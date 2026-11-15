@@ -1,0 +1,44 @@
+name: funda
+description: "Aplikasi mobile keuangan belajar sambil praktik dengan fitur dompet digital pencatatan."
+publish_to: 'none'
+
+version: 0.1.0+1
+
+environment:
+  sdk: ^3.10.1
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  flutter_riverpod: ^3.3.2
+  go_router: ^17.5.0
+  drift: ^2.24.0
+  sqlite3_flutter_libs: ^0.6.0+eol
+  path_provider: ^2.1.6
+  path: ^1.9.1
+  intl: ^0.20.3
+  lucide_icons_flutter: ^4.0.3
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  drift_dev: ^2.24.0
+  build_runner: ^2.4.14
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - aset/font/
+
+  fonts:
+    - family: PlusJakartaSans
+      fonts:
+        - asset: aset/font/PlusJakartaSans-Regular.ttf
+          weight: 400
+        - asset: aset/font/PlusJakartaSans-SemiBold.ttf
+          weight: 600
+        - asset: aset/font/PlusJakartaSans-Bold.ttf
+          weight: 700
