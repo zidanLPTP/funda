@@ -85,7 +85,7 @@ class TombolFunda extends StatelessWidget {
   Widget _bangunIsi() {
     if (memuat) {
       final warnaIndikator = switch (varian) {
-        VarianTombolFunda.primer => Colors.white,
+        VarianTombolFunda.primer => WarnaFunda.putih,
         VarianTombolFunda.sekunder => WarnaFunda.utama,
         VarianTombolFunda.teks => WarnaFunda.utama,
       };
@@ -101,7 +101,7 @@ class TombolFunda extends StatelessWidget {
     }
 
     final warnaTeks = switch (varian) {
-      VarianTombolFunda.primer => Colors.white,
+      VarianTombolFunda.primer => WarnaFunda.teksPutih,
       VarianTombolFunda.sekunder =>
         _aktif ? WarnaFunda.utama : WarnaFunda.teksRedup,
       VarianTombolFunda.teks =>
@@ -134,7 +134,7 @@ class TombolFunda extends StatelessWidget {
       onPressed: _aktif ? padaTekan : null,
       style: FilledButton.styleFrom(
         backgroundColor: WarnaFunda.utama,
-        foregroundColor: Colors.white,
+        foregroundColor: WarnaFunda.teksPutih,
         disabledBackgroundColor: WarnaFunda.garis,
         disabledForegroundColor: WarnaFunda.teksRedup,
         minimumSize: const Size(0, SpasiFunda.xxxl),

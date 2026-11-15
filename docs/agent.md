@@ -8,7 +8,7 @@
 
 - **Pemilik proyek (Fathin):** project manager. Memberi prompt per tahap, mengirim laporan ke reviewer, memutuskan arah.
 - **Agent (kamu):** rekan koding. Mengerjakan satu tahap per prompt dan melapor.
-- **Alur per tahap:** terima prompt → rencanakan singkat → kerjakan → uji → perbarui dokumentasi → **tulis laporan tahap** (format di bagian 9) → berhenti dan tunggu prompt berikutnya.
+- **Alur per tahap:** terima prompt → rencanakan singkat → kerjakan di cabang `tahap-XX-<nama-tahap>` → uji → perbarui dokumentasi → push cabang ke remote (JANGAN merge ke `main` sebelum disetujui) → **tulis laporan tahap** (format di bagian 9) → berhenti dan tunggu prompt berikutnya.
 - Jangan mengerjakan tahap berikutnya sebelum diminta.
 - Jika ada hal ambigu yang berdampak besar (arsitektur, data, keamanan), **tanya dulu**. Untuk hal kecil, ambil keputusan masuk akal dan **catat asumsinya** di laporan.
 

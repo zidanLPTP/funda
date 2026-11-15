@@ -1,10 +1,13 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '../../../komponen/komponen_funda.dart';
 import '../../../tema/token.dart';
+import '../../dompet/tampilan/layar_daftar_dompet.dart';
+import '../../kategori/tampilan/layar_daftar_kategori.dart';
 
-/// Layar Lainnya (Pengaturan, Cadangan, Informasi).
+/// Layar Lainnya: Pusat navigasi untuk Dompet, Kategori, Pengaturan, dan Galeri Pengembang.
 class LayarLainnya extends StatelessWidget {
   const LayarLainnya({super.key});
 
@@ -16,75 +19,102 @@ class LayarLainnya extends StatelessWidget {
       anak: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Kartu Info Pengembang
-          PetakBento.ukuran2x1(
-            tint: TintPetakBento.biru,
-            padaKetuk: () => context.push('/galeri'),
-            anak: Row(
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(SpasiFunda.m),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(SudutFunda.kartu),
+          // Kartu Info Pengembang (hanya di mode debug)
+          if (kDebugMode) ...[
+            PetakBento.ukuran2x1(
+              tint: TintPetakBento.biru,
+              padaKetuk: () => context.push('/galeri'),
+              anak: Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(SpasiFunda.m),
+                    decoration: BoxDecoration(
+                      color: WarnaFunda.permukaan,
+                      borderRadius: BorderRadius.circular(SudutFunda.kartu),
+                    ),
+                    child: const Icon(
+                      LucideIcons.palette,
+                      color: WarnaFunda.utama,
+                      size: 24,
+                    ),
                   ),
-                  child: const Icon(
-                    LucideIcons.palette,
-                    color: WarnaFunda.utama,
-                    size: 24,
+                  const SizedBox(width: SpasiFunda.l),
+                  const Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        TeksFunda.label('Galeri Komponen UI'),
+                        SizedBox(height: SpasiFunda.xs),
+                        TeksFunda.catatan(
+                          'Lihat semua varian tombol, bento, warna, dan tipografi',
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                const SizedBox(width: SpasiFunda.l),
-                const Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      TeksFunda.label('Galeri Komponen UI'),
-                      SizedBox(height: SpasiFunda.xs),
-                      TeksFunda.catatan(
-                        'Lihat semua varian tombol, bento, warna, dan tipografi',
-                      ),
-                    ],
+                  const Icon(
+                    LucideIcons.chevronRight,
+                    color: WarnaFunda.teksRedup,
                   ),
-                ),
-                const Icon(
-                  LucideIcons.chevronRight,
-                  color: WarnaFunda.teksRedup,
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-          const SizedBox(height: SpasiFunda.l),
+            const SizedBox(height: SpasiFunda.l),
+          ],
 
-          // Menu Placeholder
+          // Menu Manajemen Keuangan (Tahap 2)
+          const TeksFunda.judulBagian('Pengelolaan Keuangan'),
+          const SizedBox(height: SpasiFunda.m),
           _ItemMenu(
-            ikon: LucideIcons.settings,
-            judul: 'Pengaturan Aplikasi',
-            keterangan: 'Format, mata uang, dan preferensi tampilan',
-            padaKetuk: () => _tampilkanPesan(context, 'Pengaturan'),
+            ikon: LucideIcons.wallet,
+            judul: 'Kelola Dompet',
+            keterangan: 'Tambah akun, ubah, arsipkan, atau sesuaikan saldo',
+            padaKetuk: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const LayarDaftarDompet()),
+              );
+            },
           ),
           const SizedBox(height: SpasiFunda.s),
           _ItemMenu(
+            ikon: LucideIcons.tags,
+            judul: 'Kelola Kategori',
+            keterangan: 'Kelompok kebutuhan, keinginan, tabungan, dan utang',
+            padaKetuk: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const LayarDaftarKategori()),
+              );
+            },
+          ),
+          const SizedBox(height: SpasiFunda.l),
+
+          // Menu Pendukung
+          const TeksFunda.judulBagian('Aplikasi & Data'),
+          const SizedBox(height: SpasiFunda.m),
+          _ItemMenu(
             ikon: LucideIcons.database,
             judul: 'Cadangan & Pemulihan Data',
-            keterangan: 'Data keuanganmu aman dan tersimpan di perangkat ini',
+            keterangan:
+                'Data keuanganmu aman dan tersimpan lokal di perangkat ini',
             padaKetuk: () => _tampilkanPesan(context, 'Cadangan Data'),
           ),
           const SizedBox(height: SpasiFunda.s),
           _ItemMenu(
-            ikon: LucideIcons.shieldAlert,
+            ikon: LucideIcons.shieldCheck,
             judul: 'Privasi & Keamanan',
             keterangan:
-                'Funda tidak mengirimkan data keuanganmu ke server luar',
+                'Funda tidak mengirimkan data keuanganmu ke server luar (v1)',
             padaKetuk: () => _tampilkanPesan(context, 'Privasi'),
           ),
           const SizedBox(height: SpasiFunda.s),
           _ItemMenu(
             ikon: LucideIcons.info,
             judul: 'Tentang Funda',
-            keterangan: 'Versi 0.1.0 (Tahap 1 - Fondasi)',
+            keterangan: 'Versi 0.2.0 (Tahap 2 - Dompet & Transaksi)',
             padaKetuk: () => _tampilkanPesan(context, 'Tentang Funda'),
           ),
+          const SizedBox(height: SpasiFunda.xl),
         ],
       ),
     );

@@ -79,7 +79,10 @@ funda/
 │  ├─ styleguide.md             # Panduan desain Soft Bento & suara merek
 │  └─ kamus_penamaan.md         # Standar istilah bahasa Indonesia
 ├─ test/                        # Pengujian unit & widget
-│  ├─ data/                     # Uji basis data & migrasi
+│  ├─ data/                     # Uji basis data, migrasi bertingkat, repositori
+│  ├─ fitur/                    # Uji widget fitur (galeri debug, form transaksi, catatan)
+│  ├─ performa/                 # Uji performa kalkulasi & kueri 5.000 transaksi
+│  ├─ perhitungan/              # Uji logika murni perhitungan keuangan (TDD)
 │  ├─ komponen/                 # Uji widget komponen dasar
 │  └─ util/                     # Uji utilitas format Rupiah
 ├─ README.md
@@ -93,3 +96,8 @@ funda/
 - [docs/spec.md](docs/spec.md) — Rincian spesifikasi lengkap aplikasi Funda.
 - [docs/styleguide.md](docs/styleguide.md) — Token desain Soft Bento, warna, dan pedoman bahasa.
 - [docs/kamus_penamaan.md](docs/kamus_penamaan.md) — Kamus istilah penamaan kode berbahasa Indonesia.
+
+---
+
+## 🔤 Lisensi Font
+Font **Plus Jakarta Sans** dirancang oleh Tokotype (Gumpita Rahayu) dan dilisensikan di bawah lisensi terbuka [SIL Open Font License (OFL)](aset/font/OFL.txt). Berkas teks lisensi resmi disertakan pada `aset/font/OFL.txt`.

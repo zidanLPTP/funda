@@ -47,6 +47,19 @@
 | savings | tabungan | Sifat pengeluaran simpanan masa depan |
 | settings | pengaturan | Konfigurasi aplikasi pengguna |
 | empty state | keadaanKosong | Tampilan bila belum ada data |
+| cash | tunai | Jenis dompet fisik uang tunai |
+| bank account | rekeningBank (`rekening_bank`) | Jenis dompet akun perbankan |
+| e-wallet | eWallet (`e_wallet`) | Jenis dompet dompet digital |
+| initial balance | saldoAwalRupiah | Saldo awal pembukaan dompet |
+| admin fee | biayaAdminRupiah | Biaya admin transfer antar-dompet |
+| transaction time | waktuTransaksi | Waktu pencatatan transaksi |
+| expense nature | sifatKategori | Sifat pos pengeluaran (`kebutuhan`, `keinginan`, `tabungan`, `utang`, `belum_dilabeli`, `tidak_berlaku`) |
+| balance adjustment | penyesuaianSaldo | Transaksi penyesuaian saldo riil (`penyesuaian_masuk`, `penyesuaian_keluar`) |
+
+## Aturan Cabang Kerja (Git)
+- Setiap tahap dikerjakan pada cabang khusus (contoh: `tahap-02-dompet-transaksi`).
+- Push cabang ke remote `origin <nama-cabang>`.
+- **DILARANG MERGE** ke cabang `main` sebelum pengguna/pemilik menyatakan tahap lolos verifikasi.
 
 ## Pengecualian
 - API bawaan Flutter/Dart/paket eksternal (`StatelessWidget`, `build`, `BuildContext`, `State`, `override`, `dispose`, dll).

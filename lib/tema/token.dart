@@ -9,6 +9,9 @@ abstract final class WarnaFunda {
   static const utamaTipis = Color(0xFFCCFBF1);
   static const latar = Color(0xFFF8FAF9);
   static const permukaan = Color(0xFFFFFFFF);
+  static const putih = Color(0xFFFFFFFF);
+  static const teksPutih = Color(0xFFFFFFFF);
+  static const teksPutihRedup = Color(0xB3FFFFFF);
   static const garis = Color(0xFFE2E8E6);
   static const teks = Color(0xFF0F1F1D);
   static const teksRedup = Color(0xFF5B6B68);

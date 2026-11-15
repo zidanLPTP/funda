@@ -3,25 +3,32 @@ import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
+import 'seeder/kategori_bawaan.dart';
+import 'tabel/tabel_dompet.dart';
+import 'tabel/tabel_kategori.dart';
 import 'tabel/tabel_pengaturan.dart';
+import 'tabel/tabel_transaksi.dart';
 
 part 'basis_data.g.dart';
 
 /// Basis data lokal SQLite Funda yang dikelola menggunakan Drift.
 /// Mendukung migrasi bertingkat bertipe aman yang tidak menghapus data pengguna.
-@DriftDatabase(tables: [TabelPengaturan])
+@DriftDatabase(
+  tables: [TabelPengaturan, TabelDompet, TabelKategori, TabelTransaksi],
+)
 class BasisDataFunda extends _$BasisDataFunda {
   BasisDataFunda([QueryExecutor? pelaksanaKueri])
     : super(pelaksanaKueri ?? _bukaKoneksi());
 
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 2;
 
   @override
   MigrationStrategy get migration {
     return MigrationStrategy(
       onCreate: (Migrator m) async {
         await m.createAll();
+        await _seedKategoriBawaan();
       },
       onUpgrade: (Migrator m, int dariVersi, int keVersi) async {
         // Mekanisme migrasi bertingkat berurutan (dariVersi -> keVersi)
@@ -45,11 +52,26 @@ class BasisDataFunda extends _$BasisDataFunda {
         // Skema awal: tabel_pengaturan
         await m.createTable(tabelPengaturan);
         break;
-      // Versi skema berikutnya akan ditambahkan di sini secara bertahap:
-      // case 2: ...
+      case 2:
+        // Skema tahap 2: dompet, kategori, transaksi
+        await m.createTable(tabelDompet);
+        await m.createTable(tabelKategori);
+        await m.createTable(tabelTransaksi);
+        await _seedKategoriBawaan();
+        break;
       default:
         break;
     }
+  }
+
+  /// Menyuntikkan kategori bawaan sistem secara idempoten (InsertMode.insertOrIgnore).
+  /// Aman dijalankan ulang berkali-kali tanpa menimpa perubahan atau menduplikasi kategori.
+  Future<void> _seedKategoriBawaan() async {
+    await batch((b) {
+      for (final kategori in daftarKategoriBawaan) {
+        b.insert(tabelKategori, kategori, mode: InsertMode.insertOrIgnore);
+      }
+    });
   }
 
   // --- Operasi Tabel Pengaturan ---

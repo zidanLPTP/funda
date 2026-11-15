@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../fitur/belajar/tampilan/layar_belajar.dart';
@@ -64,11 +65,12 @@ final ruteFunda = GoRouter(
       ],
     ),
 
-    // Rute Galeri Komponen (khusus pengembang, tidak tampil di bilah tab)
-    GoRoute(
-      parentNavigatorKey: _kunciNavigatorAkar,
-      path: '/galeri',
-      builder: (context, state) => const LayarGaleri(),
-    ),
+    // Rute Galeri Komponen (hanya tersedia di mode debug)
+    if (kDebugMode)
+      GoRoute(
+        parentNavigatorKey: _kunciNavigatorAkar,
+        path: '/galeri',
+        builder: (context, state) => const LayarGaleri(),
+      ),
   ],
 );

@@ -8,15 +8,15 @@ abstract final class TemaFunda {
     const colorScheme = ColorScheme(
       brightness: Brightness.light,
       primary: WarnaFunda.utama,
-      onPrimary: Colors.white,
+      onPrimary: WarnaFunda.putih,
       primaryContainer: WarnaFunda.utamaTipis,
       onPrimaryContainer: WarnaFunda.utamaGelap,
       secondary: WarnaFunda.utamaGelap,
-      onSecondary: Colors.white,
+      onSecondary: WarnaFunda.putih,
       surface: WarnaFunda.permukaan,
       onSurface: WarnaFunda.teks,
       error: WarnaFunda.bahaya,
-      onError: Colors.white,
+      onError: WarnaFunda.putih,
       outline: WarnaFunda.garis,
     );
 

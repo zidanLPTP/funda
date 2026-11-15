@@ -16,23 +16,18 @@ void main() {
   });
 
   group('BasisDataFunda & TabelPengaturan', () {
-    test(
-      'skema versi 1 menginisialisasi tabel_pengaturan dengan benar',
-      () async {
-        expect(basisData.schemaVersion, equals(1));
+    test('skema versi 2 terdaftar pada basis data', () async {
+      expect(basisData.schemaVersion, equals(2));
 
-        // Cek baca pengaturan yang belum ada
-        final nilaiAwal = await basisData.bacaPengaturan('sudah_onboarding');
-        expect(nilaiAwal, isNull);
+      final nilaiAwal = await basisData.bacaPengaturan('sudah_onboarding');
+      expect(nilaiAwal, isNull);
 
-        // Simpan pengaturan baru
-        await basisData.simpanPengaturan('sudah_onboarding', 'true');
-        final nilaiSetelahSimpan = await basisData.bacaPengaturan(
-          'sudah_onboarding',
-        );
-        expect(nilaiSetelahSimpan, equals('true'));
-      },
-    );
+      await basisData.simpanPengaturan('sudah_onboarding', 'true');
+      final nilaiSetelahSimpan = await basisData.bacaPengaturan(
+        'sudah_onboarding',
+      );
+      expect(nilaiSetelahSimpan, equals('true'));
+    });
 
     test(
       'memperbarui pengaturan yang sudah ada (insertOnConflictUpdate)',
@@ -40,11 +35,9 @@ void main() {
         await basisData.simpanPengaturan('tema', 'terang');
         expect(await basisData.bacaPengaturan('tema'), equals('terang'));
 
-        // Ubah nilai dengan kunci yang sama
         await basisData.simpanPengaturan('tema', 'gelap');
         expect(await basisData.bacaPengaturan('tema'), equals('gelap'));
 
-        // Pastikan baris data tidak berduplikasi
         final semua = await basisData.ambilSemuaPengaturan();
         expect(semua.where((p) => p.kunci == 'tema').length, equals(1));
       },
@@ -52,39 +45,90 @@ void main() {
 
     test('menghapus pengaturan berdasarkan kunci', () async {
       await basisData.simpanPengaturan('kunci_hapus', 'nilai');
-      expect(await basisData.bacaPengaturan('kunci_hapus'), equals('nilai'));
-
       final jumlahTerhapus = await basisData.hapusPengaturan('kunci_hapus');
       expect(jumlahTerhapus, equals(1));
       expect(await basisData.bacaPengaturan('kunci_hapus'), isNull);
     });
   });
 
-  group('Migrasi Bertingkat', () {
-    test('migrasi onUpgrade aman dijalankan dan data tidak hilang', () async {
-      // Simpan data di versi 1
-      await basisData.simpanPengaturan('versi_db', '1.0');
-      await basisData.simpanPengaturan('pengguna_nama', 'Fathin');
+  group('Kategori Bawaan & Inisialisasi', () {
+    test(
+      'kategori bawaan otomatis ter-seed saat inisialisasi basis data',
+      () async {
+        final daftar = await basisData.select(basisData.tabelKategori).get();
 
-      // Simulasikan pemicuan onUpgrade
-      final migrator = Migrator(basisData);
-      await basisData.migration.onUpgrade(migrator, 1, 1);
+        // Total ada 25 kategori bawaan (5 masuk, 8 kebutuhan, 3 keinginan, 4 belum dilabeli, 2 tabungan, 3 utang)
+        expect(daftar.length, equals(25));
 
-      // Pastikan data tetap utuh setelah onUpgrade
-      expect(await basisData.bacaPengaturan('versi_db'), equals('1.0'));
-      expect(await basisData.bacaPengaturan('pengguna_nama'), equals('Fathin'));
-    });
+        // Verifikasi kategori masuk sifatnya tidak_berlaku
+        final kategoriMasuk = daftar.where((k) => k.arus == 'masuk');
+        expect(kategoriMasuk.length, equals(5));
+        for (final k in kategoriMasuk) {
+          expect(k.sifat, equals('tidak_berlaku'));
+          expect(k.bawaan, isTrue);
+        }
 
-    test('migrasi aman diulang berkali-kali tanpa menimbulkan galat', () async {
-      await basisData.simpanPengaturan('kunci_ulang', 'aman');
+        // Verifikasi kategori keluar memiliki sifat yang valid
+        final kategoriKeluar = daftar.where((k) => k.arus == 'keluar');
+        expect(kategoriKeluar.length, equals(20));
+        for (final k in kategoriKeluar) {
+          expect([
+            'kebutuhan',
+            'keinginan',
+            'tabungan',
+            'utang',
+            'belum_dilabeli',
+          ], contains(k.sifat));
+        }
+      },
+    );
+  });
 
-      final migrator = Migrator(basisData);
-      // Ulangi panggilan upgrade beberapa kali
-      await basisData.migration.onUpgrade(migrator, 1, 1);
-      await basisData.migration.onUpgrade(migrator, 1, 1);
-      await basisData.migration.onUpgrade(migrator, 1, 1);
+  group('Migrasi Bertingkat Skema v1 -> v2', () {
+    test(
+      'migrasi dari versi 1 ke versi 2 aman dan tidak menghapus data pengaturan',
+      () async {
+        // Simulasikan database dengan pengaturan awal
+        await basisData.simpanPengaturan('pengguna_nama', 'Fathin');
+        await basisData.simpanPengaturan('versi_aplikasi', '0.1.0');
 
-      expect(await basisData.bacaPengaturan('kunci_ulang'), equals('aman'));
-    });
+        // Jalankan onUpgrade dari versi 1 ke versi 2
+        final migrator = Migrator(basisData);
+        await basisData.migration.onUpgrade(migrator, 1, 2);
+
+        // Pastikan data v1 tidak hilang
+        expect(
+          await basisData.bacaPengaturan('pengguna_nama'),
+          equals('Fathin'),
+        );
+        expect(
+          await basisData.bacaPengaturan('versi_aplikasi'),
+          equals('0.1.0'),
+        );
+
+        // Pastikan kategori bawaan tersedia
+        final daftarKategori = await basisData
+            .select(basisData.tabelKategori)
+            .get();
+        expect(daftarKategori.length, equals(25));
+      },
+    );
+
+    test(
+      'migrasi aman diulang berkali-kali tanpa duplikasi kategori (idempoten)',
+      () async {
+        final migrator = Migrator(basisData);
+
+        // Panggil onUpgrade beberapa kali
+        await basisData.migration.onUpgrade(migrator, 1, 2);
+        await basisData.migration.onUpgrade(migrator, 1, 2);
+        await basisData.migration.onUpgrade(migrator, 2, 2);
+
+        final daftarKategori = await basisData
+            .select(basisData.tabelKategori)
+            .get();
+        expect(daftarKategori.length, equals(25));
+      },
+    );
   });
 }

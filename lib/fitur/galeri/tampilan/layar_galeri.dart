@@ -232,7 +232,7 @@ class _LayarGaleriState extends State<LayarGaleri> {
                       ikon: const Icon(
                         LucideIcons.plus,
                         size: 18,
-                        color: Colors.white,
+                        color: WarnaFunda.putih,
                       ),
                       padaTekan: () {},
                     ),
@@ -346,7 +346,7 @@ class _LayarGaleriState extends State<LayarGaleri> {
             anak: Container(
               padding: const EdgeInsets.symmetric(vertical: SpasiFunda.xl),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: WarnaFunda.permukaan,
                 borderRadius: BorderRadius.circular(SudutFunda.petak),
                 border: Border.all(color: WarnaFunda.garis),
               ),
@@ -441,7 +441,7 @@ class _KotakWarna extends StatelessWidget {
           Text(
             nama,
             style: TipografiFunda.catatan.copyWith(
-              color: teksHitam ? Colors.black : Colors.white,
+              color: teksHitam ? WarnaFunda.teks : WarnaFunda.teksPutih,
               fontWeight: FontWeight.w600,
             ),
           ),
@@ -449,7 +449,9 @@ class _KotakWarna extends StatelessWidget {
           Text(
             '#${warna.toARGB32().toRadixString(16).substring(2).toUpperCase()}',
             style: TipografiFunda.catatan.copyWith(
-              color: teksHitam ? Colors.black54 : Colors.white70,
+              color: teksHitam
+                  ? WarnaFunda.teksRedup
+                  : WarnaFunda.teksPutihRedup,
               fontSize: 10,
             ),
           ),
