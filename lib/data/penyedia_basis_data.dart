@@ -4,6 +4,7 @@ import 'repositori/anggaran_repositori.dart';
 import 'repositori/dompet_repositori.dart';
 import 'repositori/kantong_repositori.dart';
 import 'repositori/kategori_repositori.dart';
+import 'repositori/tagihan_repositori.dart';
 import 'repositori/transaksi_repositori.dart';
 import 'repositori/tujuan_repositori.dart';
 import 'repositori/utang_repositori.dart';
@@ -56,4 +57,10 @@ final penyediaKantongRepositori = Provider<KantongRepositori>((ref) {
 final penyediaUtangRepositori = Provider<UtangRepositori>((ref) {
   final db = ref.watch(penyediaBasisData);
   return UtangRepositori(db);
+});
+
+/// Provider repositori tagihan dan langganan berulang.
+final penyediaTagihanRepositori = Provider<TagihanRepositori>((ref) {
+  final db = ref.watch(penyediaBasisData);
+  return TagihanRepositori(db);
 });

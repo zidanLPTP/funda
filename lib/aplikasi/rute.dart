@@ -10,6 +10,10 @@ import '../fitur/galeri/tampilan/layar_galeri.dart';
 import '../fitur/kantong/tampilan/layar_daftar_kantong.dart';
 import '../fitur/kekayaan_bersih/tampilan/layar_kekayaan_bersih.dart';
 import '../fitur/lainnya/tampilan/layar_lainnya.dart';
+import '../fitur/pengaturan/tampilan/layar_pengaturan.dart';
+import '../fitur/tagihan/tampilan/layar_form_tagihan.dart';
+import '../fitur/tagihan/tampilan/layar_jadwal_tagihan.dart';
+import '../fitur/tagihan/tampilan/layar_semua_tagihan.dart';
 import '../fitur/tujuan/tampilan/layar_daftar_tujuan.dart';
 import '../fitur/tujuan/tampilan/layar_detail_tujuan.dart';
 import '../fitur/utang/tampilan/layar_daftar_utang.dart';
@@ -127,6 +131,30 @@ final ruteFunda = GoRouter(
       parentNavigatorKey: _kunciNavigatorAkar,
       path: '/kekayaan-bersih',
       builder: (context, state) => const LayarKekayaanBersih(),
+    ),
+
+    // Rute Fitur Tahap 3C: Tagihan, Langganan & Pengaturan
+    GoRoute(
+      parentNavigatorKey: _kunciNavigatorAkar,
+      path: '/tagihan',
+      builder: (context, state) => const LayarJadwalTagihan(),
+      routes: [
+        GoRoute(
+          parentNavigatorKey: _kunciNavigatorAkar,
+          path: 'semua',
+          builder: (context, state) => const LayarSemuaTagihan(),
+        ),
+        GoRoute(
+          parentNavigatorKey: _kunciNavigatorAkar,
+          path: 'tambah',
+          builder: (context, state) => const LayarFormTagihan(),
+        ),
+      ],
+    ),
+    GoRoute(
+      parentNavigatorKey: _kunciNavigatorAkar,
+      path: '/pengaturan',
+      builder: (context, state) => const LayarPengaturan(),
     ),
 
     // Rute Galeri Komponen (hanya tersedia di mode debug)

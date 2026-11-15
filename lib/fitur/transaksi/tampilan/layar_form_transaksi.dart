@@ -17,9 +17,24 @@ import '../../../util/format_rupiah.dart';
 
 /// Layar Formulir Catat Transaksi (Pemasukan, Pengeluaran, Transfer Antar Dompet).
 class LayarFormTransaksi extends ConsumerStatefulWidget {
-  const LayarFormTransaksi({super.key, this.transaksi});
+  const LayarFormTransaksi({
+    super.key,
+    this.transaksi,
+    this.idTagihan,
+    this.tanggalJatuhTempoTagihan,
+    this.nominalAwalRupiah,
+    this.kategoriIdAwal,
+    this.dompetIdAwal,
+    this.catatanAwal,
+  });
 
   final EntitasTransaksi? transaksi;
+  final String? idTagihan;
+  final DateTime? tanggalJatuhTempoTagihan;
+  final int? nominalAwalRupiah;
+  final String? kategoriIdAwal;
+  final String? dompetIdAwal;
+  final String? catatanAwal;
 
   @override
   ConsumerState<LayarFormTransaksi> createState() => _LayarFormTransaksiState();
@@ -48,18 +63,25 @@ class _LayarFormTransaksiState extends ConsumerState<LayarFormTransaksi> {
     _jenisTerpilih = t != null
         ? JenisTransaksi.dariKode(t.jenis)
         : JenisTransaksi.keluar;
+
+    final nominalAwal = t != null
+        ? t.jumlahRupiah
+        : (widget.nominalAwalRupiah ?? 0);
+
     _pengontrolNominal = TextEditingController(
-      text: t != null ? formatRupiah(t.jumlahRupiah) : 'Rp 0',
+      text: nominalAwal > 0 ? formatRupiah(nominalAwal) : 'Rp 0',
     );
     _pengontrolBiayaAdmin = TextEditingController(
       text: t != null && t.biayaAdminRupiah > 0
           ? formatRupiah(t.biayaAdminRupiah)
           : 'Rp 0',
     );
-    _pengontrolCatatan = TextEditingController(text: t?.catatan ?? '');
-    _dompetIdTerpilih = t?.dompetId;
+    _pengontrolCatatan = TextEditingController(
+      text: t?.catatan ?? (widget.catatanAwal ?? ''),
+    );
+    _dompetIdTerpilih = t?.dompetId ?? widget.dompetIdAwal;
     _dompetTujuanIdTerpilih = t?.dompetTujuanId;
-    _kategoriIdTerpilih = t?.kategoriId;
+    _kategoriIdTerpilih = t?.kategoriId ?? widget.kategoriIdAwal;
     _waktuTransaksi = t?.waktuTransaksi.toLocal() ?? DateTime.now();
 
     if (t != null) {
@@ -200,25 +222,38 @@ class _LayarFormTransaksiState extends ConsumerState<LayarFormTransaksi> {
         }
       }
     } else {
-      final idBaru = 't_${DateTime.now().millisecondsSinceEpoch}';
-      await repoTransaksi.tambahTransaksi(
-        TabelTransaksiCompanion(
-          id: drift.Value(idBaru),
-          jenis: drift.Value(_jenisTerpilih.kode),
-          jumlahRupiah: drift.Value(nominal),
-          dompetId: drift.Value(_dompetIdTerpilih!),
-          dompetTujuanId: drift.Value(_dompetTujuanIdTerpilih),
-          kategoriId: drift.Value(_kategoriIdTerpilih),
-          biayaAdminRupiah: drift.Value(biayaAdmin),
-          catatan: drift.Value(catatan.isEmpty ? null : catatan),
-          waktuTransaksi: drift.Value(waktuUtc),
-        ),
-      );
-      if (_utangIdTerpilih != null) {
-        await repoUtang.tautkanTransaksiKeUtang(
-          utangId: _utangIdTerpilih!,
-          transaksiId: idBaru,
+      if (widget.idTagihan != null && widget.tanggalJatuhTempoTagihan != null) {
+        final repoTagihan = ref.read(penyediaTagihanRepositori);
+        await repoTagihan.tandaiTagihanDibayar(
+          tagihanId: widget.idTagihan!,
+          jatuhTempo: widget.tanggalJatuhTempoTagihan!,
+          jumlahRupiah: nominal,
+          dompetId: _dompetIdTerpilih!,
+          kategoriId: _kategoriIdTerpilih!,
+          catatan: catatan.isEmpty ? null : catatan,
+          waktuTransaksi: waktuUtc,
         );
+      } else {
+        final idBaru = 't_${DateTime.now().millisecondsSinceEpoch}';
+        await repoTransaksi.tambahTransaksi(
+          TabelTransaksiCompanion(
+            id: drift.Value(idBaru),
+            jenis: drift.Value(_jenisTerpilih.kode),
+            jumlahRupiah: drift.Value(nominal),
+            dompetId: drift.Value(_dompetIdTerpilih!),
+            dompetTujuanId: drift.Value(_dompetTujuanIdTerpilih),
+            kategoriId: drift.Value(_kategoriIdTerpilih),
+            biayaAdminRupiah: drift.Value(biayaAdmin),
+            catatan: drift.Value(catatan.isEmpty ? null : catatan),
+            waktuTransaksi: drift.Value(waktuUtc),
+          ),
+        );
+        if (_utangIdTerpilih != null) {
+          await repoUtang.tautkanTransaksiKeUtang(
+            utangId: _utangIdTerpilih!,
+            transaksiId: idBaru,
+          );
+        }
       }
     }
 

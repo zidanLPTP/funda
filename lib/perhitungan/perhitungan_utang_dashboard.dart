@@ -3,10 +3,10 @@ import '../data/model/arah_penyesuaian_utang.dart';
 import '../data/model/jenis_tujuan.dart';
 import '../util/format_rupiah.dart';
 
-/// Ambang batas praktis rasio cicilan perbankan (30%).
+/// Ambang batas aturan praktis rasio cicilan perbankan (30%).
 /// BELUM digunakan untuk melabeli aman/bahaya di UI (hanya ditampilkan persentasenya).
 /// TODO-VERIFIKASI: Acuan perbankan 30% untuk materi edukasi cicilan nanti.
-const int ambangBatasRasioCicilanSehat = 30;
+const int ambangRasioCicilanAturanPraktis = 30;
 
 /// Sumber dasar perhitungan pemasukan rata-rata pengguna.
 enum DasarPemasukanRataRata {

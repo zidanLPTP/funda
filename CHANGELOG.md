@@ -5,6 +5,54 @@ Format penulisan mengacu pada standar Keep a Changelog dan penamaan commit Funda
 
 ---
 
+## [0.5.0] - 2026-11-15 — Tagihan Berulang & Pengingat Lokal (Tahap 3C)
+
+Tahap 3C: Menutup Tahap 3 secara tuntas meliputi Pengelolaan Tagihan Rutin & Langganan (mingguan, bulanan, tahunan), Jadwal Jatuh Tempo Dinamis (penanganan akhir bulan kabisat 28/29 Feb), Pembayaran Tagihan Atomik tertaut Transaksi Pengeluaran, Layanan Pengingat Lokal Ramah Baterai (Inexact Alarm, Boot Receiver, Timezone), Layar Pengaturan Pengingat & Privasi Nominal, serta Petak Bento Tagihan Terdekat di Beranda.
+
+### Ditambahkan
+- **Skema Basis Data & Migrasi Bertingkat Skema v5 (`lib/data/basis_data.dart`):**
+  - Tabel `tabel_tagihan`: id, nama, jenis (`tagihan_rutin`, `langganan`), jumlah_rupiah (int > 0), frekuensi (`mingguan`, `bulanan`, `tahunan`), hari_dalam_minggu (1-7), tanggal_dalam_bulan (1-31), bulan_dalam_tahun (1-12), dompet_id, kategori_id, pengingat_hari_sebelumnya (teks daftar integer dipisah koma, misal "0,1,3"), aktif (boolean), diarsipkan, dibuat_pada.
+  - Tabel `tabel_pembayaran_tagihan`: id, tagihan_id, tanggal_jatuh_tempo, status (`sudah_dibayar`, `dilewati`), transaksi_id (opsional, onDelete: Cascade), waktu_dibayar, dibuat_pada. Unik (tagihan_id, tanggal_jatuh_tempo).
+  - Indeks komposit `idx_tagihan_aktif_diarsipkan` pada `(aktif, diarsipkan)` untuk kueri cepat tagihan aktif.
+  - Indeks komposit `idx_pembayaran_tagihan_jatuh_tempo` pada `(tagihan_id, tanggal_jatuh_tempo)` untuk pengecekan status periode.
+  - Verifikasi otomatis `PRAGMA foreign_keys = ON` pada callback `beforeOpen` database.
+- **Logika Murni Perhitungan TDD (`lib/perhitungan/perhitungan_tagihan.dart`):**
+  - `hitungJatuhTempoDalamRentang`: Algoritma cerdas yang menghasilkan jadwal jatuh tempo mingguan, bulanan, dan tahunan dalam rentang tanggal tertentu, menangani kasus batas akhir bulan (seperti tagihan tanggal 31 di bulan Februari/April yang otomatis menyesuaikan ke hari terakhir bulan, kabisat 29 Feb -> 28 Feb pada tahun non-kabisat).
+  - `tentukanStatusJatuhTempo`: Menentukan status jatuh tempo spesifik (`terlewat`, `hariIni`, `akanDatang`) relatif terhadap hari ini.
+  - `hitungRingkasanTagihanBulan`: Menghitung total tagihan aktif, total nominal jatuh tempo bulan berjalan, total yang sudah dibayar, total yang belum dibayar, dan jumlah tagihan yang lewat jatuh tempo.
+  - `hitungRencanaPengingat`: Menghitung daftar waktu notifikasi yang perlu dijadwalkan secara deterministik berdasarkan preferensi hari sebelumnya dan jam notifikasi pengguna.
+- **Layanan Pengingat Lokal Ramah Baterai (`lib/layanan/layanan_pengingat.dart`):**
+  - Kontrak antarmuka `LayananPengingat`, implementasi uji `LayananPengingatPalsu`, dan implementasi riil `LayananPengingatNyata` (`flutter_local_notifications: ^22.3.3`, `timezone: ^0.11.2`, `flutter_timezone: ^5.1.1`).
+  - Penjadwalan *inexact* (`androidScheduleMode: AndroidScheduleMode.inexact`) yang hemat daya dan tidak membutuhkan izin sensitif `USE_EXACT_ALARM` atau `SCHEDULE_EXACT_ALARM`.
+  - Dukungan `RECEIVE_BOOT_COMPLETED` di Android untuk sinkronisasi ulang pengingat otomatis pasca perangkat dinyalakan ulang.
+  - Penanganan payload rute (`/tagihan`) saat notifikasi ditekan.
+  - Permintaan izin notifikasi Android 13+ ditunda (*just-in-time*), hanya saat pengguna mengaktifkan saklar pengingat di Layar Pengaturan.
+- **Repositori & State Management Riverpod (`lib/data/repositori/tagihan_repositori.dart`, `penyedia_tagihan.dart`, `penyedia_pengaturan.dart`):**
+  - CRUD master tagihan, jeda/aktifkan tagihan, dan pengarsipan tagihan.
+  - `tandaiTagihanDibayar`: Pencatatan transaksi pengeluaran dan status `sudah_dibayar` secara atomik di dalam satu blok transaksi database.
+  - `tandaiTagihanDilewati`: Menandai tagihan periode tertentu dilewati tanpa mencatat transaksi pengeluaran.
+  - `batalkanPenandaanPeriode`: Membatalkan penandaan status periode, menghapus entri pembayaran, dan menghapus transaksi tertaut secara otomatis via foreign key cascade.
+  - `ambilJadwalGabungan`: Kueri gabungan cerdas jadwal jatuh tempo tagihan aktif beserta status bayar/lewati per periode.
+  - `sinkronkanPengingat`: Penjadwalan ulang seluruh pengingat yang relevan ke layanan pengingat sesuai status saklar, jam, dan privasi nominal pengguna.
+  - Notifier Riverpod untuk pengaturan pengingat (`penyediaPengingatAktif`, `penyediaJamPengingat`, `penyediaTampilkanNominalNotifikasi`).
+- **Antarmuka Pengguna Soft Bento Baru:**
+  - **Layar Jadwal Tagihan (`layar_jadwal_tagihan.dart`):** Navigasi pemilih bulan, Hero ringkasan total tagihan & nominal jatuh tempo bulan terpilih, pengelompokan rapi (Perlu Perhatian, Akan Datang, Sudah Ditandai), aksi sekali ketuk untuk menandai dibayar atau lewati, serta tombol ke daftar master tagihan.
+  - **Layar Master Tagihan (`layar_semua_tagihan.dart`):** Daftar seluruh tagihan, saklar jeda/aktifkan, menu kelola (ubah, arsipkan, hapus permanen), dan FAB tambah tagihan.
+  - **Layar Form Tagihan (`layar_form_tagihan.dart`):** Input jenis (tagihan rutin/langganan), nama, nominal, frekuensi, pemilih hari/tanggal, multi-select chip pengingat (H-3, H-1, Hari H), pemilih dompet & kategori, serta banner peringatan informatif bila pengingat sistem sedang nonaktif.
+  - **Layar Pengaturan (`layar_pengaturan.dart`):** Saklar aktivasi pengingat lokal, pemilih jam pengingat (`showTimePicker`), saklar privasi nominal pada teks notifikasi, dan catatan edukatif transparan mengenai jadwal ramah baterai.
+  - **Petak Bento Tagihan Terdekat di Beranda (`layar_beranda.dart`):** Petak Bento berdimensi 2x1 yang menampilkan tagihan terdekat (jatuh tempo dalam 7 hari ke depan atau sudah terlewat) sebelum 5 Transaksi Terakhir, dengan indikator status warna dan tombol bayar langsung.
+  - **Integrasi Pembayaran Form Transaksi (`layar_form_transaksi.dart`):** Prefill otomatis nominal, dompet, dan kategori saat membayar tagihan dari jadwal atau petak beranda, serta penandaan atomik status tagihan terbayar saat formulir disimpan.
+  - **Layar Menu Lainnya (`layar_lainnya.dart`):** Ditambahkan menu akses cepat "Tagihan & Langganan" dan "Pengaturan".
+- **Pengujian & Verifikasi:**
+  - Uji foreign key cascade SQLite dan pembuktian pragma ON (`test/data/foreign_key_test.dart`).
+  - Uji atomisitas transaksi, urungkan, sinkronisasi sisa utang dinamis, penolakan pembayaran lebih, dan waktu muat Beranda bebas N+1 (`test/data/bukti_uji_tahap_03b_lengkap_test.dart`).
+  - Uji migrasi beruntun skema v1 hingga v5 (`test/data/migrasi_beruntun_test.dart`).
+  - Uji skala teks 2.0x pada seluruh layar baru tagihan dan pengaturan tanpa overflow (`test/fitur/tagihan_skala_teks_test.dart`, `test/fitur/skala_teks_membesar_test.dart`).
+  - 100% kelulusan uji suite proyek (168/168 tests passed) dan 0 isu pada `flutter analyze`.
+  - 6 tangkapan layar baru tersimpan di `docs/tangkapan_layar/tahap_03c/`.
+
+---
+
 ## [0.4.0] - 2026-11-15 — Utang, Kekayaan Bersih & Dashboard (Tahap 3B)
 
 Tahap 3B: Pengelolaan Utang & Kewajiban (kartu kredit, paylater, KPR, kendaraan, pinjol, pribadi), Pencatatan Pembayaran Utang Atomik tertaut Transaksi, Penyesuaian Sisa Utang 2 Arah, Evaluasi Rasio Cicilan Bulanan, Perhitungan Kekayaan Bersih (Aset - Utang), serta Dashboard Penuh Soft Bento di Beranda.

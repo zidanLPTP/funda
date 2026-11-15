@@ -65,9 +65,10 @@ funda/
 │  ├─ aplikasi/                 # MaterialApp, konfigurasi GoRouter, bilah navigasi
 │  ├─ tema/                     # Token warna, spasi, sudut, tipografi, ThemeData
 │  ├─ komponen/                 # Widget bersama: PetakBento, TombolFunda, TeksFunda, KeadaanKosong, PembungkusLayar
-│  ├─ fitur/                    # Modul fitur (Beranda, Catatan, Belajar, Lainnya, Galeri)
-│  ├─ data/                     # Basis data Drift (SQLite) & migrasi bertingkat
-│  ├─ perhitungan/              # Fungsi murni keuangan teruji
+│  ├─ fitur/                    # Modul fitur (Beranda, Catatan, Belajar, Lainnya, Dompet, Transaksi, Anggaran, Tujuan, Kantong, Utang, Kekayaan Bersih, Tagihan, Pengaturan, Galeri)
+│  ├─ layanan/                  # Layanan perangkat (Pengingat Lokal Notifikasi)
+│  ├─ data/                     # Basis data Drift (SQLite), model, tabel, repositori & migrasi bertingkat
+│  ├─ perhitungan/              # Fungsi murni keuangan teruji (TDD)
 │  └─ util/                     # Utilitas murni (formatRupiah, ambilAngkaRupiah)
 ├─ aset/
 │  ├─ font/                     # Font lokal Plus Jakarta Sans (Regular, SemiBold, Bold)
