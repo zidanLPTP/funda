@@ -185,14 +185,16 @@ class LayarDetailTujuan extends ConsumerWidget {
                             ),
                           ),
                           const SizedBox(width: SpasiFunda.m),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              TeksFunda.label(tujuan.nama),
-                              TeksFunda.catatan(jenis.label),
-                            ],
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                TeksFunda.label(tujuan.nama),
+                                TeksFunda.catatan(jenis.label),
+                              ],
+                            ),
                           ),
-                          const Spacer(),
+                          const SizedBox(width: SpasiFunda.s),
                           Container(
                             padding: const EdgeInsets.symmetric(
                               horizontal: SpasiFunda.s,
@@ -230,8 +232,10 @@ class LayarDetailTujuan extends ConsumerWidget {
                         ),
                       ),
                       const SizedBox(height: SpasiFunda.s),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      Wrap(
+                        alignment: WrapAlignment.spaceBetween,
+                        spacing: SpasiFunda.m,
+                        runSpacing: SpasiFunda.xs,
                         children: [
                           TeksFunda.catatan(
                             'Target: ${formatRupiah(tujuan.targetRupiah)}',
@@ -292,8 +296,10 @@ class LayarDetailTujuan extends ConsumerWidget {
                           children: [
                             const Icon(LucideIcons.calendar, size: 18),
                             const SizedBox(width: SpasiFunda.s),
-                            TeksFunda.label(
-                              'Tenggat: ${DateFormat('d MMMM yyyy', 'id_ID').format(tujuan.tenggat!)}',
+                            Expanded(
+                              child: TeksFunda.label(
+                                'Tenggat: ${DateFormat('d MMMM yyyy', 'id_ID').format(tujuan.tenggat!)}',
+                              ),
                             ),
                           ],
                         ),
@@ -310,38 +316,77 @@ class LayarDetailTujuan extends ConsumerWidget {
                 ],
 
                 // Baris Tombol Aksi: Isi & Ambil
-                Row(
-                  children: [
-                    Expanded(
-                      child: TombolFunda.primer(
-                        teks: 'Isi Tujuan',
-                        ikon: const Icon(LucideIcons.plusCircle, size: 18),
-                        padaTekan: () => _bukaModalAlokasi(
-                          context,
-                          ref,
-                          tujuan: tujuan,
-                          isIsi: true,
-                          daftarDompet: daftarDompet,
+                LayoutBuilder(
+                  builder: (context, constraints) {
+                    final isTeksBesar =
+                        MediaQuery.textScalerOf(context).scale(1.0) > 1.3 ||
+                        constraints.maxWidth < 340;
+                    if (isTeksBesar) {
+                      return Column(
+                        children: [
+                          TombolFunda.primer(
+                            teks: 'Isi Tujuan',
+                            ikon: const Icon(LucideIcons.plusCircle, size: 18),
+                            padaTekan: () => _bukaModalAlokasi(
+                              context,
+                              ref,
+                              tujuan: tujuan,
+                              isIsi: true,
+                              daftarDompet: daftarDompet,
+                            ),
+                          ),
+                          const SizedBox(height: SpasiFunda.s),
+                          TombolFunda.sekunder(
+                            teks: 'Ambil Dana',
+                            ikon: const Icon(LucideIcons.minusCircle, size: 18),
+                            padaTekan: danaTerkumpul > 0
+                                ? () => _bukaModalAlokasi(
+                                    context,
+                                    ref,
+                                    tujuan: tujuan,
+                                    isIsi: false,
+                                    daftarDompet: daftarDompet,
+                                  )
+                                : null,
+                          ),
+                        ],
+                      );
+                    }
+
+                    return Row(
+                      children: [
+                        Expanded(
+                          child: TombolFunda.primer(
+                            teks: 'Isi Tujuan',
+                            ikon: const Icon(LucideIcons.plusCircle, size: 18),
+                            padaTekan: () => _bukaModalAlokasi(
+                              context,
+                              ref,
+                              tujuan: tujuan,
+                              isIsi: true,
+                              daftarDompet: daftarDompet,
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                    const SizedBox(width: SpasiFunda.m),
-                    Expanded(
-                      child: TombolFunda.sekunder(
-                        teks: 'Ambil Dana',
-                        ikon: const Icon(LucideIcons.minusCircle, size: 18),
-                        padaTekan: danaTerkumpul > 0
-                            ? () => _bukaModalAlokasi(
-                                context,
-                                ref,
-                                tujuan: tujuan,
-                                isIsi: false,
-                                daftarDompet: daftarDompet,
-                              )
-                            : null,
-                      ),
-                    ),
-                  ],
+                        const SizedBox(width: SpasiFunda.m),
+                        Expanded(
+                          child: TombolFunda.sekunder(
+                            teks: 'Ambil Dana',
+                            ikon: const Icon(LucideIcons.minusCircle, size: 18),
+                            padaTekan: danaTerkumpul > 0
+                                ? () => _bukaModalAlokasi(
+                                    context,
+                                    ref,
+                                    tujuan: tujuan,
+                                    isIsi: false,
+                                    daftarDompet: daftarDompet,
+                                  )
+                                : null,
+                          ),
+                        ),
+                      ],
+                    );
+                  },
                 ),
                 const SizedBox(height: SpasiFunda.l),
 

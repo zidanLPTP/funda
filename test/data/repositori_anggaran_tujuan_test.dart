@@ -357,6 +357,53 @@ void main() {
           ),
           isTrue,
         );
+
+        // Uji kasus khusus 0(e): Bulan tujuan sudah punya sebagian anggaran
+        // Misal di Maret 2026, pengguna sudah atur anggaran Makan Harian Rp 2.000.000
+        await repoAnggaran.simpanAtauPerbaruiAnggaran(
+          TabelAnggaranCompanion(
+            id: Value('ang_2026_3_${katMakan.id}'),
+            tahun: const Value(2026),
+            bulan: const Value(3),
+            kategoriId: Value(katMakan.id),
+            batasRupiah: const Value(2000000),
+            dibuatPada: Value(sekarang),
+            diubahPada: Value(sekarang),
+          ),
+        );
+
+        // Salin dari Februari 2026 ke Maret 2026
+        final disalinKeMaret = await repoAnggaran.salinAnggaranDariBulanLalu(
+          tahunTujuan: 2026,
+          bulanTujuan: 3,
+        );
+
+        // Hanya 1 kategori yang disalin (Transportasi), Makan Harian tidak ditimpa
+        expect(disalinKeMaret, equals(1));
+
+        final daftarMaret = await repoAnggaran.ambilAnggaranBulan(2026, 3);
+        expect(daftarMaret.length, equals(2));
+        final makanMaret = daftarMaret.firstWhere(
+          (a) => a.kategoriId == katMakan.id,
+        );
+        expect(
+          makanMaret.batasRupiah,
+          equals(2000000),
+        ); // Tetap Rp 2.000.000, tidak tertimpa
+        final transMaret = daftarMaret.firstWhere(
+          (a) => a.kategoriId == katTrans.id,
+        );
+        expect(
+          transMaret.batasRupiah,
+          equals(500000),
+        ); // Disalin dari bulan lalu
+
+        // Jika disalin lagi saat semua kategori sudah ada, hasilnya 0 disalin
+        final disalinLagi = await repoAnggaran.salinAnggaranDariBulanLalu(
+          tahunTujuan: 2026,
+          bulanTujuan: 3,
+        );
+        expect(disalinLagi, equals(0));
       },
     );
   });

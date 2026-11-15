@@ -136,11 +136,96 @@ class TransaksiRepositori {
     kueri.orderBy([
       (t) =>
           OrderingTerm(expression: t.waktuTransaksi, mode: OrderingMode.desc),
+      (t) => OrderingTerm(expression: t.id, mode: OrderingMode.desc),
       (t) => OrderingTerm(expression: t.dibuatPada, mode: OrderingMode.desc),
     ]);
 
     kueri.limit(limit, offset: offset);
     return kueri;
+  }
+
+  /// Mengambil transaksi menggunakan paginasi berbasis kursor (waktuTransaksi + id).
+  /// Mencegah anomali baris duplikat atau terlewat saat data baru ditambah/dihapus di halaman atas.
+  Future<List<EntitasTransaksi>> ambilTransaksiKursor({
+    int limit = 50,
+    DateTime? kursorWaktu,
+    String? kursorId,
+    String? kataKunci,
+    String? dompetId,
+    String? kategoriId,
+    String? sifat,
+    String? jenis,
+    DateTime? mulai,
+    DateTime? selesai,
+  }) {
+    final kueri = _db.select(_db.tabelTransaksi);
+
+    kueri.where((t) {
+      Expression<bool> kondisi = const Constant(true);
+
+      // Filter Kursor (waktuTransaksi < kursorWaktu ATAU (waktuTransaksi == kursorWaktu DAN id < kursorId))
+      if (kursorWaktu != null && kursorId != null) {
+        kondisi =
+            kondisi &
+            (t.waktuTransaksi.isSmallerThanValue(kursorWaktu) |
+                (t.waktuTransaksi.equals(kursorWaktu) &
+                    t.id.isSmallerThanValue(kursorId)));
+      } else if (kursorWaktu != null) {
+        kondisi = kondisi & t.waktuTransaksi.isSmallerThanValue(kursorWaktu);
+      }
+
+      if (dompetId != null) {
+        kondisi =
+            kondisi &
+            (t.dompetId.equals(dompetId) | t.dompetTujuanId.equals(dompetId));
+      }
+
+      if (kategoriId != null) {
+        kondisi = kondisi & t.kategoriId.equals(kategoriId);
+      }
+
+      if (sifat != null) {
+        final kueriIdKategoriSifat = _db.selectOnly(_db.tabelKategori)
+          ..addColumns([_db.tabelKategori.id])
+          ..where(_db.tabelKategori.sifat.equals(sifat));
+        kondisi = kondisi & t.kategoriId.isInQuery(kueriIdKategoriSifat);
+      }
+
+      if (jenis != null) {
+        kondisi = kondisi & t.jenis.equals(jenis);
+      }
+
+      if (mulai != null) {
+        kondisi = kondisi & t.waktuTransaksi.isBiggerOrEqualValue(mulai);
+      }
+
+      if (selesai != null) {
+        kondisi = kondisi & t.waktuTransaksi.isSmallerOrEqualValue(selesai);
+      }
+
+      if (kataKunci != null && kataKunci.trim().isNotEmpty) {
+        final pola = '%${kataKunci.trim().toLowerCase()}%';
+        final kueriIdKategori = _db.selectOnly(_db.tabelKategori)
+          ..addColumns([_db.tabelKategori.id])
+          ..where(_db.tabelKategori.nama.lower().like(pola));
+
+        kondisi =
+            kondisi &
+            (t.catatan.lower().like(pola) |
+                t.kategoriId.isInQuery(kueriIdKategori));
+      }
+
+      return kondisi;
+    });
+
+    kueri.orderBy([
+      (t) =>
+          OrderingTerm(expression: t.waktuTransaksi, mode: OrderingMode.desc),
+      (t) => OrderingTerm(expression: t.id, mode: OrderingMode.desc),
+    ]);
+
+    kueri.limit(limit);
+    return kueri.get();
   }
 
   /// Memantau transaksi yang terkait dengan suatu dompet (sebagai asal maupun tujuan).

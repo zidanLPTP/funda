@@ -46,7 +46,8 @@ class TujuanRepositori {
     required String warna,
     DateTime? tenggat,
   }) async {
-    final id = 'tuj_${DateTime.now().microsecondsSinceEpoch}_${++_pencacahUnik}';
+    final id =
+        'tuj_${DateTime.now().microsecondsSinceEpoch}_${++_pencacahUnik}';
     final sekarang = DateTime.now();
     await tambahTujuan(
       TabelTujuanCompanion(

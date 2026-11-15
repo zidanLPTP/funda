@@ -16,8 +16,8 @@ void main() {
   });
 
   group('BasisDataFunda & TabelPengaturan', () {
-    test('skema versi 3 terdaftar pada basis data', () async {
-      expect(basisData.schemaVersion, equals(3));
+    test('skema versi 4 terdaftar pada basis data', () async {
+      expect(basisData.schemaVersion, equals(4));
 
       final nilaiAwal = await basisData.bacaPengaturan('sudah_onboarding');
       expect(nilaiAwal, isNull);
@@ -190,6 +190,62 @@ void main() {
 
       final daftarTujuan = await basisData.select(basisData.tabelTujuan).get();
       expect(daftarTujuan, isEmpty);
+    });
+  });
+
+  group('Migrasi Bertingkat Skema v3 -> v4 (Tahap 3B)', () {
+    test(
+      'migrasi dari versi 3 ke versi 4 aman, membuat tabel utang, pembayaran, dan penyesuaian tanpa menghapus data v3',
+      () async {
+        // Simulasikan data v3 (tujuan)
+        await basisData.tabelTujuan.insertOne(
+          TabelTujuanCompanion.insert(
+            id: 'tujuan_v3',
+            nama: 'Laptop Kerja',
+            jenis: 'tujuan_besar',
+            targetRupiah: 15000000,
+            ikon: 'laptop',
+            warna: 'biru',
+            status: 'aktif',
+            dibuatPada: DateTime.now(),
+          ),
+        );
+
+        // Jalankan migrasi v3 -> v4
+        final migrator = Migrator(basisData);
+        await basisData.migration.onUpgrade(migrator, 3, 4);
+
+        // Verifikasi data v3 tetap utuh
+        final tujuanLama = await (basisData.select(
+          basisData.tabelTujuan,
+        )..where((t) => t.id.equals('tujuan_v3'))).getSingleOrNull();
+        expect(tujuanLama, isNotNull);
+        expect(tujuanLama!.nama, equals('Laptop Kerja'));
+
+        // Verifikasi tabel baru v4 (utang, pembayaran_utang, penyesuaian_utang) bisa diakses
+        final daftarUtang = await basisData.select(basisData.tabelUtang).get();
+        final daftarPembayaran = await basisData
+            .select(basisData.tabelPembayaranUtang)
+            .get();
+        final daftarPenyesuaian = await basisData
+            .select(basisData.tabelPenyesuaianUtang)
+            .get();
+
+        expect(daftarUtang, isEmpty);
+        expect(daftarPembayaran, isEmpty);
+        expect(daftarPenyesuaian, isEmpty);
+      },
+    );
+
+    test('migrasi v3 -> v4 aman diulang berkali-kali (idempoten)', () async {
+      final migrator = Migrator(basisData);
+
+      await basisData.migration.onUpgrade(migrator, 3, 4);
+      await basisData.migration.onUpgrade(migrator, 3, 4);
+      await basisData.migration.onUpgrade(migrator, 4, 4);
+
+      final daftarUtang = await basisData.select(basisData.tabelUtang).get();
+      expect(daftarUtang, isEmpty);
     });
   });
 }

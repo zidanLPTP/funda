@@ -82,6 +82,14 @@ final penyediaDaftarTransaksi = StreamProvider<List<EntitasTransaksi>>((ref) {
   return repo.pantauSemuaTransaksi();
 });
 
+/// Stream provider 5 transaksi terbaru untuk petak dashboard Beranda.
+final penyediaLimaTransaksiTerakhir = StreamProvider<List<EntitasTransaksi>>((
+  ref,
+) {
+  final repo = ref.watch(penyediaTransaksiRepositori);
+  return repo.pantauTransaksiBerhalaman(limit: 5);
+});
+
 /// Provider hasil perhitungan arus kas bulan berjalan (dari data nyata).
 final penyediaArusKasBulanIni = Provider<HasilArusKas>((ref) {
   final daftarTransaksiAsync = ref.watch(penyediaDaftarTransaksi);

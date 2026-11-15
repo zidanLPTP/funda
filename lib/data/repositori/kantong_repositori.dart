@@ -66,7 +66,8 @@ class KantongRepositori {
     );
     if (ada != null) return ada;
 
-    final id = 'ktg_${DateTime.now().microsecondsSinceEpoch}_${++_pencacahUnik}';
+    final id =
+        'ktg_${DateTime.now().microsecondsSinceEpoch}_${++_pencacahUnik}';
     final sekarang = DateTime.now();
     await tambahKantong(
       TabelKantongCompanion(
@@ -90,7 +91,8 @@ class KantongRepositori {
     required String ikon,
     required String warna,
   }) async {
-    final id = 'ktg_${DateTime.now().microsecondsSinceEpoch}_${++_pencacahUnik}';
+    final id =
+        'ktg_${DateTime.now().microsecondsSinceEpoch}_${++_pencacahUnik}';
     final sekarang = DateTime.now();
     await tambahKantong(
       TabelKantongCompanion(
@@ -114,7 +116,8 @@ class KantongRepositori {
     required int jumlahRupiah,
     String? catatan,
   }) async {
-    final id = 'alk_${DateTime.now().microsecondsSinceEpoch}_${++_pencacahUnik}';
+    final id =
+        'alk_${DateTime.now().microsecondsSinceEpoch}_${++_pencacahUnik}';
     final sekarang = DateTime.now();
     await tambahAlokasiKantong(
       TabelAlokasiKantongCompanion(

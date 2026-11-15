@@ -8,6 +8,7 @@ import '../../../data/basis_data.dart';
 import '../../../data/model/jenis_transaksi.dart';
 import '../../../data/model/sifat_kategori.dart';
 import '../../../data/penyedia_data.dart';
+import '../../utang/kontroler/penyedia_utang.dart';
 import '../../../komponen/komponen_funda.dart';
 import '../../../komponen/pembantu_ikon.dart';
 import '../../../perhitungan/perhitungan_keuangan.dart';
@@ -33,6 +34,7 @@ class _LayarFormTransaksiState extends ConsumerState<LayarFormTransaksi> {
   String? _dompetIdTerpilih;
   String? _dompetTujuanIdTerpilih;
   String? _kategoriIdTerpilih;
+  String? _utangIdTerpilih;
   late DateTime _waktuTransaksi;
   bool _memuat = false;
 
@@ -59,6 +61,17 @@ class _LayarFormTransaksiState extends ConsumerState<LayarFormTransaksi> {
     _dompetTujuanIdTerpilih = t?.dompetTujuanId;
     _kategoriIdTerpilih = t?.kategoriId;
     _waktuTransaksi = t?.waktuTransaksi.toLocal() ?? DateTime.now();
+
+    if (t != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
+        final relasi = await ref
+            .read(penyediaUtangRepositori)
+            .cariPembayaranBerdasarkanTransaksiId(t.id);
+        if (relasi != null && mounted) {
+          setState(() => _utangIdTerpilih = relasi.utangId);
+        }
+      });
+    }
   }
 
   @override
@@ -156,6 +169,7 @@ class _LayarFormTransaksiState extends ConsumerState<LayarFormTransaksi> {
 
     setState(() => _memuat = true);
     final repoTransaksi = ref.read(penyediaTransaksiRepositori);
+    final repoUtang = ref.read(penyediaUtangRepositori);
     final catatan = _pengontrolCatatan.text.trim();
     final waktuUtc = _waktuTransaksi.toUtc();
 
@@ -174,6 +188,17 @@ class _LayarFormTransaksiState extends ConsumerState<LayarFormTransaksi> {
           diubahPada: drift.Value(DateTime.now().toUtc()),
         ),
       );
+      if (_utangIdTerpilih != null) {
+        final relasiLama = await repoUtang.cariPembayaranBerdasarkanTransaksiId(
+          widget.transaksi!.id,
+        );
+        if (relasiLama == null || relasiLama.utangId != _utangIdTerpilih) {
+          await repoUtang.tautkanTransaksiKeUtang(
+            utangId: _utangIdTerpilih!,
+            transaksiId: widget.transaksi!.id,
+          );
+        }
+      }
     } else {
       final idBaru = 't_${DateTime.now().millisecondsSinceEpoch}';
       await repoTransaksi.tambahTransaksi(
@@ -189,6 +214,12 @@ class _LayarFormTransaksiState extends ConsumerState<LayarFormTransaksi> {
           waktuTransaksi: drift.Value(waktuUtc),
         ),
       );
+      if (_utangIdTerpilih != null) {
+        await repoUtang.tautkanTransaksiKeUtang(
+          utangId: _utangIdTerpilih!,
+          transaksiId: idBaru,
+        );
+      }
     }
 
     if (mounted) {
@@ -202,6 +233,13 @@ class _LayarFormTransaksiState extends ConsumerState<LayarFormTransaksi> {
     final daftarDompetAktif = ref.watch(penyediaDaftarDompetAktif).value ?? [];
     final semuaKategori = ref.watch(penyediaDaftarKategori).value ?? [];
     final petaSaldo = ref.watch(penyediaPetaSaldoDompet);
+    final daftarUtangAktif = ref.watch(penyediaDaftarUtangAktif).value ?? [];
+
+    final kategoriTerpilih = semuaKategori
+        .where((k) => k.id == _kategoriIdTerpilih)
+        .firstOrNull;
+    final apakahKategoriUtang =
+        kategoriTerpilih != null && kategoriTerpilih.sifat == 'utang';
 
     // Otomatis pilih dompet pertama jika belum dipilih
     if (_dompetIdTerpilih == null && daftarDompetAktif.isNotEmpty) {
@@ -397,6 +435,7 @@ class _LayarFormTransaksiState extends ConsumerState<LayarFormTransaksi> {
           ),
           const SizedBox(height: SpasiFunda.s),
           DropdownButtonFormField<String>(
+            isExpanded: true,
             initialValue: _dompetIdTerpilih,
             decoration: InputDecoration(
               filled: true,
@@ -422,7 +461,12 @@ class _LayarFormTransaksiState extends ConsumerState<LayarFormTransaksi> {
                       color: WarnaFunda.utama,
                     ),
                     const SizedBox(width: SpasiFunda.s),
-                    Text('${d.nama} (${formatRupiah(saldo)})'),
+                    Expanded(
+                      child: Text(
+                        '${d.nama} (${formatRupiah(saldo)})',
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
                   ],
                 ),
               );
@@ -436,6 +480,7 @@ class _LayarFormTransaksiState extends ConsumerState<LayarFormTransaksi> {
             const TeksFunda.label('Dompet Tujuan Transfer'),
             const SizedBox(height: SpasiFunda.s),
             DropdownButtonFormField<String>(
+              isExpanded: true,
               initialValue: _dompetTujuanIdTerpilih,
               decoration: InputDecoration(
                 hintText: 'Pilih dompet penerima',
@@ -463,7 +508,12 @@ class _LayarFormTransaksiState extends ConsumerState<LayarFormTransaksi> {
                             color: WarnaFunda.utama,
                           ),
                           const SizedBox(width: SpasiFunda.s),
-                          Text(d.nama),
+                          Expanded(
+                            child: Text(
+                              d.nama,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
                         ],
                       ),
                     );
@@ -558,6 +608,47 @@ class _LayarFormTransaksiState extends ConsumerState<LayarFormTransaksi> {
               }).toList(),
             ),
             const SizedBox(height: SpasiFunda.l),
+
+            // Dropdown Hubungkan ke Utang (jika kategori sifatnya utang)
+            if (apakahKategoriUtang && daftarUtangAktif.isNotEmpty) ...[
+              const TeksFunda.label('Hubungkan ke Utang (Opsional)'),
+              const SizedBox(height: SpasiFunda.s),
+              DropdownButtonFormField<String?>(
+                isExpanded: true,
+                initialValue: _utangIdTerpilih,
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: WarnaFunda.permukaan,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(SudutFunda.kartu),
+                    borderSide: const BorderSide(color: WarnaFunda.garis),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(SudutFunda.kartu),
+                    borderSide: const BorderSide(color: WarnaFunda.garis),
+                  ),
+                ),
+                items: [
+                  const DropdownMenuItem<String?>(
+                    value: null,
+                    child: Text(
+                      'Tidak dihubungkan ke utang spesifik',
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  ...daftarUtangAktif.map((u) {
+                    return DropdownMenuItem<String?>(
+                      value: u.id,
+                      child: Text(u.nama, overflow: TextOverflow.ellipsis),
+                    );
+                  }),
+                ],
+                onChanged: (val) {
+                  setState(() => _utangIdTerpilih = val);
+                },
+              ),
+              const SizedBox(height: SpasiFunda.l),
+            ],
           ],
 
           // Tanggal & Waktu
@@ -584,11 +675,13 @@ class _LayarFormTransaksiState extends ConsumerState<LayarFormTransaksi> {
                     color: WarnaFunda.utama,
                   ),
                   const SizedBox(width: SpasiFunda.m),
-                  TeksFunda.isi(
-                    DateFormat(
-                      'EEEE, d MMMM yyyy HH:mm',
-                      'id_ID',
-                    ).format(_waktuTransaksi),
+                  Expanded(
+                    child: TeksFunda.isi(
+                      DateFormat(
+                        'EEEE, d MMMM yyyy HH:mm',
+                        'id_ID',
+                      ).format(_waktuTransaksi),
+                    ),
                   ),
                 ],
               ),

@@ -5,11 +5,16 @@ import '../fitur/anggaran/tampilan/layar_anggaran.dart';
 import '../fitur/belajar/tampilan/layar_belajar.dart';
 import '../fitur/beranda/tampilan/layar_beranda.dart';
 import '../fitur/catatan/tampilan/layar_catatan.dart';
+import '../fitur/dompet/tampilan/layar_daftar_dompet.dart';
 import '../fitur/galeri/tampilan/layar_galeri.dart';
 import '../fitur/kantong/tampilan/layar_daftar_kantong.dart';
+import '../fitur/kekayaan_bersih/tampilan/layar_kekayaan_bersih.dart';
 import '../fitur/lainnya/tampilan/layar_lainnya.dart';
 import '../fitur/tujuan/tampilan/layar_daftar_tujuan.dart';
 import '../fitur/tujuan/tampilan/layar_detail_tujuan.dart';
+import '../fitur/utang/tampilan/layar_daftar_utang.dart';
+import '../fitur/utang/tampilan/layar_detail_utang.dart';
+import '../fitur/utang/tampilan/layar_form_utang.dart';
 import 'bilah_navigasi.dart';
 
 final GlobalKey<NavigatorState> _kunciNavigatorAkar = GlobalKey<NavigatorState>(
@@ -72,6 +77,11 @@ final ruteFunda = GoRouter(
     // Rute Fitur Tahap 3A: Anggaran, Tujuan, Kantong
     GoRoute(
       parentNavigatorKey: _kunciNavigatorAkar,
+      path: '/dompet',
+      builder: (context, state) => const LayarDaftarDompet(),
+    ),
+    GoRoute(
+      parentNavigatorKey: _kunciNavigatorAkar,
       path: '/anggaran',
       builder: (context, state) => const LayarAnggaran(),
     ),
@@ -92,6 +102,31 @@ final ruteFunda = GoRouter(
       parentNavigatorKey: _kunciNavigatorAkar,
       path: '/kantong',
       builder: (context, state) => const LayarDaftarKantong(),
+    ),
+
+    // Rute Fitur Tahap 3B: Utang & Kekayaan Bersih
+    GoRoute(
+      parentNavigatorKey: _kunciNavigatorAkar,
+      path: '/utang',
+      builder: (context, state) => const LayarDaftarUtang(),
+      routes: [
+        GoRoute(
+          parentNavigatorKey: _kunciNavigatorAkar,
+          path: 'tambah',
+          builder: (context, state) => const LayarFormUtang(),
+        ),
+        GoRoute(
+          parentNavigatorKey: _kunciNavigatorAkar,
+          path: ':id',
+          builder: (context, state) =>
+              LayarDetailUtang(utangId: state.pathParameters['id']!),
+        ),
+      ],
+    ),
+    GoRoute(
+      parentNavigatorKey: _kunciNavigatorAkar,
+      path: '/kekayaan-bersih',
+      builder: (context, state) => const LayarKekayaanBersih(),
     ),
 
     // Rute Galeri Komponen (hanya tersedia di mode debug)

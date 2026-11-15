@@ -62,6 +62,17 @@
 | unallocated balance | saldoBebas | Saldo dompet riil dikurangi total saldo seluruh kantong di dompet tersebut |
 | pocket allocation | alokasiKantong | Mutasi penambahan/pengurangan saldo kantong (`isi`, `ambil`, `penyesuaian`) |
 | budget realization | realisasiAnggaran | Evaluasi batas vs riil pengeluaran (`aman` < 80%, `mendekati` 80-100%, `melewati` > 100%) |
+| debt entity | EntitasUtang (`tabel_utang`) | Entitas data pencatatan utang / kewajiban |
+| debt type | jenisUtang | Jenis pinjaman (`kartuKredit`, `paylater`, `kpr`, `kendaraan`, `pinjamanOnline`, `pinjamanPribadi`, `lainnya`) |
+| interest type | jenisBunga | Tipe bunga utang (`tetap`, `efektif`, `tanpaBunga`) |
+| debt status | statusUtang | Status kelangsungan utang (`aktif`, `lunas`) |
+| basis points | basisPoin | Satuan suku bunga per tahun dalam integer (100 bp = 1%, tanpa tipe `double`) |
+| remaining debt | sisaRupiah | Sisa pokok / total utang yang belum terbayar |
+| debt payment | EntitasPembayaranUtang (`tabel_pembayaran_utang`) | Pembayaran utang yang atomik tertaut ke transaksi pengeluaran |
+| debt adjustment | EntitasPenyesuaianUtang (`tabel_penyesuaian_utang`) | Koreksi manual sisa utang (`tambah`, `kurang`) |
+| debt ratio | rasioCicilan | Persentase total cicilan bulanan terhadap rata-rata pemasukan 3 bulan terakhir |
+| net worth | kekayaanBersih | Nilai bersih finansial (total saldo dompet aktif dikurangi total sisa utang aktif) |
+| cursor pagination | ambilTransaksiKursor | Paginasi stabil berbasis kursor komposit `(waktu_transaksi, id)` |
 
 ## Aturan Cabang Kerja (Git)
 - Setiap tahap dikerjakan pada cabang khusus (contoh: `tahap-02-dompet-transaksi`).

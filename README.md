@@ -100,5 +100,22 @@ funda/
 
 ---
 
+## 📸 Tangkapan Layar Aplikasi
+Tangkapan layar otomatis yang dihasilkan dari pengujian widget tersimpan pada:
+- **Tahap 3B (Utang, Kekayaan Bersih & Dashboard):** [docs/tangkapan_layar/tahap_03b/](docs/tangkapan_layar/tahap_03b/)
+  - `01_beranda_penuh.png` — Dashboard Beranda modular Soft Bento
+  - `02_daftar_utang.png` — Layar Daftar Utang (Aktif, Lunas, Rasio Cicilan)
+  - `03_form_catat_utang.png` — Form Catat Utang Baru
+  - `04_detail_utang_aktif.png` — Detail Utang Berjalan
+  - `05_detail_utang_lunas.png` — Detail Utang Lunas (Pesan hangat tanpa gamifikasi)
+  - `06_kekayaan_bersih_menguatkan.png` — Kekayaan Bersih Negatif (Nada menguatkan)
+  - `07_kekayaan_bersih_positif.png` — Kekayaan Bersih Positif
+  - `08_form_transaksi_taut_utang.png` — Form Transaksi tertaut Pembayaran Utang
+  - `09_menu_lainnya_utang.png` — Menu Akses di Layar Lainnya
+- **Tahap 3A (Anggaran, Tujuan & Kantong):** [docs/tangkapan_layar/tahap_03a/](docs/tangkapan_layar/tahap_03a/)
+- **Tahap 2 (Dompet & Transaksi):** [docs/tangkapan_layar/tahap_02/](docs/tangkapan_layar/tahap_02/)
+
+---
+
 ## 🔤 Lisensi Font
 Font **Plus Jakarta Sans** dirancang oleh Tokotype (Gumpita Rahayu) dan dilisensikan di bawah lisensi terbuka [SIL Open Font License (OFL)](aset/font/OFL.txt). Berkas teks lisensi resmi disertakan pada `aset/font/OFL.txt`.

@@ -47,8 +47,8 @@ class LayarAnggaran extends ConsumerWidget {
                   SnackBar(
                     content: Text(
                       jumlahSalin > 0
-                          ? 'Berhasil menyalin $jumlahSalin anggaran dari bulan lalu.'
-                          : 'Tidak ada anggaran bulan lalu yang dapat disalin.',
+                          ? 'Berhasil menyalin $jumlahSalin pos anggaran dari bulan lalu (pos yang sudah ada tidak ditimpa).'
+                          : 'Semua pos anggaran sudah terisi atau tidak ada anggaran bulan lalu yang dapat disalin.',
                     ),
                   ),
                 );

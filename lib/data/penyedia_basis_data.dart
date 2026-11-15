@@ -6,6 +6,7 @@ import 'repositori/kantong_repositori.dart';
 import 'repositori/kategori_repositori.dart';
 import 'repositori/transaksi_repositori.dart';
 import 'repositori/tujuan_repositori.dart';
+import 'repositori/utang_repositori.dart';
 
 /// Provider instans tunggal basis data Drift.
 final penyediaBasisData = Provider<BasisDataFunda>((ref) {
@@ -49,4 +50,10 @@ final penyediaTujuanRepositori = Provider<TujuanRepositori>((ref) {
 final penyediaKantongRepositori = Provider<KantongRepositori>((ref) {
   final db = ref.watch(penyediaBasisData);
   return KantongRepositori(db);
+});
+
+/// Provider repositori utang dan cicilan.
+final penyediaUtangRepositori = Provider<UtangRepositori>((ref) {
+  final db = ref.watch(penyediaBasisData);
+  return UtangRepositori(db);
 });

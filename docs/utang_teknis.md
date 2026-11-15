@@ -28,5 +28,20 @@ Dokumen ini mencatat keputusan teknis sementara, kompromi dependensi, dan hal-ha
 
 - **Konteks:**
   Berkas `lib/data/penyedia_data.dart` awalnya menampung seluruh provider dari berbagai domain (dompet, kategori, transaksi).
+---
+
+## 4. Paginasi Berbasis Kursor Komposit (Tahap 3B)
+
+- **Konteks:**
+  Pada pengujian Tahap 3B langkah 0(d), ditemukan bahwa paginasi berbasis `OFFSET` rentan mengalami duplikasi item saat transaksi baru dimasukkan di halaman paling atas ketika halaman >= 2 sedang dibuka, atau baris terlewat saat transaksi di atas dihapus.
 - **Keputusan:**
-  Mulai Tahap 3A, berkas tersebut dipecah ke folder kontroler tiap fitur (`lib/fitur/<fitur>/kontroler/`) agar modularitas kode tetap terjaga seiring bertambahnya fitur anggaran, tujuan, dan kantong.
+  Ditambahkan metode `ambilTransaksiKursor(waktuKursor, idKursor, limit)` pada repositori transaksi menggunakan kunci urut komposit `(waktu_transaksi < kursor_waktu OR (waktu_transaksi == kursor_waktu AND id < kursor_id))`. Hal ini menjamin konsistensi kursor tanpa duplikasi atau baris yang terlewat pada aliran data dinamis.
+
+---
+
+## 5. Ambang Rasio Cicilan Sehat 30% (Tahap 3B)
+
+- **Konteks:**
+  Spesifikasi Tahap 3B menghendaki penghitungan rasio cicilan terhadap rata-rata pemasukan 3 bulan terakhir. Acuan umum industri perbankan menganggap rasio cicilan <= 30% masih dalam kategori wajar.
+- **Keputusan:**
+  Nilai 30% disimpan sebagai konstanta `ambangBatasRasioCicilanSehat = 30; // TODO-VERIFIKASI`. Di antarmuka pengguna (Layar Utang dan Beranda), angka persentase ditampilkan apa adanya secara netral (*"Bagian dari pemasukanmu yang dipakai untuk cicilan"*) tanpa memberi label aman/bahaya/lampu merah/hijau, menunggu materi edukasi kurikulum resmi pada Tahap 8.

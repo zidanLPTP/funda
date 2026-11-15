@@ -56,7 +56,8 @@ class DompetRepositori {
     required int saldoAwalRupiah,
     int urutan = 0,
   }) async {
-    final id = 'dmp_${DateTime.now().microsecondsSinceEpoch}_${++_pencacahUnik}';
+    final id =
+        'dmp_${DateTime.now().microsecondsSinceEpoch}_${++_pencacahUnik}';
     final sekarang = DateTime.now();
     await tambahDompet(
       TabelDompetCompanion(

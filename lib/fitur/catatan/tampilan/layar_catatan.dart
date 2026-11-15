@@ -185,6 +185,7 @@ class _LayarCatatanState extends ConsumerState<LayarCatatan> {
     // Jika belum ada dompet sama sekali di aplikasi
     if (daftarDompetAktif.isEmpty && daftarSemuaDompet.isEmpty) {
       return PembungkusLayar(
+        bisaGulir: true,
         appBar: AppBar(title: const TeksFunda.judulBagian('Catatan Keuangan')),
         anak: KeadaanKosong(
           ikon: LucideIcons.wallet,
@@ -313,35 +314,37 @@ class _LayarCatatanState extends ConsumerState<LayarCatatan> {
               error: (e, _) => Center(child: Text('Terjadi kesalahan: $e')),
               data: (transaksiTersaring) {
                 if (transaksiTersaring.isEmpty) {
-                  return KeadaanKosong(
-                    ikon: LucideIcons.receipt,
-                    judul:
-                        _kataKunci.isNotEmpty || _filter.jumlahFilterAktif > 0
-                        ? 'Tidak Ada Catatan yang Cocok'
-                        : 'Belum Ada Transaksi',
-                    pesan:
-                        _kataKunci.isNotEmpty || _filter.jumlahFilterAktif > 0
-                        ? 'Coba sesuaikan kata kunci pencarian atau hapus beberapa filter yang aktif.'
-                        : 'Setiap langkah keuangan dimulai dari satu catatan kecil. Yuk mulai catat transaksi pertamamu!',
-                    teksTombol: _filter.jumlahFilterAktif > 0
-                        ? 'Hapus Semua Filter'
-                        : 'Catat Transaksi Sekarang',
-                    padaAksi: () {
-                      if (_filter.jumlahFilterAktif > 0) {
-                        setState(() {
-                          _filter = const KondisiFilterTransaksi();
-                          _pengontrolCari.clear();
-                          _kataKunci = '';
-                        });
-                      } else {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => const LayarFormTransaksi(),
-                          ),
-                        );
-                      }
-                    },
+                  return SingleChildScrollView(
+                    child: KeadaanKosong(
+                      ikon: LucideIcons.receipt,
+                      judul:
+                          _kataKunci.isNotEmpty || _filter.jumlahFilterAktif > 0
+                          ? 'Tidak Ada Catatan yang Cocok'
+                          : 'Belum Ada Transaksi',
+                      pesan:
+                          _kataKunci.isNotEmpty || _filter.jumlahFilterAktif > 0
+                          ? 'Coba sesuaikan kata kunci pencarian atau hapus beberapa filter yang aktif.'
+                          : 'Setiap langkah keuangan dimulai dari satu catatan kecil. Yuk mulai catat transaksi pertamamu!',
+                      teksTombol: _filter.jumlahFilterAktif > 0
+                          ? 'Hapus Semua Filter'
+                          : 'Catat Transaksi Sekarang',
+                      padaAksi: () {
+                        if (_filter.jumlahFilterAktif > 0) {
+                          setState(() {
+                            _filter = const KondisiFilterTransaksi();
+                            _pengontrolCari.clear();
+                            _kataKunci = '';
+                          });
+                        } else {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => const LayarFormTransaksi(),
+                            ),
+                          );
+                        }
+                      },
+                    ),
                   );
                 }
 

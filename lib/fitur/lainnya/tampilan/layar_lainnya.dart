@@ -4,7 +4,6 @@ import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '../../../komponen/komponen_funda.dart';
 import '../../../tema/token.dart';
-import '../../dompet/tampilan/layar_daftar_dompet.dart';
 import '../../kategori/tampilan/layar_daftar_kategori.dart';
 
 /// Layar Lainnya: Pusat navigasi untuk Dompet, Kategori, Pengaturan, dan Galeri Pengembang.
@@ -86,15 +85,25 @@ class LayarLainnya extends StatelessWidget {
           ),
           const SizedBox(height: SpasiFunda.s),
           _ItemMenu(
+            ikon: LucideIcons.creditCard,
+            judul: 'Utang & Cicilan',
+            keterangan:
+                'Pantau sisa pinjaman, cicilan per bulan, dan rasio cicilan',
+            padaKetuk: () => context.push('/utang'),
+          ),
+          const SizedBox(height: SpasiFunda.s),
+          _ItemMenu(
+            ikon: LucideIcons.trendingUp,
+            judul: 'Kekayaan Bersih',
+            keterangan: 'Selisih total saldo aset dan sisa seluruh pinjaman',
+            padaKetuk: () => context.push('/kekayaan-bersih'),
+          ),
+          const SizedBox(height: SpasiFunda.s),
+          _ItemMenu(
             ikon: LucideIcons.wallet,
             judul: 'Kelola Dompet',
             keterangan: 'Tambah akun, ubah, arsipkan, atau sesuaikan saldo',
-            padaKetuk: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => const LayarDaftarDompet()),
-              );
-            },
+            padaKetuk: () => context.push('/dompet'),
           ),
           const SizedBox(height: SpasiFunda.s),
           _ItemMenu(

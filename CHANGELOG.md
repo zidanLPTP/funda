@@ -5,6 +5,45 @@ Format penulisan mengacu pada standar Keep a Changelog dan penamaan commit Funda
 
 ---
 
+## [0.4.0] - 2026-11-15 — Utang, Kekayaan Bersih & Dashboard (Tahap 3B)
+
+Tahap 3B: Pengelolaan Utang & Kewajiban (kartu kredit, paylater, KPR, kendaraan, pinjol, pribadi), Pencatatan Pembayaran Utang Atomik tertaut Transaksi, Penyesuaian Sisa Utang 2 Arah, Evaluasi Rasio Cicilan Bulanan, Perhitungan Kekayaan Bersih (Aset - Utang), serta Dashboard Penuh Soft Bento di Beranda.
+
+### Ditambahkan
+- **Skema Basis Data & Migrasi Bertingkat Skema v4 (`lib/data/basis_data.dart`):**
+  - Tabel `tabel_utang`: id, nama, jenis (`kartu_kredit`, `paylater`, `kpr`, `kendaraan`, `pinjaman_online`, `pinjaman_pribadi`, `lainnya`), pokok_awal_rupiah (int > 0), sisa_awal_rupiah (int > 0), bunga_basis_poin (int >= 0, 100 bp = 1%, tanpa tipe `double`), jenis_bunga (`tetap`, `efektif`, `tanpa_bunga`), tenor_bulan (int > 0), cicilan_bulanan_rupiah (int >= 0), tanggal_jatuh_tempo (1-31), status (`aktif`, `lunas`), diarsipkan, dibuat_pada.
+  - Tabel `tabel_pembayaran_utang`: id, utang_id, transaksi_id (unik, onDelete: Cascade), dibuat_pada. Menjamin pembayaran utang selalu atomik dan sinkron dengan transaksi pengeluaran.
+  - Tabel `tabel_penyesuaian_utang`: id, utang_id, arah (`tambah`, `kurang`), jumlah_rupiah (int > 0), catatan, waktu, dibuat_pada.
+  - Indeks komposit `idx_utang_status_diarsipkan` pada `(status, diarsipkan)` untuk kueri cepat utang aktif.
+- **Logika Murni Perhitungan TDD (`lib/perhitungan/perhitungan_utang_dashboard.dart`):**
+  - `hitungSisaUtang`: Sisa awal dikurangi total pembayaran ditambah penyesuaian tambah dikurangi penyesuaian kurang. Sisa utang tidak disimpan statis.
+  - `hitungKekayaanBersih`: Total saldo semua dompet aktif dikurangi total sisa utang aktif. Mendukung nilai negatif dengan pesan menguatkan yang ramah tanpa kepanikan.
+  - `hitungRasioCicilan`: Persentase integer total cicilan bulanan terhadap rata-rata pemasukan 3 bulan terakhir yang selesai. Dilengkapi konstanta `ambangBatasRasioCicilanSehat = 30` (TODO-VERIFIKASI) yang belum digunakan untuk menghakimi aman/bahaya di antarmuka.
+  - `hitungPemasukanBulananRataRata`: Algoritma cerdas yang menghitung rata-rata dari 3 bulan kalender terakhir yang sudah selesai, dengan fallback ke bulan berjalan bila belum ada data lampau.
+  - `konversiBasisPoinKePersen`: Format representasi persen dari basis poin (misal 1500 bp = "15%").
+  - `pilihTujuanTerdekat`: Memilih tujuan non-darurat dengan progres dana tertinggi di bawah 100% untuk ditampilkan di Beranda.
+- **Repositori & State Management Riverpod (`lib/data/repositori/utang_repositori.dart`, `penyedia_utang.dart`):**
+  - `catatPembayaranUtang`: Transaksi database atomik yang serentak mencatat `tabel_transaksi` pengeluaran dan `tabel_pembayaran_utang`.
+  - Otomatisasi status `lunas` saat sisa utang mencapai Rp 0 dan kembali `aktif` bila pembayaran dibatalkan/dihapus via foreign key cascade.
+  - Penyesuaian sisa utang 2 arah (menambah/mengurangi beban utang).
+  - Paginasi kursor stabil `ambilTransaksiKursor` berbasis komposit `(waktu_transaksi, id)` yang terbukti imun dari duplikasi atau baris terlewat saat ada penambahan/penghapusan data.
+  - Uji kesetaraan agregasi SQL vs fungsi murni Dart lulus identik 100% pada data acak (`test/data/repositori_utang_test.dart`).
+- **Antarmuka Pengguna Soft Bento Baru:**
+  - **Layar Beranda Penuh:** 8-9 Petak Bento modular (Arus Kas Bulan Ini, Total Saldo, Kekayaan Bersih, Sisa Anggaran, Dana Darurat, Rasio Cicilan, Tujuan Terdekat, Lanjut Belajar bertanda jelas, 5 Transaksi Terakhir). Responsif pada skala teks 2.0 (susun bertumpuk saat teks besar).
+  - **Layar Daftar Utang (`layar_daftar_utang.dart`):** Hero total sisa utang aktif, total cicilan bulanan, rasio cicilan, daftar utang aktif vs lunas terpisah, dan FAB catat utang.
+  - **Layar Form Utang (`layar_form_utang.dart`):** Input jenis utang, pokok, sisa awal, bunga basis poin, tenor, cicilan per bulan, dan tanggal jatuh tempo bulanan.
+  - **Layar Detail Utang (`layar_detail_utang.dart`):** Hero sisa utang, pesan hangat kelulusan tanpa gamifikasi berlebih, modal catat pembayaran atomik, modal penyesuaian sisa, riwayat pembayaran & penyesuaian, dan opsi arsip.
+  - **Layar Kekayaan Bersih (`layar_kekayaan_bersih.dart`):** Hero kekayaan bersih, nada menguatkan saat negatif, rincian per dompet aktif vs per utang aktif.
+  - **Integrasi Form Transaksi (`layar_form_transaksi.dart`):** Pemilih utang aktif saat kategori bertipe `utang`, mencatat pembayaran utang secara atomik.
+  - **Layar Lainnya (`layar_lainnya.dart`):** Menu akses cepat "Utang & Cicilan", "Kekayaan Bersih", dan "Daftar Dompet".
+- **Aksesibilitas & Pengujian:**
+  - Uji skala teks 2.0 pada seluruh 12 layar utama aplikasi tanpa teks terpotong atau overflow (`test/fitur/aksesibilitas_skala_teks_tahap_03b_test.dart`).
+  - Uji paginasi kursor deterministik (`test/data/paginasi_transaksi_test.dart`).
+  - Uji benchmark performa bersih 1x pemanasan + 5 iterasi pada 5.000 dan 20.000 transaksi (`test/performa/benchmark_tahap_03b_test.dart`).
+  - 9 tangkapan layar PNG di `docs/tangkapan_layar/tahap_03b/`.
+
+---
+
 ## [0.3.0] - 2026-11-15 — Anggaran, Tujuan & Kantong (Tahap 3A)
 
 Tahap 3A: Pengelolaan Anggaran Bulanan per kategori, Sistem Kantong Dompet (mental accounting / envelope budgeting lokal tanpa pemindahan dana riil), Tujuan Finansial (Tabungan, Dana Darurat, Tujuan Besar), serta optimalisasi performa paginasi riwayat dan agregasi SQL.

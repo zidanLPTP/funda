@@ -180,8 +180,10 @@ class _LayarDaftarKantongState extends ConsumerState<LayarDaftarKantong> {
             const SizedBox(height: SpasiFunda.l),
 
             // Daftar Kantong di Dompet Tersebut
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            Wrap(
+              alignment: WrapAlignment.spaceBetween,
+              crossAxisAlignment: WrapCrossAlignment.center,
+              spacing: SpasiFunda.s,
               children: [
                 const TeksFunda.judulBagian('Daftar Kantong'),
                 TextButton.icon(

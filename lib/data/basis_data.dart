@@ -9,9 +9,12 @@ import 'tabel/tabel_anggaran.dart';
 import 'tabel/tabel_dompet.dart';
 import 'tabel/tabel_kantong.dart';
 import 'tabel/tabel_kategori.dart';
+import 'tabel/tabel_pembayaran_utang.dart';
 import 'tabel/tabel_pengaturan.dart';
+import 'tabel/tabel_penyesuaian_utang.dart';
 import 'tabel/tabel_transaksi.dart';
 import 'tabel/tabel_tujuan.dart';
+import 'tabel/tabel_utang.dart';
 
 part 'basis_data.g.dart';
 
@@ -27,6 +30,9 @@ part 'basis_data.g.dart';
     TabelTujuan,
     TabelKantong,
     TabelAlokasiKantong,
+    TabelUtang,
+    TabelPembayaranUtang,
+    TabelPenyesuaianUtang,
   ],
 )
 class BasisDataFunda extends _$BasisDataFunda {
@@ -34,7 +40,7 @@ class BasisDataFunda extends _$BasisDataFunda {
     : super(pelaksanaKueri ?? _bukaKoneksi());
 
   @override
-  int get schemaVersion => 3;
+  int get schemaVersion => 4;
 
   @override
   MigrationStrategy get migration {
@@ -53,6 +59,14 @@ class BasisDataFunda extends _$BasisDataFunda {
         await customStatement(
           'CREATE INDEX IF NOT EXISTS idx_anggaran_periode '
           'ON tabel_anggaran (tahun, bulan);',
+        );
+        await customStatement(
+          'CREATE INDEX IF NOT EXISTS idx_pembayaran_utang_utang_id '
+          'ON tabel_pembayaran_utang (utang_id);',
+        );
+        await customStatement(
+          'CREATE INDEX IF NOT EXISTS idx_penyesuaian_utang_utang_id '
+          'ON tabel_penyesuaian_utang (utang_id);',
         );
       },
       onUpgrade: (Migrator m, int dariVersi, int keVersi) async {
@@ -101,6 +115,20 @@ class BasisDataFunda extends _$BasisDataFunda {
         await customStatement(
           'CREATE INDEX IF NOT EXISTS idx_anggaran_periode '
           'ON tabel_anggaran (tahun, bulan);',
+        );
+        break;
+      case 4:
+        // Skema tahap 3B: utang, pembayaran_utang, penyesuaian_utang
+        await m.createTable(tabelUtang);
+        await m.createTable(tabelPembayaranUtang);
+        await m.createTable(tabelPenyesuaianUtang);
+        await customStatement(
+          'CREATE INDEX IF NOT EXISTS idx_pembayaran_utang_utang_id '
+          'ON tabel_pembayaran_utang (utang_id);',
+        );
+        await customStatement(
+          'CREATE INDEX IF NOT EXISTS idx_penyesuaian_utang_utang_id '
+          'ON tabel_penyesuaian_utang (utang_id);',
         );
         break;
       default:

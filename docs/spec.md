@@ -289,7 +289,9 @@ Kamu mengirim **prompt per tahap** ke agent → agent kerja dan menulis laporan 
 |---|---|---|
 | 1 | **Fondasi:** proyek Flutter, struktur, tema bento, navigasi, SQLite + migrasi, util Rupiah, uji, dokumentasi | Aplikasi kosong yang berjalan |
 | 2 | **Dompet & transaksi:** banyak dompet, kategori + sifat, transaksi, transfer antar dompet, sesuaikan saldo | Pencatat inti |
-| 3 | **Pengelolaan:** kantong, tagihan berulang, anggaran, tujuan, utang, kekayaan bersih, dashboard bento | Data lengkap untuk gerbang |
+| 3A | **Anggaran, Tujuan & Kantong:** alokasi kantong (pos penandaan saldo), anggaran per kategori, tujuan finansial | Pengelolaan alokasi & anggaran |
+| 3B | **Utang, Kekayaan Bersih & Dashboard:** pelacak utang & cicilan, pencatatan pembayaran terhubung transaksi, kekayaan bersih, dashboard Beranda penuh | Dasbor & pelacak kewajiban |
+| 3C | **Tagihan Berulang & Pengingat:** tagihan/langganan berulang, pengingat lokal, petak tagihan di Beranda | Pengingat komitmen rutin |
 | 4 | **Mesin belajar:** pemutar pelajaran, kuis, misi, **gerbang data**, pembaca konten | Satu pelajaran jalan penuh |
 | 5 | **Tes awal & personalisasi** | Profil + rekomendasi modul |
 | 6 | **Modul 1 lengkap** | **MVP belajar** |
