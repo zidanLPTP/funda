@@ -9,9 +9,11 @@ import 'tabel/tabel_anggaran.dart';
 import 'tabel/tabel_dompet.dart';
 import 'tabel/tabel_kantong.dart';
 import 'tabel/tabel_kategori.dart';
+import 'tabel/tabel_pembayaran_tagihan.dart';
 import 'tabel/tabel_pembayaran_utang.dart';
 import 'tabel/tabel_pengaturan.dart';
 import 'tabel/tabel_penyesuaian_utang.dart';
+import 'tabel/tabel_tagihan.dart';
 import 'tabel/tabel_transaksi.dart';
 import 'tabel/tabel_tujuan.dart';
 import 'tabel/tabel_utang.dart';
@@ -33,6 +35,8 @@ part 'basis_data.g.dart';
     TabelUtang,
     TabelPembayaranUtang,
     TabelPenyesuaianUtang,
+    TabelTagihan,
+    TabelPembayaranTagihan,
   ],
 )
 class BasisDataFunda extends _$BasisDataFunda {
@@ -40,7 +44,7 @@ class BasisDataFunda extends _$BasisDataFunda {
     : super(pelaksanaKueri ?? _bukaKoneksi());
 
   @override
-  int get schemaVersion => 4;
+  int get schemaVersion => 5;
 
   @override
   MigrationStrategy get migration {
@@ -48,6 +52,7 @@ class BasisDataFunda extends _$BasisDataFunda {
       onCreate: (Migrator m) async {
         await m.createAll();
         await _seedKategoriBawaan();
+        await _seedPengaturanAwal();
         await customStatement(
           'CREATE UNIQUE INDEX IF NOT EXISTS idx_kantong_dompet_tujuan '
           'ON tabel_kantong (dompet_id, tujuan_id) WHERE tujuan_id IS NOT NULL;',
@@ -67,6 +72,14 @@ class BasisDataFunda extends _$BasisDataFunda {
         await customStatement(
           'CREATE INDEX IF NOT EXISTS idx_penyesuaian_utang_utang_id '
           'ON tabel_penyesuaian_utang (utang_id);',
+        );
+        await customStatement(
+          'CREATE INDEX IF NOT EXISTS idx_tagihan_aktif_diarsipkan '
+          'ON tabel_tagihan (aktif, diarsipkan);',
+        );
+        await customStatement(
+          'CREATE INDEX IF NOT EXISTS idx_pembayaran_tagihan_jatuh_tempo '
+          'ON tabel_pembayaran_tagihan (tagihan_id, jatuh_tempo);',
         );
       },
       onUpgrade: (Migrator m, int dariVersi, int keVersi) async {
@@ -131,9 +144,51 @@ class BasisDataFunda extends _$BasisDataFunda {
           'ON tabel_penyesuaian_utang (utang_id);',
         );
         break;
+      case 5:
+        // Skema tahap 3C: tagihan, pembayaran_tagihan
+        await m.createTable(tabelTagihan);
+        await m.createTable(tabelPembayaranTagihan);
+        await customStatement(
+          'CREATE INDEX IF NOT EXISTS idx_tagihan_aktif_diarsipkan '
+          'ON tabel_tagihan (aktif, diarsipkan);',
+        );
+        await customStatement(
+          'CREATE INDEX IF NOT EXISTS idx_pembayaran_tagihan_jatuh_tempo '
+          'ON tabel_pembayaran_tagihan (tagihan_id, jatuh_tempo);',
+        );
+        await _seedPengaturanAwal();
+        break;
       default:
         break;
     }
+  }
+
+  /// Menyuntikkan nilai pengaturan awal secara idempoten.
+  Future<void> _seedPengaturanAwal() async {
+    await into(tabelPengaturan).insert(
+      TabelPengaturanCompanion(
+        kunci: const Value('pengingat_aktif'),
+        nilai: const Value('false'),
+        diubahPada: Value(DateTime.now()),
+      ),
+      mode: InsertMode.insertOrIgnore,
+    );
+    await into(tabelPengaturan).insert(
+      TabelPengaturanCompanion(
+        kunci: const Value('jam_pengingat'),
+        nilai: const Value('09:00'),
+        diubahPada: Value(DateTime.now()),
+      ),
+      mode: InsertMode.insertOrIgnore,
+    );
+    await into(tabelPengaturan).insert(
+      TabelPengaturanCompanion(
+        kunci: const Value('tampilkan_nominal_di_pengingat'),
+        nilai: const Value('false'),
+        diubahPada: Value(DateTime.now()),
+      ),
+      mode: InsertMode.insertOrIgnore,
+    );
   }
 
   /// Menyuntikkan kategori bawaan sistem secara idempoten (InsertMode.insertOrIgnore).

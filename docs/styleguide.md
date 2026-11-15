@@ -73,6 +73,7 @@ Antarmuka tersusun dari **petak-petak (tile) membulat** berukuran beragam di ata
 | `tintBiru` | `#E8F0FE` | Kebutuhan, anggaran |
 | `tintUngu` | `#F1EBFD` | Keinginan, refleksi |
 | `tintAmber` | `#FEF3E2` | Utang, peringatan lembut |
+| `tintMawar` | `#FCE7F3` | Kekayaan bersih negatif bernada menguatkan (kontras teks `#0F1F1D` = 14.5:1 ≥ 4.5:1) |
 | `tintNetral` | `#F1F5F4` | Petak netral (transaksi, pengaturan) |
 
 ### Warna sifat pengeluaran (inti konsep aplikasi)

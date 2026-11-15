@@ -8,6 +8,7 @@ enum TintPetakBento {
   ungu(WarnaFunda.tintUngu),
   amber(WarnaFunda.tintAmber),
   netral(WarnaFunda.tintNetral),
+  mawar(WarnaFunda.tintMawar),
   putih(WarnaFunda.permukaan);
 
   const TintPetakBento(this.warna);

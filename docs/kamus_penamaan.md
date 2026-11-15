@@ -73,6 +73,15 @@
 | debt ratio | rasioCicilan | Persentase total cicilan bulanan terhadap rata-rata pemasukan 3 bulan terakhir |
 | net worth | kekayaanBersih | Nilai bersih finansial (total saldo dompet aktif dikurangi total sisa utang aktif) |
 | cursor pagination | ambilTransaksiKursor | Paginasi stabil berbasis kursor komposit `(waktu_transaksi, id)` |
+| recurring bill | tagihan | Entitas tagihan / langganan berkala (`TabelTagihan`) |
+| bill payment | pembayaranTagihan | Riwayat penandaan tagihan per periode (`TabelPembayaranTagihan`) |
+| bill frequency | frekuensiTagihan | Frekuensi jatuh tempo (`mingguan`, `bulanan`, `tahunan`) |
+| bill type | jenisTagihan | Jenis pos tagihan (`tagihanRutin`, `langganan`) |
+| bill payment status | statusPembayaranTagihan | Status jatuh tempo periode (`sudahDibayar`, `dilewati`) |
+| bill due date | jatuhTempo | Tanggal jatuh tempo spesifik tagihan pada periode tertentu |
+| local notification | pengingatLokal | Layanan pemberitahuan jadwal jatuh tempo lokal (`LayananPengingat`) |
+| inexact alarm | pengingatHematDaya | Jadwal notifikasi ramah baterai tanpa exact alarm permission |
+| nominal privacy | privasiNominal | Pengaturan untuk menyembunyikan angka Rupiah pada teks notifikasi |
 
 ## Aturan Cabang Kerja (Git)
 - Setiap tahap dikerjakan pada cabang khusus (contoh: `tahap-02-dompet-transaksi`).

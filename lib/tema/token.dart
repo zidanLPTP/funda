@@ -37,6 +37,7 @@ abstract final class WarnaFunda {
   static const tintUngu = Color(0xFFF1EBFD);
   static const tintAmber = Color(0xFFFEF3E2);
   static const tintNetral = Color(0xFFF1F5F4);
+  static const tintMawar = Color(0xFFFCE7F3);
 }
 
 /// Token spasi Funda berbasis grid 4dp.

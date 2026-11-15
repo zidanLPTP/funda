@@ -93,6 +93,14 @@ class LayarLainnya extends StatelessWidget {
           ),
           const SizedBox(height: SpasiFunda.s),
           _ItemMenu(
+            ikon: LucideIcons.calendarClock,
+            judul: 'Tagihan & Langganan',
+            keterangan:
+                'Jadwal jatuh tempo rutin dan pengingat lokal ramah baterai',
+            padaKetuk: () => context.push('/tagihan'),
+          ),
+          const SizedBox(height: SpasiFunda.s),
+          _ItemMenu(
             ikon: LucideIcons.trendingUp,
             judul: 'Kekayaan Bersih',
             keterangan: 'Selisih total saldo aset dan sisa seluruh pinjaman',
@@ -139,9 +147,18 @@ class LayarLainnya extends StatelessWidget {
           ),
           const SizedBox(height: SpasiFunda.s),
           _ItemMenu(
+            ikon: LucideIcons.settings,
+            judul: 'Pengaturan',
+            keterangan:
+                'Kelola pengingat lokal, jam notifikasi, dan privasi nominal',
+            padaKetuk: () => context.push('/pengaturan'),
+          ),
+          const SizedBox(height: SpasiFunda.s),
+          _ItemMenu(
             ikon: LucideIcons.info,
             judul: 'Tentang Funda',
-            keterangan: 'Versi 0.2.0 (Tahap 2 - Dompet & Transaksi)',
+            keterangan:
+                'Versi 0.5.0 (Tahap 3C - Tagihan Berulang & Pengingat Lokal)',
             padaKetuk: () => _tampilkanPesan(context, 'Tentang Funda'),
           ),
           const SizedBox(height: SpasiFunda.xl),

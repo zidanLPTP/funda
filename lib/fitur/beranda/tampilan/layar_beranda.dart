@@ -12,6 +12,8 @@ import '../../../tema/token.dart';
 import '../../../util/format_rupiah.dart';
 import '../../anggaran/kontroler/penyedia_anggaran.dart';
 import '../../dompet/tampilan/layar_form_dompet.dart';
+import '../../tagihan/kontroler/penyedia_tagihan.dart';
+import '../../../perhitungan/perhitungan_tagihan.dart';
 import '../../tujuan/kontroler/penyedia_tujuan.dart';
 import '../../utang/kontroler/penyedia_utang.dart';
 
@@ -186,15 +188,11 @@ class LayarBeranda extends ConsumerWidget {
                     ],
                   ),
                   const SizedBox(height: SpasiFunda.s),
-                  FittedBox(
-                    fit: BoxFit.scaleDown,
-                    alignment: Alignment.centerLeft,
-                    child: TeksFunda.angkaBesar(
-                      formatRupiah(arusKas.selisih),
-                      warna: arusKas.selisih < 0
-                          ? WarnaFunda.pengeluaran
-                          : WarnaFunda.teks,
-                    ),
+                  TeksFunda.angkaBesar(
+                    formatRupiah(arusKas.selisih),
+                    warna: arusKas.selisih < 0
+                        ? WarnaFunda.pengeluaran
+                        : WarnaFunda.teks,
                   ),
                   const SizedBox(height: SpasiFunda.xs),
                   TeksFunda.catatan(
@@ -234,16 +232,12 @@ class LayarBeranda extends ConsumerWidget {
                     const SizedBox(height: SpasiFunda.m),
                     const TeksFunda.isiKecil('Total Saldo'),
                     const SizedBox(height: SpasiFunda.xs),
-                    FittedBox(
-                      fit: BoxFit.scaleDown,
-                      alignment: Alignment.centerLeft,
-                      child: TeksFunda.judulBagian(
-                        formatRupiah(totalSaldo),
-                        angkaTabular: true,
-                        warna: totalSaldo < 0
-                            ? WarnaFunda.pengeluaran
-                            : WarnaFunda.teks,
-                      ),
+                    TeksFunda.judulBagian(
+                      formatRupiah(totalSaldo),
+                      angkaTabular: true,
+                      warna: totalSaldo < 0
+                          ? WarnaFunda.pengeluaran
+                          : WarnaFunda.teks,
                     ),
                     const SizedBox(height: SpasiFunda.xs),
                     TeksFunda.catatan(
@@ -277,16 +271,12 @@ class LayarBeranda extends ConsumerWidget {
                     const SizedBox(height: SpasiFunda.m),
                     const TeksFunda.isiKecil('Kekayaan Bersih'),
                     const SizedBox(height: SpasiFunda.xs),
-                    FittedBox(
-                      fit: BoxFit.scaleDown,
-                      alignment: Alignment.centerLeft,
-                      child: TeksFunda.judulBagian(
-                        formatRupiah(kekayaanBersih),
-                        angkaTabular: true,
-                        warna: kekayaanBersih < 0
-                            ? WarnaFunda.pengeluaran
-                            : WarnaFunda.teks,
-                      ),
+                    TeksFunda.judulBagian(
+                      formatRupiah(kekayaanBersih),
+                      angkaTabular: true,
+                      warna: kekayaanBersih < 0
+                          ? WarnaFunda.pengeluaran
+                          : WarnaFunda.teks,
                     ),
                     const SizedBox(height: SpasiFunda.xs),
                     const TeksFunda.catatan('Aset dikurangi utang'),
@@ -331,16 +321,12 @@ class LayarBeranda extends ConsumerWidget {
                         const SizedBox(height: SpasiFunda.m),
                         const TeksFunda.isiKecil('Sisa Anggaran'),
                         const SizedBox(height: SpasiFunda.xs),
-                        FittedBox(
-                          fit: BoxFit.scaleDown,
-                          alignment: Alignment.centerLeft,
-                          child: TeksFunda.judulBagian(
-                            formatRupiah(sisa),
-                            angkaTabular: true,
-                            warna: sisa < 0
-                                ? WarnaFunda.pengeluaran
-                                : WarnaFunda.teks,
-                          ),
+                        TeksFunda.judulBagian(
+                          formatRupiah(sisa),
+                          angkaTabular: true,
+                          warna: sisa < 0
+                              ? WarnaFunda.pengeluaran
+                              : WarnaFunda.teks,
                         ),
                         const SizedBox(height: SpasiFunda.xs),
                         const TeksFunda.catatan('Bulan berjalan'),
@@ -417,13 +403,7 @@ class LayarBeranda extends ConsumerWidget {
                               const SizedBox(height: SpasiFunda.xs),
                               TeksFunda.judulBagian('$progres%'),
                               const SizedBox(height: SpasiFunda.xs),
-                              FittedBox(
-                                fit: BoxFit.scaleDown,
-                                alignment: Alignment.centerLeft,
-                                child: TeksFunda.catatan(
-                                  formatRupiah(danaTerkumpul),
-                                ),
-                              ),
+                              TeksFunda.catatan(formatRupiah(danaTerkumpul)),
                             ],
                           );
                         },
@@ -460,13 +440,9 @@ class LayarBeranda extends ConsumerWidget {
                     const SizedBox(height: SpasiFunda.m),
                     const TeksFunda.isiKecil('Rasio Cicilan'),
                     const SizedBox(height: SpasiFunda.xs),
-                    FittedBox(
-                      fit: BoxFit.scaleDown,
-                      alignment: Alignment.centerLeft,
-                      child: TeksFunda.judulBagian(
-                        rasioCicilan != null ? '$rasioCicilan%' : '0%',
-                        angkaTabular: true,
-                      ),
+                    TeksFunda.judulBagian(
+                      rasioCicilan != null ? '$rasioCicilan%' : '0%',
+                      angkaTabular: true,
                     ),
                     const SizedBox(height: SpasiFunda.xs),
                     const TeksFunda.catatan('Beban cicilanmu'),
@@ -546,13 +522,7 @@ class LayarBeranda extends ConsumerWidget {
                               const SizedBox(height: SpasiFunda.xs),
                               TeksFunda.judulBagian('$progres%'),
                               const SizedBox(height: SpasiFunda.xs),
-                              FittedBox(
-                                fit: BoxFit.scaleDown,
-                                alignment: Alignment.centerLeft,
-                                child: TeksFunda.catatan(
-                                  formatRupiah(danaTerkumpul),
-                                ),
-                              ),
+                              TeksFunda.catatan(formatRupiah(danaTerkumpul)),
                             ],
                           );
                         },
@@ -613,7 +583,172 @@ class LayarBeranda extends ConsumerWidget {
             ),
             const SizedBox(height: SpasiFunda.jarakPetak),
 
-            // 9. Bento 2x1: 5 Transaksi Terakhir (Data Nyata)
+            // 9. Bento 2x1: Tagihan Terdekat (Data Nyata)
+            Consumer(
+              builder: (context, ref, _) {
+                final tagihanTerdekatAsync = ref.watch(
+                  penyediaTagihanTerdekatBeranda,
+                );
+                return tagihanTerdekatAsync.when(
+                  loading: () => const SizedBox.shrink(),
+                  error: (_, _) => const SizedBox.shrink(),
+                  data: (tagihan) {
+                    if (tagihan == null) {
+                      return PetakBento.ukuran2x1(
+                        tint: TintPetakBento.netral,
+                        padaKetuk: () => context.push('/tagihan'),
+                        labelAkses:
+                            'Tagihan terdekat: Tidak ada tagihan dalam 7 hari ke depan',
+                        anak: Row(
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.all(SpasiFunda.m),
+                              decoration: BoxDecoration(
+                                color: WarnaFunda.permukaan,
+                                borderRadius: BorderRadius.circular(
+                                  SudutFunda.kartu,
+                                ),
+                              ),
+                              child: const Icon(
+                                LucideIcons.calendarCheck,
+                                color: WarnaFunda.utama,
+                                size: 24,
+                              ),
+                            ),
+                            const SizedBox(width: SpasiFunda.m),
+                            const Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  TeksFunda.label('Tagihan Terdekat'),
+                                  SizedBox(height: SpasiFunda.xs),
+                                  TeksFunda.catatan(
+                                    'Tidak ada tagihan dalam 7 hari ke depan. Aman!',
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const Icon(
+                              LucideIcons.chevronRight,
+                              color: WarnaFunda.teksRedup,
+                            ),
+                          ],
+                        ),
+                      );
+                    }
+
+                    final isLewat =
+                        tagihan.status == StatusKemunculan.lewat ||
+                        tagihan.status == StatusKemunculan.lewatKedaluwarsa;
+                    final isHariIni =
+                        tagihan.status == StatusKemunculan.hariIni;
+
+                    final warnaTint = isLewat
+                        ? TintPetakBento.mawar
+                        : (isHariIni
+                              ? TintPetakBento.amber
+                              : TintPetakBento.hijau);
+
+                    String infoStatus;
+                    if (isLewat) {
+                      infoStatus = 'Lewat ${-tagihan.selisihHari} hari';
+                    } else if (isHariIni) {
+                      infoStatus = 'Jatuh tempo hari ini';
+                    } else {
+                      infoStatus = tagihan.selisihHari == 1
+                          ? 'Besok'
+                          : '${tagihan.selisihHari} hari lagi';
+                    }
+
+                    return PetakBento.ukuran2x1(
+                      tint: warnaTint,
+                      padaKetuk: () => context.push('/tagihan'),
+                      labelAkses:
+                          'Tagihan terdekat: ${tagihan.nama}, $infoStatus, perkiraan ${tagihan.jumlahPerkiraanRupiah != null ? formatRupiah(tagihan.jumlahPerkiraanRupiah!) : "fluktuatif"}',
+                      anak: Row(
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.all(SpasiFunda.m),
+                            decoration: BoxDecoration(
+                              color: WarnaFunda.permukaan,
+                              borderRadius: BorderRadius.circular(
+                                SudutFunda.kartu,
+                              ),
+                            ),
+                            child: Icon(
+                              isLewat
+                                  ? LucideIcons.circleAlert
+                                  : (isHariIni
+                                        ? LucideIcons.clock
+                                        : LucideIcons.calendarClock),
+                              color: isLewat
+                                  ? WarnaFunda.pengeluaran
+                                  : (isHariIni
+                                        ? WarnaFunda.peringatan
+                                        : WarnaFunda.utama),
+                              size: 24,
+                            ),
+                          ),
+                          const SizedBox(width: SpasiFunda.m),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Wrap(
+                                  spacing: SpasiFunda.xs,
+                                  runSpacing: SpasiFunda.xs,
+                                  crossAxisAlignment: WrapCrossAlignment.center,
+                                  children: [
+                                    Text(
+                                      tagihan.nama,
+                                      style: TipografiFunda.label,
+                                    ),
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 6,
+                                        vertical: 2,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color: WarnaFunda.permukaan,
+                                        borderRadius: BorderRadius.circular(4),
+                                      ),
+                                      child: Text(
+                                        infoStatus,
+                                        style: TipografiFunda.catatan.copyWith(
+                                          color: isLewat
+                                              ? WarnaFunda.pengeluaran
+                                              : WarnaFunda.teks,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: SpasiFunda.xs),
+                                TeksFunda.catatan(
+                                  tagihan.jumlahPerkiraanRupiah != null &&
+                                          tagihan.jumlahPerkiraanRupiah! > 0
+                                      ? 'Perkiraan: ${formatRupiah(tagihan.jumlahPerkiraanRupiah!)}'
+                                      : 'Nominal fluktuatif',
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(width: SpasiFunda.s),
+                          const Icon(
+                            LucideIcons.chevronRight,
+                            color: WarnaFunda.teksRedup,
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                );
+              },
+            ),
+            const SizedBox(height: SpasiFunda.jarakPetak),
+
+            // 10. Bento 2x1: 5 Transaksi Terakhir (Data Nyata)
             PetakBento.ukuran2x1(
               tint: TintPetakBento.netral,
               padaKetuk: () => context.go('/catatan'),
@@ -719,14 +854,11 @@ class LayarBeranda extends ConsumerWidget {
                                   ),
                                 ),
                                 const SizedBox(width: SpasiFunda.s),
-                                FittedBox(
-                                  fit: BoxFit.scaleDown,
-                                  child: Text(
-                                    '${isMasuk ? '+' : '-'} ${formatRupiah(t.jumlahRupiah)}',
-                                    style: TipografiFunda.catatan.copyWith(
-                                      color: warnaNominal,
-                                      fontWeight: FontWeight.w600,
-                                    ),
+                                Text(
+                                  '${isMasuk ? '+' : '-'} ${formatRupiah(t.jumlahRupiah)}',
+                                  style: TipografiFunda.catatan.copyWith(
+                                    color: warnaNominal,
+                                    fontWeight: FontWeight.w600,
                                   ),
                                 ),
                               ],

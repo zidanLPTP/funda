@@ -45,3 +45,17 @@ Dokumen ini mencatat keputusan teknis sementara, kompromi dependensi, dan hal-ha
   Spesifikasi Tahap 3B menghendaki penghitungan rasio cicilan terhadap rata-rata pemasukan 3 bulan terakhir. Acuan umum industri perbankan menganggap rasio cicilan <= 30% masih dalam kategori wajar.
 - **Keputusan:**
   Nilai 30% disimpan sebagai konstanta `ambangBatasRasioCicilanSehat = 30; // TODO-VERIFIKASI`. Di antarmuka pengguna (Layar Utang dan Beranda), angka persentase ditampilkan apa adanya secara netral (*"Bagian dari pemasukanmu yang dipakai untuk cicilan"*) tanpa memberi label aman/bahaya/lampu merah/hijau, menunggu materi edukasi kurikulum resmi pada Tahap 8.
+
+---
+
+## 6. Arsitektur Pengingat Lokal Inexact & Sinkronisasi (Tahap 3C)
+
+- **Konteks:**
+  Aplikasi Funda adalah aplikasi pencatatan keuangan lokal tanpa server (*offline-first*). Tagihan berulang memerlukan pengingat jatuh tempo yang andal namun tidak boleh boros baterai atau memicu penolakan Google Play karena izin alarm presisi (*exact alarm*).
+- **Keputusan:**
+  1. Penjadwalan pengingat menggunakan `androidScheduleMode: AndroidScheduleMode.inexact` via pustaka `flutter_local_notifications`. Hal ini tidak membutuhkan izin sensitif `SCHEDULE_EXACT_ALARM` atau `USE_EXACT_ALARM` yang dibatasi ketat oleh Google Play.
+  2. Notifikasi dijadwalkan secara deterministik untuk rentang waktu hingga 60 hari ke depan berdasarkan preferensi jam notifikasi dan hari pengingat (H-3, H-1, Hari H).
+  3. Konfigurasi `RECEIVE_BOOT_COMPLETED` disertakan agar saat perangkat Android dihidupkan ulang, layanan dapat menjadwalkan ulang pengingat yang tersimpan.
+  4. Permintaan izin notifikasi Android 13+ tidak dimunculkan di awal instalasi aplikasi, melainkan hanya diminta saat pengguna mengaktifkan saklar pengingat di layar Pengaturan (*permission just-in-time*).
+- **Rencana Peninjauan:**
+  Pada rilis mendatang saat fitur cadangan/pemulihan data lokal diterapkan, pastikan status saklar preferensi pengingat dan riwayat penandaan tagihan ikut tersimpan dalam berkas cadangan JSON terenkripsi.

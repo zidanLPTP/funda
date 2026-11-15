@@ -44,7 +44,7 @@ class LayarKekayaanBersih extends ConsumerWidget {
               // 1. Bento Hero: Total Kekayaan Bersih
               PetakBento.ukuran2x1(
                 warnaKustom: isNegatif
-                    ? WarnaFunda.tintAmber
+                    ? WarnaFunda.tintMawar
                     : WarnaFunda.tintHijau,
                 labelAkses: 'Kekayaan bersih ${formatRupiah(kekayaanBersih)}',
                 anak: Column(
@@ -101,7 +101,7 @@ class LayarKekayaanBersih extends ConsumerWidget {
                           Expanded(
                             child: TeksFunda.catatan(
                               isNegatif
-                                  ? 'Saat ini utangmu lebih besar dari saldo. Ini umum terjadi, dan bisa kita rapikan langkah demi langkah.'
+                                  ? 'Saat ini utangmu lebih besar dari saldo. Ini umum terjadi di awal, dan bisa dirapikan langkah demi langkah.'
                                   : 'Kekayaan bersihmu mencerminkan selisih saldo seluruh dompet aktif dengan sisa kewajiban utang.',
                               warna: WarnaFunda.teks,
                             ),
