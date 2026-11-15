@@ -1,11 +1,14 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:funda/aplikasi/aplikasi.dart';
 import 'package:funda/aplikasi/rute.dart';
 import 'package:funda/data/penyedia_data.dart';
+import 'package:funda/fitur/anggaran/kontroler/penyedia_anggaran.dart';
 import 'package:funda/fitur/beranda/tampilan/layar_beranda.dart';
 import 'package:funda/fitur/lainnya/tampilan/layar_lainnya.dart';
+import 'package:funda/fitur/tujuan/kontroler/penyedia_tujuan.dart';
 import 'package:funda/perhitungan/perhitungan_keuangan.dart';
 import 'package:go_router/go_router.dart';
 
@@ -35,6 +38,10 @@ void main() {
               penyediaDaftarDompetAktif.overrideWith(
                 (ref) => Stream.value(const []),
               ),
+              penyediaSisaAnggaranBulanIni.overrideWith(
+                (ref) => Future.value(0),
+              ),
+              penyediaTujuanTerdekat.overrideWithValue(null),
             ],
             child: const AplikasiFunda(),
           ),
@@ -46,6 +53,9 @@ void main() {
           find.textContaining('Mode Pengembang: Buka Galeri Komponen & Token'),
           findsOneWidget,
         );
+
+        await tester.pumpWidget(const SizedBox());
+        await tester.pumpAndSettle();
       },
     );
 
@@ -62,6 +72,8 @@ void main() {
             penyediaDaftarDompetAktif.overrideWith(
               (ref) => Stream.value(const []),
             ),
+            penyediaSisaAnggaranBulanIni.overrideWith((ref) => Future.value(0)),
+            penyediaTujuanTerdekat.overrideWithValue(null),
           ],
           child: const AplikasiFunda(),
         ),
@@ -74,6 +86,9 @@ void main() {
 
       expect(find.byType(LayarLainnya), findsOneWidget);
       expect(find.text('Galeri Komponen UI'), findsOneWidget);
+
+      await tester.pumpWidget(const SizedBox());
+      await tester.pumpAndSettle();
     });
   });
 }

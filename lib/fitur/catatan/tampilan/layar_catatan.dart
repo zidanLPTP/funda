@@ -79,12 +79,32 @@ class LayarCatatan extends ConsumerStatefulWidget {
 
 class _LayarCatatanState extends ConsumerState<LayarCatatan> {
   final _pengontrolCari = TextEditingController();
+  final _pengontrolGulir = ScrollController();
   KondisiFilterTransaksi _filter = const KondisiFilterTransaksi();
   String _kataKunci = '';
+  int _limit = 50;
+
+  @override
+  void initState() {
+    super.initState();
+    _pengontrolGulir.addListener(_padaGulir);
+  }
+
+  void _padaGulir() {
+    if (_pengontrolGulir.position.pixels >=
+        _pengontrolGulir.position.maxScrollExtent - 200) {
+      if (_limit < 100000) {
+        setState(() {
+          _limit += 50;
+        });
+      }
+    }
+  }
 
   @override
   void dispose() {
     _pengontrolCari.dispose();
+    _pengontrolGulir.dispose();
     super.dispose();
   }
 
@@ -117,7 +137,50 @@ class _LayarCatatanState extends ConsumerState<LayarCatatan> {
     final daftarDompetAktif = ref.watch(penyediaDaftarDompetAktif).value ?? [];
     final daftarSemuaDompet = ref.watch(penyediaDaftarDompet).value ?? [];
     final daftarKategori = ref.watch(penyediaDaftarKategori).value ?? [];
-    final daftarTransaksiAsync = ref.watch(penyediaDaftarTransaksi);
+    final repoTransaksi = ref.watch(penyediaTransaksiRepositori);
+
+    DateTime? mulai;
+    DateTime? selesai;
+    final sekarang = DateTime.now();
+    switch (_filter.rentang) {
+      case RentangWaktuFilter.hariIni:
+        mulai = DateTime(sekarang.year, sekarang.month, sekarang.day);
+        selesai = DateTime(
+          sekarang.year,
+          sekarang.month,
+          sekarang.day,
+          23,
+          59,
+          59,
+        );
+        break;
+      case RentangWaktuFilter.tujuhHari:
+        mulai = sekarang.subtract(const Duration(days: 7));
+        selesai = sekarang;
+        break;
+      case RentangWaktuFilter.bulanIni:
+        mulai = DateTime(sekarang.year, sekarang.month, 1);
+        selesai = DateTime(sekarang.year, sekarang.month + 1, 0, 23, 59, 59);
+        break;
+      case RentangWaktuFilter.semua:
+        break;
+    }
+
+    final paramKueri = ParameterKueriTransaksi(
+      limit: _limit,
+      offset: 0,
+      kataKunci: _kataKunci.isEmpty ? null : _kataKunci,
+      dompetId: _filter.dompetId,
+      kategoriId: _filter.kategoriId,
+      sifat: _filter.sifat?.kode,
+      jenis: _filter.jenis?.kode,
+      mulai: mulai,
+      selesai: selesai,
+    );
+
+    final daftarTransaksiAsync = ref.watch(
+      penyediaTransaksiBerhalaman(paramKueri),
+    );
 
     // Jika belum ada dompet sama sekali di aplikasi
     if (daftarDompetAktif.isEmpty && daftarSemuaDompet.isEmpty) {
@@ -248,96 +311,7 @@ class _LayarCatatanState extends ConsumerState<LayarCatatan> {
             child: daftarTransaksiAsync.when(
               loading: () => const Center(child: CircularProgressIndicator()),
               error: (e, _) => Center(child: Text('Terjadi kesalahan: $e')),
-              data: (semuaTransaksi) {
-                // Terapkan Filter & Pencarian
-                final transaksiTersaring = semuaTransaksi.where((t) {
-                  // Filter kata kunci pencarian
-                  if (_kataKunci.isNotEmpty) {
-                    final catatanCocok =
-                        t.catatan?.toLowerCase().contains(_kataKunci) ?? false;
-                    final kat = daftarKategori.firstWhere(
-                      (k) => k.id == t.kategoriId,
-                      orElse: () => EntitasKategori(
-                        id: '',
-                        nama: '',
-                        arus: '',
-                        sifat: '',
-                        ikon: '',
-                        bawaan: false,
-                        diarsipkan: false,
-                      ),
-                    );
-                    final namaKatCocok = kat.nama.toLowerCase().contains(
-                      _kataKunci,
-                    );
-                    if (!catatanCocok && !namaKatCocok) return false;
-                  }
-
-                  // Filter jenis
-                  if (_filter.jenis != null && t.jenis != _filter.jenis!.kode) {
-                    return false;
-                  }
-
-                  // Filter dompet
-                  if (_filter.dompetId != null &&
-                      t.dompetId != _filter.dompetId &&
-                      t.dompetTujuanId != _filter.dompetId) {
-                    return false;
-                  }
-
-                  // Filter kategori
-                  if (_filter.kategoriId != null &&
-                      t.kategoriId != _filter.kategoriId) {
-                    return false;
-                  }
-
-                  // Filter sifat
-                  if (_filter.sifat != null) {
-                    final kat = daftarKategori.firstWhere(
-                      (k) => k.id == t.kategoriId,
-                      orElse: () => EntitasKategori(
-                        id: '',
-                        nama: '',
-                        arus: '',
-                        sifat: '',
-                        ikon: '',
-                        bawaan: false,
-                        diarsipkan: false,
-                      ),
-                    );
-                    if (kat.sifat != _filter.sifat!.kode) return false;
-                  }
-
-                  // Filter rentang waktu
-                  final sekarang = DateTime.now();
-                  final waktuLokal = t.waktuTransaksi.toLocal();
-                  switch (_filter.rentang) {
-                    case RentangWaktuFilter.hariIni:
-                      if (waktuLokal.year != sekarang.year ||
-                          waktuLokal.month != sekarang.month ||
-                          waktuLokal.day != sekarang.day) {
-                        return false;
-                      }
-                      break;
-                    case RentangWaktuFilter.tujuhHari:
-                      final batas7Hari = sekarang.subtract(
-                        const Duration(days: 7),
-                      );
-                      if (waktuLokal.isBefore(batas7Hari)) return false;
-                      break;
-                    case RentangWaktuFilter.bulanIni:
-                      if (waktuLokal.year != sekarang.year ||
-                          waktuLokal.month != sekarang.month) {
-                        return false;
-                      }
-                      break;
-                    case RentangWaktuFilter.semua:
-                      break;
-                  }
-
-                  return true;
-                }).toList();
-
+              data: (transaksiTersaring) {
                 if (transaksiTersaring.isEmpty) {
                   return KeadaanKosong(
                     ikon: LucideIcons.receipt,
@@ -382,12 +356,13 @@ class _LayarCatatanState extends ConsumerState<LayarCatatan> {
                   ..sort((a, b) => b.compareTo(a));
 
                 return ListView.builder(
+                  controller: _pengontrolGulir,
                   itemCount: daftarHari.length,
                   itemBuilder: (context, indeks) {
                     final hari = daftarHari[indeks];
                     final daftarTransaksiHari = petaHari[hari]!;
 
-                    // Hitung subjumlah harian (masuk - keluar)
+                    // Hitung subjumlah harian lokal sebagai nilai mula-mula
                     var masukHari = 0;
                     var keluarHari = 0;
                     for (final t in daftarTransaksiHari) {
@@ -399,12 +374,22 @@ class _LayarCatatanState extends ConsumerState<LayarCatatan> {
                         keluarHari += t.biayaAdminRupiah;
                       }
                     }
-                    final selisihHari = masukHari - keluarHari;
+                    final selisihHariLokal = masukHari - keluarHari;
+
+                    final awalHari = DateTime(hari.year, hari.month, hari.day);
+                    final akhirHari = DateTime(
+                      hari.year,
+                      hari.month,
+                      hari.day,
+                      23,
+                      59,
+                      59,
+                    );
 
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // Header Tanggal & Subjumlah Harian
+                        // Header Tanggal & Subjumlah Harian (Agregasi SQL)
                         Padding(
                           padding: const EdgeInsets.symmetric(
                             vertical: SpasiFunda.s,
@@ -419,11 +404,21 @@ class _LayarCatatanState extends ConsumerState<LayarCatatan> {
                                 ).format(hari),
                                 warna: WarnaFunda.teksRedup,
                               ),
-                              TeksFunda.catatan(
-                                '${selisihHari >= 0 ? '+' : ''}${formatRupiah(selisihHari)}',
-                                warna: selisihHari >= 0
-                                    ? WarnaFunda.pemasukan
-                                    : WarnaFunda.pengeluaran,
+                              FutureBuilder<int>(
+                                future: repoTransaksi.hitungSubjumlahHarianSQL(
+                                  awalHari: awalHari,
+                                  akhirHari: akhirHari,
+                                ),
+                                builder: (context, snapshot) {
+                                  final selisihHari =
+                                      snapshot.data ?? selisihHariLokal;
+                                  return TeksFunda.catatan(
+                                    '${selisihHari >= 0 ? '+' : ''}${formatRupiah(selisihHari)}',
+                                    warna: selisihHari >= 0
+                                        ? WarnaFunda.pemasukan
+                                        : WarnaFunda.pengeluaran,
+                                  );
+                                },
                               ),
                             ],
                           ),

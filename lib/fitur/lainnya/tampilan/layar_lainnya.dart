@@ -61,9 +61,30 @@ class LayarLainnya extends StatelessWidget {
             const SizedBox(height: SpasiFunda.l),
           ],
 
-          // Menu Manajemen Keuangan (Tahap 2)
+          // Menu Manajemen Keuangan
           const TeksFunda.judulBagian('Pengelolaan Keuangan'),
           const SizedBox(height: SpasiFunda.m),
+          _ItemMenu(
+            ikon: LucideIcons.pieChart,
+            judul: 'Anggaran Bulanan',
+            keterangan: 'Rencanakan batas pengeluaran per kategori per bulan',
+            padaKetuk: () => context.push('/anggaran'),
+          ),
+          const SizedBox(height: SpasiFunda.s),
+          _ItemMenu(
+            ikon: LucideIcons.target,
+            judul: 'Tujuan Keuangan',
+            keterangan: 'Pantau impian, pos tabungan, dan dana darurat',
+            padaKetuk: () => context.push('/tujuan'),
+          ),
+          const SizedBox(height: SpasiFunda.s),
+          _ItemMenu(
+            ikon: LucideIcons.layers,
+            judul: 'Kantong Dompet',
+            keterangan: 'Pisahkan pos uang dalam dompet tanpa pindah rekening',
+            padaKetuk: () => context.push('/kantong'),
+          ),
+          const SizedBox(height: SpasiFunda.s),
           _ItemMenu(
             ikon: LucideIcons.wallet,
             judul: 'Kelola Dompet',

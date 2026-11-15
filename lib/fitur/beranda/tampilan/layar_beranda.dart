@@ -5,12 +5,15 @@ import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '../../../data/penyedia_data.dart';
 import '../../../komponen/komponen_funda.dart';
+import '../../../perhitungan/perhitungan_anggaran_tujuan.dart';
 import '../../../tema/token.dart';
 import '../../../util/format_rupiah.dart';
+import '../../anggaran/kontroler/penyedia_anggaran.dart';
 import '../../dompet/tampilan/layar_form_dompet.dart';
+import '../../tujuan/kontroler/penyedia_tujuan.dart';
 
 /// Layar Beranda utama aplikasi Funda.
-/// Menampilkan data NYATA untuk Arus Kas dan Total Saldo,
+/// Menampilkan data NYATA untuk Arus Kas, Total Saldo, Sisa Anggaran, dan Tujuan Terdekat,
 /// serta modul pendukung bertanda placeholder.
 class LayarBeranda extends ConsumerWidget {
   const LayarBeranda({super.key});
@@ -20,6 +23,8 @@ class LayarBeranda extends ConsumerWidget {
     final daftarDompetAktif = ref.watch(penyediaDaftarDompetAktif).value ?? [];
     final totalSaldo = ref.watch(penyediaTotalSaldoAktif);
     final arusKas = ref.watch(penyediaArusKasBulanIni);
+    final sisaAnggaranAsync = ref.watch(penyediaSisaAnggaranBulanIni);
+    final tujuanTerdekat = ref.watch(penyediaTujuanTerdekat);
 
     return PembungkusLayar(
       bisaGulir: true,
@@ -102,8 +107,10 @@ class LayarBeranda extends ConsumerWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const TeksFunda.isiKecil(
-                        'Arus Kas Bulan Ini (Data Nyata)',
+                      const Expanded(
+                        child: TeksFunda.isiKecil(
+                          'Arus Kas Bulan Ini (Data Nyata)',
+                        ),
                       ),
                       Container(
                         padding: const EdgeInsets.symmetric(
@@ -205,39 +212,144 @@ class LayarBeranda extends ConsumerWidget {
                 Expanded(
                   child: PetakBento.ukuran1x1(
                     tint: TintPetakBento.amber,
-                    padaKetuk: () {},
-                    anak: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.all(SpasiFunda.xs),
-                          decoration: BoxDecoration(
-                            color: WarnaFunda.permukaan,
-                            borderRadius: BorderRadius.circular(
-                              SudutFunda.kecil,
+                    padaKetuk: () => context.push('/anggaran'),
+                    anak: sisaAnggaranAsync.when(
+                      loading: () =>
+                          const Center(child: CircularProgressIndicator()),
+                      error: (_, _) => const Center(child: Text('Gagal')),
+                      data: (sisa) {
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.all(SpasiFunda.xs),
+                              decoration: BoxDecoration(
+                                color: WarnaFunda.permukaan,
+                                borderRadius: BorderRadius.circular(
+                                  SudutFunda.kecil,
+                                ),
+                              ),
+                              child: const Icon(
+                                LucideIcons.pieChart,
+                                size: 18,
+                                color: WarnaFunda.sifatKebutuhan,
+                              ),
                             ),
-                          ),
-                          child: const Icon(
-                            LucideIcons.shieldCheck,
-                            size: 18,
-                            color: WarnaFunda.sifatUtang,
-                          ),
-                        ),
-                        const SizedBox(height: SpasiFunda.m),
-                        const TeksFunda.isiKecil('Dana Darurat [Contoh]'),
-                        const SizedBox(height: SpasiFunda.xs),
-                        const TeksFunda.judulBagian('1.5 Bulan'),
-                        const SizedBox(height: SpasiFunda.xs),
-                        const TeksFunda.catatan(
-                          'Target 3 bulan (Placeholder)',
-                          warna: WarnaFunda.peringatan,
-                        ),
-                      ],
+                            const SizedBox(height: SpasiFunda.m),
+                            const TeksFunda.isiKecil('Sisa Anggaran (Nyata)'),
+                            const SizedBox(height: SpasiFunda.xs),
+                            TeksFunda.judulBagian(
+                              formatRupiah(sisa),
+                              angkaTabular: true,
+                              warna: sisa < 0
+                                  ? WarnaFunda.pengeluaran
+                                  : WarnaFunda.teks,
+                            ),
+                            const SizedBox(height: SpasiFunda.xs),
+                            const TeksFunda.catatan('Bulan Berjalan'),
+                          ],
+                        );
+                      },
                     ),
                   ),
                 ),
               ],
             ),
+            const SizedBox(height: SpasiFunda.jarakPetak),
+
+            // Bento 2x1: Tujuan Terdekat (DATA NYATA)
+            if (tujuanTerdekat == null)
+              PetakBento.ukuran2x1(
+                tint: TintPetakBento.netral,
+                padaKetuk: () => context.push('/tujuan'),
+                anak: Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(SpasiFunda.s),
+                      decoration: BoxDecoration(
+                        color: WarnaFunda.permukaan,
+                        borderRadius: BorderRadius.circular(SudutFunda.kecil),
+                      ),
+                      child: const Icon(
+                        LucideIcons.target,
+                        size: 24,
+                        color: WarnaFunda.utama,
+                      ),
+                    ),
+                    const SizedBox(width: SpasiFunda.m),
+                    const Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          TeksFunda.label('Belum Ada Tujuan Keuangan'),
+                          TeksFunda.catatan(
+                            'Yuk buat impian atau pos tabungan pertamamu!',
+                          ),
+                        ],
+                      ),
+                    ),
+                    const Icon(LucideIcons.chevronRight, size: 20),
+                  ],
+                ),
+              )
+            else
+              Consumer(
+                builder: (context, ref, _) {
+                  final danaTerkumpul =
+                      ref.watch(penyediaDanaTujuan(tujuanTerdekat.id)).value ??
+                      0;
+                  final progres = hitungProgresTujuan(
+                    danaRupiah: danaTerkumpul,
+                    targetRupiah: tujuanTerdekat.targetRupiah,
+                  );
+
+                  return PetakBento.ukuran2x1(
+                    tint: TintPetakBento.hijau,
+                    padaKetuk: () => context.push('/tujuan'),
+                    labelAkses: 'Tujuan terdekat: ${tujuanTerdekat.nama}',
+                    anak: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Expanded(
+                              child: TeksFunda.isiKecil(
+                                'Tujuan Terdekat (Data Nyata)',
+                              ),
+                            ),
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: SpasiFunda.s,
+                                vertical: 2,
+                              ),
+                              decoration: BoxDecoration(
+                                color: WarnaFunda.permukaan,
+                                borderRadius: BorderRadius.circular(
+                                  SudutFunda.pil,
+                                ),
+                              ),
+                              child: TeksFunda.catatan(
+                                '$progres%',
+                                warna: progres >= 100
+                                    ? WarnaFunda.sukses
+                                    : WarnaFunda.utama,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: SpasiFunda.s),
+                        TeksFunda.judulBagian(tujuanTerdekat.nama),
+                        const SizedBox(height: SpasiFunda.xs),
+                        TeksFunda.catatan(
+                          '${formatRupiah(danaTerkumpul)} dari ${formatRupiah(tujuanTerdekat.targetRupiah)}',
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
             const SizedBox(height: SpasiFunda.jarakPetak),
 
             // Bento 2x1: Lanjut Belajar (Placeholder)

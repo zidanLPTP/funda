@@ -1,4 +1,4 @@
-import 'package:drift/drift.dart' hide isNull;
+import 'package:drift/drift.dart' hide isNull, isNotNull;
 import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:funda/data/basis_data.dart';
@@ -16,8 +16,8 @@ void main() {
   });
 
   group('BasisDataFunda & TabelPengaturan', () {
-    test('skema versi 2 terdaftar pada basis data', () async {
-      expect(basisData.schemaVersion, equals(2));
+    test('skema versi 3 terdaftar pada basis data', () async {
+      expect(basisData.schemaVersion, equals(3));
 
       final nilaiAwal = await basisData.bacaPengaturan('sudah_onboarding');
       expect(nilaiAwal, isNull);
@@ -130,5 +130,66 @@ void main() {
         expect(daftarKategori.length, equals(25));
       },
     );
+  });
+
+  group('Migrasi Bertingkat Skema v2 -> v3 (Tahap 3A)', () {
+    test(
+      'migrasi dari versi 2 ke versi 3 aman, membuat tabel baru, dan tidak menghapus data v2',
+      () async {
+        // Simulasikan data v2 (dompet)
+        await basisData.tabelDompet.insertOne(
+          TabelDompetCompanion.insert(
+            id: 'dompet_v2',
+            nama: 'Dompet Lama',
+            jenis: 'tunai',
+            ikon: 'wallet',
+            warna: 'tintHijau',
+            saldoAwalRupiah: const Value(100000),
+            dibuatPada: Value(DateTime.now()),
+          ),
+        );
+
+        // Jalankan migrasi v2 -> v3
+        final migrator = Migrator(basisData);
+        await basisData.migration.onUpgrade(migrator, 2, 3);
+
+        // Verifikasi data dompet v2 tetap utuh
+        final dompetLama = await (basisData.select(
+          basisData.tabelDompet,
+        )..where((d) => d.id.equals('dompet_v2'))).getSingleOrNull();
+        expect(dompetLama, isNotNull);
+        expect(dompetLama!.nama, equals('Dompet Lama'));
+
+        // Verifikasi tabel baru (anggaran, tujuan, kantong, alokasi) bisa diakses
+        final daftarAnggaran = await basisData
+            .select(basisData.tabelAnggaran)
+            .get();
+        final daftarTujuan = await basisData
+            .select(basisData.tabelTujuan)
+            .get();
+        final daftarKantong = await basisData
+            .select(basisData.tabelKantong)
+            .get();
+        final daftarAlokasi = await basisData
+            .select(basisData.tabelAlokasiKantong)
+            .get();
+
+        expect(daftarAnggaran, isEmpty);
+        expect(daftarTujuan, isEmpty);
+        expect(daftarKantong, isEmpty);
+        expect(daftarAlokasi, isEmpty);
+      },
+    );
+
+    test('migrasi v2 -> v3 aman diulang berkali-kali (idempoten)', () async {
+      final migrator = Migrator(basisData);
+
+      await basisData.migration.onUpgrade(migrator, 2, 3);
+      await basisData.migration.onUpgrade(migrator, 2, 3);
+      await basisData.migration.onUpgrade(migrator, 3, 3);
+
+      final daftarTujuan = await basisData.select(basisData.tabelTujuan).get();
+      expect(daftarTujuan, isEmpty);
+    });
   });
 }

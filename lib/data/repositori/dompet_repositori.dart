@@ -35,9 +35,43 @@ class DompetRepositori {
     )..where((t) => t.id.equals(id))).getSingleOrNull();
   }
 
+  /// Mengambil semua dompet sekali panggil.
+  Future<List<EntitasDompet>> ambilSemuaDompet() {
+    return _db.select(_db.tabelDompet).get();
+  }
+
   /// Menambah dompet baru.
   Future<int> tambahDompet(TabelDompetCompanion dompet) {
     return _db.into(_db.tabelDompet).insert(dompet);
+  }
+
+  static int _pencacahUnik = 0;
+
+  /// Helper membuat dompet baru dengan parameter dasar.
+  Future<String> buatDompet({
+    required String nama,
+    required String jenis,
+    required String ikon,
+    required String warna,
+    required int saldoAwalRupiah,
+    int urutan = 0,
+  }) async {
+    final id = 'dmp_${DateTime.now().microsecondsSinceEpoch}_${++_pencacahUnik}';
+    final sekarang = DateTime.now();
+    await tambahDompet(
+      TabelDompetCompanion(
+        id: Value(id),
+        nama: Value(nama),
+        jenis: Value(jenis),
+        ikon: Value(ikon),
+        warna: Value(warna),
+        saldoAwalRupiah: Value(saldoAwalRupiah),
+        urutan: Value(urutan),
+        diarsipkan: const Value(false),
+        dibuatPada: Value(sekarang),
+      ),
+    );
+    return id;
   }
 
   /// Memperbarui informasi dompet.

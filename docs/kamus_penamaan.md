@@ -55,6 +55,13 @@
 | transaction time | waktuTransaksi | Waktu pencatatan transaksi |
 | expense nature | sifatKategori | Sifat pos pengeluaran (`kebutuhan`, `keinginan`, `tabungan`, `utang`, `belum_dilabeli`, `tidak_berlaku`) |
 | balance adjustment | penyesuaianSaldo | Transaksi penyesuaian saldo riil (`penyesuaian_masuk`, `penyesuaian_keluar`) |
+| budget limit | batasRupiah | Batas alokasi pengeluaran bulanan per pos kategori |
+| copy budget | salinAnggaran | Menyalin seluruh batas anggaran dari periode bulan sebelumnya |
+| financial goal | tujuan | Target capaian finansial (`tabungan`, `dana_darurat`, `tujuan_besar`, `lainnya`) |
+| emergency fund | danaDarurat | Tujuan dana darurat (maksimal 1 aktif) |
+| unallocated balance | saldoBebas | Saldo dompet riil dikurangi total saldo seluruh kantong di dompet tersebut |
+| pocket allocation | alokasiKantong | Mutasi penambahan/pengurangan saldo kantong (`isi`, `ambil`, `penyesuaian`) |
+| budget realization | realisasiAnggaran | Evaluasi batas vs riil pengeluaran (`aman` < 80%, `mendekati` 80-100%, `melewati` > 100%) |
 
 ## Aturan Cabang Kerja (Git)
 - Setiap tahap dikerjakan pada cabang khusus (contoh: `tahap-02-dompet-transaksi`).

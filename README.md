@@ -96,6 +96,7 @@ funda/
 - [docs/spec.md](docs/spec.md) — Rincian spesifikasi lengkap aplikasi Funda.
 - [docs/styleguide.md](docs/styleguide.md) — Token desain Soft Bento, warna, dan pedoman bahasa.
 - [docs/kamus_penamaan.md](docs/kamus_penamaan.md) — Kamus istilah penamaan kode berbahasa Indonesia.
+- [docs/utang_teknis.md](docs/utang_teknis.md) — Catatan utang teknis, dependensi native SQLite, dan rencana refaktor.
 
 ---
 

@@ -4,24 +4,37 @@ import 'package:drift/native.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 import 'seeder/kategori_bawaan.dart';
+import 'tabel/tabel_alokasi_kantong.dart';
+import 'tabel/tabel_anggaran.dart';
 import 'tabel/tabel_dompet.dart';
+import 'tabel/tabel_kantong.dart';
 import 'tabel/tabel_kategori.dart';
 import 'tabel/tabel_pengaturan.dart';
 import 'tabel/tabel_transaksi.dart';
+import 'tabel/tabel_tujuan.dart';
 
 part 'basis_data.g.dart';
 
 /// Basis data lokal SQLite Funda yang dikelola menggunakan Drift.
 /// Mendukung migrasi bertingkat bertipe aman yang tidak menghapus data pengguna.
 @DriftDatabase(
-  tables: [TabelPengaturan, TabelDompet, TabelKategori, TabelTransaksi],
+  tables: [
+    TabelPengaturan,
+    TabelDompet,
+    TabelKategori,
+    TabelTransaksi,
+    TabelAnggaran,
+    TabelTujuan,
+    TabelKantong,
+    TabelAlokasiKantong,
+  ],
 )
 class BasisDataFunda extends _$BasisDataFunda {
   BasisDataFunda([QueryExecutor? pelaksanaKueri])
     : super(pelaksanaKueri ?? _bukaKoneksi());
 
   @override
-  int get schemaVersion => 2;
+  int get schemaVersion => 3;
 
   @override
   MigrationStrategy get migration {
@@ -29,6 +42,18 @@ class BasisDataFunda extends _$BasisDataFunda {
       onCreate: (Migrator m) async {
         await m.createAll();
         await _seedKategoriBawaan();
+        await customStatement(
+          'CREATE UNIQUE INDEX IF NOT EXISTS idx_kantong_dompet_tujuan '
+          'ON tabel_kantong (dompet_id, tujuan_id) WHERE tujuan_id IS NOT NULL;',
+        );
+        await customStatement(
+          'CREATE INDEX IF NOT EXISTS idx_alokasi_kantong_id '
+          'ON tabel_alokasi_kantong (kantong_id);',
+        );
+        await customStatement(
+          'CREATE INDEX IF NOT EXISTS idx_anggaran_periode '
+          'ON tabel_anggaran (tahun, bulan);',
+        );
       },
       onUpgrade: (Migrator m, int dariVersi, int keVersi) async {
         // Mekanisme migrasi bertingkat berurutan (dariVersi -> keVersi)
@@ -58,6 +83,25 @@ class BasisDataFunda extends _$BasisDataFunda {
         await m.createTable(tabelKategori);
         await m.createTable(tabelTransaksi);
         await _seedKategoriBawaan();
+        break;
+      case 3:
+        // Skema tahap 3A: anggaran, tujuan, kantong, alokasi_kantong
+        await m.createTable(tabelAnggaran);
+        await m.createTable(tabelTujuan);
+        await m.createTable(tabelKantong);
+        await m.createTable(tabelAlokasiKantong);
+        await customStatement(
+          'CREATE UNIQUE INDEX IF NOT EXISTS idx_kantong_dompet_tujuan '
+          'ON tabel_kantong (dompet_id, tujuan_id) WHERE tujuan_id IS NOT NULL;',
+        );
+        await customStatement(
+          'CREATE INDEX IF NOT EXISTS idx_alokasi_kantong_id '
+          'ON tabel_alokasi_kantong (kantong_id);',
+        );
+        await customStatement(
+          'CREATE INDEX IF NOT EXISTS idx_anggaran_periode '
+          'ON tabel_anggaran (tahun, bulan);',
+        );
         break;
       default:
         break;

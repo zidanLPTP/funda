@@ -1,11 +1,15 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import '../fitur/anggaran/tampilan/layar_anggaran.dart';
 import '../fitur/belajar/tampilan/layar_belajar.dart';
 import '../fitur/beranda/tampilan/layar_beranda.dart';
 import '../fitur/catatan/tampilan/layar_catatan.dart';
 import '../fitur/galeri/tampilan/layar_galeri.dart';
+import '../fitur/kantong/tampilan/layar_daftar_kantong.dart';
 import '../fitur/lainnya/tampilan/layar_lainnya.dart';
+import '../fitur/tujuan/tampilan/layar_daftar_tujuan.dart';
+import '../fitur/tujuan/tampilan/layar_detail_tujuan.dart';
 import 'bilah_navigasi.dart';
 
 final GlobalKey<NavigatorState> _kunciNavigatorAkar = GlobalKey<NavigatorState>(
@@ -63,6 +67,31 @@ final ruteFunda = GoRouter(
           ],
         ),
       ],
+    ),
+
+    // Rute Fitur Tahap 3A: Anggaran, Tujuan, Kantong
+    GoRoute(
+      parentNavigatorKey: _kunciNavigatorAkar,
+      path: '/anggaran',
+      builder: (context, state) => const LayarAnggaran(),
+    ),
+    GoRoute(
+      parentNavigatorKey: _kunciNavigatorAkar,
+      path: '/tujuan',
+      builder: (context, state) => const LayarDaftarTujuan(),
+      routes: [
+        GoRoute(
+          parentNavigatorKey: _kunciNavigatorAkar,
+          path: ':id',
+          builder: (context, state) =>
+              LayarDetailTujuan(tujuanId: state.pathParameters['id']!),
+        ),
+      ],
+    ),
+    GoRoute(
+      parentNavigatorKey: _kunciNavigatorAkar,
+      path: '/kantong',
+      builder: (context, state) => const LayarDaftarKantong(),
     ),
 
     // Rute Galeri Komponen (hanya tersedia di mode debug)
