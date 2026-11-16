@@ -5,7 +5,7 @@ import 'package:funda/data/basis_data.dart';
 
 void main() {
   group(
-    'Langkah 0(d): Uji Migrasi Beruntun Bertingkat (v1 -> v2 -> v3 -> v4 -> v5 -> v6)',
+    'Langkah 0(d): Uji Migrasi Beruntun Bertingkat (v1 -> v2 -> v3 -> v4 -> v5 -> v6 -> v7)',
     () {
       late BasisDataFunda basisData;
       late Migrator migrator;
@@ -188,7 +188,53 @@ void main() {
               );
 
           // -------------------------------------------------------------
-          // VERIFIKASI KEUTUHAN DATA KESELURUHAN SETELAH v6
+          // 7. MIGRASI v6 -> v7 (Tahap 4 - Mesin Belajar)
+          // -------------------------------------------------------------
+          await basisData.migration.onUpgrade(migrator, 6, 7);
+
+          final waktuV7 = DateTime(2026, 4, 1, 9, 0);
+          await basisData.into(basisData.tabelProgresPelajaran).insert(
+                TabelProgresPelajaranCompanion.insert(
+                  pelajaranId: 'anggaran_arus_kas_1_2',
+                  modulId: 'anggaran_arus_kas',
+                  status: 'selesai',
+                  indeksLangkah: const Value(3),
+                  dibuatPada: waktuV7,
+                  selesaiPada: Value(waktuV7.add(const Duration(minutes: 5))),
+                ),
+              );
+
+          await basisData.into(basisData.tabelHasilMisi).insert(
+                TabelHasilMisiCompanion.insert(
+                  misiId: 'anggaran_arus_kas_1_2',
+                  pelajaranId: 'anggaran_arus_kas_1_2',
+                  tipe: 'ada_data',
+                  status: 'selesai',
+                  selesaiPada: waktuV7.add(const Duration(minutes: 4)),
+                ),
+              );
+
+          await basisData.into(basisData.tabelHasilKuis).insert(
+                TabelHasilKuisCompanion.insert(
+                  modulId: 'anggaran_arus_kas',
+                  benar: 4,
+                  total: 5,
+                  skorPersen: 80,
+                  lulus: true,
+                  waktu: waktuV7.add(const Duration(minutes: 10)),
+                ),
+              );
+
+          await basisData.into(basisData.tabelPernyataan).insert(
+                TabelPernyataanCompanion.insert(
+                  kunci: 'tidak_punya_utang',
+                  nilai: 'true',
+                  diubahPada: waktuV7,
+                ),
+              );
+
+          // -------------------------------------------------------------
+          // VERIFIKASI KEUTUHAN DATA KESELURUHAN SETELAH v7
           // -------------------------------------------------------------
 
           // 1. Data v1 (pengaturan) utuh
@@ -252,6 +298,33 @@ void main() {
           expect(tagihanV6!.nama, equals('Listrik Pasca Bayar'));
           expect(tagihanV6.jumlahPerkiraanRupiah, isNull);
           expect(tagihanV6.berakhirPada, equals(batasAkhirV6));
+
+          // 7. Data v7 (progres pelajaran, misi, kuis, pernyataan) tersimpan utuh
+          final progres = await (basisData.select(basisData.tabelProgresPelajaran)
+                ..where((p) => p.pelajaranId.equals('anggaran_arus_kas_1_2')))
+              .getSingleOrNull();
+          expect(progres, isNotNull);
+          expect(progres!.status, equals('selesai'));
+          expect(progres.indeksLangkah, equals(3));
+
+          final misi = await (basisData.select(basisData.tabelHasilMisi)
+                ..where((m) => m.misiId.equals('anggaran_arus_kas_1_2')))
+              .getSingleOrNull();
+          expect(misi, isNotNull);
+          expect(misi!.status, equals('selesai'));
+
+          final kuisList = await (basisData.select(basisData.tabelHasilKuis)
+                ..where((k) => k.modulId.equals('anggaran_arus_kas')))
+              .get();
+          expect(kuisList.length, equals(1));
+          expect(kuisList.first.skorPersen, equals(80));
+          expect(kuisList.first.lulus, isTrue);
+
+          final pernyataan = await (basisData.select(basisData.tabelPernyataan)
+                ..where((p) => p.kunci.equals('tidak_punya_utang')))
+              .getSingleOrNull();
+          expect(pernyataan, isNotNull);
+          expect(pernyataan!.nilai, equals('true'));
 
           // Verifikasi pengaturan default pengingat terinisialisasi di v5/v6
           expect(

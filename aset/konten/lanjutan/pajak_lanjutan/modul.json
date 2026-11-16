@@ -1,0 +1,20 @@
+﻿{
+    "kuis":  {
+                 "jumlahSoal":  0,
+                 "bankSoal":  [
+
+                              ]
+             },
+    "id":  "pajak_lanjutan",
+    "tersedia":  false,
+    "urutan":  15,
+    "gerbang":  [
+
+                ],
+    "deskripsiSingkat":  "Pelaporan SPT tahunan dari ragam sumber penghasilan dan perencanaan pajak legal.",
+    "daftarPelajaran":  [
+
+                        ],
+    "tingkat":  "lanjutan",
+    "judul":  "Pajak Lanjutan"
+}

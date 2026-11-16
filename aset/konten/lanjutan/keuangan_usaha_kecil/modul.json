@@ -1,0 +1,14 @@
+﻿{
+  "kuis": {
+    "jumlahSoal": 0,
+    "bankSoal": []
+  },
+  "id": "keuangan_usaha_kecil",
+  "tersedia": false,
+  "urutan": 17,
+  "gerbang": [],
+  "deskripsiSingkat": "Memisahkan rekening pribadi dan modal usaha serta mengelola perputaran kas bisnis.",
+  "daftarPelajaran": [],
+  "tingkat": "lanjutan",
+  "judul": "Keuangan Usaha Kecil"
+}

@@ -1,0 +1,20 @@
+﻿{
+    "kuis":  {
+                 "jumlahSoal":  0,
+                 "bankSoal":  [
+
+                              ]
+             },
+    "id":  "utang_cicilan",
+    "tersedia":  false,
+    "urutan":  4,
+    "gerbang":  [
+
+                ],
+    "deskripsiSingkat":  "Memahami cara kerja bunga, rasio cicilan sehat, dan strategi melunasi kewajiban.",
+    "daftarPelajaran":  [
+
+                        ],
+    "tingkat":  "pemula",
+    "judul":  "Utang \u0026 Cicilan"
+}

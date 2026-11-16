@@ -1,0 +1,20 @@
+﻿{
+    "kuis":  {
+                 "jumlahSoal":  0,
+                 "bankSoal":  [
+
+                              ]
+             },
+    "id":  "pajak_dasar",
+    "tersedia":  false,
+    "urutan":  9,
+    "gerbang":  [
+
+                ],
+    "deskripsiSingkat":  "Mengenal NPWP, kewajiban pelaporan, dan dasar pemotongan pajak penghasilan.",
+    "daftarPelajaran":  [
+
+                        ],
+    "tingkat":  "menengah",
+    "judul":  "Pajak Dasar"
+}

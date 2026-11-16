@@ -1,0 +1,20 @@
+﻿{
+    "kuis":  {
+                 "jumlahSoal":  0,
+                 "bankSoal":  [
+
+                              ]
+             },
+    "id":  "paylater_kredit",
+    "tersedia":  false,
+    "urutan":  7,
+    "gerbang":  [
+
+                ],
+    "deskripsiSingkat":  "Memahami cara kerja skema tunda bayar dan menjaga reputasi kredit yang baik.",
+    "daftarPelajaran":  [
+
+                        ],
+    "tingkat":  "menengah",
+    "judul":  "Paylater, Kredit \u0026 Skor Kredit"
+}

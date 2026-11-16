@@ -1,0 +1,20 @@
+﻿{
+    "kuis":  {
+                 "jumlahSoal":  0,
+                 "bankSoal":  [
+
+                              ]
+             },
+    "id":  "dana_darurat",
+    "tersedia":  false,
+    "urutan":  3,
+    "gerbang":  [
+
+                ],
+    "deskripsiSingkat":  "Pondasi ketenangan finansial menghadapi peristiwa tak terduga dalam hidup.",
+    "daftarPelajaran":  [
+
+                        ],
+    "tingkat":  "pemula",
+    "judul":  "Dana Darurat"
+}

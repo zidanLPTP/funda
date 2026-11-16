@@ -1,0 +1,90 @@
+{
+  "id": "anggaran_arus_kas",
+  "judul": "Anggaran & Arus Kas",
+  "tingkat": "pemula",
+  "urutan": 1,
+  "deskripsiSingkat": "Kuasai aliran uang masuk dan keluar sebelum merancang batas pengeluaran pertamamu.",
+  "tersedia": true,
+  "gerbang": [
+    {
+      "tipe": "ada_data",
+      "objek": "dompet",
+      "min": 1,
+      "pesan": "Buat minimal 1 dompet dulu agar kamu bisa mulai mencatat."
+    }
+  ],
+  "daftarPelajaran": [
+    "anggaran_arus_kas_1_2",
+    "anggaran_arus_kas_1_3"
+  ],
+  "kuis": {
+    "jumlahSoal": 5,
+    "bankSoal": [
+      {
+        "id": "soal_1_1",
+        "pelajaranId": "anggaran_arus_kas_1_2",
+        "tanya": "Apa yang dimaksud dengan arus kas positif?",
+        "pilihan": [
+          "Uang yang keluar lebih banyak daripada uang yang masuk",
+          "Uang yang masuk lebih banyak daripada uang yang keluar",
+          "Seluruh uang habis digunakan untuk belanja",
+          "Saldo di rekening bank bertambah dari pinjaman"
+        ],
+        "benar": 1,
+        "penjelasan": "Arus kas positif terjadi saat total pemasukanmu lebih besar dari pengeluaranmu dalam satu bulan."
+      },
+      {
+        "id": "soal_1_2",
+        "pelajaranId": "anggaran_arus_kas_1_2",
+        "tanya": "Manakah di bawah ini yang tergolong sebagai uang masuk?",
+        "pilihan": [
+          "Membayar tagihan listrik",
+          "Membeli paket data internet",
+          "Gaji bulanan atau honor freelance",
+          "Mengisi bensin kendaraan"
+        ],
+        "benar": 2,
+        "penjelasan": "Gaji bulanan dan honor adalah uang masuk yang menambah saldo dompetmu."
+      },
+      {
+        "id": "soal_1_3",
+        "pelajaranId": "anggaran_arus_kas_1_3",
+        "tanya": "Apa ciri utama dari pos pengeluaran kebutuhan?",
+        "pilihan": [
+          "Wajib dipenuhi demi kelangsungan hidup sehari-hari",
+          "Bisa ditunda bulan depan tanpa dampak apa pun",
+          "Hanya dibeli saat ada promo diskon",
+          "Bisa ditiadakan selamanya"
+        ],
+        "benar": 0,
+        "penjelasan": "Kebutuhan adalah pengeluaran pokok seperti makanan pokok dan tempat tinggal yang harus ada."
+      },
+      {
+        "id": "soal_1_4",
+        "pelajaranId": "anggaran_arus_kas_1_3",
+        "tanya": "Jika kamu membeli sepatu baru karena sepatu lama masih bagus dan layak pakai, pengeluaran itu masuk kategori apa?",
+        "pilihan": [
+          "Kebutuhan pokok",
+          "Keinginan",
+          "Tabungan darurat",
+          "Cicilan utang"
+        ],
+        "benar": 1,
+        "penjelasan": "Membeli barang yang sudah ada fungsinya demi model baru termasuk kategori keinginan."
+      },
+      {
+        "id": "soal_1_5",
+        "pelajaranId": "anggaran_arus_kas_1_3",
+        "tanya": "Mengapa kita perlu membedakan kebutuhan dan keinginan saat mencatat keuangan?",
+        "pilihan": [
+          "Agar kita tidak boleh jajan sama sekali",
+          "Agar kita tahu pos mana yang bisa disesuaikan saat uang menipis",
+          "Untuk memamerkan catatan belanja kepada orang lain",
+          "Supaya dompet kita terlihat banyak transaksi"
+        ],
+        "benar": 1,
+        "penjelasan": "Memahami pemisah ini membantu kamu berhemat pada pos keinginan saat kondisi keuangan sedang menuntut penyesuaian."
+      }
+    ]
+  }
+}

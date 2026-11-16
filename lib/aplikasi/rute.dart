@@ -3,10 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../fitur/anggaran/tampilan/layar_anggaran.dart';
 import '../fitur/belajar/tampilan/layar_belajar.dart';
+import '../fitur/belajar/tampilan/layar_kuis_modul.dart';
+import '../fitur/belajar/tampilan/layar_pemutar_pelajaran.dart';
 import '../fitur/beranda/tampilan/layar_beranda.dart';
 import '../fitur/catatan/tampilan/layar_catatan.dart';
 import '../fitur/dompet/tampilan/layar_daftar_dompet.dart';
 import '../fitur/galeri/tampilan/layar_galeri.dart';
+import '../fitur/kategori/tampilan/layar_daftar_kategori.dart';
 import '../fitur/kantong/tampilan/layar_daftar_kantong.dart';
 import '../fitur/kekayaan_bersih/tampilan/layar_kekayaan_bersih.dart';
 import '../fitur/lainnya/tampilan/layar_lainnya.dart';
@@ -155,6 +158,28 @@ final ruteFunda = GoRouter(
       parentNavigatorKey: _kunciNavigatorAkar,
       path: '/pengaturan',
       builder: (context, state) => const LayarPengaturan(),
+    ),
+    GoRoute(
+      parentNavigatorKey: _kunciNavigatorAkar,
+      path: '/kategori',
+      builder: (context, state) => const LayarDaftarKategori(),
+    ),
+
+    // Rute Fitur Tahap 4: Pemutar Pelajaran & Kuis Akhir Modul
+    GoRoute(
+      parentNavigatorKey: _kunciNavigatorAkar,
+      path: '/belajar/pelajaran/:modulId/:pelajaranId',
+      builder: (context, state) => LayarPemutarPelajaran(
+        modulId: state.pathParameters['modulId']!,
+        pelajaranId: state.pathParameters['pelajaranId']!,
+      ),
+    ),
+    GoRoute(
+      parentNavigatorKey: _kunciNavigatorAkar,
+      path: '/belajar/kuis/:modulId',
+      builder: (context, state) => LayarKuisModul(
+        modulId: state.pathParameters['modulId']!,
+      ),
     ),
 
     // Rute Galeri Komponen (hanya tersedia di mode debug)

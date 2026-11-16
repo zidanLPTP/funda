@@ -38,6 +38,26 @@ flutter:
 
   assets:
     - aset/font/
+    - aset/konten/
+    - aset/konten/pemula/mulai_tes_awal/
+    - aset/konten/pemula/anggaran_arus_kas/
+    - aset/konten/pemula/tabungan/
+    - aset/konten/pemula/dana_darurat/
+    - aset/konten/pemula/utang_cicilan/
+    - aset/konten/pemula/waspada_penipuan/
+    - aset/konten/pemula/psikologi_uang/
+    - aset/konten/menengah/paylater_kredit/
+    - aset/konten/menengah/penghasilan_tambahan/
+    - aset/konten/menengah/pajak_dasar/
+    - aset/konten/menengah/proteksi_dasar/
+    - aset/konten/menengah/investasi_dasar/
+    - aset/konten/menengah/tujuan_besar/
+    - aset/konten/lanjutan/investasi_lanjutan/
+    - aset/konten/lanjutan/kpr_kredit_besar/
+    - aset/konten/lanjutan/pajak_lanjutan/
+    - aset/konten/lanjutan/pensiun_kebebasan_finansial/
+    - aset/konten/lanjutan/keuangan_usaha_kecil/
+    - aset/konten/lanjutan/proteksi_keluarga_warisan/
 
   fonts:
     - family: PlusJakartaSans

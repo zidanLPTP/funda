@@ -17,6 +17,10 @@ import 'tabel/tabel_tagihan.dart';
 import 'tabel/tabel_transaksi.dart';
 import 'tabel/tabel_tujuan.dart';
 import 'tabel/tabel_utang.dart';
+import 'tabel/tabel_progres_pelajaran.dart';
+import 'tabel/tabel_hasil_misi.dart';
+import 'tabel/tabel_hasil_kuis.dart';
+import 'tabel/tabel_pernyataan.dart';
 
 part 'basis_data.g.dart';
 
@@ -37,6 +41,10 @@ part 'basis_data.g.dart';
     TabelPenyesuaianUtang,
     TabelTagihan,
     TabelPembayaranTagihan,
+    TabelProgresPelajaran,
+    TabelHasilMisi,
+    TabelHasilKuis,
+    TabelPernyataan,
   ],
 )
 class BasisDataFunda extends _$BasisDataFunda {
@@ -44,7 +52,7 @@ class BasisDataFunda extends _$BasisDataFunda {
     : super(pelaksanaKueri ?? _bukaKoneksi());
 
   @override
-  int get schemaVersion => 6;
+  int get schemaVersion => 7;
 
   @override
   MigrationStrategy get migration {
@@ -80,6 +88,14 @@ class BasisDataFunda extends _$BasisDataFunda {
         await customStatement(
           'CREATE INDEX IF NOT EXISTS idx_pembayaran_tagihan_jatuh_tempo '
           'ON tabel_pembayaran_tagihan (tagihan_id, jatuh_tempo);',
+        );
+        await customStatement(
+          'CREATE INDEX IF NOT EXISTS idx_progres_modul_id '
+          'ON tabel_progres_pelajaran (modul_id);',
+        );
+        await customStatement(
+          'CREATE INDEX IF NOT EXISTS idx_hasil_kuis_modul_id '
+          'ON tabel_hasil_kuis (modul_id);',
         );
       },
       onUpgrade: (Migrator m, int dariVersi, int keVersi) async {
@@ -183,6 +199,22 @@ class BasisDataFunda extends _$BasisDataFunda {
             'ALTER TABLE tabel_tagihan ADD COLUMN berakhir_pada INTEGER;',
           );
         }
+        break;
+      case 7:
+        // Migrasi Skema Versi 7 (Tahap 4 - Mesin Belajar):
+        // Membuat tabel progres pelajaran, hasil misi, hasil kuis, dan pernyataan.
+        await m.createTable(tabelProgresPelajaran);
+        await m.createTable(tabelHasilMisi);
+        await m.createTable(tabelHasilKuis);
+        await m.createTable(tabelPernyataan);
+        await customStatement(
+          'CREATE INDEX IF NOT EXISTS idx_progres_modul_id '
+          'ON tabel_progres_pelajaran (modul_id);',
+        );
+        await customStatement(
+          'CREATE INDEX IF NOT EXISTS idx_hasil_kuis_modul_id '
+          'ON tabel_hasil_kuis (modul_id);',
+        );
         break;
       default:
         break;

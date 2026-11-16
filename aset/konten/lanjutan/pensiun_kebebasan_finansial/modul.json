@@ -1,0 +1,20 @@
+﻿{
+    "kuis":  {
+                 "jumlahSoal":  0,
+                 "bankSoal":  [
+
+                              ]
+             },
+    "id":  "pensiun_kebebasan_finansial",
+    "tersedia":  false,
+    "urutan":  16,
+    "gerbang":  [
+
+                ],
+    "deskripsiSingkat":  "Menghitung angka kebebasan finansial dan proyeksi kebutuhan hari tua dengan inflasi.",
+    "daftarPelajaran":  [
+
+                        ],
+    "tingkat":  "lanjutan",
+    "judul":  "Pensiun \u0026 Kebebasan Finansial"
+}

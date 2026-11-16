@@ -65,3 +65,19 @@ Dokumen ini mencatat keputusan teknis sementara, kompromi dependensi, dan hal-ha
   - *Keterbatasan Pengujian iOS:* Karena lingkungan pengembangan saat ini berjalan di Windows, pengujian platform iOS dibatasi pada validasi sintaks Dart/kompatibilitas kode. Pengujian integrasi langsung sistem notifikasi iOS (`UNUserNotificationCenter`) memerlukan mesin macOS dengan Xcode aktif.
 - **Rencana Peninjauan:**
   Pada rilis mendatang (Tahap 7 - Cadangan & Ekspor), pastikan entri di `tabel_pengaturan` (status aktif pengingat, jam pengingat, preferensi nominal) ikut disertakan dalam format cadangan JSON terenkripsi.
+
+---
+
+## 7. Tabel Progres Belajar & Pernyataan Wajib Masuk Cadangan (Tahap 4)
+
+- **Konteks:**
+  Pada Tahap 4 (Mesin Belajar), skema basis data versi 7 menambahkan 4 tabel baru untuk persistensi progres edukasi:
+  1. `tabel_progres_pelajaran` (mencatat status belum, sedang, selesai, indeks langkah terakhir, waktu mulai & selesai).
+  2. `tabel_hasil_misi` (mencatat hasil pengerjaan misi per pelajaran: selesai, dilewati, waktu eksekusi).
+  3. `tabel_hasil_kuis` (mencatat riwayat percobaan kuis per modul: nilai persentase integer, status lulus, jawaban detail JSON, waktu selesai).
+  4. `tabel_pernyataan` (mencatat klaim pengguna seperti *"tidak_punya_utang"*, *"tidak_punya_pengeluaran"* untuk evaluasi gerbang prasyarat belajar).
+- **Keputusan & Kompromi:**
+  Untuk menjaga kesederhanaan dan performa kueri lokal, tabel-tabel ini terisolasi dari tabel keuangan utama (tanpa foreign key yang mengikat data transaksi atau dompet).
+- **Rencana Peninjauan:**
+  Pada Tahap 7 (Cadangan & Ekspor Data), 4 tabel progres belajar ini wajib disertakan dalam mekanisme ekspor/impor JSON dan cadangan terenkripsi agar pengguna tidak kehilangan riwayat pembelajaran dan sertifikasi kelulusan kuis saat berganti perangkat.
+

@@ -1,0 +1,20 @@
+﻿{
+    "kuis":  {
+                 "jumlahSoal":  0,
+                 "bankSoal":  [
+
+                              ]
+             },
+    "id":  "proteksi_keluarga_warisan",
+    "tersedia":  false,
+    "urutan":  18,
+    "gerbang":  [
+
+                ],
+    "deskripsiSingkat":  "Perencanaan dokumen masa depan dan pemahaman dasar distribusi warisan keluarga.",
+    "daftarPelajaran":  [
+
+                        ],
+    "tingkat":  "lanjutan",
+    "judul":  "Proteksi Keluarga \u0026 Warisan Dasar"
+}

@@ -1,0 +1,20 @@
+﻿{
+    "kuis":  {
+                 "jumlahSoal":  0,
+                 "bankSoal":  [
+
+                              ]
+             },
+    "id":  "penghasilan_tambahan",
+    "tersedia":  false,
+    "urutan":  8,
+    "gerbang":  [
+
+                ],
+    "deskripsiSingkat":  "Mengelola penghasilan tidak tetap dan menyisihkan dana untuk masa sepi proyek.",
+    "daftarPelajaran":  [
+
+                        ],
+    "tingkat":  "menengah",
+    "judul":  "Penghasilan Tambahan \u0026 Freelance"
+}

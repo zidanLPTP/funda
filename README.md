@@ -97,12 +97,24 @@ funda/
 - [docs/spec.md](docs/spec.md) — Rincian spesifikasi lengkap aplikasi Funda.
 - [docs/styleguide.md](docs/styleguide.md) — Token desain Soft Bento, warna, dan pedoman bahasa.
 - [docs/kamus_penamaan.md](docs/kamus_penamaan.md) — Kamus istilah penamaan kode berbahasa Indonesia.
+- [docs/format_konten.md](docs/format_konten.md) — Spesifikasi skema JSON kurikulum edukasi, kamus istilah, dan aturan penulisan kalimat <= 25 kata.
 - [docs/utang_teknis.md](docs/utang_teknis.md) — Catatan utang teknis, dependensi native SQLite, dan rencana refaktor.
 
 ---
 
 ## 📸 Tangkapan Layar Aplikasi
 Tangkapan layar otomatis yang dihasilkan dari pengujian dan emulator tersimpan pada:
+- **Tahap 4 (Mesin Belajar):** [docs/tangkapan_layar/tahap_04/](docs/tangkapan_layar/tahap_04/)
+  - `01_tab_belajar_peta.png` — Tab Belajar menampilkan peta 3 tingkat (Pemula, Menengah, Lanjutan)
+  - `02_pelajaran_terkunci_apa_yang_kurang.png` — Pelajaran terkunci dengan dialog apa yang kurang & tombol pernyataan
+  - `03_pemutar_pemantik.png` — Pemutar pelajaran micro-learning langkah pemantik reflektif
+  - `04_pemutar_kartu_konsep_tooltip.png` — Kartu konsep dengan teks istilah interaktif & dialog kamus terbuka
+  - `05_pemutar_cek_paham.png` — Langkah cek paham interaktif dengan pilihan jawaban dan penjelasan langsung
+  - `06_pemutar_kartu_misi.png` — Kartu misi praktik nyata yang memeriksa data keuangan riil pengguna
+  - `07_pemutar_umpan_balik.png` — Umpan balik nyata tanpa kata menghakimi dari data pengguna
+  - `08_kuis_soal.png` — Kuis akhir modul dengan bilah kemajuan dan pilihan jawaban acak
+  - `09_kuis_hasil_lulus.png` — Hasil kuis kelulusan modul (nilai >= 70%)
+  - `10_beranda_lanjut_belajar.png` — Petak Beranda "Lanjut Belajar" reaktif mengarahkan ke pelajaran aktif
 - **Tahap 3C-R (Tagihan Berulang, Pengingat Lokal & Emulator):** [docs/tangkapan_layar/tahap_03c_emulator/](docs/tangkapan_layar/tahap_03c_emulator/)
   - `01_beranda.png` — Dasbor Beranda dengan Petak Bento Tagihan Terdekat
   - `02_jadwal_tagihan.png` — Layar Jadwal Tagihan Gabungan (Tagihan & Cicilan Utang)

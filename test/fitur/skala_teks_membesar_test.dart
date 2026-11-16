@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:funda/data/basis_data.dart';
 import 'package:funda/fitur/anggaran/kontroler/penyedia_anggaran.dart';
+import 'package:funda/fitur/belajar/kontroler/penyedia_belajar.dart';
 import 'package:funda/fitur/beranda/tampilan/layar_beranda.dart';
 import 'package:funda/fitur/dompet/kontroler/penyedia_dompet.dart';
 import 'package:funda/fitur/kategori/kontroler/penyedia_kategori.dart';
@@ -61,6 +62,17 @@ void main() {
                 penyediaTagihanTerdekatBeranda.overrideWith(
                   (ref) => Future.value(null),
                 ),
+                penyediaLanjutBelajarBeranda.overrideWith(
+                  (ref) => Future.value(
+                    const InfoLanjutBelajar(
+                      labelAksi: 'Mulai',
+                      judul: 'Memetakan Arus Kas',
+                      keterangan: 'Pelajaran siap dipelajari.',
+                      rute: '/belajar',
+                      bisaDibuka: true,
+                    ),
+                  ),
+                ),
               ],
               child: MaterialApp(
                 theme: TemaFunda.temaTerang,
@@ -104,6 +116,9 @@ void main() {
             greaterThanOrEqualTo(ukuranSkala1.height * 1.5),
             reason: 'Teks tidak boleh disusutkan oleh FittedBox',
           );
+
+          await tester.pumpWidget(const SizedBox());
+          await tester.pump(const Duration(milliseconds: 100));
         },
       );
     },

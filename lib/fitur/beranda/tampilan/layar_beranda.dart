@@ -11,6 +11,7 @@ import '../../../perhitungan/perhitungan_utang_dashboard.dart';
 import '../../../tema/token.dart';
 import '../../../util/format_rupiah.dart';
 import '../../anggaran/kontroler/penyedia_anggaran.dart';
+import '../../belajar/kontroler/penyedia_belajar.dart';
 import '../../dompet/tampilan/layar_form_dompet.dart';
 import '../../tagihan/kontroler/penyedia_tagihan.dart';
 import '../../../perhitungan/perhitungan_tagihan.dart';
@@ -531,56 +532,61 @@ class LayarBeranda extends ConsumerWidget {
             ),
             const SizedBox(height: SpasiFunda.jarakPetak),
 
-            // 8. Bento 2x1: Lanjut Belajar (Placeholder bertanda jelas)
-            PetakBento.ukuran2x1(
-              tint: TintPetakBento.ungu,
-              padaKetuk: () => context.go('/belajar'),
-              labelAkses: 'Pelajaran keuangan: Segera hadir di Tahap Belajar',
-              anak: Row(
-                children: [
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+            // 8. Bento 2x1: Lanjut Belajar (Data Nyata dari Penyedia Belajar)
+            ref.watch(penyediaLanjutBelajarBeranda).when(
+                  data: (info) => PetakBento.ukuran2x1(
+                    tint: TintPetakBento.ungu,
+                    padaKetuk: () => context.push(info.rute),
+                    labelAkses: 'Pelajaran keuangan: ${info.labelAksi} ${info.judul}',
+                    anak: Row(
                       children: [
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: SpasiFunda.s,
-                            vertical: SpasiFunda.xs,
-                          ),
-                          decoration: BoxDecoration(
-                            color: WarnaFunda.sifatKeinginan.withAlpha(25),
-                            borderRadius: BorderRadius.circular(SudutFunda.pil),
-                          ),
-                          child: const TeksFunda.catatan(
-                            'Segera Hadir di Tahap Belajar',
-                            warna: WarnaFunda.sifatKeinginan,
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: SpasiFunda.s,
+                                  vertical: SpasiFunda.xs,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: WarnaFunda.sifatKeinginan.withAlpha(25),
+                                  borderRadius: BorderRadius.circular(SudutFunda.pil),
+                                ),
+                                child: TeksFunda.catatan(
+                                  info.labelAksi,
+                                  warna: WarnaFunda.sifatKeinginan,
+                                ),
+                              ),
+                              const SizedBox(height: SpasiFunda.s),
+                              TeksFunda.judulBagian(info.judul),
+                              const SizedBox(height: SpasiFunda.xs),
+                              TeksFunda.catatan(
+                                info.keterangan,
+                                warna: WarnaFunda.teksRedup,
+                              ),
+                            ],
                           ),
                         ),
-                        const SizedBox(height: SpasiFunda.s),
-                        const TeksFunda.judulBagian('Memetakan Arus Kas'),
-                        const SizedBox(height: SpasiFunda.xs),
-                        const TeksFunda.catatan(
-                          'Pondasi mengelola uang dingin dan kebutuhan',
+                        Container(
+                          width: 44,
+                          height: 44,
+                          decoration: BoxDecoration(
+                            color: WarnaFunda.sifatKeinginan,
+                            borderRadius: BorderRadius.circular(SudutFunda.pil),
+                          ),
+                          child: const Icon(
+                            LucideIcons.play,
+                            size: 20,
+                            color: WarnaFunda.putih,
+                          ),
                         ),
                       ],
                     ),
                   ),
-                  Container(
-                    width: 44,
-                    height: 44,
-                    decoration: BoxDecoration(
-                      color: WarnaFunda.sifatKeinginan,
-                      borderRadius: BorderRadius.circular(SudutFunda.pil),
-                    ),
-                    child: const Icon(
-                      LucideIcons.play,
-                      size: 20,
-                      color: WarnaFunda.putih,
-                    ),
-                  ),
-                ],
-              ),
-            ),
+                  loading: () => const SizedBox.shrink(),
+                  error: (_, _) => const SizedBox.shrink(),
+                ),
             const SizedBox(height: SpasiFunda.jarakPetak),
 
             // 9. Bento 2x1: Tagihan Terdekat (Data Nyata)

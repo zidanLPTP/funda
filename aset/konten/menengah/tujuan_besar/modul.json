@@ -1,0 +1,20 @@
+﻿{
+    "kuis":  {
+                 "jumlahSoal":  0,
+                 "bankSoal":  [
+
+                              ]
+             },
+    "id":  "tujuan_besar",
+    "tersedia":  false,
+    "urutan":  12,
+    "gerbang":  [
+
+                ],
+    "deskripsiSingkat":  "Merencanakan pernikahan, hunian pertama, pendidikan, dan proyeksi jangka panjang.",
+    "daftarPelajaran":  [
+
+                        ],
+    "tingkat":  "menengah",
+    "judul":  "Tujuan Besar \u0026 Perencanaan"
+}

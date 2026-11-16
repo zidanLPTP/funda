@@ -1,0 +1,20 @@
+﻿{
+    "kuis":  {
+                 "jumlahSoal":  0,
+                 "bankSoal":  [
+
+                              ]
+             },
+    "id":  "tabungan",
+    "tersedia":  false,
+    "urutan":  2,
+    "gerbang":  [
+
+                ],
+    "deskripsiSingkat":  "Menabung itu soal tujuan yang jelas dan cara membayar diri sendiri lebih dulu.",
+    "daftarPelajaran":  [
+
+                        ],
+    "tingkat":  "pemula",
+    "judul":  "Tabungan"
+}

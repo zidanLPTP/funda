@@ -12,6 +12,7 @@ import 'package:funda/data/penyedia_basis_data.dart';
 import 'package:funda/data/repositori/tagihan_repositori.dart';
 import 'package:funda/fitur/anggaran/kontroler/penyedia_anggaran.dart';
 import 'package:funda/fitur/beranda/tampilan/layar_beranda.dart';
+import 'package:funda/fitur/belajar/kontroler/penyedia_belajar.dart';
 import 'package:funda/fitur/dompet/kontroler/penyedia_dompet.dart';
 import 'package:funda/fitur/kategori/kontroler/penyedia_kategori.dart';
 import 'package:funda/fitur/pengaturan/kontroler/penyedia_pengaturan.dart';
@@ -220,6 +221,17 @@ void main() {
           ),
           penyediaPengingatAktif.overrideWith(
             () => PengaturanPengingatAktifNotifier(),
+          ),
+          penyediaLanjutBelajarBeranda.overrideWith(
+            (ref) => Future.value(
+              const InfoLanjutBelajar(
+                labelAksi: 'Mulai',
+                judul: 'Memetakan Arus Kas',
+                keterangan: 'Pelajaran siap dipelajari sekarang.',
+                rute: '/belajar/pelajaran/anggaran_arus_kas/anggaran_arus_kas_1_2',
+                bisaDibuka: true,
+              ),
+            ),
           ),
         ],
         child: MaterialApp(

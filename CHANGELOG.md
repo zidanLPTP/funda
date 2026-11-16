@@ -5,6 +5,46 @@ Format penulisan mengacu pada standar Keep a Changelog dan penamaan commit Funda
 
 ---
 
+## [0.6.0] - 2026-11-16 — Mesin Belajar (Tahap 4)
+
+Tahap 4: Implementasi lengkap arsitektur Mesin Belajar (*Learning Engine*) Funda, mencakup pemutar materi micro-learning kartu berurutan, kuis akhir modul dengan nilai ambang 70% dan pengacak deterministik, misi praktik nyata yang berinteraksi langsung dengan data pengguna riil tanpa kata-kata menghakimi, gerbang data prasyarat dengan opsi pernyataan pengguna (*"Aku tidak punya ini"*), pembaca konten statis & kamus istilah interaktif (`{{istilah}}`), skema basis data versi 7 (4 tabel baru: `tabel_progres_pelajaran`, `tabel_hasil_misi`, `tabel_hasil_kuis`, `tabel_pernyataan`), petak Beranda reaktif *"Lanjut Belajar"*, serta pembuktian benchmark Beranda bebas N+1 pada 5.000 vs 20.000 transaksi.
+
+### Ditambahkan
+- **Skema Basis Data & Migrasi Bertingkat Skema v7 (`lib/data/basis_data.dart`):**
+  - Tabel `tabel_progres_pelajaran`: mencatat status belajar (`belum`, `sedang`, `selesai`), indeks langkah terakhir yang dicapai, waktu mulai dan waktu penyelesaian.
+  - Tabel `tabel_hasil_misi`: mencatat hasil eksekusi misi praktik per pelajaran (`selesai`, `dilewati`) beserta waktu selesai.
+  - Tabel `tabel_hasil_kuis`: mencatat rekam jejak percobaan kuis per modul (skor persentase integer, status lulus/gagal, detail jawaban JSON, waktu selesai).
+  - Tabel `tabel_pernyataan`: menyimpan klaim pengguna (mis. `tidak_punya_pengeluaran`, `tidak_punya_utang`) untuk membuka materi terkunci saat pengguna belum memiliki data riil terkait.
+  - Migrasi idempoten v6 -> v7 aman dan teruji pada migrasi beruntun v1 hingga v7.
+- **Logika Murni Perhitungan TDD (`lib/perhitungan/perhitungan_belajar.dart`):**
+  - Evaluasi gerbang data prasyarat modul dan pelajaran (`evaluasiSyaratData`, `evaluasiGerbangData`, `evaluasiPetaModul`) dengan toleransi pernyataan `ATAU`.
+  - Penilaian kuis modul berbasis bilangan bulat integer (`hitungSkorKuis`, ambang kelulusan 70%).
+  - Pengacak bank soal kuis yang deterministik (`acakSoalDeterministik`).
+  - Penentuan status belajar pelajaran (`tentukanStatusPelajaran`).
+  - Analisis komposisi pengeluaran per sifat (`hitungKomposisiSifat`).
+- **Pembaca Konten & Kamus Istilah (`lib/fitur/belajar/model/pembaca_konten.dart`):**
+  - Pembaca aset JSON kurikulum bertingkat (`aset/konten/pemula/anggaran_arus_kas/modul.json`, `anggaran_arus_kas_1_2.json`, `anggaran_arus_kas_1_3.json`, dan stub 18 modul lainnya).
+  - Pembaca `aset/konten/kamus.json` yang memuat 10 istilah keuangan dengan definisi ramah dan contoh konkret Rupiah.
+  - Komponen `TeksDenganIstilah`: membedah tag `{{istilah}}` menjadi teks interaktif bergaris bawah putus-putus yang menampilkan dialog arti istilah saat diketuk.
+- **Registri Misi & Umpan Balik Nyata (`lib/fitur/belajar/model/registri_misi.dart`):**
+  - Pengecekan kondisi data riil pengguna (`ada_data`, `aturan_data`, `lihat_hitungan`).
+  - Umpan balik yang objektif, mendidik, dan bebas kata-kata menghakimi (*non-judgmental*).
+- **Antarmuka Pengguna & Navigasi Pembelajaran:**
+  - `LayarBelajar` (Tab Navigasi Belajar): Peta belajar terstruktur dalam 3 tingkat (Pemula, Menengah, Lanjutan), indikator status modul, daftar pelajaran, tombol kuis, dan dialog syarat kurang bagi pelajaran terkunci.
+  - `LayarPemutarPelajaran`: Alur bertahap micro-learning (Pemantik -> Konsep Inti -> Contoh Nyata -> Cek Paham -> Misi Praktik Nyata -> Umpan Balik Datamu -> Tindak Lanjut) dengan penanda kemajuan progress bar dan lencana draf.
+  - `LayarKuisModul`: Kuis interaktif dengan umpan balik langsung per soal dan layar kelulusan modul.
+  - Petak Beranda *"Lanjut Belajar"*: Memandu pengguna secara reaktif ke pelajaran yang sedang berjalan atau siap dipelajari.
+- **Pengujian & Verifikasi Mutu:**
+  - 204 dari 204 uji unit dan widget lulus 100% (`flutter test`).
+  - 10 tangkapan layar lengkap tersimpan di `docs/tangkapan_layar/tahap_04/`.
+  - Aksesibilitas skala teks 2.0x bebas overflow di seluruh layar baru.
+  - `flutter analyze` 100% bersih tanpa peringatan.
+- **Dokumentasi:**
+  - Berkas baru `docs/format_konten.md` yang merinci skema JSON dan aturan penulisan kalimat <= 25 kata tanpa kata terlarang.
+  - Pembaruan `docs/utang_teknis.md` dan `docs/kamus_penamaan.md`.
+
+---
+
 ## [0.5.1] - 2026-11-16 — Revisi & Penutupan Tahap 3C (Tahap 3C-R)
 
 Tahap 3C-R: Penutupan dan penyempurnaan resmi Tahap 3C meliputi revisi skema migrasi v6 (nominal tagihan opsional, kolom `jatuh_tempo_pertama` dan `berakhir_pada` inklusif), pembersihan logika murni jatuh tempo (dukungan pilihan pengingat {0, 1, 3, 7}, batas kedaluwarsa > 60 hari), penggabungan jadwal tagihan dengan cicilan utang bulanan (status baca-saja dan pembukaan detail utang), batasan deterministik jendela 45 hari dan maksimal 50 slot pengingat, mode penjadwalan `inexactAllowWhileIdle`, pendaftaran receiver boot Android, tombol pengingat uji debug 2 menit, serta dokumentasi rasio kontras warna dan tolok ukur benchmark di emulator Android API 36.

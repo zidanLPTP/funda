@@ -88,6 +88,16 @@
 | loan installment item | CicilanUtangKalkulasi | Baris cicilan utang dalam jadwal gabungan dengan status baca-saja |
 | reminder days set | pilihanHariPengingatValid | Himpunan hari pengingat valid `{0, 1, 3, 7}` hari sebelum jatuh tempo |
 | rule-of-thumb ratio | ambangRasioCicilanAturanPraktis | Batas rasio cicilan aturan praktis (30%) tanpa menghakimi pengguna |
+| lesson player | LayarPemutarPelajaran | Pemutar alur micro-learning kartu berurutan |
+| module quiz | LayarKuisModul | Layar kuis akhir modul dengan nilai ambang 70% |
+| user declaration | tabel_pernyataan | Tabel pernyataan pengguna untuk melewati syarat data |
+| lesson progress | tabel_progres_pelajaran | Tabel pencatatan progres per langkah pelajaran |
+| mission result | tabel_hasil_misi | Tabel pencatatan status misi pengguna |
+| quiz result | tabel_hasil_kuis | Tabel pencatatan riwayat skor kuis pengguna |
+| dictionary reader | TeksDenganIstilah | Komponen teks interaktif dengan tooltip kamus |
+| learning map | LayarBelajar | Tab Belajar menampilkan peta tingkat, modul, dan pelajaran |
+| content reader | PembacaKonten | Utilitas pembaca berkas JSON kurikulum dan kamus |
+| continue learning tile | penyediaLanjutBelajarBeranda | Petak Beranda reaktif penunjuk pelajaran siap buka |
 
 ## Aturan Cabang Kerja (Git)
 - Setiap tahap dikerjakan pada cabang khusus (contoh: `tahap-02-dompet-transaksi`).

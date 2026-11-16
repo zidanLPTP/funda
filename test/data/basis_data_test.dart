@@ -16,8 +16,8 @@ void main() {
   });
 
   group('BasisDataFunda & TabelPengaturan', () {
-    test('skema versi 6 terdaftar pada basis data', () async {
-      expect(basisData.schemaVersion, equals(6));
+    test('skema versi 7 terdaftar pada basis data', () async {
+      expect(basisData.schemaVersion, equals(7));
 
       final nilaiAwal = await basisData.bacaPengaturan('sudah_onboarding');
       expect(nilaiAwal, isNull);
@@ -290,6 +290,38 @@ void main() {
 
         // Jalankan lagi (idempoten)
         await basisData.migration.onUpgrade(migrator, 5, 6);
+      },
+    );
+
+    test(
+      'Migrasi Bertingkat Skema v6 -> v7 aman, idempoten, dan membuat tabel belajar',
+      () async {
+        final migrator = Migrator(basisData);
+
+        // Jalankan migrasi v6 -> v7
+        await basisData.migration.onUpgrade(migrator, 6, 7);
+
+        // Uji insert pada tabel progres pelajaran
+        final waktu = DateTime.now();
+        await basisData.into(basisData.tabelProgresPelajaran).insert(
+              TabelProgresPelajaranCompanion.insert(
+                pelajaranId: 'anggaran_arus_kas_1_2',
+                modulId: 'anggaran_arus_kas',
+                status: 'selesai',
+                indeksLangkah: const Value(2),
+                dibuatPada: waktu,
+                selesaiPada: Value(waktu),
+              ),
+            );
+
+        final hasilProgres = await (basisData.select(basisData.tabelProgresPelajaran)
+              ..where((p) => p.pelajaranId.equals('anggaran_arus_kas_1_2')))
+            .getSingleOrNull();
+        expect(hasilProgres, isNotNull);
+        expect(hasilProgres!.status, equals('selesai'));
+
+        // Jalankan lagi (idempoten)
+        await basisData.migration.onUpgrade(migrator, 6, 7);
       },
     );
   });

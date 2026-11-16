@@ -1,0 +1,20 @@
+﻿{
+    "kuis":  {
+                 "jumlahSoal":  0,
+                 "bankSoal":  [
+
+                              ]
+             },
+    "id":  "waspada_penipuan",
+    "tersedia":  false,
+    "urutan":  5,
+    "gerbang":  [
+
+                ],
+    "deskripsiSingkat":  "Mengenali tawaran mencurigakan, memeriksa legalitas, dan langkah perlindungan diri.",
+    "daftarPelajaran":  [
+
+                        ],
+    "tingkat":  "pemula",
+    "judul":  "Waspada Penipuan \u0026 Pinjol Ilegal"
+}

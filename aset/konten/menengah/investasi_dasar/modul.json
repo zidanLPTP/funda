@@ -1,0 +1,20 @@
+﻿{
+    "kuis":  {
+                 "jumlahSoal":  0,
+                 "bankSoal":  [
+
+                              ]
+             },
+    "id":  "investasi_dasar",
+    "tersedia":  false,
+    "urutan":  11,
+    "gerbang":  [
+
+                ],
+    "deskripsiSingkat":  "Memahami inflasi, hubungan imbal hasil dan risiko, serta memulai investasi kecil.",
+    "daftarPelajaran":  [
+
+                        ],
+    "tingkat":  "menengah",
+    "judul":  "Investasi Dasar"
+}

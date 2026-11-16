@@ -1,0 +1,52 @@
+[
+  {
+    "istilah": "arus kas",
+    "arti": "Selisih antara total uang masuk dan total uang keluar dalam satu periode tertentu.",
+    "contohRupiah": "Pemasukan Rp3.000.000 dikurangi pengeluaran Rp2.400.000 menghasilkan arus kas positif Rp600.000."
+  },
+  {
+    "istilah": "kebutuhan",
+    "arti": "Pengeluaran pokok yang wajib dipenuhi agar kehidupan sehari-hari tetap berjalan normal.",
+    "contohRupiah": "Membayar sewa kos Rp800.000 atau membeli beras Rp120.000 adalah pengeluaran kebutuhan."
+  },
+  {
+    "istilah": "keinginan",
+    "arti": "Pengeluaran untuk kenyamanan atau gaya hidup yang sebenarnya bisa ditunda tanpa mengganggu hidup pokok.",
+    "contohRupiah": "Membeli kopi kekinian seharga Rp35.000 atau menonton bioskop Rp50.000 adalah pengeluaran keinginan."
+  },
+  {
+    "istilah": "anggaran",
+    "arti": "Rencana batasan jumlah uang yang boleh kamu belanjakan untuk pos tertentu selama satu bulan.",
+    "contohRupiah": "Menetapkan batas belanja makan Rp1.500.000 selama bulan Maret."
+  },
+  {
+    "istilah": "dana darurat",
+    "arti": "Simpanan uang tunai terpisah yang hanya boleh dipakai saat menghadapi situasi darurat tak terduga.",
+    "contohRupiah": "Menyimpan Rp5.000.000 di rekening khusus untuk biaya servis motor tiba-tiba atau kebutuhan mendesak."
+  },
+  {
+    "istilah": "sifat pengeluaran",
+    "arti": "Kategori makna dari suatu pengeluaran: kebutuhan, keinginan, tabungan, atau pembayaran utang.",
+    "contohRupiah": "Memberi tanda pada belanja mingguan sebagai kebutuhan dan jajan cemilan sebagai keinginan."
+  },
+  {
+    "istilah": "dompet",
+    "arti": "Wadah pencatatan akun uangmu, bisa berupa uang tunai fisik, rekening bank, atau dompet digital.",
+    "contohRupiah": "Mencatat saldo rekening bank Rp2.000.000 dan uang tunai di dompet fisik Rp350.000."
+  },
+  {
+    "istilah": "surplus",
+    "arti": "Kondisi saat uang yang masuk lebih besar daripada uang yang keluar dalam satu bulan.",
+    "contohRupiah": "Pemasukan Rp4.000.000 dan pengeluaran Rp3.200.000 menghasilkan surplus Rp800.000."
+  },
+  {
+    "istilah": "defisit",
+    "arti": "Kondisi saat uang yang keluar lebih besar daripada uang yang masuk dalam satu bulan.",
+    "contohRupiah": "Pemasukan Rp3.000.000 tetapi pengeluaran Rp3.500.000 menyebabkan defisit Rp500.000."
+  },
+  {
+    "istilah": "cicilan",
+    "arti": "Pembayaran berkala setiap bulan untuk melunasi kewajiban pinjaman atau utang sampai tuntas.",
+    "contohRupiah": "Membayar cicilan motor sebesar Rp650.000 setiap tanggal 10."
+  }
+]

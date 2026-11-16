@@ -1,0 +1,61 @@
+{
+  "id": "anggaran_arus_kas_1_3",
+  "judul": "Kebutuhan vs Keinginan",
+  "durasiMenit": 4,
+  "status": "draf",
+  "gerbang": [
+    {
+      "tipe": "ada_data",
+      "objek": "pengeluaran",
+      "min": 3,
+      "pesan": "Catat minimal 3 pengeluaran dulu agar kamu bisa memilah pos belanjamu."
+    }
+  ],
+  "pemantik": "Sering merasa semua barang yang dibeli terasa penting padahal anggaran bulanan jebol?",
+  "kartu": [
+    {
+      "judul": "Memilah Dua Sisi Belanja",
+      "isi": "Setiap pengeluaran punya peran berbeda. Ada pos {{kebutuhan}} yang menjaga hidupmu berjalan, dan ada pos {{keinginan}} yang memberi kenyamanan tambahan."
+    },
+    {
+      "judul": "Bukan Berarti Dilarang",
+      "isi": "Memiliki pos keinginan itu wajar dan manusiawi. Tujuannya bukan menghapus kesenangan, melainkan menyadari proporsi belanjamu secara jujur."
+    },
+    {
+      "judul": "Kekuatan Memberi Label",
+      "isi": "Dengan menandai {{sifat pengeluaran}} pada setiap kategori, kamu memegang kendali penuh untuk memutuskan pos mana yang bisa disesuaikan saat kondisi mendesak."
+    }
+  ],
+  "contohAngka": 150000,
+  "cekPaham": [
+    {
+      "tanya": "Manakah contoh pengeluaran yang jelas termasuk kebutuhan pokok?",
+      "pilihan": [
+        "Membeli jaket baru karena warnanya menarik",
+        "Membayar tagihan listrik rumah",
+        "Berlangganan tiga aplikasi streaming video sekaligus"
+      ],
+      "benar": 1,
+      "penjelasan": "Listrik rumah adalah kebutuhan dasar yang menopang kehidupan sehari-hari."
+    },
+    {
+      "tanya": "Kapan saat terbaik untuk meninjau kembali porsi pengeluaran keinginan?",
+      "pilihan": [
+        "Saat arus kas bulananmu mulai terasa sesak atau defisit",
+        "Hanya saat tahun baru saja",
+        "Tidak perlu ditinjau jika masih ada limit kartu kredit"
+      ],
+      "benar": 0,
+      "penjelasan": "Menyesuaikan pos keinginan adalah langkah tercepat menyehatkan kembali arus kasmu."
+    }
+  ],
+  "misi": {
+    "tipe": "aturan_data",
+    "aturan": "semua_kategori_berlabel",
+    "judul": "Beri Label Kategori Pengeluaran",
+    "deskripsi": "Pastikan seluruh kategori pengeluaran aktif yang pernah kamu pakai sudah dilabeli sebagai kebutuhan, keinginan, tabungan, atau utang.",
+    "perkiraanMenit": 2,
+    "umpanBalik": "komposisi_sifat_bulan_ini"
+  },
+  "tindakLanjut": "Sebelum membayar sesuatu besok, tanyakan pada dirimu: apakah barang ini kebutuhan atau keinginan?"
+}

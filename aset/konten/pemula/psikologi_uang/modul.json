@@ -1,0 +1,20 @@
+﻿{
+    "kuis":  {
+                 "jumlahSoal":  0,
+                 "bankSoal":  [
+
+                              ]
+             },
+    "id":  "psikologi_uang",
+    "tersedia":  false,
+    "urutan":  6,
+    "gerbang":  [
+
+                ],
+    "deskripsiSingkat":  "Memahami pemicu belanja impulsif dan membangun kebiasaan belanja yang tenang.",
+    "daftarPelajaran":  [
+
+                        ],
+    "tingkat":  "pemula",
+    "judul":  "Psikologi Uang \u0026 Kebiasaan Belanja"
+}

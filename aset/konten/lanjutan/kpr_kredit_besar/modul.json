@@ -1,0 +1,20 @@
+﻿{
+    "kuis":  {
+                 "jumlahSoal":  0,
+                 "bankSoal":  [
+
+                              ]
+             },
+    "id":  "kpr_kredit_besar",
+    "tersedia":  false,
+    "urutan":  14,
+    "gerbang":  [
+
+                ],
+    "deskripsiSingkat":  "Simulasi kredit pemilikan rumah, uang muka, dan uji kemampuan bayar dari arus kas.",
+    "daftarPelajaran":  [
+
+                        ],
+    "tingkat":  "lanjutan",
+    "judul":  "KPR \u0026 Kredit Besar"
+}

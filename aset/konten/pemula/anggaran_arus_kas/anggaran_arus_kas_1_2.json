@@ -1,0 +1,62 @@
+{
+  "id": "anggaran_arus_kas_1_2",
+  "judul": "Memetakan Arus Kas",
+  "durasiMenit": 4,
+  "status": "draf",
+  "gerbang": [
+    {
+      "tipe": "ada_data",
+      "objek": "dompet",
+      "min": 1,
+      "pesan": "Buat minimal 1 dompet dulu, yuk."
+    }
+  ],
+  "pemantik": "Pernah merasa saldo rekening cepat sekali menipis padahal rasanya baru kemarin gajian?",
+  "kartu": [
+    {
+      "judul": "Uang Masuk dan Uang Keluar",
+      "isi": "Setiap rupiah yang singgah di hidupmu selalu bergerak. Ada uang masuk dari hasil kerjamu, dan ada uang keluar untuk berbagai kebutuhan harianmu."
+    },
+    {
+      "judul": "Mengenal Arus Kas",
+      "isi": "Gerakan uang ini disebut {{arus kas}}. Saat uang masuk lebih besar daripada uang keluar, kamu punya ruang bernapas untuk menabung."
+    },
+    {
+      "judul": "Mulailah Mencatat",
+      "isi": "Langkah pertama bukan langsung berhemat ketat, melainkan **melihat kenyataan** dengan mencatat setiap transaksi apa adanya di dalam {{dompet}} pilihanmu."
+    }
+  ],
+  "contohAngka": 500000,
+  "cekPaham": [
+    {
+      "tanya": "Apa yang terjadi jika uang keluar lebih besar daripada uang masuk?",
+      "pilihan": [
+        "Arus kas positif",
+        "Arus kas negatif dan saldo berkurang",
+        "Tabungan otomatis bertambah"
+      ],
+      "benar": 1,
+      "penjelasan": "Jika pengeluaran lebih besar, kamu mengalami arus kas negatif yang menguras saldo simpananmu."
+    },
+    {
+      "tanya": "Apa langkah awal yang paling penting dalam merapikan keuangan?",
+      "pilihan": [
+        "Langsung berhenti jajan sama sekali",
+        "Mencatat pemasukan dan pengeluaran apa adanya",
+        "Meminjam uang ke teman"
+      ],
+      "benar": 1,
+      "penjelasan": "Mencatat secara jujur memberi gambaran utuh ke mana uangmu sebenarnya pergi."
+    }
+  ],
+  "misi": {
+    "tipe": "ada_data",
+    "objek": "transaksi",
+    "min": 2,
+    "judul": "Catat Transaksi Pertama",
+    "deskripsi": "Catat minimal 1 uang masuk dan 1 uang keluar di dompetmu untuk melihat arus kas bulan ini.",
+    "perkiraanMenit": 2,
+    "umpanBalik": "arus_kas_bulan_ini"
+  },
+  "tindakLanjut": "Simpan struk belanjamu hari ini atau catat langsung di Funda sesaat setelah membayar."
+}

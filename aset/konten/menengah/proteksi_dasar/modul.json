@@ -1,0 +1,20 @@
+﻿{
+    "kuis":  {
+                 "jumlahSoal":  0,
+                 "bankSoal":  [
+
+                              ]
+             },
+    "id":  "proteksi_dasar",
+    "tersedia":  false,
+    "urutan":  10,
+    "gerbang":  [
+
+                ],
+    "deskripsiSingkat":  "Melindungi kesehatan dan aset berharga dari risiko pengeluaran katastropik.",
+    "daftarPelajaran":  [
+
+                        ],
+    "tingkat":  "menengah",
+    "judul":  "Proteksi \u0026 Asuransi Dasar"
+}
