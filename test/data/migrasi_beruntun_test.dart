@@ -5,7 +5,7 @@ import 'package:funda/data/basis_data.dart';
 
 void main() {
   group(
-    'Langkah 0(d): Uji Migrasi Beruntun Bertingkat (v1 -> v2 -> v3 -> v4 -> v5 -> v6 -> v7)',
+    'Langkah 0(d): Uji Migrasi Beruntun Bertingkat (v1 -> v2 -> v3 -> v4 -> v5 -> v6 -> v7 -> v8)',
     () {
       late BasisDataFunda basisData;
       late Migrator migrator;
@@ -234,7 +234,22 @@ void main() {
               );
 
           // -------------------------------------------------------------
-          // VERIFIKASI KEUTUHAN DATA KESELURUHAN SETELAH v7
+          // 8. MIGRASI v7 -> v8 (Optimasi Indeks Kueri)
+          // -------------------------------------------------------------
+          await basisData.migration.onUpgrade(migrator, 7, 8);
+
+          // Verifikasi indeks baru v8 berhasil terbuat
+          final indexRes = await basisData.customSelect(
+            "SELECT name FROM sqlite_master WHERE type='index' AND name LIKE 'idx_transaksi_%';",
+          ).get();
+          final daftarIndex = indexRes.map((r) => r.read<String>('name')).toSet();
+          expect(daftarIndex.contains('idx_transaksi_jenis'), isTrue);
+          expect(daftarIndex.contains('idx_transaksi_jenis_kategori'), isTrue);
+          expect(daftarIndex.contains('idx_transaksi_waktu_id'), isTrue);
+          expect(daftarIndex.contains('idx_transaksi_waktu_jenis'), isTrue);
+
+          // -------------------------------------------------------------
+          // VERIFIKASI KEUTUHAN DATA KESELURUHAN SETELAH v8
           // -------------------------------------------------------------
 
           // 1. Data v1 (pengaturan) utuh

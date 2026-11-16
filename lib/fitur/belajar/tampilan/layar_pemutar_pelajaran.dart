@@ -653,26 +653,14 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
 
   Widget _bangunKartuUmpanBalik(MisiKonten misi) {
     final arusKas = ref.watch(penyediaArusKasBulanIni);
-    final daftarTx = ref.watch(penyediaDaftarTransaksi).value ?? [];
-    final kategoriMap = {for (final k in ref.watch(penyediaDaftarKategori).value ?? []) k.id: k.sifat};
-
-    // Hitung pengeluaran per sifat bulan berjalan
-    final now = DateTime.now();
-    final awalBulan = DateTime(now.year, now.month, 1);
-    final pengeluaranPerSifat = <String, int>{
-      'kebutuhan': 0,
-      'keinginan': 0,
-      'tabungan': 0,
-      'utang': 0,
-      'belum_dilabeli': 0,
-    };
-
-    for (final tx in daftarTx) {
-      if (tx.jenis == 'keluar' && tx.waktuTransaksi.isAfter(awalBulan.subtract(const Duration(seconds: 1)))) {
-        final sifat = kategoriMap[tx.kategoriId] ?? 'belum_dilabeli';
-        pengeluaranPerSifat[sifat] = (pengeluaranPerSifat[sifat] ?? 0) + tx.jumlahRupiah;
-      }
-    }
+    final pengeluaranPerSifat = ref.watch(penyediaKomposisiSifatBulanIni).value ??
+        const {
+          'kebutuhan': 0,
+          'keinginan': 0,
+          'tabungan': 0,
+          'utang': 0,
+          'belum_dilabeli': 0,
+        };
 
     final persenSifat = hitungKomposisiSifat(pengeluaranPerSifat);
 

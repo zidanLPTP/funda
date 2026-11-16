@@ -63,8 +63,14 @@ const daftarMetadataModul = [
   ('lanjutan', 'proteksi_keluarga_warisan'),
 ];
 
-/// Provider seluruh 19 modul konten dari aset.
+/// Cache in-memory untuk modul kurikulum agar tidak membaca 19 file JSON berulang kali.
+List<ModulKonten>? _cacheSemuaModul;
+
+/// Provider seluruh 19 modul konten dari aset (dengan cache in-memory O(1)).
 final penyediaDaftarSemuaModul = FutureProvider<List<ModulKonten>>((ref) async {
+  if (_cacheSemuaModul != null && _cacheSemuaModul!.isNotEmpty) {
+    return _cacheSemuaModul!;
+  }
   final hasil = <ModulKonten>[];
   for (final (tingkat, modulId) in daftarMetadataModul) {
     try {
@@ -77,6 +83,7 @@ final penyediaDaftarSemuaModul = FutureProvider<List<ModulKonten>>((ref) async {
     } catch (_) {}
   }
   hasil.sort((a, b) => a.urutan.compareTo(b.urutan));
+  _cacheSemuaModul = hasil;
   return hasil;
 });
 
@@ -92,10 +99,15 @@ final penyediaStreamHasilKuis = StreamProvider((ref) {
   return ref.watch(penyediaKuisRepositori).pantauSemuaHasilKuis();
 });
 
-/// Provider snapshot foto data pengguna yang reaktif terhadap perubahan transaksi, dompet, dll.
+/// Stream sinyal ringan perubahan transaksi untuk reaktivitas tanpa menarik seluruh baris ke memori Dart.
+final penyediaSinyalTransaksiBerubah = StreamProvider<int>((ref) {
+  return ref.watch(penyediaTransaksiRepositori).pantauJumlahTransaksi();
+});
+
+/// Provider snapshot foto data pengguna yang reaktif terhadap perubahan data via agregasi SQL.
 final penyediaFotoData = FutureProvider<FotoDataPengguna>((ref) async {
-  // Hubungkan dengan reaktivitas stream data
-  ref.watch(penyediaDaftarTransaksi);
+  // Hubungkan dengan reaktivitas stream data ringan (bebas N+1)
+  ref.watch(penyediaSinyalTransaksiBerubah);
   ref.watch(penyediaDaftarDompetAktif);
   ref.watch(penyediaStreamPernyataan);
   ref.watch(penyediaStreamProgresPelajaran);

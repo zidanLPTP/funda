@@ -8549,6 +8549,22 @@ abstract class _$BasisDataFunda extends GeneratedDatabase {
     'idx_transaksi_dompet',
     'CREATE INDEX idx_transaksi_dompet ON tabel_transaksi (dompet_id)',
   );
+  late final Index idxTransaksiJenis = Index(
+    'idx_transaksi_jenis',
+    'CREATE INDEX idx_transaksi_jenis ON tabel_transaksi (jenis)',
+  );
+  late final Index idxTransaksiJenisKategori = Index(
+    'idx_transaksi_jenis_kategori',
+    'CREATE INDEX idx_transaksi_jenis_kategori ON tabel_transaksi (jenis, kategori_id)',
+  );
+  late final Index idxTransaksiWaktuId = Index(
+    'idx_transaksi_waktu_id',
+    'CREATE INDEX idx_transaksi_waktu_id ON tabel_transaksi (waktu_transaksi, id)',
+  );
+  late final Index idxTransaksiWaktuJenis = Index(
+    'idx_transaksi_waktu_jenis',
+    'CREATE INDEX idx_transaksi_waktu_jenis ON tabel_transaksi (waktu_transaksi, jenis)',
+  );
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -8573,6 +8589,10 @@ abstract class _$BasisDataFunda extends GeneratedDatabase {
     tabelPernyataan,
     idxTransaksiWaktu,
     idxTransaksiDompet,
+    idxTransaksiJenis,
+    idxTransaksiJenisKategori,
+    idxTransaksiWaktuId,
+    idxTransaksiWaktuJenis,
   ];
   @override
   StreamQueryUpdateRules get streamUpdateRules => const StreamQueryUpdateRules([

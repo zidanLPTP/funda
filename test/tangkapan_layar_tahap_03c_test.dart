@@ -301,6 +301,8 @@ void main() {
       await tester.pumpAndSettle();
 
       await simpanTangkapanLayar(tester, 'layar_beranda_petak_tagihan.png');
+      await tester.pumpWidget(const SizedBox());
+      await tester.pump(const Duration(milliseconds: 100));
     });
 
     testWidgets(

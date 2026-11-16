@@ -10,6 +10,8 @@ class FotoDataRepositori {
 
   /// Mengambil snapshot lengkap data pengguna untuk evaluasi gerbang data.
   Future<FotoDataPengguna> ambilFotoData() async {
+    final offsetDetik = DateTime.now().timeZoneOffset.inSeconds;
+
     // 1. Agregasi jumlah objek dasar (O(1) kueri agregasi)
     final barisRingkasan = await _db.customSelect(
       '''
@@ -20,8 +22,8 @@ class FotoDataRepositori {
         (SELECT COUNT(*) FROM tabel_anggaran) as jml_anggaran,
         (SELECT COUNT(*) FROM tabel_tujuan WHERE status = 'aktif') as jml_tujuan,
         (SELECT COUNT(*) FROM tabel_utang WHERE status = 'aktif') as jml_utang,
-        (SELECT COUNT(DISTINCT date(waktu_transaksi, 'localtime')) FROM tabel_transaksi) as hari_berbeda,
-        (SELECT COUNT(DISTINCT strftime('%Y-%m', waktu_transaksi, 'localtime')) FROM tabel_transaksi) as bulan_berbeda
+        (SELECT COUNT(DISTINCT date(waktu_transaksi + $offsetDetik, 'unixepoch')) FROM tabel_transaksi) as hari_berbeda,
+        (SELECT COUNT(DISTINCT strftime('%Y-%m', datetime(waktu_transaksi + $offsetDetik, 'unixepoch'))) FROM tabel_transaksi) as bulan_berbeda
       ''',
     ).getSingle();
 

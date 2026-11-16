@@ -47,6 +47,8 @@ class PembacaKonten {
     'boros',
     'bodoh',
     'malas',
+    'ceroboh',
+    'payah',
   ];
 
   /// Mengurai string JSON kamus menjadi daftar istilah terindeks.
@@ -112,6 +114,14 @@ class PembacaKonten {
     }
     if (data['daftarPelajaran'] is! List) {
       throw GalatKonten('Kolom daftarPelajaran wajib berupa array', berkas: namaBerkas, kolom: 'daftarPelajaran');
+    }
+    final tersedia = data['tersedia'] as bool? ?? false;
+    final kuis = data['kuis'];
+    if (tersedia && kuis is Map<String, dynamic>) {
+      final jmlSoal = kuis['jumlahSoal'];
+      if (jmlSoal is num && jmlSoal <= 0) {
+        throw GalatKonten('Kolom kuis.jumlahSoal harus bernilai > 0 untuk modul yang tersedia', berkas: namaBerkas, kolom: 'kuis.jumlahSoal');
+      }
     }
   }
 
@@ -196,6 +206,18 @@ class PembacaKonten {
     if (cekPaham is! List || cekPaham.length < 2 || cekPaham.length > 3) {
       throw GalatKonten('Kolom cekPaham harus berisi 2 sampai 3 soal', berkas: namaBerkas, kolom: 'cekPaham');
     }
+    for (var i = 0; i < cekPaham.length; i++) {
+      final soal = cekPaham[i];
+      if (soal is Map<String, dynamic>) {
+        final pilihan = soal['pilihan'];
+        final benar = soal['benar'];
+        if (pilihan is List && benar is num) {
+          if (benar < 0 || benar >= pilihan.length) {
+            throw GalatKonten('Indeks benar di luar rentang pilihan', berkas: namaBerkas, kolom: 'cekPaham.benar');
+          }
+        }
+      }
+    }
 
     // 7. Misi
     final misi = data['misi'];
@@ -205,6 +227,12 @@ class PembacaKonten {
     final tipeMisi = misi['tipe'] as String?;
     if (tipeMisi == null) {
       throw GalatKonten('Kolom misi.tipe wajib ada', berkas: namaBerkas, kolom: 'misi.tipe');
+    }
+    if (misi.containsKey('min')) {
+      final minVal = misi['min'];
+      if (minVal is num && minVal < 1) {
+        throw GalatKonten('Kolom misi.min harus bernilai >= 1', berkas: namaBerkas, kolom: 'misi.min');
+      }
     }
   }
 

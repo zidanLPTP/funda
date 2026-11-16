@@ -411,6 +411,29 @@ int hitungSkorKuis({required int benar, required int total}) {
   return (benar * 100) ~/ total;
 }
 
+/// Menghitung jumlah hari kalender berbeda berdasarkan waktu lokal perangkat.
+int hitungHariKalenderBerbeda(List<DateTime> daftarWaktu) {
+  final setHari = <String>{};
+  for (final w in daftarWaktu) {
+    final lokal = w.toLocal();
+    final bulanStr = lokal.month.toString().padLeft(2, '0');
+    final hariStr = lokal.day.toString().padLeft(2, '0');
+    setHari.add('${lokal.year}-$bulanStr-$hariStr');
+  }
+  return setHari.length;
+}
+
+/// Menghitung jumlah bulan kalender berbeda berdasarkan waktu lokal perangkat.
+int hitungBulanKalenderBerbeda(List<DateTime> daftarWaktu) {
+  final setBulan = <String>{};
+  for (final w in daftarWaktu) {
+    final lokal = w.toLocal();
+    final bulanStr = lokal.month.toString().padLeft(2, '0');
+    setBulan.add('${lokal.year}-$bulanStr');
+  }
+  return setBulan.length;
+}
+
 /// Menentukan kelulusan kuis berdasarkan batas minimal 70% dengan aritmetika integer.
 bool tentukanLulusKuis({required int benar, required int total}) {
   if (total <= 0) return false;
@@ -514,6 +537,8 @@ String? ambilRutePengisianObjek(String? objek) {
       return '/utang';
     case 'kategori':
       return '/kategori';
+    case 'tagihan':
+      return '/tagihan';
     default:
       return null;
   }

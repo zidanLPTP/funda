@@ -299,9 +299,26 @@ class TagihanRepositori {
       petaPembayaran[kunci] = p;
     }
 
-    // Ambil data transaksi untuk mengetahui jumlah aktual jika ada
-    final daftarTransaksi = await _db.select(_db.tabelTransaksi).get();
-    final petaTransaksi = {for (var t in daftarTransaksi) t.id: t};
+    // Ambil data transaksi terarah HANYA untuk transaksi yang tertaut di penandaan pembayaran
+    final idTransaksiTerkait = daftarPembayaran
+        .map((p) => p.transaksiId)
+        .whereType<String>()
+        .toSet()
+        .toList();
+
+    final Map<String, int> petaJumlahTransaksi;
+    if (idTransaksiTerkait.isEmpty) {
+      petaJumlahTransaksi = const {};
+    } else {
+      final barisTransaksi = await (_db.selectOnly(_db.tabelTransaksi)
+            ..addColumns([_db.tabelTransaksi.id, _db.tabelTransaksi.jumlahRupiah])
+            ..where(_db.tabelTransaksi.id.isIn(idTransaksiTerkait)))
+          .get();
+      petaJumlahTransaksi = {
+        for (final b in barisTransaksi)
+          b.read(_db.tabelTransaksi.id)!: b.read(_db.tabelTransaksi.jumlahRupiah)!
+      };
+    }
 
     for (final tagihan in daftarTagihan) {
       final frekuensi = FrekuensiTagihan.dariKode(tagihan.frekuensi);
@@ -345,7 +362,7 @@ class TagihanRepositori {
 
         int? jumlahAktual;
         if (catatan?.transaksiId != null) {
-          jumlahAktual = petaTransaksi[catatan!.transaksiId!]?.jumlahRupiah;
+          jumlahAktual = petaJumlahTransaksi[catatan!.transaksiId!];
         }
 
         hasil.add(

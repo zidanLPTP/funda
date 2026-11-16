@@ -16,8 +16,8 @@ void main() {
   });
 
   group('BasisDataFunda & TabelPengaturan', () {
-    test('skema versi 7 terdaftar pada basis data', () async {
-      expect(basisData.schemaVersion, equals(7));
+    test('skema versi 8 terdaftar pada basis data', () async {
+      expect(basisData.schemaVersion, equals(8));
 
       final nilaiAwal = await basisData.bacaPengaturan('sudah_onboarding');
       expect(nilaiAwal, isNull);
@@ -322,6 +322,29 @@ void main() {
 
         // Jalankan lagi (idempoten)
         await basisData.migration.onUpgrade(migrator, 6, 7);
+      },
+    );
+
+    test(
+      'Migrasi Bertingkat Skema v7 -> v8 aman, idempoten, dan membuat indeks performa',
+      () async {
+        final migrator = Migrator(basisData);
+
+        // Jalankan migrasi v7 -> v8
+        await basisData.migration.onUpgrade(migrator, 7, 8);
+
+        // Cek bahwa indeks baru terbuat
+        final indexRes = await basisData.customSelect(
+          "SELECT name FROM sqlite_master WHERE type='index' AND name LIKE 'idx_transaksi_%';",
+        ).get();
+        final daftarIndex = indexRes.map((r) => r.read<String>('name')).toSet();
+        expect(daftarIndex.contains('idx_transaksi_jenis'), isTrue);
+        expect(daftarIndex.contains('idx_transaksi_jenis_kategori'), isTrue);
+        expect(daftarIndex.contains('idx_transaksi_waktu_id'), isTrue);
+        expect(daftarIndex.contains('idx_transaksi_waktu_jenis'), isTrue);
+
+        // Jalankan lagi (idempoten)
+        await basisData.migration.onUpgrade(migrator, 7, 8);
       },
     );
   });

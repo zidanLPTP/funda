@@ -4,7 +4,6 @@ import '../../../data/penyedia_basis_data.dart';
 import '../../../data/repositori/utang_repositori.dart';
 import '../../../perhitungan/perhitungan_utang_dashboard.dart';
 import '../../dompet/kontroler/penyedia_dompet.dart';
-import '../../transaksi/kontroler/penyedia_transaksi.dart';
 
 /// Stream provider daftar utang yang masih aktif.
 final penyediaDaftarUtangAktif = StreamProvider<List<EntitasUtang>>((ref) {
@@ -44,15 +43,24 @@ final penyediaTotalCicilanBulananAktif = Provider<int>((ref) {
   );
 });
 
-/// Provider pemasukan bulanan rata-rata pengguna (berdasarkan 3 bulan kalender terakhir atau bulan berjalan).
+/// Stream provider pemasukan bulanan rata-rata agregasi SQL efisien.
+final penyediaStreamPemasukanBulananRataRata =
+    StreamProvider.family<HasilPemasukanRataRata, DateTime>((ref, waktuSekarang) {
+  final repo = ref.watch(penyediaTransaksiRepositori);
+  return repo.pantauPemasukanRataRataSQL(waktuSekarang: waktuSekarang);
+});
+
+/// Provider pemasukan bulanan rata-rata pengguna via agregasi SQL (berdasarkan 3 bulan kalender terakhir atau bulan berjalan).
 final penyediaPemasukanBulananRataRata = Provider<HasilPemasukanRataRata>((
   ref,
 ) {
-  final daftarTransaksi = ref.watch(penyediaDaftarTransaksi).value ?? [];
-  return hitungPemasukanBulananRataRata(
-    daftarTransaksi: daftarTransaksi,
-    waktuSekarang: DateTime.now(),
-  );
+  final sekarang = DateTime.now();
+  final hasilAsync = ref.watch(penyediaStreamPemasukanBulananRataRata(sekarang));
+  return hasilAsync.value ??
+      const HasilPemasukanRataRata(
+        nilaiRupiah: 0,
+        dasar: DasarPemasukanRataRata.belumAda,
+      );
 });
 
 /// Provider rasio cicilan terhadap pemasukan bulanan (dalam persentase integer).

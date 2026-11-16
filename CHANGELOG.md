@@ -5,6 +5,52 @@ Format penulisan mengacu pada standar Keep a Changelog dan penamaan commit Funda
 
 ---
 
+## [0.6.1] - 2026-11-16 — Revisi & Pembuktian Mesin Belajar (Tahap 4-R)
+
+Tahap 4-R: Revisi menyeluruh dan pembuktian performa empiris mesin belajar di emulator Android (Pixel 8, API 36). Mengoptimalkan kueri agregasi SQL Beranda dan foto data pengguna sehingga waktu muat Beranda pada 20.000 transaksi turun drastis ke median 14.46 ms (jauh melampaui target < 60 ms), kenaikan waktu beban data 4x (5k -> 20k) bersifat konstan O(1) (-17.3%, di bawah batas 25%), Tab Belajar 19 modul stabil di median 1.32 ms, migrasi skema basis data versi 8 (4 indeks komposit baru), pengujian validasi gerbang data menyeluruh (14 uji), pemeriksa otomatis konten rusak (12 kasus) dan pemeriksa bahasa untuk seluruh berkas kurikulum statis, serta dokumentasi tangkapan layar emulator baru.
+
+### Diperbaiki & Dioptimalkan
+- **Performa Beranda & Tab Belajar pada 20.000 Transaksi di Emulator:**
+  - `TransaksiRepositori`: Ditambahkan kueri agregasi SQL murni `hitungPemasukanRataRataSQL`, `pantauPemasukanRataRataSQL`, dan `pantauKomposisiSifatBulanIniSQL`.
+  - `TagihanRepositori`: Eliminasi penarikan seluruh baris transaksi (`SELECT * FROM tabel_transaksi`) pada `ambilJadwalGabungan`. Kueri transaksi kini diarahkan secara presisi hanya untuk ID transaksi yang tertaut pada pembayaran tagihan (`SELECT id, jumlah_rupiah WHERE id IN (...)`).
+  - `PenyediaTransaksi`: `penyediaArusKasBulanIni` kini membaca agregasi SQL `pantauArusKasSQL` alih-alih memuat daftar transaksi ke memori Dart.
+  - `PenyediaUtang`: `penyediaPemasukanBulananRataRata` membaca agregasi SQL 3 bulan alih-alih memproses list transaksi di Dart.
+  - `PenyediaBelajar`: `penyediaFotoData` me-watch sinyal ringan `pantauJumlahTransaksi()` (O(1)) dan `penyediaDaftarSemuaModul` memanfaatkan in-memory caching untuk modul statis.
+  - Hasil profil empiris di emulator Android Pixel 8 API 36:
+    * Kueri Beranda (20.000 transaksi): **Median 14.46 ms** (target < 60 ms terpenuhi).
+    * Kenaikan waktu 5.000 -> 20.000 transaksi: **-17.3%** (target < 25% terpenuhi).
+    * Peta Belajar 19 modul: **Median 1.32 ms** (target < 50 ms terpenuhi).
+- **Skema Basis Data Versi 8 (`lib/data/basis_data.dart`):**
+  - Ditambahkan 4 indeks komposit baru:
+    * `idx_transaksi_jenis` ON `tabel_transaksi(jenis)`
+    * `idx_transaksi_jenis_kategori` ON `tabel_transaksi(jenis, kategori_id)`
+    * `idx_transaksi_waktu_id` ON `tabel_transaksi(waktu_transaksi DESC, id DESC)`
+    * `idx_transaksi_waktu_jenis` ON `tabel_transaksi(waktu_transaksi, jenis)`
+  - Seluruh kueri transaksi Beranda terbukti pada `EXPLAIN QUERY PLAN` menggunakan `INDEX` / `COVERING INDEX` tanpa temporary b-tree untuk pengurutan.
+  - Migrasi idempoten v7 -> v8 lolos 100% pada uji migrasi beruntun v1 s.d. v8.
+
+### Ditambahkan
+- **Kebenaran Foto Data & Pengujian Gerbang Data (`test/fitur/gerbang_dan_misi_lengkap_test.dart`):**
+  - 14 pengujian lengkap mencakup seluruh tipe syarat (`ada_data`, `aturan_data` mengabaikan kategori tak terpakai & mendeteksi `belum_dilabeli`, `periode_data` hari & bulan berbeda pada batas 23:30 WIB, `pernyataan`, `kuis_lulus`, `modul_selesai`).
+  - Pembuktian syarat `ATAU` + pencabutan pernyataan (kembali terkunci bila dicabut).
+  - Pembuktian pelajaran selesai TIDAK PERNAH terkunci ulang saat data dihapus.
+  - Pembuktian urutan prasyarat pelajaran dan modul.
+  - Pembuktian ambang kelulusan kuis 70% bilangan bulat murni (3/5 gagal, 4/5 lulus, 7/10 lulus, 6/10 gagal) dan rekor skor terbaik tidak tertimpa skor lebih rendah.
+  - Pembuktian komposisi sifat total selalu tepat 100% (termasuk 3 bagian sama besar).
+  - Pembuktian foto data kosong pengguna baru menghasilkan status terkunci ramah tanpa eksepsi null.
+  - Peta rute pengisian lengkap untuk 9 objek syarat dan widget test tombol aksi pada kartu terkunci.
+  - Pembuktian misi dilewati tidak membuka gerbang data yang membutuhkan data nyata.
+- **Pemeriksa Konten Rusak & Seluruh Berkas Kurikulum (`test/fitur/pemeriksa_konten_rusak_test.dart` & `test/konten/pemeriksa_semua_konten_test.dart`):**
+  - 12 uji terstruktur untuk konten rusak dengan rujukan nama berkas dan kolom galat yang jelas.
+  - Pengujian otomatis memvalidasi seluruh 19 berkas `modul.json`, berkas pelajaran, dan `kamus.json` di `aset/konten/`.
+  - Pemeriksa gaya bahasa non-judgmental (bebas kata menghakimi: boros, bodoh, malas, ceroboh, payah) dan pendeteksi kalimat > 25 kata serta istilah kamus yang belum terpakai.
+  - Pembuktian penolakan jenis misi yang belum memiliki evaluator di `RegistriMisi`.
+- **Klarifikasi Dependensi & Ikon:**
+  - Penjelasan transparan bahwa `flutter_svg` tidak pernah dipasang/dipakai (penyebutan sebelumnya adalah kekeliruan laporan). Seluruh ikon menggunakan `lucide_icons_flutter: ^4.0.3`.
+  - Bukti `git diff origin/main -- pubspec.yaml` hanya menambahkan deklarasi folder aset kurikulum.
+
+---
+
 ## [0.6.0] - 2026-11-16 — Mesin Belajar (Tahap 4)
 
 Tahap 4: Implementasi lengkap arsitektur Mesin Belajar (*Learning Engine*) Funda, mencakup pemutar materi micro-learning kartu berurutan, kuis akhir modul dengan nilai ambang 70% dan pengacak deterministik, misi praktik nyata yang berinteraksi langsung dengan data pengguna riil tanpa kata-kata menghakimi, gerbang data prasyarat dengan opsi pernyataan pengguna (*"Aku tidak punya ini"*), pembaca konten statis & kamus istilah interaktif (`{{istilah}}`), skema basis data versi 7 (4 tabel baru: `tabel_progres_pelajaran`, `tabel_hasil_misi`, `tabel_hasil_kuis`, `tabel_pernyataan`), petak Beranda reaktif *"Lanjut Belajar"*, serta pembuktian benchmark Beranda bebas N+1 pada 5.000 vs 20.000 transaksi.

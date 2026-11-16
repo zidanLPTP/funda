@@ -104,7 +104,18 @@ funda/
 
 ## 📸 Tangkapan Layar Aplikasi
 Tangkapan layar otomatis yang dihasilkan dari pengujian dan emulator tersimpan pada:
-- **Tahap 4 (Mesin Belajar):** [docs/tangkapan_layar/tahap_04/](docs/tangkapan_layar/tahap_04/)
+- **Tahap 4-R (Revisi & Pembuktian Mesin Belajar di Emulator Pixel 8):** [docs/tangkapan_layar/tahap_04_emulator/](docs/tangkapan_layar/tahap_04_emulator/)
+  - `01_tab_belajar_peta.png` — Peta belajar lengkap 19 modul pada 3 tingkat (Pemula, Menengah, Lanjutan)
+  - `02_pelajaran_terbuka_pemantik.png` — Pemutar pelajaran micro-learning langkah pemantik reflektif
+  - `03_kartu_konsep_istilah.png` — Kartu konsep dengan istilah kamus interaktif (`{{arus kas}}`)
+  - `04_cek_paham_interaktif.png` — Cek paham interaktif dengan pilihan jawaban dan umpan balik langsung
+  - `05_misi_praktik_belum_selesai.png` — Misi praktik nyata memeriksa data riil pengguna sebelum data tercatat
+  - `06_misi_praktik_selesai_umpan_balik.png` — Misi praktik selesai dan umpan balik objektif dari data riil
+  - `07_pelajaran_terkunci_gerbang_data.png` — Pelajaran terkunci gerbang data dengan tombol "Lengkapi Data Sekarang"
+  - `08_kuis_akhir_modul.png` — Kuis akhir modul dengan bilah kemajuan dan pilihan jawaban acak
+  - `09_kuis_selesai_lulus.png` — Hasil kelulusan kuis modul (nilai >= 70% dan lencana lulus)
+  - `10_beranda_petak_belajar.png` — Petak Beranda "Lanjut Belajar" reaktif mengarahkan ke materi aktif
+- **Tahap 4 (Mesin Belajar Widget Test):** [docs/tangkapan_layar/tahap_04/](docs/tangkapan_layar/tahap_04/)
   - `01_tab_belajar_peta.png` — Tab Belajar menampilkan peta 3 tingkat (Pemula, Menengah, Lanjutan)
   - `02_pelajaran_terkunci_apa_yang_kurang.png` — Pelajaran terkunci dengan dialog apa yang kurang & tombol pernyataan
   - `03_pemutar_pemantik.png` — Pemutar pelajaran micro-learning langkah pemantik reflektif

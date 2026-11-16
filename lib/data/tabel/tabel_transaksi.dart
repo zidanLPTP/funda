@@ -6,6 +6,10 @@ import 'tabel_kategori.dart';
 @DataClassName('EntitasTransaksi')
 @TableIndex(name: 'idx_transaksi_waktu', columns: {#waktuTransaksi})
 @TableIndex(name: 'idx_transaksi_dompet', columns: {#dompetId})
+@TableIndex(name: 'idx_transaksi_jenis', columns: {#jenis})
+@TableIndex(name: 'idx_transaksi_jenis_kategori', columns: {#jenis, #kategoriId})
+@TableIndex(name: 'idx_transaksi_waktu_id', columns: {#waktuTransaksi, #id})
+@TableIndex(name: 'idx_transaksi_waktu_jenis', columns: {#waktuTransaksi, #jenis})
 class TabelTransaksi extends Table {
   @override
   String get tableName => 'tabel_transaksi';

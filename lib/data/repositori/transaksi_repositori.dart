@@ -1,5 +1,6 @@
 import 'package:drift/drift.dart';
 import '../../perhitungan/perhitungan_keuangan.dart';
+import '../../perhitungan/perhitungan_utang_dashboard.dart';
 import '../basis_data.dart';
 
 /// Repositori untuk mengelola baris catatan transaksi keuangan.
@@ -528,5 +529,229 @@ class TransaksiRepositori {
       peta[katId] = total;
     }
     return peta;
+  }
+
+  /// Menghitung pemasukan bulanan rata-rata via kueri agregasi SQL efisien:
+  /// - Mengagregasikan pemasukan per bulan untuk 3 bulan kalender terakhir yang sudah selesai.
+  /// - Jika 3 bulan kosong, agregasikan bulan berjalan.
+  /// - Mengembalikan HasilPemasukanRataRata (identik dengan fungsi murni, O(1) baris ditarik ke Dart).
+  Future<HasilPemasukanRataRata> hitungPemasukanRataRataSQL({
+    required DateTime waktuSekarang,
+  }) async {
+    final waktuLokal = waktuSekarang.toLocal();
+    final offsetDetik = waktuLokal.timeZoneOffset.inSeconds;
+
+    final bulanTigaLalu = <({int tahun, int bulan})>[];
+    var kursorTahun = waktuLokal.year;
+    var kursorBulan = waktuLokal.month;
+
+    for (var i = 0; i < 3; i++) {
+      kursorBulan--;
+      if (kursorBulan == 0) {
+        kursorBulan = 12;
+        kursorTahun--;
+      }
+      bulanTigaLalu.add((tahun: kursorTahun, bulan: kursorBulan));
+    }
+
+    final awalRentangLokal = DateTime(bulanTigaLalu.last.tahun, bulanTigaLalu.last.bulan, 1);
+    final akhirRentangLokal = DateTime(waktuLokal.year, waktuLokal.month + 1, 0, 23, 59, 59);
+
+    final mulaiUnix = awalRentangLokal.toUtc().millisecondsSinceEpoch ~/ 1000;
+    final selesaiUnix = akhirRentangLokal.toUtc().millisecondsSinceEpoch ~/ 1000;
+
+    const sql = '''
+      SELECT 
+        strftime('%Y_%m', datetime(waktu_transaksi + ?, 'unixepoch')) AS periode,
+        SUM(jumlah_rupiah) AS total
+      FROM tabel_transaksi
+      WHERE jenis = 'masuk' AND waktu_transaksi >= ? AND waktu_transaksi <= ?
+      GROUP BY strftime('%Y_%m', datetime(waktu_transaksi + ?, 'unixepoch'));
+    ''';
+
+    final baris = await _db.customSelect(
+      sql,
+      variables: [
+        Variable.withInt(offsetDetik),
+        Variable.withInt(mulaiUnix),
+        Variable.withInt(selesaiUnix),
+        Variable.withInt(offsetDetik),
+      ],
+      readsFrom: {_db.tabelTransaksi},
+    ).get();
+
+    final petaPemasukan = <String, int>{};
+    for (final b in baris) {
+      final p = b.read<String>('periode');
+      final tot = b.read<int>('total');
+      petaPemasukan[p] = tot;
+    }
+
+    var total3Bulan = 0;
+    var adaData3Bulan = false;
+
+    for (final periode in bulanTigaLalu) {
+      final bulanStr = periode.bulan.toString().padLeft(2, '0');
+      final kunci = '${periode.tahun}_$bulanStr';
+      final nominal = petaPemasukan[kunci] ?? 0;
+      if (nominal > 0) {
+        adaData3Bulan = true;
+      }
+      total3Bulan += nominal;
+    }
+
+    if (adaData3Bulan) {
+      return HasilPemasukanRataRata(
+        nilaiRupiah: total3Bulan ~/ 3,
+        dasar: DasarPemasukanRataRata.rataRata3Bulan,
+      );
+    }
+
+    final bulanBerjalanStr = waktuLokal.month.toString().padLeft(2, '0');
+    final kunciBerjalan = '${waktuLokal.year}_$bulanBerjalanStr';
+    final pemasukanBulanBerjalan = petaPemasukan[kunciBerjalan] ?? 0;
+
+    if (pemasukanBulanBerjalan > 0) {
+      return HasilPemasukanRataRata(
+        nilaiRupiah: pemasukanBulanBerjalan,
+        dasar: DasarPemasukanRataRata.bulanBerjalan,
+      );
+    }
+
+    return const HasilPemasukanRataRata(
+      nilaiRupiah: 0,
+      dasar: DasarPemasukanRataRata.belumAda,
+    );
+  }
+
+  /// Stream reaktif pemasukan bulanan rata-rata agregasi SQL.
+  Stream<HasilPemasukanRataRata> pantauPemasukanRataRataSQL({
+    required DateTime waktuSekarang,
+  }) {
+    final waktuLokal = waktuSekarang.toLocal();
+    final offsetDetik = waktuLokal.timeZoneOffset.inSeconds;
+
+    final bulanTigaLalu = <({int tahun, int bulan})>[];
+    var kursorTahun = waktuLokal.year;
+    var kursorBulan = waktuLokal.month;
+
+    for (var i = 0; i < 3; i++) {
+      kursorBulan--;
+      if (kursorBulan == 0) {
+        kursorBulan = 12;
+        kursorTahun--;
+      }
+      bulanTigaLalu.add((tahun: kursorTahun, bulan: kursorBulan));
+    }
+
+    final awalRentangLokal = DateTime(bulanTigaLalu.last.tahun, bulanTigaLalu.last.bulan, 1);
+    final akhirRentangLokal = DateTime(waktuLokal.year, waktuLokal.month + 1, 0, 23, 59, 59);
+
+    final mulaiUnix = awalRentangLokal.toUtc().millisecondsSinceEpoch ~/ 1000;
+    final selesaiUnix = akhirRentangLokal.toUtc().millisecondsSinceEpoch ~/ 1000;
+
+    const sql = '''
+      SELECT 
+        strftime('%Y_%m', datetime(waktu_transaksi + ?, 'unixepoch')) AS periode,
+        SUM(jumlah_rupiah) AS total
+      FROM tabel_transaksi
+      WHERE jenis = 'masuk' AND waktu_transaksi >= ? AND waktu_transaksi <= ?
+      GROUP BY strftime('%Y_%m', datetime(waktu_transaksi + ?, 'unixepoch'));
+    ''';
+
+    return _db.customSelect(
+      sql,
+      variables: [
+        Variable.withInt(offsetDetik),
+        Variable.withInt(mulaiUnix),
+        Variable.withInt(selesaiUnix),
+        Variable.withInt(offsetDetik),
+      ],
+      readsFrom: {_db.tabelTransaksi},
+    ).watch().map((baris) {
+      final petaPemasukan = <String, int>{};
+      for (final b in baris) {
+        final p = b.read<String>('periode');
+        final tot = b.read<int>('total');
+        petaPemasukan[p] = tot;
+      }
+
+      var total3Bulan = 0;
+      var adaData3Bulan = false;
+
+      for (final periode in bulanTigaLalu) {
+        final bulanStr = periode.bulan.toString().padLeft(2, '0');
+        final kunci = '${periode.tahun}_$bulanStr';
+        final nominal = petaPemasukan[kunci] ?? 0;
+        if (nominal > 0) {
+          adaData3Bulan = true;
+        }
+        total3Bulan += nominal;
+      }
+
+      if (adaData3Bulan) {
+        return HasilPemasukanRataRata(
+          nilaiRupiah: total3Bulan ~/ 3,
+          dasar: DasarPemasukanRataRata.rataRata3Bulan,
+        );
+      }
+
+      final bulanBerjalanStr = waktuLokal.month.toString().padLeft(2, '0');
+      final kunciBerjalan = '${waktuLokal.year}_$bulanBerjalanStr';
+      final pemasukanBulanBerjalan = petaPemasukan[kunciBerjalan] ?? 0;
+
+      if (pemasukanBulanBerjalan > 0) {
+        return HasilPemasukanRataRata(
+          nilaiRupiah: pemasukanBulanBerjalan,
+          dasar: DasarPemasukanRataRata.bulanBerjalan,
+        );
+      }
+
+      return const HasilPemasukanRataRata(
+        nilaiRupiah: 0,
+        dasar: DasarPemasukanRataRata.belumAda,
+      );
+    });
+  }
+
+  /// Menghitung total pengeluaran per sifat kategori untuk bulan berjalan (agregasi SQL).
+  Stream<Map<String, int>> pantauKomposisiSifatBulanIniSQL(DateTime awalBulan) {
+    final mulaiUnix = awalBulan.toUtc().millisecondsSinceEpoch ~/ 1000;
+    const sql = '''
+      SELECT 
+        COALESCE(k.sifat, 'belum_dilabeli') AS sifat, 
+        COALESCE(SUM(t.jumlah_rupiah), 0) AS total
+      FROM tabel_transaksi t
+      LEFT JOIN tabel_kategori k ON t.kategori_id = k.id
+      WHERE t.jenis = 'keluar' AND t.waktu_transaksi >= ?
+      GROUP BY COALESCE(k.sifat, 'belum_dilabeli');
+    ''';
+
+    return _db.customSelect(
+      sql,
+      variables: [Variable.withInt(mulaiUnix)],
+      readsFrom: {_db.tabelTransaksi, _db.tabelKategori},
+    ).watch().map((baris) {
+      final peta = <String, int>{
+        'kebutuhan': 0,
+        'keinginan': 0,
+        'tabungan': 0,
+        'utang': 0,
+        'belum_dilabeli': 0,
+      };
+      for (final b in baris) {
+        final s = b.read<String>('sifat');
+        final tot = b.read<int>('total');
+        peta[s] = tot;
+      }
+      return peta;
+    });
+  }
+
+  /// Memantau jumlah transaksi secara reaktif dan ringan (O(1)) tanpa memuat baris ke memori Dart.
+  Stream<int> pantauJumlahTransaksi() {
+    final countExpr = countAll();
+    final query = _db.selectOnly(_db.tabelTransaksi)..addColumns([countExpr]);
+    return query.map((row) => row.read(countExpr) ?? 0).watchSingle();
   }
 }

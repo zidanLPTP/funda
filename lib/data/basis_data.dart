@@ -52,7 +52,7 @@ class BasisDataFunda extends _$BasisDataFunda {
     : super(pelaksanaKueri ?? _bukaKoneksi());
 
   @override
-  int get schemaVersion => 7;
+  int get schemaVersion => 8;
 
   @override
   MigrationStrategy get migration {
@@ -96,6 +96,22 @@ class BasisDataFunda extends _$BasisDataFunda {
         await customStatement(
           'CREATE INDEX IF NOT EXISTS idx_hasil_kuis_modul_id '
           'ON tabel_hasil_kuis (modul_id);',
+        );
+        await customStatement(
+          'CREATE INDEX IF NOT EXISTS idx_transaksi_jenis '
+          'ON tabel_transaksi (jenis);',
+        );
+        await customStatement(
+          'CREATE INDEX IF NOT EXISTS idx_transaksi_jenis_kategori '
+          'ON tabel_transaksi (jenis, kategori_id);',
+        );
+        await customStatement(
+          'CREATE INDEX IF NOT EXISTS idx_transaksi_waktu_id '
+          'ON tabel_transaksi (waktu_transaksi DESC, id DESC);',
+        );
+        await customStatement(
+          'CREATE INDEX IF NOT EXISTS idx_transaksi_waktu_jenis '
+          'ON tabel_transaksi (waktu_transaksi, jenis);',
         );
       },
       onUpgrade: (Migrator m, int dariVersi, int keVersi) async {
@@ -214,6 +230,26 @@ class BasisDataFunda extends _$BasisDataFunda {
         await customStatement(
           'CREATE INDEX IF NOT EXISTS idx_hasil_kuis_modul_id '
           'ON tabel_hasil_kuis (modul_id);',
+        );
+        break;
+      case 8:
+        // Migrasi Skema Versi 8 (Tahap 4-R - Optimasi Kueri & Indeks Agregasi):
+        // Indeks untuk mempercepat kueri beranda, paginasi transaksi, dan foto data.
+        await customStatement(
+          'CREATE INDEX IF NOT EXISTS idx_transaksi_jenis '
+          'ON tabel_transaksi (jenis);',
+        );
+        await customStatement(
+          'CREATE INDEX IF NOT EXISTS idx_transaksi_jenis_kategori '
+          'ON tabel_transaksi (jenis, kategori_id);',
+        );
+        await customStatement(
+          'CREATE INDEX IF NOT EXISTS idx_transaksi_waktu_id '
+          'ON tabel_transaksi (waktu_transaksi DESC, id DESC);',
+        );
+        await customStatement(
+          'CREATE INDEX IF NOT EXISTS idx_transaksi_waktu_jenis '
+          'ON tabel_transaksi (waktu_transaksi, jenis);',
         );
         break;
       default:
