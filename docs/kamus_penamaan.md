@@ -82,6 +82,12 @@
 | local notification | pengingatLokal | Layanan pemberitahuan jadwal jatuh tempo lokal (`LayananPengingat`) |
 | inexact alarm | pengingatHematDaya | Jadwal notifikasi ramah baterai tanpa exact alarm permission |
 | nominal privacy | privasiNominal | Pengaturan untuk menyembunyikan angka Rupiah pada teks notifikasi |
+| first due date | jatuhTempoPertama | Tanggal dasar dimulainya perhitungan kemunculan tagihan (`jatuh_tempo_pertama`) |
+| end date | berakhirPada | Tanggal akhir masa berlaku kemunculan tagihan (`berakhir_pada`, inklusif) |
+| combined schedule | jadwalGabungan | Penyatuan jadwal tagihan dan cicilan utang bulanan (`gabungkanJadwal`) |
+| loan installment item | CicilanUtangKalkulasi | Baris cicilan utang dalam jadwal gabungan dengan status baca-saja |
+| reminder days set | pilihanHariPengingatValid | Himpunan hari pengingat valid `{0, 1, 3, 7}` hari sebelum jatuh tempo |
+| rule-of-thumb ratio | ambangRasioCicilanAturanPraktis | Batas rasio cicilan aturan praktis (30%) tanpa menghakimi pengguna |
 
 ## Aturan Cabang Kerja (Git)
 - Setiap tahap dikerjakan pada cabang khusus (contoh: `tahap-02-dompet-transaksi`).

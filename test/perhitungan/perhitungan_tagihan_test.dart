@@ -125,6 +125,52 @@ void main() {
           );
         },
       );
+
+      test(
+        'Tagihan dibuat tanggal 15 dengan jatuh tempo tanggal 5 (jatuhTempoPertama = 5 bulan depan) tidak memunculkan tanggal 5 bulan ini sebagai lewat palsu',
+        () {
+          // Kasus: Dibuat 15 Maret 2026, jatuh tempo berikutnya adalah 5 April 2026
+          final aturanMulaiBulanDepan = AturanJatuhTempo(
+            frekuensi: FrekuensiKalkulasi.bulanan,
+            jatuhTempoPertama: DateTime(2026, 4, 5),
+          );
+
+          // Cek rentang bulan Maret 2026
+          final hasilMaret = hitungJatuhTempoDalamRentang(
+            aturan: aturanMulaiBulanDepan,
+            mulai: DateTime(2026, 3, 1),
+            selesai: DateTime(2026, 3, 31),
+          );
+
+          expect(
+            hasilMaret,
+            isEmpty,
+            reason:
+                'Tanggal 5 Maret tidak boleh muncul karena jatuh tempo pertama dimulai 5 April',
+          );
+
+          // Cek rentang bulan April 2026
+          final hasilApril = hitungJatuhTempoDalamRentang(
+            aturan: aturanMulaiBulanDepan,
+            mulai: DateTime(2026, 4, 1),
+            selesai: DateTime(2026, 4, 30),
+          );
+
+          expect(hasilApril, equals([DateTime(2026, 4, 5)]));
+
+          // Namun jika pengguna memang sengaja mengatur jatuhTempoPertama = 5 Maret 2026
+          final aturanMulaiMaret = AturanJatuhTempo(
+            frekuensi: FrekuensiKalkulasi.bulanan,
+            jatuhTempoPertama: DateTime(2026, 3, 5),
+          );
+          final hasilMaretSengaja = hitungJatuhTempoDalamRentang(
+            aturan: aturanMulaiMaret,
+            mulai: DateTime(2026, 3, 1),
+            selesai: DateTime(2026, 3, 31),
+          );
+          expect(hasilMaretSengaja, equals([DateTime(2026, 3, 5)]));
+        },
+      );
     });
 
     group('2. tentukanStatusJatuhTempo', () {
@@ -412,6 +458,185 @@ void main() {
         expect(uraiHariPengingat(null), isEmpty);
         expect(uraiHariPengingat('[]'), isEmpty);
       });
+
+      test('Menyaring nilai tidak valid, membuang duplikat, dan mengurutkan', () {
+        // Input kotor dengan nilai di luar {0,1,3,7}, duplikat, dan urutan acak
+        final kotor = [7, 2, 0, 1, 5, 3, 7, 1, -1, 10];
+        final hasilSerialisasi = serialisasiHariPengingat(kotor);
+        expect(hasilSerialisasi, equals('[0,1,3,7]'));
+
+        // Deserialisasi dari JSON dengan nilai tidak valid
+        final hasilUraiJson = uraiHariPengingat(
+          '[3, 99, 1, 1, 0, -5, 7, "abc"]',
+        );
+        expect(hasilUraiJson, equals([0, 1, 3, 7]));
+
+        // Deserialisasi dari teks dipisah koma dengan spasi dan nilai tidak valid
+        final hasilUraiCsv = uraiHariPengingat(' 7, 1 , 3, 0 , 1, ngawur, 9 ');
+        expect(hasilUraiCsv, equals([0, 1, 3, 7]));
+      });
+    });
+
+    group('6. gabungkanJadwal(tagihan, utang)', () {
+      final mulai = DateTime(2026, 3, 1);
+      final selesai = DateTime(2026, 3, 31);
+      final hariIni = DateTime(2026, 3, 15);
+
+      test(
+        'Cicilan utang aktif muncul sebagai item baca-saja dan otomatis bertanda dibayar jika ada pembayaran di bulan yang sama',
+        () {
+          final tagihan = [
+            ItemKalkulasiJadwal(
+              idTagihan: 'tag_wifi',
+              nama: 'WiFi Rumah',
+              tanggal: DateTime(2026, 3, 10),
+              jumlahPerkiraanRupiah: 300000,
+              status: StatusKemunculan.dibayar,
+            ),
+          ];
+
+          final daftarUtang = [
+            CicilanUtangKalkulasi(
+              idUtang: 'utg_kpr',
+              nama: 'KPR BTN',
+              cicilanBulananRupiah: 2500000,
+              tanggalJatuhTempoBulanan: 18,
+              daftarWaktuPembayaran: [
+                DateTime(2026, 2, 18), // Pembayaran bulan lalu
+              ],
+            ),
+            CicilanUtangKalkulasi(
+              idUtang: 'utg_motor',
+              nama: 'Motor Honda',
+              cicilanBulananRupiah: 750000,
+              tanggalJatuhTempoBulanan: 12,
+              daftarWaktuPembayaran: [
+                DateTime(2026, 3, 11), // Sudah dibayar bulan ini
+              ],
+            ),
+          ];
+
+          final hasil = gabungkanJadwal(
+            daftarTagihan: tagihan,
+            daftarUtang: daftarUtang,
+            mulai: mulai,
+            selesai: selesai,
+            hariIni: hariIni,
+          );
+
+          expect(hasil.length, equals(3));
+
+          // Terurut berdasarkan tanggal:
+          // 1. WiFi (10 Maret)
+          expect(hasil[0].idTagihan, equals('tag_wifi'));
+          expect(hasil[0].tanggal, equals(DateTime(2026, 3, 10)));
+
+          // 2. Motor Honda (12 Maret, sudah dibayar bulan ini)
+          expect(hasil[1].idTagihan, equals('utang_utg_motor'));
+          expect(hasil[1].nama, equals('Cicilan Motor Honda'));
+          expect(hasil[1].isCicilanUtang, isTrue);
+          expect(hasil[1].status, equals(StatusKemunculan.dibayar));
+
+          // 3. KPR BTN (18 Maret, belum dibayar bulan ini -> akan datang)
+          expect(hasil[2].idTagihan, equals('utang_utg_kpr'));
+          expect(hasil[2].nama, equals('Cicilan KPR BTN'));
+          expect(hasil[2].isCicilanUtang, isTrue);
+          expect(hasil[2].status, equals(StatusKemunculan.akanDatang));
+        },
+      );
+    });
+
+    group('7. ID Pengingat Stabil & Dukungan Zona Waktu Indonesia', () {
+      test(
+        'ID unik dan stabil berulang dari kombinasi sumber, tanggal, dan selisih hari',
+        () {
+          final itemTag = ItemKalkulasiJadwal(
+            idTagihan: 'listrik',
+            nama: 'Listrik',
+            tanggal: DateTime(2026, 4, 10),
+            hariSebelumPengingat: const [0, 1, 3],
+          );
+
+          final itemUtang = ItemKalkulasiJadwal(
+            idTagihan: 'listrik', // ID sama tapi dari utang
+            nama: 'Cicilan Listrik',
+            tanggal: DateTime(2026, 4, 10),
+            isCicilanUtang: true,
+            idUtang: 'listrik',
+            hariSebelumPengingat: const [0, 1, 3],
+          );
+
+          final pengaturan = PengaturanPengingatTagihan(
+            aktif: true,
+            jam: 9,
+            menit: 0,
+            tampilkanNominal: false,
+          );
+
+          final sekarang = DateTime(2026, 4, 1);
+
+          final rencanaTag = rencanakanPengingat(
+            daftarJadwal: [itemTag],
+            pengaturan: pengaturan,
+            sekarang: sekarang,
+          );
+          final rencanaUtang = rencanakanPengingat(
+            daftarJadwal: [itemUtang],
+            pengaturan: pengaturan,
+            sekarang: sekarang,
+          );
+
+          // ID tagihan dan utang tidak boleh tabrakan walau string ID dan tanggalnya sama
+          final idSetTag = rencanaTag.map((r) => r.idStabil).toSet();
+          final idSetUtang = rencanaUtang.map((r) => r.idStabil).toSet();
+          expect(idSetTag.intersection(idSetUtang), isEmpty);
+
+          // Konsistensi deterministik (dipanggil ulang menghasilkan ID persis sama)
+          final rencanaTagKedua = rencanakanPengingat(
+            daftarJadwal: [itemTag],
+            pengaturan: pengaturan,
+            sekarang: sekarang,
+          );
+          expect(
+            rencanaTagKedua.map((r) => r.idStabil).toList(),
+            equals(rencanaTag.map((r) => r.idStabil).toList()),
+          );
+        },
+      );
+
+      test(
+        'Perhitungan tanggal kalender deterministik lintas zona waktu (WIB, WITA, WIT)',
+        () {
+          // Kalender murni berbasis tanggal lokal
+          for (final offsetJam in [7, 8, 9]) {
+            // UTC+7 (WIB), UTC+8 (WITA), UTC+9 (WIT)
+            final mulaiLokal = DateTime.utc(2026, 3, 1, offsetJam);
+            final selesaiLokal = DateTime.utc(2026, 3, 31, offsetJam);
+
+            final aturan = AturanJatuhTempo(
+              frekuensi: FrekuensiKalkulasi.bulanan,
+              jatuhTempoPertama: DateTime(2026, 1, 15),
+            );
+
+            final hasil = hitungJatuhTempoDalamRentang(
+              aturan: aturan,
+              mulai: DateTime(
+                mulaiLokal.year,
+                mulaiLokal.month,
+                mulaiLokal.day,
+              ),
+              selesai: DateTime(
+                selesaiLokal.year,
+                selesaiLokal.month,
+                selesaiLokal.day,
+              ),
+            );
+
+            expect(hasil.length, equals(1));
+            expect(hasil.first, equals(DateTime(2026, 3, 15)));
+          }
+        },
+      );
     });
   });
 }

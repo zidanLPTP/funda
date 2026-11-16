@@ -102,7 +102,17 @@ funda/
 ---
 
 ## 📸 Tangkapan Layar Aplikasi
-Tangkapan layar otomatis yang dihasilkan dari pengujian widget tersimpan pada:
+Tangkapan layar otomatis yang dihasilkan dari pengujian dan emulator tersimpan pada:
+- **Tahap 3C-R (Tagihan Berulang, Pengingat Lokal & Emulator):** [docs/tangkapan_layar/tahap_03c_emulator/](docs/tangkapan_layar/tahap_03c_emulator/)
+  - `01_beranda.png` — Dasbor Beranda dengan Petak Bento Tagihan Terdekat
+  - `02_jadwal_tagihan.png` — Layar Jadwal Tagihan Gabungan (Tagihan & Cicilan Utang)
+  - `03_semua_tagihan.png` — Daftar Master Tagihan & Status Saklar
+  - `04_form_tagihan.png` — Form Tagihan dengan Bantuan Nominal Fleksibel
+  - `05_pengaturan.png` — Layar Pengaturan Pengingat Lokal & Catatan Jendela 45 Hari
+  - `06_daftar_utang.png` — Daftar Utang & Rasio Cicilan
+  - `07_kekayaan_bersih.png` — Rincian Kekayaan Bersih (Aset - Utang)
+  - `08_notifikasi_tirai.png` & `dumpsys_notification.txt` — Bukti Notifikasi Android Nyata
+- **Tahap 3C (Tagihan Berulang & Pengingat Lokal Widget Test):** [docs/tangkapan_layar/tahap_03c/](docs/tangkapan_layar/tahap_03c/)
 - **Tahap 3B (Utang, Kekayaan Bersih & Dashboard):** [docs/tangkapan_layar/tahap_03b/](docs/tangkapan_layar/tahap_03b/)
   - `01_beranda_penuh.png` — Dashboard Beranda modular Soft Bento
   - `02_daftar_utang.png` — Layar Daftar Utang (Aktif, Lunas, Rasio Cicilan)
@@ -115,6 +125,24 @@ Tangkapan layar otomatis yang dihasilkan dari pengujian widget tersimpan pada:
   - `09_menu_lainnya_utang.png` — Menu Akses di Layar Lainnya
 - **Tahap 3A (Anggaran, Tujuan & Kantong):** [docs/tangkapan_layar/tahap_03a/](docs/tangkapan_layar/tahap_03a/)
 - **Tahap 2 (Dompet & Transaksi):** [docs/tangkapan_layar/tahap_02/](docs/tangkapan_layar/tahap_02/)
+
+---
+
+## 🔔 Pengujian Pengingat Lokal di Emulator Android
+Untuk memverifikasi integrasi pengingat lokal secara nyata di Android Emulator:
+1. Jalankan aplikasi pada perangkat/emulator target (`flutter run`).
+2. Buka menu **Lainnya** -> **Pengaturan** (`/pengaturan`).
+3. Aktifkan saklar **Aktifkan Pengingat**.
+4. Di mode debug (`kDebugMode`), tekan tombol **Jadwalkan Pengingat Uji (2 Menit Lagi)**.
+5. Periksa status antrean notifikasi pada Android OS melalui terminal:
+   ```bash
+   adb shell dumpsys notification --noredact
+   ```
+6. Majukan waktu emulator atau tunggu 2 menit untuk melihat tirai notifikasi muncul.
+7. Simulasikan reboot perangkat untuk menguji `ScheduledNotificationBootReceiver`:
+   ```bash
+   adb shell am broadcast -a android.intent.action.BOOT_COMPLETED
+   ```
 
 ---
 

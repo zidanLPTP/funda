@@ -104,6 +104,13 @@ class _LayarJadwalTagihanState extends ConsumerState<LayarJadwalTagihan> {
   }
 
   void _bukaFormPembayaran(ItemJadwalTampilan item) {
+    if (item.isCicilanUtang && item.idUtang != null) {
+      context.push('/utang/detail/${item.idUtang}').then((_) {
+        ref.invalidate(penyediaJadwalBulanTerpilih);
+      });
+      return;
+    }
+
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -183,9 +190,11 @@ class _LayarJadwalTagihanState extends ConsumerState<LayarJadwalTagihan> {
                   borderRadius: BorderRadius.circular(SudutFunda.kartu),
                 ),
                 child: Icon(
-                  kategori != null
-                      ? ambilIkonLucide(kategori.ikon)
-                      : LucideIcons.receipt,
+                  item.isCicilanUtang
+                      ? LucideIcons.creditCard
+                      : (kategori != null
+                            ? ambilIkonLucide(kategori.ikon)
+                            : LucideIcons.receipt),
                   color: warnaStatus,
                   size: 20,
                 ),
@@ -195,7 +204,34 @@ class _LayarJadwalTagihanState extends ConsumerState<LayarJadwalTagihan> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    TeksFunda.label(item.nama),
+                    Wrap(
+                      spacing: SpasiFunda.xs,
+                      crossAxisAlignment: WrapCrossAlignment.center,
+                      children: [
+                        TeksFunda.label(item.nama),
+                        if (item.isCicilanUtang)
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 6,
+                              vertical: 2,
+                            ),
+                            decoration: BoxDecoration(
+                              color: WarnaFunda.tintAmber,
+                              borderRadius: BorderRadius.circular(
+                                SudutFunda.pil,
+                              ),
+                            ),
+                            child: const Text(
+                              'Cicilan Utang',
+                              style: TextStyle(
+                                fontSize: 10,
+                                fontWeight: FontWeight.bold,
+                                color: WarnaFunda.sifatUtang,
+                              ),
+                            ),
+                          ),
+                      ],
+                    ),
                     const SizedBox(height: SpasiFunda.xs),
                     TeksFunda.catatan(
                       DateFormat(
@@ -246,16 +282,18 @@ class _LayarJadwalTagihanState extends ConsumerState<LayarJadwalTagihan> {
                 Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    IconButton(
-                      icon: const Icon(
-                        LucideIcons.skipForward,
-                        size: 20,
-                        color: WarnaFunda.teksRedup,
+                    if (!item.isCicilanUtang) ...[
+                      IconButton(
+                        icon: const Icon(
+                          LucideIcons.skipForward,
+                          size: 20,
+                          color: WarnaFunda.teksRedup,
+                        ),
+                        tooltip: 'Lewati periode ini',
+                        onPressed: () => _lewatiPeriode(item),
                       ),
-                      tooltip: 'Lewati periode ini',
-                      onPressed: () => _lewatiPeriode(item),
-                    ),
-                    const SizedBox(width: SpasiFunda.xs),
+                      const SizedBox(width: SpasiFunda.xs),
+                    ],
                     FilledButton.icon(
                       style: FilledButton.styleFrom(
                         backgroundColor: WarnaFunda.utama,
@@ -265,7 +303,9 @@ class _LayarJadwalTagihanState extends ConsumerState<LayarJadwalTagihan> {
                         ),
                       ),
                       icon: const Icon(LucideIcons.check, size: 16),
-                      label: const Text('Bayar'),
+                      label: Text(
+                        item.isCicilanUtang ? 'Bayar Cicilan' : 'Bayar',
+                      ),
                       onPressed: () => _bukaFormPembayaran(item),
                     ),
                   ],
@@ -399,6 +439,13 @@ class _LayarJadwalTagihanState extends ConsumerState<LayarJadwalTagihan> {
                   TeksFunda.catatan(
                     '${ringkasan.jumlahBelumDitandai} tagihan belum ditandai (${jadwalBulanAsync.value?.length ?? 0} total periode)',
                   ),
+                  if (ringkasan.jumlahTanpaNominal > 0) ...[
+                    const SizedBox(height: SpasiFunda.xs),
+                    TeksFunda.catatan(
+                      '${ringkasan.jumlahTanpaNominal} tagihan belum ada perkiraan',
+                      warna: WarnaFunda.peringatan,
+                    ),
+                  ],
                 ],
               ),
             ),
