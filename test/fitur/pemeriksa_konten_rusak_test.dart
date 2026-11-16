@@ -2,7 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:funda/fitur/belajar/model/pembaca_konten.dart';
 
 void main() {
-  group('Butir C.1: Pemeriksa Konten Rusak (9+ Kasus dengan Nama Berkas & Kolom Terstruktur)', () {
+  group('Butir B.3 & B.4: Pemeriksa Konten Rusak & Pemeriksa Bahasa Lengkap', () {
     // 1. kamus.json bukan format array
     test('1. kamus.json: format bukan array', () {
       expect(
@@ -93,37 +93,110 @@ void main() {
       );
     });
 
-    // 10. pelajaran.json: durasiMenit <= 0
-    test('10. pelajaran.json: durasiMenit <= 0', () {
+    // 10. modul.json: ID pelajaran duplikat di daftarPelajaran
+    test('10. modul.json: ID duplikat pada daftarPelajaran', () {
       const jsonStr = '''
       {
-        "id": "modul_1_1",
-        "modulId": "modul_1",
-        "judul": "Judul",
-        "durasiMenit": 0,
-        "kartu": [{"judul": "J", "isi": "I"}],
-        "cekPaham": [{"tanya": "T", "pilihan": ["A", "B"], "benar": 0, "penjelasan": "P"}],
-        "misi": {"tipe": "ada_data", "objek": "transaksi", "min": 1, "judul": "M", "deskripsi": "D", "perkiraanMenit": 2}
+        "id": "anggaran_arus_kas",
+        "judul": "Anggaran & Arus Kas",
+        "tingkat": "pemula",
+        "urutan": 1,
+        "deskripsiSingkat": "Deskripsi",
+        "tersedia": true,
+        "daftarPelajaran": ["anggaran_arus_kas_1_2", "anggaran_arus_kas_1_2"],
+        "kuis": {"jumlahSoal": 1, "bankSoal": []}
       }
       ''';
       expect(
-        () => PembacaKonten.uraiPelajaran(jsonStr, namaBerkas: 'pelajaran.json'),
-        throwsA(predicate((e) => e is GalatKonten && e.berkas == 'pelajaran.json' && e.kolom == 'durasiMenit')),
+        () => PembacaKonten.uraiModul(jsonStr, namaBerkas: 'modul.json'),
+        throwsA(predicate((e) => e is GalatKonten && e.berkas == 'modul.json' && e.kolom == 'daftarPelajaran' && e.pesan.contains('duplikat'))),
       );
     });
 
-    // 11. pelajaran.json: cekPaham benar di luar indeks pilihan
-    test('11. pelajaran.json: cekPaham indeks benar di luar rentang pilihan', () {
+    // 11. modul.json: ID soal kuis duplikat
+    test('11. modul.json: ID duplikat pada bankSoal kuis', () {
       const jsonStr = '''
       {
-        "id": "modul_1_1",
-        "modulId": "modul_1",
+        "id": "anggaran_arus_kas",
+        "judul": "Anggaran & Arus Kas",
+        "tingkat": "pemula",
+        "urutan": 1,
+        "deskripsiSingkat": "Deskripsi",
+        "tersedia": true,
+        "daftarPelajaran": ["anggaran_arus_kas_1_2"],
+        "kuis": {
+          "jumlahSoal": 1,
+          "bankSoal": [
+            {"id": "soal_1", "pelajaranId": "anggaran_arus_kas_1_2", "tanya": "T1", "pilihan": ["A", "B"], "benar": 0, "penjelasan": "P1"},
+            {"id": "soal_1", "pelajaranId": "anggaran_arus_kas_1_2", "tanya": "T2", "pilihan": ["A", "B"], "benar": 0, "penjelasan": "P2"}
+          ]
+        }
+      }
+      ''';
+      expect(
+        () => PembacaKonten.uraiModul(jsonStr, namaBerkas: 'modul.json'),
+        throwsA(predicate((e) => e is GalatKonten && e.berkas == 'modul.json' && e.pesan.contains('duplikat'))),
+      );
+    });
+
+    // 12. modul.json: soal kuis mereferensikan pelajaranId yang tidak ada
+    test('12. modul.json: referensi pelajaranId soal kuis tidak ada di daftarPelajaran', () {
+      const jsonStr = '''
+      {
+        "id": "anggaran_arus_kas",
+        "judul": "Anggaran & Arus Kas",
+        "tingkat": "pemula",
+        "urutan": 1,
+        "deskripsiSingkat": "Deskripsi",
+        "tersedia": true,
+        "daftarPelajaran": ["anggaran_arus_kas_1_2"],
+        "kuis": {
+          "jumlahSoal": 1,
+          "bankSoal": [
+            {"id": "soal_1", "pelajaranId": "pelajaran_fiktif_99", "tanya": "T", "pilihan": ["A", "B"], "benar": 0, "penjelasan": "P"}
+          ]
+        }
+      }
+      ''';
+      expect(
+        () => PembacaKonten.uraiModul(jsonStr, namaBerkas: 'modul.json'),
+        throwsA(predicate((e) => e is GalatKonten && e.berkas == 'modul.json' && e.pesan.contains('tidak terdaftar'))),
+      );
+    });
+
+    // 13. modul.json: objek gerbang tidak dikenal
+    test('13. modul.json: referensi objek gerbang data tidak dikenal', () {
+      const jsonStr = '''
+      {
+        "id": "modul_1",
         "judul": "Judul",
-        "durasiMenit": 5,
+        "tingkat": "pemula",
+        "urutan": 1,
+        "deskripsiSingkat": "Deskripsi",
+        "tersedia": true,
+        "gerbang": [{"tipe": "ada_data", "objek": "crypto_wallet", "min": 1, "pesan": "Hubungkan wallet"}],
+        "daftarPelajaran": ["modul_1_1"],
+        "kuis": {"jumlahSoal": 1, "bankSoal": []}
+      }
+      ''';
+      expect(
+        () => PembacaKonten.uraiModul(jsonStr, namaBerkas: 'modul.json'),
+        throwsA(predicate((e) => e is GalatKonten && e.berkas == 'modul.json' && e.kolom == 'gerbang[0].objek')),
+      );
+    });
+
+    // 14. pelajaran.json: ID tidak berformat stabil <modul>_<nomor>
+    test('14. pelajaran.json: ID tidak berformat stabil <modul>_<nomor>', () {
+      const jsonStr = '''
+      {
+        "id": "pelajaran-bebas-tanpa-nomor",
+        "modulId": "anggaran_arus_kas",
+        "judul": "Judul",
+        "durasiMenit": 4,
         "status": "draf",
         "kartu": [{"judul": "J", "isi": "I"}],
         "cekPaham": [
-          {"tanya": "T1", "pilihan": ["A", "B"], "benar": 5, "penjelasan": "P1"},
+          {"tanya": "T1", "pilihan": ["A", "B"], "benar": 0, "penjelasan": "P1"},
           {"tanya": "T2", "pilihan": ["A", "B"], "benar": 0, "penjelasan": "P2"}
         ],
         "misi": {"tipe": "ada_data", "objek": "transaksi", "min": 1, "judul": "M", "deskripsi": "D", "perkiraanMenit": 2}
@@ -131,16 +204,110 @@ void main() {
       ''';
       expect(
         () => PembacaKonten.uraiPelajaran(jsonStr, namaBerkas: 'pelajaran.json'),
-        throwsA(predicate((e) => e is GalatKonten && e.berkas == 'pelajaran.json' && e.kolom == 'cekPaham.benar')),
+        throwsA(predicate((e) => e is GalatKonten && e.berkas == 'pelajaran.json' && e.kolom == 'id' && e.pesan.contains('stabil'))),
       );
     });
 
-    // 12. pelajaran.json: misi min < 1
-    test('12. pelajaran.json: misi min < 1', () {
+    // 15. pelajaran.json: durasi di luar 3 sampai 8 menit
+    test('15. pelajaran.json: durasi di luar rentang 3 sampai 8 menit (< 3 atau > 8)', () {
+      const jsonKurang = '''
+      {
+        "id": "anggaran_arus_kas_1_2",
+        "modulId": "anggaran_arus_kas",
+        "judul": "Judul",
+        "durasiMenit": 2,
+        "status": "draf",
+        "kartu": [{"judul": "J", "isi": "I"}],
+        "cekPaham": [
+          {"tanya": "T1", "pilihan": ["A", "B"], "benar": 0, "penjelasan": "P1"},
+          {"tanya": "T2", "pilihan": ["A", "B"], "benar": 0, "penjelasan": "P2"}
+        ],
+        "misi": {"tipe": "ada_data", "objek": "transaksi", "min": 1, "judul": "M", "deskripsi": "D", "perkiraanMenit": 2}
+      }
+      ''';
+      expect(
+        () => PembacaKonten.uraiPelajaran(jsonKurang, namaBerkas: 'pelajaran.json'),
+        throwsA(predicate((e) => e is GalatKonten && e.berkas == 'pelajaran.json' && e.kolom == 'durasiMenit')),
+      );
+
+      const jsonLebih = '''
+      {
+        "id": "anggaran_arus_kas_1_2",
+        "modulId": "anggaran_arus_kas",
+        "judul": "Judul",
+        "durasiMenit": 10,
+        "status": "draf",
+        "kartu": [{"judul": "J", "isi": "I"}],
+        "cekPaham": [
+          {"tanya": "T1", "pilihan": ["A", "B"], "benar": 0, "penjelasan": "P1"},
+          {"tanya": "T2", "pilihan": ["A", "B"], "benar": 0, "penjelasan": "P2"}
+        ],
+        "misi": {"tipe": "ada_data", "objek": "transaksi", "min": 1, "judul": "M", "deskripsi": "D", "perkiraanMenit": 2}
+      }
+      ''';
+      expect(
+        () => PembacaKonten.uraiPelajaran(jsonLebih, namaBerkas: 'pelajaran.json'),
+        throwsA(predicate((e) => e is GalatKonten && e.berkas == 'pelajaran.json' && e.kolom == 'durasiMenit')),
+      );
+    });
+
+    // 16. pelajaran.json: kartu > 3
+    test('16. pelajaran.json: kartu lebih dari 3 kartu konsep', () {
       const jsonStr = '''
       {
-        "id": "modul_1_1",
-        "modulId": "modul_1",
+        "id": "anggaran_arus_kas_1_2",
+        "modulId": "anggaran_arus_kas",
+        "judul": "Judul",
+        "durasiMenit": 5,
+        "status": "draf",
+        "kartu": [
+          {"judul": "J1", "isi": "I1"},
+          {"judul": "J2", "isi": "I2"},
+          {"judul": "J3", "isi": "I3"},
+          {"judul": "J4", "isi": "I4"}
+        ],
+        "cekPaham": [
+          {"tanya": "T1", "pilihan": ["A", "B"], "benar": 0, "penjelasan": "P1"},
+          {"tanya": "T2", "pilihan": ["A", "B"], "benar": 0, "penjelasan": "P2"}
+        ],
+        "misi": {"tipe": "ada_data", "objek": "transaksi", "min": 1, "judul": "M", "deskripsi": "D", "perkiraanMenit": 2}
+      }
+      ''';
+      expect(
+        () => PembacaKonten.uraiPelajaran(jsonStr, namaBerkas: 'pelajaran.json'),
+        throwsA(predicate((e) => e is GalatKonten && e.berkas == 'pelajaran.json' && e.kolom == 'kartu')),
+      );
+    });
+
+    // 17. pelajaran.json: istilah {{...}} tidak ada di kamus
+    test('17. pelajaran.json: istilah {{istilah_asing}} tidak terdaftar di kamus.json', () {
+      const jsonStr = '''
+      {
+        "id": "anggaran_arus_kas_1_2",
+        "modulId": "anggaran_arus_kas",
+        "judul": "Judul",
+        "durasiMenit": 5,
+        "status": "draf",
+        "kartu": [{"judul": "J", "isi": "Pahami konsep {{istilah_tidak_ada}} sekarang."}],
+        "cekPaham": [
+          {"tanya": "T1", "pilihan": ["A", "B"], "benar": 0, "penjelasan": "P1"},
+          {"tanya": "T2", "pilihan": ["A", "B"], "benar": 0, "penjelasan": "P2"}
+        ],
+        "misi": {"tipe": "ada_data", "objek": "transaksi", "min": 1, "judul": "M", "deskripsi": "D", "perkiraanMenit": 2}
+      }
+      ''';
+      expect(
+        () => PembacaKonten.uraiPelajaran(jsonStr, namaBerkas: 'pelajaran.json', daftarIstilahKamus: {'arus kas', 'kebutuhan'}),
+        throwsA(predicate((e) => e is GalatKonten && e.berkas == 'pelajaran.json' && e.pesan.contains('tidak ditemukan di kamus.json'))),
+      );
+    });
+
+    // 18. pelajaran.json: jenis misi yang belum didukung (misal: simulasi_investasi)
+    test('18. pelajaran.json: jenis misi yang belum didukung ditolak', () {
+      const jsonStr = '''
+      {
+        "id": "anggaran_arus_kas_1_2",
+        "modulId": "anggaran_arus_kas",
         "judul": "Judul",
         "durasiMenit": 5,
         "status": "draf",
@@ -149,13 +316,85 @@ void main() {
           {"tanya": "T1", "pilihan": ["A", "B"], "benar": 0, "penjelasan": "P1"},
           {"tanya": "T2", "pilihan": ["A", "B"], "benar": 0, "penjelasan": "P2"}
         ],
-        "misi": {"tipe": "ada_data", "objek": "transaksi", "min": 0, "judul": "M", "deskripsi": "D", "perkiraanMenit": 2}
+        "misi": {"tipe": "simulasi_saham_ai", "min": 1, "judul": "M", "deskripsi": "D", "perkiraanMenit": 2}
       }
       ''';
       expect(
         () => PembacaKonten.uraiPelajaran(jsonStr, namaBerkas: 'pelajaran.json'),
-        throwsA(predicate((e) => e is GalatKonten && e.berkas == 'pelajaran.json' && e.kolom == 'misi.min')),
+        throwsA(predicate((e) => e is GalatKonten && e.berkas == 'pelajaran.json' && e.kolom == 'misi.tipe' && e.pesan.contains('belum didukung'))),
       );
+    });
+
+    // 19. pelajaran.json: umpan balik misi tidak dikenal
+    test('19. pelajaran.json: referensi umpanBalik misi tidak terdaftar di registri', () {
+      const jsonStr = '''
+      {
+        "id": "anggaran_arus_kas_1_2",
+        "modulId": "anggaran_arus_kas",
+        "judul": "Judul",
+        "durasiMenit": 5,
+        "status": "draf",
+        "kartu": [{"judul": "J", "isi": "I"}],
+        "cekPaham": [
+          {"tanya": "T1", "pilihan": ["A", "B"], "benar": 0, "penjelasan": "P1"},
+          {"tanya": "T2", "pilihan": ["A", "B"], "benar": 0, "penjelasan": "P2"}
+        ],
+        "misi": {
+          "tipe": "ada_data",
+          "objek": "transaksi",
+          "min": 1,
+          "judul": "M",
+          "deskripsi": "D",
+          "perkiraanMenit": 2,
+          "umpanBalik": "prediksi_cuan_masa_depan"
+        }
+      }
+      ''';
+      expect(
+        () => PembacaKonten.uraiPelajaran(jsonStr, namaBerkas: 'pelajaran.json'),
+        throwsA(predicate((e) => e is GalatKonten && e.berkas == 'pelajaran.json' && e.kolom == 'misi.umpanBalik')),
+      );
+    });
+
+    // 20. Pemeriksa Bahasa: Uji Positif Kata Terlarang (boros, bodoh, malas, dll)
+    test('20. Pemeriksa bahasa: konten sintetis berisi kata terlarang harus GAGAL', () {
+      const teksBoros = 'Jangan boros saat berbelanja bulanan.';
+      expect(
+        () => PembacaKonten.periksaBahasaTeks(teksBoros, namaBerkas: 'uji_bahasa.json'),
+        throwsA(predicate((e) => e is GalatKonten && e.pesan.contains('boros'))),
+      );
+
+      const teksMenghakimi = 'Cara yang kamu lakukan ini salah dan merugikan.';
+      expect(
+        () => PembacaKonten.periksaBahasaTeks(teksMenghakimi, namaBerkas: 'uji_bahasa.json'),
+        throwsA(predicate((e) => e is GalatKonten && e.pesan.contains('salah'))),
+      );
+    });
+
+    // 21. Pemeriksa Bahasa: Uji Positif Istilah Teknis Polos tanpa {{ }} (defisit/surplus)
+    test('21. Pemeriksa bahasa: istilah teknis polos tanpa {{ }} (misal versi lama 1_3 "defisit") harus GAGAL', () {
+      // Kalimat persis baris 44 versi lama anggaran_arus_kas_1_3.json
+      const kalimatLamaBaris44 = 'Saat arus kas bulananmu mulai terasa sesak atau defisit';
+      expect(
+        () => PembacaKonten.periksaBahasaTeks(kalimatLamaBaris44, namaBerkas: 'anggaran_arus_kas_1_3.json'),
+        throwsA(predicate((e) => e is GalatKonten && e.pesan.contains('defisit') && e.pesan.contains('tooltip'))),
+      );
+
+      // Kalimat yang sudah diperbaiki dengan {{defisit}} harus LOLOS
+      const kalimatBaruBaris44 = 'Saat arus kas bulananmu mulai terasa sesak atau {{defisit}}';
+      expect(
+        () => PembacaKonten.periksaBahasaTeks(kalimatBaruBaris44, namaBerkas: 'anggaran_arus_kas_1_3.json'),
+        returnsNormally,
+      );
+    });
+
+    // 22. Pemeriksa Bahasa: Kalimat > 25 kata menghasilkan peringatan
+    test('22. Pemeriksa bahasa: kalimat > 25 kata menghasilkan peringatan terdaftar', () {
+      const kalimatPanjang = 'Setiap rupiah yang masuk ke dalam dompetmu adalah hasil dari kerja kerasmu sendiri dan kamu berhak mengalokasikannya dengan penuh rasa bangga dan bahagia untuk masa depan yang cerah.';
+      final daftarPeringatan = <String>[];
+      PembacaKonten.periksaBahasaTeks(kalimatPanjang, namaBerkas: 'uji_panjang.json', daftarPeringatan: daftarPeringatan);
+      expect(daftarPeringatan.length, 1);
+      expect(daftarPeringatan.first, contains('Kalimat panjang'));
     });
   });
 }

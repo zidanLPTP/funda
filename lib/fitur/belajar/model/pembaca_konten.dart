@@ -43,13 +43,33 @@ class GalatKonten implements Exception {
 /// Pembaca dan validator konten materi micro-learning Funda.
 class PembacaKonten {
   static final RegExp _polaIstilahKamus = RegExp(r'\{\{([^}]+)\}\}');
-  static final List<String> kataTerlarang = [
+  static const List<String> kataTerlarang = [
     'boros',
     'bodoh',
     'malas',
     'ceroboh',
     'payah',
   ];
+  static const List<String> istilahTeknisWajibKurung = [
+    'surplus',
+    'defisit',
+    'aset',
+    'liabilitas',
+  ];
+  static const Set<String> objekGerbangValid = {
+    'dompet',
+    'pemasukan',
+    'pengeluaran',
+    'transaksi',
+    'anggaran',
+    'tujuan',
+    'utang',
+    'kategori',
+  };
+  static const Set<String> umpanBalikMisiValid = {
+    'arus_kas_bulan_ini',
+    'komposisi_sifat_bulan_ini',
+  };
 
   /// Mengurai string JSON kamus menjadi daftar istilah terindeks.
   static Map<String, IstilahKamus> uraiKamus(String jsonString, {String namaBerkas = 'kamus.json'}) {
@@ -112,15 +132,57 @@ class PembacaKonten {
     if (!data.containsKey('tersedia') || data['tersedia'] is! bool) {
       throw GalatKonten('Kolom tersedia wajib berupa boolean', berkas: namaBerkas, kolom: 'tersedia');
     }
-    if (data['daftarPelajaran'] is! List) {
+    final daftarPelajaran = data['daftarPelajaran'];
+    if (daftarPelajaran is! List) {
       throw GalatKonten('Kolom daftarPelajaran wajib berupa array', berkas: namaBerkas, kolom: 'daftarPelajaran');
     }
+    // Cek ID pelajaran duplikat
+    final setPelajaran = <String>{};
+    for (final pel in daftarPelajaran) {
+      final pelId = pel.toString();
+      if (!setPelajaran.add(pelId)) {
+        throw GalatKonten('Ditemukan ID pelajaran duplikat di daftarPelajaran: "$pelId"', berkas: namaBerkas, kolom: 'daftarPelajaran');
+      }
+    }
+
+    // Validasi gerbang modul bila ada
+    final gerbang = data['gerbang'];
+    if (gerbang is List) {
+      for (var i = 0; i < gerbang.length; i++) {
+        final g = gerbang[i];
+        if (g is Map<String, dynamic>) {
+          final tipe = g['tipe'] as String?;
+          final obj = g['objek'] as String?;
+          if (tipe == 'ada_data' && obj != null && !objekGerbangValid.contains(obj.toLowerCase())) {
+            throw GalatKonten('Objek gerbang data tidak dikenal: "$obj"', berkas: namaBerkas, kolom: 'gerbang[$i].objek');
+          }
+        }
+      }
+    }
+
     final tersedia = data['tersedia'] as bool? ?? false;
     final kuis = data['kuis'];
     if (tersedia && kuis is Map<String, dynamic>) {
       final jmlSoal = kuis['jumlahSoal'];
       if (jmlSoal is num && jmlSoal <= 0) {
         throw GalatKonten('Kolom kuis.jumlahSoal harus bernilai > 0 untuk modul yang tersedia', berkas: namaBerkas, kolom: 'kuis.jumlahSoal');
+      }
+      final bankSoal = kuis['bankSoal'];
+      if (bankSoal is List) {
+        final setSoal = <String>{};
+        for (var i = 0; i < bankSoal.length; i++) {
+          final soal = bankSoal[i];
+          if (soal is Map<String, dynamic>) {
+            final soalId = soal['id'] as String?;
+            if (soalId != null && !setSoal.add(soalId)) {
+              throw GalatKonten('Ditemukan ID soal kuis duplikat: "$soalId"', berkas: namaBerkas, kolom: 'kuis.bankSoal[$i].id');
+            }
+            final pelId = soal['pelajaranId'] as String?;
+            if (pelId != null && setPelajaran.isNotEmpty && !setPelajaran.contains(pelId)) {
+              throw GalatKonten('Soal "$soalId" mereferensikan pelajaranId "$pelId" yang tidak terdaftar di modul', berkas: namaBerkas, kolom: 'kuis.bankSoal[$i].pelajaranId');
+            }
+          }
+        }
       }
     }
   }
@@ -176,6 +238,21 @@ class PembacaKonten {
       throw GalatKonten('Kolom status pelajaran harus "draf" atau "ditinjau"', berkas: namaBerkas, kolom: 'status');
     }
 
+    // Validasi gerbang pelajaran bila ada
+    final gerbang = data['gerbang'];
+    if (gerbang is List) {
+      for (var i = 0; i < gerbang.length; i++) {
+        final g = gerbang[i];
+        if (g is Map<String, dynamic>) {
+          final tipe = g['tipe'] as String?;
+          final obj = g['objek'] as String?;
+          if (tipe == 'ada_data' && obj != null && !objekGerbangValid.contains(obj.toLowerCase())) {
+            throw GalatKonten('Objek gerbang data tidak dikenal: "$obj"', berkas: namaBerkas, kolom: 'gerbang[$i].objek');
+          }
+        }
+      }
+    }
+
     // 5. Kartu konsep (maksimal 3 kartu)
     final kartuList = data['kartu'];
     if (kartuList is! List || kartuList.isEmpty || kartuList.length > 3) {
@@ -209,11 +286,26 @@ class PembacaKonten {
     for (var i = 0; i < cekPaham.length; i++) {
       final soal = cekPaham[i];
       if (soal is Map<String, dynamic>) {
+        final tanya = soal['tanya'] as String? ?? '';
+        final penjelasan = soal['penjelasan'] as String? ?? '';
         final pilihan = soal['pilihan'];
         final benar = soal['benar'];
-        if (pilihan is List && benar is num) {
-          if (benar < 0 || benar >= pilihan.length) {
-            throw GalatKonten('Indeks benar di luar rentang pilihan', berkas: namaBerkas, kolom: 'cekPaham.benar');
+
+        _periksaIstilahKamus(tanya, daftarIstilahKamus, namaBerkas, 'cekPaham[$i].tanya');
+        _periksaIstilahKamus(penjelasan, daftarIstilahKamus, namaBerkas, 'cekPaham[$i].penjelasan');
+        periksaBahasaTeks(tanya, namaBerkas: namaBerkas, daftarPeringatan: daftarPeringatan);
+        periksaBahasaTeks(penjelasan, namaBerkas: namaBerkas, daftarPeringatan: daftarPeringatan);
+
+        if (pilihan is List) {
+          for (var j = 0; j < pilihan.length; j++) {
+            final teksPilihan = pilihan[j].toString();
+            _periksaIstilahKamus(teksPilihan, daftarIstilahKamus, namaBerkas, 'cekPaham[$i].pilihan[$j]');
+            periksaBahasaTeks(teksPilihan, namaBerkas: namaBerkas, daftarPeringatan: daftarPeringatan);
+          }
+          if (benar is num) {
+            if (benar < 0 || benar >= pilihan.length) {
+              throw GalatKonten('Indeks benar di luar rentang pilihan', berkas: namaBerkas, kolom: 'cekPaham.benar');
+            }
           }
         }
       }
@@ -228,11 +320,23 @@ class PembacaKonten {
     if (tipeMisi == null) {
       throw GalatKonten('Kolom misi.tipe wajib ada', berkas: namaBerkas, kolom: 'misi.tipe');
     }
+    const jenisMisiDidukung = {'ada_data', 'aturan_data', 'lihat_hitungan'};
+    if (!jenisMisiDidukung.contains(tipeMisi)) {
+      throw GalatKonten('Jenis misi "$tipeMisi" belum didukung pada versi ini', berkas: namaBerkas, kolom: 'misi.tipe');
+    }
     if (misi.containsKey('min')) {
       final minVal = misi['min'];
       if (minVal is num && minVal < 1) {
         throw GalatKonten('Kolom misi.min harus bernilai >= 1', berkas: namaBerkas, kolom: 'misi.min');
       }
+    }
+    final objekMisi = misi['objek'] as String?;
+    if (objekMisi != null && !objekGerbangValid.contains(objekMisi.toLowerCase())) {
+      throw GalatKonten('Objek misi tidak dikenal: "$objekMisi"', berkas: namaBerkas, kolom: 'misi.objek');
+    }
+    final umpanBalik = misi['umpanBalik'] as String?;
+    if (umpanBalik != null && !umpanBalikMisiValid.contains(umpanBalik)) {
+      throw GalatKonten('Umpan balik misi "$umpanBalik" tidak terdaftar di registri umpan balik', berkas: namaBerkas, kolom: 'misi.umpanBalik');
     }
   }
 
@@ -268,12 +372,24 @@ class PembacaKonten {
       }
     }
 
-    // Cek kata "salah" yang menghakimi perilaku pengguna (misal: "kamu salah", "cara yang salah")
-    if (RegExp(r'\b(kamu salah|cara(mu)? yang salah|perilaku salah)\b', caseSensitive: false).hasMatch(lower)) {
+    // Cek kata "salah" yang menghakimi perilaku pengguna (misal: "kamu salah", "cara yang salah", dll)
+    if (RegExp(r'\b(kamu salah|cara.*salah|perilaku.*salah|tindakan.*salah)\b', caseSensitive: false).hasMatch(lower)) {
       throw GalatKonten('Frasa menghakimi "salah" ditemukan. Hindari menyalahkan perilaku pengguna.', berkas: namaBerkas);
     }
 
-    // 2. Kalimat > 25 kata -> Peringatan
+    // 2. Cek istilah teknis yang dilarang muncul sebagai teks polos tanpa {{ }}
+    final teksTanpaKurung = teks.replaceAll(RegExp(r'\{\{[^}]+\}\}'), '');
+    for (final istilah in istilahTeknisWajibKurung) {
+      final reg = RegExp('\\b$istilah\\b', caseSensitive: false);
+      if (reg.hasMatch(teksTanpaKurung)) {
+        throw GalatKonten(
+          'Istilah teknis "$istilah" dilarang muncul sebagai teks polos tanpa tooltip. Wajib dibungkus format {{$istilah}} agar memiliki penjelasan bantuan.',
+          berkas: namaBerkas,
+        );
+      }
+    }
+
+    // 3. Kalimat > 25 kata -> Peringatan
     final kalimatList = teks.split(RegExp(r'[.!?]')).map((s) => s.trim()).where((s) => s.isNotEmpty);
     for (final k in kalimatList) {
       final jumlahKata = k.split(RegExp(r'\s+')).length;

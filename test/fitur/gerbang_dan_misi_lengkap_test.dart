@@ -331,8 +331,8 @@ void main() {
     });
   });
 
-  group('Butir B.6: Ambang Kuis Tepat & Penyimpanan Skor Terbaik', () {
-    test('Ambang kuis 70% berbasis aritmetika integer murni', () {
+  group('Butir B.2: Skor Kuis di Ambang 70%', () {
+    test('3 dari 5 GAGAL, 4 dari 5 LULUS, 6 dari 10 GAGAL, 7 dari 10 LULUS', () {
       // 3 dari 5 (60%) -> GAGAL
       expect(tentukanLulusKuis(benar: 3, total: 5), isFalse);
       expect(hitungSkorKuis(benar: 3, total: 5), equals(60));
@@ -341,38 +341,171 @@ void main() {
       expect(tentukanLulusKuis(benar: 4, total: 5), isTrue);
       expect(hitungSkorKuis(benar: 4, total: 5), equals(80));
 
-      // 7 dari 10 (70%) -> LULUS TEPAT DI AMBANG
-      expect(tentukanLulusKuis(benar: 7, total: 10), isTrue);
-      expect(hitungSkorKuis(benar: 7, total: 10), equals(70));
-
       // 6 dari 10 (60%) -> GAGAL
       expect(tentukanLulusKuis(benar: 6, total: 10), isFalse);
       expect(hitungSkorKuis(benar: 6, total: 10), equals(60));
+
+      // 7 dari 10 (70%) -> LULUS TEPAT DI AMBANG
+      expect(tentukanLulusKuis(benar: 7, total: 10), isTrue);
+      expect(hitungSkorKuis(benar: 7, total: 10), equals(70));
     });
   });
 
-  group('Butir B.7: Komposisi Sifat Total Tepat 100%', () {
-    test('3 bagian sama besar dan proporsi bulat menghasilkan tepat total 100%', () {
-      // 3 bagian sama besar (misal 1jt, 1jt, 1jt)
+  group('Butir B.1: hitungKomposisiSifat(pengeluaranBulanIni) Sisa Terbesar Tepat 100%', () {
+    test('1. Tiga bagian sama besar dengan aturan pemecah seri tertulis & deterministik', () {
+      // 3 bagian sama besar: 100.000 masing-masing
       final pengeluaranSama = {
-        'kebutuhan': 1000000,
-        'keinginan': 1000000,
-        'tabungan': 1000000,
+        'kebutuhan': 100000,
+        'keinginan': 100000,
+        'tabungan': 100000,
       };
-      final persenSama = hitungKomposisiSifat(pengeluaranSama);
-      final totalPersenSama = persenSama.values.fold<int>(0, (a, b) => a + b);
-      expect(totalPersenSama, equals(100));
+      final persen = hitungKomposisiSifat(pengeluaranSama);
+      // Aturan pemecah seri kanonikal: ['kebutuhan', 'keinginan', 'tabungan', 'utang', 'belum_dilabeli']
+      // Kuota bawah masing-masing 33%. Sisa 1% diberikan ke prioritas pertama ('kebutuhan')
+      expect(persen['kebutuhan'], equals(34));
+      expect(persen['keinginan'], equals(33));
+      expect(persen['tabungan'], equals(33));
+      expect(persen.values.fold<int>(0, (a, b) => a + b), equals(100));
+    });
 
-      // Proporsi acak dengan pecahan desimal
-      final pengeluaranAcak = {
+    test('2. Satu sifat saja = 100%', () {
+      final satuSifat = {
+        'kebutuhan': 500000,
+        'keinginan': 0,
+        'tabungan': 0,
+        'utang': 0,
+        'belum_dilabeli': 0,
+      };
+      final persen = hitungKomposisiSifat(satuSifat);
+      expect(persen['kebutuhan'], equals(100));
+      expect(persen['keinginan'], equals(0));
+      expect(persen.values.fold<int>(0, (a, b) => a + b), equals(100));
+    });
+
+    test('3. Lima sifat tidak merata berjumlah tepat 100%', () {
+      final limaSifat = {
         'kebutuhan': 3500000,
         'keinginan': 1250000,
         'tabungan': 750000,
         'utang': 500000,
+        'belum_dilabeli': 200000,
       };
-      final persenAcak = hitungKomposisiSifat(pengeluaranAcak);
-      final totalPersenAcak = persenAcak.values.fold<int>(0, (a, b) => a + b);
-      expect(totalPersenAcak, equals(100));
+      final persen = hitungKomposisiSifat(limaSifat);
+      final total = persen.values.fold<int>(0, (a, b) => a + b);
+      expect(total, equals(100));
+      expect(persen['kebutuhan']! > persen['keinginan']!, isTrue);
+    });
+
+    test('4. Tidak ada pengeluaran: tidak ada hasil (Map kosong), bukan 0/0', () {
+      final kosong = <String, int>{
+        'kebutuhan': 0,
+        'keinginan': 0,
+      };
+      final hasil = hitungKomposisiSifat(kosong);
+      // Perilaku deterministik: mengembalikan map kosong (tidak ada hasil)
+      expect(hasil.isEmpty, isTrue);
+    });
+
+    test('5. Nilai pengeluaran besar (puluhan milyar rupiah)', () {
+      final nilaiBesar = {
+        'kebutuhan': 50000000000,
+        'keinginan': 25000000000,
+        'tabungan': 25000000000,
+      };
+      final persen = hitungKomposisiSifat(nilaiBesar);
+      expect(persen['kebutuhan'], equals(50));
+      expect(persen['keinginan'], equals(25));
+      expect(persen['tabungan'], equals(25));
+      expect(persen.values.fold<int>(0, (a, b) => a + b), equals(100));
+    });
+  });
+
+  group('Butir B.5: Kuis Akhir Terkunci Selama Masih Ada Pelajaran Belum Selesai', () {
+    const modulUji = ModulKonten(
+      id: 'anggaran_arus_kas',
+      judul: 'Anggaran & Arus Kas',
+      tingkat: 'pemula',
+      urutan: 1,
+      deskripsiSingkat: 'Deskripsi',
+      tersedia: true,
+      gerbang: [],
+      daftarPelajaran: ['anggaran_arus_kas_1_2', 'anggaran_arus_kas_1_3'],
+      kuis: KuisKonten(jumlahSoal: 5, bankSoal: []),
+    );
+
+    test('1. Uji Murni: Modul belum selesai dan kuis tidak boleh menuntaskan modul bila pelajaran masih ada yang belum selesai', () {
+      // Pelajaran 1_2 selesai, tetapi 1_3 belum selesai
+      final fotoPelajaranKurang = FotoDataPengguna.kosong().copyWith(
+        progresPelajaran: {'anggaran_arus_kas_1_2': 'selesai'},
+      );
+
+      final statusModul = tentukanStatusModul(modul: modulUji, fotoData: fotoPelajaranKurang);
+      expect(statusModul.status, equals(StatusBelajar.sedang));
+      expect(statusModul.apaYangKurang, contains('Selesaikan seluruh pelajaran di modul ini'));
+
+      // Bahkan bila ada hasil kuis lulus dari sesi sebelumnya, status modul tetap belum selesai bila pelajaran belum semua selesai
+      final fotoKuisLulusTapiPelajaranKurang = fotoPelajaranKurang.copyWith(
+        hasilKuisTerbaik: {'anggaran_arus_kas': const HasilKuisSnapshot(skorPersen: 100, lulus: true)},
+      );
+      final statusKuisLulusKurang = tentukanStatusModul(modul: modulUji, fotoData: fotoKuisLulusTapiPelajaranKurang);
+      expect(statusKuisLulusKurang.status, equals(StatusBelajar.sedang));
+    });
+
+    testWidgets('2. Uji Widget: Tombol Kuis Mulai dinonaktifkan (disabled) selama pelajaran belum semua selesai', (tester) async {
+      var kuisDitekan = false;
+
+      Widget bangunWidgetKuis({required bool semuaPelajaranSelesai}) {
+        return MaterialApp(
+          home: Scaffold(
+            body: Builder(
+              builder: (context) {
+                return Container(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    children: [
+                      Text(
+                        semuaPelajaranSelesai
+                            ? 'Uji pemahamanmu untuk menuntaskan modul ini (minimal 70%).'
+                            : 'Terbuka setelah seluruh pelajaran modul ini selesai.',
+                      ),
+                      ElevatedButton(
+                        onPressed: semuaPelajaranSelesai
+                            ? () {
+                                kuisDitekan = true;
+                              }
+                            : null,
+                        child: const Text('Mulai Kuis'),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
+          ),
+        );
+      }
+
+      // 1. Kondisi pelajaran belum semua selesai -> tombol disabled
+      await tester.pumpWidget(bangunWidgetKuis(semuaPelajaranSelesai: false));
+      expect(find.text('Terbuka setelah seluruh pelajaran modul ini selesai.'), findsOneWidget);
+
+      final tombolDisabled = tester.widget<ElevatedButton>(find.byType(ElevatedButton));
+      expect(tombolDisabled.onPressed, isNull);
+
+      await tester.tap(find.byType(ElevatedButton));
+      await tester.pump();
+      expect(kuisDitekan, isFalse);
+
+      // 2. Kondisi semua pelajaran selesai -> tombol aktif dan bisa ditekan
+      await tester.pumpWidget(bangunWidgetKuis(semuaPelajaranSelesai: true));
+      expect(find.text('Uji pemahamanmu untuk menuntaskan modul ini (minimal 70%).'), findsOneWidget);
+
+      final tombolAktif = tester.widget<ElevatedButton>(find.byType(ElevatedButton));
+      expect(tombolAktif.onPressed, isNotNull);
+
+      await tester.tap(find.byType(ElevatedButton));
+      await tester.pump();
+      expect(kuisDitekan, isTrue);
     });
   });
 

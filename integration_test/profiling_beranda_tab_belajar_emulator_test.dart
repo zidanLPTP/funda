@@ -1,10 +1,9 @@
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:funda/data/basis_data.dart';
-import 'package:funda/data/penyedia_basis_data.dart';
 import 'package:funda/data/repositori/anggaran_repositori.dart';
 import 'package:funda/data/repositori/dompet_repositori.dart';
 import 'package:funda/data/repositori/foto_data_repositori.dart';
@@ -13,7 +12,8 @@ import 'package:funda/data/repositori/tagihan_repositori.dart';
 import 'package:funda/data/repositori/transaksi_repositori.dart';
 import 'package:funda/data/repositori/tujuan_repositori.dart';
 import 'package:funda/data/repositori/utang_repositori.dart';
-import 'package:funda/fitur/belajar/kontroler/penyedia_belajar.dart';
+import 'package:funda/fitur/belajar/model/pembaca_konten.dart';
+import 'package:funda/perhitungan/perhitungan_belajar.dart';
 import 'package:funda/perhitungan/perhitungan_utang_dashboard.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -194,10 +194,80 @@ void main() {
       return sw.elapsedMicroseconds / 1000.0;
     }
 
-    // Fungsi ukur Tab Belajar (memuat peta belajar 19 modul)
-    Future<double> eksekusiTabBelajar(ProviderContainer container) async {
+    // Fungsi ukur Tab Belajar Lengkap:
+    // Termasuk (1) Kueri Foto Data Pengguna SQLite
+    //          (2) Pemuatan aset bundle 19 modul & parsing JSON
+    //          (3) Pemuatan aset 2 pelajaran contoh & parsing JSON
+    //          (4) Evaluasi gerbang data seluruh modul & pelajaran
+    Future<double> eksekusiTabBelajarSiklusLengkap() async {
       final sw = Stopwatch()..start();
-      await container.read(penyediaPetaBelajar.future);
+
+      // 1. Kueri Foto Data Pengguna
+      final fotoData = await repoFotoData.ambilFotoData();
+
+      // 2. Baca Kamus
+      final kamusStr = await rootBundle.loadString('aset/konten/kamus.json');
+      final petaKamus = PembacaKonten.uraiKamus(kamusStr, namaBerkas: 'kamus.json');
+      final istilahKamus = petaKamus.keys.toSet();
+
+      // 3. Muat 19 Modul dari aset
+      const daftarFolderModul = [
+        ('pemula', 'anggaran_arus_kas'),
+        ('pemula', 'dana_darurat'),
+        ('pemula', 'mulai_tes_awal'),
+        ('pemula', 'psikologi_uang'),
+        ('pemula', 'tabungan'),
+        ('pemula', 'utang_cicilan'),
+        ('pemula', 'waspada_penipuan'),
+        ('menengah', 'investasi_dasar'),
+        ('menengah', 'pajak_dasar'),
+        ('menengah', 'paylater_kredit'),
+        ('menengah', 'penghasilan_tambahan'),
+        ('menengah', 'proteksi_dasar'),
+        ('menengah', 'tujuan_besar'),
+        ('lanjutan', 'investasi_lanjutan'),
+        ('lanjutan', 'keuangan_usaha_kecil'),
+        ('lanjutan', 'kpr_kredit_besar'),
+        ('lanjutan', 'pajak_lanjutan'),
+        ('lanjutan', 'pensiun_kebebasan_finansial'),
+        ('lanjutan', 'proteksi_keluarga_warisan'),
+      ];
+
+      final daftarModul = <ModulKonten>[];
+      for (final item in daftarFolderModul) {
+        final path = 'aset/konten/${item.$1}/${item.$2}/modul.json';
+        final str = await rootBundle.loadString(path);
+        final modul = PembacaKonten.uraiModul(str, namaBerkas: path);
+        daftarModul.add(modul);
+      }
+
+      // 4. Muat 2 Pelajaran contoh
+      const path12 = 'aset/konten/pemula/anggaran_arus_kas/anggaran_arus_kas_1_2.json';
+      const path13 = 'aset/konten/pemula/anggaran_arus_kas/anggaran_arus_kas_1_3.json';
+      final pel12Str = await rootBundle.loadString(path12);
+      final pel13Str = await rootBundle.loadString(path13);
+      final pel12 = PembacaKonten.uraiPelajaran(pel12Str, namaBerkas: path12, daftarIstilahKamus: istilahKamus);
+      final pel13 = PembacaKonten.uraiPelajaran(pel13Str, namaBerkas: path13, daftarIstilahKamus: istilahKamus);
+
+      // 5. Evaluasi seluruh gerbang modul dan pelajaran
+      for (final m in daftarModul) {
+        tentukanStatusModul(modul: m, fotoData: fotoData);
+      }
+      tentukanStatusPelajaran(
+        pelajaran: pel12,
+        posisiIndeks: 0,
+        daftarPelajaranModul: [pel12, pel13],
+        gerbangModul: daftarModul.first.gerbang,
+        fotoData: fotoData,
+      );
+      tentukanStatusPelajaran(
+        pelajaran: pel13,
+        posisiIndeks: 1,
+        daftarPelajaranModul: [pel12, pel13],
+        gerbangModul: daftarModul.first.gerbang,
+        fotoData: fotoData,
+      );
+
       sw.stop();
       return sw.elapsedMicroseconds / 1000.0;
     }
@@ -247,15 +317,11 @@ void main() {
     final terburuk5k = list5k.last;
 
     // Tab Belajar 5k
-    final container5k = ProviderContainer(
-      overrides: [penyediaBasisData.overrideWithValue(basisData)],
-    );
-    addTearDown(container5k.dispose);
-    await eksekusiTabBelajar(container5k); // Pemanasan 1x
+    await eksekusiTabBelajarSiklusLengkap(); // Pemanasan 1x
 
     final listBelajar5k = <double>[];
     for (var iter = 1; iter <= 5; iter++) {
-      listBelajar5k.add(await eksekusiTabBelajar(container5k));
+      listBelajar5k.add(await eksekusiTabBelajarSiklusLengkap());
     }
     listBelajar5k.sort();
     final medianBelajar5k = listBelajar5k[2];
@@ -303,15 +369,11 @@ void main() {
     final terburuk20k = list20k.last;
 
     // Tab Belajar 20k
-    final container20k = ProviderContainer(
-      overrides: [penyediaBasisData.overrideWithValue(basisData)],
-    );
-    addTearDown(container20k.dispose);
-    await eksekusiTabBelajar(container20k); // Pemanasan 1x
+    await eksekusiTabBelajarSiklusLengkap(); // Pemanasan 1x
 
     final listBelajar20k = <double>[];
     for (var iter = 1; iter <= 5; iter++) {
-      listBelajar20k.add(await eksekusiTabBelajar(container20k));
+      listBelajar20k.add(await eksekusiTabBelajarSiklusLengkap());
     }
     listBelajar20k.sort();
     final medianBelajar20k = listBelajar20k[2];

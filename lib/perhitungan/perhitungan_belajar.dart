@@ -473,9 +473,21 @@ List<SoalKuis> pilihDanAcakSoalKuis({
 }
 
 /// Menghitung persentase per sifat pengeluaran menggunakan Metode Sisa Terbesar (Largest Remainder).
-/// Menjamin total seluruh persentase selalu tepat 100%.
+/// - Menjamin total seluruh persentase selalu tepat 100% bila ada pengeluaran.
+/// - Bila tidak ada pengeluaran (total <= 0), mengembalikan Map kosong (tidak ada hasil, bebas pembagian nol).
+/// - Aturan pemecah seri deterministik: prioritas urutan kanonikal ['kebutuhan', 'keinginan', 'tabungan', 'utang', 'belum_dilabeli'].
 Map<String, int> hitungKomposisiSifat(Map<String, int> pengeluaranPerSifat) {
   final totalNominal = pengeluaranPerSifat.values.fold<int>(0, (a, b) => a + b);
+  if (totalNominal <= 0) return <String, int>{};
+
+  const urutanPrioritas = [
+    'kebutuhan',
+    'keinginan',
+    'tabungan',
+    'utang',
+    'belum_dilabeli',
+  ];
+
   final hasil = <String, int>{
     'kebutuhan': 0,
     'keinginan': 0,
@@ -483,15 +495,13 @@ Map<String, int> hitungKomposisiSifat(Map<String, int> pengeluaranPerSifat) {
     'utang': 0,
     'belum_dilabeli': 0,
   };
-  if (totalNominal <= 0) return hasil;
 
   final kuotaBawah = <String, int>{};
   final sisaPecahan = <String, int>{};
 
   var totalKuotaBawah = 0;
-  for (final entry in pengeluaranPerSifat.entries) {
-    final sifat = entry.key;
-    final nominal = entry.value;
+  for (final sifat in urutanPrioritas) {
+    final nominal = pengeluaranPerSifat[sifat] ?? 0;
     if (nominal <= 0) {
       kuotaBawah[sifat] = 0;
       sisaPecahan[sifat] = 0;
@@ -504,9 +514,32 @@ Map<String, int> hitungKomposisiSifat(Map<String, int> pengeluaranPerSifat) {
     totalKuotaBawah += kuota;
   }
 
+  // Masukkan juga sifat lain di luar kanonikal jika ada
+  for (final entry in pengeluaranPerSifat.entries) {
+    if (!urutanPrioritas.contains(entry.key)) {
+      final nominal = entry.value;
+      if (nominal > 0) {
+        final kuota = (nominal * 100) ~/ totalNominal;
+        final sisa = (nominal * 100) % totalNominal;
+        kuotaBawah[entry.key] = kuota;
+        sisaPecahan[entry.key] = sisa;
+        totalKuotaBawah += kuota;
+        hasil[entry.key] = 0;
+      }
+    }
+  }
+
   var sisaBagi = 100 - totalKuotaBawah;
-  final urutanSifat = pengeluaranPerSifat.keys.toList()
-    ..sort((a, b) => (sisaPecahan[b] ?? 0).compareTo(sisaPecahan[a] ?? 0));
+  final urutanSifat = kuotaBawah.keys.toList()
+    ..sort((a, b) {
+      final cmpSisa = (sisaPecahan[b] ?? 0).compareTo(sisaPecahan[a] ?? 0);
+      if (cmpSisa != 0) return cmpSisa;
+      final idxA = urutanPrioritas.indexOf(a);
+      final idxB = urutanPrioritas.indexOf(b);
+      final posA = idxA == -1 ? 999 : idxA;
+      final posB = idxB == -1 ? 999 : idxB;
+      return posA.compareTo(posB);
+    });
 
   for (final sifat in urutanSifat) {
     var p = kuotaBawah[sifat] ?? 0;

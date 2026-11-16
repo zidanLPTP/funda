@@ -138,11 +138,15 @@ aset/konten/
 
 ## 5. Aturan Penulisan Kalimat & Gaya Bahasa
 
-1. **Panjang Kalimat**: Maksimal 25 kata per kalimat. Gunakan kalimat aktif, ringkas, dan jelas.
+1. **Panjang Kalimat**: Maksimal 25 kata per kalimat. Gunakan kalimat aktif, ringkas, dan jelas. Kalimat > 25 kata menghasilkan peringatan.
 2. **Tanpa Kata Terlarang**:
-   - Dilarang keras menggunakan kata-kata menghakimi seperti: *boros, salah, bodoh, payah, gagal, malas, ceroboh*.
+   - Dilarang keras menggunakan kata-kata menghakimi seperti: *boros, bodoh, malas, ceroboh, payah*.
+   - Dilarang menyalahkan perilaku pengguna dengan kata *salah* (misal: "cara yang salah", "kamu salah").
    - Dilarang menggunakan janji palsu atau skema cepat kaya seperti: *pasti kaya, cuan instan, bebas finansial 1 tahun*.
-3. **Penyebutan Istilah**: Istilah keuangan yang memiliki entri di kamus wajib dibungkus dalam tag `{{nama istilah}}` dengan huruf kecil.
+3. **Penyebutan Istilah & Aturan Tooltip Istilah Teknis**:
+   - Istilah teknis finansial (seperti *surplus, defisit, aset, liabilitas*) **HANYA boleh muncul** di teks pengguna dalam bentuk `{{istilah}}` agar memiliki bantuan tooltip interaktif dari kamus.
+   - Kemunculan istilah teknis sebagai teks polos tanpa kurung kurawal ganda (`{{ }}`) adalah **GALAT** pada pemeriksa bahasa.
+   - Teks umpan balik data nyata (`arus_kas_bulan_ini` dan `komposisi_sifat_bulan_ini`) **DILARANG memakai kata surplus atau defisit sama sekali**; wajib menggunakan padanan bahasa awam seperti *"uang masuk lebih besar"* atau *"uang keluar lebih besar"* disertai nominal Rupiah nyata.
 4. **Contoh Angka Nyata**:
    - Contoh angka wajib menggunakan mata uang Rupiah nominal bulat (`int`).
    - Hindari persentase abstrak tanpa padanan Rupiah (misal: "simpan 20% atau sekitar Rp600.000 dari gaji Rp3.000.000").

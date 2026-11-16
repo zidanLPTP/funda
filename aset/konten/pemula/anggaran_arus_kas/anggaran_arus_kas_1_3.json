@@ -41,7 +41,7 @@
     {
       "tanya": "Kapan saat terbaik untuk meninjau kembali porsi pengeluaran keinginan?",
       "pilihan": [
-        "Saat arus kas bulananmu mulai terasa sesak atau defisit",
+        "Saat arus kas bulananmu mulai terasa sesak atau {{defisit}}",
         "Hanya saat tahun baru saja",
         "Tidak perlu ditinjau jika masih ada limit kartu kredit"
       ],

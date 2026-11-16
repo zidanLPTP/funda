@@ -101,3 +101,21 @@ Dokumen ini mencatat keputusan teknis sementara, kompromi dependensi, dan hal-ha
 - **Hasil:**
   Waktu eksekusi kueri Beranda pada 20.000 transaksi di emulator Pixel 8 turun drastis ke **median 14.46 ms** (kenaikan beban data 4x menghasilkan delta -17.3%, membuktikan kompleksitas konstan O(1)). Peta Belajar 19 modul stabil di **median 1.32 ms**.
 
+---
+
+## 9. Profiling Jujur Siklus Penuh Tab Belajar vs Cache Memori (Tahap 4-R2)
+
+- **Konteks:**
+  Pada laporan Tahap 4-R sebelumnya, Tab Belajar dilaporkan memakan waktu median 1.32 ms, yang ternyata lebih kecil daripada kueri SQLite foto data pengguna sendiri (~2.5 ms). Penelusuran mengungkap bahwa pengujian sebelumnya mengukur pembacaan Riverpod provider setelah data modul sudah tersimpan di *in-memory cache* Dart.
+- **Keputusan & Pengukuran Sebenarnya:**
+  Profiling diperbaiki untuk mengukur **seluruh siklus kerja penuh** Tab Belajar:
+  1. Kueri foto data pengguna dari basis data SQLite lokal.
+  2. Pemuatan bundel aset teks dari disk APK untuk seluruh 19 berkas `modul.json`, 2 berkas pelajaran, dan `kamus.json`.
+  3. Deserialisasi dan parsing JSON ke model typed Dart.
+  4. Evaluasi gerbang data dan status belajar seluruh modul dan pelajaran.
+- **Hasil Terverifikasi:**
+  Pada emulator Pixel 8 (API 36), siklus penuh Tab Belajar memakan waktu:
+  - 5.000 transaksi: **Median 19.61 ms**, Terburuk 30.77 ms.
+  - 20.000 transaksi: **Median 26.31 ms**, Terburuk 34.65 ms.
+  Hasil ini mencerminkan kinerja fisik sebenarnya dan terbukti **LULUS telak di bawah batas target 50 ms**.
+

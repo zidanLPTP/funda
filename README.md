@@ -151,6 +151,20 @@ Tangkapan layar otomatis yang dihasilkan dari pengujian dan emulator tersimpan p
 
 ---
 
+## 📸 Skrip Pengambilan Tangkapan Layar Emulator
+Pembangkit tangkapan layar berada di luar rangkaian pengujian unit/widget untuk mencegah interferensi I/O dan pending timer pada test binding:
+- **Perintah Resmi ADB**:
+  ```bash
+  adb exec-out screencap -p > docs/tangkapan_layar/tahap_04_emulator/<nama_berkas>.png
+  ```
+- **Skrip Pembantu PowerShell**:
+  Jalankan skrip pembantu untuk mengambil tangkapan layar aktif dari emulator secara aman:
+  ```powershell
+  powershell -ExecutionPolicy Bypass -File tool/ambil_tangkapan_layar.ps1 -NamaBerkas "01_tab_belajar_peta.png"
+  ```
+
+---
+
 ## 🔔 Pengujian Pengingat Lokal di Emulator Android
 Untuk memverifikasi integrasi pengingat lokal secara nyata di Android Emulator:
 1. Jalankan aplikasi pada perangkat/emulator target (`flutter run`).

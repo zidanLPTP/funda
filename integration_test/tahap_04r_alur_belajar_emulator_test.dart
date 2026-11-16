@@ -108,14 +108,28 @@ void main() {
     await tester.runAsync(() => Future.delayed(const Duration(seconds: 4)));
 
     // -------------------------------------------------------------------------
-    // SUNTIK DATA TRANSAKSI NYATA UNTUK MENYELESAIKAN MISI
+    // SUNTIK DATA TRANSAKSI PEMASUKAN DAN PENGELUARAN UNTUK PELAJARAN 1.2
     // -------------------------------------------------------------------------
     final daftarKategori = await basisData.select(basisData.tabelKategori).get();
     final katKeluar = daftarKategori.firstWhere((k) => k.arus == 'keluar').id;
+    final katMasuk = daftarKategori.firstWhere((k) => k.arus == 'masuk').id;
 
+    // Catat 1 Pemasukan dan 1 Pengeluaran
     await basisData.into(basisData.tabelTransaksi).insert(
           TabelTransaksiCompanion.insert(
-            id: 'tx_misi_selesai',
+            id: 'tx_masuk_1',
+            jenis: 'masuk',
+            jumlahRupiah: 3000000,
+            dompetId: 'dmp_utama',
+            kategoriId: Value(katMasuk),
+            waktuTransaksi: DateTime.now(),
+            catatan: const Value('Gaji paruh waktu'),
+            dibuatPada: Value(DateTime.now()),
+          ),
+        );
+    await basisData.into(basisData.tabelTransaksi).insert(
+          TabelTransaksiCompanion.insert(
+            id: 'tx_keluar_1',
             jenis: 'keluar',
             jumlahRupiah: 35000,
             dompetId: 'dmp_utama',
@@ -130,12 +144,12 @@ void main() {
     await tester.pumpAndSettle();
 
     // -------------------------------------------------------------------------
-    // 06. MISI PRAKTIK SELESAI + UMPAN BALIK
+    // 06. MISI PRAKTIK SELESAI + UMPAN BALIK ARUS KAS BULAN INI
     // -------------------------------------------------------------------------
     _sinyalkanLayar('06_misi_praktik_selesai_umpan_balik');
     await tester.runAsync(() => Future.delayed(const Duration(seconds: 4)));
 
-    // Tandai pelajaran 1.2 selesai di database progres
+    // Selesaikan pelajaran 1.2
     await basisData.into(basisData.tabelProgresPelajaran).insertOnConflictUpdate(
           TabelProgresPelajaranCompanion.insert(
             pelajaranId: 'anggaran_arus_kas_1_2',
@@ -148,6 +162,7 @@ void main() {
 
     // -------------------------------------------------------------------------
     // 07. KEMBALI KE PETA BELAJAR (PELAJARAN 1.3 TERKUNCI GERBANG DATA)
+    // Syarat 1.3: butuh 3 pengeluaran (saat ini baru ada 1 pengeluaran)
     // -------------------------------------------------------------------------
     tester.element(find.byType(Scaffold).first).go('/belajar');
     await tester.pumpAndSettle();
@@ -155,7 +170,46 @@ void main() {
     await tester.runAsync(() => Future.delayed(const Duration(seconds: 4)));
 
     // -------------------------------------------------------------------------
-    // 08. KUIS AKHIR MODUL
+    // CATAT 2 PENGELUARAN TAMBAHAN (TOTAL 3 PENGELUARAN) & LABELI KATEGORI
+    // -------------------------------------------------------------------------
+    await basisData.into(basisData.tabelTransaksi).insert(
+          TabelTransaksiCompanion.insert(
+            id: 'tx_keluar_2',
+            jenis: 'keluar',
+            jumlahRupiah: 50000,
+            dompetId: 'dmp_utama',
+            kategoriId: Value(katKeluar),
+            waktuTransaksi: DateTime.now(),
+            catatan: const Value('Belanja makan siang'),
+            dibuatPada: Value(DateTime.now()),
+          ),
+        );
+    await basisData.into(basisData.tabelTransaksi).insert(
+          TabelTransaksiCompanion.insert(
+            id: 'tx_keluar_3',
+            jenis: 'keluar',
+            jumlahRupiah: 20000,
+            dompetId: 'dmp_utama',
+            kategoriId: Value(katKeluar),
+            waktuTransaksi: DateTime.now(),
+            catatan: const Value('Beli pulsa'),
+            dibuatPada: Value(DateTime.now()),
+          ),
+        );
+
+    // Selesaikan pelajaran 1.3
+    await basisData.into(basisData.tabelProgresPelajaran).insertOnConflictUpdate(
+          TabelProgresPelajaranCompanion.insert(
+            pelajaranId: 'anggaran_arus_kas_1_3',
+            modulId: 'anggaran_arus_kas',
+            status: 'selesai',
+            dibuatPada: DateTime.now(),
+            selesaiPada: Value(DateTime.now()),
+          ),
+        );
+
+    // -------------------------------------------------------------------------
+    // 08. KUIS AKHIR MODUL (TERBUKA KARENA 1.2 DAN 1.3 SELESAI)
     // -------------------------------------------------------------------------
     tester.element(find.byType(Scaffold).first).push('/belajar/kuis/anggaran_arus_kas');
     await tester.pumpAndSettle();
@@ -163,7 +217,7 @@ void main() {
     await tester.runAsync(() => Future.delayed(const Duration(seconds: 4)));
 
     // -------------------------------------------------------------------------
-    // 09. HASIL KUIS SELESAI LULUS
+    // 09. HASIL KUIS SELESAI LULUS (4 DARI 5, 80%)
     // -------------------------------------------------------------------------
     // Catat hasil kuis lulus di database
     await basisData.into(basisData.tabelHasilKuis).insert(
@@ -174,17 +228,6 @@ void main() {
             total: 5,
             lulus: true,
             waktu: DateTime.now(),
-          ),
-        );
-
-    // Tandai juga pelajaran 1.3 selesai agar seluruh modul berstatus selesai
-    await basisData.into(basisData.tabelProgresPelajaran).insertOnConflictUpdate(
-          TabelProgresPelajaranCompanion.insert(
-            pelajaranId: 'anggaran_arus_kas_1_3',
-            modulId: 'anggaran_arus_kas',
-            status: 'selesai',
-            dibuatPada: DateTime.now(),
-            selesaiPada: Value(DateTime.now()),
           ),
         );
 

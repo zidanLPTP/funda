@@ -84,11 +84,9 @@ void main() {
       final total2 = hasil2.values.fold<int>(0, (a, b) => a + b);
       expect(total2, equals(100));
 
-      // Kasus pengeluaran 0
+      // Kasus pengeluaran 0: kembalikan Map kosong {} (tidak ada hasil)
       final hasilKosong = hitungKomposisiSifat({});
-      expect(hasilKosong['kebutuhan'], equals(0));
-      final totalKosong = hasilKosong.values.fold<int>(0, (a, b) => a + b);
-      expect(totalKosong, equals(0));
+      expect(hasilKosong.isEmpty, isTrue);
     });
 
     test('Peta objek ke rute pengisian lengkap dan benar', () {

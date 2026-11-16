@@ -5,6 +5,31 @@ Format penulisan mengacu pada standar Keep a Changelog dan penamaan commit Funda
 
 ---
 
+## [0.6.2] - 2026-11-16 — Penyelarasan & Pembuktian Sebenarnya (Tahap 4-R2)
+
+Tahap 4-R2: Penyelarasan ketat skema konten dengan spesifikasi, perbaikan penggunaan istilah teknis pada teks pelajaran, penguatan fungsi murni komposisi sifat dengan aturan pemecah seri deterministik, penambahan pengujian konten rusak dan pemeriksa bahasa lengkap, pemisahan skrip tangkapan layar emulator ke luar pengujian unit/widget, serta pengukuran profiling jujur siklus penuh Tab Belajar dan Beranda di emulator Pixel 8.
+
+### Ditambahkan
+- **Pengujian Lengkap Butir B (`test/fitur/pemeriksa_konten_rusak_test.dart` & `test/fitur/gerbang_dan_misi_lengkap_test.dart`):**
+  - Uji `hitungKomposisiSifat`: 3 bagian sama besar (pemecah seri deterministik), 1 sifat saja = 100%, 5 sifat tidak merata, tidak ada pengeluaran (mengembalikan Map kosong, bebas pembagian nol), nilai nominal besar (puluhan milyar Rupiah).
+  - Uji kelulusan kuis ambang 70%: 3 dari 5 GAGAL (60%), 4 dari 5 LULUS (80%), 6 dari 10 GAGAL (60%), 7 dari 10 LULUS (70%).
+  - Uji pembaca konten rusak dengan galat terstruktur menyebut berkas dan kolom: ID duplikat pada modul/kuis, format ID tidak stabil `<modul>_<nomor>`, referensi pelajaranId/gerbang tidak terdaftar, istilah `{{...}}` tidak ada di kamus, kartu > 3, durasi di luar 3..8 menit, jenis misi belum didukung.
+  - Uji pemeriksa bahasa: deteksi kata terlarang (*boros, bodoh, malas, ceroboh, payah*, frasa menyalahkan pengguna), deteksi teks polos istilah teknis (*surplus, defisit, aset, liabilitas*) tanpa `{{ }}`, serta peringatan kalimat > 25 kata.
+  - Uji kuis akhir terkunci selama pelajaran belum semua selesai (uji murni logika dan uji widget tombol disabled).
+- **Alat Bantu Tangkapan Layar Terpisah (`tool/ambil_tangkapan_layar.ps1`):**
+  - Mengambil tangkapan layar langsung dari framebuffer emulator via `adb exec-out screencap -p` di luar proses pengujian Flutter untuk mencegah pending timer dan interferensi I/O.
+
+### Diperbaiki
+- **Penyelarasan Teks Pelajaran & Kamus:**
+  - `anggaran_arus_kas_1_3.json`: Baris 44 diperbaiki dari teks polos `"defisit"` menjadi `"{{defisit}}"` agar memiliki interaktivitas tooltip kamus dan mematuhi aturan bahasa.
+  - `investasi_lanjutan/modul.json` & `proteksi_dasar/modul.json`: Deskripsi modul diperbarui menggantikan kata teknis "aset" dengan bahasa awam yang ramah ("alokasi instrumen", "barang berharga").
+  - `RegistriUmpanBalik`: Memastikan teks umpan balik `arus_kas_bulan_ini` dan `komposisi_sifat_bulan_ini` sepenuhnya bebas dari kata surplus/defisit, menggunakan kalimat awam "lebih besar" / "lebih kecil" disertai angka Rupiah.
+- **Pengukuran Profiling Jujur di Emulator Pixel 8:**
+  - Tab Belajar Siklus Lengkap (19 modul + 2 pelajaran + kueri foto data + evaluasi gerbang): Median **19.61 ms** (5k transaksi) dan **26.31 ms** (20k transaksi), terburuk 34.65 ms (memenuhi target < 50 ms).
+  - Beranda Kueri Paralel: Median **17.86 ms** (5k transaksi) dan **13.24 ms** (20k transaksi), kenaikan waktu **-25.8%** (konstan O(1), memenuhi target < 60 ms dan kenaikan < 25%).
+
+---
+
 ## [0.6.1] - 2026-11-16 — Revisi & Pembuktian Mesin Belajar (Tahap 4-R)
 
 Tahap 4-R: Revisi menyeluruh dan pembuktian performa empiris mesin belajar di emulator Android (Pixel 8, API 36). Mengoptimalkan kueri agregasi SQL Beranda dan foto data pengguna sehingga waktu muat Beranda pada 20.000 transaksi turun drastis ke median 14.46 ms (jauh melampaui target < 60 ms), kenaikan waktu beban data 4x (5k -> 20k) bersifat konstan O(1) (-17.3%, di bawah batas 25%), Tab Belajar 19 modul stabil di median 1.32 ms, migrasi skema basis data versi 8 (4 indeks komposit baru), pengujian validasi gerbang data menyeluruh (14 uji), pemeriksa otomatis konten rusak (12 kasus) dan pemeriksa bahasa untuk seluruh berkas kurikulum statis, serta dokumentasi tangkapan layar emulator baru.
