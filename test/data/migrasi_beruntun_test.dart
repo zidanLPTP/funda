@@ -5,7 +5,7 @@ import 'package:funda/data/basis_data.dart';
 
 void main() {
   group(
-    'Langkah 0(d): Uji Migrasi Beruntun Bertingkat (v1 -> v2 -> v3 -> v4 -> v5)',
+    'Langkah 0(d): Uji Migrasi Beruntun Bertingkat (v1 -> v2 -> v3 -> v4 -> v5 -> v6)',
     () {
       late BasisDataFunda basisData;
       late Migrator migrator;
@@ -164,7 +164,31 @@ void main() {
               );
 
           // -------------------------------------------------------------
-          // VERIFIKASI KEUTUHAN DATA KESELURUHAN SETELAH v5
+          // 6. MIGRASI v5 -> v6 (Tahap 3C-R: Jatuh Tempo Pertama, Berakhir Pada, Opsional Nominal)
+          // -------------------------------------------------------------
+          await basisData.migration.onUpgrade(migrator, 5, 6);
+
+          // Masukkan tagihan v6 dengan nominal fluktuatif (null) dan batas berakhir
+          final waktuV6 = DateTime(2026, 4, 1);
+          final batasAkhirV6 = DateTime(2026, 12, 31);
+          await basisData
+              .into(basisData.tabelTagihan)
+              .insert(
+                TabelTagihanCompanion.insert(
+                  id: 'tag_v6',
+                  nama: 'Listrik Pasca Bayar',
+                  jenis: 'tagihan',
+                  jumlahPerkiraanRupiah: const Value(null),
+                  kategoriId: katMakan,
+                  frekuensi: 'bulanan',
+                  jatuhTempoPertama: waktuV6,
+                  berakhirPada: Value(batasAkhirV6),
+                  dibuatPada: waktuV6,
+                ),
+              );
+
+          // -------------------------------------------------------------
+          // VERIFIKASI KEUTUHAN DATA KESELURUHAN SETELAH v6
           // -------------------------------------------------------------
 
           // 1. Data v1 (pengaturan) utuh
@@ -213,13 +237,23 @@ void main() {
           expect(utang.sisaAwalRupiah, equals(12000000));
 
           // 5. Data v5 (tagihan & pengaturan bawaan pengingat) utuh
-          final tagihan = await (basisData.select(
+          final tagihanV5 = await (basisData.select(
             basisData.tabelTagihan,
           )..where((t) => t.id.equals('tag_v5'))).getSingleOrNull();
-          expect(tagihan, isNotNull);
-          expect(tagihan!.nama, equals('Internet Rumah Indihome'));
+          expect(tagihanV5, isNotNull);
+          expect(tagihanV5!.nama, equals('Internet Rumah Indihome'));
+          expect(tagihanV5.jatuhTempoPertama, equals(waktuV5));
 
-          // Verifikasi pengaturan default pengingat terinisialisasi di v5
+          // 6. Data v6 tersimpan dengan baik
+          final tagihanV6 = await (basisData.select(
+            basisData.tabelTagihan,
+          )..where((t) => t.id.equals('tag_v6'))).getSingleOrNull();
+          expect(tagihanV6, isNotNull);
+          expect(tagihanV6!.nama, equals('Listrik Pasca Bayar'));
+          expect(tagihanV6.jumlahPerkiraanRupiah, isNull);
+          expect(tagihanV6.berakhirPada, equals(batasAkhirV6));
+
+          // Verifikasi pengaturan default pengingat terinisialisasi di v5/v6
           expect(
             await basisData.bacaPengaturan('pengingat_aktif'),
             equals('false'),

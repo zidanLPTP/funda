@@ -1,8 +1,10 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '../../../komponen/komponen_funda.dart';
 import '../../../layanan/pengingat/penyedia_layanan_pengingat.dart';
+import '../../../perhitungan/perhitungan_tagihan.dart';
 import '../../../tema/token.dart';
 import '../kontroler/penyedia_pengaturan.dart';
 
@@ -74,6 +76,28 @@ class _LayarPengaturanState extends ConsumerState<LayarPengaturan> {
           ),
         );
       }
+    }
+  }
+
+  Future<void> _jadwalkanPengingatUjiDebug() async {
+    final layanan = ref.read(penyediaLayananPengingat);
+    await layanan.mintaIzin();
+    final waktuUji = DateTime.now().add(const Duration(minutes: 2));
+    final rencanaUji = RencanaPengingat(
+      idStabil: 999999,
+      waktuTayang: waktuUji,
+      judul: 'Uji Pengingat Funda',
+      isi:
+          'Pengingat tagihan uji 2 menit berhasil muncul! Ketuk untuk buka jadwal tagihan.',
+      tujuanPayload: '/tagihan',
+    );
+    await layanan.jadwalkanPengingat(rencanaUji);
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Pengingat uji dijadwalkan untuk 2 menit ke depan.'),
+        ),
+      );
     }
   }
 
@@ -193,9 +217,58 @@ class _LayarPengaturanState extends ConsumerState<LayarPengaturan> {
                   const TeksFunda.catatan(
                     '2. Hemat Energi (Inexact Alarm)\nNotifikasi menggunakan penjadwalan ramah baterai yang diselaraskan dengan siklus istirahat sistem operasi Android.',
                   ),
+                  const SizedBox(height: SpasiFunda.xs),
+                  const TeksFunda.catatan(
+                    '3. Jendela Pengingat 45 Hari\nPengingat dijadwalkan sampai 45 hari ke depan, jadi buka Funda sedikitnya sebulan sekali agar jadwal pengingatmu selalu terbarui.',
+                  ),
                 ],
               ),
             ),
+
+            if (kDebugMode) ...[
+              const SizedBox(height: SpasiFunda.m),
+              PetakBento(
+                anak: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(SpasiFunda.xs),
+                          decoration: BoxDecoration(
+                            color: WarnaFunda.permukaan,
+                            borderRadius: BorderRadius.circular(
+                              SudutFunda.kecil,
+                            ),
+                          ),
+                          child: const Icon(
+                            LucideIcons.flaskConical,
+                            color: WarnaFunda.peringatan,
+                            size: 20,
+                          ),
+                        ),
+                        const SizedBox(width: SpasiFunda.s),
+                        const Expanded(
+                          child: TeksFunda.label(
+                            'Alat Pengujian Notifikasi (Debug)',
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: SpasiFunda.s),
+                    const TeksFunda.catatan(
+                      'Jadwalkan satu pengingat uji yang akan muncul tepat 2 menit lagi untuk verifikasi notifikasi di perangkat atau emulator.',
+                    ),
+                    const SizedBox(height: SpasiFunda.m),
+                    TombolFunda.sekunder(
+                      teks: 'Jadwalkan Pengingat Uji (2 Menit Lagi)',
+                      lebarPenuh: true,
+                      padaTekan: _jadwalkanPengingatUjiDebug,
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ],
         ),
       ),

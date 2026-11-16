@@ -132,7 +132,7 @@ class LayananPengingatNyata implements LayananPengingat {
       body: rencana.isi,
       scheduledDate: waktuLokal,
       notificationDetails: notificationDetails,
-      androidScheduleMode: AndroidScheduleMode.inexact,
+      androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
       payload: rencana.tujuanPayload,
     );
   }

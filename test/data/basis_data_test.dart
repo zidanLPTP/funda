@@ -16,8 +16,8 @@ void main() {
   });
 
   group('BasisDataFunda & TabelPengaturan', () {
-    test('skema versi 5 terdaftar pada basis data', () async {
-      expect(basisData.schemaVersion, equals(5));
+    test('skema versi 6 terdaftar pada basis data', () async {
+      expect(basisData.schemaVersion, equals(6));
 
       final nilaiAwal = await basisData.bacaPengaturan('sudah_onboarding');
       expect(nilaiAwal, isNull);
@@ -247,5 +247,50 @@ void main() {
       final daftarUtang = await basisData.select(basisData.tabelUtang).get();
       expect(daftarUtang, isEmpty);
     });
+
+    test(
+      'Migrasi Bertingkat Skema v5 -> v6 aman, idempoten, dan menjaga data tagihan',
+      () async {
+        final migrator = Migrator(basisData);
+        // Buat tabel sampai v5
+        await migrator.createTable(basisData.tabelDompet);
+        await migrator.createTable(basisData.tabelKategori);
+        await basisData.migration.onUpgrade(migrator, 4, 5);
+
+        // Masukkan data tagihan di v5
+        final daftarKat = await basisData.select(basisData.tabelKategori).get();
+        final katId = daftarKat.first.id;
+        final waktuDibuat = DateTime(2026, 3, 10);
+        await basisData
+            .into(basisData.tabelTagihan)
+            .insert(
+              TabelTagihanCompanion.insert(
+                id: 'tag_test_v5',
+                nama: 'Spotify Premium',
+                jenis: 'langganan',
+                jumlahPerkiraanRupiah: const Value(54990),
+                kategoriId: katId,
+                frekuensi: 'bulanan',
+                jatuhTempoPertama: waktuDibuat,
+                dibuatPada: waktuDibuat,
+              ),
+            );
+
+        // Jalankan migrasi v5 -> v6
+        await basisData.migration.onUpgrade(migrator, 5, 6);
+
+        // Verifikasi data tagihan v5 tetap utuh
+        final tagihan = await (basisData.select(
+          basisData.tabelTagihan,
+        )..where((t) => t.id.equals('tag_test_v5'))).getSingleOrNull();
+        expect(tagihan, isNotNull);
+        expect(tagihan!.nama, equals('Spotify Premium'));
+        expect(tagihan.jumlahPerkiraanRupiah, equals(54990));
+        expect(tagihan.jatuhTempoPertama, equals(waktuDibuat));
+
+        // Jalankan lagi (idempoten)
+        await basisData.migration.onUpgrade(migrator, 5, 6);
+      },
+    );
   });
 }

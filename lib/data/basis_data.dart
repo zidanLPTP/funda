@@ -44,7 +44,7 @@ class BasisDataFunda extends _$BasisDataFunda {
     : super(pelaksanaKueri ?? _bukaKoneksi());
 
   @override
-  int get schemaVersion => 5;
+  int get schemaVersion => 6;
 
   @override
   MigrationStrategy get migration {
@@ -157,6 +157,32 @@ class BasisDataFunda extends _$BasisDataFunda {
           'ON tabel_pembayaran_tagihan (tagihan_id, jatuh_tempo);',
         );
         await _seedPengaturanAwal();
+        break;
+      case 6:
+        // Migrasi Skema Versi 6 (Tahap 3C-R):
+        // Memastikan kolom jatuh_tempo_pertama dan berakhir_pada ada di tabel_tagihan.
+        // Data lama diisi tanggal jatuh tempo pertama dari dibuat_pada.
+        final kolomTagihan = await customSelect(
+          "PRAGMA table_info('tabel_tagihan');",
+        ).get();
+        final namaKolom = kolomTagihan
+            .map((k) => k.read<String>('name'))
+            .toSet();
+
+        if (!namaKolom.contains('jatuh_tempo_pertama')) {
+          await customStatement(
+            'ALTER TABLE tabel_tagihan ADD COLUMN jatuh_tempo_pertama INTEGER;',
+          );
+          await customStatement(
+            'UPDATE tabel_tagihan SET jatuh_tempo_pertama = dibuat_pada WHERE jatuh_tempo_pertama IS NULL;',
+          );
+        }
+
+        if (!namaKolom.contains('berakhir_pada')) {
+          await customStatement(
+            'ALTER TABLE tabel_tagihan ADD COLUMN berakhir_pada INTEGER;',
+          );
+        }
         break;
       default:
         break;

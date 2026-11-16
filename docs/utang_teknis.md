@@ -39,23 +39,29 @@ Dokumen ini mencatat keputusan teknis sementara, kompromi dependensi, dan hal-ha
 
 ---
 
-## 5. Ambang Rasio Cicilan Sehat 30% (Tahap 3B)
+## 5. Ambang Rasio Cicilan Aturan Praktis 30% (Tahap 3B & 3C-R)
 
 - **Konteks:**
-  Spesifikasi Tahap 3B menghendaki penghitungan rasio cicilan terhadap rata-rata pemasukan 3 bulan terakhir. Acuan umum industri perbankan menganggap rasio cicilan <= 30% masih dalam kategori wajar.
+  Spesifikasi Tahap 3B & 3C menghendaki penghitungan rasio cicilan terhadap rata-rata pemasukan 3 bulan terakhir. Acuan umum industri perbankan menganggap rasio cicilan <= 30% sebagai batas aturan praktis (*rule of thumb*).
 - **Keputusan:**
-  Nilai 30% disimpan sebagai konstanta `ambangBatasRasioCicilanSehat = 30; // TODO-VERIFIKASI`. Di antarmuka pengguna (Layar Utang dan Beranda), angka persentase ditampilkan apa adanya secara netral (*"Bagian dari pemasukanmu yang dipakai untuk cicilan"*) tanpa memberi label aman/bahaya/lampu merah/hijau, menunggu materi edukasi kurikulum resmi pada Tahap 8.
+  Nilai 30% disimpan sebagai konstanta `ambangRasioCicilanAturanPraktis = 30; // TODO-VERIFIKASI` di `lib/perhitungan/perhitungan_utang_dashboard.dart`. Di antarmuka pengguna (Layar Utang dan Beranda), angka persentase ditampilkan apa adanya secara netral (*"Bagian dari pemasukanmu yang dipakai untuk cicilan"*) tanpa memberi label aman/bahaya/lampu merah/hijau, menunggu materi edukasi kurikulum resmi pada Tahap 8.
 
 ---
 
-## 6. Arsitektur Pengingat Lokal Inexact & Sinkronisasi (Tahap 3C)
+## 6. Arsitektur Pengingat Lokal Inexact & Batasan 45 Hari (Tahap 3C-R)
 
 - **Konteks:**
-  Aplikasi Funda adalah aplikasi pencatatan keuangan lokal tanpa server (*offline-first*). Tagihan berulang memerlukan pengingat jatuh tempo yang andal namun tidak boleh boros baterai atau memicu penolakan Google Play karena izin alarm presisi (*exact alarm*).
+  Aplikasi Funda adalah aplikasi pencatatan keuangan lokal tanpa server (*offline-first*). Tagihan berulang memerlukan pengingat jatuh tempo yang andal tanpa memboroskan baterai atau memicu penolakan kebijakan Google Play Store terkait izin alarm presisi (*exact alarm*).
 - **Keputusan:**
-  1. Penjadwalan pengingat menggunakan `androidScheduleMode: AndroidScheduleMode.inexact` via pustaka `flutter_local_notifications`. Hal ini tidak membutuhkan izin sensitif `SCHEDULE_EXACT_ALARM` atau `USE_EXACT_ALARM` yang dibatasi ketat oleh Google Play.
-  2. Notifikasi dijadwalkan secara deterministik untuk rentang waktu hingga 60 hari ke depan berdasarkan preferensi jam notifikasi dan hari pengingat (H-3, H-1, Hari H).
-  3. Konfigurasi `RECEIVE_BOOT_COMPLETED` disertakan agar saat perangkat Android dihidupkan ulang, layanan dapat menjadwalkan ulang pengingat yang tersimpan.
-  4. Permintaan izin notifikasi Android 13+ tidak dimunculkan di awal instalasi aplikasi, melainkan hanya diminta saat pengguna mengaktifkan saklar pengingat di layar Pengaturan (*permission just-in-time*).
+  1. Penjadwalan pengingat menggunakan `androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle` via pustaka `flutter_local_notifications`. Mode ini memanfaatkan `AlarmManager.setAndAllowWhileIdle()`, sehingga notifikasi tetap dapat membangunkan perangkat dari mode Doze tanpa memerlukan izin sensitif `SCHEDULE_EXACT_ALARM` atau `USE_EXACT_ALARM`.
+  2. Batasan Jendela Penjadwalan: Pengingat dijadwalkan secara deterministik untuk rentang **45 hari ke depan** dengan **kuota maksimal 50 slot pengingat aktif** (diprioritaskan pada jadwal kemunculan terdekat). Pemilihan 45 hari memastikan kuota OS tidak penuh dan sinkronisasi berkala dapat dilakukan setiap kali aplikasi dibuka.
+  3. Pilihan hari pengingat divalidasi ketat pada himpunan `{0, 1, 3, 7}` hari sebelum jatuh tempo.
+  4. ID Notifikasi dihitung secara deterministik dan unik menggunakan fungsi hash `(sumber, idSumber, tanggalJatuhTempo, selisihHari)`.
+  5. Konfigurasi `ScheduledNotificationReceiver` dan `ScheduledNotificationBootReceiver` disertakan di `AndroidManifest.xml` bersama `RECEIVE_BOOT_COMPLETED` agar saat perangkat Android dihidupkan ulang, sistem dapat menjadwalkan ulang alarm yang tersimpan.
+  6. Privasi Pengguna: Notifikasi secara default tidak menampilkan nominal uang (*"Tagihan Listrik PLN jatuh tempo hari ini"*) kecuali opsi "Tampilkan nominal tagihan di notifikasi" diaktifkan secara eksplisit oleh pengguna di Layar Pengaturan.
+  7. Izin notifikasi Android 13+ (*POST_NOTIFICATIONS*) tidak diminta secara agresif di awal instalasi, melainkan hanya saat pengguna mengaktifkan saklar pengingat (*just-in-time*).
+- **Catatan Platform & Risiko:**
+  - *Vendor OEM Android:* Pengoptimalan baterai agresif pada sistem operasi berbasis vendor OEM tertentu (misal MIUI/HyperOS, ColorOS, FunTouchOS, OneUI) dapat menangguhkan proses latar belakang dan alarm inexact jika aplikasi tidak diberikan pengecualian baterai (*Unrestricted*). Edukasi dan teks bantu telah disediakan di Layar Pengaturan.
+  - *Keterbatasan Pengujian iOS:* Karena lingkungan pengembangan saat ini berjalan di Windows, pengujian platform iOS dibatasi pada validasi sintaks Dart/kompatibilitas kode. Pengujian integrasi langsung sistem notifikasi iOS (`UNUserNotificationCenter`) memerlukan mesin macOS dengan Xcode aktif.
 - **Rencana Peninjauan:**
-  Pada rilis mendatang saat fitur cadangan/pemulihan data lokal diterapkan, pastikan status saklar preferensi pengingat dan riwayat penandaan tagihan ikut tersimpan dalam berkas cadangan JSON terenkripsi.
+  Pada rilis mendatang (Tahap 7 - Cadangan & Ekspor), pastikan entri di `tabel_pengaturan` (status aktif pengingat, jam pengingat, preferensi nominal) ikut disertakan dalam format cadangan JSON terenkripsi.

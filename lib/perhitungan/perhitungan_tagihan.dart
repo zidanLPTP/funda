@@ -67,6 +67,23 @@ class ItemKalkulasiJadwal {
   final String? idUtang;
 }
 
+/// Representasi data cicilan utang untuk penggabungan jadwal murni.
+class CicilanUtangKalkulasi {
+  const CicilanUtangKalkulasi({
+    required this.idUtang,
+    required this.nama,
+    required this.cicilanBulananRupiah,
+    required this.tanggalJatuhTempoBulanan,
+    this.daftarWaktuPembayaran = const [],
+  });
+
+  final String idUtang;
+  final String nama;
+  final int cicilanBulananRupiah;
+  final int tanggalJatuhTempoBulanan;
+  final List<DateTime> daftarWaktuPembayaran;
+}
+
 /// Ringkasan keuangan tagihan untuk periode satu bulan kalender.
 class RingkasanBulanTagihan {
   const RingkasanBulanTagihan({
@@ -116,22 +133,53 @@ class RencanaPengingat {
   final String tujuanPayload;
 }
 
+/// Nilai pilihan hari pengingat yang valid sesuai spesifikasi Funda {0, 1, 3, 7}.
+const Set<int> pilihanHariPengingatValid = {0, 1, 3, 7};
+
 /// Serialisasi daftar hari pengingat {0, 1, 3, 7} ke format string JSON.
+/// Menghilangkan duplikat, menyaring nilai tidak valid, dan mengurutkan secara menaik.
 String serialisasiHariPengingat(List<int> daftar) {
-  final terurut = List<int>.from(daftar)..sort();
-  return jsonEncode(terurut);
+  final valid =
+      daftar
+          .toSet()
+          .where((e) => pilihanHariPengingatValid.contains(e))
+          .toList()
+        ..sort();
+  return jsonEncode(valid);
 }
 
-/// Deserialisasi string JSON daftar hari pengingat kembali ke daftar bilangan bulat hari.
+/// Deserialisasi string JSON atau teks daftar hari pengingat kembali ke daftar bilangan bulat hari.
+/// Menyaring nilai tidak valid, membuang duplikat, dan mengurutkan secara menaik.
 List<int> uraiHariPengingat(String? jsonStr) {
   if (jsonStr == null || jsonStr.trim().isEmpty) return const [];
-  try {
-    final list = jsonDecode(jsonStr);
-    if (list is List) {
-      return list.map((e) => int.parse(e.toString())).toList()..sort();
+  final hasilSet = <int>{};
+  final dipangkas = jsonStr.trim();
+
+  if (dipangkas.startsWith('[')) {
+    try {
+      final list = jsonDecode(dipangkas);
+      if (list is List) {
+        for (final item in list) {
+          final angka = int.tryParse(item.toString());
+          if (angka != null && pilihanHariPengingatValid.contains(angka)) {
+            hasilSet.add(angka);
+          }
+        }
+      }
+    } catch (_) {}
+  } else {
+    // Format teks dipisah koma (misal: "0,1,3")
+    final bagian = dipangkas.split(',');
+    for (final b in bagian) {
+      final angka = int.tryParse(b.trim());
+      if (angka != null && pilihanHariPengingatValid.contains(angka)) {
+        hasilSet.add(angka);
+      }
     }
-  } catch (_) {}
-  return const [];
+  }
+
+  final hasil = hasilSet.toList()..sort();
+  return hasil;
 }
 
 /// Menghitung seluruh tanggal jatuh tempo dalam rentang waktu kalender lokal.
@@ -296,6 +344,72 @@ HasilStatusJatuhTempo tentukanStatusJatuhTempo({
   }
 }
 
+/// Menggabungkan jadwal tagihan dan cicilan utang bulanan secara murni.
+List<ItemKalkulasiJadwal> gabungkanJadwal({
+  required List<ItemKalkulasiJadwal> daftarTagihan,
+  required List<CicilanUtangKalkulasi> daftarUtang,
+  required DateTime mulai,
+  required DateTime selesai,
+  required DateTime hariIni,
+}) {
+  final hasil = <ItemKalkulasiJadwal>[...daftarTagihan];
+
+  for (final utang in daftarUtang) {
+    final targetHari = utang.tanggalJatuhTempoBulanan;
+    if (targetHari < 1 || targetHari > 31) continue;
+
+    var tahun = mulai.year;
+    var bulan = mulai.month;
+
+    while (true) {
+      final hariMaksimal = DateTime(tahun, bulan + 1, 0).day;
+      final tJatuh = DateTime(tahun, bulan, math.min(targetHari, hariMaksimal));
+
+      if (tJatuh.isAfter(selesai)) break;
+
+      if (!tJatuh.isBefore(mulai)) {
+        final sudahBayarBulanIni = utang.daftarWaktuPembayaran.any(
+          (waktu) => waktu.year == tahun && waktu.month == bulan,
+        );
+
+        final statusEvaluasi = tentukanStatusJatuhTempo(
+          tanggalJatuhTempo: tJatuh,
+          hariIni: hariIni,
+          statusTersimpan: sudahBayarBulanIni ? 'dibayar' : null,
+        );
+
+        hasil.add(
+          ItemKalkulasiJadwal(
+            idTagihan: 'utang_${utang.idUtang}',
+            nama: 'Cicilan ${utang.nama}',
+            tanggal: tJatuh,
+            jumlahPerkiraanRupiah: utang.cicilanBulananRupiah,
+            status: statusEvaluasi.status,
+            isCicilanUtang: true,
+            idUtang: utang.idUtang,
+            hariSebelumPengingat: const [0, 1, 3],
+          ),
+        );
+      }
+
+      bulan++;
+      if (bulan > 12) {
+        bulan = 1;
+        tahun++;
+      }
+    }
+  }
+
+  hasil.sort((a, b) {
+    if (a.tanggal == null && b.tanggal == null) return 0;
+    if (a.tanggal == null) return 1;
+    if (b.tanggal == null) return -1;
+    return a.tanggal!.compareTo(b.tanggal!);
+  });
+
+  return hasil;
+}
+
 /// Menghitung ringkasan tagihan untuk satu bulan kalender.
 RingkasanBulanTagihan hitungRingkasanBulanTagihan(
   List<ItemKalkulasiJadwal> daftarItem,
@@ -346,9 +460,10 @@ List<RencanaPengingat> rencanakanPengingat({
   final batasJendela = sekarang.add(const Duration(days: 45));
 
   for (final item in daftarJadwal) {
-    // Lewati item yang sudah ditandai selesai/dilewati atau kedaluwarsa
+    // Lewati item yang sudah ditandai selesai/dilewati, sudah lewat, atau tanggal kosong
     if (item.status == StatusKemunculan.dibayar ||
         item.status == StatusKemunculan.dilewati ||
+        item.status == StatusKemunculan.lewat ||
         item.status == StatusKemunculan.lewatKedaluwarsa ||
         item.tanggal == null) {
       continue;
@@ -371,9 +486,10 @@ List<RencanaPengingat> rencanakanPengingat({
       }
 
       // ID deterministik stabil integer 32-bit:
-      // Kombinasi hash idTagihan + tanggalJatuhTempo + hariSebelum
+      // Kombinasi hash sumber + idTagihan + tanggalJatuhTempo + hariSebelum
+      final sumber = item.isCicilanUtang ? 'utang' : 'tagihan';
       final kunci =
-          '${item.idTagihan}_${jatuhTempo.year}${jatuhTempo.month.toString().padLeft(2, '0')}${jatuhTempo.day.toString().padLeft(2, '0')}_$hariSebelum';
+          '${sumber}_${item.idTagihan}_${jatuhTempo.year}${jatuhTempo.month.toString().padLeft(2, '0')}${jatuhTempo.day.toString().padLeft(2, '0')}_$hariSebelum';
       final idStabil = (kunci.hashCode & 0x7FFFFFFF);
 
       // Judul ramah

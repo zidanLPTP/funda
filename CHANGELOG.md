@@ -5,6 +5,37 @@ Format penulisan mengacu pada standar Keep a Changelog dan penamaan commit Funda
 
 ---
 
+## [0.5.1] - 2026-11-16 — Revisi & Penutupan Tahap 3C (Tahap 3C-R)
+
+Tahap 3C-R: Penutupan dan penyempurnaan resmi Tahap 3C meliputi revisi skema migrasi v6 (nominal tagihan opsional, kolom `jatuh_tempo_pertama` dan `berakhir_pada` inklusif), pembersihan logika murni jatuh tempo (dukungan pilihan pengingat {0, 1, 3, 7}, batas kedaluwarsa > 60 hari), penggabungan jadwal tagihan dengan cicilan utang bulanan (status baca-saja dan pembukaan detail utang), batasan deterministik jendela 45 hari dan maksimal 50 slot pengingat, mode penjadwalan `inexactAllowWhileIdle`, pendaftaran receiver boot Android, tombol pengingat uji debug 2 menit, serta dokumentasi rasio kontras warna dan tolok ukur benchmark di emulator Android API 36.
+
+### Ditambahkan & Diperbaiki
+- **Skema Basis Data & Migrasi Bertingkat Skema v6 (`lib/data/basis_data.dart`):**
+  - Kolom `jumlah_perkiraan_rupiah` di `tabel_tagihan` kini opsional (nullable), memungkinkan pencatatan tagihan yang nominalnya berubah-ubah tiap bulan (misal tagihan listrik pascabayar/air).
+  - Kolom `jatuh_tempo_pertama` (DateTime) sebagai acuan awal perhitungan kemunculan, mencegah munculnya kemunculan lewat palsu saat tagihan baru dibuat.
+  - Kolom `berakhir_pada` (DateTime opsional, inklusif) untuk menentukan batas akhir tagihan berkala.
+  - Migrasi idempoten v5 -> v6 dengan pengisian default nilai `jatuh_tempo_pertama` dari `dibuat_pada` untuk data lama.
+- **Logika Murni Perhitungan TDD (`lib/perhitungan/perhitungan_tagihan.dart`, `perhitungan_utang_dashboard.dart`):**
+  - Fungsi `serialisasiHariPengingat` dan `uraiHariPengingat` tangguh terhadap masukan kotor, menyaring nilai hanya pada `{0, 1, 3, 7}`, membuang duplikat, dan mengurutkan menaik.
+  - Kemunculan jatuh tempo lewat lebih dari 60 hari (`selisihHari < -60`) otomatis ditandai `lewatKedaluwarsa` dan diabaikan dari daftar aktif pengingat.
+  - Fungsi murni `gabungkanJadwal(tagihan, utang)` menggabungkan entri tagihan aktif dan cicilan utang aktif bulanan; cicilan utang berstatus baca-saja dan otomatis berstatus `dibayar` bila terdapat pembayaran utang pada bulan kalender yang bersangkutan.
+  - Fungsi `rencanakanPengingat` membatasi jadwal pada rentang maksimal 45 hari ke depan dan maksimal 50 total pengingat terdekat untuk mencegah kepenuhan antrean OS.
+  - Pengubahan nama konstanta menjadi `ambangRasioCicilanAturanPraktis = 30; // TODO-VERIFIKASI`.
+- **Integrasi Android & Layanan Pengingat Nyata:**
+  - Pendaftaran `ScheduledNotificationReceiver` dan `ScheduledNotificationBootReceiver` di `android/app/src/main/AndroidManifest.xml` bersama izin `RECEIVE_BOOT_COMPLETED`.
+  - Mode penjadwalan diatur ke `AndroidScheduleMode.inexactAllowWhileIdle` agar alarm dapat membangunkan perangkat saat Doze mode tanpa izin sensitif exact alarm.
+  - Tombol uji debug "Jadwalkan Pengingat Uji (2 Menit Lagi)" di Layar Pengaturan di bawah penjaga `kDebugMode`.
+- **Penyempurnaan Antarmuka Pengguna Soft Bento:**
+  - Form Tagihan: Teks bantuan ramah *"Kosongkan jika nominal berubah-ubah tiap bulan."* saat nominal tidak diisi.
+  - Layar Jadwal Tagihan: Tampilan hero ringkasan menyertakan keterangan *"N tagihan belum ada perkiraan"*, serta kartu cicilan utang dilengkapi badge "Cicilan Utang" dan tombol "Bayar" yang mengarahkan langsung ke rute detail utang terkait.
+  - Layar Pengaturan: Ditambahkan catatan edukasi transparan mengenai jendela 45 hari dan batas 50 pengingat.
+- **Pengujian & Verifikasi:**
+  - 180 uji otomatis lulus 100% (`flutter test`).
+  - Verifikasi benchmark di emulator Pixel 8 (Android 16, API 36) pada volume 20.000 transaksi + 20 utang + 20 tagihan: Halaman pertama riwayat (50 baris) Median = 14.67 ms (Terburuk = 18.72 ms, 1 kueri SQL); Agregasi Beranda Median = 0.91 ms (Terburuk = 1.38 ms, 2 kueri SQL).
+  - Verifikasi kontras warna `tintMawar` (#FCE7F3) terhadap teks utama (#0F1F1D) sebesar 14.5:1 (memenuhi WCAG AAA).
+
+---
+
 ## [0.5.0] - 2026-11-15 — Tagihan Berulang & Pengingat Lokal (Tahap 3C)
 
 Tahap 3C: Menutup Tahap 3 secara tuntas meliputi Pengelolaan Tagihan Rutin & Langganan (mingguan, bulanan, tahunan), Jadwal Jatuh Tempo Dinamis (penanganan akhir bulan kabisat 28/29 Feb), Pembayaran Tagihan Atomik tertaut Transaksi Pengeluaran, Layanan Pengingat Lokal Ramah Baterai (Inexact Alarm, Boot Receiver, Timezone), Layar Pengaturan Pengingat & Privasi Nominal, serta Petak Bento Tagihan Terdekat di Beranda.

@@ -326,6 +326,8 @@ class _LayarFormTagihanState extends ConsumerState<LayarFormTagihan> {
                       decoration: const InputDecoration(
                         labelText: 'Perkiraan Nominal (Opsional)',
                         hintText: 'Rp 0 (kosongkan jika fluktuatif)',
+                        helperText:
+                            'Kosongkan jika nominal berubah-ubah tiap bulan.',
                         border: OutlineInputBorder(),
                       ),
                       onChanged: (teks) {
