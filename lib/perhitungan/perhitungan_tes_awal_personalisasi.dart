@@ -1,4 +1,15 @@
 import '../fitur/belajar/model/pembaca_konten.dart';
+import 'perhitungan_belajar.dart';
+
+/// Konstanta heuristik urutan saran personalisasi (bukan penilaian atau nasihat keuangan).
+const String alasanSkorTesRendah = 'skor_tes_rendah';
+const String alasanPunyaUtangTercatat = 'punya_utang_tercatat';
+const String alasanDanaDaruratKosong = 'dana_darurat_kosong';
+const String alasanKeinginanTerbesar = 'keinginan_terbesar';
+const String alasanBelumAdaModulSelesai = 'belum_ada_modul_selesai';
+
+/// Ambang kelulusan kuis untuk mengidentifikasi topik yang perlu diperdalam.
+const int ambangLulusKuis = 70;
 
 /// Hasil perhitungan skor tes awal.
 class HasilSkorTesAwal {
@@ -139,116 +150,128 @@ ProfilKeuanganSnapshot bangunProfil({
 /// Item rekomendasi hasil evaluasi personalisasi.
 class ModulRekomendasi {
   final String modulId;
-  final String kodeAlasan;
-  final int prioritas;
+  final List<String> kodeAlasan;
+  final bool tersedia;
+  final bool terbuka;
+  final List<String> apaYangKurang;
 
   const ModulRekomendasi({
     required this.modulId,
     required this.kodeAlasan,
-    required this.prioritas,
+    required this.tersedia,
+    required this.terbuka,
+    this.apaYangKurang = const [],
   });
+
+  /// Kode alasan utama untuk kompatibilitas tampilan.
+  String get kodeAlasanUtama => kodeAlasan.isNotEmpty ? kodeAlasan.first : '';
 }
 
-/// Menghitung rekomendasi modul berdasarkan profil dan skor tes awal (maks 3 modul).
+/// Menghitung rekomendasi modul berdasarkan profil, hasil tes awal, dan foto data (maksimal 3 modul).
 List<ModulRekomendasi> rekomendasiModul({
-  required ProfilKeuanganSnapshot profil,
-  required Map<String, int> skorPerModul,
-  required Set<String> modulSelesai,
+  ProfilKeuanganSnapshot? profil,
+  HasilSkorTesAwal? hasilTes,
+  required FotoDataPengguna fotoData,
+  required List<ModulKonten> daftarModul,
+  required Map<String, HasilStatusBelajar> statusModul,
 }) {
-  final daftarKandidat = <ModulRekomendasi>[];
-
-  // Aturan 1: Jika punya utang 'ya', prioritaskan utang_cicilan
-  if (profil.punyaUtang == 'ya' && !modulSelesai.contains('utang_cicilan')) {
-    daftarKandidat.add(
-      const ModulRekomendasi(
-        modulId: 'utang_cicilan',
-        kodeAlasan: 'ada_utang',
-        prioritas: 1,
-      ),
-    );
-  }
-
-  // Aturan 2: Jika dana darurat 'belum', prioritaskan dana_darurat
-  if (profil.danaDarurat == 'belum' && !modulSelesai.contains('dana_darurat')) {
-    daftarKandidat.add(
-      const ModulRekomendasi(
-        modulId: 'dana_darurat',
-        kodeAlasan: 'dana_darurat_kosong',
-        prioritas: 2,
-      ),
-    );
-  }
-
-  // Aturan 3: Modul dengan skor tes awal rendah (< 70%)
-  // Urutkan dari skor terkecil (0% lalu 50%)
-  final modulSkorRendah = skorPerModul.entries
-      .where((e) => e.value < 70 && !modulSelesai.contains(e.key))
-      .toList()
-    ..sort((a, b) => a.value.compareTo(b.value));
-
-  for (final entry in modulSkorRendah) {
-    if (!daftarKandidat.any((k) => k.modulId == entry.key)) {
-      daftarKandidat.add(
-        ModulRekomendasi(
-          modulId: entry.key,
-          kodeAlasan: 'skor_rendah',
-          prioritas: 3,
-        ),
-      );
+  // 1. Modul yang sudah selesai dikeluarkan dari rekomendasi
+  final modulSelesai = <String>{};
+  for (final entry in statusModul.entries) {
+    if (entry.value.status == StatusBelajar.selesai) {
+      modulSelesai.add(entry.key);
     }
   }
 
-  // Aturan 4: Jika ada kecocokan teks tujuanUtama
-  if (profil.tujuanUtama != null && profil.tujuanUtama!.isNotEmpty) {
-    final teksLower = profil.tujuanUtama!.toLowerCase();
-    final pemetaanKataKunci = {
-      'utang_cicilan': ['utang', 'cicil', 'pinjol', 'kredit'],
-      'dana_darurat': ['darurat', 'jaga-jaga', 'tak terduga'],
-      'tabungan': ['nabung', 'menabung', 'simpanan'],
-      'anggaran_arus_kas': ['anggaran', 'arus kas', 'catat', 'gaji'],
-      'waspada_penipuan': ['tipu', 'penipuan', 'bodong'],
-    };
+  final alasanPerModul = <String, List<String>>{};
 
-    for (final entry in pemetaanKataKunci.entries) {
-      final modulId = entry.key;
-      if (!modulSelesai.contains(modulId) &&
-          !daftarKandidat.any((k) => k.modulId == modulId)) {
-        if (entry.value.any((kata) => teksLower.contains(kata))) {
-          daftarKandidat.add(
-            ModulRekomendasi(
-              modulId: modulId,
-              kodeAlasan: 'keinginan_terbesar',
-              prioritas: 4,
-            ),
-          );
+  void tambahAlasan(String modulId, String kodeAlasan) {
+    if (modulSelesai.contains(modulId)) return;
+    final list = alasanPerModul.putIfAbsent(modulId, () => []);
+    if (!list.contains(kodeAlasan)) {
+      list.add(kodeAlasan);
+    }
+  }
+
+  // Aturan 1: Modul bertingkat pemula yang skor tesnya < ambangLulusKuis (70) -> alasan skor_tes_rendah
+  if (hasilTes != null) {
+    for (final modul in daftarModul) {
+      if (modul.tingkat == 'pemula' && modul.id != 'mulai_tes_awal') {
+        final skor = hasilTes.skorPerModul[modul.id];
+        if (skor != null && skor < ambangLulusKuis) {
+          tambahAlasan(modul.id, alasanSkorTesRendah);
         }
       }
     }
   }
 
-  // Aturan 5: Jika belum ada modul yang selesai dan kandidat masih kurang dari 3, tawarkan anggaran_arus_kas
-  if (modulSelesai.isEmpty && !modulSelesai.contains('anggaran_arus_kas')) {
-    if (!daftarKandidat.any((k) => k.modulId == 'anggaran_arus_kas')) {
+  // Aturan 2: Ada utang aktif dengan sisa > 0 -> modul utang_cicilan, alasan punya_utang_tercatat
+  final adaUtangAktif =
+      fotoData.sisaUtangAktif > 0 || (profil != null && profil.punyaUtang == 'ya');
+  if (adaUtangAktif) {
+    tambahAlasan('utang_cicilan', alasanPunyaUtangTercatat);
+  }
+
+  // Aturan 3: Tidak ada tujuan dana_darurat aktif, atau dana terkumpulnya 0 -> modul dana_darurat, alasan dana_darurat_kosong
+  final danaDaruratKosong =
+      (!fotoData.tujuanDanaDaruratAktif || fotoData.saldoTerkumpulDanaDarurat <= 0) ||
+      (profil != null && profil.danaDarurat == 'belum');
+  if (danaDaruratKosong) {
+    tambahAlasan('dana_darurat', alasanDanaDaruratKosong);
+  }
+
+  // Aturan 4: Komposisi sifat pengeluaran bulan ini: keinginan merupakan sifat terbesar secara STRIK
+  // (bukan gabungan / bukan seri) dan total pengeluaran > 0 -> modul psikologi_uang, alasan keinginan_terbesar
+  final comp = fotoData.komposisiSifatBulanIni;
+  final keinginan = comp['keinginan'] ?? 0;
+  final kebutuhan = comp['kebutuhan'] ?? 0;
+  final tabungan = comp['tabungan'] ?? 0;
+  final utang = comp['utang'] ?? 0;
+  final belum = comp['belum_dilabeli'] ?? 0;
+  final totalPengeluaran = keinginan + kebutuhan + tabungan + utang + belum;
+
+  if (totalPengeluaran > 0 &&
+      keinginan > kebutuhan &&
+      keinginan > tabungan &&
+      keinginan > utang &&
+      keinginan > belum) {
+    tambahAlasan('psikologi_uang', alasanKeinginanTerbesar);
+  }
+
+  // Aturan 5: Bila belum ada modul yang selesai -> modul pertama yang terbuka, alasan belum_ada_modul_selesai
+  if (modulSelesai.isEmpty) {
+    for (final modul in daftarModul) {
+      if (modul.id != 'mulai_tes_awal') {
+        final stat = statusModul[modul.id];
+        if (stat != null && stat.status == StatusBelajar.terbuka) {
+          tambahAlasan(modul.id, alasanBelumAdaModulSelesai);
+          break;
+        }
+      }
+    }
+  }
+
+  // Urutkan modul berdasarkan urutan modul di kurikulum, ambil maksimal 3
+  final daftarKandidat = <ModulRekomendasi>[];
+  for (final modul in daftarModul) {
+    if (alasanPerModul.containsKey(modul.id)) {
+      final stat = statusModul[modul.id];
       daftarKandidat.add(
-        const ModulRekomendasi(
-          modulId: 'anggaran_arus_kas',
-          kodeAlasan: 'fondasi_awal',
-          prioritas: 5,
+        ModulRekomendasi(
+          modulId: modul.id,
+          kodeAlasan: alasanPerModul[modul.id]!,
+          tersedia: modul.tersedia,
+          terbuka: stat?.status == StatusBelajar.terbuka,
+          apaYangKurang: stat?.apaYangKurang ?? const [],
         ),
       );
+      if (daftarKandidat.length == 3) {
+        break;
+      }
     }
   }
 
-  // Saring unik dan ambil maksimal 3 modul
-  final hasilUnik = <String, ModulRekomendasi>{};
-  for (final item in daftarKandidat) {
-    if (!hasilUnik.containsKey(item.modulId)) {
-      hasilUnik[item.modulId] = item;
-    }
-    if (hasilUnik.length == 3) break;
-  }
-
-  return hasilUnik.values.toList();
+  return daftarKandidat;
 }
 
 enum AlasanTargetBelajar {

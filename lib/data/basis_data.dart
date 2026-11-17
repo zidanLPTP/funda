@@ -56,7 +56,7 @@ class BasisDataFunda extends _$BasisDataFunda {
     : super(pelaksanaKueri ?? _bukaKoneksi());
 
   @override
-  int get schemaVersion => 9;
+  int get schemaVersion => 10;
 
   @override
   MigrationStrategy get migration {
@@ -265,6 +265,74 @@ class BasisDataFunda extends _$BasisDataFunda {
         // Membuat tabel_profil_keuangan dan tabel_hasil_tes_awal
         await m.createTable(tabelProfilKeuangan);
         await m.createTable(tabelHasilTesAwal);
+        await customStatement(
+          'CREATE INDEX IF NOT EXISTS idx_hasil_tes_awal_waktu '
+          'ON tabel_hasil_tes_awal (waktu);',
+        );
+        break;
+      case 10:
+        // Migrasi Skema Versi 10 (Tahap 5-R - Penyelarasan Profil Keuangan):
+        // Memastikan tabelProfilKeuangan dan tabelHasilTesAwal ada dan valid.
+        // Bila ada tabel_profil_keuangan lama dengan kolom lama (darurat, utang, rentang, tanggungan),
+        // petakan data secara aman ke kolom resmi:
+        // darurat -> dana_darurat, utang -> punya_utang, sementara rentang & tanggungan dibuang.
+        final tabelProfilInfo = await customSelect(
+          "PRAGMA table_info('tabel_profil_keuangan');",
+        ).get();
+        if (tabelProfilInfo.isEmpty) {
+          await m.createTable(tabelProfilKeuangan);
+        } else {
+          final kolomMap = {
+            for (final r in tabelProfilInfo) r.read<String>('name'): true,
+          };
+          final butuhRestrukturisasi = kolomMap.containsKey('darurat') ||
+              kolomMap.containsKey('rentang') ||
+              kolomMap.containsKey('tanggungan') ||
+              (kolomMap.containsKey('utang') && !kolomMap.containsKey('punya_utang'));
+
+          if (butuhRestrukturisasi) {
+            await customStatement(
+              'ALTER TABLE tabel_profil_keuangan RENAME TO _lama_tabel_profil_keuangan;',
+            );
+            await m.createTable(tabelProfilKeuangan);
+            final punyaUtangExpr = kolomMap.containsKey('punya_utang')
+                ? 'punya_utang'
+                : (kolomMap.containsKey('utang') ? 'utang' : "'tidak_yakin'");
+            final danaDaruratExpr = kolomMap.containsKey('dana_darurat')
+                ? 'dana_darurat'
+                : (kolomMap.containsKey('darurat') ? 'darurat' : "'belum'");
+            final punyaPenghasilanExpr = kolomMap.containsKey('punya_penghasilan')
+                ? 'punya_penghasilan'
+                : (kolomMap.containsKey('sumber') ? 'sumber' : "'rutin'");
+            final menabungExpr = kolomMap.containsKey('menabung') ? 'menabung' : "'kadang'";
+            final investasiExpr = kolomMap.containsKey('investasi') ? 'investasi' : "'belum'";
+            final mencatatExpr = kolomMap.containsKey('mencatat_keuangan') ? 'mencatat_keuangan' : "'kadang'";
+            final tujuanUtamaExpr = kolomMap.containsKey('tujuan_utama')
+                ? 'tujuan_utama'
+                : (kolomMap.containsKey('tujuan') ? 'tujuan' : 'NULL');
+
+            await customStatement('''
+              INSERT INTO tabel_profil_keuangan (
+                id, punya_penghasilan, punya_utang, dana_darurat,
+                menabung, investasi, mencatat_keuangan, tujuan_utama,
+                diisi_pada, diperbarui_pada
+              )
+              SELECT
+                id, $punyaPenghasilanExpr, $punyaUtangExpr, $danaDaruratExpr,
+                $menabungExpr, $investasiExpr, $mencatatExpr, $tujuanUtamaExpr,
+                diisi_pada, diperbarui_pada
+              FROM _lama_tabel_profil_keuangan;
+            ''');
+            await customStatement('DROP TABLE _lama_tabel_profil_keuangan;');
+          }
+        }
+
+        final tabelTesAwalInfo = await customSelect(
+          "PRAGMA table_info('tabel_hasil_tes_awal');",
+        ).get();
+        if (tabelTesAwalInfo.isEmpty) {
+          await m.createTable(tabelHasilTesAwal);
+        }
         await customStatement(
           'CREATE INDEX IF NOT EXISTS idx_hasil_tes_awal_waktu '
           'ON tabel_hasil_tes_awal (waktu);',

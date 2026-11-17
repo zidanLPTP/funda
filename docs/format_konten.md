@@ -168,3 +168,71 @@ Berikut adalah daftar objek resmi yang valid untuk syarat `gerbang` (modul/pelaj
 6. **Nada Edukasi**:
    - Bersahabat, suportif, dan realistis terhadap kondisi ekonomi Indonesia sehari-hari.
    - Pilihan "Belum relevan buat aku" selalu tersedia pada misi praktik nyata untuk menghargai kenyamanan pengguna.
+
+---
+
+## 6. Format Berkas Tes Awal (`aset/konten/pemula/mulai_tes_awal/tes_awal.json`)
+
+Berkas ini memuat kuesioner profil awal pengguna dan butir soal tes pemahaman konsep dasar.
+
+### 6.1 Pertanyaan Profil Keuangan (`pertanyaanProfil`)
+Tepat 6 pertanyaan kondisi profil finansial pengguna dengan kunci dan nilai pilihan yang sesuai skema database:
+- **`punya_penghasilan`**: `rutin`, `tidak_rutin`, `belum`
+- **`punya_utang`**: `ya`, `tidak`, `tidak_yakin`
+- **`dana_darurat`**: `belum`, `sedikit`, `sudah`
+- **`menabung`**: `belum`, `kadang`, `rutin`
+- **`investasi`**: `belum`, `pernah`, `aktif`
+- **`mencatat_keuangan`**: `belum`, `kadang`, `rutin`
+- **`tujuanUtama`**: Sasaran keuangan teks bebas opsional (maksimal 100 karakter).
+
+*Catatan: Kolom `rentang` dan `tanggungan` tidak digunakan sesuai keputusan produk (data penghasilan dan jumlah keluarga tidak diminta).*
+
+### 6.2 Soal Tes Awal (`soalTesAwal`)
+- Tepat **12 butir soal** (tepat 2 butir soal untuk 6 modul tingkat pemula: `anggaran_arus_kas`, `tabungan`, `dana_darurat`, `utang_cicilan`, `waspada_penipuan`, `psikologi_uang`).
+- Setiap butir soal wajib memiliki tepat 4 pilihan jawaban:
+  - Pilihan indeks 0 s.d. 2: Pilihan konsep materi.
+  - Pilihan indeks 3: Pilihan tetap persis `"Belum tahu, nggak apa-apa"` (dihitung tidak benar dan tidak dihukum).
+  - Indeks `benar`: Hanya boleh bernilai 0, 1, atau 2 (tidak boleh menunjuk ke opsi indeks 3).
+- **Batasan Isi**: Hanya menguji konsep dasar keuangan. **DILARANG** memuat angka aturan praktis (mis. 50/30/20, jumlah bulan dana darurat), ambang rasio persentase cicilan, tarif spesifik, atau pasal regulasi.
+
+---
+
+## 7. Format Berkas Rekomendasi (`aset/konten/rekomendasi.json`)
+
+Berkas ini memetakan kode alasan heuristik personalisasi ke teks penjelasan yang ramah dan memberdayakan. Aturan evaluasi logika berada di kode murni, **bukan** di data.
+
+### 7.1 Kode Alasan Resmi
+1. **`skor_tes_rendah`**: Modul tingkat pemula yang skor tes awalnya < 70%.
+2. **`punya_utang_tercatat`**: Ada utang aktif dengan sisa > 0 atau profil `punya_utang == 'ya'`.
+3. **`dana_darurat_kosong`**: Tidak ada pos dana darurat aktif atau dana terkumpul 0, atau profil `dana_darurat == 'belum'`.
+4. **`keinginan_terbesar`**: Komposisi pengeluaran bulan ini di mana keinginan merupakan sifat terbesar secara STRIK (bukan seri, bukan gabungan) dan total > 0.
+5. **`belum_ada_modul_selesai`**: Belum ada modul yang diselesaikan, menyarankan modul terbuka pertama sebagai fondasi awal.
+
+### 7.2 Struktur JSON
+```json
+{
+  "versi": 1,
+  "alasan": {
+    "skor_tes_rendah": {
+      "judul": "Perdalam Pemahaman",
+      "deskripsi": "Topik ini bagus untuk diperdalam agar kamu semakin percaya diri mengelola keuangan."
+    },
+    "punya_utang_tercatat": {
+      "judul": "Prioritas Pelunasan Utang",
+      "deskripsi": "Membantu menata strategi pelunasan dan beban cicilan agar arus kas lebih lega."
+    },
+    "dana_darurat_kosong": {
+      "judul": "Bantalan Keuangan",
+      "deskripsi": "Membangun pos dana darurat memberi ketenangan pikiran saat hal tak terduga terjadi."
+    },
+    "keinginan_terbesar": {
+      "judul": "Keseimbangan Pengeluaran",
+      "deskripsi": "Menyadari dan mengelola porsi keinginan membantu pengeluaran tetap seimbang dan terarah."
+    },
+    "belum_ada_modul_selesai": {
+      "judul": "Langkah Fondasi",
+      "deskripsi": "Pijakan awal terbaik untuk memetakan uang masuk dan uang keluar sehari-hari."
+    }
+  }
+}
+```

@@ -2,10 +2,13 @@
 # Menggunakan perintah resmi: adb exec-out screencap -p
 param (
     [string]$NamaBerkas = "tangkapan_layar.png",
-    [string]$FolderTujuan = "docs/tangkapan_layar/tahap_04_emulator"
+    [string]$FolderTujuan = "docs/tangkapan_layar/tahap_05_emulator"
 )
 
-$adbPath = "C:\AndroidSdk\platform-tools\adb.exe"
+$adbPath = "$env:LOCALAPPDATA\Android\Sdk\platform-tools\adb.exe"
+if (-not (Test-Path $adbPath)) {
+    $adbPath = "C:\AndroidSdk\platform-tools\adb.exe"
+}
 if (-not (Test-Path $adbPath)) {
     $adbCmd = Get-Command "adb" -ErrorAction SilentlyContinue
     if ($adbCmd) {

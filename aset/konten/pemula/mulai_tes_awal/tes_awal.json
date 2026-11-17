@@ -136,7 +136,7 @@
       "pilihan": [
         "Instrumen berisiko tinggi dengan fluktuasi tajam",
         "Tempat yang aman, stabil, dan mudah dicairkan sewaktu-waktu",
-        "Aset fisik tanah yang butuh waktu lama untuk dijual",
+        "Barang atau tanah yang butuh waktu lama untuk dijual",
         "Belum tahu, nggak apa-apa"
       ],
       "benar": 1,
@@ -145,15 +145,15 @@
     {
       "id": "ta_utang_1",
       "modulId": "utang_cicilan",
-      "tanya": "Berapa batas rasio cicilan bulanan yang sehat terhadap pemasukan?",
+      "tanya": "Apa pertimbangan utama sebelum memutuskan mengambil pinjaman atau cicilan?",
       "pilihan": [
-        "Maksimal 30 persen dari total pemasukan bulanan",
-        "Minimal 70 persen dari seluruh gaji bulanan",
-        "Bebas tanpa batas selama masih ada pinjaman baru",
+        "Kemampuan membayar cicilan bulanan hingga lunas tanpa mengganggu kebutuhan pokok",
+        "Apakah batas pinjaman yang ditawarkan bernilai sebesar mungkin",
+        "Keinginan membeli barang mewah agar terlihat mapan seketika",
         "Belum tahu, nggak apa-apa"
       ],
       "benar": 0,
-      "penjelasan": "Batas aturan praktis cicilan yang aman adalah di bawah 30 persen."
+      "penjelasan": "Kesiapan membayar cicilan secara tertib adalah kunci agar arus kas tetap lega."
     },
     {
       "id": "ta_utang_2",
@@ -200,12 +200,12 @@
       "tanya": "Apa strategi sederhana meredam dorongan belanja impulsif?",
       "pilihan": [
         "Langsung bayar barang saat pertama kali melihatnya",
-        "Terapkan jeda 24 jam sebelum memutuskan membeli barang non-esensial",
+        "Beri jeda waktu berpikir sebelum memutuskan membeli barang non-esensial",
         "Pinjam uang teman agar bisa segera checkout belanjaan",
         "Belum tahu, nggak apa-apa"
       ],
       "benar": 1,
-      "penjelasan": "Aturan jeda waktu memberi ruang berpikir logis antara butuh dan ingin."
+      "penjelasan": "Jeda waktu berpikir memberi ruang menimbang antara butuh dan ingin."
     },
     {
       "id": "ta_psikologi_2",

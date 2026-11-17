@@ -248,6 +248,7 @@ final penyediaDaftarRekomendasiModul =
   final entitasTesAwal = ref.watch(penyediaStreamHasilTesAwal).value;
   final kontenRekomendasi = await ref.watch(penyediaKontenRekomendasi.future);
   final peta = await ref.watch(penyediaPetaBelajar.future);
+  final fotoData = await ref.watch(penyediaFotoData.future);
 
   final profil = entitasProfil != null
       ? bangunProfil(
@@ -261,26 +262,33 @@ final penyediaDaftarRekomendasiModul =
           },
           tujuanUtama: entitasProfil.tujuanUtama,
         )
-      : bangunProfil(jawabanProfil: {});
+      : null;
 
-  var skorPerModul = <String, int>{};
+  HasilSkorTesAwal? hasilTes;
   if (entitasTesAwal != null) {
     try {
       final decoded =
           jsonDecode(entitasTesAwal.skorPerModulJson) as Map<String, dynamic>;
-      skorPerModul = decoded.map((k, v) => MapEntry(k, (v as num).toInt()));
+      final skorPerModul =
+          decoded.map((k, v) => MapEntry(k, (v as num).toInt()));
+      hasilTes = HasilSkorTesAwal(
+        skorPerModul: skorPerModul,
+        skorTotalPersen: entitasTesAwal.skorTotalPersen,
+        totalBenar: 0,
+        totalSoal: 12,
+      );
     } catch (_) {}
   }
 
-  final modulSelesai = peta
-      .where((item) => item.statusModul.status == StatusBelajar.selesai)
-      .map((item) => item.modul.id)
-      .toSet();
+  final daftarModul = peta.map((p) => p.modul).toList();
+  final statusModul = {for (final p in peta) p.modul.id: p.statusModul};
 
   final daftarRekomendasi = rekomendasiModul(
     profil: profil,
-    skorPerModul: skorPerModul,
-    modulSelesai: modulSelesai,
+    hasilTes: hasilTes,
+    fotoData: fotoData,
+    daftarModul: daftarModul,
+    statusModul: statusModul,
   );
 
   final hasil = <InfoRekomendasiModul>[];
@@ -294,20 +302,21 @@ final penyediaDaftarRekomendasiModul =
           tingkat: 'pemula',
           urutan: 0,
           deskripsiSingkat: '',
-          tersedia: false,
+          tersedia: rek.tersedia,
           gerbang: [],
           daftarPelajaran: [],
           kuis: const KuisKonten(jumlahSoal: 0, bankSoal: []),
         ),
-        statusModul: const HasilStatusBelajar(
-          status: StatusBelajar.terkunci,
-          apaYangKurang: [],
+        statusModul: HasilStatusBelajar(
+          status: rek.terbuka ? StatusBelajar.terbuka : StatusBelajar.terkunci,
+          apaYangKurang: rek.apaYangKurang,
         ),
         daftarPelajaran: [],
       ),
     );
 
-    final alasanInfo = kontenRekomendasi.alasan[rek.kodeAlasan];
+    final alasanKey = rek.kodeAlasanUtama;
+    final alasanInfo = kontenRekomendasi.alasan[alasanKey];
     hasil.add(
       InfoRekomendasiModul(
         modul: itemPeta.modul,

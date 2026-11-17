@@ -139,4 +139,15 @@ Berdasarkan hasil pengujian terisolasi pada 10 iterasi bersih di emulator Pixel 
 
 ---
 
+## 12. Penyelarasan Skema v10, Eliminasi Kolom Rentang & Tanggungan, serta Rencana Cadangan (Tahap 5-R)
+
+- **Konteks:**
+  Pada implementasi awal Tahap 5, tabel profil keuangan memuat kolom spekulatif `rentang` dan `tanggungan` serta nama kolom ringkas (`darurat`, `utang`) yang tidak sejalan dengan spesifikasi kurikulum dan format kuesioner `tes_awal.json`.
+- **Keputusan:**
+  1. **Migrasi Skema v10:** Dilakukan migrasi aman idempoten pada `lib/data/basis_data.dart` (skema versi 10). Kolom lama dipetakan: `darurat` -> `dana_darurat`, `utang` -> `punya_utang`. Kolom `rentang` dan `tanggungan` dihapus seluruhnya dari struktur basis data, model Dart, dan antarmuka input kuesioner.
+  2. **Struktur Resmi `tabel_profil_keuangan`:** Menggunakan 7 kolom inti profil (`punya_penghasilan`, `punya_utang`, `dana_darurat`, `menabung`, `investasi`, `mencatat_keuangan`, `tujuan_utama`) dengan timestamp `diisi_pada` dan `diperbarui_pada`.
+  3. **Struktur Resmi `tabel_hasil_tes_awal`:** Mencatat riwayat tes awal (`jawaban_json`, `skor_per_modul_json`, `skor_total_persen`, `waktu`).
+- **Rencana Peninjauan:**
+  Pada Tahap 7 (Cadangan & Ekspor), kedua tabel ini (`tabel_profil_keuangan` dan `tabel_hasil_tes_awal`) wajib dimasukkan ke dalam skema cadangan JSON terenkripsi agar pengguna tidak kehilangan profil keuangan dan hasil penempatan belajarnya.
+
 

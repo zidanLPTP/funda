@@ -99,7 +99,7 @@
 | content reader | PembacaKonten | Utilitas pembaca berkas JSON kurikulum dan kamus |
 | continue learning tile | penyediaLanjutBelajarBeranda | Petak Beranda reaktif penunjuk pelajaran siap buka |
 | placement test result | tabel_hasil_tes_awal | Riwayat nilai tes mandiri penempatan dan skor per modul |
-| financial profile | tabel_profil_keuangan | Profil keuangan pengguna (tujuan, sumber penghasilan, rentang, tanggungan, darurat, utang) |
+| financial profile | tabel_profil_keuangan | Profil keuangan pengguna (punya_penghasilan, punya_utang, dana_darurat, menabung, investasi, mencatat_keuangan, tujuan_utama) |
 | module recommendation | rekomendasiModul | Fungsi rekomendasi modul personalisasi berbasis skor dan profil keuangan |
 | test screen | LayarTesAwal | Layar alur tes awal dan pembentukan profil keuangan |
 

@@ -5,7 +5,7 @@ import 'package:funda/data/basis_data.dart';
 
 void main() {
   group(
-    'Langkah 0(d): Uji Migrasi Beruntun Bertingkat (v1 -> v2 -> v3 -> v4 -> v5 -> v6 -> v7 -> v8 -> v9)',
+    'Langkah 0(d): Uji Migrasi Beruntun Bertingkat (v1 -> v2 -> v3 -> v4 -> v5 -> v6 -> v7 -> v8 -> v9 -> v10)',
     () {
       late BasisDataFunda basisData;
       late Migrator migrator;
@@ -285,7 +285,12 @@ void main() {
           expect(indexTesAwalRes.length, equals(1));
 
           // -------------------------------------------------------------
-          // VERIFIKASI KEUTUHAN DATA KESELURUHAN SETELAH v9
+          // 10. TAHAP SKEMA v10 (Tahap 5-R Penyelarasan)
+          // -------------------------------------------------------------
+          await basisData.migration.onUpgrade(migrator, 9, 10);
+
+          // -------------------------------------------------------------
+          // VERIFIKASI KEUTUHAN DATA KESELURUHAN SETELAH v10
           // -------------------------------------------------------------
 
           // 1. Data v1 (pengaturan) utuh

@@ -16,8 +16,8 @@ void main() {
   });
 
   group('BasisDataFunda & TabelPengaturan', () {
-    test('skema versi 9 terdaftar pada basis data', () async {
-      expect(basisData.schemaVersion, equals(9));
+    test('skema versi 10 terdaftar pada basis data', () async {
+      expect(basisData.schemaVersion, equals(10));
 
       final nilaiAwal = await basisData.bacaPengaturan('sudah_onboarding');
       expect(nilaiAwal, isNull);
@@ -345,6 +345,87 @@ void main() {
 
         // Jalankan lagi (idempoten)
         await basisData.migration.onUpgrade(migrator, 7, 8);
+      },
+    );
+
+    test(
+      'Migrasi Bertingkat Skema v8 -> v9 aman, idempoten, dan membuat tabel tes awal',
+      () async {
+        final migrator = Migrator(basisData);
+        await basisData.migration.onUpgrade(migrator, 8, 9);
+
+        final indexRes = await basisData.customSelect(
+          "SELECT name FROM sqlite_master WHERE type='index' AND name = 'idx_hasil_tes_awal_waktu';",
+        ).get();
+        expect(indexRes.length, equals(1));
+
+        // Jalankan lagi (idempoten)
+        await basisData.migration.onUpgrade(migrator, 8, 9);
+      },
+    );
+
+    test(
+      'Migrasi Bertingkat Skema v9 -> v10 aman, memetakan kolom lama dan membuang rentang/tanggungan',
+      () async {
+        final migrator = Migrator(basisData);
+        // Hapus tabel_profil_keuangan untuk simulasi tabel versi lama
+        await basisData.customStatement('DROP TABLE IF EXISTS tabel_profil_keuangan;');
+
+        // Simulasikan tabel v9 dengan kolom lama (darurat, utang, rentang, tanggungan)
+        await basisData.customStatement('''
+          CREATE TABLE tabel_profil_keuangan (
+            id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+            punya_penghasilan TEXT NOT NULL,
+            utang TEXT NOT NULL,
+            darurat TEXT NOT NULL,
+            menabung TEXT NOT NULL,
+            investasi TEXT NOT NULL,
+            mencatat_keuangan TEXT NOT NULL,
+            rentang TEXT,
+            tanggungan INTEGER,
+            tujuan_utama TEXT,
+            diisi_pada INTEGER NOT NULL,
+            diperbarui_pada INTEGER NOT NULL
+          );
+        ''');
+
+        // Isi data dengan kolom lama
+        final sekarang = DateTime.now().millisecondsSinceEpoch;
+        await basisData.customStatement('''
+          INSERT INTO tabel_profil_keuangan (
+            punya_penghasilan, utang, darurat, menabung, investasi,
+            mencatat_keuangan, rentang, tanggungan, tujuan_utama,
+            diisi_pada, diperbarui_pada
+          ) VALUES (
+            'rutin', 'ya', 'sedikit', 'kadang', 'belum',
+            'rutin', '5jt-10jt', 2, 'Beli rumah',
+            $sekarang, $sekarang
+          );
+        ''');
+
+        // Jalankan migrasi v9 -> v10
+        await basisData.migration.onUpgrade(migrator, 9, 10);
+
+        // Verifikasi skema baru: kolom darurat dipetakan ke dana_darurat, utang ke punya_utang
+        final hasil = await basisData.select(basisData.tabelProfilKeuangan).getSingle();
+        expect(hasil.punyaUtang, equals('ya'));
+        expect(hasil.danaDarurat, equals('sedikit'));
+        expect(hasil.punyaPenghasilan, equals('rutin'));
+        expect(hasil.tujuanUtama, equals('Beli rumah'));
+
+        // Pastikan kolom rentang dan tanggungan tidak ada lagi di tabel
+        final infoKolom = await basisData.customSelect(
+          "PRAGMA table_info('tabel_profil_keuangan');",
+        ).get();
+        final daftarKolom = infoKolom.map((r) => r.read<String>('name')).toSet();
+        expect(daftarKolom.contains('rentang'), isFalse);
+        expect(daftarKolom.contains('tanggungan'), isFalse);
+        expect(daftarKolom.contains('darurat'), isFalse);
+        expect(daftarKolom.contains('dana_darurat'), isTrue);
+        expect(daftarKolom.contains('punya_utang'), isTrue);
+
+        // Jalankan lagi (idempoten)
+        await basisData.migration.onUpgrade(migrator, 9, 10);
       },
     );
   });

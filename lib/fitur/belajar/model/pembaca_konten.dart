@@ -458,6 +458,23 @@ class PembacaKonten {
     'mencatat_keuangan',
   };
 
+  static const Map<String, Set<String>> nilaiPilihanProfilValid = {
+    'punya_penghasilan': {'rutin', 'tidak_rutin', 'belum'},
+    'punya_utang': {'ya', 'tidak', 'tidak_yakin'},
+    'dana_darurat': {'belum', 'sedikit', 'sudah'},
+    'menabung': {'belum', 'kadang', 'rutin'},
+    'investasi': {'belum', 'pernah', 'aktif'},
+    'mencatat_keuangan': {'belum', 'kadang', 'rutin'},
+  };
+
+  static const Set<String> kodeAlasanRekomendasiValid = {
+    'skor_tes_rendah',
+    'punya_utang_tercatat',
+    'dana_darurat_kosong',
+    'keinginan_terbesar',
+    'belum_ada_modul_selesai',
+  };
+
   static const Set<String> modulTesAwalValid = {
     'anggaran_arus_kas',
     'tabungan',
@@ -505,13 +522,19 @@ class PembacaKonten {
   static KontenTesAwal uraiTesAwal(
     String jsonString, {
     String namaBerkas = 'tes_awal.json',
+    Set<String>? daftarIstilahKamus,
     List<String>? daftarPeringatan,
   }) {
     final dynamic data = jsonDecode(jsonString);
     if (data is! Map<String, dynamic>) {
       throw GalatKonten('Tes awal harus berupa objek JSON', berkas: namaBerkas);
     }
-    validasiKontenTesAwal(data, namaBerkas: namaBerkas, daftarPeringatan: daftarPeringatan);
+    validasiKontenTesAwal(
+      data,
+      namaBerkas: namaBerkas,
+      daftarIstilahKamus: daftarIstilahKamus,
+      daftarPeringatan: daftarPeringatan,
+    );
     return KontenTesAwal.fromJson(data);
   }
 
@@ -519,6 +542,7 @@ class PembacaKonten {
   static void validasiKontenTesAwal(
     Map<String, dynamic> data, {
     required String namaBerkas,
+    Set<String>? daftarIstilahKamus,
     List<String>? daftarPeringatan,
   }) {
     final judul = data['judul'] as String?;
@@ -570,6 +594,16 @@ class PembacaKonten {
         if (pil is! Map<String, dynamic> || pil['nilai'] == null || pil['teks'] == null) {
           throw GalatKonten('Format pilihan profil tidak valid', berkas: namaBerkas, kolom: 'pertanyaanProfil[$i].pilihan');
         }
+        final nilai = pil['nilai'] as String;
+        if (!nilaiPilihanProfilValid[kunci]!.contains(nilai)) {
+          throw GalatKonten(
+            'Nilai pilihan profil tidak valid: "$nilai" untuk kunci "$kunci"',
+            berkas: namaBerkas,
+            kolom: 'pertanyaanProfil[$i].pilihan',
+          );
+        }
+        final teksPil = pil['teks'] as String;
+        periksaBahasaTeks(teksPil, namaBerkas: namaBerkas, daftarPeringatan: daftarPeringatan);
       }
     }
 
@@ -616,10 +650,21 @@ class PembacaKonten {
         throw GalatKonten('Pertanyaan soal wajib diisi', berkas: namaBerkas, kolom: 'soalTesAwal[$i].tanya');
       }
       periksaBahasaTeks(tanya, namaBerkas: namaBerkas, daftarPeringatan: daftarPeringatan);
+      if (daftarIstilahKamus != null) {
+        _periksaIstilahKamus(tanya, daftarIstilahKamus, namaBerkas, 'soalTesAwal[$i].tanya');
+      }
 
       final pilihan = s['pilihan'];
       if (pilihan is! List || pilihan.length != 4) {
         throw GalatKonten('Setiap soal tes awal wajib memiliki tepat 4 pilihan jawaban', berkas: namaBerkas, kolom: 'soalTesAwal[$i].pilihan');
+      }
+
+      for (var pIdx = 0; pIdx < pilihan.length; pIdx++) {
+        final pilTeks = pilihan[pIdx]?.toString().trim() ?? '';
+        periksaBahasaTeks(pilTeks, namaBerkas: namaBerkas, daftarPeringatan: daftarPeringatan);
+        if (daftarIstilahKamus != null) {
+          _periksaIstilahKamus(pilTeks, daftarIstilahKamus, namaBerkas, 'soalTesAwal[$i].pilihan[$pIdx]');
+        }
       }
 
       final opsiTerakhir = pilihan[3]?.toString().trim();
@@ -645,6 +690,22 @@ class PembacaKonten {
         throw GalatKonten('Penjelasan soal wajib diisi', berkas: namaBerkas, kolom: 'soalTesAwal[$i].penjelasan');
       }
       periksaBahasaTeks(penjelasan, namaBerkas: namaBerkas, daftarPeringatan: daftarPeringatan);
+      if (daftarIstilahKamus != null) {
+        _periksaIstilahKamus(penjelasan, daftarIstilahKamus, namaBerkas, 'soalTesAwal[$i].penjelasan');
+      }
+
+      // Larangan angka aturan praktis, tarif, atau regulasi
+      final cekAturanPraktis = RegExp(
+        r'(50/30/20|aturan 50|aturan 20|tarif pajak \d+%|bunga pinjol \d+%|pasal \d+|uu no|peraturan ojk)',
+        caseSensitive: false,
+      );
+      if (cekAturanPraktis.hasMatch(tanya) || cekAturanPraktis.hasMatch(penjelasan)) {
+        throw GalatKonten(
+          'Soal tes awal dilarang memuat angka aturan praktis, tarif spesifik, atau regulasi',
+          berkas: namaBerkas,
+          kolom: 'soalTesAwal[$i]',
+        );
+      }
     }
 
     // Pastikan setiap modul pemula diuji tepat 2 soal
@@ -656,7 +717,11 @@ class PembacaKonten {
   }
 
   /// Mengurai dan memvalidasi berkas rekomendasi.
-  static KontenRekomendasi uraiRekomendasi(String jsonString, {String namaBerkas = 'rekomendasi.json'}) {
+  static KontenRekomendasi uraiRekomendasi(
+    String jsonString, {
+    String namaBerkas = 'rekomendasi.json',
+    List<String>? daftarPeringatan,
+  }) {
     final dynamic data = jsonDecode(jsonString);
     if (data is! Map<String, dynamic>) {
       throw GalatKonten('Rekomendasi harus berupa objek JSON', berkas: namaBerkas);
@@ -665,6 +730,37 @@ class PembacaKonten {
     if (alasan is! Map<String, dynamic> || alasan.isEmpty) {
       throw GalatKonten('Kolom alasan wajib berupa objek tidak kosong', berkas: namaBerkas, kolom: 'alasan');
     }
+
+    for (final kodeResmi in kodeAlasanRekomendasiValid) {
+      if (!alasan.containsKey(kodeResmi)) {
+        throw GalatKonten('Kode alasan resmi "$kodeResmi" wajib ada di rekomendasi.json', berkas: namaBerkas, kolom: 'alasan');
+      }
+    }
+    for (final key in alasan.keys) {
+      if (!kodeAlasanRekomendasiValid.contains(key)) {
+        throw GalatKonten('Kode alasan asing "$key" tidak didukung oleh kode murni aplikasi', berkas: namaBerkas, kolom: 'alasan.$key');
+      }
+      final item = alasan[key];
+      if (item is! Map<String, dynamic>) {
+        throw GalatKonten('Item alasan "$key" harus berupa objek JSON', berkas: namaBerkas, kolom: 'alasan.$key');
+      }
+      final judul = item['judul'] as String?;
+      final deskripsi = item['deskripsi'] as String?;
+      if (judul == null || judul.trim().isEmpty) {
+        throw GalatKonten('Kolom judul alasan wajib ada', berkas: namaBerkas, kolom: 'alasan.$key.judul');
+      }
+      if (deskripsi == null || deskripsi.trim().isEmpty) {
+        throw GalatKonten('Kolom deskripsi alasan wajib ada', berkas: namaBerkas, kolom: 'alasan.$key.deskripsi');
+      }
+      periksaBahasaTeks(judul, namaBerkas: namaBerkas, daftarPeringatan: daftarPeringatan);
+      periksaBahasaTeks(deskripsi, namaBerkas: namaBerkas, daftarPeringatan: daftarPeringatan);
+
+      final cekKlaim = RegExp(r'(terlalu tinggi|terlalu rendah|keuangan buruk|keuangan rusak|boros|harus hemat)', caseSensitive: false);
+      if (cekKlaim.hasMatch(judul) || cekKlaim.hasMatch(deskripsi)) {
+        throw GalatKonten('Teks rekomendasi tidak boleh memuat klaim keuangan atau penilaian', berkas: namaBerkas, kolom: 'alasan.$key');
+      }
+    }
+
     return KontenRekomendasi.fromJson(data);
   }
 

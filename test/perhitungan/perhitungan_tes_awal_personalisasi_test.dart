@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:funda/fitur/belajar/model/pembaca_konten.dart';
+import 'package:funda/perhitungan/perhitungan_belajar.dart';
 import 'package:funda/perhitungan/perhitungan_tes_awal_personalisasi.dart';
 
 void main() {
@@ -54,14 +55,13 @@ void main() {
 
     test('Benar 1 dari 2 soal menghasilkan skor 50% untuk modul tersebut', () {
       final jawaban = {
-        's1': 1, 's2': 3, // anggaran_arus_kas: benar 1 -> 50%
-        's3': 1, 's4': 0, // tabungan: benar 2 -> 100%
-        's5': 3, 's6': 3, // dana_darurat: benar 0 -> 0%
-        's7': 0, 's8': 3, // utang_cicilan: benar 1 -> 50%
-        's9': 3, 's10': 3, // waspada_penipuan: benar 0 -> 0%
-        's11': 1, 's12': 0, // psikologi_uang: benar 2 -> 100%
+        's1': 1, 's2': 3,
+        's3': 1, 's4': 0,
+        's5': 3, 's6': 3,
+        's7': 0, 's8': 3,
+        's9': 3, 's10': 3,
+        's11': 1, 's12': 0,
       };
-      // Total benar: 1 + 2 + 0 + 1 + 0 + 2 = 6 dari 12 (50%)
       final hasil = hitungSkorTesAwal(jawabanPengguna: jawaban, daftarSoal: daftar12Soal);
       expect(hasil.totalBenar, equals(6));
       expect(hasil.skorTotalPersen, equals(50));
@@ -82,32 +82,19 @@ void main() {
           'investasi': 'belum',
           'mencatat_keuangan': 'rutin',
         },
-        tujuanUtama: 'Ingin bebas dari utang dan punya tabungan.',
+        tujuanUtama: 'Mempersiapkan dana pensiun dan beli rumah',
       );
 
       expect(profil.punyaPenghasilan, equals('rutin'));
       expect(profil.punyaUtang, equals('ya'));
-      expect(profil.tujuanUtama, equals('Ingin bebas dari utang dan punya tabungan.'));
+      expect(profil.danaDarurat, equals('sedikit'));
+      expect(profil.menabung, equals('kadang'));
+      expect(profil.investasi, equals('belum'));
+      expect(profil.mencatatKeuangan, equals('rutin'));
+      expect(profil.tujuanUtama, equals('Mempersiapkan dana pensiun dan beli rumah'));
     });
 
-    test('Tujuan utama yang melebihi 100 karakter dipotong aman (truncate)', () {
-      final teksPanjang = 'A' * 150;
-      final profil = bangunProfil(
-        jawabanProfil: {
-          'punya_penghasilan': 'rutin',
-          'punya_utang': 'tidak',
-          'dana_darurat': 'sudah',
-          'menabung': 'rutin',
-          'investasi': 'aktif',
-          'mencatat_keuangan': 'rutin',
-        },
-        tujuanUtama: teksPanjang,
-      );
-
-      expect(profil.tujuanUtama?.length, equals(100));
-    });
-
-    test('Nilai enum tidak dikenal otomatis disetel ke default fallback aman', () {
+    test('Input tidak sah difallback ke nilai default yang aman', () {
       final profil = bangunProfil(
         jawabanProfil: {
           'punya_penghasilan': 'nilai_ngawur',
@@ -125,80 +112,355 @@ void main() {
     });
   });
 
-  group('3. Pengujian Fungsi Murni rekomendasiModul', () {
-    test('Pengguna punya utang memprioritaskan modul utang_cicilan', () {
-      final profil = bangunProfil(
-        jawabanProfil: {
-          'punya_penghasilan': 'rutin',
-          'punya_utang': 'ya',
-          'dana_darurat': 'sudah',
-          'menabung': 'rutin',
-          'investasi': 'aktif',
-          'mencatat_keuangan': 'rutin',
-        },
-      );
+  group('3. Pengujian Fungsi Murni rekomendasiModul Sesuai Butir B.2', () {
+    final daftarModulContoh = [
+      const ModulKonten(
+        id: 'anggaran_arus_kas',
+        judul: 'Anggaran & Arus Kas',
+        tingkat: 'pemula',
+        urutan: 1,
+        deskripsiSingkat: '',
+        tersedia: true,
+        gerbang: [],
+        daftarPelajaran: [],
+        kuis: KuisKonten(jumlahSoal: 0, bankSoal: []),
+      ),
+      const ModulKonten(
+        id: 'tabungan',
+        judul: 'Tabungan',
+        tingkat: 'pemula',
+        urutan: 2,
+        deskripsiSingkat: '',
+        tersedia: true,
+        gerbang: [],
+        daftarPelajaran: [],
+        kuis: KuisKonten(jumlahSoal: 0, bankSoal: []),
+      ),
+      const ModulKonten(
+        id: 'dana_darurat',
+        judul: 'Dana Darurat',
+        tingkat: 'pemula',
+        urutan: 3,
+        deskripsiSingkat: '',
+        tersedia: true,
+        gerbang: [],
+        daftarPelajaran: [],
+        kuis: KuisKonten(jumlahSoal: 0, bankSoal: []),
+      ),
+      const ModulKonten(
+        id: 'utang_cicilan',
+        judul: 'Utang & Cicilan',
+        tingkat: 'pemula',
+        urutan: 4,
+        deskripsiSingkat: '',
+        tersedia: false, // Segera hadir
+        gerbang: [],
+        daftarPelajaran: [],
+        kuis: KuisKonten(jumlahSoal: 0, bankSoal: []),
+      ),
+      const ModulKonten(
+        id: 'waspada_penipuan',
+        judul: 'Waspada Penipuan',
+        tingkat: 'pemula',
+        urutan: 5,
+        deskripsiSingkat: '',
+        tersedia: false,
+        gerbang: [],
+        daftarPelajaran: [],
+        kuis: KuisKonten(jumlahSoal: 0, bankSoal: []),
+      ),
+      const ModulKonten(
+        id: 'psikologi_uang',
+        judul: 'Psikologi Uang',
+        tingkat: 'pemula',
+        urutan: 6,
+        deskripsiSingkat: '',
+        tersedia: false,
+        gerbang: [],
+        daftarPelajaran: [],
+        kuis: KuisKonten(jumlahSoal: 0, bankSoal: []),
+      ),
+    ];
 
-      final hasilRekomendasi = rekomendasiModul(
-        profil: profil,
+    final statusModulStandar = {
+      for (final m in daftarModulContoh)
+        m.id: const HasilStatusBelajar(
+          status: StatusBelajar.terbuka,
+          apaYangKurang: [],
+        ),
+    };
+
+    test('Aturan 1: skor modul < 70 vs tepat 70 (69 memicu, 70 tidak memicu)', () {
+      final hasilTes = const HasilSkorTesAwal(
         skorPerModul: {
-          'anggaran_arus_kas': 100,
-          'tabungan': 100,
-          'dana_darurat': 100,
-          'utang_cicilan': 50,
-          'waspada_penipuan': 100,
-          'psikologi_uang': 100,
+          'anggaran_arus_kas': 69, // < 70 -> memicu
+          'tabungan': 70, // tepat 70 -> TIDAK memicu skor_tes_rendah
         },
-        modulSelesai: {},
+        skorTotalPersen: 70,
+        totalBenar: 8,
+        totalSoal: 12,
       );
 
-      expect(hasilRekomendasi.isNotEmpty, isTrue);
-      expect(hasilRekomendasi.first.modulId, equals('utang_cicilan'));
-      expect(hasilRekomendasi.first.kodeAlasan, equals('ada_utang'));
+      final hasil = rekomendasiModul(
+        profil: null,
+        hasilTes: hasilTes,
+        fotoData: const FotoDataPengguna(
+          jumlahDompetAktif: 1,
+          jumlahPemasukan: 1,
+          jumlahPengeluaran: 1,
+          jumlahAnggaran: 1,
+          jumlahTujuanAktif: 1,
+          jumlahUtangAktif: 0,
+          kategoriKeluarTerpakai: {},
+          hariTransaksiBerbeda: 1,
+          bulanTransaksiBerbeda: 1,
+          pernyataan: {},
+          progresPelajaran: {},
+          hasilKuisTerbaik: {},
+          tujuanDanaDaruratAktif: true,
+          saldoTerkumpulDanaDarurat: 1000000,
+          sisaUtangAktif: 0,
+        ),
+        daftarModul: daftarModulContoh,
+        statusModul: {
+          ...statusModulStandar,
+          // Anggap ada 1 modul selesai agar Aturan 5 tidak campur tangan
+          'waspada_penipuan': const HasilStatusBelajar(status: StatusBelajar.selesai, apaYangKurang: []),
+        },
+      );
+
+      final rekAnggaran = hasil.where((r) => r.modulId == 'anggaran_arus_kas').toList();
+      final rekTabungan = hasil.where((r) => r.modulId == 'tabungan').toList();
+
+      expect(rekAnggaran.isNotEmpty, isTrue);
+      expect(rekAnggaran.first.kodeAlasan.contains(alasanSkorTesRendah), isTrue);
+
+      // Tabungan dengan skor 70 tidak boleh memuat alasan skor_tes_rendah
+      if (rekTabungan.isNotEmpty) {
+        expect(rekTabungan.first.kodeAlasan.contains(alasanSkorTesRendah), isFalse);
+      }
     });
 
-    test('Pengguna dana darurat belum memprioritaskan modul dana_darurat', () {
-      final profil = bangunProfil(
-        jawabanProfil: {
-          'punya_penghasilan': 'rutin',
-          'punya_utang': 'tidak',
-          'dana_darurat': 'belum',
-          'menabung': 'belum',
-          'investasi': 'belum',
-          'mencatat_keuangan': 'belum',
+    test('Aturan 2: ada utang aktif dengan sisa > 0 memicu modul utang_cicilan dengan alasan punya_utang_tercatat', () {
+      final hasil = rekomendasiModul(
+        profil: null,
+        hasilTes: null,
+        fotoData: const FotoDataPengguna(
+          jumlahDompetAktif: 1,
+          jumlahPemasukan: 1,
+          jumlahPengeluaran: 1,
+          jumlahAnggaran: 1,
+          jumlahTujuanAktif: 1,
+          jumlahUtangAktif: 1,
+          kategoriKeluarTerpakai: {},
+          hariTransaksiBerbeda: 1,
+          bulanTransaksiBerbeda: 1,
+          pernyataan: {},
+          progresPelajaran: {},
+          hasilKuisTerbaik: {},
+          sisaUtangAktif: 5000000, // Ada utang aktif sisa > 0
+          tujuanDanaDaruratAktif: true,
+          saldoTerkumpulDanaDarurat: 1000000,
+        ),
+        daftarModul: daftarModulContoh,
+        statusModul: {
+          ...statusModulStandar,
+          'waspada_penipuan': const HasilStatusBelajar(status: StatusBelajar.selesai, apaYangKurang: []),
         },
       );
 
-      final hasilRekomendasi = rekomendasiModul(
-        profil: profil,
-        skorPerModul: {
-          'anggaran_arus_kas': 100,
-          'tabungan': 100,
-          'dana_darurat': 50,
-          'utang_cicilan': 100,
-          'waspada_penipuan': 100,
-          'psikologi_uang': 100,
-        },
-        modulSelesai: {},
-      );
-
-      final ids = hasilRekomendasi.map((r) => r.modulId).toList();
-      expect(ids.contains('dana_darurat'), isTrue);
+      final rekUtang = hasil.where((r) => r.modulId == 'utang_cicilan').toList();
+      expect(rekUtang.isNotEmpty, isTrue);
+      expect(rekUtang.first.kodeAlasan.contains(alasanPunyaUtangTercatat), isTrue);
     });
 
-    test('Maksimal menghasilkan 3 modul rekomendasi unik', () {
-      final profil = bangunProfil(
-        jawabanProfil: {
-          'punya_penghasilan': 'rutin',
-          'punya_utang': 'ya',
-          'dana_darurat': 'belum',
-          'menabung': 'belum',
-          'investasi': 'belum',
-          'mencatat_keuangan': 'belum',
+    test('Aturan 3: dana darurat kosong memicu modul dana_darurat dengan alasan dana_darurat_kosong', () {
+      final hasil = rekomendasiModul(
+        profil: null,
+        hasilTes: null,
+        fotoData: const FotoDataPengguna(
+          jumlahDompetAktif: 1,
+          jumlahPemasukan: 1,
+          jumlahPengeluaran: 1,
+          jumlahAnggaran: 1,
+          jumlahTujuanAktif: 0,
+          jumlahUtangAktif: 0,
+          kategoriKeluarTerpakai: {},
+          hariTransaksiBerbeda: 1,
+          bulanTransaksiBerbeda: 1,
+          pernyataan: {},
+          progresPelajaran: {},
+          hasilKuisTerbaik: {},
+          tujuanDanaDaruratAktif: false, // Tidak ada tujuan darurat aktif
+          saldoTerkumpulDanaDarurat: 0,
+          sisaUtangAktif: 0,
+        ),
+        daftarModul: daftarModulContoh,
+        statusModul: {
+          ...statusModulStandar,
+          'waspada_penipuan': const HasilStatusBelajar(status: StatusBelajar.selesai, apaYangKurang: []),
         },
       );
 
-      final hasilRekomendasi = rekomendasiModul(
-        profil: profil,
+      final rekDarurat = hasil.where((r) => r.modulId == 'dana_darurat').toList();
+      expect(rekDarurat.isNotEmpty, isTrue);
+      expect(rekDarurat.first.kodeAlasan.contains(alasanDanaDaruratKosong), isTrue);
+    });
+
+    test('Aturan 4: keinginan terbesar secara STRIK memicu modul psikologi_uang, sedangkan seri dengan kebutuhan tidak memicu', () {
+      // Kasus A: STRIK terbesar (keinginan 500k, kebutuhan 300k, tabungan 100k) -> Terpicu
+      final hasilStrik = rekomendasiModul(
+        profil: null,
+        hasilTes: null,
+        fotoData: const FotoDataPengguna(
+          jumlahDompetAktif: 1,
+          jumlahPemasukan: 1,
+          jumlahPengeluaran: 1,
+          jumlahAnggaran: 1,
+          jumlahTujuanAktif: 1,
+          jumlahUtangAktif: 0,
+          kategoriKeluarTerpakai: {},
+          hariTransaksiBerbeda: 1,
+          bulanTransaksiBerbeda: 1,
+          pernyataan: {},
+          progresPelajaran: {},
+          hasilKuisTerbaik: {},
+          tujuanDanaDaruratAktif: true,
+          saldoTerkumpulDanaDarurat: 1000000,
+          sisaUtangAktif: 0,
+          komposisiSifatBulanIni: {
+            'keinginan': 500000,
+            'kebutuhan': 300000,
+            'tabungan': 100000,
+          },
+        ),
+        daftarModul: daftarModulContoh,
+        statusModul: {
+          ...statusModulStandar,
+          'waspada_penipuan': const HasilStatusBelajar(status: StatusBelajar.selesai, apaYangKurang: []),
+        },
+      );
+
+      final rekPsikologiStrik = hasilStrik.where((r) => r.modulId == 'psikologi_uang').toList();
+      expect(rekPsikologiStrik.isNotEmpty, isTrue);
+      expect(rekPsikologiStrik.first.kodeAlasan.contains(alasanKeinginanTerbesar), isTrue);
+
+      // Kasus B: Seri (keinginan 500k == kebutuhan 500k) -> TIDAK terpicu
+      final hasilSeri = rekomendasiModul(
+        profil: null,
+        hasilTes: null,
+        fotoData: const FotoDataPengguna(
+          jumlahDompetAktif: 1,
+          jumlahPemasukan: 1,
+          jumlahPengeluaran: 1,
+          jumlahAnggaran: 1,
+          jumlahTujuanAktif: 1,
+          jumlahUtangAktif: 0,
+          kategoriKeluarTerpakai: {},
+          hariTransaksiBerbeda: 1,
+          bulanTransaksiBerbeda: 1,
+          pernyataan: {},
+          progresPelajaran: {},
+          hasilKuisTerbaik: {},
+          tujuanDanaDaruratAktif: true,
+          saldoTerkumpulDanaDarurat: 1000000,
+          sisaUtangAktif: 0,
+          komposisiSifatBulanIni: {
+            'keinginan': 500000,
+            'kebutuhan': 500000, // Seri dengan keinginan
+          },
+        ),
+        daftarModul: daftarModulContoh,
+        statusModul: {
+          ...statusModulStandar,
+          'waspada_penipuan': const HasilStatusBelajar(status: StatusBelajar.selesai, apaYangKurang: []),
+        },
+      );
+
+      final rekPsikologiSeri = hasilSeri.where((r) => r.modulId == 'psikologi_uang').toList();
+      expect(
+        rekPsikologiSeri.isEmpty || !rekPsikologiSeri.first.kodeAlasan.contains(alasanKeinginanTerbesar),
+        isTrue,
+        reason: 'Keinginan seri dengan kebutuhan tidak boleh memicu aturan STRIK terbesar',
+      );
+    });
+
+    test('Aturan 5: belum ada modul selesai merekomendasikan modul terbuka pertama dengan alasan belum_ada_modul_selesai', () {
+      final hasil = rekomendasiModul(
+        profil: null,
+        hasilTes: null,
+        fotoData: const FotoDataPengguna(
+          jumlahDompetAktif: 1,
+          jumlahPemasukan: 1,
+          jumlahPengeluaran: 1,
+          jumlahAnggaran: 1,
+          jumlahTujuanAktif: 1,
+          jumlahUtangAktif: 0,
+          kategoriKeluarTerpakai: {},
+          hariTransaksiBerbeda: 1,
+          bulanTransaksiBerbeda: 1,
+          pernyataan: {},
+          progresPelajaran: {},
+          hasilKuisTerbaik: {},
+          tujuanDanaDaruratAktif: true,
+          saldoTerkumpulDanaDarurat: 1000000,
+          sisaUtangAktif: 0,
+        ),
+        daftarModul: daftarModulContoh,
+        statusModul: statusModulStandar, // Tidak ada modul selesai sama sekali
+      );
+
+      expect(hasil.isNotEmpty, isTrue);
+      final pertama = hasil.first;
+      expect(pertama.modulId, equals('anggaran_arus_kas'));
+      expect(pertama.kodeAlasan.contains(alasanBelumAdaModulSelesai), isTrue);
+    });
+
+    test('Penggabungan alasan per modul (misal skor rendah dan dana darurat kosong pada satu modul)', () {
+      final hasilTes = const HasilSkorTesAwal(
+        skorPerModul: {
+          'dana_darurat': 50, // < 70 -> memicu skor_tes_rendah
+        },
+        skorTotalPersen: 50,
+        totalBenar: 6,
+        totalSoal: 12,
+      );
+
+      final hasil = rekomendasiModul(
+        profil: null,
+        hasilTes: hasilTes,
+        fotoData: const FotoDataPengguna(
+          jumlahDompetAktif: 1,
+          jumlahPemasukan: 1,
+          jumlahPengeluaran: 1,
+          jumlahAnggaran: 1,
+          jumlahTujuanAktif: 0,
+          jumlahUtangAktif: 0,
+          kategoriKeluarTerpakai: {},
+          hariTransaksiBerbeda: 1,
+          bulanTransaksiBerbeda: 1,
+          pernyataan: {},
+          progresPelajaran: {},
+          hasilKuisTerbaik: {},
+          tujuanDanaDaruratAktif: false, // memicu dana_darurat_kosong
+          saldoTerkumpulDanaDarurat: 0,
+          sisaUtangAktif: 0,
+        ),
+        daftarModul: daftarModulContoh,
+        statusModul: {
+          ...statusModulStandar,
+          'waspada_penipuan': const HasilStatusBelajar(status: StatusBelajar.selesai, apaYangKurang: []),
+        },
+      );
+
+      final rekDarurat = hasil.firstWhere((r) => r.modulId == 'dana_darurat');
+      // Memuat kedua alasan secara sekaligus dalam satu list alasan
+      expect(rekDarurat.kodeAlasan.contains(alasanSkorTesRendah), isTrue);
+      expect(rekDarurat.kodeAlasan.contains(alasanDanaDaruratKosong), isTrue);
+    });
+
+    test('Maksimum 3 modul rekomendasi teratas sesuai urutan modul', () {
+      final hasilTesSemuaNol = const HasilSkorTesAwal(
         skorPerModul: {
           'anggaran_arus_kas': 0,
           'tabungan': 0,
@@ -207,41 +469,95 @@ void main() {
           'waspada_penipuan': 0,
           'psikologi_uang': 0,
         },
-        modulSelesai: {},
+        skorTotalPersen: 0,
+        totalBenar: 0,
+        totalSoal: 12,
       );
 
-      expect(hasilRekomendasi.length, lessThanOrEqualTo(3));
-      final ids = hasilRekomendasi.map((r) => r.modulId).toSet();
-      expect(ids.length, equals(hasilRekomendasi.length), reason: 'Rekomendasi tidak boleh duplikat');
+      final hasil = rekomendasiModul(
+        profil: null,
+        hasilTes: hasilTesSemuaNol,
+        fotoData: FotoDataPengguna.kosong(),
+        daftarModul: daftarModulContoh,
+        statusModul: statusModulStandar,
+      );
+
+      expect(hasil.length, equals(3), reason: 'Maksimum rekomendasi adalah tepat 3');
+      expect(hasil[0].modulId, equals('anggaran_arus_kas'));
+      expect(hasil[1].modulId, equals('tabungan'));
+      expect(hasil[2].modulId, equals('dana_darurat'));
     });
 
-    test('Modul yang sudah selesai tidak direkomendasikan lagi', () {
-      final profil = bangunProfil(
-        jawabanProfil: {
-          'punya_penghasilan': 'rutin',
-          'punya_utang': 'ya',
-          'dana_darurat': 'sudah',
-          'menabung': 'rutin',
-          'investasi': 'aktif',
-          'mencatat_keuangan': 'rutin',
+    test('Modul tersedia:false tetap muncul dalam rekomendasi sebagai segera hadir', () {
+      final hasil = rekomendasiModul(
+        profil: null,
+        hasilTes: null,
+        fotoData: const FotoDataPengguna(
+          jumlahDompetAktif: 1,
+          jumlahPemasukan: 1,
+          jumlahPengeluaran: 1,
+          jumlahAnggaran: 1,
+          jumlahTujuanAktif: 1,
+          jumlahUtangAktif: 1,
+          kategoriKeluarTerpakai: {},
+          hariTransaksiBerbeda: 1,
+          bulanTransaksiBerbeda: 1,
+          pernyataan: {},
+          progresPelajaran: {},
+          hasilKuisTerbaik: {},
+          sisaUtangAktif: 10000000, // Utang aktif
+          tujuanDanaDaruratAktif: true,
+          saldoTerkumpulDanaDarurat: 1000000,
+        ),
+        daftarModul: daftarModulContoh,
+        statusModul: {
+          ...statusModulStandar,
+          'anggaran_arus_kas': const HasilStatusBelajar(status: StatusBelajar.selesai, apaYangKurang: []),
+          'tabungan': const HasilStatusBelajar(status: StatusBelajar.selesai, apaYangKurang: []),
+          'dana_darurat': const HasilStatusBelajar(status: StatusBelajar.selesai, apaYangKurang: []),
         },
       );
 
-      final hasilRekomendasi = rekomendasiModul(
-        profil: profil,
-        skorPerModul: {
-          'anggaran_arus_kas': 100,
-          'tabungan': 100,
-          'dana_darurat': 100,
-          'utang_cicilan': 50,
-          'waspada_penipuan': 100,
-          'psikologi_uang': 100,
-        },
-        modulSelesai: {'utang_cicilan'}, // Sudah selesai
+      final rekUtang = hasil.firstWhere((r) => r.modulId == 'utang_cicilan');
+      expect(rekUtang.tersedia, isFalse, reason: 'Modul 4 belum tersedia dan ditandai tersedia: false');
+      expect(rekUtang.kodeAlasan.contains(alasanPunyaUtangTercatat), isTrue);
+    });
+
+    test('Pengguna baru tanpa profil dan tanpa tes tetap mendapatkan rekomendasi deterministik', () {
+      final hasil = rekomendasiModul(
+        profil: null,
+        hasilTes: null,
+        fotoData: FotoDataPengguna.kosong(),
+        daftarModul: daftarModulContoh,
+        statusModul: statusModulStandar,
       );
 
-      final ids = hasilRekomendasi.map((r) => r.modulId).toList();
-      expect(ids.contains('utang_cicilan'), isFalse);
+      expect(hasil.isNotEmpty, isTrue);
+      expect(hasil.length, lessThanOrEqualTo(3));
+      // Dana darurat kosong dan belum ada modul selesai akan terpicu
+      final ids = hasil.map((r) => r.modulId).toList();
+      expect(ids.contains('anggaran_arus_kas'), isTrue);
+      expect(ids.contains('dana_darurat'), isTrue);
+    });
+
+    test('Semua modul selesai menghasilkan daftar rekomendasi kosong', () {
+      final statusSemuaSelesai = {
+        for (final m in daftarModulContoh)
+          m.id: const HasilStatusBelajar(
+            status: StatusBelajar.selesai,
+            apaYangKurang: [],
+          ),
+      };
+
+      final hasil = rekomendasiModul(
+        profil: null,
+        hasilTes: null,
+        fotoData: FotoDataPengguna.kosong(),
+        daftarModul: daftarModulContoh,
+        statusModul: statusSemuaSelesai,
+      );
+
+      expect(hasil.isEmpty, isTrue, reason: 'Bila semua modul telah diselesaikan, daftar rekomendasi kosong');
     });
   });
 

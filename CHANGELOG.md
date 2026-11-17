@@ -5,6 +5,32 @@ Format penulisan mengacu pada standar Keep a Changelog dan penamaan commit Funda
 
 ---
 
+## [0.7.1] - 2026-11-17 — Penyelarasan Tahap 5 (Tahap 5-R)
+
+Tahap 5-R: Penyelarasan skema profil keuangan, tabel hasil tes awal, kode alasan rekomendasi, validator konten, dan pembuktian integrasi emulator. Menyelaraskan seluruh nama kolom profil ke snake_case resmi prompt (`punya_penghasilan`, `punya_utang`, `dana_darurat`, `menabung`, `investasi`, `mencatat_keuangan`, `tujuan_utama`), menghapus pertanyaan dan kolom `rentang` serta `tanggungan`, menaikkan versi basis data ke skema 10 dengan migrasi idempoten yang memetakan kolom lama dan membuang data rentang/tanggungan. Memindahkan seluruh logika evaluasi rekomendasi modul ke fungsi murni dengan konstanta bernama (`alasanSkorTesRendah`, `alasanPunyaUtangTercatat`, `alasanDanaDaruratKosong`, `alasanKeinginanTerbesar`, `alasanBelumAdaModulSelesai`), menerapkan aturan STRIK pengeluaran keinginan (seri tidak memicu), memperluas validator konten untuk `tes_awal.json` dan `rekomendasi.json` (mencegah angka aturan praktis/tarif/regulasi dan klaim keuangan menghakimi), menambahkan 8 kasus uji konten rusak baru, serta membuktikan 5 skenario integrasi dengan interaksi nyata dan assertion di Emulator Android 16 (API 36).
+
+### Ditambahkan
+- **Skema & Migrasi Basis Data Versi 10 (`lib/data/`):**
+  - Kenaikan versi skema basis data menjadi 10 (`schemaVersion => 10`) pada `lib/data/basis_data.dart`.
+  - Migrasi `case 10:` idempoten yang memetakan data kolom lama (`darurat` -> `dana_darurat`, `utang` -> `punya_utang`) dan membuang kolom `rentang` dan `tanggungan`.
+  - Pengujian beruntun migrasi bertingkat skema v1 s.d. v10 dengan data terisi lengkap (`test/data/basis_data_test.dart` dan `test/data/migrasi_beruntun_test.dart`) lulus 100%.
+- **Logika Murni & Personalisasi Berbasis Kode (`lib/perhitungan/`):**
+  - Konstanta bernama heuristik saran di `lib/perhitungan/perhitungan_tes_awal_personalisasi.dart`.
+  - Evaluasi Aturan 1 s.d. 5 murni di fungsi Dart: skor tes rendah (< 70 vs 70), sisa utang aktif > 0, dana darurat kosong, sifat keinginan terbesar secara STRIK (bukan seri), dan modul terbuka pertama bila belum ada modul selesai.
+  - Penanganan modul `tersedia: false` ("segera hadir") dan informasi `apaYangKurang` dari gerbang modul.
+  - 10 nama uji spesifik untuk setiap aturan pada `test/perhitungan/perhitungan_tes_awal_personalisasi_test.dart`.
+- **Pemeriksa Konten Mendalam & Uji Konten Rusak (`lib/fitur/belajar/`, `test/fitur/`):**
+  - Validasi ketat `tes_awal.json`: tepat 12 butir soal (2 per modul pemula), 4 opsi jawaban dengan opsi ke-4 persis "Belum tahu, nggak apa-apa", indeks benar 0..2, tanpa angka aturan praktis (mis. 50/30/20), tanpa tarif pajak/bunga pinjol spesifik, dan tanpa kutipan regulasi.
+  - Validasi kuesioner profil: 6 pertanyaan dengan kunci dan nilai pilihan yang sesuai skema database SQLite.
+  - Validasi `rekomendasi.json`: kode alasan dua arah wajib cocok dengan kode murni aplikasi, bebas kata terlarang, dan bebas klaim keuangan/penilaian menghakimi.
+  - 8 kasus uji konten rusak baru pada `test/fitur/pemeriksa_konten_rusak_test.dart` (total 38 uji).
+- **Pengujian Integrasi Emulator Android 16 (`integration_test/`):**
+  - Bukti 5 skenario lengkap dengan interaksi nyata (`tap`, `enterText`) dan assertion database/UI pada `integration_test/tahap_05_alur_tes_awal_emulator_test.dart`.
+  - Pengambilan tangkapan layar otomatis via `tool/ambil_tangkapan_layar.ps1`.
+  - Versi rilis Android diverifikasi langsung dari emulator via `adb shell getprop ro.build.version.release` = 16.
+
+---
+
 ## [0.7.0] - 2026-11-17 — Tahap 5: Tes Awal & Personalisasi
 
 Tahap 5: Tes Awal Keuangan (Modul 0), Pembentukan Profil Keuangan, dan Personalisasi Saran Modul Belajar. Pengguna baru dapat mengikuti tes mandiri penempatan yang terdiri dari 6 pertanyaan profil keuangan (tujuan, sumber penghasilan, rentang, tanggungan, dana darurat, utang) dan 12 butir soal pemahaman awal (2 butir per modul dengan opsi ke-4 "Belum tahu, nggak apa-apa"). Sistem menghasilkan skor total dan skor per topik pemula, menyimpannya ke skema basis data SQLite (migrasi versi 9), serta menghasilkan rekomendasi personalisasi modul berbasis aturan deterministik yang ramah dan bebas menghakimi. Dilengkapi kartu rekomendasi di bagian atas Tab Belajar, kemampuan melewati tes awal (`profil_dilewati`), opsi tes ulang, serta gerbang data Modul 1 yang menyelaraskan opsi pengisian profil atau lewati.
