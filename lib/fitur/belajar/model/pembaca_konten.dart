@@ -66,6 +66,7 @@ class PembacaKonten {
     'tujuan',
     'utang',
     'kategori',
+    'profil',
   };
   static const Set<String> umpanBalikMisiValid = {
     'arus_kas_bulan_ini',
@@ -162,8 +163,9 @@ class PembacaKonten {
     }
 
     final tersedia = data['tersedia'] as bool? ?? false;
+    final jenis = data['jenis'] as String?;
     final kuis = data['kuis'];
-    if (tersedia && kuis is Map<String, dynamic>) {
+    if (tersedia && jenis != 'tes_awal' && kuis is Map<String, dynamic>) {
       final jmlSoal = kuis['jumlahSoal'];
       if (jmlSoal is num && jmlSoal <= 0) {
         throw GalatKonten('Kolom kuis.jumlahSoal harus bernilai > 0 untuk modul yang tersedia', berkas: namaBerkas, kolom: 'kuis.jumlahSoal');
@@ -447,6 +449,24 @@ class PembacaKonten {
     }
   }
 
+  static const Set<String> kunciProfilValid = {
+    'punya_penghasilan',
+    'punya_utang',
+    'dana_darurat',
+    'menabung',
+    'investasi',
+    'mencatat_keuangan',
+  };
+
+  static const Set<String> modulTesAwalValid = {
+    'anggaran_arus_kas',
+    'tabungan',
+    'dana_darurat',
+    'utang_cicilan',
+    'waspada_penipuan',
+    'psikologi_uang',
+  };
+
   /// Memuat kamus dari aset aplikasi.
   static Future<Map<String, IstilahKamus>> muatKamusDariAset(AssetBundle bundle) async {
     final jsonString = await bundle.loadString('aset/konten/kamus.json');
@@ -478,6 +498,344 @@ class PembacaKonten {
       jsonString,
       namaBerkas: path,
       daftarIstilahKamus: daftarIstilahKamus,
+    );
+  }
+
+  /// Mengurai dan memvalidasi berkas tes awal.
+  static KontenTesAwal uraiTesAwal(
+    String jsonString, {
+    String namaBerkas = 'tes_awal.json',
+    List<String>? daftarPeringatan,
+  }) {
+    final dynamic data = jsonDecode(jsonString);
+    if (data is! Map<String, dynamic>) {
+      throw GalatKonten('Tes awal harus berupa objek JSON', berkas: namaBerkas);
+    }
+    validasiKontenTesAwal(data, namaBerkas: namaBerkas, daftarPeringatan: daftarPeringatan);
+    return KontenTesAwal.fromJson(data);
+  }
+
+  /// Memvalidasi berkas tes awal.
+  static void validasiKontenTesAwal(
+    Map<String, dynamic> data, {
+    required String namaBerkas,
+    List<String>? daftarPeringatan,
+  }) {
+    final judul = data['judul'] as String?;
+    if (judul == null || judul.trim().isEmpty) {
+      throw GalatKonten('Kolom judul tes awal wajib ada', berkas: namaBerkas, kolom: 'judul');
+    }
+    final deskripsi = data['deskripsi'] as String?;
+    if (deskripsi == null || deskripsi.trim().isEmpty) {
+      throw GalatKonten('Kolom deskripsi tes awal wajib ada', berkas: namaBerkas, kolom: 'deskripsi');
+    }
+
+    periksaBahasaTeks(judul, namaBerkas: namaBerkas, daftarPeringatan: daftarPeringatan);
+    periksaBahasaTeks(deskripsi, namaBerkas: namaBerkas, daftarPeringatan: daftarPeringatan);
+
+    // 1. Validasi 6 pertanyaan profil
+    final pertanyaanProfil = data['pertanyaanProfil'];
+    if (pertanyaanProfil is! List || pertanyaanProfil.length != 6) {
+      throw GalatKonten(
+        'Kolom pertanyaanProfil wajib berisi tepat 6 pertanyaan kondisi profil',
+        berkas: namaBerkas,
+        kolom: 'pertanyaanProfil',
+      );
+    }
+
+    final setKunci = <String>{};
+    for (var i = 0; i < pertanyaanProfil.length; i++) {
+      final p = pertanyaanProfil[i];
+      if (p is! Map<String, dynamic>) {
+        throw GalatKonten('Pertanyaan profil indeks $i bukan objek JSON', berkas: namaBerkas, kolom: 'pertanyaanProfil[$i]');
+      }
+      final kunci = p['kunci'] as String?;
+      if (kunci == null || !kunciProfilValid.contains(kunci)) {
+        throw GalatKonten('Kunci profil tidak dikenal: "$kunci"', berkas: namaBerkas, kolom: 'pertanyaanProfil[$i].kunci');
+      }
+      if (!setKunci.add(kunci)) {
+        throw GalatKonten('Kunci profil duplikat: "$kunci"', berkas: namaBerkas, kolom: 'pertanyaanProfil[$i].kunci');
+      }
+      final tanya = p['tanya'] as String?;
+      if (tanya == null || tanya.trim().isEmpty) {
+        throw GalatKonten('Kolom tanya wajib diisi', berkas: namaBerkas, kolom: 'pertanyaanProfil[$i].tanya');
+      }
+      periksaBahasaTeks(tanya, namaBerkas: namaBerkas, daftarPeringatan: daftarPeringatan);
+
+      final pilihan = p['pilihan'];
+      if (pilihan is! List || pilihan.length < 2) {
+        throw GalatKonten('Pilihan pertanyaan profil minimal 2 opsi', berkas: namaBerkas, kolom: 'pertanyaanProfil[$i].pilihan');
+      }
+      for (final pil in pilihan) {
+        if (pil is! Map<String, dynamic> || pil['nilai'] == null || pil['teks'] == null) {
+          throw GalatKonten('Format pilihan profil tidak valid', berkas: namaBerkas, kolom: 'pertanyaanProfil[$i].pilihan');
+        }
+      }
+    }
+
+    // 2. Validasi tujuan utama
+    final tujuanUtama = data['tujuanUtama'];
+    if (tujuanUtama is! Map<String, dynamic>) {
+      throw GalatKonten('Kolom tujuanUtama wajib ada sebagai objek JSON', berkas: namaBerkas, kolom: 'tujuanUtama');
+    }
+    final maxChar = tujuanUtama['maksimalKarakter'];
+    if (maxChar is! num || maxChar <= 0) {
+      throw GalatKonten('Kolom maksimalKarakter wajib berupa angka > 0', berkas: namaBerkas, kolom: 'tujuanUtama.maksimalKarakter');
+    }
+
+    // 3. Validasi 12 butir soal tes awal (tepat 2 per modul pemula)
+    final soalTesAwal = data['soalTesAwal'];
+    if (soalTesAwal is! List || soalTesAwal.length != 12) {
+      throw GalatKonten(
+        'Kolom soalTesAwal wajib berisi tepat 12 soal (tepat 2 soal per modul)',
+        berkas: namaBerkas,
+        kolom: 'soalTesAwal',
+      );
+    }
+
+    final hitungModul = <String, int>{};
+    final setSoalId = <String>{};
+
+    for (var i = 0; i < soalTesAwal.length; i++) {
+      final s = soalTesAwal[i];
+      if (s is! Map<String, dynamic>) {
+        throw GalatKonten('Soal tes awal indeks $i bukan objek JSON', berkas: namaBerkas, kolom: 'soalTesAwal[$i]');
+      }
+      final sId = s['id'] as String?;
+      if (sId == null || !setSoalId.add(sId)) {
+        throw GalatKonten('ID soal tes awal kosong atau duplikat: "$sId"', berkas: namaBerkas, kolom: 'soalTesAwal[$i].id');
+      }
+      final modulId = s['modulId'] as String?;
+      if (modulId == null || !modulTesAwalValid.contains(modulId)) {
+        throw GalatKonten('Soal mereferensikan modulId tidak valid: "$modulId"', berkas: namaBerkas, kolom: 'soalTesAwal[$i].modulId');
+      }
+      hitungModul[modulId] = (hitungModul[modulId] ?? 0) + 1;
+
+      final tanya = s['tanya'] as String?;
+      if (tanya == null || tanya.trim().isEmpty) {
+        throw GalatKonten('Pertanyaan soal wajib diisi', berkas: namaBerkas, kolom: 'soalTesAwal[$i].tanya');
+      }
+      periksaBahasaTeks(tanya, namaBerkas: namaBerkas, daftarPeringatan: daftarPeringatan);
+
+      final pilihan = s['pilihan'];
+      if (pilihan is! List || pilihan.length != 4) {
+        throw GalatKonten('Setiap soal tes awal wajib memiliki tepat 4 pilihan jawaban', berkas: namaBerkas, kolom: 'soalTesAwal[$i].pilihan');
+      }
+
+      final opsiTerakhir = pilihan[3]?.toString().trim();
+      if (opsiTerakhir != 'Belum tahu, nggak apa-apa') {
+        throw GalatKonten(
+          'Opsi ke-4 wajib berupa "Belum tahu, nggak apa-apa" untuk menjaga kenyamanan pengguna',
+          berkas: namaBerkas,
+          kolom: 'soalTesAwal[$i].pilihan[3]',
+        );
+      }
+
+      final benar = s['benar'];
+      if (benar is! num || benar < 0 || benar >= 3) {
+        throw GalatKonten(
+          'Indeks jawaban benar harus antara 0 sampai 2 (tidak boleh menunjuk ke opsi "Belum tahu, nggak apa-apa")',
+          berkas: namaBerkas,
+          kolom: 'soalTesAwal[$i].benar',
+        );
+      }
+
+      final penjelasan = s['penjelasan'] as String?;
+      if (penjelasan == null || penjelasan.trim().isEmpty) {
+        throw GalatKonten('Penjelasan soal wajib diisi', berkas: namaBerkas, kolom: 'soalTesAwal[$i].penjelasan');
+      }
+      periksaBahasaTeks(penjelasan, namaBerkas: namaBerkas, daftarPeringatan: daftarPeringatan);
+    }
+
+    // Pastikan setiap modul pemula diuji tepat 2 soal
+    for (final m in modulTesAwalValid) {
+      if ((hitungModul[m] ?? 0) != 2) {
+        throw GalatKonten('Modul "$m" harus memiliki tepat 2 butir soal di tes awal', berkas: namaBerkas, kolom: 'soalTesAwal');
+      }
+    }
+  }
+
+  /// Mengurai dan memvalidasi berkas rekomendasi.
+  static KontenRekomendasi uraiRekomendasi(String jsonString, {String namaBerkas = 'rekomendasi.json'}) {
+    final dynamic data = jsonDecode(jsonString);
+    if (data is! Map<String, dynamic>) {
+      throw GalatKonten('Rekomendasi harus berupa objek JSON', berkas: namaBerkas);
+    }
+    final alasan = data['alasan'];
+    if (alasan is! Map<String, dynamic> || alasan.isEmpty) {
+      throw GalatKonten('Kolom alasan wajib berupa objek tidak kosong', berkas: namaBerkas, kolom: 'alasan');
+    }
+    return KontenRekomendasi.fromJson(data);
+  }
+
+  /// Memuat tes awal dari aset aplikasi.
+  static Future<KontenTesAwal> muatTesAwalDariAset(AssetBundle bundle) async {
+    const path = 'aset/konten/pemula/mulai_tes_awal/tes_awal.json';
+    final jsonString = await bundle.loadString(path);
+    return uraiTesAwal(jsonString, namaBerkas: path);
+  }
+
+  /// Memuat rekomendasi dari aset aplikasi.
+  static Future<KontenRekomendasi> muatRekomendasiDariAset(AssetBundle bundle) async {
+    const path = 'aset/konten/rekomendasi.json';
+    final jsonString = await bundle.loadString(path);
+    return uraiRekomendasi(jsonString, namaBerkas: path);
+  }
+}
+
+/// Model butir pertanyaan profil keuangan di tes awal.
+class PertanyaanProfilKonten {
+  final String kunci;
+  final String tanya;
+  final List<PilihanProfilKonten> pilihan;
+
+  const PertanyaanProfilKonten({
+    required this.kunci,
+    required this.tanya,
+    required this.pilihan,
+  });
+
+  factory PertanyaanProfilKonten.fromJson(Map<String, dynamic> json) {
+    return PertanyaanProfilKonten(
+      kunci: json['kunci'] as String? ?? '',
+      tanya: json['tanya'] as String? ?? '',
+      pilihan: (json['pilihan'] as List<dynamic>?)
+              ?.map((e) => PilihanProfilKonten.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          [],
+    );
+  }
+}
+
+class PilihanProfilKonten {
+  final String nilai;
+  final String teks;
+
+  const PilihanProfilKonten({required this.nilai, required this.teks});
+
+  factory PilihanProfilKonten.fromJson(Map<String, dynamic> json) {
+    return PilihanProfilKonten(
+      nilai: json['nilai'] as String? ?? '',
+      teks: json['teks'] as String? ?? '',
+    );
+  }
+}
+
+class TujuanUtamaKonten {
+  final String tanya;
+  final String petunjuk;
+  final int maksimalKarakter;
+
+  const TujuanUtamaKonten({
+    required this.tanya,
+    required this.petunjuk,
+    required this.maksimalKarakter,
+  });
+
+  factory TujuanUtamaKonten.fromJson(Map<String, dynamic> json) {
+    return TujuanUtamaKonten(
+      tanya: json['tanya'] as String? ?? '',
+      petunjuk: json['petunjuk'] as String? ?? '',
+      maksimalKarakter: (json['maksimalKarakter'] as num?)?.toInt() ?? 100,
+    );
+  }
+}
+
+class SoalTesAwalKonten {
+  final String id;
+  final String modulId;
+  final String tanya;
+  final List<String> pilihan;
+  final int benar;
+  final String penjelasan;
+
+  const SoalTesAwalKonten({
+    required this.id,
+    required this.modulId,
+    required this.tanya,
+    required this.pilihan,
+    required this.benar,
+    required this.penjelasan,
+  });
+
+  factory SoalTesAwalKonten.fromJson(Map<String, dynamic> json) {
+    return SoalTesAwalKonten(
+      id: json['id'] as String? ?? '',
+      modulId: json['modulId'] as String? ?? '',
+      tanya: json['tanya'] as String? ?? '',
+      pilihan: (json['pilihan'] as List<dynamic>?)?.map((e) => e.toString()).toList() ?? [],
+      benar: (json['benar'] as num?)?.toInt() ?? 0,
+      penjelasan: json['penjelasan'] as String? ?? '',
+    );
+  }
+}
+
+class KontenTesAwal {
+  final int versi;
+  final String judul;
+  final String deskripsi;
+  final List<PertanyaanProfilKonten> pertanyaanProfil;
+  final TujuanUtamaKonten tujuanUtama;
+  final List<SoalTesAwalKonten> soalTesAwal;
+
+  const KontenTesAwal({
+    required this.versi,
+    required this.judul,
+    required this.deskripsi,
+    required this.pertanyaanProfil,
+    required this.tujuanUtama,
+    required this.soalTesAwal,
+  });
+
+  factory KontenTesAwal.fromJson(Map<String, dynamic> json) {
+    return KontenTesAwal(
+      versi: (json['versi'] as num?)?.toInt() ?? 1,
+      judul: json['judul'] as String? ?? '',
+      deskripsi: json['deskripsi'] as String? ?? '',
+      pertanyaanProfil: (json['pertanyaanProfil'] as List<dynamic>?)
+              ?.map((e) => PertanyaanProfilKonten.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          [],
+      tujuanUtama: TujuanUtamaKonten.fromJson(json['tujuanUtama'] as Map<String, dynamic>? ?? {}),
+      soalTesAwal: (json['soalTesAwal'] as List<dynamic>?)
+              ?.map((e) => SoalTesAwalKonten.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          [],
+    );
+  }
+}
+
+class RekomendasiItemKonten {
+  final String judul;
+  final String deskripsi;
+
+  const RekomendasiItemKonten({required this.judul, required this.deskripsi});
+
+  factory RekomendasiItemKonten.fromJson(Map<String, dynamic> json) {
+    return RekomendasiItemKonten(
+      judul: json['judul'] as String? ?? '',
+      deskripsi: json['deskripsi'] as String? ?? '',
+    );
+  }
+}
+
+class KontenRekomendasi {
+  final int versi;
+  final Map<String, RekomendasiItemKonten> alasan;
+
+  const KontenRekomendasi({required this.versi, required this.alasan});
+
+  factory KontenRekomendasi.fromJson(Map<String, dynamic> json) {
+    final alasanMap = <String, RekomendasiItemKonten>{};
+    final rawAlasan = json['alasan'] as Map<String, dynamic>? ?? {};
+    for (final entry in rawAlasan.entries) {
+      if (entry.value is Map<String, dynamic>) {
+        alasanMap[entry.key] = RekomendasiItemKonten.fromJson(entry.value as Map<String, dynamic>);
+      }
+    }
+    return KontenRekomendasi(
+      versi: (json['versi'] as num?)?.toInt() ?? 1,
+      alasan: alasanMap,
     );
   }
 }

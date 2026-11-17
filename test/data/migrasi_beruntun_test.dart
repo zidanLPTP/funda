@@ -5,7 +5,7 @@ import 'package:funda/data/basis_data.dart';
 
 void main() {
   group(
-    'Langkah 0(d): Uji Migrasi Beruntun Bertingkat (v1 -> v2 -> v3 -> v4 -> v5 -> v6 -> v7 -> v8)',
+    'Langkah 0(d): Uji Migrasi Beruntun Bertingkat (v1 -> v2 -> v3 -> v4 -> v5 -> v6 -> v7 -> v8 -> v9)',
     () {
       late BasisDataFunda basisData;
       late Migrator migrator;
@@ -249,7 +249,43 @@ void main() {
           expect(daftarIndex.contains('idx_transaksi_waktu_jenis'), isTrue);
 
           // -------------------------------------------------------------
-          // VERIFIKASI KEUTUHAN DATA KESELURUHAN SETELAH v8
+          // 9. MIGRASI v8 -> v9 (Tahap 5 - Profil Keuangan & Hasil Tes Awal)
+          // -------------------------------------------------------------
+          await basisData.migration.onUpgrade(migrator, 8, 9);
+
+          // Isi data v9
+          final waktuV9 = DateTime(2026, 3, 15, 14, 0);
+          await basisData.into(basisData.tabelProfilKeuangan).insert(
+                TabelProfilKeuanganCompanion.insert(
+                  punyaPenghasilan: 'rutin',
+                  punyaUtang: 'ya',
+                  danaDarurat: 'sedikit',
+                  menabung: 'kadang',
+                  investasi: 'belum',
+                  mencatatKeuangan: 'rutin',
+                  tujuanUtama: const Value('Membeli rumah impian'),
+                  diisiPada: waktuV9,
+                  diperbaruiPada: waktuV9,
+                ),
+              );
+
+          await basisData.into(basisData.tabelHasilTesAwal).insert(
+                TabelHasilTesAwalCompanion.insert(
+                  waktu: waktuV9,
+                  jawabanJson: '{"soal_1": 1}',
+                  skorPerModulJson: '{"anggaran_arus_kas": 100}',
+                  skorTotalPersen: 85,
+                ),
+              );
+
+          // Verifikasi indeks baru v9
+          final indexTesAwalRes = await basisData.customSelect(
+            "SELECT name FROM sqlite_master WHERE type='index' AND name = 'idx_hasil_tes_awal_waktu';",
+          ).get();
+          expect(indexTesAwalRes.length, equals(1));
+
+          // -------------------------------------------------------------
+          // VERIFIKASI KEUTUHAN DATA KESELURUHAN SETELAH v9
           // -------------------------------------------------------------
 
           // 1. Data v1 (pengaturan) utuh
@@ -354,6 +390,22 @@ void main() {
             await basisData.bacaPengaturan('tampilkan_nominal_di_pengingat'),
             equals('false'),
           );
+
+          // 8. Data v9 (profil keuangan & hasil tes awal) utuh
+          final profil = await basisData
+              .select(basisData.tabelProfilKeuangan)
+              .getSingleOrNull();
+          expect(profil, isNotNull);
+          expect(profil!.punyaPenghasilan, equals('rutin'));
+          expect(profil.punyaUtang, equals('ya'));
+          expect(profil.tujuanUtama, equals('Membeli rumah impian'));
+
+          final hasilTes = await basisData
+              .select(basisData.tabelHasilTesAwal)
+              .getSingleOrNull();
+          expect(hasilTes, isNotNull);
+          expect(hasilTes!.skorTotalPersen, equals(85));
+          expect(hasilTes.skorPerModulJson, contains('anggaran_arus_kas'));
         },
       );
     },

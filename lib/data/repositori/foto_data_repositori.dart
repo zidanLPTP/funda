@@ -23,7 +23,30 @@ class FotoDataRepositori {
         (SELECT COUNT(*) FROM tabel_tujuan WHERE status = 'aktif') as jml_tujuan,
         (SELECT COUNT(*) FROM tabel_utang WHERE status = 'aktif') as jml_utang,
         (SELECT COUNT(DISTINCT date(waktu_transaksi + $offsetDetik, 'unixepoch')) FROM tabel_transaksi) as hari_berbeda,
-        (SELECT COUNT(DISTINCT strftime('%Y-%m', datetime(waktu_transaksi + $offsetDetik, 'unixepoch'))) FROM tabel_transaksi) as bulan_berbeda
+        (SELECT COUNT(DISTINCT strftime('%Y-%m', datetime(waktu_transaksi + $offsetDetik, 'unixepoch'))) FROM tabel_transaksi) as bulan_berbeda,
+        (SELECT COUNT(*) FROM tabel_profil_keuangan) as jml_profil,
+        (SELECT COUNT(*) FROM tabel_tujuan WHERE status = 'aktif' AND jenis = 'dana_darurat') as jml_tujuan_darurat,
+        (SELECT COALESCE(SUM(
+          CASE
+            WHEN a.jenis = 'isi' THEN a.jumlah_rupiah
+            WHEN a.jenis = 'ambil' THEN -a.jumlah_rupiah
+            ELSE 0
+          END
+        ), 0) FROM tabel_alokasi_kantong a JOIN tabel_kantong k ON a.kantong_id = k.id JOIN tabel_tujuan t ON k.tujuan_id = t.id WHERE t.status = 'aktif' AND t.jenis = 'dana_darurat' AND k.diarsipkan = 0) as saldo_darurat,
+        (SELECT COALESCE(SUM(
+          u.sisa_awal_rupiah - 
+          COALESCE((
+            SELECT SUM(t.jumlah_rupiah)
+            FROM tabel_pembayaran_utang pu
+            JOIN tabel_transaksi t ON pu.transaksi_id = t.id
+            WHERE pu.utang_id = u.id
+          ), 0) +
+          COALESCE((
+            SELECT SUM(CASE WHEN py.arah = 'tambah' THEN py.jumlah_rupiah ELSE -py.jumlah_rupiah END)
+            FROM tabel_penyesuaian_utang py
+            WHERE py.utang_id = u.id
+          ), 0)
+        ), 0) FROM tabel_utang u WHERE u.status = 'aktif') as sisa_utang
       ''',
     ).getSingle();
 
@@ -35,6 +58,10 @@ class FotoDataRepositori {
     final jmlUtang = barisRingkasan.read<int>('jml_utang');
     final hariBerbeda = barisRingkasan.read<int>('hari_berbeda');
     final bulanBerbeda = barisRingkasan.read<int>('bulan_berbeda');
+    final jmlProfil = barisRingkasan.read<int>('jml_profil');
+    final jmlTujuanDarurat = barisRingkasan.read<int>('jml_tujuan_darurat');
+    final saldoDarurat = barisRingkasan.read<int>('saldo_darurat');
+    final sisaUtang = barisRingkasan.read<int>('sisa_utang');
 
     // 2. Kategori keluar aktif yang pernah dipakai transaksi beserta sifatnya
     final barisKategori = await _db.customSelect(
@@ -78,6 +105,25 @@ class FotoDataRepositori {
       mapKuis[mId] = HasilKuisSnapshot(skorPersen: skor, lulus: llsNum > 0);
     }
 
+    // 6. Komposisi sifat pengeluaran bulan berjalan
+    final barisSifat = await _db.customSelect(
+      '''
+      SELECT k.sifat, COALESCE(SUM(t.jumlah_rupiah), 0) as total
+      FROM tabel_transaksi t
+      JOIN tabel_kategori k ON t.kategori_id = k.id
+      WHERE t.jenis = 'keluar' 
+        AND strftime('%Y-%m', datetime(t.waktu_transaksi + $offsetDetik, 'unixepoch')) = strftime('%Y-%m', datetime('now', '+$offsetDetik seconds'))
+      GROUP BY k.sifat
+      ''',
+    ).get();
+
+    final mapKomposisiSifat = <String, int>{};
+    for (final b in barisSifat) {
+      final sifat = b.read<String>('sifat');
+      final total = b.read<int>('total');
+      mapKomposisiSifat[sifat] = total;
+    }
+
     return FotoDataPengguna(
       jumlahDompetAktif: jmlDompet,
       jumlahPemasukan: jmlMasuk,
@@ -91,6 +137,11 @@ class FotoDataRepositori {
       pernyataan: mapPernyataan,
       progresPelajaran: mapProgres,
       hasilKuisTerbaik: mapKuis,
+      profilTerisi: jmlProfil > 0,
+      tujuanDanaDaruratAktif: jmlTujuanDarurat > 0,
+      saldoTerkumpulDanaDarurat: saldoDarurat,
+      sisaUtangAktif: sisaUtang,
+      komposisiSifatBulanIni: mapKomposisiSifat,
     );
   }
 }

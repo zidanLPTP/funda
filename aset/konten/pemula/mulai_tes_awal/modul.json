@@ -1,20 +1,15 @@
 {
-    "kuis":  {
-                 "jumlahSoal":  0,
-                 "bankSoal":  [
-
-                              ]
-             },
-    "id":  "mulai_tes_awal",
-    "tersedia":  false,
-    "urutan":  0,
-    "gerbang":  [
-
-                ],
-    "deskripsiSingkat":  "Kenalan dengan Funda, ketahui profil keuanganmu, dan mulai langkah pertama.",
-    "daftarPelajaran":  [
-
-                        ],
-    "tingkat":  "pemula",
-    "judul":  "Mulai \u0026 Tes Awal"
+  "id": "mulai_tes_awal",
+  "judul": "Mulai & Tes Awal",
+  "tingkat": "pemula",
+  "urutan": 0,
+  "deskripsiSingkat": "Kenalan dengan Funda, ketahui profil keuanganmu, dan mulai langkah pertama.",
+  "tersedia": true,
+  "jenis": "tes_awal",
+  "gerbang": [],
+  "daftarPelajaran": [],
+  "kuis": {
+    "jumlahSoal": 0,
+    "bankSoal": []
+  }
 }

@@ -16,8 +16,8 @@ void main() {
   });
 
   group('BasisDataFunda & TabelPengaturan', () {
-    test('skema versi 8 terdaftar pada basis data', () async {
-      expect(basisData.schemaVersion, equals(8));
+    test('skema versi 9 terdaftar pada basis data', () async {
+      expect(basisData.schemaVersion, equals(9));
 
       final nilaiAwal = await basisData.bacaPengaturan('sudah_onboarding');
       expect(nilaiAwal, isNull);

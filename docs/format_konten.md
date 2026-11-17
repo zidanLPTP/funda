@@ -134,6 +134,18 @@ aset/konten/
 }
 ```
 
+### 4.1 Daftar Objek Resmi Gerbang & Misi
+Berikut adalah daftar objek resmi yang valid untuk syarat `gerbang` (modul/pelajaran) dan target `misi`:
+- **`dompet`**: Jumlah akun dompet aktif (tipe `ada_data`).
+- **`pemasukan`**: Jumlah transaksi jenis pemasukan (tipe `ada_data`).
+- **`pengeluaran`**: Jumlah transaksi jenis pengeluaran (tipe `ada_data`).
+- **`transaksi`**: Jumlah seluruh transaksi (pemasukan + pengeluaran + transfer) (tipe `ada_data`).
+- **`anggaran`**: Jumlah kategori anggaran bulanan aktif (tipe `ada_data`).
+- **`tujuan`**: Jumlah tujuan/pos/kantong tabungan aktif (tipe `ada_data`).
+- **`utang`**: Jumlah catatan utang/piutang aktif (tipe `ada_data`).
+- **`arus_kas`**: Komposit pemasukan >= min DAN pengeluaran >= min (tipe `aturan_data` atau `ada_data`).
+- **`profil`**: Profil keuangan pengguna sudah diisi (bukan dilewati, bukan kosong; tipe `ada_data`).
+
 ---
 
 ## 5. Aturan Penulisan Kalimat & Gaya Bahasa

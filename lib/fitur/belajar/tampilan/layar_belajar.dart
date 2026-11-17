@@ -52,6 +52,9 @@ class LayarBelajar extends ConsumerWidget {
                   ),
                   const SizedBox(height: SpasiFunda.l),
 
+                  // Kartu Saran Personalisasi / Tes Awal
+                  _bangunKartuSaranPersonalisasi(context, ref),
+
                   // Tingkat Pemula
                   _bangunBagianTingkat(
                     context,
@@ -168,7 +171,14 @@ class LayarBelajar extends ConsumerWidget {
           const SizedBox(height: SpasiFunda.s),
           TeksFunda.isiKecil(modul.deskripsiSingkat, warna: WarnaFunda.teksRedup),
 
-          if (!isTersedia) ...[
+          if (modul.id == 'mulai_tes_awal') ...[
+            const SizedBox(height: SpasiFunda.m),
+            TombolFunda(
+              teks: 'Buka Tes Awal',
+              lebarPenuh: true,
+              padaTekan: () => context.push('/belajar/tes-awal'),
+            ),
+          ] else if (!isTersedia) ...[
             const SizedBox(height: SpasiFunda.m),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: SpasiFunda.m, vertical: SpasiFunda.s),
@@ -483,6 +493,126 @@ class LayarBelajar extends ConsumerWidget {
           ),
         ],
       ),
+    );
+  }
+
+  Widget _bangunKartuSaranPersonalisasi(BuildContext context, WidgetRef ref) {
+    final profilAsync = ref.watch(penyediaStreamProfilKeuangan);
+    final rekomendasiAsync = ref.watch(penyediaDaftarRekomendasiModul);
+
+    return profilAsync.when(
+      data: (profil) {
+        if (profil == null) {
+          // Banner ajakan ramah jika belum ada profil
+          return Container(
+            margin: const EdgeInsets.only(bottom: SpasiFunda.l),
+            padding: const EdgeInsets.all(SpasiFunda.m),
+            decoration: BoxDecoration(
+              color: WarnaFunda.utamaTipis,
+              borderRadius: BorderRadius.circular(SudutFunda.petak),
+              border: Border.all(
+                  color: WarnaFunda.utama.withValues(alpha: 0.2)),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Row(
+                  children: [
+                    Icon(LucideIcons.sparkles,
+                        color: WarnaFunda.utama, size: 20),
+                    SizedBox(width: SpasiFunda.s),
+                    Text(
+                      'Saran Belajar Sesuai Kondisimu',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: WarnaFunda.utama,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: SpasiFunda.xs),
+                const TeksFunda.isiKecil(
+                  'Ikuti tes awal 3 menit untuk mengetahui topik mana yang paling pas buat kamu mulai duluan.',
+                ),
+                const SizedBox(height: SpasiFunda.m),
+                TombolFunda(
+                  teks: 'Mulai Tes Awal (Modul 0)',
+                  padaTekan: () => context.push('/belajar/tes-awal'),
+                ),
+              ],
+            ),
+          );
+        }
+
+        // Tampilkan rekomendasi personalisasi jika profil sudah ada
+        return rekomendasiAsync.when(
+          data: (daftar) {
+            if (daftar.isEmpty) return const SizedBox();
+            final rek = daftar.first;
+
+            return Container(
+              margin: const EdgeInsets.only(bottom: SpasiFunda.l),
+              padding: const EdgeInsets.all(SpasiFunda.m),
+              decoration: BoxDecoration(
+                color: WarnaFunda.permukaan,
+                borderRadius: BorderRadius.circular(SudutFunda.petak),
+                border: Border.all(
+                    color: WarnaFunda.utama.withValues(alpha: 0.3)),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: SpasiFunda.s, vertical: 2),
+                        decoration: BoxDecoration(
+                          color: WarnaFunda.utamaTipis,
+                          borderRadius: BorderRadius.circular(SudutFunda.pil),
+                        ),
+                        child: const Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(LucideIcons.sparkles,
+                                size: 14, color: WarnaFunda.utama),
+                            SizedBox(width: SpasiFunda.xs),
+                            TeksFunda.catatan('Saran untuk kamu',
+                                warna: WarnaFunda.utama),
+                          ],
+                        ),
+                      ),
+                      const Spacer(),
+                      TextButton(
+                        onPressed: () => context.push('/belajar/tes-awal'),
+                        child: const Text('Profilku',
+                            style: TextStyle(fontSize: 12)),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: SpasiFunda.s),
+                  TeksFunda.judulBagian(rek.modul.judul),
+                  const SizedBox(height: SpasiFunda.xs),
+                  TeksFunda.isiKecil(rek.deskripsiAlasan,
+                      warna: WarnaFunda.teksRedup),
+                  const SizedBox(height: SpasiFunda.m),
+                  TombolFunda(
+                    teks: 'Buka Modul Ini',
+                    lebarPenuh: true,
+                    padaTekan: () {
+                      context.push('/belajar/tes-awal');
+                    },
+                  ),
+                ],
+              ),
+            );
+          },
+          loading: () => const SizedBox(),
+          error: (err, stack) => const SizedBox(),
+        );
+      },
+      loading: () => const SizedBox(),
+      error: (err, stack) => const SizedBox(),
     );
   }
 }

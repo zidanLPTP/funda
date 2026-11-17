@@ -9,10 +9,12 @@ import '../kontroler/penyedia_belajar.dart';
 /// Layar pengerjaan kuis akhir modul (satu soal per layar + hasil kelulusan).
 class LayarKuisModul extends ConsumerStatefulWidget {
   final String modulId;
+  final int? benih;
 
   const LayarKuisModul({
     super.key,
     required this.modulId,
+    this.benih,
   });
 
   @override
@@ -47,7 +49,11 @@ class _LayarKuisModulState extends ConsumerState<LayarKuisModul> {
 
       final bank = m.kuis.bankSoal;
       final jumlah = m.kuis.jumlahSoal > 0 ? m.kuis.jumlahSoal : bank.length;
-      final soalAcak = pilihDanAcakSoalKuis(bankSoal: bank, jumlahSoal: jumlah);
+      final soalAcak = pilihDanAcakSoalKuis(
+        bankSoal: bank,
+        jumlahSoal: jumlah,
+        benih: widget.benih,
+      );
 
       if (mounted) {
         setState(() {
@@ -197,7 +203,10 @@ class _LayarKuisModulState extends ConsumerState<LayarKuisModul> {
                       child: TeksFunda.catatan('Kuis: ${_modul!.judul}', warna: WarnaFunda.utama),
                     ),
                     const SizedBox(height: SpasiFunda.l),
-                    TeksFunda.judulBagian(soal.tanya),
+                    TeksFunda.judulBagian(
+                      soal.tanya,
+                      key: const Key('teks_soal_kuis'),
+                    ),
                     const SizedBox(height: SpasiFunda.l),
 
                     // Opsi Pilihan

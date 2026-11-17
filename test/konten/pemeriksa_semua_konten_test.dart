@@ -26,11 +26,22 @@ void main() {
       final berkasPelajaranDitemukan = <File>[];
       final berkasModulDitemukan = <File>[];
 
+      File? berkasTesAwal;
+      File? berkasRekomendasi;
+
       // Kumpulkan seluruh berkas JSON
       for (final entitas in dirKonten.listSync(recursive: true)) {
         if (entitas is File && entitas.path.endsWith('.json')) {
           final nama = entitas.uri.pathSegments.last;
           if (nama == 'kamus.json') continue;
+          if (nama == 'rekomendasi.json') {
+            berkasRekomendasi = entitas;
+            continue;
+          }
+          if (nama == 'tes_awal.json') {
+            berkasTesAwal = entitas;
+            continue;
+          }
           if (nama == 'modul.json') {
             berkasModulDitemukan.add(entitas);
           } else {
@@ -49,7 +60,7 @@ void main() {
 
         expect(modul.id.isNotEmpty, isTrue);
         expect(modul.judul.isNotEmpty, isTrue);
-        if (modul.tersedia) {
+        if (modul.tersedia && modul.id != 'mulai_tes_awal') {
           expect(modul.daftarPelajaran.isNotEmpty, isTrue);
         }
 
@@ -109,7 +120,29 @@ void main() {
         );
       }
 
-      // 4. Periksa istilah kamus yang tidak pernah dipakai
+      // 4. Validasi berkas tes_awal.json bila ada
+      if (berkasTesAwal != null) {
+        final rawTes = berkasTesAwal.readAsStringSync();
+        final tesAwal = PembacaKonten.uraiTesAwal(
+          rawTes,
+          namaBerkas: berkasTesAwal.path,
+          daftarPeringatan: daftarPeringatan,
+        );
+        expect(tesAwal.pertanyaanProfil.length, equals(6));
+        expect(tesAwal.soalTesAwal.length, equals(12));
+      }
+
+      // 5. Validasi berkas rekomendasi.json bila ada
+      if (berkasRekomendasi != null) {
+        final rawRekomendasi = berkasRekomendasi.readAsStringSync();
+        final rekomendasi = PembacaKonten.uraiRekomendasi(
+          rawRekomendasi,
+          namaBerkas: berkasRekomendasi.path,
+        );
+        expect(rekomendasi.alasan.isNotEmpty, isTrue);
+      }
+
+      // 6. Periksa istilah kamus yang tidak pernah dipakai
       final istilahTakTerpakai = daftarIstilahKamus.difference(istilahTerpakai);
       if (istilahTakTerpakai.isNotEmpty) {
         for (final ist in istilahTakTerpakai) {

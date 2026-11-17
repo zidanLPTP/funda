@@ -236,6 +236,17 @@ Materi disimpan sebagai berkas JSON di `aset/konten/<tingkat>/<modul>/`.
 }
 ```
 
+**Daftar objek resmi gerbang & misi:**
+- `dompet`: jumlah akun dompet aktif (tipe `ada_data`)
+- `pemasukan`: jumlah transaksi jenis pemasukan (tipe `ada_data`)
+- `pengeluaran`: jumlah transaksi jenis pengeluaran (tipe `ada_data`)
+- `transaksi`: jumlah seluruh transaksi (pemasukan + pengeluaran + transfer) (tipe `ada_data`)
+- `anggaran`: jumlah kategori anggaran bulanan aktif (tipe `ada_data`)
+- `tujuan`: jumlah tujuan/pos/kantong tabungan aktif (tipe `ada_data`)
+- `utang`: jumlah catatan utang/piutang aktif (tipe `ada_data`)
+- `arus_kas`: komposit pemasukan >= min DAN pengeluaran >= min (tipe `aturan_data` atau `ada_data`)
+- `profil`: profil keuangan sudah diisi (bukan dilewati, bukan kosong; tipe `ada_data`)
+
 **Aturan penulisan:** ikuti `styleguide.md` bagian Suara & Bahasa. Angka aturan praktis (rasio, jumlah bulan dana darurat, batas pajak, dll) ditandai **aturan praktis**, diberi sumber, dan **diverifikasi sebelum rilis**. Konten baru berstatus `draf` sampai pemilik proyek menyatakan `ditinjau`.
 
 ---

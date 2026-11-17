@@ -209,6 +209,11 @@ LAPORAN TAHAP: <nama tahap>
 
 Laporan harus jujur. Jika sesuatu belum jalan, katakan. Jangan menyatakan "selesai" untuk hal yang belum diuji.
 
+### Aturan Kejujuran Laporan (WAJIB & KETAT Mulai Tahap 5)
+1. **DILARANG** menulis isi berkas, nama bidang/tabel/kelas, atau keluaran perintah yang tidak berasal dari perintah yang **BENAR-BENAR dijalankan di sesi kerja ini**. Setiap kutipan isi berkas atau klaim "berkas X berisi Y" harus disertai perintah dan keluaran mentah riil (maksimal 40 baris per kutipan).
+2. Klaim apa pun yang belum dibuktikan dengan perintah nyata di sesi ini **WAJIB ditulis "BELUM TERVERIFIKASI"**, bukan "selesai" atau "lolos".
+3. Kata **"LOLOS"** adalah hak pemilik proyek dan reviewer, **BUKAN agen**. Di laporan, agen hanya menyatakan "pengujian lulus: X/Y" atau "verifikasi mandiri terpenuhi", tidak pernah menyatakan tahap lolos.
+
 ---
 
 ## 10. Hal yang Dilarang

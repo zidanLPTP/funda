@@ -1,0 +1,224 @@
+{
+  "versi": 1,
+  "judul": "Tes Awal & Profil Keuangan",
+  "deskripsi": "Bantu Funda memahami situasi dan pemahamanmu agar saran belajar lebih pas.",
+  "pertanyaanProfil": [
+    {
+      "kunci": "punya_penghasilan",
+      "tanya": "Bagaimana kondisi penghasilanmu saat ini?",
+      "pilihan": [
+        { "nilai": "rutin", "teks": "Punya penghasilan rutin bulanan" },
+        { "nilai": "tidak_rutin", "teks": "Penghasilan ada tapi tidak menentu" },
+        { "nilai": "belum", "teks": "Belum memiliki penghasilan sendiri" }
+      ]
+    },
+    {
+      "kunci": "punya_utang",
+      "tanya": "Apakah kamu memiliki kewajiban cicilan atau utang berjalan?",
+      "pilihan": [
+        { "nilai": "ya", "teks": "Ya, sedang mencicil atau ada utang aktif" },
+        { "nilai": "tidak", "teks": "Tidak punya cicilan atau utang sama sekali" },
+        { "nilai": "tidak_yakin", "teks": "Kurang yakin dengan rincian kewajiban" }
+      ]
+    },
+    {
+      "kunci": "dana_darurat",
+      "tanya": "Apakah kamu sudah menyiapkan simpanan khusus dana darurat?",
+      "pilihan": [
+        { "nilai": "belum", "teks": "Belum punya simpanan khusus darurat" },
+        { "nilai": "sedikit", "teks": "Ada sedikit, tapi belum mencukupi" },
+        { "nilai": "sudah", "teks": "Sudah aman untuk beberapa bulan ke depan" }
+      ]
+    },
+    {
+      "kunci": "menabung",
+      "tanya": "Seberapa sering kamu menyisihkan uang untuk ditabung?",
+      "pilihan": [
+        { "nilai": "belum", "teks": "Belum sempat menyisihkan simpanan" },
+        { "nilai": "kadang", "teks": "Kadang menabung bila ada sisa uang" },
+        { "nilai": "rutin", "teks": "Rutin menyisihkan di awal setiap bulan" }
+      ]
+    },
+    {
+      "kunci": "investasi",
+      "tanya": "Bagaimana pengalamanmu dengan dunia investasi?",
+      "pilihan": [
+        { "nilai": "belum", "teks": "Belum pernah mencoba instrumen investasi" },
+        { "nilai": "pernah", "teks": "Pernah mencoba tapi belum aktif rutin" },
+        { "nilai": "aktif", "teks": "Aktif berinvestasi secara berkala" }
+      ]
+    },
+    {
+      "kunci": "mencatat_keuangan",
+      "tanya": "Apakah kamu terbiasa mencatat uang masuk dan uang keluar?",
+      "pilihan": [
+        { "nilai": "belum", "teks": "Belum pernah mencatat secara tertib" },
+        { "nilai": "kadang", "teks": "Kadang mencatat saat ingat saja" },
+        { "nilai": "rutin", "teks": "Rutin mencatat setiap ada transaksi" }
+      ]
+    }
+  ],
+  "tujuanUtama": {
+    "tanya": "Apa sasaran keuangan yang paling ingin kamu capai dalam waktu dekat?",
+    "petunjuk": "Contoh: Menyiapkan dana darurat, melunasi cicilan, atau mulai menabung rutin.",
+    "maksimalKarakter": 100
+  },
+  "soalTesAwal": [
+    {
+      "id": "ta_arus_kas_1",
+      "modulId": "anggaran_arus_kas",
+      "tanya": "Apa yang dimaksud dengan kondisi arus kas positif?",
+      "pilihan": [
+        "Uang yang keluar lebih banyak daripada uang yang masuk",
+        "Uang yang masuk lebih banyak daripada uang yang keluar",
+        "Seluruh saldo uang habis terpakai tanpa sisa",
+        "Belum tahu, nggak apa-apa"
+      ],
+      "benar": 1,
+      "penjelasan": "Arus kas positif terjadi saat uang masuk melebihi uang keluar."
+    },
+    {
+      "id": "ta_arus_kas_2",
+      "modulId": "anggaran_arus_kas",
+      "tanya": "Kapan waktu terbaik menyusun alokasi anggaran bulanan?",
+      "pilihan": [
+        "Di awal bulan sebelum uang mulai dibelanjakan",
+        "Di akhir bulan setelah semua uang terpakai",
+        "Hanya saat saldo rekening sudah menipis",
+        "Belum tahu, nggak apa-apa"
+      ],
+      "benar": 0,
+      "penjelasan": "Anggaran disusun di awal bulan sebagai panduan batas pengeluaran."
+    },
+    {
+      "id": "ta_tabungan_1",
+      "modulId": "tabungan",
+      "tanya": "Bagaimana cara menabung yang paling efektif dan konsisten?",
+      "pilihan": [
+        "Menunggu sisa uang belanja di akhir bulan",
+        "Menyisihkan uang di awal begitu menerima pemasukan",
+        "Menghabiskan uang dulu lalu berutang bila kurang",
+        "Belum tahu, nggak apa-apa"
+      ],
+      "benar": 1,
+      "penjelasan": "Menyisihkan uang di awal memastikan tabungan selalu terisi konsisten."
+    },
+    {
+      "id": "ta_tabungan_2",
+      "modulId": "tabungan",
+      "tanya": "Apa fungsi memisahkan rekening tabungan dari rekening harian?",
+      "pilihan": [
+        "Agar uang tabungan tidak sengaja terpakai belanja harian",
+        "Agar biaya administrasi bank bertambah banyak",
+        "Supaya bisa menarik uang tunai lebih sering",
+        "Belum tahu, nggak apa-apa"
+      ],
+      "benar": 0,
+      "penjelasan": "Pemisahan pos simpanan melindungi uang dari belanja impulsif."
+    },
+    {
+      "id": "ta_dana_darurat_1",
+      "modulId": "dana_darurat",
+      "tanya": "Untuk keperluan apa dana darurat boleh digunakan?",
+      "pilihan": [
+        "Membeli tiket konser yang sedang diskon",
+        "Biaya perbaikan mendadak atau berobat saat sakit",
+        "Modal spekulasi belanja barang koleksi",
+        "Belum tahu, nggak apa-apa"
+      ],
+      "benar": 1,
+      "penjelasan": "Dana darurat khusus untuk peristiwa genting yang tak terduga."
+    },
+    {
+      "id": "ta_dana_darurat_2",
+      "modulId": "dana_darurat",
+      "tanya": "Di mana tempat penyimpanan dana darurat yang paling tepat?",
+      "pilihan": [
+        "Instrumen berisiko tinggi dengan fluktuasi tajam",
+        "Tempat yang aman, stabil, dan mudah dicairkan sewaktu-waktu",
+        "Aset fisik tanah yang butuh waktu lama untuk dijual",
+        "Belum tahu, nggak apa-apa"
+      ],
+      "benar": 1,
+      "penjelasan": "Dana darurat harus likuid agar siap dipakai seketika dibutuhkan."
+    },
+    {
+      "id": "ta_utang_1",
+      "modulId": "utang_cicilan",
+      "tanya": "Berapa batas rasio cicilan bulanan yang sehat terhadap pemasukan?",
+      "pilihan": [
+        "Maksimal 30 persen dari total pemasukan bulanan",
+        "Minimal 70 persen dari seluruh gaji bulanan",
+        "Bebas tanpa batas selama masih ada pinjaman baru",
+        "Belum tahu, nggak apa-apa"
+      ],
+      "benar": 0,
+      "penjelasan": "Batas aturan praktis cicilan yang aman adalah di bawah 30 persen."
+    },
+    {
+      "id": "ta_utang_2",
+      "modulId": "utang_cicilan",
+      "tanya": "Apa langkah pertama yang bijak saat memiliki beberapa cicilan utang?",
+      "pilihan": [
+        "Membuat utang baru untuk menutup utang lama",
+        "Mencatat seluruh daftar utang, bunga, dan jadwal jatuh tempo",
+        "Mengabaikan tagihan sampai penagih datang ke rumah",
+        "Belum tahu, nggak apa-apa"
+      ],
+      "benar": 1,
+      "penjelasan": "Memetakan total kewajiban adalah kunci menyusun strategi pelunasan."
+    },
+    {
+      "id": "ta_penipuan_1",
+      "modulId": "waspada_penipuan",
+      "tanya": "Apa tanda mencurigakan dari tawaran investasi bodong?",
+      "pilihan": [
+        "Keuntungan pasti sangat tinggi tanpa ada risiko rugi",
+        "Terdaftar resmi dan diawasi oleh otoritas keuangan",
+        "Risiko investasi dijelaskan secara transparan",
+        "Belum tahu, nggak apa-apa"
+      ],
+      "benar": 0,
+      "penjelasan": "Janji keuntungan pasti tanpa risiko adalah ciri khas utama penipuan."
+    },
+    {
+      "id": "ta_penipuan_2",
+      "modulId": "waspada_penipuan",
+      "tanya": "Apa yang harus kamu lakukan bila ada orang meminta kode OTP perbankanmu?",
+      "pilihan": [
+        "Segera memberikannya karena mengaku petugas bank",
+        "Jangan pernah membagikan kode OTP kepada siapa pun",
+        "Menuliskan kode OTP di media sosial publik",
+        "Belum tahu, nggak apa-apa"
+      ],
+      "benar": 1,
+      "penjelasan": "Kode OTP bersifat rahasia pribadi dan pihak bank tidak pernah memintanya."
+    },
+    {
+      "id": "ta_psikologi_1",
+      "modulId": "psikologi_uang",
+      "tanya": "Apa strategi sederhana meredam dorongan belanja impulsif?",
+      "pilihan": [
+        "Langsung bayar barang saat pertama kali melihatnya",
+        "Terapkan jeda 24 jam sebelum memutuskan membeli barang non-esensial",
+        "Pinjam uang teman agar bisa segera checkout belanjaan",
+        "Belum tahu, nggak apa-apa"
+      ],
+      "benar": 1,
+      "penjelasan": "Aturan jeda waktu memberi ruang berpikir logis antara butuh dan ingin."
+    },
+    {
+      "id": "ta_psikologi_2",
+      "modulId": "psikologi_uang",
+      "tanya": "Bagaimana membedakan kebutuhan pokok dari keinginan pribadi?",
+      "pilihan": [
+        "Kebutuhan menunjang keberlangsungan hidup, keinginan meningkatkan kenyamanan",
+        "Kebutuhan dan keinginan memiliki sifat yang sama persis",
+        "Semua barang mahal otomatis tergolong sebagai kebutuhan primer",
+        "Belum tahu, nggak apa-apa"
+      ],
+      "benar": 0,
+      "penjelasan": "Kebutuhan esensial untuk hidup, sedangkan keinginan bersifat pelengkap."
+    }
+  ]
+}

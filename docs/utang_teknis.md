@@ -121,14 +121,22 @@ Dokumen ini mencatat keputusan teknis sementara, kompromi dependensi, dan hal-ha
 
 ---
 
-## 10. Penyelarasan Terakhir Mesin Belajar & Isolasi Iterasi Bersih (Tahap 4-R3)
+## 11. Catatan Profiling Kinerja Skala Besar & Rencana Optimasi (Tahap 5)
 
-- **Konteks:**
-  Pada pengujian 4-R2, kueri 20.000 transaksi sempat terlihat lebih cepat daripada 5.000 transaksi karena efek warm page cache SQLite dan distribusi tanggal di mana bulan berjalan memiliki jumlah data yang sama.
-- **Penyelarasan:**
-  1. Pengukuran ulang dilakukan dengan **basis data terisolasi bersih per iterasi** (10 iterasi) dan proporsi data bulan berjalan 4x lipat (2.500 vs 10.000 transaksi di bulan Maret 2026).
-  2. Hasil 10 iterasi bersih: Kueri Beranda 5k = **19.20 ms** vs 20k = **33.14 ms**; Waktu tampil Beranda 5k = **85.83 ms** vs 20k = **88.39 ms**; Tab Belajar 5k = **13.79 ms** vs 20k = **37.23 ms**.
-  3. Relasi misi vs gerbang data: Pemeriksa konten kini secara otomatis menolak pelajaran bila misinya sama atau lebih longgar dari gerbang pelajarannya sendiri.
-  4. Sisa selisih yang dicatat: Pengetukan notifikasi fisik pada notification shade sistem OS Android tetap tercatat sebagai `[BELUM TERVERIFIKASI FISIK]` karena keterbatasan otomasi window OS tanpa runner pihak ketiga, meskipun penanganan deep-link rute `/tagihan` terbukti 100% lulus di tingkat kode.
+Berdasarkan hasil pengujian terisolasi pada 10 iterasi bersih di emulator Pixel 8 (Tahap 4-R3), dicatat 3 temuan profiling penting untuk ditinjau:
+1. **Kenaikan Kueri Beranda 72.6% saat Beban Bulan Berjalan 4x Lipat:**
+   - *Temuan:* Ketika data bulan berjalan dinaikkan 4x (2.500 transaksi menjadi 10.000 transaksi di bulan yang sama), durasi kueri SQL Beranda naik dari 19.20 ms ke 33.14 ms (+72.6%).
+   - *Penyebab:* Kueri agregasi SQL tetap harus memindai (*index range scan*) semua baris dalam rentang tanggal bulan berjalan untuk menghitung `SUM(nominal)` dan mengelompokkan sifat kategori. Meskipun masih jauh di bawah ambang batas bahaya (tetap < 35 ms), pertumbuhan ini linier terhadap jumlah transaksi di bulan aktif.
+   - *Rencana:* Pada Tahap 7/8, jika pengguna memiliki >10.000 transaksi dalam 1 bulan tunggal, pertimbangkan tabel agregasi ringkasan bulanan (*monthly summary snapshot*) yang diperbarui secara inkremental via trigger/repositori.
+2. **Kenaikan Tab Belajar 170% pada Pindai Hari/Bulan Berbeda:**
+   - *Temuan:* Waktu siklus penuh Tab Belajar naik dari 13.79 ms (5k data) ke 37.23 ms (20k data) (+170%).
+   - *Penyebab:* Adanya pemindaian hari berbeda (`COUNT(DISTINCT date(waktu))`) dan bulan berbeda pada foto data pengguna yang memindai seluruh riwayat transaksi.
+   - *Rencana:* Evaluasi kueri `DISTINCT date` ini hanya perlu dijalankan apabila terdapat modul/pelajaran yang benar-benar mensyaratkan gerbang bertipe `periode_data`. Untuk kurikulum saat ini yang mayoritas bertipe `ada_data`, pemindaian ini dapat dioptimasi atau dihitung secara lazy bila diperlukan.
+3. **Cold Start Tampilan Beranda Pertama Kali (~1.129 ms di Emulator):**
+   - *Temuan:* Pada peluncuran aplikasi pertama kali (*cold start*), inisialisasi awal Flutter engine, pembukaan koneksi SQLite, dan rendering frame pertama Beranda memakan waktu ~1.129 ms di emulator.
+   - *Penyebab:* Overhead kompilasi JIT di emulator Android debug build serta pembacaan awal skema basis data. Setelah frame pertama ter-render (*warm render*), waktu pembaruan tampilan turun drastis ke 85-88 ms.
+   - *Rencana:* Evaluasi waktu peluncuran rilis (*release build* dengan AOT) pada Tahap 12 (Polesan & Rilis).
+
+---
 
 

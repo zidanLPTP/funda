@@ -21,6 +21,8 @@ import 'tabel/tabel_progres_pelajaran.dart';
 import 'tabel/tabel_hasil_misi.dart';
 import 'tabel/tabel_hasil_kuis.dart';
 import 'tabel/tabel_pernyataan.dart';
+import 'tabel/tabel_profil_keuangan.dart';
+import 'tabel/tabel_hasil_tes_awal.dart';
 
 part 'basis_data.g.dart';
 
@@ -45,6 +47,8 @@ part 'basis_data.g.dart';
     TabelHasilMisi,
     TabelHasilKuis,
     TabelPernyataan,
+    TabelProfilKeuangan,
+    TabelHasilTesAwal,
   ],
 )
 class BasisDataFunda extends _$BasisDataFunda {
@@ -52,7 +56,7 @@ class BasisDataFunda extends _$BasisDataFunda {
     : super(pelaksanaKueri ?? _bukaKoneksi());
 
   @override
-  int get schemaVersion => 8;
+  int get schemaVersion => 9;
 
   @override
   MigrationStrategy get migration {
@@ -112,6 +116,10 @@ class BasisDataFunda extends _$BasisDataFunda {
         await customStatement(
           'CREATE INDEX IF NOT EXISTS idx_transaksi_waktu_jenis '
           'ON tabel_transaksi (waktu_transaksi, jenis);',
+        );
+        await customStatement(
+          'CREATE INDEX IF NOT EXISTS idx_hasil_tes_awal_waktu '
+          'ON tabel_hasil_tes_awal (waktu);',
         );
       },
       onUpgrade: (Migrator m, int dariVersi, int keVersi) async {
@@ -250,6 +258,16 @@ class BasisDataFunda extends _$BasisDataFunda {
         await customStatement(
           'CREATE INDEX IF NOT EXISTS idx_transaksi_waktu_jenis '
           'ON tabel_transaksi (waktu_transaksi, jenis);',
+        );
+        break;
+      case 9:
+        // Migrasi Skema Versi 9 (Tahap 5 - Tes Awal & Personalisasi):
+        // Membuat tabel_profil_keuangan dan tabel_hasil_tes_awal
+        await m.createTable(tabelProfilKeuangan);
+        await m.createTable(tabelHasilTesAwal);
+        await customStatement(
+          'CREATE INDEX IF NOT EXISTS idx_hasil_tes_awal_waktu '
+          'ON tabel_hasil_tes_awal (waktu);',
         );
         break;
       default:

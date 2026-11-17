@@ -228,6 +228,8 @@ void main() {
       expect(find.text('Lengkapi Data Sekarang'), findsOneWidget);
 
       // Ketuk tombol "Aku tidak punya ini"
+      await tester.ensureVisible(find.text('Aku tidak punya ini'));
+      await tester.pumpAndSettle();
       await tester.tap(find.text('Aku tidak punya ini'));
       await tester.pumpAndSettle();
 

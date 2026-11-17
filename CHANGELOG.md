@@ -5,6 +5,36 @@ Format penulisan mengacu pada standar Keep a Changelog dan penamaan commit Funda
 
 ---
 
+## [0.7.0] - 2026-11-17 — Tahap 5: Tes Awal & Personalisasi
+
+Tahap 5: Tes Awal Keuangan (Modul 0), Pembentukan Profil Keuangan, dan Personalisasi Saran Modul Belajar. Pengguna baru dapat mengikuti tes mandiri penempatan yang terdiri dari 6 pertanyaan profil keuangan (tujuan, sumber penghasilan, rentang, tanggungan, dana darurat, utang) dan 12 butir soal pemahaman awal (2 butir per modul dengan opsi ke-4 "Belum tahu, nggak apa-apa"). Sistem menghasilkan skor total dan skor per topik pemula, menyimpannya ke skema basis data SQLite (migrasi versi 9), serta menghasilkan rekomendasi personalisasi modul berbasis aturan deterministik yang ramah dan bebas menghakimi. Dilengkapi kartu rekomendasi di bagian atas Tab Belajar, kemampuan melewati tes awal (`profil_dilewati`), opsi tes ulang, serta gerbang data Modul 1 yang menyelaraskan opsi pengisian profil atau lewati.
+
+### Ditambahkan
+- **Skema & Migrasi Basis Data Versi 9 (`lib/data/`):**
+  - `TabelProfilKeuangan`: Menyimpan data profil keuangan pengguna (`tujuan_utama`, `sumber_penghasilan`, `rentang_penghasilan`, `tanggungan`, `status_darurat`, `status_utang`, `dibuat_pada`).
+  - `TabelHasilTesAwal`: Menyimpan riwayat hasil tes awal (`skor_total_persen`, `total_soal`, `total_benar`, `skor_per_modul_json`, `selesai_pada`) dengan indeks performa `idx_hasil_tes_awal_waktu`.
+  - Migrasi idempoten `case 9` dan pengujian beruntun migrasi v1 -> v9 lulus 100%.
+- **Konten Tes Awal & Rekomendasi (`aset/konten/`):**
+  - `aset/konten/pemula/mulai_tes_awal/tes_awal.json`: 6 pertanyaan profil dan 12 butir soal tes awal berbobot 0/1 dengan opsi ke-4 selalu "Belum tahu, nggak apa-apa".
+  - `aset/konten/rekomendasi.json`: Matriks aturan rekomendasi modul berbasis kode alasan (`fondasi_awal`, `skor_rendah`, `ada_utang`, `dana_darurat_kosong`, `keinginan_terbesar`) dengan narasi ramah tanpa kata menghakimi.
+- **Logika Murni & TDD (`lib/perhitungan/perhitungan_tes_awal_personalisasi.dart`):**
+  - `hitungSkorTesAwal`: Menghitung skor total persen dan skor per modul secara adil dan deterministik.
+  - `bangunProfil`: Memetakan jawaban kuesioner profil pengguna ke objek data terstruktur.
+  - `rekomendasiModul`: Menentukan urutan rekomendasi modul berdasarkan gabungan kondisi riil pengguna dan nilai pemahaman awal.
+  - `tentukanTargetLanjutBelajar`: Menentukan prioritas pelajaran berikutnya di Beranda (sedang berjalan > rekomendasi terbuka pertama > modul terbuka pertama).
+- **Antarmuka Pengguna & Integrasi State (`lib/fitur/belajar/`):**
+  - `LayarTesAwal` (`/belajar/tes-awal`): Alur bertahap (Pembuka -> Profil 6 pertanyaan -> Soal Tes 12 butir -> Hasil & Rekomendasi).
+  - Kartu rekomendasi personalisasi dinamis di bagian atas Tab Belajar (`LayarBelajar`) dengan tombol "Profilku" / "Mulai Tes Ulang".
+  - Pengacakan kuis modul yang deterministik dengan dukungan parameter benih (`benih`) di `LayarKuisModul`.
+- **Pengujian Lengkap & Bukti Resmi (`test/`, `integration_test/`, `docs/bukti/`):**
+  - Uji murni tes awal & personalisasi (`test/perhitungan/perhitungan_tes_awal_personalisasi_test.dart`): 13 skenario lengkap.
+  - Uji widget tes awal (`test/fitur/tes_awal_widget_test.dart`): Melewati tes awal dan alur pengisian lengkap.
+  - Uji integrasi emulator Pixel 8 (`integration_test/tahap_05_alur_tes_awal_emulator_test.dart`): Pengujian end-to-end lengkap dari Beranda -> Peta Belajar -> Tes Awal -> Profil -> 12 Soal -> Hasil Rekomendasi -> Kembali ke Tab Belajar.
+  - Bukti keluaran nyata: `docs/bukti/tahap_05_analyze.txt` (0 issues) dan `docs/bukti/tahap_05_test.txt` (270 passed).
+  - Tangkapan layar resmi: `docs/tangkapan_layar/tahap_05_emulator/07_tab_belajar_dengan_rekomendasi.png`.
+
+---
+
 ## [0.6.3] - 2026-11-17 — Penyelarasan Terakhir Tahap 4 (Tahap 4-R3)
 
 Tahap 4-R3: Penyelarasan terakhir dan pengukuhan arsitektur mesin belajar Funda. Menyelaraskan dua pelajaran contoh persis spesifikasi (1.2 "Memetakan Arus Kas", gerbang dompet >= 1, misi arus kas [masuk >= 1 DAN keluar >= 1], umpan balik arus_kas_bulan_ini; 1.3 "Kebutuhan vs Keinginan", gerbang pengeluaran >= 3, misi semua_kategori_berlabel, umpan balik komposisi_sifat_bulan_ini). Mengoreksi evaluasi misi agar tidak lolos pada data kosong dan menambahkan aturan pemeriksa konten yang menolak misi yang otomatis terpenuhi oleh gerbang pelajarannya sendiri. Pembersihan UTF-8 BOM pada berkas JSON kurikulum, penegasan daftar kata terlarang di satu tempat sentral dengan kalimat > 25 kata sebagai peringatan, pembuktian kesetaraan SQL batas bulan pukul 23:30 WIB, pengukuran performa ulang 10 iterasi bersih di emulator Pixel 8, serta pengujian alur interaktif end-to-end lengkap dan pembuktian eliminasi penulisan berkas ke `docs/tangkapan_layar` dari seluruh berkas uji.

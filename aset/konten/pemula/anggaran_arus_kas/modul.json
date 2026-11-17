@@ -8,6 +8,13 @@
   "gerbang": [
     {
       "tipe": "ada_data",
+      "objek": "profil",
+      "min": 1,
+      "atauPernyataan": "profil_dilewati",
+      "pesan": "Isi profil keuanganmu atau lewati tes awal terlebih dahulu."
+    },
+    {
+      "tipe": "ada_data",
       "objek": "dompet",
       "min": 1,
       "pesan": "Buat minimal 1 dompet dulu agar kamu bisa mulai mencatat."

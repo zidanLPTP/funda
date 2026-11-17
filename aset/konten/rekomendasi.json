@@ -1,0 +1,25 @@
+{
+  "versi": 1,
+  "alasan": {
+    "skor_rendah": {
+      "judul": "Perdalam Pemahaman",
+      "deskripsi": "Topik ini bagus untuk diperdalam agar kamu semakin percaya diri mengelola keuangan."
+    },
+    "ada_utang": {
+      "judul": "Prioritas Pelunasan Utang",
+      "deskripsi": "Membantu menata strategi pelunasan dan beban cicilan agar arus kas lebih lega."
+    },
+    "dana_darurat_kosong": {
+      "judul": "Bantalan Keuangan",
+      "deskripsi": "Membangun pos dana darurat memberi ketenangan pikiran saat hal tak terduga terjadi."
+    },
+    "keinginan_terbesar": {
+      "judul": "Sesuai Sasaranmu",
+      "deskripsi": "Selaras dengan tujuan utama yang ingin kamu capai dalam waktu dekat."
+    },
+    "fondasi_awal": {
+      "judul": "Langkah Fondasi",
+      "deskripsi": "Pijakan awal terbaik untuk memetakan uang masuk dan uang keluar sehari-hari."
+    }
+  }
+}

@@ -176,7 +176,11 @@ void main() {
       final semuaBerkasJson = dirKonten
           .listSync(recursive: true)
           .whereType<File>()
-          .where((f) => f.path.endsWith('.json') && !f.path.endsWith('kamus.json'))
+          .where((f) =>
+              f.path.endsWith('.json') &&
+              !f.path.endsWith('kamus.json') &&
+              !f.path.endsWith('rekomendasi.json') &&
+              !f.path.endsWith('tes_awal.json'))
           .toList();
 
       expect(semuaBerkasJson.length, greaterThanOrEqualTo(19), reason: 'Minimal 19 modul (modul 0..18)');

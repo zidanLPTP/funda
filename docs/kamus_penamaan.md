@@ -98,6 +98,10 @@
 | learning map | LayarBelajar | Tab Belajar menampilkan peta tingkat, modul, dan pelajaran |
 | content reader | PembacaKonten | Utilitas pembaca berkas JSON kurikulum dan kamus |
 | continue learning tile | penyediaLanjutBelajarBeranda | Petak Beranda reaktif penunjuk pelajaran siap buka |
+| placement test result | tabel_hasil_tes_awal | Riwayat nilai tes mandiri penempatan dan skor per modul |
+| financial profile | tabel_profil_keuangan | Profil keuangan pengguna (tujuan, sumber penghasilan, rentang, tanggungan, darurat, utang) |
+| module recommendation | rekomendasiModul | Fungsi rekomendasi modul personalisasi berbasis skor dan profil keuangan |
+| test screen | LayarTesAwal | Layar alur tes awal dan pembentukan profil keuangan |
 
 ## Aturan Cabang Kerja (Git)
 - Setiap tahap dikerjakan pada cabang khusus (contoh: `tahap-02-dompet-transaksi`).

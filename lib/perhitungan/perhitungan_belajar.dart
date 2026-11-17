@@ -26,6 +26,11 @@ class FotoDataPengguna {
   final Map<String, String> pernyataan; // kunci -> nilai ('true')
   final Map<String, String> progresPelajaran; // pelajaranId -> 'sedang' | 'selesai'
   final Map<String, HasilKuisSnapshot> hasilKuisTerbaik; // modulId -> snapshot
+  final bool profilTerisi;
+  final bool tujuanDanaDaruratAktif;
+  final int saldoTerkumpulDanaDarurat;
+  final int sisaUtangAktif;
+  final Map<String, int> komposisiSifatBulanIni;
 
   const FotoDataPengguna({
     required this.jumlahDompetAktif,
@@ -40,6 +45,11 @@ class FotoDataPengguna {
     required this.pernyataan,
     required this.progresPelajaran,
     required this.hasilKuisTerbaik,
+    this.profilTerisi = false,
+    this.tujuanDanaDaruratAktif = false,
+    this.saldoTerkumpulDanaDarurat = 0,
+    this.sisaUtangAktif = 0,
+    this.komposisiSifatBulanIni = const {},
   });
 
   factory FotoDataPengguna.kosong() {
@@ -56,6 +66,11 @@ class FotoDataPengguna {
       pernyataan: {},
       progresPelajaran: {},
       hasilKuisTerbaik: {},
+      profilTerisi: false,
+      tujuanDanaDaruratAktif: false,
+      saldoTerkumpulDanaDarurat: 0,
+      sisaUtangAktif: 0,
+      komposisiSifatBulanIni: {},
     );
   }
 
@@ -72,6 +87,11 @@ class FotoDataPengguna {
     Map<String, String>? pernyataan,
     Map<String, String>? progresPelajaran,
     Map<String, HasilKuisSnapshot>? hasilKuisTerbaik,
+    bool? profilTerisi,
+    bool? tujuanDanaDaruratAktif,
+    int? saldoTerkumpulDanaDarurat,
+    int? sisaUtangAktif,
+    Map<String, int>? komposisiSifatBulanIni,
   }) {
     return FotoDataPengguna(
       jumlahDompetAktif: jumlahDompetAktif ?? this.jumlahDompetAktif,
@@ -88,6 +108,14 @@ class FotoDataPengguna {
       pernyataan: pernyataan ?? this.pernyataan,
       progresPelajaran: progresPelajaran ?? this.progresPelajaran,
       hasilKuisTerbaik: hasilKuisTerbaik ?? this.hasilKuisTerbaik,
+      profilTerisi: profilTerisi ?? this.profilTerisi,
+      tujuanDanaDaruratAktif:
+          tujuanDanaDaruratAktif ?? this.tujuanDanaDaruratAktif,
+      saldoTerkumpulDanaDarurat:
+          saldoTerkumpulDanaDarurat ?? this.saldoTerkumpulDanaDarurat,
+      sisaUtangAktif: sisaUtangAktif ?? this.sisaUtangAktif,
+      komposisiSifatBulanIni:
+          komposisiSifatBulanIni ?? this.komposisiSifatBulanIni,
     );
   }
 }
@@ -573,6 +601,8 @@ String? ambilRutePengisianObjek(String? objek) {
       return '/kategori';
     case 'tagihan':
       return '/tagihan';
+    case 'profil':
+      return '/belajar/tes-awal';
     default:
       return null;
   }
@@ -681,6 +711,8 @@ int _hitungJumlahObjek(String? objek, FotoDataPengguna fotoData) {
       return fotoData.jumlahUtangAktif;
     case 'kategori':
       return fotoData.kategoriKeluarTerpakai.length;
+    case 'profil':
+      return fotoData.profilTerisi ? 1 : 0;
     default:
       return 0;
   }

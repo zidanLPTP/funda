@@ -5,6 +5,7 @@ import '../fitur/anggaran/tampilan/layar_anggaran.dart';
 import '../fitur/belajar/tampilan/layar_belajar.dart';
 import '../fitur/belajar/tampilan/layar_kuis_modul.dart';
 import '../fitur/belajar/tampilan/layar_pemutar_pelajaran.dart';
+import '../fitur/belajar/tampilan/layar_tes_awal.dart';
 import '../fitur/beranda/tampilan/layar_beranda.dart';
 import '../fitur/catatan/tampilan/layar_catatan.dart';
 import '../fitur/dompet/tampilan/layar_daftar_dompet.dart';
@@ -180,6 +181,11 @@ final ruteFunda = GoRouter(
       builder: (context, state) => LayarKuisModul(
         modulId: state.pathParameters['modulId']!,
       ),
+    ),
+    GoRoute(
+      parentNavigatorKey: _kunciNavigatorAkar,
+      path: '/belajar/tes-awal',
+      builder: (context, state) => const LayarTesAwal(),
     ),
 
     // Rute Galeri Komponen (hanya tersedia di mode debug)

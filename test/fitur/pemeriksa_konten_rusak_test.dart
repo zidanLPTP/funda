@@ -485,5 +485,164 @@ void main() {
         returnsNormally,
       );
     });
+
+    // -------------------------------------------------------------------------
+    // Pengujian Validasi Konten Tes Awal (tes_awal.json) Rusak (Tahap 5)
+    // -------------------------------------------------------------------------
+    group('Pengujian Validasi Konten Tes Awal (tes_awal.json) Rusak', () {
+      test('1. tes_awal.json bukan objek JSON', () {
+        expect(
+          () => PembacaKonten.uraiTesAwal('["bukan", "objek"]', namaBerkas: 'tes_awal.json'),
+          throwsA(predicate((e) => e is GalatKonten && e.berkas == 'tes_awal.json')),
+        );
+      });
+
+      test('2. tes_awal.json pertanyaanProfil kurang dari 6', () {
+        final jsonStr = '''
+        {
+          "judul": "Tes Awal",
+          "deskripsi": "Deskripsi",
+          "pertanyaanProfil": [
+            {"kunci": "punya_penghasilan", "tanya": "Tanya?", "pilihan": [{"nilai": "a", "teks": "A"}]}
+          ],
+          "tujuanUtama": {"tanya": "Tanya?", "petunjuk": "P", "maksimalKarakter": 100},
+          "soalTesAwal": []
+        }
+        ''';
+        expect(
+          () => PembacaKonten.uraiTesAwal(jsonStr, namaBerkas: 'tes_awal.json'),
+          throwsA(predicate((e) => e is GalatKonten && e.kolom == 'pertanyaanProfil')),
+        );
+      });
+
+      test('3. tes_awal.json pertanyaanProfil kunci tidak dikenal', () {
+        final jsonStr = '''
+        {
+          "judul": "Tes Awal",
+          "deskripsi": "Deskripsi",
+          "pertanyaanProfil": [
+            {"kunci": "kunci_ajaib_salah", "tanya": "Tanya?", "pilihan": [{"nilai": "a", "teks": "A"}, {"nilai": "b", "teks": "B"}]},
+            {"kunci": "punya_utang", "tanya": "Tanya?", "pilihan": [{"nilai": "a", "teks": "A"}, {"nilai": "b", "teks": "B"}]},
+            {"kunci": "dana_darurat", "tanya": "Tanya?", "pilihan": [{"nilai": "a", "teks": "A"}, {"nilai": "b", "teks": "B"}]},
+            {"kunci": "menabung", "tanya": "Tanya?", "pilihan": [{"nilai": "a", "teks": "A"}, {"nilai": "b", "teks": "B"}]},
+            {"kunci": "investasi", "tanya": "Tanya?", "pilihan": [{"nilai": "a", "teks": "A"}, {"nilai": "b", "teks": "B"}]},
+            {"kunci": "mencatat_keuangan", "tanya": "Tanya?", "pilihan": [{"nilai": "a", "teks": "A"}, {"nilai": "b", "teks": "B"}]}
+          ],
+          "tujuanUtama": {"tanya": "Tanya?", "petunjuk": "P", "maksimalKarakter": 100},
+          "soalTesAwal": []
+        }
+        ''';
+        expect(
+          () => PembacaKonten.uraiTesAwal(jsonStr, namaBerkas: 'tes_awal.json'),
+          throwsA(predicate((e) => e is GalatKonten && e.kolom?.contains('kunci') == true)),
+        );
+      });
+
+      test('4. tes_awal.json jumlah soal bukan 12', () {
+        final jsonStr = '''
+        {
+          "judul": "Tes Awal",
+          "deskripsi": "Deskripsi",
+          "pertanyaanProfil": [
+            {"kunci": "punya_penghasilan", "tanya": "Tanya?", "pilihan": [{"nilai": "a", "teks": "A"}, {"nilai": "b", "teks": "B"}]},
+            {"kunci": "punya_utang", "tanya": "Tanya?", "pilihan": [{"nilai": "a", "teks": "A"}, {"nilai": "b", "teks": "B"}]},
+            {"kunci": "dana_darurat", "tanya": "Tanya?", "pilihan": [{"nilai": "a", "teks": "A"}, {"nilai": "b", "teks": "B"}]},
+            {"kunci": "menabung", "tanya": "Tanya?", "pilihan": [{"nilai": "a", "teks": "A"}, {"nilai": "b", "teks": "B"}]},
+            {"kunci": "investasi", "tanya": "Tanya?", "pilihan": [{"nilai": "a", "teks": "A"}, {"nilai": "b", "teks": "B"}]},
+            {"kunci": "mencatat_keuangan", "tanya": "Tanya?", "pilihan": [{"nilai": "a", "teks": "A"}, {"nilai": "b", "teks": "B"}]}
+          ],
+          "tujuanUtama": {"tanya": "Tanya?", "petunjuk": "P", "maksimalKarakter": 100},
+          "soalTesAwal": [
+            {
+              "id": "s1", "modulId": "anggaran_arus_kas", "tanya": "T?", "pilihan": ["A", "B", "C", "Belum tahu, nggak apa-apa"], "benar": 0, "penjelasan": "P"
+            }
+          ]
+        }
+        ''';
+        expect(
+          () => PembacaKonten.uraiTesAwal(jsonStr, namaBerkas: 'tes_awal.json'),
+          throwsA(predicate((e) => e is GalatKonten && e.kolom == 'soalTesAwal')),
+        );
+      });
+
+      test('5. tes_awal.json opsi ke-4 bukan "Belum tahu, nggak apa-apa"', () {
+        // Buat 12 soal tetapi soal pertama opsi ke-4 nya bukan standar
+        final modulList = ['anggaran_arus_kas', 'tabungan', 'dana_darurat', 'utang_cicilan', 'waspada_penipuan', 'psikologi_uang'];
+        final daftarSoal = <Map<String, dynamic>>[];
+        var idCounter = 1;
+        for (final m in modulList) {
+          for (var i = 1; i <= 2; i++) {
+            final nomor = idCounter++;
+            daftarSoal.add({
+              'id': 's_$nomor',
+              'modulId': m,
+              'tanya': 'Pertanyaan soal?',
+              'pilihan': ['A', 'B', 'C', nomor == 1 ? 'Pilihan Sembarangan' : 'Belum tahu, nggak apa-apa'],
+              'benar': 0,
+              'penjelasan': 'Penjelasan jawaban.',
+            });
+          }
+        }
+
+        final data = {
+          'judul': 'Tes Awal',
+          'deskripsi': 'Deskripsi',
+          'pertanyaanProfil': [
+            {'kunci': 'punya_penghasilan', 'tanya': 'Tanya?', 'pilihan': [{'nilai': 'a', 'teks': 'A'}, {'nilai': 'b', 'teks': 'B'}]},
+            {'kunci': 'punya_utang', 'tanya': 'Tanya?', 'pilihan': [{'nilai': 'a', 'teks': 'A'}, {'nilai': 'b', 'teks': 'B'}]},
+            {'kunci': 'dana_darurat', 'tanya': 'Tanya?', 'pilihan': [{'nilai': 'a', 'teks': 'A'}, {'nilai': 'b', 'teks': 'B'}]},
+            {'kunci': 'menabung', 'tanya': 'Tanya?', 'pilihan': [{'nilai': 'a', 'teks': 'A'}, {'nilai': 'b', 'teks': 'B'}]},
+            {'kunci': 'investasi', 'tanya': 'Tanya?', 'pilihan': [{'nilai': 'a', 'teks': 'A'}, {'nilai': 'b', 'teks': 'B'}]},
+            {'kunci': 'mencatat_keuangan', 'tanya': 'Tanya?', 'pilihan': [{'nilai': 'a', 'teks': 'A'}, {'nilai': 'b', 'teks': 'B'}]}
+          ],
+          'tujuanUtama': {'tanya': 'Tanya?', 'petunjuk': 'P', 'maksimalKarakter': 100},
+          'soalTesAwal': daftarSoal,
+        };
+
+        expect(
+          () => PembacaKonten.validasiKontenTesAwal(data, namaBerkas: 'tes_awal.json'),
+          throwsA(predicate((e) => e is GalatKonten && e.kolom?.contains('pilihan[3]') == true)),
+        );
+      });
+
+      test('6. tes_awal.json soal mereferensikan modulId tidak valid', () {
+        final modulList = ['anggaran_arus_kas', 'tabungan', 'dana_darurat', 'utang_cicilan', 'waspada_penipuan', 'modul_salah_tidak_ada'];
+        final daftarSoal = <Map<String, dynamic>>[];
+        var idCounter = 1;
+        for (final m in modulList) {
+          for (var i = 1; i <= 2; i++) {
+            final nomor = idCounter++;
+            daftarSoal.add({
+              'id': 's_$nomor',
+              'modulId': m,
+              'tanya': 'Pertanyaan soal?',
+              'pilihan': ['A', 'B', 'C', 'Belum tahu, nggak apa-apa'],
+              'benar': 0,
+              'penjelasan': 'Penjelasan jawaban.',
+            });
+          }
+        }
+
+        final data = {
+          'judul': 'Tes Awal',
+          'deskripsi': 'Deskripsi',
+          'pertanyaanProfil': [
+            {'kunci': 'punya_penghasilan', 'tanya': 'Tanya?', 'pilihan': [{'nilai': 'a', 'teks': 'A'}, {'nilai': 'b', 'teks': 'B'}]},
+            {'kunci': 'punya_utang', 'tanya': 'Tanya?', 'pilihan': [{'nilai': 'a', 'teks': 'A'}, {'nilai': 'b', 'teks': 'B'}]},
+            {'kunci': 'dana_darurat', 'tanya': 'Tanya?', 'pilihan': [{'nilai': 'a', 'teks': 'A'}, {'nilai': 'b', 'teks': 'B'}]},
+            {'kunci': 'menabung', 'tanya': 'Tanya?', 'pilihan': [{'nilai': 'a', 'teks': 'A'}, {'nilai': 'b', 'teks': 'B'}]},
+            {'kunci': 'investasi', 'tanya': 'Tanya?', 'pilihan': [{'nilai': 'a', 'teks': 'A'}, {'nilai': 'b', 'teks': 'B'}]},
+            {'kunci': 'mencatat_keuangan', 'tanya': 'Tanya?', 'pilihan': [{'nilai': 'a', 'teks': 'A'}, {'nilai': 'b', 'teks': 'B'}]}
+          ],
+          'tujuanUtama': {'tanya': 'Tanya?', 'petunjuk': 'P', 'maksimalKarakter': 100},
+          'soalTesAwal': daftarSoal,
+        };
+
+        expect(
+          () => PembacaKonten.validasiKontenTesAwal(data, namaBerkas: 'tes_awal.json'),
+          throwsA(predicate((e) => e is GalatKonten && e.kolom?.contains('modulId') == true)),
+        );
+      });
+    });
   });
 }

@@ -8,6 +8,8 @@ import 'repositori/tagihan_repositori.dart';
 import 'repositori/transaksi_repositori.dart';
 import 'repositori/tujuan_repositori.dart';
 import 'repositori/utang_repositori.dart';
+import 'repositori/profil_repositori.dart';
+import 'repositori/tes_awal_repositori.dart';
 
 /// Provider instans tunggal basis data Drift.
 final penyediaBasisData = Provider<BasisDataFunda>((ref) {
@@ -63,4 +65,16 @@ final penyediaUtangRepositori = Provider<UtangRepositori>((ref) {
 final penyediaTagihanRepositori = Provider<TagihanRepositori>((ref) {
   final db = ref.watch(penyediaBasisData);
   return TagihanRepositori(db);
+});
+
+/// Provider repositori profil keuangan pengguna.
+final penyediaProfilRepositori = Provider<ProfilRepositori>((ref) {
+  final db = ref.watch(penyediaBasisData);
+  return ProfilRepositori(db);
+});
+
+/// Provider repositori riwayat tes awal pengguna.
+final penyediaTesAwalRepositori = Provider<TesAwalRepositori>((ref) {
+  final db = ref.watch(penyediaBasisData);
+  return TesAwalRepositori(db);
 });

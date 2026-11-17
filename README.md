@@ -104,6 +104,8 @@ funda/
 
 ## 📸 Tangkapan Layar Aplikasi
 Tangkapan layar otomatis yang dihasilkan dari pengujian dan emulator tersimpan pada:
+- **Tahap 5 (Tes Awal & Personalisasi Belajar di Emulator Pixel 8):** [docs/tangkapan_layar/tahap_05_emulator/](docs/tangkapan_layar/tahap_05_emulator/)
+  - `07_tab_belajar_dengan_rekomendasi.png` — Kartu rekomendasi personalisasi ramah di bagian atas Tab Belajar setelah menyelesaikan tes awal dan pembentukan profil keuangan
 - **Tahap 4-R (Revisi & Pembuktian Mesin Belajar di Emulator Pixel 8):** [docs/tangkapan_layar/tahap_04_emulator/](docs/tangkapan_layar/tahap_04_emulator/)
   - `01_tab_belajar_peta.png` — Peta belajar lengkap 19 modul pada 3 tingkat (Pemula, Menengah, Lanjutan)
   - `02_pelajaran_terbuka_pemantik.png` — Pemutar pelajaran micro-learning langkah pemantik reflektif
