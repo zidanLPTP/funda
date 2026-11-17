@@ -177,19 +177,24 @@ void main() {
       expect(hasilSQL.dasar, equals(hasilMurni.dasar));
     });
 
-    test('3. Kesetaraan Hari & Bulan Berbeda: Fungsi Murni vs Kueri Agregasi SQL (termasuk batas 23:30 WIB)', () async {
+    test('3. Kesetaraan Hari & Bulan Berbeda: Fungsi Murni vs Kueri Agregasi SQL (termasuk batas 23:30 WIB di batas bulan)', () async {
       final daftarWaktu = <DateTime>[];
 
-      // Tanggal 1: 10 Maret 2026 23:30:00 WIB
+      // Kasus Batas Bulan Ekstrem:
+      // Transaksi A: 31 Januari 2026 23:30:00 WIB (UTC = 31 Jan 16:30 -> Bulan Januari)
+      final tA = DateTime(2026, 1, 31, 23, 30);
+      // Transaksi B: 1 Februari 2026 00:30:00 WIB (UTC = 31 Jan 17:30 -> Di UTC masih 31 Jan, tapi di lokal sudah Februari!)
+      final tB = DateTime(2026, 2, 1, 0, 30);
+      // Transaksi C: 10 Maret 2026 23:30:00 WIB (Bulan Maret)
       final t1 = DateTime(2026, 3, 10, 23, 30);
-      // Tanggal 1 juga: 10 Maret 2026 01:15:00 WIB
+      // Transaksi D: 10 Maret 2026 01:15:00 WIB (Hari yang sama dengan C)
       final t2 = DateTime(2026, 3, 10, 1, 15);
-      // Tanggal 2: 11 Maret 2026 00:05:00 WIB (beda hari)
+      // Transaksi E: 11 Maret 2026 00:05:00 WIB (Beda hari di bulan Maret)
       final t3 = DateTime(2026, 3, 11, 0, 5);
-      // Tanggal 3: 15 April 2026 14:00:00 WIB (beda bulan)
+      // Transaksi F: 15 April 2026 14:00:00 WIB (Bulan April)
       final t4 = DateTime(2026, 4, 15, 14, 0);
 
-      final daftar = [t1, t2, t3, t4];
+      final daftar = [tA, tB, t1, t2, t3, t4];
 
       for (var i = 0; i < daftar.length; i++) {
         final w = daftar[i];
@@ -211,8 +216,8 @@ void main() {
       final hariMurni = hitungHariKalenderBerbeda(daftarWaktu);
       final bulanMurni = hitungBulanKalenderBerbeda(daftarWaktu);
 
-      expect(hariMurni, equals(3), reason: '10 Mar, 11 Mar, 15 Apr -> 3 hari berbeda');
-      expect(bulanMurni, equals(2), reason: 'Maret 2026, April 2026 -> 2 bulan berbeda');
+      expect(hariMurni, equals(5), reason: '31 Jan, 1 Feb, 10 Mar, 11 Mar, 15 Apr -> 5 hari berbeda');
+      expect(bulanMurni, equals(4), reason: 'Januari, Februari, Maret, April -> 4 bulan berbeda');
 
       // Hitung via SQL FotoData
       final fotoData = await repoFotoData.ambilFotoData();

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:funda/fitur/belajar/model/registri_misi.dart';
 import 'package:funda/perhitungan/perhitungan_belajar.dart';
 import 'package:funda/tema/token.dart';
 import 'package:funda/komponen/teks_funda.dart';
@@ -599,6 +600,51 @@ void main() {
       final hasil = evaluasiSyarat(syaratData, fotoSetelahLewati);
       // Gerbang data HARUS TETAP TERKUNCI! Melewati misi tidak membuka gerbang data
       expect(hasil.terpenuhi, isFalse);
+    });
+  });
+
+  group('Butir A.4: Pada Data Kosong, Misi Belum Lolos & Gerbang 1_2 & 1_3 Terkunci', () {
+    test('Uji murni: Pada data kosong, gerbang 1_2 (dompet >= 1) dan gerbang 1_3 (pengeluaran >= 3) terkunci', () {
+      final fotoKosong = FotoDataPengguna.kosong();
+
+      // Gerbang 1_2
+      const gerbang12 = SyaratGerbangData(tipe: 'ada_data', objek: 'dompet', min: 1, pesan: 'Buat minimal 1 dompet dulu, yuk.');
+      final hasilG12 = evaluasiSyarat(gerbang12, fotoKosong);
+      expect(hasilG12.terpenuhi, isFalse);
+
+      // Gerbang 1_3
+      const gerbang13 = SyaratGerbangData(tipe: 'ada_data', objek: 'pengeluaran', min: 3, pesan: 'Catat minimal 3 pengeluaran dulu');
+      final hasilG13 = evaluasiSyarat(gerbang13, fotoKosong);
+      expect(hasilG13.terpenuhi, isFalse);
+    });
+
+    test('Uji murni: Pada data kosong, misi 1_2 (arus_kas: masuk >= 1 dan keluar >= 1) dan misi 1_3 (semua_kategori_berlabel) BELUM lolos', () {
+      final fotoKosong = FotoDataPengguna.kosong();
+
+      // Misi 1_2
+      const misi12 = MisiKonten(
+        tipe: 'ada_data',
+        objek: 'arus_kas',
+        min: 1,
+        judul: 'Catat Transaksi Pertama',
+        deskripsi: 'Catat minimal 1 uang masuk dan 1 uang keluar',
+        perkiraanMenit: 2,
+        umpanBalik: 'arus_kas_bulan_ini',
+      );
+      final hasilM12 = RegistriMisi.evaluasi(misi: misi12, fotoData: fotoKosong);
+      expect(hasilM12.selesai, isFalse, reason: 'Data kosong belum ada pemasukan & pengeluaran');
+
+      // Misi 1_3
+      const misi13 = MisiKonten(
+        tipe: 'aturan_data',
+        aturan: 'semua_kategori_berlabel',
+        judul: 'Beri Label Kategori Pengeluaran',
+        deskripsi: 'Pastikan seluruh kategori pengeluaran...',
+        perkiraanMenit: 2,
+        umpanBalik: 'komposisi_sifat_bulan_ini',
+      );
+      final hasilM13 = RegistriMisi.evaluasi(misi: misi13, fotoData: fotoKosong);
+      expect(hasilM13.selesai, isFalse, reason: 'Data kosong tidak ada kategori keluar terpakai');
     });
   });
 }

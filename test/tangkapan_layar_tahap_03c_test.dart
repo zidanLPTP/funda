@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'dart:ui' as ui;
 import 'package:drift/native.dart';
 import 'package:flutter/material.dart';
@@ -78,14 +77,7 @@ void main() {
       await tester.runAsync(() async {
         final image = await boundary.toImage(pixelRatio: 2.0);
         final byteData = await image.toByteData(format: ui.ImageByteFormat.png);
-        final bytes = byteData!.buffer.asUint8List();
-
-        final folder = Directory('docs/tangkapan_layar/tahap_03c');
-        if (!folder.existsSync()) {
-          folder.createSync(recursive: true);
-        }
-        final file = File('docs/tangkapan_layar/tahap_03c/$namaBerkas');
-        await file.writeAsBytes(bytes);
+        expect(byteData, isNotNull);
       });
     }
 

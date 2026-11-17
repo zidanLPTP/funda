@@ -119,3 +119,16 @@ Dokumen ini mencatat keputusan teknis sementara, kompromi dependensi, dan hal-ha
   - 20.000 transaksi: **Median 26.31 ms**, Terburuk 34.65 ms.
   Hasil ini mencerminkan kinerja fisik sebenarnya dan terbukti **LULUS telak di bawah batas target 50 ms**.
 
+---
+
+## 10. Penyelarasan Terakhir Mesin Belajar & Isolasi Iterasi Bersih (Tahap 4-R3)
+
+- **Konteks:**
+  Pada pengujian 4-R2, kueri 20.000 transaksi sempat terlihat lebih cepat daripada 5.000 transaksi karena efek warm page cache SQLite dan distribusi tanggal di mana bulan berjalan memiliki jumlah data yang sama.
+- **Penyelarasan:**
+  1. Pengukuran ulang dilakukan dengan **basis data terisolasi bersih per iterasi** (10 iterasi) dan proporsi data bulan berjalan 4x lipat (2.500 vs 10.000 transaksi di bulan Maret 2026).
+  2. Hasil 10 iterasi bersih: Kueri Beranda 5k = **19.20 ms** vs 20k = **33.14 ms**; Waktu tampil Beranda 5k = **85.83 ms** vs 20k = **88.39 ms**; Tab Belajar 5k = **13.79 ms** vs 20k = **37.23 ms**.
+  3. Relasi misi vs gerbang data: Pemeriksa konten kini secara otomatis menolak pelajaran bila misinya sama atau lebih longgar dari gerbang pelajarannya sendiri.
+  4. Sisa selisih yang dicatat: Pengetukan notifikasi fisik pada notification shade sistem OS Android tetap tercatat sebagai `[BELUM TERVERIFIKASI FISIK]` karena keterbatasan otomasi window OS tanpa runner pihak ketiga, meskipun penanganan deep-link rute `/tagihan` terbukti 100% lulus di tingkat kode.
+
+

@@ -61,6 +61,7 @@ class PembacaKonten {
     'pemasukan',
     'pengeluaran',
     'transaksi',
+    'arus_kas',
     'anggaran',
     'tujuan',
     'utang',
@@ -337,6 +338,53 @@ class PembacaKonten {
     final umpanBalik = misi['umpanBalik'] as String?;
     if (umpanBalik != null && !umpanBalikMisiValid.contains(umpanBalik)) {
       throw GalatKonten('Umpan balik misi "$umpanBalik" tidak terdaftar di registri umpan balik', berkas: namaBerkas, kolom: 'misi.umpanBalik');
+    }
+
+    // 8. Validasi Relasi Misi vs Gerbang Pelajaran
+    // Pemeriksa konten GAGAL bila sebuah misi sudah otomatis terpenuhi oleh gerbang pelajarannya sendiri
+    // (misi tidak boleh lebih longgar atau sama dengan gerbang), kecuali bertipe lihat_hitungan.
+    if (tipeMisi != 'lihat_hitungan' && gerbang is List) {
+      final minMisi = (misi['min'] as num?)?.toInt() ?? 1;
+      final aturanMisi = misi['aturan'] as String?;
+
+      for (var i = 0; i < gerbang.length; i++) {
+        final g = gerbang[i];
+        if (g is Map<String, dynamic>) {
+          final tipeG = g['tipe'] as String?;
+          final objG = g['objek'] as String?;
+          final minG = (g['min'] as num?)?.toInt() ?? 1;
+          final aturanG = g['aturan'] as String?;
+
+          if (tipeMisi == 'ada_data' && tipeG == 'ada_data') {
+            // Objek sama dan syarat misi <= syarat gerbang
+            if (objG != null && objekMisi != null && objG.toLowerCase() == objekMisi.toLowerCase() && minMisi <= minG) {
+              throw GalatKonten(
+                'Misi ada_data ($objekMisi min: $minMisi) otomatis terpenuhi oleh gerbang pelajaran ($objG min: $minG). Misi tidak boleh lebih longgar atau sama dengan gerbang.',
+                berkas: namaBerkas,
+                kolom: 'misi',
+              );
+            }
+            // Objek transaksi mencakup pemasukan dan pengeluaran
+            if ((objG == 'pengeluaran' || objG == 'pemasukan') && objekMisi == 'transaksi' && minMisi <= minG) {
+              throw GalatKonten(
+                'Misi ada_data ($objekMisi min: $minMisi) otomatis terpenuhi oleh gerbang pelajaran ($objG min: $minG). Misi tidak boleh lebih longgar atau sama dengan gerbang.',
+                berkas: namaBerkas,
+                kolom: 'misi',
+              );
+            }
+          }
+
+          if (tipeMisi == 'aturan_data' && tipeG == 'aturan_data') {
+            if (aturanG != null && aturanMisi != null && aturanG == aturanMisi) {
+              throw GalatKonten(
+                'Misi aturan_data ($aturanMisi) otomatis terpenuhi oleh gerbang pelajaran dengan aturan yang sama. Misi tidak boleh sama dengan gerbang.',
+                berkas: namaBerkas,
+                kolom: 'misi',
+              );
+            }
+          }
+        }
+      }
     }
   }
 

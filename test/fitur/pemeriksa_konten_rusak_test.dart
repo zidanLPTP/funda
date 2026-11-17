@@ -396,5 +396,94 @@ void main() {
       expect(daftarPeringatan.length, 1);
       expect(daftarPeringatan.first, contains('Kalimat panjang'));
     });
+
+    // 23. Pemeriksa Konten: Misi otomatis terpenuhi oleh gerbang pelajaran sendiri GAGAL
+    test('23. Pemeriksa konten: misi ada_data otomatis terpenuhi oleh gerbang pelajaran sendiri harus GAGAL', () {
+      final pelajaranRusak = {
+        'id': 'modul_uji_1_1',
+        'judul': 'Uji Pelajaran',
+        'durasiMenit': 4,
+        'status': 'draf',
+        'gerbang': [
+          {'tipe': 'ada_data', 'objek': 'pemasukan', 'min': 1, 'pesan': 'Catat 1 pemasukan'}
+        ],
+        'pemantik': 'Pemantik singkat.',
+        'kartu': [
+          {'judul': 'Kartu 1', 'isi': 'Isi kartu konsep.'}
+        ],
+        'contohAngka': 100000,
+        'cekPaham': [
+          {'tanya': 'Tanya 1', 'pilihan': ['A', 'B'], 'benar': 0, 'penjelasan': 'P1'},
+          {'tanya': 'Tanya 2', 'pilihan': ['A', 'B'], 'benar': 1, 'penjelasan': 'P2'}
+        ],
+        'misi': {
+          'tipe': 'ada_data',
+          'objek': 'pemasukan',
+          'min': 1,
+          'judul': 'Misi Sama',
+          'deskripsi': 'Deskripsi',
+          'perkiraanMenit': 2,
+          'umpanBalik': 'arus_kas_bulan_ini'
+        }
+      };
+
+      expect(
+        () => PembacaKonten.validasiKontenPelajaran(pelajaranRusak, namaBerkas: 'pelajaran_rusak.json'),
+        throwsA(predicate((e) => e is GalatKonten && e.pesan.contains('otomatis terpenuhi oleh gerbang'))),
+      );
+    });
+
+    // 24. Pemeriksa Konten: Misi bertipe lihat_hitungan atau beda objek LOLOS (uji positif)
+    test('24. Pemeriksa konten: misi lihat_hitungan atau objek beda dengan gerbang harus LOLOS', () {
+      final pelajaranValid = {
+        'id': 'modul_uji_1_2',
+        'judul': 'Uji Pelajaran Valid',
+        'durasiMenit': 4,
+        'status': 'draf',
+        'gerbang': [
+          {'tipe': 'ada_data', 'objek': 'dompet', 'min': 1, 'pesan': 'Buat 1 dompet'}
+        ],
+        'pemantik': 'Pemantik singkat.',
+        'kartu': [
+          {'judul': 'Kartu 1', 'isi': 'Isi kartu konsep.'}
+        ],
+        'contohAngka': 100000,
+        'cekPaham': [
+          {'tanya': 'Tanya 1', 'pilihan': ['A', 'B'], 'benar': 0, 'penjelasan': 'P1'},
+          {'tanya': 'Tanya 2', 'pilihan': ['A', 'B'], 'benar': 1, 'penjelasan': 'P2'}
+        ],
+        'misi': {
+          'tipe': 'ada_data',
+          'objek': 'arus_kas',
+          'min': 1,
+          'judul': 'Misi Arus Kas',
+          'deskripsi': 'Deskripsi',
+          'perkiraanMenit': 2,
+          'umpanBalik': 'arus_kas_bulan_ini'
+        }
+      };
+
+      expect(
+        () => PembacaKonten.validasiKontenPelajaran(pelajaranValid, namaBerkas: 'pelajaran_valid.json'),
+        returnsNormally,
+      );
+
+      final pelajaranLihatHitungan = Map<String, dynamic>.from(pelajaranValid)
+        ..['id'] = 'modul_uji_1_3'
+        ..['gerbang'] = [
+          {'tipe': 'ada_data', 'objek': 'pemasukan', 'min': 1}
+        ]
+        ..['misi'] = {
+          'tipe': 'lihat_hitungan',
+          'judul': 'Misi Lihat Hitungan',
+          'deskripsi': 'Deskripsi',
+          'perkiraanMenit': 1,
+        };
+
+      expect(
+        () => PembacaKonten.validasiKontenPelajaran(pelajaranLihatHitungan, namaBerkas: 'pelajaran_lihat.json'),
+        returnsNormally,
+      );
+    });
   });
 }

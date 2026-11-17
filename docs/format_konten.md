@@ -123,10 +123,10 @@ aset/konten/
   ],
   "misi": {
     "tipe": "ada_data",
-    "objek": "transaksi",
+    "objek": "arus_kas",
     "min": 1,
     "judul": "Catat Arus Kas Pertamamu",
-    "deskripsi": "Buka menu Catatan dan masukkan satu transaksi pemasukan atau pengeluaran yang kamu lakukan hari ini apa adanya.",
+    "deskripsi": "Catat minimal 1 uang masuk dan 1 uang keluar di dompetmu untuk melihat arus kas bulan ini.",
     "perkiraanMenit": 2,
     "umpanBalik": "arus_kas_bulan_ini"
   },
@@ -138,18 +138,21 @@ aset/konten/
 
 ## 5. Aturan Penulisan Kalimat & Gaya Bahasa
 
-1. **Panjang Kalimat**: Maksimal 25 kata per kalimat. Gunakan kalimat aktif, ringkas, dan jelas. Kalimat > 25 kata menghasilkan peringatan.
-2. **Tanpa Kata Terlarang**:
-   - Dilarang keras menggunakan kata-kata menghakimi seperti: *boros, bodoh, malas, ceroboh, payah*.
-   - Dilarang menyalahkan perilaku pengguna dengan kata *salah* (misal: "cara yang salah", "kamu salah").
-   - Dilarang menggunakan janji palsu atau skema cepat kaya seperti: *pasti kaya, cuan instan, bebas finansial 1 tahun*.
+1. **Panjang Kalimat**: Maksimal 25 kata per kalimat. Gunakan kalimat aktif, ringkas, dan jelas. Kalimat > 25 kata menghasilkan **peringatan** (bukan galat).
+2. **Daftar Kata Terlarang (Tunggal & Terpusat di `PembacaKonten`)**:
+   - Dilarang keras menggunakan kata-kata menghakimi: *boros, bodoh, malas, ceroboh, payah, miskin*.
+   - Dilarang menyalahkan perilaku pengguna dengan frasa menghakimi (misal: *"kamu salah"*, *"cara yang salah"*, *"perilaku salah"*).
+   - Kata wajar seperti *harus* dan *wajib* **sah digunakan** pada konteks kalimat reguler dan tidak dilarang sebagai galat.
 3. **Penyebutan Istilah & Aturan Tooltip Istilah Teknis**:
-   - Istilah teknis finansial (seperti *surplus, defisit, aset, liabilitas*) **HANYA boleh muncul** di teks pengguna dalam bentuk `{{istilah}}` agar memiliki bantuan tooltip interaktif dari kamus.
+   - Istilah teknis finansial (*surplus, defisit, aset, liabilitas*) **HANYA boleh muncul** di teks pengguna dalam bentuk `{{istilah}}` agar memiliki bantuan tooltip interaktif dari kamus.
    - Kemunculan istilah teknis sebagai teks polos tanpa kurung kurawal ganda (`{{ }}`) adalah **GALAT** pada pemeriksa bahasa.
    - Teks umpan balik data nyata (`arus_kas_bulan_ini` dan `komposisi_sifat_bulan_ini`) **DILARANG memakai kata surplus atau defisit sama sekali**; wajib menggunakan padanan bahasa awam seperti *"uang masuk lebih besar"* atau *"uang keluar lebih besar"* disertai nominal Rupiah nyata.
-4. **Contoh Angka Nyata**:
+4. **Relasi Misi vs Gerbang Data**:
+   - Misi pada berkas pelajaran **tidak boleh otomatis terpenuhi oleh gerbang pelajarannya sendiri** (misi tidak boleh lebih longgar atau sama dengan gerbang), kecuali bertipe `lihat_hitungan`.
+   - Aturan `semua_kategori_berlabel` terpenuhi **HANYA** bila terdapat minimal 1 kategori pengeluaran yang pernah dipakai dalam transaksi dan seluruhnya berlabel sifat (pada data kosong = belum terpenuhi).
+5. **Contoh Angka Nyata**:
    - Contoh angka wajib menggunakan mata uang Rupiah nominal bulat (`int`).
    - Hindari persentase abstrak tanpa padanan Rupiah (misal: "simpan 20% atau sekitar Rp600.000 dari gaji Rp3.000.000").
-5. **Nada Edukasi**:
+6. **Nada Edukasi**:
    - Bersahabat, suportif, dan realistis terhadap kondisi ekonomi Indonesia sehari-hari.
    - Pilihan "Belum relevan buat aku" selalu tersedia pada misi praktik nyata untuk menghargai kenyamanan pengguna.

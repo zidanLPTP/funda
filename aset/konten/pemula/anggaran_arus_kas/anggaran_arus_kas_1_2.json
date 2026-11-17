@@ -51,8 +51,8 @@
   ],
   "misi": {
     "tipe": "ada_data",
-    "objek": "transaksi",
-    "min": 2,
+    "objek": "arus_kas",
+    "min": 1,
     "judul": "Catat Transaksi Pertama",
     "deskripsi": "Catat minimal 1 uang masuk dan 1 uang keluar di dompetmu untuk melihat arus kas bulan ini.",
     "perkiraanMenit": 2,

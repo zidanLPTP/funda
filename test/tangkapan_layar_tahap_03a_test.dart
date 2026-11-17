@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 import 'package:drift/native.dart';
@@ -57,9 +56,7 @@ void main() {
       final ByteData? byteData = await image.toByteData(
         format: ui.ImageByteFormat.png,
       );
-      final Uint8List pngBytes = byteData!.buffer.asUint8List();
-      final file = File('docs/tangkapan_layar/tahap_03a/$namaBerkas');
-      await file.writeAsBytes(pngBytes);
+      expect(byteData, isNotNull);
     });
   }
 

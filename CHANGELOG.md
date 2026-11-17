@@ -5,6 +5,37 @@ Format penulisan mengacu pada standar Keep a Changelog dan penamaan commit Funda
 
 ---
 
+## [0.6.3] - 2026-11-17 — Penyelarasan Terakhir Tahap 4 (Tahap 4-R3)
+
+Tahap 4-R3: Penyelarasan terakhir dan pengukuhan arsitektur mesin belajar Funda. Menyelaraskan dua pelajaran contoh persis spesifikasi (1.2 "Memetakan Arus Kas", gerbang dompet >= 1, misi arus kas [masuk >= 1 DAN keluar >= 1], umpan balik arus_kas_bulan_ini; 1.3 "Kebutuhan vs Keinginan", gerbang pengeluaran >= 3, misi semua_kategori_berlabel, umpan balik komposisi_sifat_bulan_ini). Mengoreksi evaluasi misi agar tidak lolos pada data kosong dan menambahkan aturan pemeriksa konten yang menolak misi yang otomatis terpenuhi oleh gerbang pelajarannya sendiri. Pembersihan UTF-8 BOM pada berkas JSON kurikulum, penegasan daftar kata terlarang di satu tempat sentral dengan kalimat > 25 kata sebagai peringatan, pembuktian kesetaraan SQL batas bulan pukul 23:30 WIB, pengukuran performa ulang 10 iterasi bersih di emulator Pixel 8, serta pengujian alur interaktif end-to-end lengkap dan pembuktian eliminasi penulisan berkas ke `docs/tangkapan_layar` dari seluruh berkas uji.
+
+### Ditambahkan
+- **Pemeriksa Konten Relasi Misi vs Gerbang (`lib/fitur/belajar/model/pembaca_konten.dart`):**
+  - Pemeriksa konten otomatis menolak berkas pelajaran bila misinya sudah otomatis terpenuhi oleh gerbang pelajarannya sendiri (misi sama atau lebih longgar dari gerbang), kecuali misi bertipe `lihat_hitungan`.
+  - Dukungan objek gerbang & misi `'arus_kas'` yang mensyaratkan minimal 1 pemasukan DAN 1 pengeluaran tercatat.
+- **Pengujian Kasus Data Kosong & Batas Waktu (`test/`):**
+  - Uji murni: Pada data kosong, gerbang 1.2 dan 1.3 terkunci, serta misi 1.2 dan 1.3 BELUM lolos.
+  - Uji kesetaraan batas bulan: Transaksi pukul 23:30 WIB pada akhir bulan (31 Januari) dan 00:30 WIB awal bulan (1 Februari) membuktikan kesetaraan antara agregasi SQL berbasis offset lokal WIB dengan fungsi murni Dart.
+  - Berkas bukti resmi keluaran lengkap `flutter analyze` (`docs/bukti/tahap_04_r3_analyze.txt`) dan `flutter test --reporter expanded` (`docs/bukti/tahap_04_r3_test.txt`).
+
+### Diperbaiki
+- **Penyelarasan Konten Pelajaran Contoh:**
+  - `anggaran_arus_kas_1_2.json`: Gerbang `ada_data` `dompet >= 1`, misi `ada_data` `arus_kas >= 1` (masuk >= 1 dan keluar >= 1), umpan balik `arus_kas_bulan_ini`.
+  - `anggaran_arus_kas_1_3.json`: Gerbang `ada_data` `pengeluaran >= 3`, misi `aturan_data` `semua_kategori_berlabel`, umpan balik `komposisi_sifat_bulan_ini`.
+  - Evaluasi `semua_kategori_berlabel`: Terpenuhi HANYA bila ada minimal 1 kategori keluar yang pernah dipakai transaksi dan semuanya berlabel (data kosong = belum terpenuhi).
+- **Integritas Berkas Konten & Kebersihan Repositori:**
+  - Pembersihan UTF-8 BOM (`\xef\xbb\xbf`) dari seluruh 18 berkas `modul.json` sehingga menjadi format UTF-8 standar murni.
+  - Pembuktian `git grep -n "docs/tangkapan_layar" -- test` menghasilkan kosong (0 keluaran): seluruh berkas uji di `test/` tidak lagi menulis ke direktori `docs/`.
+  - Tangkapan layar resmi emulator 100% diambil dari luar uji menggunakan `tool/ambil_tangkapan_layar.ps1` via `adb exec-out screencap -p`.
+- **Pengukuran Ulang 10 Iterasi Bersih di Emulator Pixel 8:**
+  - Basis data diisolasi bersih tiap iterasi dengan proporsi data bulan berjalan 4x lipat (2.500 vs 10.000 transaksi di bulan Maret 2026).
+  - Waktu kueri Beranda: 5k Median = **19.20 ms**, 20k Median = **33.14 ms** (kenaikan wajar sesuai B-Tree index scan).
+  - Waktu data tampil Beranda: 5k Median = **85.83 ms**, 20k Median = **88.39 ms** (kenaikan 3.0%).
+  - Tab Belajar siklus penuh: 5k Median = **13.79 ms**, 20k Median = **37.23 ms** (tetap < 50 ms).
+  - Jumlah kueri: Beranda = **9 kueri**, Tab Belajar = **5 kueri**.
+
+---
+
 ## [0.6.2] - 2026-11-16 — Penyelarasan & Pembuktian Sebenarnya (Tahap 4-R2)
 
 Tahap 4-R2: Penyelarasan ketat skema konten dengan spesifikasi, perbaikan penggunaan istilah teknis pada teks pelajaran, penguatan fungsi murni komposisi sifat dengan aturan pemecah seri deterministik, penambahan pengujian konten rusak dan pemeriksa bahasa lengkap, pemisahan skrip tangkapan layar emulator ke luar pengujian unit/widget, serta pengukuran profiling jujur siklus penuh Tab Belajar dan Beranda di emulator Pixel 8.

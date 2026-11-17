@@ -38,6 +38,25 @@ class RegistriMisi {
 
     switch (misi.tipe) {
       case 'ada_data':
+        if (misi.objek?.toLowerCase() == 'arus_kas') {
+          final adaMasuk = fotoData.jumlahPemasukan >= 1;
+          final adaKeluar = fotoData.jumlahPengeluaran >= 1;
+          final cukup = adaMasuk && adaKeluar;
+          String statusTeks;
+          if (cukup) {
+            statusTeks = 'Syarat misi terpenuhi (pemasukan dan pengeluaran sudah tercatat).';
+          } else if (!adaMasuk && !adaKeluar) {
+            statusTeks = 'Catat minimal 1 pemasukan dan 1 pengeluaran.';
+          } else if (!adaMasuk) {
+            statusTeks = 'Catat minimal 1 pemasukan untuk melengkapi arus kas.';
+          } else {
+            statusTeks = 'Catat minimal 1 pengeluaran untuk melengkapi arus kas.';
+          }
+          return HasilEvaluasiMisi(
+            selesai: cukup,
+            statusTeks: statusTeks,
+          );
+        }
         final jumlah = _hitungJumlah(misi.objek, fotoData);
         final cukup = jumlah >= misi.min;
         return HasilEvaluasiMisi(
@@ -95,6 +114,8 @@ class RegistriMisi {
         return fotoData.jumlahPengeluaran;
       case 'transaksi':
         return fotoData.jumlahPemasukan + fotoData.jumlahPengeluaran;
+      case 'arus_kas':
+        return (fotoData.jumlahPemasukan >= 1 && fotoData.jumlahPengeluaran >= 1) ? 1 : 0;
       case 'anggaran':
         return fotoData.jumlahAnggaran;
       case 'tujuan':

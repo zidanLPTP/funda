@@ -561,6 +561,7 @@ String? ambilRutePengisianObjek(String? objek) {
     case 'pemasukan':
     case 'pengeluaran':
     case 'transaksi':
+    case 'arus_kas':
       return '/catatan';
     case 'anggaran':
       return '/anggaran';
@@ -670,6 +671,8 @@ int _hitungJumlahObjek(String? objek, FotoDataPengguna fotoData) {
       return fotoData.jumlahPengeluaran;
     case 'transaksi':
       return fotoData.jumlahPemasukan + fotoData.jumlahPengeluaran;
+    case 'arus_kas':
+      return (fotoData.jumlahPemasukan >= 1 && fotoData.jumlahPengeluaran >= 1) ? 1 : 0;
     case 'anggaran':
       return fotoData.jumlahAnggaran;
     case 'tujuan':
