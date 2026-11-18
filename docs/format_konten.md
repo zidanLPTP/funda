@@ -107,7 +107,18 @@ aset/konten/
       "isi": "{{arus kas}} adalah rekaman sederhana tentang seberapa deras uang mengalir masuk dan keluar dari dompetmu setiap hari."
     }
   ],
-  "contohAngka": 1500000,
+  "contohAngka": {
+    "judul": "Pengeluaran kecil yang menumpuk (uang bulanan Rp2.000.000)",
+    "baris": [
+      { "label": "Kopi susu 20 hari", "jumlah": -360000 },
+      { "label": "Camilan sore", "jumlah": -200000 },
+      { "label": "Langganan tidak terpakai", "jumlah": -149000 },
+      { "label": "Total bocor kecil", "jumlah": -709000, "ringkasan": true }
+    ],
+    "kesimpulan": "Hampir sepertiga uang bulanan terpakai untuk pos yang jarang disadari."
+  },
+  "aturanPraktis": false,
+  "catatanReviewer": null,
   "cekPaham": [
     {
       "id": "cek_1",
@@ -145,6 +156,23 @@ Berikut adalah daftar objek resmi yang valid untuk syarat `gerbang` (modul/pelaj
 - **`utang`**: Jumlah catatan utang/piutang aktif (tipe `ada_data`).
 - **`arus_kas`**: Komposit pemasukan >= min DAN pengeluaran >= min (tipe `aturan_data` atau `ada_data`).
 - **`profil`**: Profil keuangan pengguna sudah diisi (bukan dilewati, bukan kosong; tipe `ada_data`).
+
+### 4.2 Skema Baru Tahap 6: `contohAngka` & Penanda `aturanPraktis`
+1. **`contohAngka`**: Objek berstruktur dengan properti:
+   - `judul`: String judul contoh angka konkret.
+   - `baris`: Array objek `{ "label": String, "jumlah": int, "ringkasan": bool (opsional) }`. Nilai negatif dirender dengan format Rupiah rapat positif (contoh `Rp900.000`) karena kolom label sudah membedakan arah pos pengeluaran.
+   - `kesimpulan`: Kalimat kesimpulan ringkas.
+2. **`aturanPraktis` & `catatanReviewer`**:
+   - Jika materi atau soal memuat formula/aturan praktis populer (seperti 50/30/20), bidang `aturanPraktis: true` wajib disematkan.
+   - Setiap berkas/soal dengan `aturanPraktis: true` wajib menyertakan `catatanReviewer` berawalan `"TODO-VERIFIKASI:"`.
+
+### 4.3 Registri Kunci Umpan Balik Misi
+Berikut adalah registri kunci umpan balik edukatif yang diolah dari data riil pengguna:
+- **`arus_kas_bulan_ini`**: Ringkasan uang masuk vs uang keluar pengguna bulan berjalan.
+- **`komposisi_sifat_bulan_ini`**: Distribusi pengeluaran pengguna per sifat (kebutuhan, keinginan, tabungan, utang).
+- **`catatan_pengeluaran_terbaru`**: Evaluasi jumlah catatan pengeluaran, kategori pengeluaran terakhir, dan nominal Rupiah rapat.
+- **`perbandingan_pola_anggaran`**: Perbandingan anggaran riil pengguna (Kebutuhan, Keinginan, Tabungan/Utang, Belum Dilabeli) terhadap pola aturan praktis 50/30/20.
+- **`realisasi_anggaran_bulan_ini`**: Evaluasi status pemakaian pos anggaran berjalan (aman <80%, mendekati 80-100%, melewati >100%), sisa pos terbanyak, dan pos melewati batas terjauh.
 
 ---
 

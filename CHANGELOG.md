@@ -5,6 +5,38 @@ Format penulisan mengacu pada standar Keep a Changelog dan penamaan commit Funda
 
 ---
 
+## [0.8.0] - 2026-11-18 — Tahap 6: Modul 1 Lengkap "Anggaran & Arus Kas"
+
+Tahap 6: Implementasi Lengkap Konten Edukasi Modul 1 "Anggaran & Arus Kas", Skema Baru Contoh Angka, Registri Umpan Balik Edukatif Data Riil, dan Pengujian Integrasi Emulator. Seluruh 5 pelajaran Modul 1 (1.1 "Ke Mana Uangku Pergi?", 1.2 "Memetakan Arus Kas", 1.3 "Kebutuhan vs Keinginan", 1.4 "Anggaran Pertamamu", dan 1.5 "Evaluasi Akhir Bulan") diisi penuh berdasarkan materi resmi reviewer tanpa kata terlarang dan tanpa emoji. Kuis akhir modul diperluas menjadi bank 10 soal dengan pengambilan 5 butir acak deterministik. Menambahkan skema objek `contohAngka` yang merender tabel data konkret dengan format Rupiah rapat, penandaan `aturanPraktis` dan `catatanReviewer` beranotasi `TODO-VERIFIKASI` untuk formula populer 50/30/20, 3 generator umpan balik edukatif data riil (`catatan_pengeluaran_terbaru`, `perbandingan_pola_anggaran`, `realisasi_anggaran_bulan_ini`), kamus finansial diperluas, serta pembuktian alur end-to-end Modul 1 dan profil performa di Emulator Android 16 (API 36).
+
+### Ditambahkan
+- **Materi Kurikulum Lengkap Modul 1 (`aset/konten/pemula/anggaran_arus_kas/`):**
+  - `anggaran_arus_kas_1_1.json`: "Ke Mana Uangku Pergi?" (durasi 4 mnt, pemantik kebocoran kecil, 3 kartu konsep, contoh angka bocor kecil Rp709.000, cek paham, misi catat 1 pengeluaran, umpan balik `catatan_pengeluaran_terbaru`).
+  - `anggaran_arus_kas_1_2.json`: "Memetakan Arus Kas" (durasi 5 mnt, pemantik arus kas, 3 kartu konsep, contoh angka masuk Rp3.000.000 keluar Rp2.100.000 sisa Rp900.000, cek paham, misi catat pemasukan + pengeluaran, umpan balik `arus_kas_bulan_ini`).
+  - `anggaran_arus_kas_1_3.json`: "Kebutuhan vs Keinginan" (durasi 6 mnt, gerbang 3 pengeluaran, pemantik dua kelompok pengeluaran, 3 kartu konsep, contoh angka klasifikasi sifat pengeluaran, cek paham, misi labeli kategori, umpan balik `komposisi_sifat_bulan_ini`).
+  - `anggaran_arus_kas_1_4.json`: "Anggaran Pertamamu" (durasi 6 mnt, gerbang transaksi di 7 hari berbeda + ada pemasukan, pemantik anggaran bukan penjara, 3 kartu konsep, penanda `aturanPraktis: true` dan `catatanReviewer: "TODO-VERIFIKASI:..."`, contoh angka rencana alokasi, cek paham, misi buat 3 anggaran kategori, umpan balik `perbandingan_pola_anggaran`).
+  - `anggaran_arus_kas_1_5.json`: "Evaluasi Akhir Bulan" (durasi 5 mnt, gerbang punya minimal 1 anggaran, pemantik bandingkan rencana vs kenyataan, 3 kartu konsep, contoh angka evaluasi pos anggaran, cek paham, misi lihat realisasi anggaran, umpan balik `realisasi_anggaran_bulan_ini`).
+  - `modul.json`: Urutan pelajaran 1 s.d. 5, bank 10 butir soal kuis (soal nomor 7 ditandai `aturanPraktis: true` dan `catatanReviewer: "TODO-VERIFIKASI:..."`), dan pengambilan 5 butir acak per sesi.
+- **Skema Baru & Logika Edukasi (`lib/perhitungan/`):**
+  - Objek data `ContohAngkaKonten` dan `BarisContohAngka` di `lib/perhitungan/perhitungan_belajar.dart`.
+  - Generator murni teks umpan balik di `lib/perhitungan/perhitungan_umpan_balik_belajar.dart`:
+    * `formatCatatanPengeluaranTerbaru`: Format nominal rapat `formatRupiahRapat` dan n pengeluaran.
+    * `formatPerbandinganPolaAnggaran`: Pembagian integer murni 50/30/20, penanganan pemasukan 0, dan penanganan sisa belum dilabeli D > 0.
+    * `formatRealisasiAnggaranBulanIni`: Evaluasi 3 status pos (aman <80%, mendekati 80-100%, melewati >100%), pos sisa terbanyak, dan pos melewati batas terjauh.
+  - Unit test TDD di `test/perhitungan/perhitungan_umpan_balik_belajar_test.dart` (7/7 tests passed).
+- **Pemeriksa Konten Rusak & Validator Kuis (`lib/fitur/belajar/model/pembaca_konten.dart`):**
+  - Validasi objek `contohAngka` (judul, baris array tidak kosong, kesimpulan).
+  - Validasi penanda `aturanPraktis` wajib memuat `catatanReviewer` berawalan "TODO-VERIFIKASI".
+  - Validasi penolakan teks materi/soal yang memuat formula aturan praktis tanpa penanda resmi.
+  - Validasi integritas `pelajaranId` soal kuis ke daftar pelajaran modul, dan syarat `bankSoal.length >= jumlahSoal`.
+  - 7 kasus uji baru di `test/fitur/pemeriksa_konten_rusak_test.dart` (total 45 tests passed).
+- **Pengujian Widget Baru & Integrasi Emulator (`test/fitur/`, `integration_test/`):**
+  - `test/fitur/pemutar_pelajaran_contoh_angka_widget_test.dart`: 4 pengujian widget untuk rendering contohAngka berbaris, umpan balik kartu misi, pengacakan kuis dari bank 10 butir, dan aksesibilitas skala teks 2.0x (bebas overflow).
+  - `integration_test/tahap_06_alur_modul_1_emulator_test.dart`: Alur penuh Modul 1 di Pixel 8 (Android 16 API 36), pengerjaan kuis gagal (<80%) lalu lulus (100%), hingga Beranda.
+  - Bukti 6 berkas tangkapan layar di `docs/bukti/` dan pengukuran waktu respons Tab Belajar (median 926ms) dan Pemutar Pelajaran (median 802ms).
+
+---
+
 ## [0.7.1] - 2026-11-17 — Penyelarasan Tahap 5 (Tahap 5-R)
 
 Tahap 5-R: Penyelarasan skema profil keuangan, tabel hasil tes awal, kode alasan rekomendasi, validator konten, dan pembuktian integrasi emulator. Menyelaraskan seluruh nama kolom profil ke snake_case resmi prompt (`punya_penghasilan`, `punya_utang`, `dana_darurat`, `menabung`, `investasi`, `mencatat_keuangan`, `tujuan_utama`), menghapus pertanyaan dan kolom `rentang` serta `tanggungan`, menaikkan versi basis data ke skema 10 dengan migrasi idempoten yang memetakan kolom lama dan membuang data rentang/tanggungan. Memindahkan seluruh logika evaluasi rekomendasi modul ke fungsi murni dengan konstanta bernama (`alasanSkorTesRendah`, `alasanPunyaUtangTercatat`, `alasanDanaDaruratKosong`, `alasanKeinginanTerbesar`, `alasanBelumAdaModulSelesai`), menerapkan aturan STRIK pengeluaran keinginan (seri tidak memicu), memperluas validator konten untuk `tes_awal.json` dan `rekomendasi.json` (mencegah angka aturan praktis/tarif/regulasi dan klaim keuangan menghakimi), menambahkan 8 kasus uji konten rusak baru, serta membuktikan 5 skenario integrasi dengan interaksi nyata dan assertion di Emulator Android 16 (API 36).

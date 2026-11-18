@@ -233,7 +233,7 @@ void main() {
         ],
         pemantik: 'Pemantik',
         kartu: const [],
-        contohAngka: 500000,
+        contohAngka: ContohAngkaKonten.kosong,
         cekPaham: const [],
         misi: MisiKonten(tipe: 'ada_data', objek: 'pemasukan', min: 1, judul: 'Misi', deskripsi: 'Desc', perkiraanMenit: 2),
       );
@@ -260,7 +260,7 @@ void main() {
         gerbang: const [],
         pemantik: '',
         kartu: const [],
-        contohAngka: 0,
+        contohAngka: ContohAngkaKonten.kosong,
         cekPaham: const [],
         misi: MisiKonten(tipe: 'ada_data', objek: 'pemasukan', min: 1, judul: '', deskripsi: '', perkiraanMenit: 1),
       );
@@ -273,7 +273,7 @@ void main() {
         gerbang: const [],
         pemantik: '',
         kartu: const [],
-        contohAngka: 0,
+        contohAngka: ContohAngkaKonten.kosong,
         cekPaham: const [],
         misi: MisiKonten(tipe: 'ada_data', objek: 'pengeluaran', min: 1, judul: '', deskripsi: '', perkiraanMenit: 1),
       );

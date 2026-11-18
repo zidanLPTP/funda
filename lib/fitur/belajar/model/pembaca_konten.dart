@@ -69,8 +69,11 @@ class PembacaKonten {
     'profil',
   };
   static const Set<String> umpanBalikMisiValid = {
+    'catatan_pengeluaran_terbaru',
     'arus_kas_bulan_ini',
     'komposisi_sifat_bulan_ini',
+    'perbandingan_pola_anggaran',
+    'realisasi_anggaran_bulan_ini',
   };
 
   /// Mengurai string JSON kamus menjadi daftar istilah terindeks.
@@ -172,6 +175,9 @@ class PembacaKonten {
       }
       final bankSoal = kuis['bankSoal'];
       if (bankSoal is List) {
+        if (jmlSoal is num && bankSoal.length < jmlSoal) {
+          throw GalatKonten('Jumlah bankSoal (${bankSoal.length}) tidak boleh lebih sedikit dari jumlahSoal ($jmlSoal)', berkas: namaBerkas, kolom: 'kuis.bankSoal');
+        }
         final setSoal = <String>{};
         for (var i = 0; i < bankSoal.length; i++) {
           final soal = bankSoal[i];
@@ -181,8 +187,29 @@ class PembacaKonten {
               throw GalatKonten('Ditemukan ID soal kuis duplikat: "$soalId"', berkas: namaBerkas, kolom: 'kuis.bankSoal[$i].id');
             }
             final pelId = soal['pelajaranId'] as String?;
-            if (pelId != null && setPelajaran.isNotEmpty && !setPelajaran.contains(pelId)) {
+            if (pelId == null || pelId.trim().isEmpty) {
+              throw GalatKonten('Kolom pelajaranId pada soal kuis "$soalId" wajib ada', berkas: namaBerkas, kolom: 'kuis.bankSoal[$i].pelajaranId');
+            }
+            if (setPelajaran.isNotEmpty && !setPelajaran.contains(pelId)) {
               throw GalatKonten('Soal "$soalId" mereferensikan pelajaranId "$pelId" yang tidak terdaftar di modul', berkas: namaBerkas, kolom: 'kuis.bankSoal[$i].pelajaranId');
+            }
+
+            final tanya = soal['tanya'] as String? ?? '';
+            final penjelasan = soal['penjelasan'] as String? ?? '';
+            final pilihan = (soal['pilihan'] as List<dynamic>?)?.map((e) => e.toString()).join(' ') ?? '';
+            final teksSoal = '$tanya $penjelasan $pilihan';
+
+            final polaAturanPraktis = RegExp(r'(50/30/20|50-30-20|\b50\s*persen\b|\b30\s*persen\b|\b20\s*persen\b)', caseSensitive: false);
+            final adaAturanPraktis = polaAturanPraktis.hasMatch(teksSoal);
+            final isAturanPraktis = soal['aturanPraktis'] == true;
+            final catatanReviewer = (soal['catatanReviewer'] as String?) ?? (data['catatanReviewer'] as String?);
+
+            if (isAturanPraktis) {
+              if (catatanReviewer == null || !catatanReviewer.contains('TODO-VERIFIKASI')) {
+                throw GalatKonten('Soal kuis dengan aturanPraktis: true wajib memuat catatanReviewer dengan "TODO-VERIFIKASI"', berkas: namaBerkas, kolom: 'kuis.bankSoal[$i].catatanReviewer');
+              }
+            } else if (adaAturanPraktis) {
+              throw GalatKonten('Soal kuis memuat angka aturan praktis tanpa penanda aturanPraktis: true dan catatanReviewer "TODO-VERIFIKASI"', berkas: namaBerkas, kolom: 'kuis.bankSoal[$i]');
             }
           }
         }
@@ -314,7 +341,76 @@ class PembacaKonten {
       }
     }
 
-    // 7. Misi
+    // 7. Contoh Angka (opsional, jika ada harus berstruktur valid)
+    final contohAngka = data['contohAngka'];
+    var teksContohAngka = '';
+    if (contohAngka != null && contohAngka is! num) {
+      if (contohAngka is! Map<String, dynamic>) {
+        throw GalatKonten('Kolom contohAngka wajib berupa objek', berkas: namaBerkas, kolom: 'contohAngka');
+      }
+      final judulContoh = contohAngka['judul'] as String?;
+      if (judulContoh == null || judulContoh.trim().isEmpty) {
+        throw GalatKonten('Kolom contohAngka.judul wajib ada', berkas: namaBerkas, kolom: 'contohAngka.judul');
+      }
+      final kesimpulan = contohAngka['kesimpulan'] as String?;
+      if (kesimpulan == null || kesimpulan.trim().isEmpty) {
+        throw GalatKonten('Kolom contohAngka.kesimpulan wajib ada', berkas: namaBerkas, kolom: 'contohAngka.kesimpulan');
+      }
+
+      teksContohAngka = '$judulContoh $kesimpulan ';
+      _periksaIstilahKamus(judulContoh, daftarIstilahKamus, namaBerkas, 'contohAngka.judul');
+      _periksaIstilahKamus(kesimpulan, daftarIstilahKamus, namaBerkas, 'contohAngka.kesimpulan');
+      periksaBahasaTeks(judulContoh, namaBerkas: namaBerkas, daftarPeringatan: daftarPeringatan);
+      periksaBahasaTeks(kesimpulan, namaBerkas: namaBerkas, daftarPeringatan: daftarPeringatan);
+
+      if (contohAngka.containsKey('baris')) {
+        final baris = contohAngka['baris'];
+        if (baris is! List || baris.isEmpty) {
+          throw GalatKonten('Kolom contohAngka.baris wajib berupa array tidak kosong', berkas: namaBerkas, kolom: 'contohAngka.baris');
+        }
+        for (var bIdx = 0; bIdx < baris.length; bIdx++) {
+          final b = baris[bIdx];
+          if (b is! Map<String, dynamic>) {
+            throw GalatKonten('Baris contohAngka indeks $bIdx harus berupa objek', berkas: namaBerkas, kolom: 'contohAngka.baris[$bIdx]');
+          }
+          final label = b['label'] as String?;
+          if (label == null || label.trim().isEmpty) {
+            throw GalatKonten('Kolom label pada baris contohAngka wajib ada', berkas: namaBerkas, kolom: 'contohAngka.baris[$bIdx].label');
+          }
+          if (!b.containsKey('jumlah') || b['jumlah'] is! num) {
+            throw GalatKonten('Kolom jumlah pada baris contohAngka wajib berupa angka int Rupiah', berkas: namaBerkas, kolom: 'contohAngka.baris[$bIdx].jumlah');
+          }
+          teksContohAngka += '$label ';
+          _periksaIstilahKamus(label, daftarIstilahKamus, namaBerkas, 'contohAngka.baris[$bIdx].label');
+          periksaBahasaTeks(label, namaBerkas: namaBerkas, daftarPeringatan: daftarPeringatan);
+        }
+      } else {
+        // Mendukung bentuk lama {masuk, keluar, hasil}
+        if (!contohAngka.containsKey('masuk') && !contohAngka.containsKey('keluar') && !contohAngka.containsKey('hasil')) {
+          throw GalatKonten('Kolom contohAngka wajib memuat array "baris" atau format {masuk, keluar, hasil}', berkas: namaBerkas, kolom: 'contohAngka');
+        }
+      }
+    }
+
+    // 8. Validasi Aturan Praktis & Catatan Reviewer
+    final teksSemuaKartu = kartuList.map((k) => '${(k as Map)["judul"]} ${(k)["isi"]}').join(' ');
+    final teksSemuaCekPaham = cekPaham.map((c) => '${(c as Map)["tanya"]} ${(c)["penjelasan"]}').join(' ');
+    final seluruhTeks = '$pemantik $teksSemuaKartu $teksSemuaCekPaham $teksContohAngka';
+
+    final polaAturanPraktis = RegExp(r'(50/30/20|50-30-20|\b50\s*persen\b|\b30\s*persen\b|\b20\s*persen\b)', caseSensitive: false);
+    final adaAturanPraktis = polaAturanPraktis.hasMatch(seluruhTeks);
+    final isAturanPraktis = data['aturanPraktis'] == true;
+    final catatanReviewer = data['catatanReviewer'] as String?;
+
+    if (isAturanPraktis) {
+      if (catatanReviewer == null || !catatanReviewer.contains('TODO-VERIFIKASI')) {
+        throw GalatKonten('Pelajaran dengan aturanPraktis: true wajib memuat catatanReviewer dengan "TODO-VERIFIKASI"', berkas: namaBerkas, kolom: 'catatanReviewer');
+      }
+    } else if (adaAturanPraktis) {
+      throw GalatKonten('Pelajaran memuat angka aturan praktis tanpa penanda aturanPraktis: true dan catatanReviewer "TODO-VERIFIKASI"', berkas: namaBerkas);
+    }
+
+    // 9. Misi
     final misi = data['misi'];
     if (misi is! Map<String, dynamic>) {
       throw GalatKonten('Kolom misi wajib berupa objek', berkas: namaBerkas, kolom: 'misi');

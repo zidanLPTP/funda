@@ -1,61 +1,84 @@
 {
   "id": "anggaran_arus_kas_1_3",
+  "modul": "anggaran_arus_kas",
   "judul": "Kebutuhan vs Keinginan",
-  "durasiMenit": 4,
+  "durasiMenit": 6,
   "status": "draf",
   "gerbang": [
     {
       "tipe": "ada_data",
       "objek": "pengeluaran",
       "min": 3,
-      "pesan": "Catat minimal 3 pengeluaran dulu agar kamu bisa memilah pos belanjamu."
+      "pesan": "Catat minimal 3 pengeluaran dulu, supaya ada contoh nyata yang bisa kita labeli bersama."
     }
   ],
-  "pemantik": "Sering merasa semua barang yang dibeli terasa penting padahal anggaran bulanan jebol?",
+  "pemantik": "Kamu membeli kopi. Itu kebutuhan atau keinginan? Jawabannya bisa dua-duanya, tergantung keadaanmu.",
   "kartu": [
     {
-      "judul": "Memilah Dua Sisi Belanja",
-      "isi": "Setiap pengeluaran punya peran berbeda. Ada pos {{kebutuhan}} yang menjaga hidupmu berjalan, dan ada pos {{keinginan}} yang memberi kenyamanan tambahan."
+      "judul": "Dua kelompok, satu tujuan",
+      "isi": "{{Kebutuhan}} adalah hal yang perlu ada agar hidup dan kewajibanmu berjalan. Contohnya tempat tinggal, makan harian, transportasi ke kampus atau kerja, listrik, dan kesehatan. {{Keinginan}} adalah hal yang membuat hidup lebih nyaman atau menyenangkan, tetapi bisa ditunda atau dikurangi. Contohnya nongkrong, hiburan, dan langganan tontonan. Keduanya sah. Membedakannya bukan untuk melarang, tetapi supaya kamu memilih dengan sadar."
     },
     {
-      "judul": "Bukan Berarti Dilarang",
-      "isi": "Memiliki pos keinginan itu wajar dan manusiawi. Tujuannya bukan menghapus kesenangan, melainkan menyadari proporsi belanjamu secara jujur."
+      "judul": "Wilayah abu-abu itu wajar",
+      "isi": "Banyak pengeluaran berada di tengah. Makan itu kebutuhan. Makan di tempat mahal tiap hari lebih dekat ke keinginan. Paket data itu kebutuhan. Paket data jumbo untuk streaming lebih dekat ke keinginan. Ada pertanyaan bantu: kalau uangku sedang tipis, apakah ini yang pertama kukurangi? Kalau iya, kemungkinan itu keinginan. Kamu yang menentukan label sesuai kondisimu."
     },
     {
-      "judul": "Kekuatan Memberi Label",
-      "isi": "Dengan menandai {{sifat pengeluaran}} pada setiap kategori, kamu memegang kendali penuh untuk memutuskan pos mana yang bisa disesuaikan saat kondisi mendesak."
+      "judul": "Empat label di Funda",
+      "isi": "Di Funda, pengeluaran diberi label: kebutuhan, keinginan, tabungan dan dana darurat, atau utang. Label ini membantumu melihat komposisi pengeluaran. Ini bukan penilaian. Tidak ada komposisi yang cocok untuk semua orang. Yang berguna adalah kamu tahu gambarannya, lalu menyesuaikannya dengan tujuanmu."
     }
   ],
-  "contohAngka": 150000,
+  "contohAngka": {
+    "judul": "Pengeluaran sebulan Rp2.450.000 menurut label",
+    "baris": [
+      { "label": "Kebutuhan: kos", "jumlah": 900000 },
+      { "label": "Kebutuhan: paket data", "jumlah": 100000 },
+      { "label": "Kebutuhan: makan harian", "jumlah": 600000 },
+      { "label": "Kebutuhan: transportasi", "jumlah": 300000 },
+      { "label": "Jumlah kebutuhan", "jumlah": 1900000, "ringkasan": true },
+      { "label": "Keinginan: makan di luar dan nongkrong", "jumlah": 200000 },
+      { "label": "Keinginan: jajan dan hiburan", "jumlah": 350000 },
+      { "label": "Jumlah keinginan", "jumlah": 550000, "ringkasan": true }
+    ],
+    "kesimpulan": "Komposisinya 78 persen kebutuhan dan 22 persen keinginan. Ini gambaran, bukan nilai."
+  },
   "cekPaham": [
     {
-      "tanya": "Manakah contoh pengeluaran yang jelas termasuk kebutuhan pokok?",
+      "tanya": "Pengeluaran mana yang paling dekat dengan kebutuhan?",
       "pilihan": [
-        "Membeli jaket baru karena warnanya menarik",
-        "Membayar tagihan listrik rumah",
-        "Berlangganan tiga aplikasi streaming video sekaligus"
-      ],
-      "benar": 1,
-      "penjelasan": "Listrik rumah adalah kebutuhan dasar yang menopang kehidupan sehari-hari."
-    },
-    {
-      "tanya": "Kapan saat terbaik untuk meninjau kembali porsi pengeluaran keinginan?",
-      "pilihan": [
-        "Saat arus kas bulananmu mulai terasa sesak atau {{defisit}}",
-        "Hanya saat tahun baru saja",
-        "Tidak perlu ditinjau jika masih ada limit kartu kredit"
+        "Biaya kos bulanan",
+        "Tiket konser",
+        "Langganan film tiap bulan"
       ],
       "benar": 0,
-      "penjelasan": "Menyesuaikan pos keinginan adalah langkah tercepat menyehatkan kembali arus kasmu."
+      "penjelasan": "Tempat tinggal perlu ada agar hidup berjalan. Konser dan film menyenangkan, tetapi bisa ditunda."
+    },
+    {
+      "tanya": "Kopi di kafe tiap pagi sebaiknya dilabeli apa?",
+      "pilihan": [
+        "Tergantung kondisi dan alasanmu, bisa kebutuhan bisa keinginan",
+        "Selalu kebutuhan",
+        "Selalu keinginan"
+      ],
+      "benar": 0,
+      "penjelasan": "Satu pengeluaran bisa punya arti berbeda untuk orang berbeda. Pilih label yang paling jujur untuk keadaanmu."
+    },
+    {
+      "tanya": "Untuk apa pengeluaran diberi label kebutuhan atau keinginan?",
+      "pilihan": [
+        "Untuk melihat gambaran pengeluaran dan memilih dengan sadar",
+        "Untuk menilai pantas atau tidaknya kamu jajan",
+        "Untuk mencari pengeluaran yang dilarang"
+      ],
+      "benar": 0,
+      "penjelasan": "Label bukan penilaian. Ia membantumu melihat pola, lalu menyesuaikannya dengan tujuanmu."
     }
   ],
   "misi": {
     "tipe": "aturan_data",
     "aturan": "semua_kategori_berlabel",
-    "judul": "Beri Label Kategori Pengeluaran",
-    "deskripsi": "Pastikan seluruh kategori pengeluaran aktif yang pernah kamu pakai sudah dilabeli sebagai kebutuhan, keinginan, tabungan, atau utang.",
-    "perkiraanMenit": 2,
+    "judul": "Labeli kategori pengeluaranmu",
+    "instruksi": "Buka Kelola Kategori, lalu beri label pada setiap kategori pengeluaran yang pernah kamu pakai.",
     "umpanBalik": "komposisi_sifat_bulan_ini"
   },
-  "tindakLanjut": "Sebelum membayar sesuatu besok, tanyakan pada dirimu: apakah barang ini kebutuhan atau keinginan?"
+  "tindakLanjut": "Minggu ini, pilih satu pengeluaran yang labelnya kamu ragukan. Tanyakan pada dirimu: kalau uangku tipis, ini yang pertama kukurangi atau bukan?"
 }

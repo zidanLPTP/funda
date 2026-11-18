@@ -285,6 +285,91 @@ class MisiKonten {
   }
 }
 
+class BarisContohAngka {
+  final String label;
+  final int jumlah;
+  final bool ringkasan;
+
+  const BarisContohAngka({
+    required this.label,
+    required this.jumlah,
+    this.ringkasan = false,
+  });
+
+  factory BarisContohAngka.fromJson(Map<String, dynamic> json) {
+    return BarisContohAngka(
+      label: json['label'] as String? ?? '',
+      jumlah: (json['jumlah'] as num?)?.toInt() ?? 0,
+      ringkasan: json['ringkasan'] as bool? ?? false,
+    );
+  }
+
+  Map<String, dynamic> toJson() => {
+        'label': label,
+        'jumlah': jumlah,
+        if (ringkasan) 'ringkasan': ringkasan,
+      };
+}
+
+class ContohAngkaKonten {
+  final String judul;
+  final List<BarisContohAngka> baris;
+  final String kesimpulan;
+
+  const ContohAngkaKonten({
+    required this.judul,
+    required this.baris,
+    required this.kesimpulan,
+  });
+
+  static const ContohAngkaKonten kosong = ContohAngkaKonten(
+    judul: '',
+    baris: [],
+    kesimpulan: '',
+  );
+
+  factory ContohAngkaKonten.fromJson(dynamic raw) {
+    if (raw is Map<String, dynamic>) {
+      final judul = raw['judul'] as String? ?? '';
+      final kesimpulan = raw['kesimpulan'] as String? ?? '';
+      final barisList = <BarisContohAngka>[];
+
+      if (raw.containsKey('baris') && raw['baris'] is List) {
+        for (final b in raw['baris'] as List) {
+          if (b is Map<String, dynamic>) {
+            barisList.add(BarisContohAngka.fromJson(b));
+          }
+        }
+      } else {
+        // Mendukung bentuk lama {masuk, keluar, hasil}
+        if (raw.containsKey('masuk')) {
+          barisList.add(BarisContohAngka(label: 'Uang Masuk', jumlah: (raw['masuk'] as num?)?.toInt() ?? 0));
+        }
+        if (raw.containsKey('keluar')) {
+          barisList.add(BarisContohAngka(label: 'Uang Keluar', jumlah: -((raw['keluar'] as num?)?.toInt() ?? 0)));
+        }
+        if (raw.containsKey('hasil')) {
+          barisList.add(BarisContohAngka(label: 'Hasil', jumlah: (raw['hasil'] as num?)?.toInt() ?? 0, ringkasan: true));
+        }
+      }
+
+      return ContohAngkaKonten(
+        judul: judul,
+        baris: barisList,
+        kesimpulan: kesimpulan,
+      );
+    } else if (raw is num) {
+      // Kompatibilitas dengan integer lama
+      return ContohAngkaKonten(
+        judul: 'Contoh Angka',
+        baris: [BarisContohAngka(label: 'Contoh', jumlah: raw.toInt())],
+        kesimpulan: '',
+      );
+    }
+    return const ContohAngkaKonten(judul: '', baris: [], kesimpulan: '');
+  }
+}
+
 class PelajaranKonten {
   final String id;
   final String modulId;
@@ -294,10 +379,12 @@ class PelajaranKonten {
   final List<SyaratGerbangData> gerbang;
   final String pemantik;
   final List<KartuPelajaranKonten> kartu;
-  final int contohAngka;
+  final ContohAngkaKonten? contohAngka;
   final List<CekPahamKonten> cekPaham;
   final MisiKonten misi;
   final String? tindakLanjut;
+  final bool aturanPraktis;
+  final String? catatanReviewer;
 
   const PelajaranKonten({
     required this.id,
@@ -308,10 +395,12 @@ class PelajaranKonten {
     required this.gerbang,
     required this.pemantik,
     required this.kartu,
-    required this.contohAngka,
+    this.contohAngka,
     required this.cekPaham,
     required this.misi,
     this.tindakLanjut,
+    this.aturanPraktis = false,
+    this.catatanReviewer,
   });
 
   factory PelajaranKonten.fromJson(Map<String, dynamic> json, {String? fallbackModulId}) {
@@ -331,13 +420,15 @@ class PelajaranKonten {
               ?.map((e) => KartuPelajaranKonten.fromJson(e as Map<String, dynamic>))
               .toList() ??
           [],
-      contohAngka: (json['contohAngka'] as num?)?.toInt() ?? 0,
+      contohAngka: json['contohAngka'] != null ? ContohAngkaKonten.fromJson(json['contohAngka']) : null,
       cekPaham: (json['cekPaham'] as List<dynamic>?)
               ?.map((e) => CekPahamKonten.fromJson(e as Map<String, dynamic>))
               .toList() ??
           [],
       misi: MisiKonten.fromJson(json['misi'] as Map<String, dynamic>? ?? {}),
       tindakLanjut: json['tindakLanjut'] as String?,
+      aturanPraktis: json['aturanPraktis'] as bool? ?? false,
+      catatanReviewer: json['catatanReviewer'] as String?,
     );
   }
 }
@@ -349,6 +440,8 @@ class SoalKuis {
   final List<String> pilihan;
   final int benar;
   final String penjelasan;
+  final bool aturanPraktis;
+  final String? catatanReviewer;
 
   const SoalKuis({
     required this.id,
@@ -357,6 +450,8 @@ class SoalKuis {
     required this.pilihan,
     required this.benar,
     required this.penjelasan,
+    this.aturanPraktis = false,
+    this.catatanReviewer,
   });
 
   factory SoalKuis.fromJson(Map<String, dynamic> json) {
@@ -367,6 +462,8 @@ class SoalKuis {
       pilihan: (json['pilihan'] as List<dynamic>?)?.map((e) => e.toString()).toList() ?? [],
       benar: (json['benar'] as num?)?.toInt() ?? 0,
       penjelasan: json['penjelasan'] as String? ?? '',
+      aturanPraktis: json['aturanPraktis'] as bool? ?? false,
+      catatanReviewer: json['catatanReviewer'] as String?,
     );
   }
 }

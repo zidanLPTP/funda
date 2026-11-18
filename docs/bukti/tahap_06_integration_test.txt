@@ -1,0 +1,39 @@
+00:00 +0: loading D:/Proyek Coding/Flutter/Funda/integration_test/tahap_06_alur_modul_1_emulator_test.dart
+Running Gradle task 'assembleDebug'...                             99.2s
+v Built build\app\outputs\flutter-apk\app-debug.apk
+Installing build\app\outputs\flutter-apk\app-debug.apk...        1,147ms
+00:00 +0: Tahap 6: Alur Penuh Modul 1, Kuis, Bukti Umpan Balik & Profil Performa Emulator Pixel 8
+=== [LANGKAH 1]: Lewati Tes Awal & Buat Dompet Saldo 0 ===
+=== [LANGKAH 2]: Verifikasi Pelajaran 1_1 Terbuka ===
+=== [LANGKAH 3]: Pelajaran 1_1 & Tangkapan Layar Contoh Angka ===
+[SCREEN_READY: contoh_angka_1_1]
+[SCREEN_CAPTURED: contoh_angka_1_1]
+[BUKTI]: Menampilkan Kartu Contoh Angka Pelajaran 1_1
+=== [LANGKAH 4]: Misi Catat Pengeluaran & Tangkapan Layar Umpan Balik ===
+[SCREEN_READY: catatan_pengeluaran_terbaru_1_1]
+[SCREEN_CAPTURED: catatan_pengeluaran_terbaru_1_1]
+[BUKTI]: Umpan Balik 1: catatan_pengeluaran_terbaru
+=== [LANGKAH 5]: Selesaikan Pelajaran 1_2 ===
+=== [LANGKAH 6]: Pelajaran 1_3 Terkunci & Buka Kunci ===
+[BUKTI]: Pesan terkunci tampil di layar belajar
+=== [LANGKAH 7]: Pelajaran 1_4 Terkunci, Penuhi Syarat 7 Hari, Tangkapan Layar 50/30/20 ===
+[SCREEN_READY: perbandingan_pola_anggaran_1_4]
+[SCREEN_CAPTURED: perbandingan_pola_anggaran_1_4]
+[BUKTI]: Umpan Balik 2: perbandingan_pola_anggaran di 1_4
+=== [LANGKAH 8]: Pelajaran 1_5 & Tangkapan Layar Realisasi Anggaran ===
+[SCREEN_READY: realisasi_anggaran_bulan_ini_1_5]
+[SCREEN_CAPTURED: realisasi_anggaran_bulan_ini_1_5]
+[BUKTI]: Umpan Balik 3: realisasi_anggaran_bulan_ini di 1_5
+=== [LANGKAH 9]: Kuis Modul 1 (Gagal lalu Lulus) ===
+[SCREEN_READY: hasil_kuis_modul_lulus]
+[SCREEN_CAPTURED: hasil_kuis_modul_lulus]
+[BUKTI]: Tangkapan Layar Hasil Kuis Modul Lulus (>= 80%)
+=== [LANGKAH 10]: Beranda Progres Selesai & Rekomendasi Berikutnya ===
+[SCREEN_READY: beranda_modul_1_selesai]
+[SCREEN_CAPTURED: beranda_modul_1_selesai]
+=== [LANGKAH 11]: Pengukuran Performa Emulator ===
+[PERFORMA TAB BELAJAR]: median = 926ms, p95 = 1010ms, detail = [753, 762, 818, 912, 926, 926, 938, 960, 999, 1010]
+[PERFORMA PEMUTAR PELAJARAN]: median = 802ms, p95 = 895ms, detail = [676, 746, 766, 775, 791, 802, 810, 860, 865, 895]
+=== [SELESAI]: Seluruh Pengujian Integrasi Tahap 6 Berhasil! ===
+01:16 +1: (tearDownAll)
+01:16 +1: All tests passed!

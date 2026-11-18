@@ -45,7 +45,19 @@ void main() {
         "tersedia": true,
         "gerbang": [],
         "daftarPelajaran": ["anggaran_arus_kas_1_2"],
-        "kuis": { "jumlahSoal": 1, "bankSoal": [] }
+        "kuis": {
+          "jumlahSoal": 1,
+          "bankSoal": [
+            {
+              "id": "soal_1",
+              "pelajaranId": "anggaran_arus_kas_1_2",
+              "pertanyaan": "Pertanyaan?",
+              "pilihan": ["A", "B"],
+              "kunci": 0,
+              "penjelasan": "Penjelasan"
+            }
+          ]
+        }
       }
       ''';
       final modul = PembacaKonten.uraiModul(modulValid);

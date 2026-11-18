@@ -6,13 +6,13 @@
   },
   {
     "istilah": "kebutuhan",
-    "arti": "Pengeluaran pokok yang wajib dipenuhi agar kehidupan sehari-hari tetap berjalan normal.",
-    "contohRupiah": "Membayar sewa kos Rp800.000 atau membeli beras Rp120.000 adalah pengeluaran kebutuhan."
+    "arti": "Pengeluaran yang perlu ada agar hidup dan kewajibanmu berjalan.",
+    "contohRupiah": "Kos, makan harian, dan transportasi ke kampus."
   },
   {
     "istilah": "keinginan",
-    "arti": "Pengeluaran untuk kenyamanan atau gaya hidup yang sebenarnya bisa ditunda tanpa mengganggu hidup pokok.",
-    "contohRupiah": "Membeli kopi kekinian seharga Rp35.000 atau menonton bioskop Rp50.000 adalah pengeluaran keinginan."
+    "arti": "Pengeluaran yang membuat hidup lebih nyaman, tetapi bisa ditunda atau dikurangi.",
+    "contohRupiah": "Tiket konser atau langganan film."
   },
   {
     "istilah": "anggaran",
@@ -23,6 +23,41 @@
     "istilah": "dana darurat",
     "arti": "Simpanan uang tunai terpisah yang hanya boleh dipakai saat menghadapi situasi darurat tak terduga.",
     "contohRupiah": "Menyimpan Rp5.000.000 di rekening khusus untuk biaya servis motor tiba-tiba atau kebutuhan mendesak."
+  },
+  {
+    "istilah": "pemasukan",
+    "arti": "Uang yang masuk ke tanganmu, seperti gaji, uang saku, atau hasil freelance.",
+    "contohRupiah": "Gaji Rp3.000.000 dan uang lembur Rp500.000 berarti pemasukan Rp3.500.000."
+  },
+  {
+    "istilah": "pengeluaran",
+    "arti": "Uang yang keluar dari tanganmu untuk membeli atau membayar sesuatu.",
+    "contohRupiah": "Makan Rp25.000 dan ojek Rp12.000 berarti pengeluaran Rp37.000."
+  },
+  {
+    "istilah": "pengeluaran tetap",
+    "arti": "Pengeluaran yang jumlahnya hampir sama tiap bulan.",
+    "contohRupiah": "Kos Rp900.000 dan paket internet Rp100.000 tiap bulan."
+  },
+  {
+    "istilah": "pengeluaran berubah-ubah",
+    "arti": "Pengeluaran yang jumlahnya naik turun dari bulan ke bulan.",
+    "contohRupiah": "Jajan bisa Rp300.000 bulan ini dan Rp450.000 bulan depan."
+  },
+  {
+    "istilah": "pos anggaran",
+    "arti": "Satu batas pengeluaran untuk satu kategori dalam sebulan.",
+    "contohRupiah": "Pos Makan Harian dengan batas Rp800.000."
+  },
+  {
+    "istilah": "realisasi anggaran",
+    "arti": "Jumlah yang benar-benar terpakai pada sebuah pos anggaran.",
+    "contohRupiah": "Batas jajan Rp300.000 dan terpakai Rp345.000 berarti realisasinya Rp345.000."
+  },
+  {
+    "istilah": "aturan praktis",
+    "arti": "Pedoman sederhana untuk memulai, yang boleh disesuaikan dengan kondisimu.",
+    "contohRupiah": "Pola 50/30/20 membagi pemasukan menjadi kebutuhan, keinginan, dan tabungan."
   },
   {
     "istilah": "sifat pengeluaran",

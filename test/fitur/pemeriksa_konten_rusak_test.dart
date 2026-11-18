@@ -800,5 +800,211 @@ void main() {
         );
       });
     });
+
+    // =========================================================================
+    // Tahap 6: Pengujian Validasi Konten Rusak untuk Bidang Baru
+    // =========================================================================
+    group('Pengujian Validasi Konten Rusak Bidang Baru (Tahap 6)', () {
+      // 1. contohAngka rusak (bukan objek, judul kosong, atau baris kosong/jumlah bukan angka)
+      test('1. contohAngka rusak: judul kosong ditolak', () {
+        const jsonStr = '''
+        {
+          "id": "anggaran_arus_kas_1_1",
+          "modul": "anggaran_arus_kas",
+          "judul": "Judul",
+          "durasiMenit": 4,
+          "status": "draf",
+          "kartu": [{"judul": "J", "isi": "I"}],
+          "contohAngka": {
+            "judul": "",
+            "baris": [{"label": "Kopi", "jumlah": 18000}],
+            "kesimpulan": "K"
+          },
+          "cekPaham": [
+            {"tanya": "T1", "pilihan": ["A", "B"], "benar": 0, "penjelasan": "P1"},
+            {"tanya": "T2", "pilihan": ["A", "B"], "benar": 0, "penjelasan": "P2"}
+          ],
+          "misi": {"tipe": "ada_data", "objek": "pengeluaran", "min": 1, "judul": "M", "umpanBalik": "catatan_pengeluaran_terbaru"}
+        }
+        ''';
+        expect(
+          () => PembacaKonten.uraiPelajaran(jsonStr, namaBerkas: 'pelajaran_rusak.json'),
+          throwsA(predicate((e) => e is GalatKonten && e.kolom == 'contohAngka.judul')),
+        );
+      });
+
+      test('1b. contohAngka rusak: baris kosong ditolak', () {
+        const jsonStr = '''
+        {
+          "id": "anggaran_arus_kas_1_1",
+          "modul": "anggaran_arus_kas",
+          "judul": "Judul",
+          "durasiMenit": 4,
+          "status": "draf",
+          "kartu": [{"judul": "J", "isi": "I"}],
+          "contohAngka": {
+            "judul": "Judul Contoh",
+            "baris": [],
+            "kesimpulan": "K"
+          },
+          "cekPaham": [
+            {"tanya": "T1", "pilihan": ["A", "B"], "benar": 0, "penjelasan": "P1"},
+            {"tanya": "T2", "pilihan": ["A", "B"], "benar": 0, "penjelasan": "P2"}
+          ],
+          "misi": {"tipe": "ada_data", "objek": "pengeluaran", "min": 1, "judul": "M", "umpanBalik": "catatan_pengeluaran_terbaru"}
+        }
+        ''';
+        expect(
+          () => PembacaKonten.uraiPelajaran(jsonStr, namaBerkas: 'pelajaran_rusak.json'),
+          throwsA(predicate((e) => e is GalatKonten && e.kolom == 'contohAngka.baris')),
+        );
+      });
+
+      // 2. aturanPraktis tanpa catatanReviewer
+      test('2. aturanPraktis: true tanpa catatanReviewer TODO-VERIFIKASI ditolak', () {
+        const jsonStr = '''
+        {
+          "id": "anggaran_arus_kas_1_4",
+          "modul": "anggaran_arus_kas",
+          "judul": "Judul",
+          "durasiMenit": 7,
+          "status": "draf",
+          "aturanPraktis": true,
+          "kartu": [{"judul": "J", "isi": "Pola 50/30/20 adalah panduan."}],
+          "cekPaham": [
+            {"tanya": "T1", "pilihan": ["A", "B"], "benar": 0, "penjelasan": "P1"},
+            {"tanya": "T2", "pilihan": ["A", "B"], "benar": 0, "penjelasan": "P2"}
+          ],
+          "misi": {"tipe": "ada_data", "objek": "anggaran", "min": 3, "judul": "M", "umpanBalik": "perbandingan_pola_anggaran"}
+        }
+        ''';
+        expect(
+          () => PembacaKonten.uraiPelajaran(jsonStr, namaBerkas: 'pelajaran_rusak.json'),
+          throwsA(predicate((e) => e is GalatKonten && e.kolom == 'catatanReviewer')),
+        );
+      });
+
+      // 3. angka 50/30/20 tanpa penanda aturanPraktis
+      test('3. teks memuat angka aturan praktis 50/30/20 tanpa penanda aturanPraktis ditolak', () {
+        const jsonStr = '''
+        {
+          "id": "anggaran_arus_kas_1_4",
+          "modul": "anggaran_arus_kas",
+          "judul": "Judul",
+          "durasiMenit": 7,
+          "status": "draf",
+          "kartu": [{"judul": "J", "isi": "Pola 50/30/20 membagi pengeluaranmu."}],
+          "cekPaham": [
+            {"tanya": "T1", "pilihan": ["A", "B"], "benar": 0, "penjelasan": "P1"},
+            {"tanya": "T2", "pilihan": ["A", "B"], "benar": 0, "penjelasan": "P2"}
+          ],
+          "misi": {"tipe": "ada_data", "objek": "anggaran", "min": 3, "judul": "M", "umpanBalik": "perbandingan_pola_anggaran"}
+        }
+        ''';
+        expect(
+          () => PembacaKonten.uraiPelajaran(jsonStr, namaBerkas: 'pelajaran_rusak.json'),
+          throwsA(predicate((e) => e is GalatKonten && e.pesan.contains('aturan praktis'))),
+        );
+      });
+
+      // 4. umpanBalik tidak ada di registri
+      test('4. umpanBalik misi tidak terdaftar di registri ditolak', () {
+        const jsonStr = '''
+        {
+          "id": "anggaran_arus_kas_1_1",
+          "modul": "anggaran_arus_kas",
+          "judul": "Judul",
+          "durasiMenit": 4,
+          "status": "draf",
+          "kartu": [{"judul": "J", "isi": "I"}],
+          "cekPaham": [
+            {"tanya": "T1", "pilihan": ["A", "B"], "benar": 0, "penjelasan": "P1"},
+            {"tanya": "T2", "pilihan": ["A", "B"], "benar": 0, "penjelasan": "P2"}
+          ],
+          "misi": {
+            "tipe": "ada_data",
+            "objek": "pengeluaran",
+            "min": 1,
+            "judul": "M",
+            "umpanBalik": "umpan_balik_khayalan_123"
+          }
+        }
+        ''';
+        expect(
+          () => PembacaKonten.uraiPelajaran(jsonStr, namaBerkas: 'pelajaran_rusak.json'),
+          throwsA(predicate((e) => e is GalatKonten && e.kolom == 'misi.umpanBalik')),
+        );
+      });
+
+      // 5. pelajaranId kuis tidak ada / tidak valid
+      test('5. pelajaranId kuis tidak ada di daftarPelajaran modul ditolak', () {
+        const jsonModulStr = '''
+        {
+          "id": "anggaran_arus_kas",
+          "judul": "Anggaran & Arus Kas",
+          "tingkat": "pemula",
+          "urutan": 1,
+          "tersedia": true,
+          "daftarPelajaran": ["anggaran_arus_kas_1_1", "anggaran_arus_kas_1_2"],
+          "kuis": {
+            "jumlahSoal": 2,
+            "bankSoal": [
+              {
+                "id": "soal_1",
+                "pelajaranId": "anggaran_arus_kas_1_1",
+                "tanya": "T1",
+                "pilihan": ["A", "B"],
+                "benar": 0,
+                "penjelasan": "P1"
+              },
+              {
+                "id": "soal_2",
+                "pelajaranId": "anggaran_arus_kas_9_9_palsu",
+                "tanya": "T2",
+                "pilihan": ["A", "B"],
+                "benar": 0,
+                "penjelasan": "P2"
+              }
+            ]
+          }
+        }
+        ''';
+        expect(
+          () => PembacaKonten.uraiModul(jsonModulStr, namaBerkas: 'modul_rusak.json'),
+          throwsA(predicate((e) => e is GalatKonten && e.kolom?.contains('pelajaranId') == true)),
+        );
+      });
+
+      // 6. jumlah bankSoal < jumlahSoal
+      test('6. jumlah bankSoal < jumlahSoal di modul.json ditolak', () {
+        const jsonModulStr = '''
+        {
+          "id": "anggaran_arus_kas",
+          "judul": "Anggaran & Arus Kas",
+          "tingkat": "pemula",
+          "urutan": 1,
+          "tersedia": true,
+          "daftarPelajaran": ["anggaran_arus_kas_1_1"],
+          "kuis": {
+            "jumlahSoal": 5,
+            "bankSoal": [
+              {
+                "id": "soal_1",
+                "pelajaranId": "anggaran_arus_kas_1_1",
+                "tanya": "T1",
+                "pilihan": ["A", "B"],
+                "benar": 0,
+                "penjelasan": "P1"
+              }
+            ]
+          }
+        }
+        ''';
+        expect(
+          () => PembacaKonten.uraiModul(jsonModulStr, namaBerkas: 'modul_rusak.json'),
+          throwsA(predicate((e) => e is GalatKonten && e.kolom == 'kuis.bankSoal')),
+        );
+      });
+    });
   });
 }

@@ -1,0 +1,91 @@
+{
+  "id": "anggaran_arus_kas_1_4",
+  "modul": "anggaran_arus_kas",
+  "judul": "Anggaran Pertamamu",
+  "durasiMenit": 7,
+  "status": "draf",
+  "aturanPraktis": true,
+  "catatanReviewer": "TODO-VERIFIKASI. (1) Sumber pola 50/30/20: dikenal dari buku \"All Your Worth\" oleh Elizabeth Warren dan Amelia Warren Tyagi (2005); periksa rumusannya (kebutuhan 50%, keinginan 30%, tabungan dan pelunasan utang 20% dari penghasilan setelah pajak). (2) Klaim pengalaman: anggaran yang terlalu ketat sering gugur dalam beberapa minggu.",
+  "gerbang": [
+    {
+      "tipe": "periode_data",
+      "objek": "transaksi",
+      "minHari": 7,
+      "pesan": "Anggaran yang bagus dimulai dari data nyata. Catat transaksimu di 7 hari yang berbeda, dan sudah ada minimal satu pemasukan bulan ini, lalu pelajaran ini terbuka."
+    },
+    {
+      "tipe": "ada_data",
+      "objek": "pemasukan",
+      "min": 1,
+      "pesan": "Sudah ada minimal satu pemasukan bulan ini."
+    }
+  ],
+  "pemantik": "Dengan catatan seminggu ke belakang, kamu punya bahan nyata. Saatnya memberi uangmu arah sebelum ia pergi.",
+  "kartu": [
+    {
+      "judul": "Anggaran itu rencana, bukan penjara",
+      "isi": "{{Anggaran}} adalah rencana tentang berapa uang yang kamu izinkan keluar untuk tiap kategori dalam sebulan. Satu batas untuk satu kategori disebut {{pos anggaran}}. Fungsinya memberi arah, bukan melarang. Anggaran yang bagus itu realistis. Anggaran yang terlalu ketat sering gugur dalam beberapa minggu. Mulailah dari kenyataanmu, lalu tetapkan batas yang masuk akal."
+    },
+    {
+      "judul": "Tiga langkah menyusunnya",
+      "isi": "Satu, mulai dari pemasukan bulan ini. Itu batas atas uang yang bisa kamu atur. Dua, tulis dulu pengeluaran yang pasti ada, seperti kos, makan, transportasi, dan cicilan. Tiga, sisihkan tabunganmu di awal, bukan dari sisa. Sisanya baru dibagi untuk keinginan. Urutan ini membuat hal yang penting terpenuhi lebih dulu."
+    },
+    {
+      "judul": "Dua cara memulai",
+      "isi": "Cara pertama adalah pola populer 50/30/20, yang termasuk {{aturan praktis}}. Idenya, sekitar 50 persen pemasukan untuk kebutuhan, 30 persen untuk keinginan, dan 20 persen untuk tabungan dan pelunasan utang. Ini titik awal, bukan hukum. Kalau biaya kosmu besar, angkanya wajar bergeser. Cara kedua adalah anggaran buatanmu sendiri dari data nyata. Setelah misi ini, kamu akan melihat keduanya berdampingan memakai uangmu."
+    }
+  ],
+  "contohAngka": {
+    "judul": "Dua susunan untuk pemasukan Rp2.500.000",
+    "baris": [
+      { "label": "Pola 50/30/20: kebutuhan", "jumlah": 1250000 },
+      { "label": "Pola 50/30/20: keinginan", "jumlah": 750000 },
+      { "label": "Pola 50/30/20: tabungan dan utang", "jumlah": 500000 },
+      { "label": "Buatan sendiri: kebutuhan", "jumlah": 1500000 },
+      { "label": "Buatan sendiri: keinginan", "jumlah": 600000 },
+      { "label": "Buatan sendiri: tabungan dan utang", "jumlah": 400000 }
+    ],
+    "kesimpulan": "Keduanya sah. Susunan kedua menyesuaikan biaya kos yang lebih besar."
+  },
+  "cekPaham": [
+    {
+      "tanya": "Apa fungsi utama anggaran?",
+      "pilihan": [
+        "Memberi arah pada uang sebelum dipakai",
+        "Melarang semua jajan",
+        "Membuktikan bahwa kamu hemat"
+      ],
+      "benar": 0,
+      "penjelasan": "Anggaran adalah rencana. Ia membantumu memilih lebih dulu, bukan menyesali belakangan."
+    },
+    {
+      "tanya": "Urutan menyusun anggaran yang disarankan?",
+      "pilihan": [
+        "Pemasukan, lalu pengeluaran pasti, lalu tabungan, lalu keinginan",
+        "Keinginan dulu, lalu sisanya untuk kebutuhan",
+        "Tabungan hanya dari sisa di akhir bulan"
+      ],
+      "benar": 0,
+      "penjelasan": "Dengan urutan ini, hal yang penting terpenuhi lebih dulu dan tabungan tidak bergantung pada sisa."
+    },
+    {
+      "tanya": "Pola 50/30/20 sebaiknya diperlakukan sebagai apa?",
+      "pilihan": [
+        "Titik awal yang boleh disesuaikan",
+        "Aturan yang berlaku sama untuk semua orang",
+        "Satu-satunya cara menabung"
+      ],
+      "benar": 0,
+      "penjelasan": "Pola ini aturan praktis. Kondisi tiap orang berbeda, jadi angkanya boleh bergeser."
+    }
+  ],
+  "misi": {
+    "tipe": "ada_data",
+    "objek": "anggaran",
+    "min": 3,
+    "judul": "Buat anggaran pertamamu",
+    "instruksi": "Di menu Anggaran, buat anggaran bulan ini untuk minimal tiga kategori.",
+    "umpanBalik": "perbandingan_pola_anggaran"
+  },
+  "tindakLanjut": "Anggaran pertamamu tidak perlu sempurna. Cukup dijalankan sebulan, lalu kita evaluasi di pelajaran berikutnya."
+}

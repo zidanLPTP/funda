@@ -227,7 +227,7 @@ void main() {
         gerbang: [SyaratGerbangData(tipe: 'ada_data', objek: 'transaksi', min: 1, pesan: 'Catat transaksi')],
         pemantik: '',
         kartu: [],
-        contohAngka: 0,
+        contohAngka: ContohAngkaKonten.kosong,
         cekPaham: [],
         misi: MisiKonten(tipe: 'ada_data', objek: 'transaksi', min: 1, judul: 'Misi', deskripsi: '', perkiraanMenit: 2),
       );
@@ -276,7 +276,7 @@ void main() {
         gerbang: [],
         pemantik: '',
         kartu: [],
-        contohAngka: 0,
+        contohAngka: ContohAngkaKonten.kosong,
         cekPaham: [],
         misi: MisiKonten(tipe: 'ada_data', judul: 'Misi', deskripsi: '', perkiraanMenit: 2),
       );
@@ -290,7 +290,7 @@ void main() {
         gerbang: [],
         pemantik: '',
         kartu: [],
-        contohAngka: 0,
+        contohAngka: ContohAngkaKonten.kosong,
         cekPaham: [],
         misi: MisiKonten(tipe: 'ada_data', judul: 'Misi', deskripsi: '', perkiraanMenit: 2),
       );

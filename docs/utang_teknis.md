@@ -150,4 +150,17 @@ Berdasarkan hasil pengujian terisolasi pada 10 iterasi bersih di emulator Pixel 
 - **Rencana Peninjauan:**
   Pada Tahap 7 (Cadangan & Ekspor), kedua tabel ini (`tabel_profil_keuangan` dan `tabel_hasil_tes_awal`) wajib dimasukkan ke dalam skema cadangan JSON terenkripsi agar pengguna tidak kehilangan profil keuangan dan hasil penempatan belajarnya.
 
+---
+
+## 13. Verifikasi Kurikulum & Anotasi Aturan Praktis Pola 50/30/20 (Tahap 6)
+
+- **Konteks:**
+  Pada Modul 1 Pelajaran 1.4 ("Anggaran Pertamamu") dan kuis modul butir 7, diperkenalkan pola anggaran populer 50/30/20 (50% Kebutuhan, 30% Keinginan, 20% Tabungan dan Utang). Formula ini merupakan aturan praktis (*rule of thumb*) internasional yang belum tentu mencerminkan struktur pengeluaran riil sebagian besar masyarakat Indonesia (khususnya pekerja sektor informal atau masyarakat dengan porsi kebutuhan pangan > 60%).
+- **Keputusan:**
+  1. **Anotasi Wajib `TODO-VERIFIKASI`:** Seluruh konstanta perhitungan di `lib/perhitungan/perhitungan_umpan_balik_belajar.dart` diberi komentar `aturan praktis populer, TODO-VERIFIKASI`. Berkas pelajaran `anggaran_arus_kas_1_4.json` dan butir kuis terkait diberi penanda skema `aturanPraktis: true` dan `catatanReviewer: "TODO-VERIFIKASI: aturan praktis populer, perlu verifikasi kesesuaian dengan profil keuangan Indonesia di Tahap 8"`.
+  2. **Narasi Netral Tanpa Menghakimi:** Generator umpan balik perbandingan (`formatPerbandinganPolaAnggaran`) menyajikan angka 50/30/20 murni sebagai titik awal perbandingan dan ditutup dengan kalimat penegas: *"Keduanya titik awal. Sesuaikan dengan kondisimu."*
+- **Rencana Peninjauan:**
+  Ditinjau ulang bersama konsultan atau kurator materi finansial pada Tahap 8 (Kurikulum Tingkat Pemula Lengkap) untuk memvalidasi apakah perlu disajikan alternatif rasio alokasi yang lebih adaptif terhadap rentang penghasilan pengguna di Indonesia.
+
+
 

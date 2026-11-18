@@ -1,5 +1,6 @@
 import '../../../perhitungan/perhitungan_belajar.dart';
 import '../../../perhitungan/perhitungan_keuangan.dart';
+import '../../../perhitungan/perhitungan_umpan_balik_belajar.dart';
 import '../../../util/format_rupiah.dart';
 
 /// Hasil evaluasi apakah suatu misi telah memenuhi syarat verifikasi pengguna.
@@ -165,5 +166,40 @@ class RegistriUmpanBalik {
     }
 
     return 'Porsi belanjamu bulan ini: ${bagian.join(", ")}. Kamu bisa melihat pos mana yang paling dominan.';
+  }
+
+  /// Menghasilkan umpan balik pencatatan pengeluaran terbaru.
+  static String formatCatatanPengeluaranTerbaruMisi({
+    required int jumlahTotal,
+    required String kategori,
+    required int nominal,
+  }) {
+    return formatCatatanPengeluaranTerbaru(
+      jumlahTotal: jumlahTotal,
+      kategori: kategori,
+      nominal: nominal,
+    );
+  }
+
+  /// Menghasilkan umpan balik perbandingan pola anggaran buatan pengguna vs pola 50/30/20.
+  static String formatPerbandinganPolaAnggaranMisi({
+    required int pemasukan,
+    required int kebutuhan,
+    required int keinginan,
+    required int tabunganDanUtang,
+    int belumDilabeli = 0,
+  }) {
+    return formatPerbandinganPolaAnggaran(
+      pemasukan: pemasukan,
+      kebutuhan: kebutuhan,
+      keinginan: keinginan,
+      tabunganDanUtang: tabunganDanUtang,
+      belumDilabeli: belumDilabeli,
+    );
+  }
+
+  /// Menghasilkan umpan balik realisasi anggaran bulan ini.
+  static String formatRealisasiAnggaranBulanIniMisi(List<PosAnggaranEvaluasi> daftarPos) {
+    return formatRealisasiAnggaranBulanIni(daftarPos);
   }
 }

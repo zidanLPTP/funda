@@ -157,7 +157,7 @@ void main() {
         ],
         pemantik: 'Pemantik cerita',
         kartu: const [KartuPelajaranKonten(judul: 'Konsep', isi: 'Isi')],
-        contohAngka: 1000000,
+        contohAngka: ContohAngkaKonten.kosong,
         cekPaham: const [],
         misi: const MisiKonten(
           tipe: 'ada_data',
@@ -369,6 +369,7 @@ void main() {
         ProviderScope(
           overrides: [
             penyediaBasisData.overrideWithValue(db),
+            penyediaFotoData.overrideWith((ref) => Future.value(FotoDataPengguna.kosong())),
           ],
           child: MaterialApp(
             theme: TemaFunda.temaTerang,
@@ -385,50 +386,56 @@ void main() {
 
       // Langkah 1: Pemantik
       expect(find.text('Pemantik'), findsOneWidget);
-      expect(find.textContaining('Pernah merasa saldo rekening cepat sekali menipis'), findsOneWidget);
+      expect(find.textContaining('Temanmu bertanya, "Uangmu bulan ini cukup?"'), findsOneWidget);
       expect(find.text('Lanjut'), findsOneWidget);
 
       // Ketuk Lanjut -> Langkah 2: Kartu Konsep 1/3
       await tester.tap(find.text('Lanjut'));
       await tester.pumpAndSettle();
-      expect(find.text('Uang Masuk dan Uang Keluar'), findsOneWidget);
+      expect(find.text('Arus kas: uang masuk dikurangi uang keluar'), findsOneWidget);
 
       // Ketuk Lanjut -> Langkah 3: Kartu Konsep 2/3
       await tester.tap(find.text('Lanjut'));
       await tester.pumpAndSettle();
-      expect(find.text('Mengenal Arus Kas'), findsOneWidget);
+      expect(find.text('Petakan dari mana dan ke mana'), findsOneWidget);
 
       // Ketuk Lanjut -> Langkah 4: Kartu Konsep 3/3
       await tester.tap(find.text('Lanjut'));
       await tester.pumpAndSettle();
-      expect(find.text('Mulailah Mencatat'), findsOneWidget);
+      expect(find.text('Membaca hasilnya dengan tenang'), findsOneWidget);
 
       // Ketuk Lanjut -> Langkah 5: Contoh Angka
       await tester.tap(find.text('Lanjut'));
       await tester.pumpAndSettle();
-      expect(find.text('Gambaran Angka'), findsOneWidget);
-      expect(find.text('Rp 500.000'), findsOneWidget);
+      expect(find.text('Contoh arus kas satu bulan'), findsOneWidget);
+      expect(find.text('Uang saku dan gaji paruh waktu'), findsOneWidget);
 
       // Ketuk Lanjut -> Langkah 6: Cek Paham
       await tester.tap(find.text('Lanjut'));
       await tester.pumpAndSettle();
       expect(find.text('Uji Pemahaman Singkat'), findsOneWidget);
-      expect(find.textContaining('Apa yang terjadi jika uang keluar lebih besar'), findsOneWidget);
+      expect(find.textContaining('Pemasukan Rp3.000.000 dan pengeluaran Rp3.200.000'), findsOneWidget);
 
-      // Jawab kedua soal cek paham
-      await tester.tap(find.text('Arus kas negatif dan saldo berkurang'));
+      // Jawab ketiga soal cek paham
+      await tester.tap(find.text('Minus Rp200.000, uang keluar lebih besar'));
       await tester.pumpAndSettle();
 
-      final soal2 = find.text('Mencatat pemasukan dan pengeluaran apa adanya');
+      final soal2 = find.text('Biaya kos bulanan');
       await tester.ensureVisible(soal2);
       await tester.pumpAndSettle();
       await tester.tap(soal2);
       await tester.pumpAndSettle();
 
+      final soal3 = find.text('Cari bagian pengeluaran terbesar dan lihat mana yang bisa disesuaikan');
+      await tester.ensureVisible(soal3);
+      await tester.pumpAndSettle();
+      await tester.tap(soal3);
+      await tester.pumpAndSettle();
+
       // Sekarang tombol Lanjut aktif -> Langkah 7: Misi Praktik
       await tester.tap(find.text('Lanjut'));
       await tester.pumpAndSettle();
-      expect(find.text('Misi Praktik Nyata'), findsOneWidget);
+      expect(find.text('Petakan uang masuk dan keluar'), findsOneWidget);
       expect(find.text('Belum relevan buat aku'), findsOneWidget);
 
       // Pengguna memilih lewati misi

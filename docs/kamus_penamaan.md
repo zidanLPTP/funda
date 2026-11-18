@@ -102,6 +102,13 @@
 | financial profile | tabel_profil_keuangan | Profil keuangan pengguna (punya_penghasilan, punya_utang, dana_darurat, menabung, investasi, mencatat_keuangan, tujuan_utama) |
 | module recommendation | rekomendasiModul | Fungsi rekomendasi modul personalisasi berbasis skor dan profil keuangan |
 | test screen | LayarTesAwal | Layar alur tes awal dan pembentukan profil keuangan |
+| concrete numbers example | ContohAngkaKonten / BarisContohAngka | Model tabel data contoh angka konkret micro-learning |
+| rule of thumb flag | aturanPraktis | Penanda formula edukasi aturan praktis populer |
+| reviewer notes | catatanReviewer | Catatan verifikasi materi edukasi beranotasi TODO-VERIFIKASI |
+| tight rupiah format | formatRupiahRapat | Format Rupiah rapat tanpa spasi antara Rp dan angka (misal Rp900.000) |
+| recent expense feedback | catatan_pengeluaran_terbaru | Generator umpan balik misi pengeluaran terakhir |
+| budget pattern comparison | perbandingan_pola_anggaran | Generator umpan balik perbandingan pola anggaran riil vs 50/30/20 |
+| current month realization | realisasi_anggaran_bulan_ini | Generator umpan balik evaluasi realisasi pos anggaran bulan ini |
 
 ## Aturan Cabang Kerja (Git)
 - Setiap tahap dikerjakan pada cabang khusus (contoh: `tahap-02-dompet-transaksi`).

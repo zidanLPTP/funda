@@ -21,76 +21,136 @@
     }
   ],
   "daftarPelajaran": [
+    "anggaran_arus_kas_1_1",
     "anggaran_arus_kas_1_2",
-    "anggaran_arus_kas_1_3"
+    "anggaran_arus_kas_1_3",
+    "anggaran_arus_kas_1_4",
+    "anggaran_arus_kas_1_5"
   ],
   "kuis": {
     "jumlahSoal": 5,
     "bankSoal": [
       {
         "id": "soal_1_1",
-        "pelajaranId": "anggaran_arus_kas_1_2",
-        "tanya": "Apa yang dimaksud dengan arus kas positif?",
+        "pelajaranId": "anggaran_arus_kas_1_1",
+        "tanya": "Kenapa uang sering terasa hilang di akhir bulan?",
         "pilihan": [
-          "Uang yang keluar lebih banyak daripada uang yang masuk",
-          "Uang yang masuk lebih banyak daripada uang yang keluar",
-          "Seluruh uang habis digunakan untuk belanja",
-          "Saldo di rekening bank bertambah dari pinjaman"
+          "Pengeluaran kecil yang berulang tidak terlihat sampai dijumlahkan",
+          "Uang memang selalu berkurang dengan sendirinya",
+          "Karena uang di awal bulan selalu kurang"
         ],
-        "benar": 1,
-        "penjelasan": "Arus kas positif terjadi saat total pemasukanmu lebih besar dari pengeluaranmu dalam satu bulan."
+        "benar": 0,
+        "penjelasan": "Pengeluaran kecil terasa ringan satu per satu. Saat dijumlahkan, nilainya bisa besar."
       },
       {
         "id": "soal_1_2",
-        "pelajaranId": "anggaran_arus_kas_1_2",
-        "tanya": "Manakah di bawah ini yang tergolong sebagai uang masuk?",
+        "pelajaranId": "anggaran_arus_kas_1_1",
+        "tanya": "Langkah pertama yang disarankan untuk mengatur uang?",
         "pilihan": [
-          "Membayar tagihan listrik",
-          "Membeli paket data internet",
-          "Gaji bulanan atau honor freelance",
-          "Mengisi bensin kendaraan"
+          "Melihat dulu ke mana uang pergi lewat pencatatan",
+          "Berhenti membeli hal yang kamu sukai",
+          "Membuka rekening baru"
         ],
-        "benar": 2,
-        "penjelasan": "Gaji bulanan dan honor adalah uang masuk yang menambah saldo dompetmu."
+        "benar": 0,
+        "penjelasan": "Kita sulit mengatur yang tidak terlihat. Mencatat membuat uangmu terlihat."
       },
       {
         "id": "soal_1_3",
-        "pelajaranId": "anggaran_arus_kas_1_3",
-        "tanya": "Apa ciri utama dari pos pengeluaran kebutuhan?",
+        "pelajaranId": "anggaran_arus_kas_1_2",
+        "tanya": "Pemasukan Rp4.000.000 dan pengeluaran Rp3.500.000. Bagaimana arus kasnya?",
         "pilihan": [
-          "Wajib dipenuhi demi kelangsungan hidup sehari-hari",
-          "Bisa ditunda bulan depan tanpa dampak apa pun",
-          "Hanya dibeli saat ada promo diskon",
-          "Bisa ditiadakan selamanya"
+          "Plus Rp500.000",
+          "Minus Rp500.000",
+          "Nol"
         ],
         "benar": 0,
-        "penjelasan": "Kebutuhan adalah pengeluaran pokok seperti makanan pokok dan tempat tinggal yang harus ada."
+        "penjelasan": "Rp4.000.000 dikurangi Rp3.500.000 hasilnya plus Rp500.000."
       },
       {
         "id": "soal_1_4",
-        "pelajaranId": "anggaran_arus_kas_1_3",
-        "tanya": "Jika kamu membeli sepatu baru karena sepatu lama masih bagus dan layak pakai, pengeluaran itu masuk kategori apa?",
+        "pelajaranId": "anggaran_arus_kas_1_2",
+        "tanya": "Cicilan HP dengan jumlah sama tiap bulan termasuk apa?",
         "pilihan": [
-          "Kebutuhan pokok",
-          "Keinginan",
-          "Tabungan darurat",
-          "Cicilan utang"
+          "Pengeluaran tetap",
+          "Pengeluaran berubah-ubah",
+          "Pemasukan"
         ],
-        "benar": 1,
-        "penjelasan": "Membeli barang yang sudah ada fungsinya demi model baru termasuk kategori keinginan."
+        "benar": 0,
+        "penjelasan": "Jumlahnya hampir sama tiap bulan, jadi ia pengeluaran tetap."
       },
       {
         "id": "soal_1_5",
         "pelajaranId": "anggaran_arus_kas_1_3",
-        "tanya": "Mengapa kita perlu membedakan kebutuhan dan keinginan saat mencatat keuangan?",
+        "tanya": "Tiket nonton bioskop paling dekat dengan apa?",
         "pilihan": [
-          "Agar kita tidak boleh jajan sama sekali",
-          "Agar kita tahu pos mana yang bisa disesuaikan saat uang menipis",
-          "Untuk memamerkan catatan belanja kepada orang lain",
-          "Supaya dompet kita terlihat banyak transaksi"
+          "Keinginan",
+          "Kebutuhan",
+          "Pemasukan"
         ],
-        "benar": 1,
-        "penjelasan": "Memahami pemisah ini membantu kamu berhemat pada pos keinginan saat kondisi keuangan sedang menuntut penyesuaian."
+        "benar": 0,
+        "penjelasan": "Nonton menyenangkan, tetapi bisa ditunda atau dikurangi, jadi lebih dekat ke keinginan."
+      },
+      {
+        "id": "soal_1_6",
+        "pelajaranId": "anggaran_arus_kas_1_3",
+        "tanya": "Sebuah kategori membuatmu ragu soal labelnya. Apa yang masuk akal?",
+        "pilihan": [
+          "Pilih sesuai kondisimu dan boleh diubah nanti",
+          "Biarkan tanpa label selamanya",
+          "Hapus kategorinya"
+        ],
+        "benar": 0,
+        "penjelasan": "Label membantumu melihat pola. Kamu boleh mengubahnya saat keadaanmu berubah."
+      },
+      {
+        "id": "soal_1_7",
+        "pelajaranId": "anggaran_arus_kas_1_4",
+        "aturanPraktis": true,
+        "catatanReviewer": "TODO-VERIFIKASI. Pola 50/30/20 adalah aturan praktis populer, periksa rumusannya.",
+        "tanya": "Dari pemasukan Rp3.000.000, pola 50/30/20 memberi bagian kebutuhan sebesar berapa?",
+        "pilihan": [
+          "Rp1.500.000",
+          "Rp900.000",
+          "Rp600.000"
+        ],
+        "benar": 0,
+        "penjelasan": "Lima puluh persen dari Rp3.000.000 adalah Rp1.500.000. Pola ini aturan praktis, jadi boleh disesuaikan."
+      },
+      {
+        "id": "soal_1_8",
+        "pelajaranId": "anggaran_arus_kas_1_4",
+        "tanya": "Urutan menyusun anggaran yang disarankan?",
+        "pilihan": [
+          "Pemasukan, pengeluaran pasti, tabungan, lalu keinginan",
+          "Keinginan, tabungan, lalu kebutuhan",
+          "Tabungan dari sisa di akhir bulan"
+        ],
+        "benar": 0,
+        "penjelasan": "Hal yang penting dipenuhi lebih dulu, dan tabungan disisihkan di awal."
+      },
+      {
+        "id": "soal_1_9",
+        "pelajaranId": "anggaran_arus_kas_1_5",
+        "tanya": "Batas sebuah pos Rp300.000 dan realisasinya Rp345.000. Apa artinya?",
+        "pilihan": [
+          "Pos itu melewati rencana sebesar Rp45.000",
+          "Pos itu hemat Rp45.000",
+          "Pos itu tepat sesuai rencana"
+        ],
+        "benar": 0,
+        "penjelasan": "Rp345.000 dikurangi Rp300.000 hasilnya Rp45.000 di atas rencana."
+      },
+      {
+        "id": "soal_1_10",
+        "pelajaranId": "anggaran_arus_kas_1_5",
+        "tanya": "Apa tujuan evaluasi akhir bulan?",
+        "pilihan": [
+          "Belajar dari data untuk memperbaiki anggaran bulan depan",
+          "Mencari kekurangan dirimu",
+          "Menghapus anggaran yang tidak berhasil"
+        ],
+        "benar": 0,
+        "penjelasan": "Evaluasi adalah proses belajar. Datanya dipakai untuk memperbaiki rencana, bukan menilai dirimu."
       }
     ]
   }

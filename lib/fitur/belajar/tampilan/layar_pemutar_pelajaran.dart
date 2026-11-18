@@ -4,11 +4,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
-import '../../../data/penyedia_data.dart';
 import '../../../komponen/komponen_funda.dart';
 import '../../../perhitungan/perhitungan_belajar.dart';
+import '../../../perhitungan/perhitungan_umpan_balik_belajar.dart';
 import '../../../tema/token.dart';
-import '../../../util/format_rupiah.dart';
 import '../kontroler/penyedia_belajar.dart';
 import '../model/pembaca_konten.dart';
 import '../model/registri_misi.dart';
@@ -18,11 +17,13 @@ import 'komponen_teks_istilah.dart';
 class LayarPemutarPelajaran extends ConsumerStatefulWidget {
   final String modulId;
   final String pelajaranId;
+  final PelajaranKonten? pelajaranOverride;
 
   const LayarPemutarPelajaran({
     super.key,
     required this.modulId,
     required this.pelajaranId,
+    this.pelajaranOverride,
   });
 
   @override
@@ -51,6 +52,15 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
   }
 
   Future<void> _muatKontenPelajaran() async {
+    if (widget.pelajaranOverride != null) {
+      if (mounted) {
+        setState(() {
+          _pelajaran = widget.pelajaranOverride;
+          _memuat = false;
+        });
+      }
+      return;
+    }
     try {
       final kamus = (await ref.read(penyediaKamus.future)).keys.toSet();
       // Cari tingkat modul
@@ -367,36 +377,87 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
     }
 
     // 3. Contoh Angka Konkret
-    kartuWidgets.add(
-      _pembungkusKartu(
-        tag: 'Contoh Nyata',
-        judul: 'Gambaran Angka',
-        isi: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              padding: const EdgeInsets.all(SpasiFunda.l),
-              decoration: BoxDecoration(
-                color: WarnaFunda.tintNetral,
-                borderRadius: BorderRadius.circular(SudutFunda.kartu),
+    final contoh = pel.contohAngka;
+    if (contoh != null && (contoh.baris.isNotEmpty || contoh.judul.isNotEmpty)) {
+      kartuWidgets.add(
+        _pembungkusKartu(
+          tag: 'Contoh Nyata',
+          judul: contoh.judul.isNotEmpty ? contoh.judul : 'Gambaran Angka',
+          isi: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                padding: const EdgeInsets.all(SpasiFunda.m),
+                decoration: BoxDecoration(
+                  color: WarnaFunda.permukaan,
+                  borderRadius: BorderRadius.circular(SudutFunda.kartu),
+                  border: Border.all(color: WarnaFunda.garis),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Table(
+                      columnWidths: const {
+                        0: FlexColumnWidth(3),
+                        1: FlexColumnWidth(2),
+                      },
+                      children: contoh.baris.map((b) {
+                        final isTebal = b.ringkasan;
+                        final formatJumlah = formatRupiahRapat(b.jumlah.abs());
+
+                        return TableRow(
+                          decoration: isTebal
+                              ? const BoxDecoration(
+                                  border: Border(
+                                    top: BorderSide(color: WarnaFunda.garis, width: 1.5),
+                                  ),
+                                )
+                              : null,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.symmetric(vertical: SpasiFunda.xs),
+                              child: Text(
+                                b.label,
+                                style: TextStyle(
+                                  fontWeight: isTebal ? FontWeight.bold : FontWeight.normal,
+                                  fontSize: 13,
+                                  color: isTebal ? WarnaFunda.teks : WarnaFunda.teksRedup,
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(vertical: SpasiFunda.xs),
+                              child: Text(
+                                formatJumlah,
+                                textAlign: TextAlign.right,
+                                style: TextStyle(
+                                  fontWeight: isTebal ? FontWeight.bold : FontWeight.w500,
+                                  fontSize: 13,
+                                  color: WarnaFunda.teks,
+                                ),
+                              ),
+                            ),
+                          ],
+                        );
+                      }).toList(),
+                    ),
+                    if (contoh.kesimpulan.isNotEmpty) ...[
+                      const SizedBox(height: SpasiFunda.m),
+                      const Divider(color: WarnaFunda.garis),
+                      const SizedBox(height: SpasiFunda.xs),
+                      TeksFunda.isiKecil(
+                        contoh.kesimpulan,
+                        warna: WarnaFunda.teksRedup,
+                      ),
+                    ],
+                  ],
+                ),
               ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const TeksFunda.catatan('Contoh nominal ilustrasi:', warna: WarnaFunda.teksRedup),
-                  const SizedBox(height: SpasiFunda.s),
-                  TeksFunda.judulBagian(formatRupiah(pel.contohAngka)),
-                  const SizedBox(height: SpasiFunda.s),
-                  const TeksFunda.isiKecil(
-                    'Melihat angka nyata membuat gambaran keuangan jauh lebih jelas daripada sekadar teori angka abstrak.',
-                  ),
-                ],
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
-      ),
-    );
+      );
+    }
 
     // 4. Cek Paham (Soal Singkat)
     kartuWidgets.add(
@@ -652,24 +713,9 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
   }
 
   Widget _bangunKartuUmpanBalik(MisiKonten misi) {
-    final arusKas = ref.watch(penyediaArusKasBulanIni);
-    final pengeluaranPerSifat = ref.watch(penyediaKomposisiSifatBulanIni).value ??
-        const {
-          'kebutuhan': 0,
-          'keinginan': 0,
-          'tabungan': 0,
-          'utang': 0,
-          'belum_dilabeli': 0,
-        };
-
-    final persenSifat = hitungKomposisiSifat(pengeluaranPerSifat);
-
-    String teksUmpanBalik;
-    if (misi.umpanBalik == 'komposisi_sifat_bulan_ini') {
-      teksUmpanBalik = RegistriUmpanBalik.formatKomposisiSifat(persenSifat);
-    } else {
-      teksUmpanBalik = RegistriUmpanBalik.formatArusKasBulanIni(arusKas);
-    }
+    final kunci = misi.umpanBalik ?? 'arus_kas_bulan_ini';
+    final umpanBalikAsync = ref.watch(penyediaTeksUmpanBalikMisi(kunci));
+    final teksUmpanBalik = umpanBalikAsync.value ?? 'Memuat analisis datamu...';
 
     return _pembungkusKartu(
       tag: 'Umpan Balik Nyata',

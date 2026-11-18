@@ -499,11 +499,14 @@ class LayarBelajar extends ConsumerWidget {
   Widget _bangunKartuSaranPersonalisasi(BuildContext context, WidgetRef ref) {
     final profilAsync = ref.watch(penyediaStreamProfilKeuangan);
     final rekomendasiAsync = ref.watch(penyediaDaftarRekomendasiModul);
+    final pernyataanAsync = ref.watch(penyediaStreamPernyataan);
+
+    final dilewati = pernyataanAsync.asData?.value['profil_dilewati'] == 'true';
 
     return profilAsync.when(
       data: (profil) {
-        if (profil == null) {
-          // Banner ajakan ramah jika belum ada profil
+        if (profil == null && !dilewati) {
+          // Banner ajakan ramah jika belum ada profil dan belum pernah melewati
           return Container(
             margin: const EdgeInsets.only(bottom: SpasiFunda.l),
             padding: const EdgeInsets.all(SpasiFunda.m),
@@ -544,67 +547,77 @@ class LayarBelajar extends ConsumerWidget {
           );
         }
 
-        // Tampilkan rekomendasi personalisasi jika profil sudah ada
+        // Tampilkan rekomendasi personalisasi jika profil sudah ada atau dilewati
         return rekomendasiAsync.when(
           data: (daftar) {
             if (daftar.isEmpty) return const SizedBox();
-            final rek = daftar.first;
 
-            return Container(
-              margin: const EdgeInsets.only(bottom: SpasiFunda.l),
-              padding: const EdgeInsets.all(SpasiFunda.m),
-              decoration: BoxDecoration(
-                color: WarnaFunda.permukaan,
-                borderRadius: BorderRadius.circular(SudutFunda.petak),
-                border: Border.all(
-                    color: WarnaFunda.utama.withValues(alpha: 0.3)),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: daftar.map((rek) {
+                final isTersedia = rek.modul.tersedia;
+
+                return Container(
+                  margin: const EdgeInsets.only(bottom: SpasiFunda.m),
+                  padding: const EdgeInsets.all(SpasiFunda.m),
+                  decoration: BoxDecoration(
+                    color: WarnaFunda.permukaan,
+                    borderRadius: BorderRadius.circular(SudutFunda.petak),
+                    border: Border.all(
+                        color: WarnaFunda.utama.withValues(alpha: 0.3)),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: SpasiFunda.s, vertical: 2),
-                        decoration: BoxDecoration(
-                          color: WarnaFunda.utamaTipis,
-                          borderRadius: BorderRadius.circular(SudutFunda.pil),
-                        ),
-                        child: const Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Icon(LucideIcons.sparkles,
-                                size: 14, color: WarnaFunda.utama),
-                            SizedBox(width: SpasiFunda.xs),
-                            TeksFunda.catatan('Saran untuk kamu',
-                                warna: WarnaFunda.utama),
-                          ],
-                        ),
+                      Row(
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: SpasiFunda.s, vertical: 2),
+                            decoration: BoxDecoration(
+                              color: WarnaFunda.utamaTipis,
+                              borderRadius: BorderRadius.circular(SudutFunda.pil),
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                const Icon(LucideIcons.sparkles,
+                                    size: 14, color: WarnaFunda.utama),
+                                const SizedBox(width: SpasiFunda.xs),
+                                TeksFunda.catatan(
+                                  isTersedia ? 'Saran untuk kamu' : 'Saran untuk kamu (segera hadir)',
+                                  warna: WarnaFunda.utama,
+                                ),
+                              ],
+                            ),
+                          ),
+                          const Spacer(),
+                          TextButton(
+                            onPressed: () => context.push('/belajar/tes-awal'),
+                            child: const Text('Profilku',
+                                style: TextStyle(fontSize: 12)),
+                          ),
+                        ],
                       ),
-                      const Spacer(),
-                      TextButton(
-                        onPressed: () => context.push('/belajar/tes-awal'),
-                        child: const Text('Profilku',
-                            style: TextStyle(fontSize: 12)),
+                      const SizedBox(height: SpasiFunda.s),
+                      TeksFunda.judulBagian(rek.modul.judul),
+                      const SizedBox(height: SpasiFunda.xs),
+                      TeksFunda.isiKecil(rek.deskripsiAlasan,
+                          warna: WarnaFunda.teksRedup),
+                      const SizedBox(height: SpasiFunda.m),
+                      TombolFunda(
+                        teks: isTersedia ? 'Buka Modul Ini' : 'Segera Hadir',
+                        lebarPenuh: true,
+                        padaTekan: isTersedia
+                            ? () {
+                                context.push('/belajar/tes-awal');
+                              }
+                            : null,
                       ),
                     ],
                   ),
-                  const SizedBox(height: SpasiFunda.s),
-                  TeksFunda.judulBagian(rek.modul.judul),
-                  const SizedBox(height: SpasiFunda.xs),
-                  TeksFunda.isiKecil(rek.deskripsiAlasan,
-                      warna: WarnaFunda.teksRedup),
-                  const SizedBox(height: SpasiFunda.m),
-                  TombolFunda(
-                    teks: 'Buka Modul Ini',
-                    lebarPenuh: true,
-                    padaTekan: () {
-                      context.push('/belajar/tes-awal');
-                    },
-                  ),
-                ],
-              ),
+                );
+              }).toList(),
             );
           },
           loading: () => const SizedBox(),

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:drift/drift.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../data/basis_data.dart';
@@ -10,7 +11,10 @@ import '../../../data/repositori/progres_repositori.dart';
 import '../../../data/repositori/pernyataan_repositori.dart';
 import '../../../perhitungan/perhitungan_belajar.dart';
 import '../../../perhitungan/perhitungan_tes_awal_personalisasi.dart';
+import '../../../perhitungan/perhitungan_umpan_balik_belajar.dart';
+import '../../utang/kontroler/penyedia_utang.dart';
 import '../model/pembaca_konten.dart';
+import '../model/registri_misi.dart';
 
 // Repositori Providers
 final penyediaProgresRepositori = Provider<ProgresRepositori>((ref) {
@@ -138,6 +142,7 @@ final penyediaFotoData = FutureProvider<FotoDataPengguna>((ref) async {
   ref.watch(penyediaStreamProgresPelajaran);
   ref.watch(penyediaStreamHasilKuis);
   ref.watch(penyediaStreamProfilKeuangan);
+  ref.watch(penyediaDaftarUtangAktif);
 
   final repo = ref.watch(penyediaFotoDataRepositori);
   return repo.ambilFotoData();
@@ -420,4 +425,112 @@ final penyediaLanjutBelajarBeranda =
     rute: '/belajar',
     bisaDibuka: true,
   );
+});
+
+/// Provider penghasil teks umpan balik dari data riil pengguna secara reaktif.
+final penyediaTeksUmpanBalikMisi = FutureProvider.family<String, String>((ref, kunci) async {
+  final db = ref.watch(penyediaBasisData);
+  final waktuSekarang = DateTime.now();
+
+  switch (kunci) {
+    case 'catatan_pengeluaran_terbaru':
+      final daftarPengeluaran = await (db.select(db.tabelTransaksi)
+            ..where((t) => t.jenis.equals('pengeluaran'))
+            ..orderBy([(t) => OrderingTerm.desc(t.waktuTransaksi), (t) => OrderingTerm.desc(t.id)]))
+          .get();
+
+      final total = daftarPengeluaran.length;
+      if (total == 0) {
+        return formatCatatanPengeluaranTerbaru(
+          jumlahTotal: 0,
+          kategori: 'Belum ada',
+          nominal: 0,
+        );
+      }
+      final terbaru = daftarPengeluaran.first;
+      var namaKategori = 'Pengeluaran';
+      if (terbaru.kategoriId != null) {
+        final kat = await (db.select(db.tabelKategori)
+              ..where((k) => k.id.equals(terbaru.kategoriId!)))
+            .getSingleOrNull();
+        if (kat != null) {
+          namaKategori = kat.nama;
+        }
+      }
+      return formatCatatanPengeluaranTerbaru(
+        jumlahTotal: total,
+        kategori: namaKategori,
+        nominal: terbaru.jumlahRupiah,
+      );
+
+    case 'perbandingan_pola_anggaran':
+      final arusKas = ref.watch(penyediaArusKasBulanIni);
+      final pemasukan = arusKas.totalMasuk;
+
+      final daftarAnggaran = await (db.select(db.tabelAnggaran)
+            ..where((a) => a.tahun.equals(waktuSekarang.year) & a.bulan.equals(waktuSekarang.month)))
+          .get();
+
+      var keb = 0;
+      var kei = 0;
+      var tabUtg = 0;
+      var belum = 0;
+
+      for (final a in daftarAnggaran) {
+        final kat = await (db.select(db.tabelKategori)
+              ..where((k) => k.id.equals(a.kategoriId)))
+            .getSingleOrNull();
+        final sifat = kat?.sifat ?? 'belum_dilabeli';
+        switch (sifat) {
+          case 'kebutuhan':
+            keb += a.batasRupiah;
+            break;
+          case 'keinginan':
+            kei += a.batasRupiah;
+            break;
+          case 'tabungan':
+          case 'utang':
+            tabUtg += a.batasRupiah;
+            break;
+          default:
+            belum += a.batasRupiah;
+            break;
+        }
+      }
+
+      return formatPerbandinganPolaAnggaran(
+        pemasukan: pemasukan,
+        kebutuhan: keb,
+        keinginan: kei,
+        tabunganDanUtang: tabUtg,
+        belumDilabeli: belum,
+      );
+
+    case 'realisasi_anggaran_bulan_ini':
+      final repoAnggaran = ref.watch(penyediaAnggaranRepositori);
+      final daftarRealisasi = await repoAnggaran.ambilRealisasiAnggaranBulan(
+        tahun: waktuSekarang.year,
+        bulan: waktuSekarang.month,
+      );
+
+      final daftarPos = daftarRealisasi.map((r) {
+        return PosAnggaranEvaluasi(
+          nama: r.namaKategori,
+          batas: r.batasRupiah,
+          terpakai: r.terpakaiRupiah,
+        );
+      }).toList();
+
+      return formatRealisasiAnggaranBulanIni(daftarPos);
+
+    case 'komposisi_sifat_bulan_ini':
+      final pengeluaranPerSifat = (await ref.watch(penyediaKomposisiSifatBulanIni.future));
+      final persenSifat = hitungKomposisiSifat(pengeluaranPerSifat);
+      return RegistriUmpanBalik.formatKomposisiSifat(persenSifat);
+
+    case 'arus_kas_bulan_ini':
+    default:
+      final arusKas = ref.watch(penyediaArusKasBulanIni);
+      return RegistriUmpanBalik.formatArusKasBulanIni(arusKas);
+  }
 });

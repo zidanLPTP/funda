@@ -1,0 +1,85 @@
+{
+  "id": "anggaran_arus_kas_1_5",
+  "modul": "anggaran_arus_kas",
+  "judul": "Evaluasi Akhir Bulan",
+  "durasiMenit": 6,
+  "status": "draf",
+  "gerbang": [
+    {
+      "tipe": "ada_data",
+      "objek": "anggaran",
+      "min": 1,
+      "pesan": "Buat minimal satu anggaran dan catat pengeluaranmu dulu, supaya ada yang bisa dievaluasi."
+    },
+    {
+      "tipe": "ada_data",
+      "objek": "pengeluaran",
+      "min": 1,
+      "pesan": "Buat minimal satu anggaran dan catat pengeluaranmu dulu, supaya ada yang bisa dievaluasi."
+    }
+  ],
+  "pemantik": "Akhir bulan bukan waktu untuk menghakimi diri sendiri. Ini waktu untuk membaca data dan belajar darinya.",
+  "kartu": [
+    {
+      "judul": "Bandingkan rencana dan kenyataan",
+      "isi": "Evaluasi akhir bulan membandingkan dua hal: yang kamu rencanakan dan yang benar-benar terjadi. Angka kenyataannya disebut {{realisasi anggaran}}. Kalau realisasi mendekati rencana, bagus. Kalau berbeda jauh, itu informasi. Mungkin rencananya terlalu ketat, atau ada pengeluaran yang belum terpikir. Keduanya bisa diperbaiki."
+    },
+    {
+      "judul": "Tiga pertanyaan evaluasi",
+      "isi": "Pertama, pos mana yang paling dekat atau melewati batas? Kedua, apa penyebabnya: kebutuhan yang memang naik, atau keinginan yang tidak terasa? Ketiga, apa yang ingin kamu ubah bulan depan: batasnya, kebiasaannya, atau dua-duanya? Pilih satu perubahan kecil saja. Perubahan kecil yang konsisten lebih mudah dijalankan daripada rencana besar yang ditinggalkan."
+    },
+    {
+      "judul": "Anggaran adalah draf yang terus diperbarui",
+      "isi": "Anggaran pertama jarang langsung pas. Itu wajar. Tiap bulan kamu mengumpulkan data baru, dan anggaranmu makin sesuai dengan hidupmu. Di Funda kamu bisa menyalin anggaran bulan lalu, lalu mengubah bagian yang perlu. Setelah beberapa bulan, kamu akan mengenali pola uangmu sendiri."
+    }
+  ],
+  "contohAngka": {
+    "judul": "Evaluasi tiga pos anggaran (sisa dari rencana)",
+    "baris": [
+      { "label": "Makan harian: rencana Rp800.000, kenyataan Rp560.000 (70 persen)", "jumlah": 240000 },
+      { "label": "Transportasi: rencana Rp300.000, kenyataan Rp255.000 (85 persen)", "jumlah": 45000 },
+      { "label": "Jajan dan nongkrong: rencana Rp300.000, kenyataan Rp345.000 (115 persen)", "jumlah": -45000 },
+      { "label": "Jumlah sisa dari rencana", "jumlah": 240000, "ringkasan": true }
+    ],
+    "kesimpulan": "Satu pos masih longgar, satu mendekati batas, dan satu melewati batas Rp45.000. Dari sini kamu bisa memutuskan: ubah batasnya atau kebiasaannya."
+  },
+  "cekPaham": [
+    {
+      "tanya": "Apa yang dimaksud realisasi anggaran?",
+      "pilihan": [
+        "Jumlah yang benar-benar terpakai pada sebuah pos",
+        "Jumlah yang kamu harapkan terpakai",
+        "Jumlah tabungan akhir bulan"
+      ],
+      "benar": 0,
+      "penjelasan": "Realisasi adalah kenyataannya. Rencana adalah batasnya. Keduanya dibandingkan saat evaluasi."
+    },
+    {
+      "tanya": "Pos jajan melewati batas bulan ini. Sikap yang masuk akal?",
+      "pilihan": [
+        "Cari penyebabnya, lalu putuskan mengubah batas atau kebiasaannya",
+        "Menyerah dan berhenti memakai anggaran",
+        "Menghapus catatan supaya terlihat rapi"
+      ],
+      "benar": 0,
+      "penjelasan": "Melewati batas adalah informasi. Dengan mengetahui penyebabnya, kamu bisa memperbaiki rencana atau kebiasaan."
+    },
+    {
+      "tanya": "Kenapa anggaran perlu diperbarui tiap bulan?",
+      "pilihan": [
+        "Kondisi dan kebiasaan berubah, dan data baru membuatnya lebih pas",
+        "Supaya angkanya terlihat berbeda",
+        "Supaya batas selalu dinaikkan"
+      ],
+      "benar": 0,
+      "penjelasan": "Anggaran yang diperbarui mengikuti hidupmu. Karena itu ia makin berguna dari bulan ke bulan."
+    }
+  ],
+  "misi": {
+    "tipe": "lihat_hitungan",
+    "judul": "Baca ringkasan realisasi bulan ini",
+    "instruksi": "Buka ringkasan realisasi anggaran bulan ini, baca isinya, lalu tekan Mengerti.",
+    "umpanBalik": "realisasi_anggaran_bulan_ini"
+  },
+  "tindakLanjut": "Pilih satu perubahan kecil untuk bulan depan dan tulis di catatan HP-mu. Misalnya, turunkan sedikit batas jajan, atau naikkan batas makan agar lebih realistis."
+}

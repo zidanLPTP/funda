@@ -1,0 +1,75 @@
+{
+  "id": "anggaran_arus_kas_1_1",
+  "modul": "anggaran_arus_kas",
+  "judul": "Ke Mana Uangku Pergi?",
+  "durasiMenit": 4,
+  "status": "draf",
+  "gerbang": [],
+  "pemantik": "Uang saku atau gaji baru masuk. Seminggu kemudian dompet sudah tipis, dan kamu bingung ke mana perginya.",
+  "kartu": [
+    {
+      "judul": "Uang tidak hilang, hanya tidak terlihat",
+      "isi": "Uang tidak lenyap begitu saja. Ia berpindah ke tempat yang jarang kita perhatikan, seperti jajan, ongkos, top up, dan langganan. Satu per satu terasa ringan. Setelah sebulan, jumlahnya bisa mengejutkan. Itu hal yang umum terjadi, dan bukan tanda kamu tidak mampu mengatur uang."
+    },
+    {
+      "judul": "Melihat dulu, berhemat belakangan",
+      "isi": "Kita sulit mengatur sesuatu yang tidak terlihat. Karena itu langkah pertama bukan berhemat, tetapi melihat. Catat setiap uang yang keluar, sekecil apa pun. Tidak perlu rapi atau sempurna. Catatan yang agak berantakan tetap jauh lebih berguna daripada tidak ada catatan sama sekali."
+    },
+    {
+      "judul": "Dua pertanyaan untuk memulai",
+      "isi": "Di Funda, kita mulai dari dua pertanyaan. Berapa uang yang masuk? Berapa uang yang keluar? Selisih keduanya disebut {{arus kas}}. Di pelajaran berikutnya kita memetakannya. Hari ini cukup satu langkah kecil: catat satu pengeluaran terakhirmu. Kamu pasti masih ingat belinya apa dan di mana."
+    }
+  ],
+  "contohAngka": {
+    "judul": "Pengeluaran kecil yang menumpuk (uang bulanan Rp2.000.000)",
+    "baris": [
+      { "label": "Kopi, 20 hari x Rp18.000", "jumlah": 360000 },
+      { "label": "Ojek online, 20 hari x Rp12.000", "jumlah": 240000 },
+      { "label": "Cemilan, 20 hari x Rp10.000", "jumlah": 200000 },
+      { "label": "Top up game dan langganan", "jumlah": 85000 },
+      { "label": "Jumlah pengeluaran kecil", "jumlah": 885000, "ringkasan": true }
+    ],
+    "kesimpulan": "Pengeluaran yang terasa kecil itu menjadi Rp885.000 dalam sebulan, sekitar 44 persen dari uang bulanan Rp2.000.000."
+  },
+  "cekPaham": [
+    {
+      "tanya": "Kenapa langkah pertama mengatur uang adalah mencatat?",
+      "pilihan": [
+        "Supaya uang terlihat dan bisa dipahami",
+        "Supaya kamu malu saat jajan",
+        "Supaya semua pengeluaran dihentikan"
+      ],
+      "benar": 0,
+      "penjelasan": "Mencatat membuat aliran uang terlihat. Dari situ kamu bisa memutuskan dengan sadar, tanpa perlu menahan diri berlebihan."
+    },
+    {
+      "tanya": "Pengeluaran kecil yang berulang sebaiknya bagaimana?",
+      "pilihan": [
+        "Tetap dicatat karena jumlahnya bisa menumpuk",
+        "Diabaikan karena nominalnya kecil",
+        "Dicatat hanya kalau di atas Rp100.000"
+      ],
+      "benar": 0,
+      "penjelasan": "Rp18.000 terasa kecil, tetapi dua puluh kali dalam sebulan menjadi Rp360.000."
+    },
+    {
+      "tanya": "Apa yang dimaksud dengan arus kas?",
+      "pilihan": [
+        "Selisih antara uang yang masuk dan uang yang keluar",
+        "Jumlah tabungan di bank",
+        "Daftar barang yang ingin dibeli"
+      ],
+      "benar": 0,
+      "penjelasan": "Arus kas adalah uang masuk dikurangi uang keluar dalam satu periode, misalnya sebulan."
+    }
+  ],
+  "misi": {
+    "tipe": "ada_data",
+    "objek": "pengeluaran",
+    "min": 1,
+    "judul": "Catat satu pengeluaranmu",
+    "instruksi": "Buka Catatan, lalu catat satu pengeluaran terakhirmu. Yang paling kecil pun boleh.",
+    "umpanBalik": "catatan_pengeluaran_terbaru"
+  },
+  "tindakLanjut": "Untuk dipikirkan, tidak perlu dijawab di aplikasi: pengeluaran kecil apa yang paling sering muncul dalam seminggu terakhirmu?"
+}
