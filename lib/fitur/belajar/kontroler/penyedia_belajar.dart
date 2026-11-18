@@ -42,9 +42,16 @@ final penyediaFotoDataRepositori = Provider<FotoDataRepositori>((ref) {
   return FotoDataRepositori(db);
 });
 
+Map<String, IstilahKamus>? _cacheKamus;
+
 /// Provider kamus istilah keuangan Funda (cache in-memory).
 final penyediaKamus = FutureProvider<Map<String, IstilahKamus>>((ref) async {
-  return PembacaKonten.muatKamusDariAset(rootBundle);
+  if (_cacheKamus != null && _cacheKamus!.isNotEmpty) {
+    return _cacheKamus!;
+  }
+  final kamus = await PembacaKonten.muatKamusDariAset(rootBundle);
+  _cacheKamus = kamus;
+  return kamus;
 });
 
 /// Daftar ID dan tingkat modul 0 s.d. 18 sesuai kurikulum Funda.
@@ -435,7 +442,7 @@ final penyediaTeksUmpanBalikMisi = FutureProvider.family<String, String>((ref, k
   switch (kunci) {
     case 'catatan_pengeluaran_terbaru':
       final daftarPengeluaran = await (db.select(db.tabelTransaksi)
-            ..where((t) => t.jenis.equals('pengeluaran'))
+            ..where((t) => t.jenis.equals('keluar'))
             ..orderBy([(t) => OrderingTerm.desc(t.waktuTransaksi), (t) => OrderingTerm.desc(t.id)]))
           .get();
 

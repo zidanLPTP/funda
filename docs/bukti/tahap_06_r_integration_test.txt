@@ -1,0 +1,40 @@
+00:00 +0: loading D:/Proyek Coding/Flutter/Funda/integration_test/tahap_06_alur_modul_1_emulator_test.dart
+Running Gradle task 'assembleDebug'...                            107.9s
+√ Built build\app\outputs\flutter-apk\app-debug.apk
+Installing build\app\outputs\flutter-apk\app-debug.apk...          13.6s
+00:00 +0: [Tahap 6-R Integrasi Emulator] Alur Lengkap Modul 1 dengan UI Nyata & 10 Bukti Tangkapan Layar
+=== [LANGKAH 1]: Pengguna Baru Lewati Tes Awal & Buat Dompet ===
+=== [LANGKAH 2]: Pelajaran 1_1 (Kartu Konsep & Contoh Angka 1_1) ===
+[SCREEN_READY: kartu_konsep]
+[BUKTI]: Tangkapan Layar Kartu Konsep 1_1
+[SCREEN_READY: contoh_angka_1_1]
+[BUKTI]: Tangkapan Layar Contoh Angka 1_1
+[SCREEN_READY: catatan_pengeluaran_terbaru_1_1]
+[BUKTI]: Tangkapan Layar Umpan Balik 1_1
+=== [LANGKAH 3]: Pelajaran 1_2 & Tangkapan Layar Contoh Angka Negatif ===
+[SCREEN_READY: contoh_angka_1_2]
+[BUKTI]: Tangkapan Layar Contoh Angka 1_2 (Nilai Negatif Rapat)
+=== [LANGKAH 4]: Pesan Gerbang Terkunci 1_4 ===
+[SCREEN_READY: pesan_gerbang_terkunci_1_4]
+[BUKTI]: Tangkapan Layar Pesan Gerbang Terkunci 1_4
+=== [LANGKAH 5]: Umpan Balik Perbandingan Pola Anggaran 1_4 ===
+[SCREEN_READY: umpan_balik_perbandingan_pola]
+[BUKTI]: Tangkapan Layar Umpan Balik Perbandingan Pola
+=== [LANGKAH 6]: Umpan Balik Realisasi Anggaran 1_5 ===
+[SCREEN_READY: umpan_balik_realisasi]
+[BUKTI]: Tangkapan Layar Umpan Balik Realisasi
+=== [LANGKAH 7]: Kuis Modul Putaran 1 (Tidak Lulus 60%) ===
+[SCREEN_READY: kuis_tidak_lulus]
+[BUKTI]: Tangkapan Layar Kuis Tidak Lulus (60%)
+=== [LANGKAH 8]: Kuis Modul Putaran 2 (Lulus 80%) ===
+[SCREEN_READY: kuis_lulus]
+[BUKTI]: Tangkapan Layar Kuis Lulus (80%)
+=== [LANGKAH 9]: Beranda Modul 1 Selesai ===
+[SCREEN_READY: beranda_modul_selesai]
+[BUKTI]: Tangkapan Layar Beranda Modul Selesai
+=== [LANGKAH 10]: Tab Belajar Modul Selesai ===
+[SCREEN_READY: tab_belajar]
+[BUKTI]: Tangkapan Layar Tab Belajar Selesai
+=== [SELESAI]: Seluruh 10 Skenario & Bukti Integrasi Tahap 6-R Selesai! ===
+03:22 +1: (tearDownAll)
+03:30 +1: All tests passed!

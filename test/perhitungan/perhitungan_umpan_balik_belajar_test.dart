@@ -17,6 +17,27 @@ void main() {
         ),
       );
     });
+
+    test('Tanpa pengeluaran menghasilkan pesan ramah awal', () {
+      final hasil = formatCatatanPengeluaranTerbaru(
+        jumlahTotal: 0,
+        kategori: '',
+        nominal: 0,
+      );
+
+      expect(
+        hasil,
+        equals('Belum ada pengeluaran yang dicatat. Dari catatan seperti ini kita mulai melihat ke mana uangmu pergi.'),
+      );
+    });
+  });
+
+  group('Format Negatif Rapat (U+2212)', () {
+    test('formatRupiahRapat(-900000) menghasilkan tanda minus U+2212 sebelum Rp tanpa spasi', () {
+      final hasil = formatRupiahRapat(-900000);
+      expect(hasil, equals('−Rp900.000'));
+      expect(hasil.codeUnitAt(0), equals(0x2212));
+    });
   });
 
   group('2. Pengujian Umpan Balik: perbandingan_pola_anggaran', () {

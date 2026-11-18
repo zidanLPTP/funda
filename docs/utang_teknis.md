@@ -162,5 +162,22 @@ Berdasarkan hasil pengujian terisolasi pada 10 iterasi bersih di emulator Pixel 
 - **Rencana Peninjauan:**
   Ditinjau ulang bersama konsultan atau kurator materi finansial pada Tahap 8 (Kurikulum Tingkat Pemula Lengkap) untuk memvalidasi apakah perlu disajikan alternatif rasio alokasi yang lebih adaptif terhadap rentang penghasilan pengguna di Indonesia.
 
+---
+
+## 14. Penyelarasan Lampiran Resmi & Profiling Waktu Respons UI (Tahap 6-R)
+
+- **Konteks:**
+  Pada implementasi awal Tahap 6, terdapat dua kalimat pesan gerbang pada pelajaran 1_4 dan 1_5 yang menggunakan ringkasan kalimat bebas alih-alih teks lampiran resmi reviewer (`docs/materi/modul_1_anggaran_arus_kas.md`). Selain itu, laporan awal Tahap 6 mencatat durasi Tab Belajar sebesar 926 ms dan Pemutar Pelajaran 802 ms, yang ternyata disebabkan oleh stopwatch test harness yang mengikutsertakan sleep waktu frame buatan (`pompaAman(tester, 300)`).
+- **Keputusan:**
+  1. **Kesesuaian Teks Kata demi Kata:** Teks kedua pesan gerbang diselaraskan 100% dengan lampiran:
+     - 1_4: `"Catat transaksi di minimal 7 hari kalender berbeda."` dan `"Catat minimal satu pemasukan bulan ini."`
+     - 1_5: `"Buat minimal satu anggaran bulan ini."` dan `"Catat minimal satu pengeluaran."`
+     Suite pengujian otomatis `test/konten/kesesuaian_lampiran_test.dart` ditambahkan untuk memastikan tidak ada perubahan kata tanpa persetujuan.
+  2. **Format Tanda Minus Rapat U+2212:** Format nominal negatif pada tabel contoh angka dan umpan balik edukatif distandarkan menggunakan minus Unicode U+2212 sebelum "Rp" tanpa spasi (`−Rp900.000`).
+  3. **Profiling Realistis:** Pengujian profiling di Android 16 (API 36) pada volume 5.000 dan 20.000 transaksi membuktikan bahwa komputasi murni logika bisnis dan kueri SQL Tab Belajar hanya memerlukan 25–43 ms (5 kueri SQL teragregasi bebas N+1).
+- **Rencana Peninjauan:**
+  Pada Tahap 8 (Kurikulum Lengkap Pemula), seluruh berkas pelajaran baru wajib melalui pipeline validasi kesesuaian lampiran otomatis sebelum merge.
+
+
 
 

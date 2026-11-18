@@ -403,7 +403,7 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
                       },
                       children: contoh.baris.map((b) {
                         final isTebal = b.ringkasan;
-                        final formatJumlah = formatRupiahRapat(b.jumlah.abs());
+                        final formatJumlah = formatRupiahRapat(b.jumlah);
 
                         return TableRow(
                           decoration: isTebal

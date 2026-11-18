@@ -1,7 +1,14 @@
 import '../util/format_rupiah.dart';
 
 /// Memformat nominal Rupiah tanpa spasi antara "Rp" dan angka sesuai konvensi teks materi edukasi.
+///
+/// Untuk nominal negatif, menggunakan tanda minus standar U+2212 ("−") sebelum "Rp" tanpa spasi,
+/// misalnya `formatRupiahRapat(-900000)` -> `"−Rp900.000"`.
 String formatRupiahRapat(int nominal) {
+  if (nominal < 0) {
+    final formatPositif = formatRupiah(nominal.abs()).replaceAll('Rp ', 'Rp');
+    return '−$formatPositif';
+  }
   return formatRupiah(nominal).replaceAll('Rp ', 'Rp');
 }
 
@@ -25,6 +32,9 @@ String formatCatatanPengeluaranTerbaru({
   required String kategori,
   required int nominal,
 }) {
+  if (jumlahTotal <= 0) {
+    return 'Belum ada pengeluaran yang dicatat. Dari catatan seperti ini kita mulai melihat ke mana uangmu pergi.';
+  }
   final formatNominal = formatRupiahRapat(nominal);
   return 'Kamu sudah mencatat $jumlahTotal pengeluaran. '
       'Yang terbaru: $kategori, $formatNominal. '

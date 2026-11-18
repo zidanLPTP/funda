@@ -17,7 +17,7 @@
       "tipe": "ada_data",
       "objek": "pemasukan",
       "min": 1,
-      "pesan": "Sudah ada minimal satu pemasukan bulan ini."
+      "pesan": "Catat minimal satu pemasukan bulan ini."
     }
   ],
   "pemantik": "Dengan catatan seminggu ke belakang, kamu punya bahan nyata. Saatnya memberi uangmu arah sebelum ia pergi.",

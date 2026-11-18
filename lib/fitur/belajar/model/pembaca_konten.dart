@@ -597,7 +597,14 @@ class PembacaKonten {
     return uraiModul(jsonString, namaBerkas: path);
   }
 
-  /// Memuat pelajaran dari aset aplikasi.
+  static final Map<String, PelajaranKonten> _cachePelajaran = {};
+
+  /// Membersihkan cache pelajaran (untuk keperluan pengujian jika diperlukan).
+  static void bersihkanCachePelajaran() {
+    _cachePelajaran.clear();
+  }
+
+  /// Memuat pelajaran dari aset aplikasi (dengan cache in-memory O(1)).
   static Future<PelajaranKonten> muatPelajaranDariAset(
     AssetBundle bundle, {
     required String tingkat,
@@ -606,12 +613,17 @@ class PembacaKonten {
     Set<String>? daftarIstilahKamus,
   }) async {
     final path = 'aset/konten/$tingkat/$modulId/$pelajaranId.json';
+    if (_cachePelajaran.containsKey(path)) {
+      return _cachePelajaran[path]!;
+    }
     final jsonString = await bundle.loadString(path);
-    return uraiPelajaran(
+    final pel = uraiPelajaran(
       jsonString,
       namaBerkas: path,
       daftarIstilahKamus: daftarIstilahKamus,
     );
+    _cachePelajaran[path] = pel;
+    return pel;
   }
 
   /// Mengurai dan memvalidasi berkas tes awal.

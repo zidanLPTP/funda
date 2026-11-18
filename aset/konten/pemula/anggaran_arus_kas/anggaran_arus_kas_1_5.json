@@ -15,7 +15,7 @@
       "tipe": "ada_data",
       "objek": "pengeluaran",
       "min": 1,
-      "pesan": "Buat minimal satu anggaran dan catat pengeluaranmu dulu, supaya ada yang bisa dievaluasi."
+      "pesan": "Catat minimal satu pengeluaran."
     }
   ],
   "pemantik": "Akhir bulan bukan waktu untuk menghakimi diri sendiri. Ini waktu untuk membaca data dan belajar darinya.",

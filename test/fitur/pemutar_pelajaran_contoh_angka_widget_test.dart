@@ -98,9 +98,10 @@ void main() {
       expect(find.text('Contoh Arus Kas Budi'), findsOneWidget);
       expect(find.text('Arus kas Budi positif sebesar Rp900.000.'), findsOneWidget);
 
-      // Periksa baris nominal: Sewa Kamar (-900000) harus tampil sebagai 'Rp900.000' rapat
+      // Periksa baris nominal: Sewa Kamar (-900000) tampil sebagai '−Rp900.000' rapat (U+2212) sesuai Tahap 6-R Butir B
       expect(find.text('Sewa Kamar'), findsOneWidget);
-      expect(find.text('Rp900.000'), findsNWidgets(2)); // Pada Sewa Kamar dan Sisa Bersih
+      expect(find.text('−Rp900.000'), findsOneWidget); // Pada Sewa Kamar (negatif rapat U+2212)
+      expect(find.text('Rp900.000'), findsOneWidget); // Pada Sisa Bersih (positif)
 
       // Periksa styling baris ringkasan (FontWeight.bold)
       final textSisaBersih = tester.widget<Text>(find.text('Sisa Bersih'));

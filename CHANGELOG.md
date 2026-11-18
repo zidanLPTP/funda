@@ -5,6 +5,31 @@ Format penulisan mengacu pada standar Keep a Changelog dan penamaan commit Funda
 
 ---
 
+## [0.8.1] - 2026-11-18 — Penyelarasan Tahap 6 (Tahap 6-R)
+
+Tahap 6-R: Penyelarasan Kesesuaian Lampiran Resmi Materi Modul 1 "Anggaran & Arus Kas", Format Nominal Negatif Rapat (Unicode U+2212), Perbaikan Kueri Umpan Balik Transaksi, Evaluasi Profiling Performa Tab Belajar, dan Verifikasi Integrasi UI Nyata di Emulator Android 16 (API 36). Memperbaiki pesan gerbang 1_4 dan 1_5 persis 100% kata demi kata terhadap `docs/materi/modul_1_anggaran_arus_kas.md`, memastikan format nominal negatif pada contoh angka dan umpan balik menggunakan minus Unicode U+2212 sebelum "Rp" tanpa spasi (`−Rp900.000`), menyelaraskan tipe misi hanya pada 3 tipe resmi (`ada_data`, `aturan_data`, `lihat_hitungan`), memperbaiki bug kueri `penyediaTeksUmpanBalikMisi` yang sebelumnya mencari `jenis = 'pengeluaran'` menjadi `jenis = 'keluar'`, mengukur durasi profil murni Tab Belajar (hanya 25-43 ms, 5 kueri SQL bebas N+1), serta mengeksekusi suite integrasi alur Modul 1 lengkap di emulator dengan 10 tangkapan layar PNG riil.
+
+### Diperbaiki & Diselaraskan
+- **Kesesuaian Teks Lampiran Materi Modul 1 (`aset/konten/pemula/anggaran_arus_kas/`):**
+  - Menyelaraskan teks pesan gerbang kondisi kedua di `anggaran_arus_kas_1_4.json` menjadi `"Catat minimal satu pemasukan bulan ini."`.
+  - Menyelaraskan teks pesan gerbang kondisi kedua di `anggaran_arus_kas_1_5.json` menjadi `"Catat minimal satu pengeluaran."`.
+  - Membuat suite pengujian kesesuaian kata demi kata di `test/konten/kesesuaian_lampiran_test.dart` yang memvalidasi seluruh judul, pemantik, kartu konsep, contoh angka, cek paham, misi, tindak lanjut, dan 10 butir soal kuis terhadap lampiran resmi (lulus 100%).
+- **Format Nominal Negatif Rapat Unicode U+2212 (`lib/perhitungan/`, `lib/fitur/belajar/`):**
+  - Mengubah `formatRupiahRapat` di `lib/perhitungan/perhitungan_umpan_balik_belajar.dart` agar nominal negatif memakai minus U+2212 tanpa spasi sebelum "Rp" (`−Rp900.000`).
+  - Memperbaiki tabel contoh angka di `lib/fitur/belajar/tampilan/layar_pemutar_pelajaran.dart` agar tidak menggunakan `abs()` melainkan mempertahankan format negatif rapat.
+  - Memperbarui `test/fitur/pemutar_pelajaran_contoh_angka_widget_test.dart` dan `test/perhitungan/perhitungan_umpan_balik_belajar_test.dart` untuk menguji format negatif rapat U+2212.
+- **Kueri Data & Registri Misi (`lib/fitur/belajar/kontroler/`, `lib/fitur/belajar/model/`):**
+  - Memperbaiki `penyediaTeksUmpanBalikMisi('catatan_pengeluaran_terbaru')` yang sebelumnya menyaring `t.jenis.equals('pengeluaran')` menjadi `t.jenis.equals('keluar')` sesuai skema database SQLite Funda.
+  - Memastikan registri misi hanya menerima 3 tipe resmi (`ada_data`, `aturan_data`, `lihat_hitungan`) dan validator menolak tegas tipe lain.
+- **Pengukuran Profiling Performa Tab Belajar (`integration_test/`):**
+  - Menjalankan profiling performa terisolasi di emulator Pixel 8 (Android 16 API 36) dengan pemanasan 1x dan 10 iterasi pada 5.000 dan 20.000 transaksi.
+  - Mengungkap bahwa komputasi murni logika bisnis dan kueri SQL Tab Belajar hanya berkisar 25–43 ms (5 kueri SQL teragregasi bebas N+1), dan durasi 800–900 ms pada laporan sebelumnya semata-mata berasal dari sleep helper frame testing `pompaAman(300ms)`.
+- **Integrasi Alur Lengkap Modul 1 di Emulator (`integration_test/`):**
+  - Mengimplementasikan alur 10 skenario lengkap di `integration_test/tahap_06_alur_modul_1_emulator_test.dart`.
+  - Berhasil menangkap 10 berkas tangkapan layar emulator riil di `docs/tangkapan_layar/tahap_06_emulator/`.
+
+---
+
 ## [0.8.0] - 2026-11-18 — Tahap 6: Modul 1 Lengkap "Anggaran & Arus Kas"
 
 Tahap 6: Implementasi Lengkap Konten Edukasi Modul 1 "Anggaran & Arus Kas", Skema Baru Contoh Angka, Registri Umpan Balik Edukatif Data Riil, dan Pengujian Integrasi Emulator. Seluruh 5 pelajaran Modul 1 (1.1 "Ke Mana Uangku Pergi?", 1.2 "Memetakan Arus Kas", 1.3 "Kebutuhan vs Keinginan", 1.4 "Anggaran Pertamamu", dan 1.5 "Evaluasi Akhir Bulan") diisi penuh berdasarkan materi resmi reviewer tanpa kata terlarang dan tanpa emoji. Kuis akhir modul diperluas menjadi bank 10 soal dengan pengambilan 5 butir acak deterministik. Menambahkan skema objek `contohAngka` yang merender tabel data konkret dengan format Rupiah rapat, penandaan `aturanPraktis` dan `catatanReviewer` beranotasi `TODO-VERIFIKASI` untuk formula populer 50/30/20, 3 generator umpan balik edukatif data riil (`catatan_pengeluaran_terbaru`, `perbandingan_pola_anggaran`, `realisasi_anggaran_bulan_ini`), kamus finansial diperluas, serta pembuktian alur end-to-end Modul 1 dan profil performa di Emulator Android 16 (API 36).
