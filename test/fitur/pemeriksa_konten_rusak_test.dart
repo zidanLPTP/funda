@@ -1006,5 +1006,162 @@ void main() {
         );
       });
     });
+
+    group('Pemeriksa Konten Laporan Rusak (Minimal 6 Kasus Galat Terstruktur)', () {
+      const templateValid = '''
+      {
+        "versi": 1,
+        "judulBagian": {
+          "arusKas": "Arus kas bulan ini",
+          "komposisi": "Komposisi pengeluaran",
+          "anggaran": "Realisasi anggaran",
+          "tujuan": "Tujuan dan dana darurat",
+          "kekayaan": "Kekayaan bersih",
+          "temuan": "Temuan bulan ini",
+          "saran": "Saran untuk bulan depan"
+        },
+        "label": {
+          "uangMasuk": "Uang masuk",
+          "uangKeluar": "Uang keluar",
+          "selisih": "Selisih",
+          "perTanggal": "Per {tanggal}",
+          "disembunyikan": "Disembunyikan"
+        },
+        "frasaSifat": {
+          "kebutuhan": "kebutuhan",
+          "keinginan": "keinginan",
+          "tabungan": "tabungan dan dana darurat",
+          "utang": "utang",
+          "belumDilabeli": "pengeluaran yang belum dilabeli"
+        },
+        "catatanKaki": {
+          "ekspor": "Dibuat dengan Funda. Ini edukasi umum, bukan nasihat keuangan.",
+          "aplikasi": "Laporan ini berisi data pribadi. Bagikan hanya ke orang yang kamu percaya."
+        },
+        "baris": {
+          "ringkasanAnggaran": "Dari {n} pos anggaran: {a} masih aman, {b} mendekati batas, {c} melewati batas.",
+          "posAnggaran": {
+            "normal": "{nama}: {terpakai} dari {batas} ({persen} persen)",
+            "sensor": "{nama}: {persen} persen terpakai"
+          },
+          "posLain": "dan {n} pos lain",
+          "tujuan": {
+            "normal": "{nama}: {dana} dari {target} ({persen} persen)",
+            "sensor": "{nama}: {persen} persen dari target"
+          },
+          "saldoDompet": "Saldo semua dompet {jumlah}",
+          "sisaUtang": "Sisa utang {jumlah}",
+          "kekayaanBersih": "Kekayaan bersih {jumlah}",
+          "arusKasSensor": "Uang keluar setara {persen} persen dari uang masuk.",
+          "belumAdaAnggaran": "Belum ada anggaran bulan ini.",
+          "belumAdaTujuan": "Belum ada tujuan aktif.",
+          "belumAdaData": "Belum ada catatan untuk bulan ini."
+        },
+        "temuan": {
+          "posMelewati": {
+            "kode": "pos_melewati",
+            "normal": "Pos {nama} melewati batasnya sebesar {jumlah}. Ini bahan belajar, bukan penilaian.",
+            "sensor": "Pos {nama} sudah terpakai {persen} persen dari batasnya. Ini bahan belajar, bukan penilaian."
+          },
+          "arusKasTanpaPemasukan": {
+            "kode": "arus_kas_tanpa_pemasukan",
+            "normal": "Bulan ini ada uang keluar, tetapi belum ada uang masuk yang tercatat.",
+            "sensor": "Bulan ini ada uang keluar, tetapi belum ada uang masuk yang tercatat."
+          },
+          "arusKasNegatif": {
+            "kode": "arus_kas_negatif",
+            "normal": "Uang keluarmu lebih besar {jumlah} dari uang masukmu bulan ini. Ini informasi untuk membantumu memutuskan.",
+            "sensor": "Uang keluarmu setara {persen} persen dari uang masukmu bulan ini. Ini informasi untuk membantumu memutuskan."
+          },
+          "sifatTerbesar": {
+            "kode": "sifat_terbesar",
+            "normal": "Bagian pengeluaran terbesarmu bulan ini ada di {sifat}: {persen} persen.",
+            "sensor": "Bagian pengeluaran terbesarmu bulan ini ada di {sifat}: {persen} persen."
+          },
+          "arusKasPositif": {
+            "kode": "arus_kas_positif",
+            "normal": "Uang masukmu lebih besar {jumlah} dari uang keluar bulan ini.",
+            "sensor": "Uang keluarmu setara {persen} persen dari uang masukmu bulan ini."
+          },
+          "dataBelumCukup": {
+            "kode": "data_belum_cukup",
+            "normal": "Datamu bulan ini masih sedikit. Setiap catatan membantu gambarannya makin jelas.",
+            "sensor": "Datamu bulan ini masih sedikit. Setiap catatan membantu gambarannya makin jelas."
+          }
+        },
+        "saran": {
+          "buatAnggaran": {
+            "kode": "buat_anggaran",
+            "teks": "Buat anggaran untuk bulan depan di menu Anggaran. Mulai dari tiga kategori saja."
+          },
+          "tinjauPos": {
+            "kode": "tinjau_pos",
+            "teks": "Tinjau lagi pos {nama}: ubah batasnya atau kebiasaannya, pilih satu saja."
+          },
+          "beriLabel": {
+            "kode": "beri_label",
+            "teks": "Beri label pada kategori {nama} supaya gambaran pengeluaranmu lebih jelas."
+          },
+          "salinAnggaran": {
+            "kode": "salin_anggaran",
+            "teks": "Salin anggaran bulan ini ke bulan depan, lalu sesuaikan bagian yang perlu."
+          }
+        }
+      }
+      ''';
+
+      test('Kasus 1: format bukan objek JSON', () {
+        expect(
+          () => PembacaKonten.uraiLaporan('["bukan", "objek"]', namaBerkas: 'laporan_rusak.json'),
+          throwsA(predicate((e) => e is GalatKonten && e.berkas == 'laporan_rusak.json')),
+        );
+      });
+
+      test('Kasus 2: judulBagian hilang atau kosong', () {
+        final rusak = templateValid.replaceAll('"arusKas": "Arus kas bulan ini",', '');
+        expect(
+          () => PembacaKonten.uraiLaporan(rusak, namaBerkas: 'laporan_rusak.json'),
+          throwsA(predicate((e) => e is GalatKonten && e.berkas == 'laporan_rusak.json' && e.kolom == 'judulBagian.arusKas')),
+        );
+      });
+
+      test('Kasus 3: placeholder tidak dikenal pada baris', () {
+        final rusak = templateValid.replaceAll('{nama}: {terpakai}', '{nama_pos}: {terpakai}');
+        expect(
+          () => PembacaKonten.uraiLaporan(rusak, namaBerkas: 'laporan_rusak.json'),
+          throwsA(predicate((e) => e is GalatKonten && e.berkas == 'laporan_rusak.json' && e.kolom == 'baris.posAnggaran.normal')),
+        );
+      });
+
+      test('Kasus 4: kata terlarang dalam temuan', () {
+        final rusak = templateValid.replaceAll(
+          'Pos {nama} melewati batasnya sebesar {jumlah}. Ini bahan belajar, bukan penilaian.',
+          'Kamu boros di pos {nama} sebesar {jumlah}.',
+        );
+        expect(
+          () => PembacaKonten.uraiLaporan(rusak, namaBerkas: 'laporan_rusak.json'),
+          throwsA(predicate((e) => e is GalatKonten && e.berkas == 'laporan_rusak.json')),
+        );
+      });
+
+      test('Kasus 5: kode temuan resmi hilang', () {
+        final rusak = templateValid.replaceAll('"pos_melewati"', '"pos_lain"');
+        expect(
+          () => PembacaKonten.uraiLaporan(rusak, namaBerkas: 'laporan_rusak.json'),
+          throwsA(predicate((e) => e is GalatKonten && e.berkas == 'laporan_rusak.json' && e.kolom!.contains('temuan'))),
+        );
+      });
+
+      test('Kasus 6: klaim keuangan tidak berdasar terdeteksi', () {
+        final rusak = templateValid.replaceAll(
+          'Buat anggaran untuk bulan depan di menu Anggaran. Mulai dari tiga kategori saja.',
+          'Pasti untung jika berinvestasi di modul ini.',
+        );
+        expect(
+          () => PembacaKonten.uraiLaporan(rusak, namaBerkas: 'laporan_rusak.json'),
+          throwsA(predicate((e) => e is GalatKonten && e.berkas == 'laporan_rusak.json' && e.kolom == 'saran.buatAnggaran.teks')),
+        );
+      });
+    });
   });
 }

@@ -5,6 +5,54 @@ Format penulisan mengacu pada standar Keep a Changelog dan penamaan commit Funda
 
 ---
 
+## [0.9.0] - 2026-11-19 — Tahap 7: Laporan Bulanan (PNG + PDF) & Cadangan Data
+
+Tahap 7: Implementasi Lengkap Laporan Bulanan (Pratinjau Soft Bento, Ekspor PNG 1080px, Dokumen PDF A4 Teks Asli Tertanam Font TTF Plus Jakarta Sans), Saklar Sensor Privasi Nominal, Cadangan Data Mandiri (JSON v1 dengan Checksum SHA-256 Deterministik), Pemulihan Atomik dengan Cadangan Keselamatan Otomatis, Pengingat Cadangan di Beranda, Tolok Ukur Beban Nyata (20.000 Transaksi), dan Penuntasan Seluruh Milestone MVP (Tahap 1–7).
+
+### Ditambahkan
+- **Fitur Laporan Bulanan (`lib/fitur/laporan/`, `lib/perhitungan/perhitungan_laporan_bulanan.dart`):**
+  - Mesin logika murni `perhitungan_laporan_bulanan.dart`:
+    * Evaluasi aturan temuan (P1 sampai P6) dan saran (P1 sampai P4) sesuai hierarki urgensi keuangan.
+    * Sensor nominal privasi: menghapus seluruh angka dan simbol "Rp" tanpa merusak tata letak kalimat.
+    * Vektor uji komprehensif V1 sampai V9 mencakup kondisi defisit, dominasi keinginan, pelanggaran anggaran, dan tahun kabisat (29 Februari).
+  - Tampilan Kartu Bento Laporan (`TampilanKartuLaporan`) dan Layar Laporan (`LayarLaporanBulanan` di rute `/laporan`):
+    * Pemilih bulan kalender dinamis (dari transaksi pertama pengguna hingga bulan berjalan).
+    * Saklar privasi nominal ("Sembunyikan nominal") yang persistensinya tersimpan di `tabel_pengaturan`.
+    * Tata letak modular soft bento: Header, Temuan & Saran, Hero Arus Kas, Komposisi Pengeluaran, Realisasi Anggaran, Tujuan Keuangan, dan Kekayaan Bersih.
+    * Responsif terhadap aksesibilitas skala font hingga 2.0x (bebas RenderFlex overflow).
+- **Layanan Ekspor Dokumen Laporan (`lib/layanan/laporan/`):**
+  - `PembuatGambarLaporan`: Menangkap kartu bento laporan via `RepaintBoundary` dengan rasio piksel 3.0 menghasilkan gambar PNG beresolusi tajam tepat 1080 px.
+  - `PembuatPdfLaporan`: Membuat dokumen PDF A4 multi-halaman teks asli (bukan raster screenshot) dengan font tertanam TTF *Plus Jakarta Sans* (Regular dan Bold) dan minus Unicode U+2212 untuk nominal negatif. Bebas dari dependensi `printing`.
+  - `LayananBagikan` & `LayananBagikanPalsu`: Membagikan berkas via `share_plus` dan membersihkan berkas cache sementara yang berusia > 24 jam.
+- **Fitur Cadangan Data & Pemulihan (`lib/data/cadangan/`, `lib/fitur/cadangan/`):**
+  - Format Berkas Cadangan `funda_cadangan` v1:
+    * Serialisasi raw kanonikal seluruh tabel SQLite berawalan `tabel_*`.
+    * Checksum kriptografis SHA-256 deterministik dengan pengurutan alfabetis kunci tabel dan baris Primary Key.
+    * Penjaga integritas tabel dan kolom (`RegistriPeningkatCadangan`) untuk migrasi skema cadangan lama.
+  - Alur Pemulihan Data (*Restore*) Berlapis:
+    * Validasi format dan integritas hash SHA-256 (penolakan berkas rusak atau hasil modifikasi ilegal).
+    * Dialog Pratinjau Data (jumlah dompet, transaksi, anggaran, tujuan, utang, tagihan, dan versi aplikasi).
+    * Konfirmasi eksplisit dua langkah sebelum penggantian data.
+    * Cadangan keselamatan otomatis (*safety backup*) ke berkas internal `sebelum_pemulihan.json` sebelum eksekusi pemulihan.
+    * Transaksi atomik SQLite (`PRAGMA defer_foreign_keys = ON;`, penggantian seluruh baris, dan verifikasi `PRAGMA foreign_key_check;`). Bila terjadi kegagalan di tengah jalan, seluruh perubahan di-rollback tanpa sisa data setengah jadi.
+  - Pengingat Cadangan Cerdas di Beranda:
+    * Banner bento beranda muncul jika pengguna memiliki data aktif dan belum mencadangkan dalam 14 hari terakhir (atau setelah 10 transaksi baru).
+    * Opsi "Cadangkan sekarang" dan "Nanti" (menunda pengingat selama 7 hari).
+- **Tolok Ukur Performa Beban Nyata (`test/performa/performa_laporan_dan_cadangan_test.dart`):**
+  - Pengukuran pada 20.000 transaksi + 20 utang + 20 tagihan:
+    * Waktu ekspor cadangan: 397 ms (jauh di bawah batas 3 detik).
+    * Ukuran berkas JSON: 5.398.908 bytes (~5,15 MB).
+    * Waktu pemulihan atomik: 704 ms (jauh di bawah batas 3 detik).
+    * Rata-rata waktu susun laporan: 460,3 ms (10 iterasi stabil).
+    * Waktu render PDF: 122 ms (13,7 KB).
+- **Rangkaian Pengujian Lengkap:**
+  - `test/perhitungan/perhitungan_laporan_bulanan_test.dart`: 12 pengujian unit logika murni (V1–V9, sensor nominal, sensor persentase, kabisat).
+  - `test/data/cadangan_test.dart`: 11 pengujian unit repositori cadangan (hash deterministik, penjaga tabel, penjaga peningkat, round-trip ekspor-impor, penolakan checksum rusak, transaksi rollback atomik, pengingat cadangan).
+  - `test/layanan/laporan_ekspor_test.dart`: 3 pengujian layanan ekspor (signature PNG 1080px, header %PDF text-asli, cleanup cache 24 jam).
+  - `test/fitur/laporan_dan_cadangan_widget_test.dart`: 6 pengujian widget UI (saklar sensor privasi, toleransi skala teks 2.0x, alur cadangan & pemulihan 2 langkah, penanganan berkas rusak, banner beranda).
+
+---
+
 ## [0.8.1] - 2026-11-18 — Penyelarasan Tahap 6 (Tahap 6-R)
 
 Tahap 6-R: Penyelarasan Kesesuaian Lampiran Resmi Materi Modul 1 "Anggaran & Arus Kas", Format Nominal Negatif Rapat (Unicode U+2212), Perbaikan Kueri Umpan Balik Transaksi, Evaluasi Profiling Performa Tab Belajar, dan Verifikasi Integrasi UI Nyata di Emulator Android 16 (API 36). Memperbaiki pesan gerbang 1_4 dan 1_5 persis 100% kata demi kata terhadap `docs/materi/modul_1_anggaran_arus_kas.md`, memastikan format nominal negatif pada contoh angka dan umpan balik menggunakan minus Unicode U+2212 sebelum "Rp" tanpa spasi (`−Rp900.000`), menyelaraskan tipe misi hanya pada 3 tipe resmi (`ada_data`, `aturan_data`, `lihat_hitungan`), memperbaiki bug kueri `penyediaTeksUmpanBalikMisi` yang sebelumnya mencari `jenis = 'pengeluaran'` menjadi `jenis = 'keluar'`, mengukur durasi profil murni Tab Belajar (hanya 25-43 ms, 5 kueri SQL bebas N+1), serta mengeksekusi suite integrasi alur Modul 1 lengkap di emulator dengan 10 tangkapan layar PNG riil.

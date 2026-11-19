@@ -97,13 +97,25 @@ funda/
 - [docs/spec.md](docs/spec.md) — Rincian spesifikasi lengkap aplikasi Funda.
 - [docs/styleguide.md](docs/styleguide.md) — Token desain Soft Bento, warna, dan pedoman bahasa.
 - [docs/kamus_penamaan.md](docs/kamus_penamaan.md) — Kamus istilah penamaan kode berbahasa Indonesia.
-- [docs/format_konten.md](docs/format_konten.md) — Spesifikasi skema JSON kurikulum edukasi, kamus istilah, dan aturan penulisan kalimat <= 25 kata.
+- [docs/format_konten.md](docs/format_konten.md) — Spesifikasi skema JSON kurikulum edukasi, kamus istilah, template laporan, dan aturan penulisan kalimat <= 25 kata.
+- [docs/format_cadangan.md](docs/format_cadangan.md) — Spesifikasi format JSON v1 berkas cadangan, checksum SHA-256, dan mekanisme rollback transaksi atomik.
 - [docs/utang_teknis.md](docs/utang_teknis.md) — Catatan utang teknis, dependensi native SQLite, dan rencana refaktor.
 
 ---
 
 ## 📸 Tangkapan Layar Aplikasi
 Tangkapan layar otomatis yang dihasilkan dari pengujian dan emulator tersimpan pada:
+- **Tahap 7 (Laporan Bulanan & Cadangan Data di Emulator Pixel 8):** [docs/tangkapan_layar/](docs/tangkapan_layar/)
+  - `tahap_07_banner_beranda.png` — Banner pengingat cadangan data 14 hari di Beranda
+  - `tahap_07_cadangan.png` — Layar Cadangan & Pemulihan (`/cadangan`)
+  - `tahap_07_pratinjau_pemulihan.png` — Dialog Pratinjau Data Cadangan sebelum konfirmasi pemulihan
+  - `tahap_07_laporan_normal.png` — Layar Laporan Bulanan mode normal (`/laporan`)
+  - `tahap_07_laporan_sensor.png` — Layar Laporan Bulanan dengan saklar sensor nominal aktif
+  - Dokumen dan gambar hasil ekspor tersimpan pada: [docs/contoh_ekspor/](docs/contoh_ekspor/)
+    * `laporan.pdf` — Dokumen cetak PDF A4 teks asli tertanam font Plus Jakarta Sans
+    * `laporan_normal.png` — Kartu bento laporan resolusi 1080 px
+    * `laporan_sensor.png` — Kartu bento laporan resolusi 1080 px bebas angka/simbol Rupiah
+- **Tahap 6-R (Materi Modul 1 Lengkap di Emulator Pixel 8):** [docs/tangkapan_layar/tahap_06_emulator/](docs/tangkapan_layar/tahap_06_emulator/)
 - **Tahap 5 (Tes Awal & Personalisasi Belajar di Emulator Pixel 8):** [docs/tangkapan_layar/tahap_05_emulator/](docs/tangkapan_layar/tahap_05_emulator/)
   - `07_tab_belajar_dengan_rekomendasi.png` — Kartu rekomendasi personalisasi ramah di bagian atas Tab Belajar setelah menyelesaikan tes awal dan pembentukan profil keuangan
 - **Tahap 4-R (Revisi & Pembuktian Mesin Belajar di Emulator Pixel 8):** [docs/tangkapan_layar/tahap_04_emulator/](docs/tangkapan_layar/tahap_04_emulator/)

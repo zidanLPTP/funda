@@ -264,3 +264,74 @@ Berkas ini memetakan kode alasan heuristik personalisasi ke teks penjelasan yang
   }
 }
 ```
+
+---
+
+## 8. Format Berkas Template Laporan Bulanan (`aset/konten/laporan.json`)
+
+Berkas ini adalah sumber kebenaran teks (*single source of truth*) untuk antarmuka pratinjau, ekspor gambar kartu PNG (1080 px), dan dokumen cetak PDF A4. Dilarang mengubah kata-kata dalam template ini tanpa persetujuan reviewer.
+
+### 8.1 Struktur JSON
+```json
+{
+  "versi": 1,
+  "judulBagian": {
+    "temuan": "Temuan Bulan Ini",
+    "saran": "Saran untuk Bulan Depan",
+    "arusKas": "Arus Kas Bulan Ini",
+    "komposisi": "Komposisi Pengeluaran",
+    "anggaran": "Realisasi Anggaran",
+    "tujuan": "Tujuan dan Dana Darurat",
+    "kekayaan": "Kekayaan Bersih"
+  },
+  "label": {
+    "uangMasuk": "Uang masuk",
+    "uangKeluar": "Uang keluar",
+    "selisih": "Selisih",
+    "kebutuhan": "Kebutuhan",
+    "keinginan": "Keinginan",
+    "tabungan": "Tabungan & Investasi",
+    "utang": "Pembayaran Utang",
+    "belumDilabeli": "Belum dilabeli",
+    "saldoDompet": "Saldo di dompet",
+    "sisaUtang": "Sisa utang tercatat",
+    "kekayaanBersih": "Kekayaan bersih",
+    "posLain": "pos lain",
+    "tujuanBelumAda": "Belum ada tujuan aktif.",
+    "posAnggaranAman": "Semua pos anggaran aman terkendali."
+  },
+  "catatanKaki": {
+    "aplikasi": "Laporan ini dibuat otomatis oleh Funda di perangkatmu. Angka dan analisis bersifat edukatif.",
+    "ekspor": "Dibuat otomatis oleh Funda di perangkat pengguna. Bersifat edukatif dan rahasia."
+  },
+  "temuan": {
+    "P1": { "teks": "..." },
+    "P2": { "teks": "..." },
+    "P3": { "teks": "..." },
+    "P4": { "teks": "..." },
+    "P5": { "teks": "..." },
+    "P6": { "teks": "..." }
+  },
+  "saran": {
+    "P1": { "teks": "..." },
+    "P2": { "teks": "..." },
+    "P3": { "teks": "..." },
+    "P4": { "teks": "..." }
+  }
+}
+```
+
+### 8.2 Logika Pemilihan Temuan (P1 sampai P6)
+1. **P1 (Utang Melebihi Pemasukan):** Terpilih jika rasio cicilan utang / uang masuk > 30%.
+2. **P2 (Defisit Arus Kas):** Terpilih jika uang keluar > uang masuk (selisih negatif).
+3. **P3 (Keinginan Mendominasi):** Terpilih jika porsi sifat keinginan > kebutuhan.
+4. **P4 (Anggaran Melebihi Batas):** Terpilih jika terdapat pos anggaran yang berstatus `melewati`.
+5. **P5 (Pengeluaran Belum Dilabeli Signifikan):** Terpilih jika ada kategori tanpa label sifat > 15% dari total pengeluaran.
+6. **P6 (Surplus Sehat):** Terpilih jika arus kas positif dan tidak ada kondisi kritis di atas.
+
+### 8.3 Logika Pemilihan Saran (P1 sampai P4)
+1. **P1 (Fokus Pelunasan Utang):** Saran bila cicilan utang menjadi beban dominan.
+2. **P2 (Rem Pengeluaran Keinginan):** Saran bila porsi belanja diskresioner tinggi.
+3. **P3 (Bangun Dana Darurat):** Saran bila belum ada bantalan darurat yang memadai.
+4. **P4 (Pertahankan Disiplin):** Saran penguatan atas kebiasaan keuangan yang sudah sehat.
+

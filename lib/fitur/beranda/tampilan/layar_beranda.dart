@@ -17,6 +17,7 @@ import '../../tagihan/kontroler/penyedia_tagihan.dart';
 import '../../../perhitungan/perhitungan_tagihan.dart';
 import '../../tujuan/kontroler/penyedia_tujuan.dart';
 import '../../utang/kontroler/penyedia_utang.dart';
+import '../../cadangan/kontroler/penyedia_cadangan.dart';
 
 /// Layar Beranda utama aplikasi Funda.
 /// Dashboard penuh dengan ~8 petak bento (data nyata) dan modul pendukung.
@@ -135,6 +136,59 @@ class LayarBeranda extends ConsumerWidget {
               warna: WarnaFunda.teksRedup,
             ),
             const SizedBox(height: SpasiFunda.l),
+
+            // Banner Pengingat Cadangan 2x1 (bahasa santai, ajakan ramah)
+            Consumer(
+              builder: (context, ref, _) {
+                final statusCadangan = ref.watch(penyediaStatusCadangan).asData?.value;
+                if (statusCadangan == null || !statusCadangan.perluPengingat) {
+                  return const SizedBox.shrink();
+                }
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: SpasiFunda.l),
+                  child: PetakBento.ukuran2x1(
+                    tint: TintPetakBento.amber,
+                    anak: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Row(
+                          children: [
+                            Icon(LucideIcons.shieldCheck, size: 20, color: WarnaFunda.utama),
+                            SizedBox(width: SpasiFunda.s),
+                            Expanded(
+                              child: TeksFunda.label('Yuk, amankan catatan keuanganmu'),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: SpasiFunda.xs),
+                        const TeksFunda.catatan(
+                          'Simpan salinan data keuanganmu agar tetap aman jika ganti perangkat.',
+                        ),
+                        const SizedBox(height: SpasiFunda.m),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            TextButton(
+                              onPressed: () => tundaPengingatCadangan(ref, durasiHari: 14),
+                              child: const Text('Nanti'),
+                            ),
+                            const SizedBox(width: SpasiFunda.s),
+                            ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: WarnaFunda.utama,
+                                foregroundColor: Colors.white,
+                              ),
+                              onPressed: () => context.push('/cadangan'),
+                              child: const Text('Cadangkan sekarang'),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
 
             // 1. Bento 2x1: Hero Arus Kas Bulan Ini (DATA NYATA) -> /catatan
             PetakBento.ukuran2x1(

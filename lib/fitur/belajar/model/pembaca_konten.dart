@@ -885,6 +885,267 @@ class PembacaKonten {
     final jsonString = await bundle.loadString(path);
     return uraiRekomendasi(jsonString, namaBerkas: path);
   }
+
+  static const Set<String> placeholderLaporanValid = {
+    'nama',
+    'jumlah',
+    'persen',
+    'sifat',
+    'tanggal',
+    'n',
+    'a',
+    'b',
+    'c',
+    'target',
+    'dana',
+    'terpakai',
+    'batas',
+  };
+
+  static const Set<String> kodeTemuanLaporanResmi = {
+    'pos_melewati',
+    'arus_kas_tanpa_pemasukan',
+    'arus_kas_negatif',
+    'sifat_terbesar',
+    'arus_kas_positif',
+    'data_belum_cukup',
+  };
+
+  static const Set<String> kodeSaranLaporanResmi = {
+    'buat_anggaran',
+    'tinjau_pos',
+    'beri_label',
+    'salin_anggaran',
+  };
+
+  static void _periksaPlaceholderLaporan(String teks, String namaBerkas, String kolom) {
+    final matches = RegExp(r'\{([^}]+)\}').allMatches(teks);
+    for (final m in matches) {
+      final tag = m.group(1)?.trim();
+      if (tag != null && !placeholderLaporanValid.contains(tag)) {
+        throw GalatKonten('Placeholder {$tag} tidak dikenal dalam template laporan', berkas: namaBerkas, kolom: kolom);
+      }
+    }
+  }
+
+  static void _periksaKlaimKeuangan(String teks, String namaBerkas, String kolom) {
+    final reg = RegExp(r'(pasti untung|dijamin untung|pasti kaya|bebas finansial dalam)', caseSensitive: false);
+    if (reg.hasMatch(teks)) {
+      throw GalatKonten('Klaim keuangan tidak berdasar terdeteksi pada teks laporan', berkas: namaBerkas, kolom: kolom);
+    }
+  }
+
+  /// Mengurai dan memvalidasi berkas laporan.json.
+  static KontenLaporan uraiLaporan(
+    String jsonString, {
+    String namaBerkas = 'laporan.json',
+    List<String>? daftarPeringatan,
+  }) {
+    final dynamic data = jsonDecode(jsonString);
+    if (data is! Map<String, dynamic>) {
+      throw GalatKonten('Laporan harus berupa objek JSON', berkas: namaBerkas);
+    }
+    validasiKontenLaporan(data, namaBerkas: namaBerkas, daftarPeringatan: daftarPeringatan);
+    return KontenLaporan.fromJson(data);
+  }
+
+  /// Memvalidasi integritas struktur berkas laporan.json.
+  static void validasiKontenLaporan(
+    Map<String, dynamic> data, {
+    required String namaBerkas,
+    List<String>? daftarPeringatan,
+  }) {
+    // 1. Judul Bagian
+    final judul = data['judulBagian'];
+    if (judul is! Map<String, dynamic>) {
+      throw GalatKonten('Kolom judulBagian wajib berupa objek JSON', berkas: namaBerkas, kolom: 'judulBagian');
+    }
+    const kunciJudulWajib = ['arusKas', 'komposisi', 'anggaran', 'tujuan', 'kekayaan', 'temuan', 'saran'];
+    for (final k in kunciJudulWajib) {
+      final val = judul[k] as String?;
+      if (val == null || val.trim().isEmpty) {
+        throw GalatKonten('Judul bagian "$k" wajib ada dan tidak boleh kosong', berkas: namaBerkas, kolom: 'judulBagian.$k');
+      }
+      periksaBahasaTeks(val, namaBerkas: namaBerkas, daftarPeringatan: daftarPeringatan);
+    }
+
+    // 2. Label
+    final label = data['label'];
+    if (label is! Map<String, dynamic>) {
+      throw GalatKonten('Kolom label wajib berupa objek JSON', berkas: namaBerkas, kolom: 'label');
+    }
+    const kunciLabelWajib = ['uangMasuk', 'uangKeluar', 'selisih', 'perTanggal', 'disembunyikan'];
+    for (final k in kunciLabelWajib) {
+      final val = label[k] as String?;
+      if (val == null || val.trim().isEmpty) {
+        throw GalatKonten('Label "$k" wajib ada dan tidak boleh kosong', berkas: namaBerkas, kolom: 'label.$k');
+      }
+      _periksaPlaceholderLaporan(val, namaBerkas, 'label.$k');
+      periksaBahasaTeks(val, namaBerkas: namaBerkas, daftarPeringatan: daftarPeringatan);
+    }
+
+    // 3. Frasa Sifat
+    final frasaSifat = data['frasaSifat'];
+    if (frasaSifat is! Map<String, dynamic>) {
+      throw GalatKonten('Kolom frasaSifat wajib berupa objek JSON', berkas: namaBerkas, kolom: 'frasaSifat');
+    }
+    const kunciSifatWajib = ['kebutuhan', 'keinginan', 'tabungan', 'utang', 'belumDilabeli'];
+    for (final k in kunciSifatWajib) {
+      final val = frasaSifat[k] as String?;
+      if (val == null || val.trim().isEmpty) {
+        throw GalatKonten('Frasa sifat "$k" wajib ada dan tidak boleh kosong', berkas: namaBerkas, kolom: 'frasaSifat.$k');
+      }
+      periksaBahasaTeks(val, namaBerkas: namaBerkas, daftarPeringatan: daftarPeringatan);
+    }
+
+    // 4. Catatan Kaki
+    final catatanKaki = data['catatanKaki'];
+    if (catatanKaki is! Map<String, dynamic>) {
+      throw GalatKonten('Kolom catatanKaki wajib berupa objek JSON', berkas: namaBerkas, kolom: 'catatanKaki');
+    }
+    const kunciCatatanWajib = ['ekspor', 'aplikasi'];
+    for (final k in kunciCatatanWajib) {
+      final val = catatanKaki[k] as String?;
+      if (val == null || val.trim().isEmpty) {
+        throw GalatKonten('Catatan kaki "$k" wajib ada dan tidak boleh kosong', berkas: namaBerkas, kolom: 'catatanKaki.$k');
+      }
+      periksaBahasaTeks(val, namaBerkas: namaBerkas, daftarPeringatan: daftarPeringatan);
+    }
+
+    // 5. Baris
+    final baris = data['baris'];
+    if (baris is! Map<String, dynamic>) {
+      throw GalatKonten('Kolom baris wajib berupa objek JSON', berkas: namaBerkas, kolom: 'baris');
+    }
+    const barisTeksTunggal = [
+      'ringkasanAnggaran',
+      'posLain',
+      'saldoDompet',
+      'sisaUtang',
+      'kekayaanBersih',
+      'arusKasSensor',
+      'belumAdaAnggaran',
+      'belumAdaTujuan',
+      'belumAdaData',
+    ];
+    for (final k in barisTeksTunggal) {
+      final val = baris[k] as String?;
+      if (val == null || val.trim().isEmpty) {
+        throw GalatKonten('Baris "$k" wajib ada dan tidak boleh kosong', berkas: namaBerkas, kolom: 'baris.$k');
+      }
+      _periksaPlaceholderLaporan(val, namaBerkas, 'baris.$k');
+      _periksaKlaimKeuangan(val, namaBerkas, 'baris.$k');
+      periksaBahasaTeks(val, namaBerkas: namaBerkas, daftarPeringatan: daftarPeringatan);
+    }
+
+    // Periksa posAnggaran (normal & sensor)
+    final posAnggaran = baris['posAnggaran'];
+    if (posAnggaran is! Map<String, dynamic>) {
+      throw GalatKonten('Baris posAnggaran wajib berupa objek dengan normal & sensor', berkas: namaBerkas, kolom: 'baris.posAnggaran');
+    }
+    for (final mode in ['normal', 'sensor']) {
+      final val = posAnggaran[mode] as String?;
+      if (val == null || val.trim().isEmpty) {
+        throw GalatKonten('posAnggaran mode "$mode" wajib ada', berkas: namaBerkas, kolom: 'baris.posAnggaran.$mode');
+      }
+      _periksaPlaceholderLaporan(val, namaBerkas, 'baris.posAnggaran.$mode');
+      periksaBahasaTeks(val, namaBerkas: namaBerkas, daftarPeringatan: daftarPeringatan);
+    }
+
+    // Periksa tujuan (normal & sensor)
+    final tujuan = baris['tujuan'];
+    if (tujuan is! Map<String, dynamic>) {
+      throw GalatKonten('Baris tujuan wajib berupa objek dengan normal & sensor', berkas: namaBerkas, kolom: 'baris.tujuan');
+    }
+    for (final mode in ['normal', 'sensor']) {
+      final val = tujuan[mode] as String?;
+      if (val == null || val.trim().isEmpty) {
+        throw GalatKonten('tujuan mode "$mode" wajib ada', berkas: namaBerkas, kolom: 'baris.tujuan.$mode');
+      }
+      _periksaPlaceholderLaporan(val, namaBerkas, 'baris.tujuan.$mode');
+      periksaBahasaTeks(val, namaBerkas: namaBerkas, daftarPeringatan: daftarPeringatan);
+    }
+
+    // 6. Temuan
+    final temuan = data['temuan'];
+    if (temuan is! Map<String, dynamic>) {
+      throw GalatKonten('Kolom temuan wajib berupa objek JSON', berkas: namaBerkas, kolom: 'temuan');
+    }
+    final kodeDitemukanTemuan = <String>{};
+    for (final entry in temuan.entries) {
+      final item = entry.value;
+      if (item is! Map<String, dynamic>) {
+        throw GalatKonten('Item temuan "${entry.key}" bukan objek JSON', berkas: namaBerkas, kolom: 'temuan.${entry.key}');
+      }
+      final kode = item['kode'] as String?;
+      if (kode == null || !kodeTemuanLaporanResmi.contains(kode)) {
+        throw GalatKonten('Kode temuan tidak valid atau asing: "$kode"', berkas: namaBerkas, kolom: 'temuan.${entry.key}.kode');
+      }
+      kodeDitemukanTemuan.add(kode);
+
+      final normal = item['normal'] as String?;
+      final sensor = item['sensor'] as String?;
+      if (normal == null || normal.trim().isEmpty) {
+        throw GalatKonten('Teks temuan normal "$kode" tidak boleh kosong', berkas: namaBerkas, kolom: 'temuan.${entry.key}.normal');
+      }
+      if (sensor == null || sensor.trim().isEmpty) {
+        throw GalatKonten('Teks temuan sensor "$kode" tidak boleh kosong', berkas: namaBerkas, kolom: 'temuan.${entry.key}.sensor');
+      }
+      _periksaPlaceholderLaporan(normal, namaBerkas, 'temuan.${entry.key}.normal');
+      _periksaPlaceholderLaporan(sensor, namaBerkas, 'temuan.${entry.key}.sensor');
+      _periksaKlaimKeuangan(normal, namaBerkas, 'temuan.${entry.key}.normal');
+      _periksaKlaimKeuangan(sensor, namaBerkas, 'temuan.${entry.key}.sensor');
+      periksaBahasaTeks(normal, namaBerkas: namaBerkas, daftarPeringatan: daftarPeringatan);
+      periksaBahasaTeks(sensor, namaBerkas: namaBerkas, daftarPeringatan: daftarPeringatan);
+    }
+
+    for (final kodeResmi in kodeTemuanLaporanResmi) {
+      if (!kodeDitemukanTemuan.contains(kodeResmi)) {
+        throw GalatKonten('Kode temuan resmi "$kodeResmi" wajib ada di temuan', berkas: namaBerkas, kolom: 'temuan');
+      }
+    }
+
+    // 7. Saran
+    final saran = data['saran'];
+    if (saran is! Map<String, dynamic>) {
+      throw GalatKonten('Kolom saran wajib berupa objek JSON', berkas: namaBerkas, kolom: 'saran');
+    }
+    final kodeDitemukanSaran = <String>{};
+    for (final entry in saran.entries) {
+      final item = entry.value;
+      if (item is! Map<String, dynamic>) {
+        throw GalatKonten('Item saran "${entry.key}" bukan objek JSON', berkas: namaBerkas, kolom: 'saran.${entry.key}');
+      }
+      final kode = item['kode'] as String?;
+      if (kode == null || !kodeSaranLaporanResmi.contains(kode)) {
+        throw GalatKonten('Kode saran tidak valid atau asing: "$kode"', berkas: namaBerkas, kolom: 'saran.${entry.key}.kode');
+      }
+      kodeDitemukanSaran.add(kode);
+
+      final teks = item['teks'] as String?;
+      if (teks == null || teks.trim().isEmpty) {
+        throw GalatKonten('Teks saran "$kode" tidak boleh kosong', berkas: namaBerkas, kolom: 'saran.${entry.key}.teks');
+      }
+      _periksaPlaceholderLaporan(teks, namaBerkas, 'saran.${entry.key}.teks');
+      _periksaKlaimKeuangan(teks, namaBerkas, 'saran.${entry.key}.teks');
+      periksaBahasaTeks(teks, namaBerkas: namaBerkas, daftarPeringatan: daftarPeringatan);
+    }
+
+    for (final kodeResmi in kodeSaranLaporanResmi) {
+      if (!kodeDitemukanSaran.contains(kodeResmi)) {
+        throw GalatKonten('Kode saran resmi "$kodeResmi" wajib ada di saran', berkas: namaBerkas, kolom: 'saran');
+      }
+    }
+  }
+
+  /// Memuat konten laporan dari aset aplikasi.
+  static Future<KontenLaporan> muatLaporanDariAset(
+    AssetBundle bundle, {
+    String path = 'aset/konten/laporan.json',
+  }) async {
+    final jsonString = await bundle.loadString(path);
+    return uraiLaporan(jsonString, namaBerkas: path);
+  }
 }
 
 /// Model butir pertanyaan profil keuangan di tes awal.
@@ -1040,6 +1301,183 @@ class KontenRekomendasi {
     return KontenRekomendasi(
       versi: (json['versi'] as num?)?.toInt() ?? 1,
       alasan: alasanMap,
+    );
+  }
+}
+
+/// Item temuan laporan bulanan dengan teks mode normal dan sensor.
+class ItemTemuanLaporan {
+  final String kode;
+  final String normal;
+  final String sensor;
+
+  const ItemTemuanLaporan({
+    required this.kode,
+    required this.normal,
+    required this.sensor,
+  });
+
+  factory ItemTemuanLaporan.fromJson(Map<String, dynamic> json) {
+    return ItemTemuanLaporan(
+      kode: json['kode'] as String? ?? '',
+      normal: json['normal'] as String? ?? '',
+      sensor: json['sensor'] as String? ?? '',
+    );
+  }
+}
+
+/// Item saran laporan bulanan.
+class ItemSaranLaporan {
+  final String kode;
+  final String teks;
+
+  const ItemSaranLaporan({
+    required this.kode,
+    required this.teks,
+  });
+
+  factory ItemSaranLaporan.fromJson(Map<String, dynamic> json) {
+    return ItemSaranLaporan(
+      kode: json['kode'] as String? ?? '',
+      teks: json['teks'] as String? ?? '',
+    );
+  }
+}
+
+/// Format baris teks laporan bulanan.
+class FormatBarisLaporan {
+  final String ringkasanAnggaran;
+  final String posAnggaranNormal;
+  final String posAnggaranSensor;
+  final String posLain;
+  final String tujuanNormal;
+  final String tujuanSensor;
+  final String saldoDompet;
+  final String sisaUtang;
+  final String kekayaanBersih;
+  final String arusKasSensor;
+  final String belumAdaAnggaran;
+  final String belumAdaTujuan;
+  final String belumAdaData;
+
+  const FormatBarisLaporan({
+    required this.ringkasanAnggaran,
+    required this.posAnggaranNormal,
+    required this.posAnggaranSensor,
+    required this.posLain,
+    required this.tujuanNormal,
+    required this.tujuanSensor,
+    required this.saldoDompet,
+    required this.sisaUtang,
+    required this.kekayaanBersih,
+    required this.arusKasSensor,
+    required this.belumAdaAnggaran,
+    required this.belumAdaTujuan,
+    required this.belumAdaData,
+  });
+
+  factory FormatBarisLaporan.fromJson(Map<String, dynamic> json) {
+    final posAnggaran = json['posAnggaran'] is Map<String, dynamic>
+        ? json['posAnggaran'] as Map<String, dynamic>
+        : <String, dynamic>{};
+    final tujuan = json['tujuan'] is Map<String, dynamic>
+        ? json['tujuan'] as Map<String, dynamic>
+        : <String, dynamic>{};
+
+    return FormatBarisLaporan(
+      ringkasanAnggaran: json['ringkasanAnggaran'] as String? ?? '',
+      posAnggaranNormal: posAnggaran['normal'] as String? ?? '',
+      posAnggaranSensor: posAnggaran['sensor'] as String? ?? '',
+      posLain: json['posLain'] as String? ?? '',
+      tujuanNormal: tujuan['normal'] as String? ?? '',
+      tujuanSensor: tujuan['sensor'] as String? ?? '',
+      saldoDompet: json['saldoDompet'] as String? ?? '',
+      sisaUtang: json['sisaUtang'] as String? ?? '',
+      kekayaanBersih: json['kekayaanBersih'] as String? ?? '',
+      arusKasSensor: json['arusKasSensor'] as String? ?? '',
+      belumAdaAnggaran: json['belumAdaAnggaran'] as String? ?? '',
+      belumAdaTujuan: json['belumAdaTujuan'] as String? ?? '',
+      belumAdaData: json['belumAdaData'] as String? ?? '',
+    );
+  }
+}
+
+/// Konten lengkap laporan bulanan yang dimuat dari aset/konten/laporan.json.
+class KontenLaporan {
+  final int versi;
+  final Map<String, String> judulBagian;
+  final Map<String, String> label;
+  final Map<String, String> frasaSifat;
+  final Map<String, String> catatanKaki;
+  final FormatBarisLaporan baris;
+  final Map<String, ItemTemuanLaporan> temuan;
+  final Map<String, ItemSaranLaporan> saran;
+
+  const KontenLaporan({
+    required this.versi,
+    required this.judulBagian,
+    required this.label,
+    required this.frasaSifat,
+    required this.catatanKaki,
+    required this.baris,
+    required this.temuan,
+    required this.saran,
+  });
+
+  String frasaUntukSifat(String sifatKode) {
+    if (sifatKode == 'belum_dilabeli' || sifatKode == 'belumDilabeli') {
+      return frasaSifat['belumDilabeli'] ?? frasaSifat['belum_dilabeli'] ?? 'pengeluaran yang belum dilabeli';
+    }
+    return frasaSifat[sifatKode] ?? sifatKode;
+  }
+
+  ItemTemuanLaporan? temuanUntukKode(String kode) => temuan[kode];
+  ItemSaranLaporan? saranUntukKode(String kode) => saran[kode];
+
+  factory KontenLaporan.fromJson(Map<String, dynamic> json) {
+    final judul = (json['judulBagian'] as Map<String, dynamic>? ?? {})
+        .map((k, v) => MapEntry(k, v.toString()));
+    final lbl = (json['label'] as Map<String, dynamic>? ?? {})
+        .map((k, v) => MapEntry(k, v.toString()));
+    final sifat = (json['frasaSifat'] as Map<String, dynamic>? ?? {})
+        .map((k, v) => MapEntry(k, v.toString()));
+    final kaki = (json['catatanKaki'] as Map<String, dynamic>? ?? {})
+        .map((k, v) => MapEntry(k, v.toString()));
+    final b = FormatBarisLaporan.fromJson(json['baris'] as Map<String, dynamic>? ?? {});
+
+    final temuanMap = <String, ItemTemuanLaporan>{};
+    final rawTemuan = json['temuan'] as Map<String, dynamic>? ?? {};
+    for (final entry in rawTemuan.entries) {
+      if (entry.value is Map<String, dynamic>) {
+        final item = ItemTemuanLaporan.fromJson(entry.value as Map<String, dynamic>);
+        temuanMap[entry.key] = item;
+        if (item.kode.isNotEmpty) {
+          temuanMap[item.kode] = item;
+        }
+      }
+    }
+
+    final saranMap = <String, ItemSaranLaporan>{};
+    final rawSaran = json['saran'] as Map<String, dynamic>? ?? {};
+    for (final entry in rawSaran.entries) {
+      if (entry.value is Map<String, dynamic>) {
+        final item = ItemSaranLaporan.fromJson(entry.value as Map<String, dynamic>);
+        saranMap[entry.key] = item;
+        if (item.kode.isNotEmpty) {
+          saranMap[item.kode] = item;
+        }
+      }
+    }
+
+    return KontenLaporan(
+      versi: (json['versi'] as num?)?.toInt() ?? 1,
+      judulBagian: judul,
+      label: lbl,
+      frasaSifat: sifat,
+      catatanKaki: kaki,
+      baris: b,
+      temuan: temuanMap,
+      saran: saranMap,
     );
   }
 }

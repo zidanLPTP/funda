@@ -121,7 +121,7 @@ class TombolFunda extends StatelessWidget {
         children: [
           ikon!,
           const SizedBox(width: SpasiFunda.s),
-          widgetTeks,
+          Flexible(child: widgetTeks),
         ],
       );
     }

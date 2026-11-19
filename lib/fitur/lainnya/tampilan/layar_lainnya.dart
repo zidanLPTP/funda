@@ -64,6 +64,13 @@ class LayarLainnya extends StatelessWidget {
           const TeksFunda.judulBagian('Pengelolaan Keuangan'),
           const SizedBox(height: SpasiFunda.m),
           _ItemMenu(
+            ikon: LucideIcons.fileText,
+            judul: 'Laporan Bulanan',
+            keterangan: 'Arus kas, komposisi, anggaran, dan saran per bulan',
+            padaKetuk: () => context.push('/laporan'),
+          ),
+          const SizedBox(height: SpasiFunda.s),
+          _ItemMenu(
             ikon: LucideIcons.pieChart,
             judul: 'Anggaran Bulanan',
             keterangan: 'Rencanakan batas pengeluaran per kategori per bulan',
@@ -134,8 +141,8 @@ class LayarLainnya extends StatelessWidget {
             ikon: LucideIcons.database,
             judul: 'Cadangan & Pemulihan Data',
             keterangan:
-                'Data keuanganmu aman dan tersimpan lokal di perangkat ini',
-            padaKetuk: () => _tampilkanPesan(context, 'Cadangan Data'),
+                'Ekspor dan pulihkan seluruh data keuangan secara lokal',
+            padaKetuk: () => context.push('/cadangan'),
           ),
           const SizedBox(height: SpasiFunda.s),
           _ItemMenu(

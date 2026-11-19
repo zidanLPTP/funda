@@ -109,6 +109,21 @@
 | recent expense feedback | catatan_pengeluaran_terbaru | Generator umpan balik misi pengeluaran terakhir |
 | budget pattern comparison | perbandingan_pola_anggaran | Generator umpan balik perbandingan pola anggaran riil vs 50/30/20 |
 | current month realization | realisasi_anggaran_bulan_ini | Generator umpan balik evaluasi realisasi pos anggaran bulan ini |
+| monthly report | LaporanBulanan | Model agregasi data laporan bulanan murni |
+| monthly report screen | LayarLaporanBulanan | Layar pratinjau bento laporan bulanan (`/laporan`) |
+| report bento card | TampilanKartuLaporan | Komponen presentasional kartu bento laporan |
+| nominal sensor | SensorNominal / terapkanSensor | Fitur menyembunyikan nominal Rupiah pada laporan demi privasi |
+| report image generator | PembuatGambarLaporan | Layanan penangkap kartu bento ke PNG 1080px via RepaintBoundary |
+| report pdf generator | PembuatPdfLaporan | Layanan penyusun dokumen PDF A4 teks asli tertanam font TTF |
+| share service | LayananBagikan | Layanan pembagi berkas laporan dan pembersih cache 24 jam |
+| backup and restore | Cadangan & Pemulihan | Fitur ekspor-impor mandiri basis data lokal (`/cadangan`) |
+| backup screen | LayarCadangan | Layar kontrol cadangan dan pemulihan data |
+| backup repository | CadanganRepositori | Repositori ekspor JSON kanonikal dan pemulihan atomik |
+| backup document | DokumenCadanganFunda | Struktur dokumen JSON v1 dengan checksum SHA-256 |
+| backup preview | PratinjauCadangan | Ringkasan data cadangan sebelum pemulihan dilakukan |
+| safety backup | cadanganKeselamatan | Cadangan otomatis (`sebelum_pemulihan.json`) sebelum penggantian data |
+| backup reminder | PerhitunganPengingatCadangan | Logika pengingat 14 hari pencadangan data di Beranda |
+| schema upgrader | RegistriPeningkatCadangan | Penjaga peningkatan versi skema berkas cadangan lama |
 
 ## Aturan Cabang Kerja (Git)
 - Setiap tahap dikerjakan pada cabang khusus (contoh: `tahap-02-dompet-transaksi`).

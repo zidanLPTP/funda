@@ -174,9 +174,24 @@ Berdasarkan hasil pengujian terisolasi pada 10 iterasi bersih di emulator Pixel 
      - 1_5: `"Buat minimal satu anggaran bulan ini."` dan `"Catat minimal satu pengeluaran."`
      Suite pengujian otomatis `test/konten/kesesuaian_lampiran_test.dart` ditambahkan untuk memastikan tidak ada perubahan kata tanpa persetujuan.
   2. **Format Tanda Minus Rapat U+2212:** Format nominal negatif pada tabel contoh angka dan umpan balik edukatif distandarkan menggunakan minus Unicode U+2212 sebelum "Rp" tanpa spasi (`−Rp900.000`).
-  3. **Profiling Realistis:** Pengujian profiling di Android 16 (API 36) pada volume 5.000 dan 20.000 transaksi membuktikan bahwa komputasi murni logika bisnis dan kueri SQL Tab Belajar hanya memerlukan 25–43 ms (5 kueri SQL teragregasi bebas N+1).
+  3. **Profiling Realistis:** Pengujian profiling di Android 16 (API 36) pada volume 5.000 dan 20.000 transaksi membuktikan bahwa komputasi murni logika bisnis dan kueri SQL Tab Belajar hanya memerlukan 25–43 ms (5 kueri SQL teragregasi bebas N+1). Namun, waktu foto data naik dari 20,55 ms ke 35,15 ms (+71%) saat data bertambah 4x (perilaku sub-linear pemindaian indeks SQLite, bukan strictly konstan O(1)). Selain itu, durasi "Render build widget UI" berkisar 340 hingga 353 ms di emulator.
 - **Rencana Peninjauan:**
-  Pada Tahap 8 (Kurikulum Lengkap Pemula), seluruh berkas pelajaran baru wajib melalui pipeline validasi kesesuaian lampiran otomatis sebelum merge.
+  Pada Tahap 8 (Kurikulum Lengkap Pemula), seluruh berkas pelajaran baru wajib melalui pipeline validasi kesesuaian lampiran otomatis sebelum merge. Durasi "Render build widget UI" (340–353 ms) perlu diukur ulang pada perangkat HP fisik sungguhan di Tahap 12 setelah memastikan jeda buatan harness test tidak ikut terukur.
+
+---
+
+## 15. Pemulihan Cadangan Data, Checksum SHA-256, dan Kebijakan Privasi File (Tahap 7)
+
+- **Konteks:**
+  Pada Tahap 7, fitur cadangan data diekspor sebagai JSON teks terbuka kanonikal dengan ringkasan integritas SHA-256 deterministik. Berkas ini mencakup seluruh tabel pengguna (transaksi, utang, anggaran, profil, progres belajar).
+- **Keputusan:**
+  1. **Transparansi & Portabilitas Teks Terbuka:** Berkas cadangan sengaja tidak dienkripsi dengan kata sandi demi portabilitas, transparansi data, dan menghindari risiko kehilangan data permanen bila pengguna lupa kata sandi lokal (sejalan dengan model *local-first auditability*). Pengguna diberi peringatan eksplisit (*"Berkas cadangan berisi seluruh data keuanganmu dan tidak dienkripsi. Simpan hanya di tempat yang aman."*).
+  2. **Integritas Atomik SQLite:** Pemulihan cadangan memanfaatkan transaksi atomik SQLite dengan penangguhan foreign keys (`PRAGMA defer_foreign_keys = ON;`) dan verifikasi integritas relasional (`PRAGMA foreign_key_check;`) di akhir transaksi. Jika gagal di tengah proses, seluruh perubahan dibatalkan (*rollback*).
+  3. **Cadangan Keselamatan Otomatis:** Sebelum proses pemulihan mengeksekusi penghapusan data lama, dibuat cadangan keselamatan internal otomatis (`sebelum_pemulihan.json`) di direktori dokumen aplikasi agar data pengguna dapat dikembalikan kapan saja.
+  4. **Nonaktifkan Kotlin Incremental di Multi-Drive Windows:** Pengaturan `kotlin.incremental=false` disetel di `android/gradle.properties` untuk mencegah bug kompilasi Kotlin Gradle Plugin pada lingkungan Windows di mana berkas proyek berada pada partisi `D:` sementara cache pub global berada pada partisi `C:`.
+- **Rencana Peninjauan:**
+  Pada rilis pasca-MVP (misalnya Tahap 9 atau versi 1.1), evaluasi penambahan fitur ekspor terenkripsi opsional (AES-GCM 256-bit berbasis kata kunci yang ditentukan pengguna) bagi pengguna tingkat lanjut yang ingin mengunggah cadangan ke penyedia cloud publik.
+
 
 
 

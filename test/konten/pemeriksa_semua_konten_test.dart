@@ -28,6 +28,7 @@ void main() {
 
       File? berkasTesAwal;
       File? berkasRekomendasi;
+      File? berkasLaporan;
 
       // Kumpulkan seluruh berkas JSON
       for (final entitas in dirKonten.listSync(recursive: true)) {
@@ -40,6 +41,10 @@ void main() {
           }
           if (nama == 'tes_awal.json') {
             berkasTesAwal = entitas;
+            continue;
+          }
+          if (nama == 'laporan.json') {
+            berkasLaporan = entitas;
             continue;
           }
           if (nama == 'modul.json') {
@@ -140,6 +145,23 @@ void main() {
           namaBerkas: berkasRekomendasi.path,
         );
         expect(rekomendasi.alasan.isNotEmpty, isTrue);
+      }
+
+      // 5b. Validasi berkas laporan.json bila ada
+      if (berkasLaporan != null) {
+        final rawLaporan = berkasLaporan.readAsStringSync();
+        final laporan = PembacaKonten.uraiLaporan(
+          rawLaporan,
+          namaBerkas: berkasLaporan.path,
+          daftarPeringatan: daftarPeringatan,
+        );
+        expect(laporan.versi, equals(1));
+        expect(laporan.judulBagian.length, equals(7));
+        expect(laporan.label.length, equals(5));
+        expect(laporan.frasaSifat.length, equals(5));
+        expect(laporan.catatanKaki.length, equals(2));
+        expect(laporan.temuan.length, greaterThanOrEqualTo(6));
+        expect(laporan.saran.length, greaterThanOrEqualTo(4));
       }
 
       // 6. Periksa istilah kamus yang tidak pernah dipakai

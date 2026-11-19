@@ -7,6 +7,7 @@ import '../fitur/belajar/tampilan/layar_kuis_modul.dart';
 import '../fitur/belajar/tampilan/layar_pemutar_pelajaran.dart';
 import '../fitur/belajar/tampilan/layar_tes_awal.dart';
 import '../fitur/beranda/tampilan/layar_beranda.dart';
+import '../fitur/cadangan/tampilan/layar_cadangan.dart';
 import '../fitur/catatan/tampilan/layar_catatan.dart';
 import '../fitur/dompet/tampilan/layar_daftar_dompet.dart';
 import '../fitur/galeri/tampilan/layar_galeri.dart';
@@ -14,6 +15,7 @@ import '../fitur/kategori/tampilan/layar_daftar_kategori.dart';
 import '../fitur/kantong/tampilan/layar_daftar_kantong.dart';
 import '../fitur/kekayaan_bersih/tampilan/layar_kekayaan_bersih.dart';
 import '../fitur/lainnya/tampilan/layar_lainnya.dart';
+import '../fitur/laporan/tampilan/layar_laporan_bulanan.dart';
 import '../fitur/pengaturan/tampilan/layar_pengaturan.dart';
 import '../fitur/tagihan/tampilan/layar_form_tagihan.dart';
 import '../fitur/tagihan/tampilan/layar_jadwal_tagihan.dart';
@@ -186,6 +188,18 @@ final ruteFunda = GoRouter(
       parentNavigatorKey: _kunciNavigatorAkar,
       path: '/belajar/tes-awal',
       builder: (context, state) => const LayarTesAwal(),
+    ),
+
+    // Rute Fitur Tahap 7: Laporan Bulanan & Cadangan Data
+    GoRoute(
+      parentNavigatorKey: _kunciNavigatorAkar,
+      path: '/laporan',
+      builder: (context, state) => const LayarLaporanBulanan(),
+    ),
+    GoRoute(
+      parentNavigatorKey: _kunciNavigatorAkar,
+      path: '/cadangan',
+      builder: (context, state) => const LayarCadangan(),
     ),
 
     // Rute Galeri Komponen (hanya tersedia di mode debug)
