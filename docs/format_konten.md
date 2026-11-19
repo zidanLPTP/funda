@@ -371,3 +371,22 @@ Berkas ini adalah sumber kebenaran teks (*single source of truth*) untuk antarmu
 3. **P3 (`beri_label`):** Ada pengeluaran kategori yang belum dilabeli sifat (`belum_dilabeli > 0`).
 4. **P4 (`salin_anggaran`):** Pengguna sudah memiliki anggaran dan semua pos aman terkendali.
 
+---
+
+## 9. Objek Gerbang/Misi & Kunci Umpan Balik Baru (Tahap 8A: Modul 2 & 3)
+
+### 9.1 Objek Gerbang dan Misi (`objek`)
+1. **`tujuan_tabungan`**: Menghitung jumlah pos tujuan berjenis `tabungan` dengan status `aktif` atau `tercapai` (`tabel_tujuan`).
+2. **`isi_tujuan_tabungan`**: Menghitung jumlah entri pengisian kantong berjenis `isi` ke pos tujuan tabungan (`tabel_alokasi_kantong` join `tabel_kantong` join `tabel_tujuan`).
+3. **`pengeluaran_kebutuhan`**: Menghitung jumlah transaksi pengeluaran (`jenis = 'keluar'`) pada kategori yang berlabel sifat `kebutuhan` (`tabel_transaksi` join `tabel_kategori`).
+4. **`tujuan_dana_darurat`**: Menghitung jumlah pos tujuan berjenis `dana_darurat` dengan status `aktif` atau `tercapai` (`tabel_tujuan`).
+5. **`isi_dana_darurat`**: Menghitung jumlah entri pengisian kantong berjenis `isi` ke pos tujuan dana darurat (`tabel_alokasi_kantong` join `tabel_kantong` join `tabel_tujuan`).
+
+### 9.2 Kunci Umpan Balik Misi Nyata (`umpanBalik`)
+1. **`ringkasan_tujuan_tabungan`**: Merangkum capaian tujuan tabungan aktif terdekat (nama, dana terkumpul, target, persentase rapat, serta setoran bulanan yang diperlukan jika ada tenggat).
+2. **`estimasi_tabungan`**: Menghitung sisa target dan proyeksi waktu tercapai (integer ceiling bulan) berdasarkan rata-rata setoran riil 3 bulan kalender, dilengkapi simulasi penambahan Rp50.000 per bulan.
+3. **`pengeluaran_wajib_bulanan`**: Menghitung rata-rata pengeluaran wajib bulanan (kebutuhan pokok + cicilan utang) dari 3 bulan kalender selesai terakhir atau bulan berjalan.
+4. **`target_dana_darurat`**: Menghitung kisaran aturan praktis dana darurat 3 sampai 6 kali pengeluaran wajib bulanan dan menyarankan titik awal 3 kali.
+5. **`progres_dana_darurat`**: Merangkum posisi dana darurat saat ini (Rupiah, persentase) dan mengonversinya ke dalam satuan bulan bertahan (`formatBulanDesimal`).
+
+

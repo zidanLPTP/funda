@@ -1,0 +1,93 @@
+{
+  "id": "dana_darurat_3_2",
+  "modul": "dana_darurat",
+  "judul": "Berapa yang Cukup untukmu?",
+  "durasiMenit": 6,
+  "status": "draf",
+  "aturanPraktis": true,
+  "catatanReviewer": "TODO-VERIFIKASI. (1) Kisaran 3 sampai 6 kali pengeluaran wajib bulanan sebagai dana darurat: umum dijumpai di materi literasi keuangan; periksa sumber resmi (mis. materi edukasi OJK atau perencana keuangan bersertifikat), termasuk apakah kisarannya berbeda menurut status (lajang, menikah, punya tanggungan). (2) Klaim bahwa penghasilan tidak tetap atau punya tanggungan cenderung membutuhkan kisaran lebih tinggi. (3) Definisi pengeluaran wajib (kebutuhan ditambah cicilan).",
+  "gerbang": [],
+  "pemantik": "Kalau dana darurat itu penting, pertanyaan berikutnya: seberapa banyak yang cukup? Jawabannya bergantung pada hidupmu, bukan angka yang sama untuk semua orang.",
+  "kartu": [
+    {
+      "judul": "Mulai dari pengeluaran wajib",
+      "isi": "Dana darurat menopang hidupmu saat penghasilan terganggu. Karena itu hitung {{pengeluaran wajib}} per bulan, yaitu kebutuhan pokok ditambah cicilan. Jajan dan hiburan tidak ikut dihitung, karena bisa dihentikan sementara saat keadaan sulit."
+    },
+    {
+      "judul": "Kisaran aturan praktis",
+      "isi": "Sebagai {{aturan praktis}}, banyak panduan menyebut dana darurat sekitar 3 sampai 6 kali pengeluaran wajib bulanan. Kalau penghasilanmu tidak tetap atau kamu punya tanggungan, kisarannya cenderung lebih tinggi. Ini titik awal, bukan hukum. Sesuaikan dengan kondisimu."
+    },
+    {
+      "judul": "Bertahap lewat tonggak",
+      "isi": "Target penuh bisa terasa jauh. Pecah menjadi {{tonggak}}: satu bulan pengeluaran wajib dulu, lalu dua, lalu tiga. Tiap tonggak sudah memberi bantalan yang lebih baik daripada nol. Rayakan tonggak kecil, lalu lanjut ke tonggak berikutnya."
+    }
+  ],
+  "contohAngka": {
+    "judul": "Contoh pengeluaran wajib Rp1.900.000 per bulan",
+    "baris": [
+      {
+        "label": "Kebutuhan: kos, makan, transportasi, paket data",
+        "jumlah": 1700000
+      },
+      {
+        "label": "Cicilan",
+        "jumlah": 200000
+      },
+      {
+        "label": "Pengeluaran wajib per bulan",
+        "jumlah": 1900000,
+        "ringkasan": true
+      },
+      {
+        "label": "Titik awal, 3 kali pengeluaran wajib",
+        "jumlah": 5700000
+      },
+      {
+        "label": "Kisaran atas, 6 kali pengeluaran wajib",
+        "jumlah": 11400000
+      }
+    ],
+    "kesimpulan": "Targetmu bisa dimulai dari Rp5.700.000. Kalau terasa jauh, mulai dari tonggak pertama: satu bulan pengeluaran wajib, yaitu Rp1.900.000."
+  },
+  "cekPaham": [
+    {
+      "tanya": "Pengeluaran wajibmu Rp2.000.000 per bulan. Berapa titik awal dana darurat dengan kelipatan 3?",
+      "pilihan": [
+        "Rp6.000.000",
+        "Rp2.000.000",
+        "Rp60.000.000"
+      ],
+      "benar": 0,
+      "penjelasan": "Rp2.000.000 dikali 3 hasilnya Rp6.000.000."
+    },
+    {
+      "tanya": "Mana yang sebaiknya tidak dihitung dalam pengeluaran wajib?",
+      "pilihan": [
+        "Langganan hiburan dan jajan yang bisa dihentikan sementara",
+        "Biaya kos",
+        "Cicilan yang sedang berjalan"
+      ],
+      "benar": 0,
+      "penjelasan": "Pengeluaran wajib berisi hal yang tetap harus dibayar saat keadaan sulit. Hiburan dan jajan bisa dihentikan sementara."
+    },
+    {
+      "tanya": "Kenapa dana darurat dibuat bertahap?",
+      "pilihan": [
+        "Target penuh bisa terasa jauh, sementara tiap tonggak sudah memberi bantalan",
+        "Karena dana darurat tidak boleh lebih dari satu bulan",
+        "Karena target boleh dilewati"
+      ],
+      "benar": 0,
+      "penjelasan": "Tonggak kecil lebih mudah dicapai, dan setiap tonggak sudah menambah rasa aman."
+    }
+  ],
+  "misi": {
+    "tipe": "ada_data",
+    "objek": "tujuan_dana_darurat",
+    "min": 1,
+    "judul": "Buat tujuan dana daruratmu",
+    "instruksi": "Buka menu Tujuan, lalu buat tujuan berjenis Dana Darurat. Kamu boleh memulai dari tonggak pertama sebagai targetnya, dan mengubahnya nanti.",
+    "umpanBalik": "target_dana_darurat"
+  },
+  "tindakLanjut": "Tentukan tonggak pertamamu: satu bulan pengeluaran wajib. Tulis angkanya di catatan HP-mu."
+}

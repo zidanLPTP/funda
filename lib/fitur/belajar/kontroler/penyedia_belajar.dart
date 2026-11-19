@@ -535,6 +535,247 @@ final penyediaTeksUmpanBalikMisi = FutureProvider.family<String, String>((ref, k
       final persenSifat = hitungKomposisiSifat(pengeluaranPerSifat);
       return RegistriUmpanBalik.formatKomposisiSifat(persenSifat);
 
+    case 'ringkasan_tujuan_tabungan':
+      final semuaTujuan = await (db.select(db.tabelTujuan)
+            ..where((t) => t.status.equals('aktif') & t.jenis.equals('tabungan')))
+          .get();
+
+      if (semuaTujuan.isEmpty) {
+        return formatRingkasanTujuanTabungan(
+          tujuan: null,
+          waktuSekarang: waktuSekarang,
+        );
+      }
+
+      final daftarTujuan = <DataTujuanTabunganUmpanBalik>[];
+      for (final t in semuaTujuan) {
+        final kantongList = await (db.select(db.tabelKantong)
+              ..where((k) => k.tujuanId.equals(t.id) & k.diarsipkan.equals(false)))
+            .get();
+
+        var saldo = 0;
+        for (final k in kantongList) {
+          final alokasi = await (db.select(db.tabelAlokasiKantong)
+                ..where((a) => a.kantongId.equals(k.id)))
+              .get();
+          for (final a in alokasi) {
+            if (a.jenis == 'isi') {
+              saldo += a.jumlahRupiah;
+            } else if (a.jenis == 'ambil') {
+              saldo -= a.jumlahRupiah;
+            }
+          }
+        }
+
+        daftarTujuan.add(DataTujuanTabunganUmpanBalik(
+          nama: t.nama,
+          danaTerkumpul: saldo,
+          targetRupiah: t.targetRupiah,
+          tenggat: t.tenggat,
+          dibuatPada: t.dibuatPada,
+        ));
+      }
+
+      final tujuanTerpilih = pilihTujuanTabunganUmpanBalik(daftarTujuan);
+      return formatRingkasanTujuanTabungan(
+        tujuan: tujuanTerpilih,
+        waktuSekarang: waktuSekarang,
+      );
+
+    case 'estimasi_tabungan':
+      final semuaTujuanEst = await (db.select(db.tabelTujuan)
+            ..where((t) => t.status.equals('aktif') & t.jenis.equals('tabungan')))
+          .get();
+
+      if (semuaTujuanEst.isEmpty) {
+        return formatEstimasiTabungan(
+          tujuan: null,
+          setoranRataRata: 0,
+        );
+      }
+
+      final mapIdToData = <String, DataTujuanTabunganUmpanBalik>{};
+      for (final t in semuaTujuanEst) {
+        final kantongList = await (db.select(db.tabelKantong)
+              ..where((k) => k.tujuanId.equals(t.id) & k.diarsipkan.equals(false)))
+            .get();
+
+        var saldo = 0;
+        for (final k in kantongList) {
+          final alokasi = await (db.select(db.tabelAlokasiKantong)
+                ..where((a) => a.kantongId.equals(k.id)))
+              .get();
+          for (final a in alokasi) {
+            if (a.jenis == 'isi') {
+              saldo += a.jumlahRupiah;
+            } else if (a.jenis == 'ambil') {
+              saldo -= a.jumlahRupiah;
+            }
+          }
+        }
+
+        mapIdToData[t.id] = DataTujuanTabunganUmpanBalik(
+          nama: t.nama,
+          danaTerkumpul: saldo,
+          targetRupiah: t.targetRupiah,
+          tenggat: t.tenggat,
+          dibuatPada: t.dibuatPada,
+        );
+      }
+
+      final terpilih = pilihTujuanTabunganUmpanBalik(mapIdToData.values.toList());
+      if (terpilih == null) {
+        return 'Belum ada tujuan tabungan.';
+      }
+
+      final idTerpilih = mapIdToData.entries.firstWhere((e) => e.value.nama == terpilih.nama).key;
+      final kantongTerpilih = await (db.select(db.tabelKantong)
+            ..where((k) => k.tujuanId.equals(idTerpilih)))
+          .get();
+
+      final alokasiList = <EntitasAlokasiSimpel>[];
+      for (final k in kantongTerpilih) {
+        final alokasi = await (db.select(db.tabelAlokasiKantong)
+              ..where((a) => a.kantongId.equals(k.id)))
+            .get();
+        for (final a in alokasi) {
+          alokasiList.add(EntitasAlokasiSimpel(
+            jenis: a.jenis,
+            jumlahRupiah: a.jumlahRupiah,
+            waktu: a.waktu,
+          ));
+        }
+      }
+
+      final setoranRata = hitungRataRataSetoranTabungan(
+        daftarAlokasi: alokasiList,
+        waktuSekarang: waktuSekarang,
+      );
+
+      return formatEstimasiTabungan(
+        tujuan: terpilih,
+        setoranRataRata: setoranRata,
+      );
+
+    case 'pengeluaran_wajib_bulanan':
+      final semuaTransaksiKeluar = await (db.select(db.tabelTransaksi)
+            ..where((t) => t.jenis.equals('keluar')))
+          .get();
+
+      final daftarWajib = <ItemPengeluaranWajib>[];
+      for (final t in semuaTransaksiKeluar) {
+        if (t.kategoriId != null) {
+          final kat = await (db.select(db.tabelKategori)
+                ..where((k) => k.id.equals(t.kategoriId!)))
+              .getSingleOrNull();
+          if (kat != null && (kat.sifat == 'kebutuhan' || kat.sifat == 'utang')) {
+            daftarWajib.add(ItemPengeluaranWajib(
+              jumlahRupiah: t.jumlahRupiah,
+              sifat: kat.sifat,
+              waktu: t.waktuTransaksi,
+            ));
+          }
+        }
+      }
+
+      final hasilWajib = hitungPengeluaranWajibBulanan(
+        daftarPengeluaran: daftarWajib,
+        waktuSekarang: waktuSekarang,
+      );
+
+      return formatTeksPengeluaranWajibBulanan(hasilWajib);
+
+    case 'target_dana_darurat':
+      final semuaTransaksiKeluarTarget = await (db.select(db.tabelTransaksi)
+            ..where((t) => t.jenis.equals('keluar')))
+          .get();
+
+      final daftarWajibTarget = <ItemPengeluaranWajib>[];
+      for (final t in semuaTransaksiKeluarTarget) {
+        if (t.kategoriId != null) {
+          final kat = await (db.select(db.tabelKategori)
+                ..where((k) => k.id.equals(t.kategoriId!)))
+              .getSingleOrNull();
+          if (kat != null && (kat.sifat == 'kebutuhan' || kat.sifat == 'utang')) {
+            daftarWajibTarget.add(ItemPengeluaranWajib(
+              jumlahRupiah: t.jumlahRupiah,
+              sifat: kat.sifat,
+              waktu: t.waktuTransaksi,
+            ));
+          }
+        }
+      }
+
+      final hasilWajibTarget = hitungPengeluaranWajibBulanan(
+        daftarPengeluaran: daftarWajibTarget,
+        waktuSekarang: waktuSekarang,
+      );
+
+      return formatTargetDanaDarurat(pengeluaranWajib: hasilWajibTarget);
+
+    case 'progres_dana_darurat':
+      final tujuanDaruratRow = await (db.select(db.tabelTujuan)
+            ..where((t) => t.status.equals('aktif') & t.jenis.equals('dana_darurat'))
+            ..limit(1))
+          .getSingleOrNull();
+
+      DataTujuanDanaDaruratUmpanBalik? tujuanDarurat;
+      if (tujuanDaruratRow != null) {
+        final kantongList = await (db.select(db.tabelKantong)
+              ..where((k) => k.tujuanId.equals(tujuanDaruratRow.id) & k.diarsipkan.equals(false)))
+            .get();
+
+        var saldo = 0;
+        for (final k in kantongList) {
+          final alokasi = await (db.select(db.tabelAlokasiKantong)
+                ..where((a) => a.kantongId.equals(k.id)))
+              .get();
+          for (final a in alokasi) {
+            if (a.jenis == 'isi') {
+              saldo += a.jumlahRupiah;
+            } else if (a.jenis == 'ambil') {
+              saldo -= a.jumlahRupiah;
+            }
+          }
+        }
+
+        tujuanDarurat = DataTujuanDanaDaruratUmpanBalik(
+          danaTerkumpul: saldo,
+          targetRupiah: tujuanDaruratRow.targetRupiah,
+        );
+      }
+
+      final semuaTransaksiKeluarProgres = await (db.select(db.tabelTransaksi)
+            ..where((t) => t.jenis.equals('keluar')))
+          .get();
+
+      final daftarWajibProgres = <ItemPengeluaranWajib>[];
+      for (final t in semuaTransaksiKeluarProgres) {
+        if (t.kategoriId != null) {
+          final kat = await (db.select(db.tabelKategori)
+                ..where((k) => k.id.equals(t.kategoriId!)))
+              .getSingleOrNull();
+          if (kat != null && (kat.sifat == 'kebutuhan' || kat.sifat == 'utang')) {
+            daftarWajibProgres.add(ItemPengeluaranWajib(
+              jumlahRupiah: t.jumlahRupiah,
+              sifat: kat.sifat,
+              waktu: t.waktuTransaksi,
+            ));
+          }
+        }
+      }
+
+      final hasilWajibProgres = hitungPengeluaranWajibBulanan(
+        daftarPengeluaran: daftarWajibProgres,
+        waktuSekarang: waktuSekarang,
+      );
+
+      final w = hasilWajibProgres.total > 0 ? hasilWajibProgres.total : null;
+      return formatProgresDanaDarurat(
+        tujuan: tujuanDarurat,
+        pengeluaranWajibPerBulan: w,
+      );
+
     case 'arus_kas_bulan_ini':
     default:
       final arusKas = ref.watch(penyediaArusKasBulanIni);

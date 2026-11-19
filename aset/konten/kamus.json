@@ -83,5 +83,35 @@
     "istilah": "cicilan",
     "arti": "Pembayaran berkala setiap bulan untuk melunasi kewajiban pinjaman atau utang sampai tuntas.",
     "contohRupiah": "Membayar cicilan motor sebesar Rp650.000 setiap tanggal 10."
+  },
+  {
+    "istilah": "tenggat",
+    "arti": "Batas waktu yang kamu tetapkan untuk mencapai sebuah tujuan.",
+    "contohRupiah": "Tenggat 12 bulan untuk target Rp6.000.000."
+  },
+  {
+    "istilah": "setoran",
+    "arti": "Uang yang kamu sisihkan ke sebuah tujuan pada satu kali pengisian atau tiap bulan.",
+    "contohRupiah": "Setoran Rp250.000 per bulan."
+  },
+  {
+    "istilah": "kantong",
+    "arti": "Penanda bagian saldo sebuah dompet untuk tujuan tertentu. Uangnya tidak berpindah.",
+    "contohRupiah": "Kantong Laptop Skripsi berisi Rp500.000 dari dompet bank."
+  },
+  {
+    "istilah": "saldo bebas",
+    "arti": "Saldo dompet yang belum ditandai untuk tujuan apa pun.",
+    "contohRupiah": "Saldo dompet Rp1.000.000 dengan kantong Rp200.000 berarti saldo bebas Rp800.000."
+  },
+  {
+    "istilah": "pengeluaran wajib",
+    "arti": "Pengeluaran yang tetap harus dibayar saat keadaan sulit, yaitu kebutuhan pokok dan cicilan.",
+    "contohRupiah": "Kos Rp900.000, makan Rp600.000, dan cicilan Rp200.000."
+  },
+  {
+    "istilah": "tonggak",
+    "arti": "Target kecil di tengah jalan menuju target besar.",
+    "contohRupiah": "Tonggak pertama dana darurat: satu bulan pengeluaran wajib, Rp1.900.000."
   }
 ]

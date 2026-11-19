@@ -1,0 +1,81 @@
+{
+  "id": "dana_darurat_3_1",
+  "modul": "dana_darurat",
+  "judul": "Apa Itu Dana Darurat?",
+  "durasiMenit": 5,
+  "status": "draf",
+  "gerbang": [],
+  "pemantik": "Motor mogok di tengah bulan, atau HP rusak saat kamu sedang membutuhkannya. Biayanya datang tanpa janji dan tanpa menunggu gajian.",
+  "kartu": [
+    {
+      "judul": "Bantalan untuk hal tak terduga",
+      "isi": "{{Dana darurat}} adalah uang yang disimpan khusus untuk kejadian mendadak dan penting. Tujuannya supaya kamu tidak perlu berutang atau menjual barang saat kejadian itu datang. Ia bukan tabungan untuk liburan, gadget baru, atau diskon yang menggoda."
+    },
+    {
+      "judul": "Darurat atau bukan? Tiga pertanyaan",
+      "isi": "Tanyakan tiga hal. Pertama, apakah kejadiannya mendadak? Kedua, apakah penting dan sulit ditunda, misalnya soal kesehatan, tempat tinggal, atau kuliah dan pekerjaan? Ketiga, apakah tanpa uang ini kamu terpaksa berutang atau mengorbankan kebutuhan pokok? Kalau ketiganya iya, kemungkinan itu darurat. Diskon besar terasa mendesak, tetapi bukan darurat."
+    },
+    {
+      "judul": "Pisahkan dari uang harian",
+      "isi": "Dana darurat yang bercampur dengan uang harian mudah terpakai tanpa sadar. Memisahkannya memberi jeda antara dorongan membeli dan keputusan memakai. Di Funda, dana darurat punya tujuan khusus, dan hanya satu yang boleh aktif. Itu membantumu menjaganya tetap fokus."
+    }
+  ],
+  "contohAngka": {
+    "judul": "Biaya mendadak Rp1.200.000 di bulan yang uangnya tipis",
+    "baris": [
+      {
+        "label": "Biaya perbaikan HP",
+        "jumlah": 1200000
+      },
+      {
+        "label": "Dana darurat yang tersedia",
+        "jumlah": 3000000
+      },
+      {
+        "label": "Dana darurat setelah dipakai",
+        "jumlah": 1800000,
+        "ringkasan": true
+      }
+    ],
+    "kesimpulan": "Dengan dana darurat, biaya ini tertutup tanpa utang dan tanpa menunda kebutuhan lain. Setelah itu, dana darurat diisi lagi sedikit demi sedikit."
+  },
+  "cekPaham": [
+    {
+      "tanya": "Mana yang termasuk keadaan darurat?",
+      "pilihan": [
+        "Biaya rumah sakit mendadak yang tidak bisa ditunda",
+        "Diskon besar sepatu yang hanya berlaku hari ini",
+        "Ajakan liburan dadakan dari teman"
+      ],
+      "benar": 0,
+      "penjelasan": "Biaya rumah sakit mendadak, penting, dan sulit ditunda. Diskon dan liburan terasa mendesak, tetapi bisa dilewatkan."
+    },
+    {
+      "tanya": "Laptopmu rusak total seminggu sebelum ujian dan kamu belum punya penggantinya. Bagaimana tiga pertanyaan menilainya?",
+      "pilihan": [
+        "Mendadak, penting untuk kuliahmu, dan sulit ditunda, jadi kemungkinan darurat",
+        "Bukan darurat karena laptop itu barang, bukan kesehatan",
+        "Bukan darurat karena bisa menunggu sampai gajian"
+      ],
+      "benar": 0,
+      "penjelasan": "Kejadiannya mendadak dan penting untuk kuliahmu. Tanpa dana, kamu mungkin terpaksa berutang atau menunda hal penting."
+    },
+    {
+      "tanya": "Kenapa dana darurat sebaiknya dipisah dari uang harian?",
+      "pilihan": [
+        "Supaya tidak terpakai tanpa sadar untuk keperluan biasa",
+        "Supaya bisa dipakai untuk belanja bulanan",
+        "Supaya otomatis bertambah sendiri"
+      ],
+      "benar": 0,
+      "penjelasan": "Pemisahan memberi jeda antara dorongan membeli dan keputusan memakai."
+    }
+  ],
+  "misi": {
+    "tipe": "lihat_hitungan",
+    "judul": "Lihat pengeluaran wajibmu",
+    "instruksi": "Buka ringkasan pengeluaran wajibmu, baca angkanya, lalu tekan Mengerti.",
+    "umpanBalik": "pengeluaran_wajib_bulanan"
+  },
+  "tindakLanjut": "Tulis tiga kejadian mendadak yang paling mungkin menimpamu setahun ke depan, misalnya HP rusak atau biaya berobat."
+}

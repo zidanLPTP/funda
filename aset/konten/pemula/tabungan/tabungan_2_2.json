@@ -1,0 +1,95 @@
+{
+  "id": "tabungan_2_2",
+  "modul": "tabungan",
+  "judul": "Bayar Diri Sendiri Dulu",
+  "durasiMenit": 5,
+  "status": "draf",
+  "catatanReviewer": "Kartu 1 memuat klaim perilaku umum (\"pengeluaran cenderung mengisi ruang uang yang tersedia\") dan prinsip \"bayar diri sendiri dulu\". Verifikasi sumber atau lunakkan bila perlu.",
+  "gerbang": [
+    {
+      "tipe": "ada_data",
+      "objek": "tujuan_tabungan",
+      "min": 1,
+      "pesan": "Buat satu tujuan tabungan dulu supaya ada tempat untuk menyisihkan uangmu."
+    }
+  ],
+  "pemantik": "Uang saku atau gaji masuk. Lalu tagihan dan jajan mengambil bagiannya satu per satu. Di akhir bulan, tidak ada yang tersisa untuk ditabung.",
+  "kartu": [
+    {
+      "judul": "Tabungan di depan, bukan dari sisa",
+      "isi": "Banyak orang menabung dari sisa di akhir bulan. Masalahnya, sisa itu sering tidak ada, karena pengeluaran cenderung mengisi ruang uang yang tersedia. Cara lain disebut bayar diri sendiri dulu. Begitu uang masuk, sisihkan bagian tabungan. Baru sisanya dipakai."
+    },
+    {
+      "judul": "Kecil tapi rutin",
+      "isi": "Mulailah dari nominal yang hampir tidak terasa, misalnya Rp50.000 setiap uang masuk. Nominal kecil yang konsisten lebih kuat daripada nominal besar yang berhenti di bulan kedua. Setelah terbiasa, naikkan sedikit demi sedikit sesuai kemampuanmu."
+    },
+    {
+      "judul": "Di Funda, isi kantong tujuanmu",
+      "isi": "Di Funda, kamu mengisi tujuan dari sebuah dompet. {{Kantong}} tujuan hanya menandai bagian saldo, jadi saldo dompet tidak berubah. Yang berkurang adalah {{saldo bebas}}, yaitu uang yang belum punya nama. Kalau mau lebih aman, kamu juga bisa memindahkannya sungguhan ke tempat simpan yang terpisah."
+    }
+  ],
+  "contohAngka": {
+    "judul": "Dua cara menabung dari uang bulanan Rp2.500.000",
+    "baris": [
+      {
+        "label": "Uang masuk bulan ini",
+        "jumlah": 2500000
+      },
+      {
+        "label": "Cara 1, dari sisa: tabungan di akhir bulan",
+        "jumlah": 0
+      },
+      {
+        "label": "Cara 2, di depan: disisihkan saat uang masuk",
+        "jumlah": 200000
+      },
+      {
+        "label": "Cara 2: tersisa untuk pengeluaran lain",
+        "jumlah": 2300000,
+        "ringkasan": true
+      }
+    ],
+    "kesimpulan": "Dalam 6 bulan, cara kedua mengumpulkan Rp1.200.000. Pada contoh ini, cara pertama tidak mengumpulkan apa-apa. Bukan karena niatnya kurang, tetapi karena tidak ada bagian yang disisihkan lebih dulu."
+  },
+  "cekPaham": [
+    {
+      "tanya": "Apa arti \"bayar diri sendiri dulu\"?",
+      "pilihan": [
+        "Menyisihkan bagian tabungan segera setelah uang masuk, sebelum dipakai untuk hal lain",
+        "Membeli sesuatu untuk diri sendiri lebih dulu",
+        "Membayar semua keinginan sebelum kebutuhan"
+      ],
+      "benar": 0,
+      "penjelasan": "Tabungan disisihkan di depan, bukan menunggu sisa di akhir bulan."
+    },
+    {
+      "tanya": "Kamu mengisi kantong tujuan dari sebuah dompet di Funda. Apa yang terjadi pada saldo dompet itu?",
+      "pilihan": [
+        "Saldo dompet tidak berubah, Funda hanya menandai bagiannya",
+        "Saldo dompet berkurang sebesar isinya",
+        "Uang pindah ke rekening bank lain"
+      ],
+      "benar": 0,
+      "penjelasan": "Kantong hanya menandai. Uangmu tidak berpindah, dan yang berkurang adalah saldo bebasnya."
+    },
+    {
+      "tanya": "Mana langkah awal yang paling masuk akal?",
+      "pilihan": [
+        "Mulai dari nominal kecil yang bisa dijalankan rutin",
+        "Menunggu sampai ada sisa yang besar",
+        "Menabung sebesar mungkin lalu berhenti bulan depan"
+      ],
+      "benar": 0,
+      "penjelasan": "Nominal kecil yang konsisten lebih mudah dipertahankan. Setelah terbiasa, kamu bisa menaikkannya."
+    }
+  ],
+  "misi": {
+    "tipe": "ada_data",
+    "objek": "isi_tujuan_tabungan",
+    "min": 1,
+    "judul": "Isi tujuan tabunganmu",
+    "instruksi": "Buka tujuan tabunganmu, tekan Isi, lalu pilih dompet dan jumlahnya. Nominal kecil pun boleh.",
+    "umpanBalik": "ringkasan_tujuan_tabungan"
+  },
+  "tindakLanjut": "Pilih satu waktu tetap untuk mengisi tujuanmu, misalnya setiap gajian atau awal bulan. Lalu pasang pengingat di HP-mu."
+}

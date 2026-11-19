@@ -1163,5 +1163,146 @@ void main() {
         );
       });
     });
+
+    group('Tahap 8A: Validasi Objek Gerbang/Misi dan Kunci Umpan Balik Baru', () {
+      const templatePelajaranValid = '''
+      {
+        "id": "tabungan_2_1",
+        "modul": "tabungan",
+        "judul": "Menabung Itu Soal Tujuan",
+        "durasiMenit": 5,
+        "status": "draf",
+        "gerbang": [],
+        "pemantik": "Pemantik pelajaran yang valid dan cukup panjang.",
+        "kartu": [
+          {"judul": "Judul 1", "isi": "Isi kartu satu"},
+          {"judul": "Judul 2", "isi": "Isi kartu dua"},
+          {"judul": "Judul 3", "isi": "Isi kartu tiga"}
+        ],
+        "contohAngka": {
+          "judul": "Judul Contoh Angka",
+          "baris": [
+            {"label": "Baris 1", "jumlah": 100000}
+          ],
+          "kesimpulan": "Kesimpulan contoh angka"
+        },
+        "cekPaham": [
+          {
+            "tanya": "Pertanyaan satu?",
+            "pilihan": ["Pilihan A", "Pilihan B"],
+            "benar": 0,
+            "penjelasan": "Penjelasan satu"
+          },
+          {
+            "tanya": "Pertanyaan dua?",
+            "pilihan": ["Pilihan A", "Pilihan B"],
+            "benar": 0,
+            "penjelasan": "Penjelasan dua"
+          }
+        ],
+        "misi": {
+          "tipe": "ada_data",
+          "objek": "tujuan_tabungan",
+          "min": 1,
+          "judul": "Buat tujuan tabungan",
+          "instruksi": "Instruksi misi",
+          "umpanBalik": "ringkasan_tujuan_tabungan"
+        },
+        "tindakLanjut": "Tindak lanjut pelajaran valid."
+      }
+      ''';
+
+      test('Kasus 1: objek gerbang tujuan_tabungan_salah ditolak', () {
+        final jsonRusak = templatePelajaranValid.replaceAll(
+          '"gerbang": []',
+          '"gerbang": [{"tipe": "ada_data", "objek": "tujuan_tabungan_salah", "min": 1}]',
+        );
+        expect(
+          () => PembacaKonten.uraiPelajaran(jsonRusak, namaBerkas: 'tabungan_rusak.json'),
+          throwsA(predicate((e) => e is GalatKonten && e.kolom == 'gerbang[0].objek')),
+        );
+      });
+
+      test('Kasus 2: objek gerbang tujuan_dana_darurat_salah ditolak', () {
+        final jsonRusak = templatePelajaranValid.replaceAll(
+          '"gerbang": []',
+          '"gerbang": [{"tipe": "ada_data", "objek": "tujuan_dana_darurat_palsu", "min": 1}]',
+        );
+        expect(
+          () => PembacaKonten.uraiPelajaran(jsonRusak, namaBerkas: 'dana_darurat_rusak.json'),
+          throwsA(predicate((e) => e is GalatKonten && e.kolom == 'gerbang[0].objek')),
+        );
+      });
+
+      test('Kasus 3: objek misi isi_tujuan_tabungan_palsu ditolak', () {
+        final jsonRusak = templatePelajaranValid.replaceAll(
+          '"objek": "tujuan_tabungan"',
+          '"objek": "isi_tujuan_tabungan_palsu"',
+        );
+        expect(
+          () => PembacaKonten.uraiPelajaran(jsonRusak, namaBerkas: 'tabungan_rusak.json'),
+          throwsA(predicate((e) => e is GalatKonten && e.kolom == 'misi.objek')),
+        );
+      });
+
+      test('Kasus 4: objek misi pengeluaran_kebutuhan_palsu ditolak', () {
+        final jsonRusak = templatePelajaranValid.replaceAll(
+          '"objek": "tujuan_tabungan"',
+          '"objek": "pengeluaran_kebutuhan_typo"',
+        );
+        expect(
+          () => PembacaKonten.uraiPelajaran(jsonRusak, namaBerkas: 'dana_darurat_rusak.json'),
+          throwsA(predicate((e) => e is GalatKonten && e.kolom == 'misi.objek')),
+        );
+      });
+
+      test('Kasus 5: kunci umpan balik ringkasan_tujuan_tabungan_rusak ditolak', () {
+        final jsonRusak = templatePelajaranValid.replaceAll(
+          '"umpanBalik": "ringkasan_tujuan_tabungan"',
+          '"umpanBalik": "ringkasan_tujuan_tabungan_rusak"',
+        );
+        expect(
+          () => PembacaKonten.uraiPelajaran(jsonRusak, namaBerkas: 'tabungan_rusak.json'),
+          throwsA(predicate((e) => e is GalatKonten && e.kolom == 'misi.umpanBalik')),
+        );
+      });
+
+      test('Kasus 6: kunci umpan balik estimasi_tabungan_salah ditolak', () {
+        final jsonRusak = templatePelajaranValid.replaceAll(
+          '"umpanBalik": "ringkasan_tujuan_tabungan"',
+          '"umpanBalik": "estimasi_tabungan_salah"',
+        );
+        expect(
+          () => PembacaKonten.uraiPelajaran(jsonRusak, namaBerkas: 'tabungan_rusak.json'),
+          throwsA(predicate((e) => e is GalatKonten && e.kolom == 'misi.umpanBalik')),
+        );
+      });
+
+      test('Kasus 7 (pembuktian positif): 5 objek baru dan 5 kunci umpan balik baru valid', () {
+        const objekBaru = [
+          'tujuan_tabungan',
+          'isi_tujuan_tabungan',
+          'pengeluaran_kebutuhan',
+          'tujuan_dana_darurat',
+          'isi_dana_darurat',
+        ];
+        const umpanBalikBaru = [
+          'ringkasan_tujuan_tabungan',
+          'estimasi_tabungan',
+          'pengeluaran_wajib_bulanan',
+          'target_dana_darurat',
+          'progres_dana_darurat',
+        ];
+        for (var i = 0; i < 5; i++) {
+          final jsonUji = templatePelajaranValid
+              .replaceAll('"tujuan_tabungan"', '"${objekBaru[i]}"')
+              .replaceAll('"ringkasan_tujuan_tabungan"', '"${umpanBalikBaru[i]}"');
+          expect(
+            () => PembacaKonten.uraiPelajaran(jsonUji, namaBerkas: 'uji_valid_$i.json'),
+            returnsNormally,
+          );
+        }
+      });
+    });
   });
 }

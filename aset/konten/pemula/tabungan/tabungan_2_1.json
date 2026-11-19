@@ -1,0 +1,86 @@
+{
+  "id": "tabungan_2_1",
+  "modul": "tabungan",
+  "judul": "Menabung Itu Soal Tujuan",
+  "durasiMenit": 5,
+  "status": "draf",
+  "gerbang": [],
+  "pemantik": "Kamu sering bilang, \"Nanti mau nabung.\" Tapi uangnya selalu habis lebih dulu. Mungkin masalahnya bukan niat, tetapi tujuannya belum jelas.",
+  "kartu": [
+    {
+      "judul": "Uang tanpa nama gampang terpakai",
+      "isi": "Uang yang tidak punya tujuan terasa bebas dipakai kapan saja. Karena itu, menabung tanpa tujuan sering berhenti di tengah jalan. Uang yang punya nama dan alasan lebih mudah dijaga. Setiap kali ingin memakainya, kamu ingat untuk apa ia disimpan."
+    },
+    {
+      "judul": "Tiga bagian tujuan yang jelas",
+      "isi": "Tujuan tabungan yang jelas punya tiga bagian. Pertama, nama, misalnya laptop untuk skripsi. Kedua, target, misalnya Rp6.000.000. Ketiga, {{tenggat}}, misalnya 12 bulan lagi. Dari target dan tenggat, kamu bisa menghitung berapa yang perlu disisihkan tiap bulan. Tanpa tenggat, tujuan mudah terus tertunda."
+    },
+    {
+      "judul": "Mulai dari satu tujuan",
+      "isi": "Mulailah dari satu tujuan yang paling terasa penting. Terlalu banyak tujuan membuat uangmu terpecah, dan semuanya terasa jauh. Kalau targetnya besar, pecah menjadi tahap yang lebih kecil. Setiap tahap yang tercapai memberi alasan untuk lanjut."
+    }
+  ],
+  "contohAngka": {
+    "judul": "Dari target ke setoran bulanan",
+    "baris": [
+      {
+        "label": "Target laptop untuk skripsi",
+        "jumlah": 6000000
+      },
+      {
+        "label": "Sudah terkumpul",
+        "jumlah": 0
+      },
+      {
+        "label": "Disisihkan per bulan kalau tenggatnya 12 bulan",
+        "jumlah": 500000
+      },
+      {
+        "label": "Disisihkan per bulan kalau tenggatnya 18 bulan",
+        "jumlah": 333334
+      }
+    ],
+    "kesimpulan": "Target Rp6.000.000 dalam 12 bulan berarti sekitar Rp500.000 per bulan. Kalau terasa berat, tenggat bisa diperpanjang menjadi 18 bulan, dengan setoran sekitar Rp333.334 per bulan (dibulatkan ke atas)."
+  },
+  "cekPaham": [
+    {
+      "tanya": "Kenapa tabungan yang punya tujuan lebih mudah bertahan?",
+      "pilihan": [
+        "Uangnya punya nama dan alasan, jadi lebih sulit terpakai tanpa sadar",
+        "Karena tabungan dengan tujuan selalu berbunga lebih tinggi",
+        "Karena uangnya otomatis tidak bisa diambil"
+      ],
+      "benar": 0,
+      "penjelasan": "Uang yang punya nama dan alasan lebih jarang terpakai tanpa sadar. Bunga dan akses tidak ada hubungannya dengan tujuan."
+    },
+    {
+      "tanya": "Mana tujuan tabungan yang paling jelas?",
+      "pilihan": [
+        "Laptop untuk skripsi, Rp6.000.000, dalam 12 bulan",
+        "Ingin punya tabungan yang banyak",
+        "Menabung kalau ada sisa"
+      ],
+      "benar": 0,
+      "penjelasan": "Tujuan yang jelas punya nama, target, dan tenggat. Dari ketiganya, setoran bulanan bisa dihitung."
+    },
+    {
+      "tanya": "Tujuan Rp3.000.000 dalam 10 bulan. Berapa yang disisihkan per bulan?",
+      "pilihan": [
+        "Rp300.000",
+        "Rp30.000",
+        "Rp3.000.000"
+      ],
+      "benar": 0,
+      "penjelasan": "Rp3.000.000 dibagi 10 bulan hasilnya Rp300.000 per bulan."
+    }
+  ],
+  "misi": {
+    "tipe": "ada_data",
+    "objek": "tujuan_tabungan",
+    "min": 1,
+    "judul": "Buat tujuan tabunganmu",
+    "instruksi": "Buka menu Tujuan, lalu buat satu tujuan tabungan. Isi nama, target, dan tenggat bila kamu sudah tahu.",
+    "umpanBalik": "ringkasan_tujuan_tabungan"
+  },
+  "tindakLanjut": "Untuk dipikirkan, tidak perlu dijawab di aplikasi: kalau tujuan ini tercapai, apa yang berubah untukmu?"
+}

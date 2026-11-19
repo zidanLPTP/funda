@@ -5,6 +5,42 @@ Format penulisan mengacu pada standar Keep a Changelog dan penamaan commit Funda
 
 ---
 
+## [0.10.0] - 2026-11-19 — Tahap 8A: Modul 2 "Tabungan" & Modul 3 "Dana Darurat"
+
+Tahap 8A mengimplementasikan konten lengkap Modul 2 ("Tabungan": 3 pelajaran, kuis akhir 5 dari 10 soal, kamus baru) dan Modul 3 ("Dana Darurat": 3 pelajaran, kuis akhir 5 dari 10 soal, kamus baru) beserta mesin pendukungnya, agregasi SQL agregat pada SATU foto data, 5 fungsi murni umpan balik belajar berbasis data pengguna nyata, unit test kesesuaian lampiran kata per kata, widget test, penutupan utang Langkah 0(c), dan pengujian integrasi emulator dengan tangkapan layar resmi.
+
+### Ditambahkan & Diperbarui
+- **Konten Edukasi Resmi Modul 2 & 3 (`aset/konten/pemula/`):**
+  - `tabungan/modul.json`: Gerbang `modul_selesai anggaran_arus_kas` DAN `ada_data anggaran min 1`, bankSoal kuis 10 butir berpelajaranId valid.
+  - `tabungan/tabungan_2_1.json`: "Menabung Itu Soal Tujuan", misi `ada_data` `tujuan_tabungan` min 1, umpanBalik `ringkasan_tujuan_tabungan`.
+  - `tabungan/tabungan_2_2.json`: "Bayar Diri Sendiri Dulu", gerbang `ada_data tujuan_tabungan min 1`, misi `ada_data` `isi_tujuan_tabungan` min 1, catatanReviewer verifikasi perilaku.
+  - `tabungan/tabungan_2_3.json`: "Menghitung Kecepatan Menabung", gerbang `ada_data isi_tujuan_tabungan min 1`, misi `lihat_hitungan`, umpanBalik `estimasi_tabungan`.
+  - `dana_darurat/modul.json`: Gerbang `modul_selesai tabungan` DAN `ada_data pengeluaran_kebutuhan min 3`, bankSoal kuis 10 butir dengan penanda aturan praktis pada soal 5 & 6.
+  - `dana_darurat/dana_darurat_3_1.json`: "Apa Itu Dana Darurat?", misi `lihat_hitungan`, umpanBalik `pengeluaran_wajib_bulanan`.
+  - `dana_darurat/dana_darurat_3_2.json`: "Berapa yang Cukup untukmu?", penanda `aturanPraktis: true` dan catatanReviewer TODO-VERIFIKASI, misi `ada_data` `tujuan_dana_darurat` min 1, umpanBalik `target_dana_darurat`.
+  - `dana_darurat/dana_darurat_3_3.json`: "Mengisi Dana Darurat Sedikit demi Sedikit", gerbang `ada_data tujuan_dana_darurat min 1`, misi `ada_data` `isi_dana_darurat` min 1, umpanBalik `progres_dana_darurat`.
+- **Ekstensi Kamus Keuangan (`aset/konten/kamus.json`):**
+  - Menambahkan 6 istilah baru: `tenggat`, `setoran`, `kantong`, `saldo bebas`, `pengeluaran wajib`, `tonggak` dengan definisi dan contoh Rupiah konkret.
+- **Mesin Pendukung Gerbang & Misi (`lib/perhitungan/perhitungan_belajar.dart`, `lib/data/repositori/foto_data_repositori.dart`, `lib/fitur/belajar/model/registri_misi.dart`):**
+  - Memperluas `FotoDataPengguna` dengan 5 bidang agregat: `jumlahTujuanTabungan`, `jumlahIsiTujuanTabungan`, `jumlahPengeluaranKebutuhan`, `jumlahTujuanDanaDarurat`, `jumlahIsiDanaDarurat`.
+  - Menambahkan 5 subkueri SQLite di dalam customSelect agregasi tunggal di `FotoDataRepositori`.
+  - Memperbarui rute navigasi interaktif pada `ambilRutePengisianObjek` untuk tujuan tabungan, kantong, dan transaksi pengeluaran kebutuhan.
+- **Fungsi Murni Umpan Balik Belajar (`lib/perhitungan/perhitungan_umpan_balik_belajar.dart`):**
+  - `formatBulanDesimal(x)`: Format desimal koma Indonesia (mis. "1,5", bulat "3", nol "0").
+  - `hitungEstimasiBulan(sisa, setoran)`: Pembulatan ke atas (integer ceiling).
+  - `hitungRataRataSetoranTabungan(...)`: Jendela 3 bulan kalender berjalan/lampau.
+  - `hitungPengeluaranWajibBulanan(...)`: Rata-rata kebutuhan + cicilan utang 3 bulan selesai terakhir atau bulan berjalan.
+  - `formatRingkasanTujuanTabungan(...)`, `formatEstimasiTabungan(...)`, `formatTeksPengeluaranWajibBulanan(...)`, `formatTargetDanaDarurat(...)`, `formatProgresDanaDarurat(...)`.
+- **Pengujian Komprehensif:**
+  - `test/konten/kesesuaian_lampiran_test.dart`: Uji kesesuaian kata per kata seluruh teks JSON Modul 2 & 3 terhadap dokumen lampiran resmi.
+  - `test/fitur/pemeriksa_konten_rusak_test.dart`: 7 kasus uji validasi penolakan objek gerbang/misi dan kunci umpan balik baru.
+  - `test/perhitungan/perhitungan_umpan_balik_tahap_08a_test.dart`: 33 kasus uji fungsi murni umpan balik dengan vektor hitungan tangan.
+  - `test/performa/performa_belajar_tahap_08a_test.dart`: Uji kesetaraan agregasi SQL vs fungsi murni dan EXPLAIN QUERY PLAN untuk 5 subkueri baru.
+  - `test/fitur/belajar_tahap_08a_widget_test.dart`: Widget test contohAngka 6 pelajaran, kartu misi 5 umpan balik, kuis modul, dan skala teks 2.0.
+  - `integration_test/tahap_08a_emulator_test.dart`: Pengujian E2E di emulator Pixel 8, penutupan Langkah 0(c), dan benchmark 20.000 transaksi.
+
+---
+
 ## [0.9.1] - 2026-11-19 — Penyelarasan Tahap 7 (Tahap 7-R)
 
 Tahap 7-R: Penyelarasan Laporan Bulanan & Cadangan Data, Penegakan Aturan Pengujian Anti-Menggantung Terpusat, Optimasi Agregasi SQL Laporan (< 15 ms), Penjaga Skema & Peningkat Cadangan, Verifikasi Font TTF U+2212 & Ekstraksi ToUnicode CMap PDF, Pengujian Regresi Tahap 5 di Emulator, dan Validasi Alur UI End-to-End dengan 7 Tangkapan Layar Resmi Emulator.

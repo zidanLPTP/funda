@@ -67,6 +67,11 @@ class PembacaKonten {
     'utang',
     'kategori',
     'profil',
+    'tujuan_tabungan',
+    'isi_tujuan_tabungan',
+    'pengeluaran_kebutuhan',
+    'tujuan_dana_darurat',
+    'isi_dana_darurat',
   };
   static const Set<String> umpanBalikMisiValid = {
     'catatan_pengeluaran_terbaru',
@@ -74,6 +79,11 @@ class PembacaKonten {
     'komposisi_sifat_bulan_ini',
     'perbandingan_pola_anggaran',
     'realisasi_anggaran_bulan_ini',
+    'ringkasan_tujuan_tabungan',
+    'estimasi_tabungan',
+    'pengeluaran_wajib_bulanan',
+    'target_dana_darurat',
+    'progres_dana_darurat',
   };
 
   /// Mengurai string JSON kamus menjadi daftar istilah terindeks.

@@ -126,6 +126,16 @@
 | schema upgrader | RegistriPeningkatCadangan | Penjaga peningkatan versi skema berkas cadangan lama |
 | loading indicator | IndikatorMemuat | Komponen pemuat terpusat pengganti Circular/LinearProgressIndicator dengan kontrol tanpa animasi untuk pengujian |
 | test pump helper | pompaAman / pompaHingga / pompaHinggaAda | Pembantu pengujian widget anti-menggantung berbatas waktu |
+| savings deadline | tenggat | Waktu batas target tabungan (`DateTime?`) |
+| savings deposit | setoran | Alokasi dana berkala ke pos tujuan tabungan/dana darurat |
+| free balance | saldo bebas | Saldo dompet yang belum dialokasikan ke kantong tujuan mana pun |
+| mandatory expense | pengeluaran wajib | Pengeluaran pokok (kebutuhan ditambah cicilan utang) |
+| milestone | tonggak | Tahapan pencapaian bertahap dana darurat (1 bulan, 2 bulan, dst.) |
+| savings goal summary feedback | ringkasan_tujuan_tabungan | Umpan balik capaian dan estimasi setoran tujuan tabungan |
+| savings speed estimate feedback | estimasi_tabungan | Umpan balik proyeksi waktu tercapai target tabungan |
+| mandatory expense feedback | pengeluaran_wajib_bulanan | Umpan balik rata-rata pengeluaran wajib bulanan |
+| emergency fund target feedback | target_dana_darurat | Umpan balik rekomendasi kelipatan 3-6 kali pengeluaran wajib |
+| emergency fund progress feedback | progres_dana_darurat | Umpan balik progres dana darurat dalam satuan bulan bertahan |
 
 ## Aturan Cabang Kerja (Git)
 - Setiap tahap dikerjakan pada cabang khusus (contoh: `tahap-02-dompet-transaksi`).

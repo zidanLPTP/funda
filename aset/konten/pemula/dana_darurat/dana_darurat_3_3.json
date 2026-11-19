@@ -1,0 +1,93 @@
+{
+  "id": "dana_darurat_3_3",
+  "modul": "dana_darurat",
+  "judul": "Mengisi Dana Darurat Sedikit demi Sedikit",
+  "durasiMenit": 6,
+  "status": "draf",
+  "gerbang": [
+    {
+      "tipe": "ada_data",
+      "objek": "tujuan_dana_darurat",
+      "min": 1,
+      "pesan": "Buat tujuan Dana Darurat dulu supaya ada tempat untuk mengisinya."
+    }
+  ],
+  "pemantik": "Tujuan dana darurat sudah ada, tetapi isinya masih nol. Pertanyaannya: mulai mengisi dari mana tanpa mengganggu kebutuhan?",
+  "kartu": [
+    {
+      "judul": "Isi dengan ritme",
+      "isi": "Isi dana darurat dengan prinsip yang sama seperti tabungan: bayar diri sendiri dulu. Sisihkan nominal kecil setiap uang masuk. Uang tambahan yang tidak rutin, seperti bonus atau hadiah, boleh sebagian masuk ke sini. Ritme yang konsisten lebih penting daripada jumlahnya."
+    },
+    {
+      "judul": "Mengambil dengan aturan",
+      "isi": "Sebelum mengambil dana darurat, jalankan tiga pertanyaan darurat. Kalau lolos, ambil seperlunya dan tulis alasannya di catatan. Setelah kejadian selesai, isi lagi secara bertahap sampai ke target. Catatan alasan membantumu melihat apakah pemakaiannya benar-benar darurat."
+    },
+    {
+      "judul": "Ukur dalam bulan",
+      "isi": "Selain Rupiah, ukur dana daruratmu dalam bulan. Caranya, bagi dana yang terkumpul dengan pengeluaran wajib per bulan. Hasilnya menunjukkan berapa lama kamu bisa bertahan kalau penghasilan terhenti. Dari satu bulan menjadi dua, lalu tiga, kemajuanmu terasa nyata."
+    }
+  ],
+  "contohAngka": {
+    "judul": "Mengisi dana darurat Rp5.700.000 dengan Rp475.000 per bulan",
+    "baris": [
+      {
+        "label": "Target dana darurat",
+        "jumlah": 5700000
+      },
+      {
+        "label": "Setoran per bulan",
+        "jumlah": 475000
+      },
+      {
+        "label": "Total setoran setelah 12 bulan",
+        "jumlah": 5700000
+      },
+      {
+        "label": "Pengeluaran wajib per bulan",
+        "jumlah": 1900000
+      }
+    ],
+    "kesimpulan": "Dengan Rp475.000 per bulan, target Rp5.700.000 tercapai dalam 12 bulan. Setiap Rp1.900.000 yang terkumpul berarti satu bulan lagi kamu bisa bertahan."
+  },
+  "cekPaham": [
+    {
+      "tanya": "Dana darurat Rp3.800.000 dan pengeluaran wajib Rp1.900.000 per bulan. Bertahan berapa bulan?",
+      "pilihan": [
+        "2 bulan",
+        "1 bulan",
+        "4 bulan"
+      ],
+      "benar": 0,
+      "penjelasan": "Rp3.800.000 dibagi Rp1.900.000 hasilnya 2 bulan."
+    },
+    {
+      "tanya": "Dana darurat terpakai untuk biaya berobat. Langkah berikutnya?",
+      "pilihan": [
+        "Mengisinya kembali sedikit demi sedikit sampai ke target",
+        "Membiarkannya kosong",
+        "Menganggapnya sudah selesai selamanya"
+      ],
+      "benar": 0,
+      "penjelasan": "Dana darurat perlu diisi ulang supaya siap untuk kejadian berikutnya."
+    },
+    {
+      "tanya": "Mana yang paling tepat dilakukan sebelum mengambil dana darurat?",
+      "pilihan": [
+        "Memeriksa tiga pertanyaan darurat: mendadak, penting dan sulit ditunda, dan tanpa uang ini kamu terpaksa berutang atau mengorbankan kebutuhan pokok",
+        "Memeriksa apakah ada diskon",
+        "Memeriksa apakah temanmu juga membeli"
+      ],
+      "benar": 0,
+      "penjelasan": "Tiga pertanyaan itu membantumu menilai apakah kejadiannya benar-benar darurat."
+    }
+  ],
+  "misi": {
+    "tipe": "ada_data",
+    "objek": "isi_dana_darurat",
+    "min": 1,
+    "judul": "Isi dana daruratmu",
+    "instruksi": "Buka tujuan Dana Darurat, tekan Isi, lalu pilih dompet dan jumlahnya. Nominal kecil pun boleh.",
+    "umpanBalik": "progres_dana_darurat"
+  },
+  "tindakLanjut": "Pilih tanggal rutin untuk mengisi dana darurat, misalnya sehari setelah uang masuk, lalu pasang pengingat di HP-mu. Di dunia nyata, kamu juga bisa menyimpannya terpisah dari uang harian."
+}

@@ -173,6 +173,7 @@ final ruteFunda = GoRouter(
       parentNavigatorKey: _kunciNavigatorAkar,
       path: '/belajar/pelajaran/:modulId/:pelajaranId',
       builder: (context, state) => LayarPemutarPelajaran(
+        key: ValueKey(state.pathParameters['pelajaranId']!),
         modulId: state.pathParameters['modulId']!,
         pelajaranId: state.pathParameters['pelajaranId']!,
       ),
@@ -181,6 +182,7 @@ final ruteFunda = GoRouter(
       parentNavigatorKey: _kunciNavigatorAkar,
       path: '/belajar/kuis/:modulId',
       builder: (context, state) => LayarKuisModul(
+        key: ValueKey(state.pathParameters['modulId']!),
         modulId: state.pathParameters['modulId']!,
       ),
     ),

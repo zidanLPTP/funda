@@ -1,20 +1,155 @@
 {
-    "kuis":  {
-                 "jumlahSoal":  0,
-                 "bankSoal":  [
-
-                              ]
-             },
-    "id":  "dana_darurat",
-    "tersedia":  false,
-    "urutan":  3,
-    "gerbang":  [
-
-                ],
-    "deskripsiSingkat":  "Pondasi ketenangan finansial menghadapi peristiwa tak terduga dalam hidup.",
-    "daftarPelajaran":  [
-
-                        ],
-    "tingkat":  "pemula",
-    "judul":  "Dana Darurat"
+  "id": "dana_darurat",
+  "judul": "Dana Darurat",
+  "tingkat": "pemula",
+  "urutan": 3,
+  "deskripsiSingkat": "Pondasi ketenangan finansial menghadapi peristiwa tak terduga dalam hidup.",
+  "tersedia": true,
+  "gerbang": [
+    {
+      "tipe": "modul_selesai",
+      "modulId": "tabungan",
+      "pesan": "Selesaikan Modul 2 dulu."
+    },
+    {
+      "tipe": "ada_data",
+      "objek": "pengeluaran_kebutuhan",
+      "min": 3,
+      "pesan": "Lalu catat minimal 3 pengeluaran kebutuhan, misalnya makan, kos, atau transportasi, supaya hitungan dana daruratmu memakai data nyata."
+    }
+  ],
+  "daftarPelajaran": [
+    "dana_darurat_3_1",
+    "dana_darurat_3_2",
+    "dana_darurat_3_3"
+  ],
+  "kuis": {
+    "jumlahSoal": 5,
+    "bankSoal": [
+      {
+        "id": "soal_3_1",
+        "pelajaranId": "dana_darurat_3_1",
+        "tanya": "Apa tujuan dana darurat?",
+        "pilihan": [
+          "Menutup kejadian mendadak dan penting tanpa harus berutang",
+          "Membiayai liburan tahunan",
+          "Menambah uang jajan"
+        ],
+        "benar": 0,
+        "penjelasan": "Dana darurat disiapkan untuk kejadian mendadak dan penting, bukan untuk keinginan."
+      },
+      {
+        "id": "soal_3_2",
+        "pelajaranId": "dana_darurat_3_1",
+        "tanya": "Mana yang BUKAN bagian dari tiga pertanyaan darurat?",
+        "pilihan": [
+          "Apakah barangnya sedang diskon?",
+          "Apakah kejadiannya mendadak?",
+          "Apakah penting dan sulit ditunda?"
+        ],
+        "benar": 0,
+        "penjelasan": "Diskon tidak membuat sesuatu menjadi darurat. Tiga pertanyaan menilai kejadian, bukan harga."
+      },
+      {
+        "id": "soal_3_3",
+        "pelajaranId": "dana_darurat_3_1",
+        "tanya": "Seseorang memakai dana darurat untuk tiket konser yang hampir habis. Menurut tiga pertanyaan, ini bagaimana?",
+        "pilihan": [
+          "Bukan darurat, karena bisa ditunda dan tidak menyangkut kebutuhan pokok",
+          "Darurat, karena kesempatannya terbatas",
+          "Darurat, karena uangnya sudah tersedia"
+        ],
+        "benar": 0,
+        "penjelasan": "Konser menyenangkan, tetapi bisa ditunda dan tidak menyangkut kebutuhan pokok."
+      },
+      {
+        "id": "soal_3_4",
+        "pelajaranId": "dana_darurat_3_2",
+        "tanya": "Pengeluaran wajibmu Rp1.500.000 per bulan. Kisaran 3 sampai 6 kali menghasilkan berapa?",
+        "pilihan": [
+          "Rp4.500.000 sampai Rp9.000.000",
+          "Rp3.000.000 sampai Rp6.000.000",
+          "Rp1.500.000 sampai Rp4.500.000"
+        ],
+        "benar": 0,
+        "penjelasan": "Rp1.500.000 dikali 3 adalah Rp4.500.000, dan dikali 6 adalah Rp9.000.000."
+      },
+      {
+        "id": "soal_3_5",
+        "pelajaranId": "dana_darurat_3_2",
+        "aturanPraktis": true,
+        "catatanReviewer": "TODO-VERIFIKASI (lihat catatan pelajaran 3_2)",
+        "tanya": "Kisaran 3 sampai 6 kali pengeluaran wajib sebaiknya diperlakukan sebagai apa?",
+        "pilihan": [
+          "Titik awal yang boleh disesuaikan dengan kondisimu",
+          "Aturan hukum yang harus dipatuhi",
+          "Angka yang sama untuk semua orang"
+        ],
+        "benar": 0,
+        "penjelasan": "Kisaran itu aturan praktis. Kondisi tiap orang berbeda, jadi angkanya boleh bergeser."
+      },
+      {
+        "id": "soal_3_6",
+        "pelajaranId": "dana_darurat_3_2",
+        "aturanPraktis": true,
+        "catatanReviewer": "TODO-VERIFIKASI (lihat catatan pelajaran 3_2)",
+        "tanya": "Penghasilanmu tidak tetap dan kamu punya tanggungan. Kemungkinan kebutuhan dana daruratmu?",
+        "pilihan": [
+          "Cenderung lebih besar dari kisaran bawah",
+          "Pasti nol",
+          "Selalu sama dengan orang yang bergaji tetap"
+        ],
+        "benar": 0,
+        "penjelasan": "Penghasilan yang tidak pasti dan tanggungan biasanya membuat bantalan yang lebih besar terasa lebih aman."
+      },
+      {
+        "id": "soal_3_7",
+        "pelajaranId": "dana_darurat_3_2",
+        "tanya": "Mana yang paling tepat sebagai tonggak pertama dana darurat?",
+        "pilihan": [
+          "Satu bulan pengeluaran wajib",
+          "Sepuluh bulan pengeluaran wajib",
+          "Seluruh penghasilan setahun"
+        ],
+        "benar": 0,
+        "penjelasan": "Tonggak pertama sebaiknya terjangkau. Satu bulan pengeluaran wajib sudah memberi bantalan awal."
+      },
+      {
+        "id": "soal_3_8",
+        "pelajaranId": "dana_darurat_3_3",
+        "tanya": "Dana darurat Rp5.700.000 dan pengeluaran wajib Rp1.900.000 per bulan. Setara berapa bulan?",
+        "pilihan": [
+          "3 bulan",
+          "2 bulan",
+          "6 bulan"
+        ],
+        "benar": 0,
+        "penjelasan": "Rp5.700.000 dibagi Rp1.900.000 hasilnya 3 bulan."
+      },
+      {
+        "id": "soal_3_9",
+        "pelajaranId": "dana_darurat_3_3",
+        "tanya": "Kenapa menulis catatan alasan saat mengambil dana darurat itu berguna?",
+        "pilihan": [
+          "Jejaknya membantu menilai apakah pemakaiannya benar-benar darurat",
+          "Karena aplikasi memakainya untuk menghitung bunga",
+          "Supaya saldo bertambah"
+        ],
+        "benar": 0,
+        "penjelasan": "Catatan alasan membantumu mengevaluasi kebiasaan memakai dana darurat."
+      },
+      {
+        "id": "soal_3_10",
+        "pelajaranId": "dana_darurat_3_3",
+        "tanya": "Cara mengisi dana darurat yang paling berkelanjutan?",
+        "pilihan": [
+          "Setoran kecil rutin setelah uang masuk",
+          "Sekali besar lalu berhenti",
+          "Hanya saat ada sisa di akhir bulan"
+        ],
+        "benar": 0,
+        "penjelasan": "Ritme yang konsisten lebih mudah dipertahankan daripada setoran besar yang tidak berlanjut."
+      }
+    ]
+  }
 }

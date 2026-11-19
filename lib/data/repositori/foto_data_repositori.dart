@@ -46,7 +46,12 @@ class FotoDataRepositori {
             FROM tabel_penyesuaian_utang py
             WHERE py.utang_id = u.id
           ), 0)
-        ), 0) FROM tabel_utang u WHERE u.status = 'aktif') as sisa_utang
+        ), 0) FROM tabel_utang u WHERE u.status = 'aktif') as sisa_utang,
+        (SELECT COUNT(*) FROM tabel_tujuan WHERE jenis = 'tabungan' AND status IN ('aktif', 'tercapai')) as jml_tujuan_tabungan,
+        (SELECT COUNT(*) FROM tabel_alokasi_kantong a JOIN tabel_kantong k ON a.kantong_id = k.id JOIN tabel_tujuan t ON k.tujuan_id = t.id WHERE a.jenis = 'isi' AND t.jenis = 'tabungan') as jml_isi_tujuan_tabungan,
+        (SELECT COUNT(*) FROM tabel_transaksi t JOIN tabel_kategori k ON t.kategori_id = k.id WHERE t.jenis = 'keluar' AND k.sifat = 'kebutuhan') as jml_pengeluaran_kebutuhan,
+        (SELECT COUNT(*) FROM tabel_tujuan WHERE jenis = 'dana_darurat' AND status IN ('aktif', 'tercapai')) as jml_tujuan_dana_darurat,
+        (SELECT COUNT(*) FROM tabel_alokasi_kantong a JOIN tabel_kantong k ON a.kantong_id = k.id JOIN tabel_tujuan t ON k.tujuan_id = t.id WHERE a.jenis = 'isi' AND t.jenis = 'dana_darurat') as jml_isi_dana_darurat
       ''',
     ).getSingle();
 
@@ -62,6 +67,11 @@ class FotoDataRepositori {
     final jmlTujuanDarurat = barisRingkasan.read<int>('jml_tujuan_darurat');
     final saldoDarurat = barisRingkasan.read<int>('saldo_darurat');
     final sisaUtang = barisRingkasan.read<int>('sisa_utang');
+    final jmlTujuanTabungan = barisRingkasan.read<int>('jml_tujuan_tabungan');
+    final jmlIsiTujuanTabungan = barisRingkasan.read<int>('jml_isi_tujuan_tabungan');
+    final jmlPengeluaranKebutuhan = barisRingkasan.read<int>('jml_pengeluaran_kebutuhan');
+    final jmlTujuanDanaDarurat = barisRingkasan.read<int>('jml_tujuan_dana_darurat');
+    final jmlIsiDanaDarurat = barisRingkasan.read<int>('jml_isi_dana_darurat');
 
     // 2. Kategori keluar aktif yang pernah dipakai transaksi beserta sifatnya
     final barisKategori = await _db.customSelect(
@@ -142,6 +152,11 @@ class FotoDataRepositori {
       saldoTerkumpulDanaDarurat: saldoDarurat,
       sisaUtangAktif: sisaUtang,
       komposisiSifatBulanIni: mapKomposisiSifat,
+      jumlahTujuanTabungan: jmlTujuanTabungan,
+      jumlahIsiTujuanTabungan: jmlIsiTujuanTabungan,
+      jumlahPengeluaranKebutuhan: jmlPengeluaranKebutuhan,
+      jumlahTujuanDanaDarurat: jmlTujuanDanaDarurat,
+      jumlahIsiDanaDarurat: jmlIsiDanaDarurat,
     );
   }
 }

@@ -1,0 +1,60 @@
+﻿00:00 +0: loading D:/Proyek Coding/Flutter/Funda/integration_test/tahap_08a_emulator_test.dart
+Running Gradle task 'assembleDebug'...                             46.8s
+√ Built build\app\outputs\flutter-apk\app-debug.apk
+Installing build\app\outputs\flutter-apk\app-debug.apk...        1,156ms
+00:00 +0: [Tahap 8A Integrasi Emulator] Alur Lengkap Modul 2 & 3, Penutupan Langkah 0(c), dan Tolok Ukur Beban 20k
+=== [LANGKAH 1]: Setup Prasyarat Modul 1 Selesai ===
+=== [LANGKAH 2]: Buka Tab Belajar, Modul 2 Terbuka ===
+[SCREEN_READY: tahap_08a_peta_belajar_modul_2_terbuka]
+=== [LANGKAH 3]: Pelajaran 2_1 & Pembuatan Tujuan Tabungan ===
+[SCREEN_READY: tahap_08a_pelajaran_2_1_umpan_balik]
+=== [LANGKAH 4]: Pelajaran 2_2 & Pengisian Tujuan Tabungan ===
+[SCREEN_READY: tahap_08a_pelajaran_2_2_misi]
+=== [LANGKAH 5]: Pelajaran 2_3 & Estimasi Kecepatan Menabung ===
+[SCREEN_READY: tahap_08a_pelajaran_2_3_estimasi]
+=== [LANGKAH 6]: Kuis Akhir Modul 2 ===
+[SCREEN_READY: tahap_08a_kuis_modul_2_lulus]
+=== [LANGKAH 7]: Gerbang Modul 3 & Pencatatan 3 Pengeluaran Kebutuhan ===
+[SCREEN_READY: tahap_08a_modul_3_terkunci]
+[SCREEN_READY: tahap_08a_modul_3_terbuka]
+=== [LANGKAH 8]: Pelajaran Modul 3 & Pengisian Dana Darurat ===
+[SCREEN_READY: tahap_08a_pelajaran_3_1_pengeluaran_wajib]
+[SCREEN_READY: tahap_08a_pelajaran_3_2_target_darurat]
+[SCREEN_READY: tahap_08a_pelajaran_3_3_progres_darurat]
+[SCREEN_READY: tahap_08a_kuis_modul_3_lulus]
+=== [LANGKAH 9]: Verifikasi Cadangan & Pemulihan (Langkah 0c) ===
+=== RINCIAN JUMLAH BARIS PER TABEL SEBELUM PEMULIHAN ===
+tabel_dompet: 1 baris
+tabel_kategori: 25 baris
+tabel_transaksi: 3 baris
+tabel_anggaran: 1 baris
+tabel_tujuan: 2 baris
+tabel_kantong: 2 baris
+tabel_alokasi_kantong: 2 baris
+tabel_utang: 0 baris
+tabel_progres_pelajaran: 11 baris
+tabel_hasil_kuis: 3 baris
+tabel_pernyataan: 1 baris
+=== TOTAL BARIS SEBELUM PEMULIHAN: 51 ===
+=== RINCIAN JUMLAH BARIS PER TABEL SESUDAH PEMULIHAN ===
+tabel_dompet: 1 baris
+tabel_kategori: 25 baris
+tabel_transaksi: 3 baris
+tabel_anggaran: 1 baris
+tabel_tujuan: 2 baris
+tabel_kantong: 2 baris
+tabel_alokasi_kantong: 2 baris
+tabel_utang: 0 baris
+tabel_progres_pelajaran: 11 baris
+tabel_hasil_kuis: 3 baris
+tabel_pernyataan: 1 baris
+=== TOTAL BARIS SESUDAH PEMULIHAN: 51 ===
+[VERIFIKASI BERHASIL]: Langkah 0(c) tertutup 100%!
+=== [LANGKAH 10]: Tolok Ukur Beban 20.000 Transaksi ===
+[BENCHMARK] Waktu Suntik 20.000 Transaksi: 460ms
+[BENCHMARK EMULATOR] Ambil Foto Data 20k Tx: Median = 48ms (Sampel: [38, 39, 45, 47, 47, 48, 51, 59, 60, 60])
+[BENCHMARK EMULATOR] Waktu Buka Tab Belajar (20k tx): 691ms
+[BENCHMARK EMULATOR] Waktu Buka Layar Pelajaran (20k tx): 505ms
+=== [SELESAI]: Seluruh 10 Skenario & Pengujian Tahap 8A Selesai! ===
+01:56 +1: (tearDownAll)
+01:56 +1: All tests passed!

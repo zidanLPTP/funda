@@ -307,7 +307,8 @@ Kamu mengirim **prompt per tahap** ke agent → agent kerja dan menulis laporan 
 | 5 | **Tes awal & personalisasi** | Profil + rekomendasi modul |
 | 6 | **Modul 1 lengkap** | **MVP belajar** |
 | 7 | **Laporan bulanan (PNG + PDF) & cadangan data** | **MVP selesai** |
-| 8 | **Tingkat Pemula** (modul 2–6) | Fondasi lengkap |
+| 8A | **Tingkat Pemula Bagian 1:** Modul 2 "Tabungan" & Modul 3 "Dana Darurat" | Pembelajaran tabungan & dana darurat aktif |
+| 8B | **Tingkat Pemula Bagian 2:** Modul 4 sampai 6 | Fondasi pemula lengkap |
 | 9 | **Sandbox + Langkah Dunia Nyata + modul 7, 10, 11** | Materi non-langsung |
 | 10 | **Tingkat Menengah** sisanya (modul 8, 9, 12) | Menengah lengkap |
 | 11 | **Tingkat Lanjutan** (modul 13–18) | Kurikulum penuh |

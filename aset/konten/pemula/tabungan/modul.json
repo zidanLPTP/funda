@@ -1,20 +1,151 @@
 {
-    "kuis":  {
-                 "jumlahSoal":  0,
-                 "bankSoal":  [
-
-                              ]
-             },
-    "id":  "tabungan",
-    "tersedia":  false,
-    "urutan":  2,
-    "gerbang":  [
-
-                ],
-    "deskripsiSingkat":  "Menabung itu soal tujuan yang jelas dan cara membayar diri sendiri lebih dulu.",
-    "daftarPelajaran":  [
-
-                        ],
-    "tingkat":  "pemula",
-    "judul":  "Tabungan"
+  "id": "tabungan",
+  "judul": "Tabungan",
+  "tingkat": "pemula",
+  "urutan": 2,
+  "deskripsiSingkat": "Pelajari cara menyisihkan uang dengan tujuan yang jelas dan konsisten.",
+  "tersedia": true,
+  "gerbang": [
+    {
+      "tipe": "modul_selesai",
+      "modulId": "anggaran_arus_kas",
+      "pesan": "Selesaikan Modul 1 dulu."
+    },
+    {
+      "tipe": "ada_data",
+      "objek": "anggaran",
+      "min": 1,
+      "pesan": "Buat minimal satu anggaran, supaya tabungan punya tempat di rencana uangmu."
+    }
+  ],
+  "daftarPelajaran": [
+    "tabungan_2_1",
+    "tabungan_2_2",
+    "tabungan_2_3"
+  ],
+  "kuis": {
+    "jumlahSoal": 5,
+    "bankSoal": [
+      {
+        "id": "soal_2_1",
+        "pelajaranId": "tabungan_2_1",
+        "tanya": "Kombinasi mana yang membuat tujuan tabungan jelas?",
+        "pilihan": [
+          "Nama tujuan, jumlah target, dan tenggat",
+          "Hanya jumlah target",
+          "Hanya niat untuk menabung"
+        ],
+        "benar": 0,
+        "penjelasan": "Ketiga bagian itu membuat tujuan jelas dan bisa dihitung setoran bulanannya."
+      },
+      {
+        "id": "soal_2_2",
+        "pelajaranId": "tabungan_2_1",
+        "tanya": "Tujuan Rp1.200.000 dalam 6 bulan. Berapa yang disisihkan per bulan?",
+        "pilihan": [
+          "Rp200.000",
+          "Rp120.000",
+          "Rp600.000"
+        ],
+        "benar": 0,
+        "penjelasan": "Rp1.200.000 dibagi 6 bulan hasilnya Rp200.000."
+      },
+      {
+        "id": "soal_2_3",
+        "pelajaranId": "tabungan_2_1",
+        "tanya": "Kamu punya beberapa keinginan besar sekaligus. Langkah awal yang disarankan?",
+        "pilihan": [
+          "Mulai dari satu tujuan dulu",
+          "Mulai dari semuanya sekaligus",
+          "Menunda sampai punya banyak uang"
+        ],
+        "benar": 0,
+        "penjelasan": "Satu tujuan yang jelas lebih mudah dijalankan daripada banyak tujuan yang terasa jauh."
+      },
+      {
+        "id": "soal_2_4",
+        "pelajaranId": "tabungan_2_2",
+        "tanya": "Kapan bagian tabungan sebaiknya disisihkan?",
+        "pilihan": [
+          "Segera setelah uang masuk",
+          "Di akhir bulan dari sisa",
+          "Hanya kalau ada uang berlebih"
+        ],
+        "benar": 0,
+        "penjelasan": "Menyisihkan di depan membuat tabungan tidak bergantung pada sisa yang sering tidak ada."
+      },
+      {
+        "id": "soal_2_5",
+        "pelajaranId": "tabungan_2_2",
+        "tanya": "Saldo dompetmu Rp1.000.000. Di Funda, kamu mengisi tujuan tabungan Rp200.000 dari dompet itu. Bagaimana kondisinya?",
+        "pilihan": [
+          "Saldo dompet tetap Rp1.000.000 dan saldo bebasnya Rp800.000",
+          "Saldo dompet menjadi Rp800.000",
+          "Saldo dompet menjadi Rp1.200.000"
+        ],
+        "benar": 0,
+        "penjelasan": "Kantong hanya menandai. Saldo dompet tidak berubah, dan saldo bebasnya berkurang Rp200.000."
+      },
+      {
+        "id": "soal_2_6",
+        "pelajaranId": "tabungan_2_2",
+        "tanya": "Kenapa nominal kecil tapi rutin cocok untuk memulai?",
+        "pilihan": [
+          "Lebih mudah dijalankan terus-menerus",
+          "Karena tabungan kecil tidak butuh tujuan",
+          "Karena nominal kecil pasti berbunga"
+        ],
+        "benar": 0,
+        "penjelasan": "Kebiasaan yang bisa dijalankan terus lebih berharga daripada nominal besar yang cepat berhenti."
+      },
+      {
+        "id": "soal_2_7",
+        "pelajaranId": "tabungan_2_3",
+        "tanya": "Sisa target Rp2.500.000 dan setoran Rp500.000 per bulan. Berapa bulan?",
+        "pilihan": [
+          "5 bulan",
+          "4 bulan",
+          "6 bulan"
+        ],
+        "benar": 0,
+        "penjelasan": "Rp2.500.000 dibagi Rp500.000 hasilnya 5 bulan."
+      },
+      {
+        "id": "soal_2_8",
+        "pelajaranId": "tabungan_2_3",
+        "tanya": "Sisa Rp1.000.000 dan setoran Rp300.000 per bulan. Berapa bulan (dibulatkan ke atas)?",
+        "pilihan": [
+          "4 bulan",
+          "3 bulan",
+          "5 bulan"
+        ],
+        "benar": 0,
+        "penjelasan": "Rp1.000.000 dibagi Rp300.000 sekitar 3,3. Dibulatkan ke atas menjadi 4 bulan."
+      },
+      {
+        "id": "soal_2_9",
+        "pelajaranId": "tabungan_2_3",
+        "tanya": "Mana yang termasuk cara menyesuaikan rencana tabungan?",
+        "pilihan": [
+          "Menaikkan setoran, memperpanjang tenggat, atau menurunkan target",
+          "Berhenti mencatat",
+          "Menghapus tujuannya"
+        ],
+        "benar": 0,
+        "penjelasan": "Ketiga tuas itu menyesuaikan rencana tanpa meninggalkannya."
+      },
+      {
+        "id": "soal_2_10",
+        "pelajaranId": "tabungan_2_3",
+        "tanya": "Kenapa hitungan kecepatan menabung perlu dicek ulang tiap bulan?",
+        "pilihan": [
+          "Karena setoran dan kondisimu bisa berubah",
+          "Karena angkanya selalu keliru",
+          "Karena target naik sendiri tiap bulan"
+        ],
+        "benar": 0,
+        "penjelasan": "Hitungan memakai data terbaru. Kalau datamu berubah, hasilnya ikut berubah."
+      }
+    ]
+  }
 }

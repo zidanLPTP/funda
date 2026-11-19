@@ -205,6 +205,35 @@ Berdasarkan hasil pengujian terisolasi pada 10 iterasi bersih di emulator Pixel 
 - **Rencana Peninjauan:**
   Pada rilis pasca-MVP (misalnya Tahap 9 atau versi 1.1), evaluasi penambahan fitur ekspor terenkripsi opsional (AES-GCM 256-bit berbasis kata kunci yang ditentukan pengguna) bagi pengguna tingkat lanjut yang ingin mengunggah cadangan ke penyedia cloud publik.
 
+---
+
+## 17. Penghapusan Dependency Overrides `image: 4.10.2` (Tahap 8A Langkah 0d)
+
+- **Konteks:**
+  Pada Tahap 7, `dependency_overrides: image: 4.10.2` sempat ditambahkan ke `pubspec.yaml` untuk mengunci dependensi pemrosesan gambar laporan.
+- **Keputusan:**
+  Pada Langkah 0(d) Tahap 8A, blok `dependency_overrides` tersebut telah dihapus secara resmi. Perintah `flutter pub get` membuktikan seluruh grafik dependensi berhasil diselesaikan secara normal (*clean resolution*) tanpa penimpaan versi darurat.
+- **Status:** Tuntas / Ditutup pada Tahap 8A.
+
+---
+
+## 18. Evaluasi Akar Masalah Pengukuran 1.910 ms Buka Layar Laporan di Emulator (Tahap 8A Langkah 0a)
+
+- **Konteks:**
+  Laporan Tahap 7 mencatat durasi *"Waktu Buka Layar Laporan Sampai Tampil: 1.910 ms"* pada benchmark emulator dengan 20.000 transaksi. Angka ini awalnya dikhawatirkan sebagai masalah kinerja render UI atau komputasi query.
+- **Temuan Investigasi:**
+  Pemeriksaan pada `integration_test/tahap_07_laporan_dan_cadangan_emulator_test.dart` baris 499–514 membuktikan bahwa stopwatch mengukur blok:
+  ```dart
+  final swRenderUi = Stopwatch()..start();
+  await tester.pumpWidget(...);
+  await pompaAman(tester, 800);
+  swRenderUi.stop();
+  ```
+  Fungsi `pompaAman(tester, 800)` mengeksekusi `await tester.pump(800ms)` sebanyak 2 kali berturut-turut (1.600 ms tidur simulasi harness pengujian). Jadi, dari total 1.910 ms yang tercatat, **1.600 ms adalah jeda buatan harness test**, sedangkan komputasi agregasi SQL dan rendering widget aktual aplikasi hanya memakan waktu **~310 ms**.
+- **Tindakan Lanjutan:**
+  Harness benchmark emulator berikutnya dipisahkan secara tegas antara pengukuran komputasi kueri/render dan jeda frame simulasi pump agar tidak bias oleh tidur buatan harness.
+
+
 
 
 

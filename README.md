@@ -105,6 +105,18 @@ funda/
 
 ## 📸 Tangkapan Layar Aplikasi
 Tangkapan layar otomatis yang dihasilkan dari pengujian dan emulator tersimpan pada:
+- **Tahap 8A (Modul 2 "Tabungan" & Modul 3 "Dana Darurat" di Emulator Pixel 8):** [docs/tangkapan_layar/](docs/tangkapan_layar/)
+  - `tahap_08a_peta_belajar_modul_2_terbuka.png` — Tab Belajar dengan Modul 2 terbuka setelah Modul 1 selesai
+  - `tahap_08a_pelajaran_2_1_umpan_balik.png` — Pelajaran 2_1 dengan umpan balik `ringkasan_tujuan_tabungan`
+  - `tahap_08a_pelajaran_2_2_misi.png` — Pelajaran 2_2 dengan misi pengisian kantong tujuan tabungan
+  - `tahap_08a_pelajaran_2_3_estimasi.png` — Pelajaran 2_3 dengan umpan balik `estimasi_tabungan` dan simulasi setoran
+  - `tahap_08a_kuis_modul_2_lulus.png` — Layar kelulusan Kuis Akhir Modul 2 (skor >= 70%)
+  - `tahap_08a_modul_3_terkunci.png` — Modul 3 terkunci menunggu syarat 3 pengeluaran berlabel kebutuhan
+  - `tahap_08a_modul_3_terbuka.png` — Modul 3 terbuka setelah 3 pengeluaran kebutuhan tercatat
+  - `tahap_08a_pelajaran_3_1_pengeluaran_wajib.png` — Pelajaran 3_1 dengan umpan balik `pengeluaran_wajib_bulanan`
+  - `tahap_08a_pelajaran_3_2_target_darurat.png` — Pelajaran 3_2 dengan umpan balik `target_dana_darurat` (aturan praktis 3–6x)
+  - `tahap_08a_pelajaran_3_3_progres_darurat.png` — Pelajaran 3_3 dengan umpan balik `progres_dana_darurat` dalam bulan bertahan
+  - `tahap_08a_kuis_modul_3_lulus.png` — Layar kelulusan Kuis Akhir Modul 3
 - **Tahap 7 (Laporan Bulanan & Cadangan Data di Emulator Pixel 8):** [docs/tangkapan_layar/](docs/tangkapan_layar/)
   - `tahap_07_banner_beranda.png` — Banner pengingat cadangan data 14 hari di Beranda
   - `tahap_07_cadangan.png` — Layar Cadangan & Pemulihan (`/cadangan`)

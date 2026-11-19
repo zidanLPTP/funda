@@ -1,0 +1,87 @@
+{
+  "id": "tabungan_2_3",
+  "modul": "tabungan",
+  "judul": "Menghitung Kecepatan Menabung",
+  "durasiMenit": 6,
+  "status": "draf",
+  "gerbang": [
+    {
+      "tipe": "ada_data",
+      "objek": "isi_tujuan_tabungan",
+      "min": 1,
+      "pesan": "Isi tujuan tabunganmu minimal sekali dulu, supaya hitungannya memakai data nyatamu."
+    }
+  ],
+  "pemantik": "Targetnya sudah ada, dan setoran pertama sudah masuk. Pertanyaan berikutnya: kapan tercapai?",
+  "kartu": [
+    {
+      "judul": "Tiga angka yang menentukan",
+      "isi": "Kecepatan menabung ditentukan tiga angka: sisa target, {{setoran}} per bulan, dan waktu. Sisa target adalah target dikurangi dana yang sudah terkumpul. Waktu kira-kira sisa target dibagi setoran per bulan, lalu dibulatkan ke atas. Dengan tiga angka ini, kapan tercapai berubah dari tebakan menjadi hitungan."
+    },
+    {
+      "judul": "Tambahan kecil, hasil yang terasa",
+      "isi": "Setoran yang naik sedikit bisa mempercepat target. Misalnya, tambahan Rp50.000 per bulan kadang memangkas beberapa bulan. Tapi jangan menambah dengan mengorbankan kebutuhan pokok. Setoran yang bisa kamu jalankan terus lebih berguna daripada setoran besar yang berhenti."
+    },
+    {
+      "judul": "Menyesuaikan, bukan menyerah",
+      "isi": "Kalau hitungannya terasa terlalu lama, kamu punya tiga tuas: naikkan setoran, perpanjang tenggat, atau turunkan target. Pilih yang paling masuk akal untuk kondisimu. Cek lagi tiap bulan, karena penghasilan dan pengeluaranmu bisa berubah, dan hitungannya ikut berubah."
+    }
+  ],
+  "contohAngka": {
+    "judul": "Target Rp3.000.000, belum ada yang terkumpul",
+    "baris": [
+      {
+        "label": "Sisa yang perlu dikumpulkan",
+        "jumlah": 3000000
+      },
+      {
+        "label": "Setoran per bulan sekarang",
+        "jumlah": 250000
+      },
+      {
+        "label": "Setoran per bulan kalau ditambah Rp50.000",
+        "jumlah": 300000
+      }
+    ],
+    "kesimpulan": "Dengan Rp250.000 per bulan, target tercapai dalam 12 bulan. Dengan Rp300.000, dalam 10 bulan. Tambahan Rp50.000 mempercepat 2 bulan."
+  },
+  "cekPaham": [
+    {
+      "tanya": "Sisa target Rp4.000.000 dan setoran Rp400.000 per bulan. Berapa bulan sampai tercapai?",
+      "pilihan": [
+        "10 bulan",
+        "8 bulan",
+        "12 bulan"
+      ],
+      "benar": 0,
+      "penjelasan": "Rp4.000.000 dibagi Rp400.000 hasilnya 10 bulan."
+    },
+    {
+      "tanya": "Setoran naik dari Rp400.000 menjadi Rp450.000 untuk sisa Rp4.000.000. Apa yang terjadi?",
+      "pilihan": [
+        "Waktunya menjadi 9 bulan (dibulatkan ke atas), lebih cepat 1 bulan",
+        "Waktunya tetap 10 bulan",
+        "Waktunya menjadi 8 bulan"
+      ],
+      "benar": 0,
+      "penjelasan": "Rp4.000.000 dibagi Rp450.000 sekitar 8,9. Dibulatkan ke atas menjadi 9 bulan."
+    },
+    {
+      "tanya": "Hitungan menunjukkan targetmu butuh 3 tahun, padahal kamu ingin 1 tahun. Pilihan yang masuk akal?",
+      "pilihan": [
+        "Pertimbangkan menaikkan setoran, memperpanjang tenggat, atau menurunkan target",
+        "Berhenti menabung",
+        "Mengurangi kebutuhan pokok sampai nol"
+      ],
+      "benar": 0,
+      "penjelasan": "Ketiga tuas itu bisa disesuaikan dengan kondisimu. Mengorbankan kebutuhan pokok bukan jalan yang sehat."
+    }
+  ],
+  "misi": {
+    "tipe": "lihat_hitungan",
+    "judul": "Baca hitungan kecepatan menabungmu",
+    "instruksi": "Buka hitungan kecepatan menabung, baca isinya, lalu tekan Mengerti.",
+    "umpanBalik": "estimasi_tabungan"
+  },
+  "tindakLanjut": "Awal bulan depan, buka lagi hitungan ini. Kalau setoranmu berubah, hasilnya ikut berubah."
+}

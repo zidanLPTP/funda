@@ -121,6 +121,16 @@ class RegistriMisi {
         return fotoData.jumlahAnggaran;
       case 'tujuan':
         return fotoData.jumlahTujuanAktif;
+      case 'tujuan_tabungan':
+        return fotoData.jumlahTujuanTabungan;
+      case 'isi_tujuan_tabungan':
+        return fotoData.jumlahIsiTujuanTabungan;
+      case 'pengeluaran_kebutuhan':
+        return fotoData.jumlahPengeluaranKebutuhan;
+      case 'tujuan_dana_darurat':
+        return fotoData.jumlahTujuanDanaDarurat;
+      case 'isi_dana_darurat':
+        return fotoData.jumlahIsiDanaDarurat;
       case 'utang':
         return fotoData.jumlahUtangAktif;
       default:
@@ -201,5 +211,50 @@ class RegistriUmpanBalik {
   /// Menghasilkan umpan balik realisasi anggaran bulan ini.
   static String formatRealisasiAnggaranBulanIniMisi(List<PosAnggaranEvaluasi> daftarPos) {
     return formatRealisasiAnggaranBulanIni(daftarPos);
+  }
+
+  /// Menghasilkan umpan balik ringkasan tujuan tabungan.
+  static String formatRingkasanTujuanTabunganMisi({
+    required DataTujuanTabunganUmpanBalik? tujuan,
+    required DateTime waktuSekarang,
+  }) {
+    return formatRingkasanTujuanTabungan(
+      tujuan: tujuan,
+      waktuSekarang: waktuSekarang,
+    );
+  }
+
+  /// Menghasilkan umpan balik estimasi tabungan.
+  static String formatEstimasiTabunganMisi({
+    required DataTujuanTabunganUmpanBalik? tujuan,
+    required int setoranRataRata,
+  }) {
+    return formatEstimasiTabungan(
+      tujuan: tujuan,
+      setoranRataRata: setoranRataRata,
+    );
+  }
+
+  /// Menghasilkan umpan balik pengeluaran wajib bulanan.
+  static String formatPengeluaranWajibBulananMisi(HasilPengeluaranWajib hasil) {
+    return formatTeksPengeluaranWajibBulanan(hasil);
+  }
+
+  /// Menghasilkan umpan balik target dana darurat.
+  static String formatTargetDanaDaruratMisi({
+    required HasilPengeluaranWajib pengeluaranWajib,
+  }) {
+    return formatTargetDanaDarurat(pengeluaranWajib: pengeluaranWajib);
+  }
+
+  /// Menghasilkan umpan balik progres dana darurat.
+  static String formatProgresDanaDaruratMisi({
+    required DataTujuanDanaDaruratUmpanBalik? tujuan,
+    required int? pengeluaranWajibPerBulan,
+  }) {
+    return formatProgresDanaDarurat(
+      tujuan: tujuan,
+      pengeluaranWajibPerBulan: pengeluaranWajibPerBulan,
+    );
   }
 }
