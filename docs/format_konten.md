@@ -305,33 +305,69 @@ Berkas ini adalah sumber kebenaran teks (*single source of truth*) untuk antarmu
     "ekspor": "Dibuat otomatis oleh Funda di perangkat pengguna. Bersifat edukatif dan rahasia."
   },
   "temuan": {
-    "P1": { "teks": "..." },
-    "P2": { "teks": "..." },
-    "P3": { "teks": "..." },
-    "P4": { "teks": "..." },
-    "P5": { "teks": "..." },
-    "P6": { "teks": "..." }
+    "posMelewati": {
+      "kode": "pos_melewati",
+      "normal": "Pos {nama} melewati batasnya sebesar {jumlah}. Ini bahan belajar, bukan penilaian.",
+      "sensor": "Pos {nama} sudah terpakai {persen} persen dari batasnya. Ini bahan belajar, bukan penilaian."
+    },
+    "arusKasTanpaPemasukan": {
+      "kode": "arus_kas_tanpa_pemasukan",
+      "normal": "Bulan ini ada uang keluar, tetapi belum ada uang masuk yang tercatat.",
+      "sensor": "Bulan ini ada uang keluar, tetapi belum ada uang masuk yang tercatat."
+    },
+    "arusKasNegatif": {
+      "kode": "arus_kas_negatif",
+      "normal": "Uang keluarmu lebih besar {jumlah} dari uang masukmu bulan ini. Ini informasi untuk membantumu memutuskan.",
+      "sensor": "Uang keluarmu setara {persen} persen dari uang masukmu bulan ini. Ini informasi untuk membantumu memutuskan."
+    },
+    "sifatTerbesar": {
+      "kode": "sifat_terbesar",
+      "normal": "Bagian pengeluaran terbesarmu bulan ini ada di {sifat}: {persen} persen.",
+      "sensor": "Bagian pengeluaran terbesarmu bulan ini ada di {sifat}: {persen} persen."
+    },
+    "arusKasPositif": {
+      "kode": "arus_kas_positif",
+      "normal": "Uang masukmu lebih besar {jumlah} dari uang keluar bulan ini.",
+      "sensor": "Uang keluarmu setara {persen} persen dari uang masukmu bulan ini."
+    },
+    "dataBelumCukup": {
+      "kode": "data_belum_cukup",
+      "normal": "Datamu bulan ini masih sedikit. Setiap catatan membantu gambarannya makin jelas.",
+      "sensor": "Datamu bulan ini masih sedikit. Setiap catatan membantu gambarannya makin jelas."
+    }
   },
   "saran": {
-    "P1": { "teks": "..." },
-    "P2": { "teks": "..." },
-    "P3": { "teks": "..." },
-    "P4": { "teks": "..." }
+    "buatAnggaran": {
+      "kode": "buat_anggaran",
+      "teks": "Buat anggaran untuk bulan depan di menu Anggaran. Mulai dari tiga kategori saja."
+    },
+    "tinjauPos": {
+      "kode": "tinjau_pos",
+      "teks": "Tinjau lagi pos {nama}: ubah batasnya atau kebiasaannya, pilih satu saja."
+    },
+    "beriLabel": {
+      "kode": "beri_label",
+      "teks": "Beri label pada kategori {nama} supaya gambaran pengeluaranmu lebih jelas."
+    },
+    "salinAnggaran": {
+      "kode": "salin_anggaran",
+      "teks": "Salin anggaran bulan ini ke bulan depan, lalu sesuaikan bagian yang perlu."
+    }
   }
 }
 ```
 
-### 8.2 Logika Pemilihan Temuan (P1 sampai P6)
-1. **P1 (Utang Melebihi Pemasukan):** Terpilih jika rasio cicilan utang / uang masuk > 30%.
-2. **P2 (Defisit Arus Kas):** Terpilih jika uang keluar > uang masuk (selisih negatif).
-3. **P3 (Keinginan Mendominasi):** Terpilih jika porsi sifat keinginan > kebutuhan.
-4. **P4 (Anggaran Melebihi Batas):** Terpilih jika terdapat pos anggaran yang berstatus `melewati`.
-5. **P5 (Pengeluaran Belum Dilabeli Signifikan):** Terpilih jika ada kategori tanpa label sifat > 15% dari total pengeluaran.
-6. **P6 (Surplus Sehat):** Terpilih jika arus kas positif dan tidak ada kondisi kritis di atas.
+### 8.2 Prioritas Pemilihan Temuan (P1 sampai P6)
+1. **P1 (`pos_melewati`):** Ada pos anggaran yang melewati batas (`terpakai > batas`). Dipilih pos dengan selisih melewati terbesar.
+2. **P2 (`arus_kas_tanpa_pemasukan`):** Ada pengeluaran tetapi pemasukan sama dengan 0.
+3. **P3 (`arus_kas_negatif`):** Uang keluar > uang masuk (defisit), dengan uang masuk > 0.
+4. **P4 (`sifat_terbesar`):** Salah satu sifat (`kebutuhan`, `keinginan`, `tabungan`, `utang`, `belum_dilabeli`) mendominasi secara strik (persentase terbesar tunggal).
+5. **P5 (`arus_kas_positif`):** Uang masuk > uang keluar (surplus), dengan uang keluar > 0.
+6. **P6 (`data_belum_cukup`):** Tidak ada transaksi, atau masuk == 0 dan keluar == 0.
 
-### 8.3 Logika Pemilihan Saran (P1 sampai P4)
-1. **P1 (Fokus Pelunasan Utang):** Saran bila cicilan utang menjadi beban dominan.
-2. **P2 (Rem Pengeluaran Keinginan):** Saran bila porsi belanja diskresioner tinggi.
-3. **P3 (Bangun Dana Darurat):** Saran bila belum ada bantalan darurat yang memadai.
-4. **P4 (Pertahankan Disiplin):** Saran penguatan atas kebiasaan keuangan yang sudah sehat.
+### 8.3 Prioritas Pemilihan Saran (P1 sampai P4)
+1. **P1 (`buat_anggaran`):** Pengguna belum memiliki anggaran aktif sama sekali di bulan bersangkutan.
+2. **P2 (`tinjau_pos`):** Ada pos anggaran yang melewati batas (prioritas pada pos dengan selisih melewati terbesar).
+3. **P3 (`beri_label`):** Ada pengeluaran kategori yang belum dilabeli sifat (`belum_dilabeli > 0`).
+4. **P4 (`salin_anggaran`):** Pengguna sudah memiliki anggaran dan semua pos aman terkendali.
 
