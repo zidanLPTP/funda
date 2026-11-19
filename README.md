@@ -111,6 +111,8 @@ Tangkapan layar otomatis yang dihasilkan dari pengujian dan emulator tersimpan p
   - `tahap_07_pratinjau_pemulihan.png` — Dialog Pratinjau Data Cadangan sebelum konfirmasi pemulihan
   - `tahap_07_laporan_normal.png` — Layar Laporan Bulanan mode normal (`/laporan`)
   - `tahap_07_laporan_sensor.png` — Layar Laporan Bulanan dengan saklar sensor nominal aktif
+  - `tahap_07_pratinjau_setelah_pulih.png` — Dialog Pratinjau Pemulihan dengan data yang terbukti pulih
+  - `tahap_07_beranda_setelah_pulih.png` — Tampilan Beranda setelah pemulihan data berhasil diselesaikan
   - Dokumen dan gambar hasil ekspor tersimpan pada: [docs/contoh_ekspor/](docs/contoh_ekspor/)
     * `laporan.pdf` — Dokumen cetak PDF A4 teks asli tertanam font Plus Jakarta Sans
     * `laporan_normal.png` — Kartu bento laporan resolusi 1080 px

@@ -40,7 +40,7 @@ class LayarDaftarDompet extends ConsumerWidget {
       ),
       bisaGulir: true,
       anak: daftarDompetAsync.when(
-        loading: () => const Center(child: CircularProgressIndicator()),
+        loading: () => const Center(child: IndikatorMemuat()),
         error: (e, _) => Center(child: Text('Terjadi kesalahan: $e')),
         data: (daftar) {
           if (daftar.isEmpty) {

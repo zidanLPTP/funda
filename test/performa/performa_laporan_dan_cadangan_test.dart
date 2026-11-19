@@ -169,15 +169,24 @@ void main() {
 
     Future<LaporanBulanan> jalankanKueriLaporan() async {
       final arusKas = await transaksiRepo.hitungArusKasSQL(mulai: awalBulan, selesai: akhirBulan);
-      final transaksiBulan = await (basisData.select(basisData.tabelTransaksi)
-            ..where((t) =>
-                t.waktuTransaksi.isBiggerOrEqual(drift.Variable.withDateTime(awalBulan)) &
-                t.waktuTransaksi.isSmallerOrEqual(drift.Variable.withDateTime(akhirBulan)) &
-                t.jenis.equals('keluar')))
-          .get();
 
-      final semuaKategori = await basisData.select(basisData.tabelKategori).get();
-      final petaKategori = {for (final k in semuaKategori) k.id: k};
+      const sqlKomposisi = '''
+        SELECT 
+          COALESCE(k.sifat, 'belum_dilabeli') AS sifat,
+          COALESCE(k.nama, 'Tanpa Kategori') AS nama_kategori,
+          COALESCE(SUM(t.jumlah_rupiah), 0) AS total
+        FROM tabel_transaksi t
+        LEFT JOIN tabel_kategori k ON t.kategori_id = k.id
+        WHERE t.waktu_transaksi >= ? AND t.waktu_transaksi <= ? AND t.jenis = 'keluar'
+        GROUP BY COALESCE(k.sifat, 'belum_dilabeli'), COALESCE(k.nama, 'Tanpa Kategori');
+      ''';
+      final rowsKomposisi = await basisData.customSelect(
+        sqlKomposisi,
+        variables: [
+          drift.Variable.withDateTime(awalBulan),
+          drift.Variable.withDateTime(akhirBulan),
+        ],
+      ).get();
 
       final perSifat = <String, int>{
         'kebutuhan': 0,
@@ -187,21 +196,19 @@ void main() {
         'belum_dilabeli': 0,
       };
 
-      for (final tx in transaksiBulan) {
-        final kat = tx.kategoriId != null ? petaKategori[tx.kategoriId] : null;
-        final sifat = kat?.sifat ?? 'belum_dilabeli';
+      for (final r in rowsKomposisi) {
+        final sifat = r.read<String>('sifat');
+        final total = r.read<int>('total');
         final sifatNormal = perSifat.containsKey(sifat) ? sifat : 'belum_dilabeli';
-        perSifat[sifatNormal] = (perSifat[sifatNormal] ?? 0) + tx.jumlahRupiah;
+        perSifat[sifatNormal] = (perSifat[sifatNormal] ?? 0) + total;
       }
 
       final dompetAktif = await (basisData.select(basisData.tabelDompet)..where((t) => t.diarsipkan.equals(false))).get();
-      final semuaTx = await basisData.select(basisData.tabelTransaksi).get();
       var totalSaldoDompet = 0;
       for (final d in dompetAktif) {
-        totalSaldoDompet += hitungSaldoDompet(
+        totalSaldoDompet += await transaksiRepo.hitungSaldoDompetSQL(
           dompetId: d.id,
           saldoAwalRupiah: d.saldoAwalRupiah,
-          daftarTransaksi: semuaTx,
         );
       }
 
@@ -257,5 +264,126 @@ void main() {
     expect(waktuPulihMs, lessThan(3000));
     expect(rataRataKueriMs, lessThan(500));
     expect(bytesPdf.isNotEmpty, isTrue);
+  });
+
+  test('Uji Kesetaraan Agregasi SQL vs Fungsi Murni Dart pada Komposisi dan Saldo Dompet', () async {
+    final awal = DateTime(2026, 11, 1);
+    final akhir = DateTime(2026, 11, 30, 23, 59, 59, 999);
+
+    // Siapkan data dompet, kategori, dan transaksi uji
+    await basisData.into(basisData.tabelDompet).insert(
+          TabelDompetCompanion.insert(
+            id: 'd1',
+            nama: 'Dompet 1',
+            jenis: 'tunai',
+            ikon: 'wallet',
+            warna: '#006C4C',
+            saldoAwalRupiah: const drift.Value(200000),
+          ),
+        );
+
+    await basisData.into(basisData.tabelKategori).insert(
+          TabelKategoriCompanion.insert(
+            id: 'k_butuh',
+            nama: 'Kebutuhan',
+            arus: 'keluar',
+            sifat: 'kebutuhan',
+            ikon: 'coffee',
+          ),
+        );
+    await basisData.into(basisData.tabelKategori).insert(
+          TabelKategoriCompanion.insert(
+            id: 'k_ingin',
+            nama: 'Keinginan',
+            arus: 'keluar',
+            sifat: 'keinginan',
+            ikon: 'gamepad',
+          ),
+        );
+
+    // 10 transaksi masuk dan keluar
+    await basisData.into(basisData.tabelTransaksi).insert(
+          TabelTransaksiCompanion.insert(
+            id: 't1',
+            dompetId: 'd1',
+            jumlahRupiah: 100000,
+            jenis: 'masuk',
+            waktuTransaksi: DateTime(2026, 11, 5),
+          ),
+        );
+    await basisData.into(basisData.tabelTransaksi).insert(
+          TabelTransaksiCompanion.insert(
+            id: 't2',
+            dompetId: 'd1',
+            kategoriId: const drift.Value('k_butuh'),
+            jumlahRupiah: 40000,
+            jenis: 'keluar',
+            waktuTransaksi: DateTime(2026, 11, 10),
+          ),
+        );
+    await basisData.into(basisData.tabelTransaksi).insert(
+          TabelTransaksiCompanion.insert(
+            id: 't3',
+            dompetId: 'd1',
+            kategoriId: const drift.Value('k_ingin'),
+            jumlahRupiah: 25000,
+            jenis: 'keluar',
+            waktuTransaksi: DateTime(2026, 11, 15),
+          ),
+        );
+
+    // 1. Uji kesetaraan Saldo Dompet: SQL vs Dart
+    final semuaTx = await basisData.select(basisData.tabelTransaksi).get();
+    final saldoDart = hitungSaldoDompet(
+      dompetId: 'd1',
+      saldoAwalRupiah: 200000,
+      daftarTransaksi: semuaTx,
+    );
+    final saldoSql = await transaksiRepo.hitungSaldoDompetSQL(
+      dompetId: 'd1',
+      saldoAwalRupiah: 200000,
+    );
+    expect(saldoSql, equals(saldoDart));
+    expect(saldoSql, equals(200000 + 100000 - 40000 - 25000));
+
+    // 2. Uji kesetaraan Komposisi Per Sifat: SQL vs Dart
+    final perSifatDart = <String, int>{
+      'kebutuhan': 0,
+      'keinginan': 0,
+    };
+    final semuaKat = await basisData.select(basisData.tabelKategori).get();
+    final petaKat = {for (final k in semuaKat) k.id: k};
+    for (final tx in semuaTx) {
+      if (tx.jenis == 'keluar') {
+        final sifat = tx.kategoriId != null ? petaKat[tx.kategoriId]?.sifat : null;
+        if (sifat != null && perSifatDart.containsKey(sifat)) {
+          perSifatDart[sifat] = perSifatDart[sifat]! + tx.jumlahRupiah;
+        }
+      }
+    }
+
+    const sqlKomposisi = '''
+      SELECT 
+        COALESCE(k.sifat, 'belum_dilabeli') AS sifat,
+        COALESCE(SUM(t.jumlah_rupiah), 0) AS total
+      FROM tabel_transaksi t
+      LEFT JOIN tabel_kategori k ON t.kategori_id = k.id
+      WHERE t.waktu_transaksi >= ? AND t.waktu_transaksi <= ? AND t.jenis = 'keluar'
+      GROUP BY COALESCE(k.sifat, 'belum_dilabeli');
+    ''';
+    final rowsSql = await basisData.customSelect(
+      sqlKomposisi,
+      variables: [
+        drift.Variable.withDateTime(awal),
+        drift.Variable.withDateTime(akhir),
+      ],
+    ).get();
+    final perSifatSql = <String, int>{};
+    for (final r in rowsSql) {
+      perSifatSql[r.read<String>('sifat')] = r.read<int>('total');
+    }
+
+    expect(perSifatSql['kebutuhan'], equals(perSifatDart['kebutuhan']));
+    expect(perSifatSql['keinginan'], equals(perSifatDart['keinginan']));
   });
 }

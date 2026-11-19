@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../tema/token.dart';
+import 'indikator_memuat.dart';
 
 /// Jenis varian tampilan tombol Funda.
 enum VarianTombolFunda { primer, sekunder, teks }
@@ -90,13 +91,10 @@ class TombolFunda extends StatelessWidget {
         VarianTombolFunda.teks => WarnaFunda.utama,
       };
 
-      return SizedBox(
-        width: 20,
-        height: 20,
-        child: CircularProgressIndicator(
-          strokeWidth: 2.5,
-          valueColor: AlwaysStoppedAnimation<Color>(warnaIndikator),
-        ),
+      return IndikatorMemuat(
+        ukuran: 20,
+        ketebalan: 2.5,
+        warna: warnaIndikator,
       );
     }
 

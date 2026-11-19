@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:drift/native.dart';
+import 'package:drift/drift.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:funda/data/basis_data.dart';
 import 'package:funda/data/cadangan/cadangan_repositori.dart';
@@ -14,6 +15,7 @@ void main() {
   late Directory tempDir;
 
   setUp(() async {
+    driftRuntimeOptions.dontWarnAboutMultipleDatabases = true;
     db = BasisDataFunda(NativeDatabase.memory());
     tempDir = Directory.systemTemp.createTempSync('funda_test_cadangan_');
     repositori = CadanganRepositori(db, direktoriPenyimpananUji: tempDir);
@@ -341,6 +343,117 @@ void main() {
         ),
         isFalse,
       );
+    });
+
+    test('12. Berkas lebih dari 50 MB ditolak dengan galat ramah', () async {
+      // Buat string dummy berukuran 51 MB secara efisien (atau tirukan string panjang)
+      // Karena string 50MB di memori butuh ~100MB RAM, buat string buffer 50MB + 10 byte
+      final buffer = StringBuffer('{"format": "');
+      buffer.write('A' * (50 * 1024 * 1024 + 10));
+      buffer.write('"}');
+      final stringBesar = buffer.toString();
+
+      expect(
+        () => repositori.validasiDanBuatPratinjau(stringBesar),
+        throwsA(isA<GalatCadangan>().having((e) => e.pesan, 'pesan', contains('melebihi batas maksimum 50 MB'))),
+      );
+    });
+
+    test('13. Kategori bawaan tidak ganda setelah pemulihan', () async {
+      // Hitung jumlah kategori awal sebelum ekspor
+      final countAwal = (await db.customSelect('SELECT count(*) as c FROM tabel_kategori;').getSingle()).read<int>('c');
+      expect(countAwal, greaterThan(0));
+
+      final jsonStr = await repositori.eksporCadanganKeJson();
+      final validasi = await repositori.validasiDanBuatPratinjau(jsonStr);
+
+      // Pulihkan
+      await repositori.pulihkanCadangan(validasi.dokumen, simpanKeselamatanOtomatis: false);
+
+      // Hitung jumlah kategori setelah pemulihan
+      final countAkhir = (await db.customSelect('SELECT count(*) as c FROM tabel_kategori;').getSingle()).read<int>('c');
+      expect(countAkhir, equals(countAwal), reason: 'Kategori bawaan tidak boleh berganda setelah pemulihan!');
+    });
+
+    test('14. Pemulihan dari cadangan keselamatan otomatis (sebelum_pemulihan.json)', () async {
+      // 1. Masukkan dompet Awal
+      await db.customStatement(
+        "INSERT INTO tabel_dompet (id, nama, jenis, ikon, warna, saldo_awal_rupiah, urutan, diarsipkan, dibuat_pada) "
+        "VALUES ('dompet-awal', 'Dompet Awal', 'tunai', 'wallet', 'tintHijau', 777000, 0, 0, datetime('now'));",
+      );
+
+      // Buat cadangan baru yang hanya memuat 'dompet-baru'
+      final docBaru = await repositori.eksporCadangan();
+      final tabelCopy = Map<String, List<Map<String, dynamic>>>.from(docBaru.tabel);
+      tabelCopy['tabel_dompet'] = [
+        {
+          'id': 'dompet-baru',
+          'nama': 'Dompet Baru',
+          'jenis': 'tunai',
+          'ikon': 'wallet',
+          'warna': 'tintBiru',
+          'saldo_awal_rupiah': 100000,
+          'urutan': 0,
+          'diarsipkan': 0,
+          'dibuat_pada': DateTime.now().toIso8601String(),
+        }
+      ];
+      final docModif = DokumenCadanganFunda(
+        versiSkema: docBaru.versiSkema,
+        versiAplikasi: docBaru.versiAplikasi,
+        dibuatPada: DateTime.now().toUtc(),
+        jumlahBaris: {'tabel_dompet': 1},
+        checksum: hitungChecksumTabel(tabelCopy),
+        tabel: tabelCopy,
+      );
+
+      // Eksekusi pemulihan dengan simpanKeselamatanOtomatis = true
+      await repositori.pulihkanCadangan(docModif, simpanKeselamatanOtomatis: true);
+
+      // Pastikan dompet-baru ada di DB
+      final dompetBaruCek = await db.customSelect("SELECT * FROM tabel_dompet WHERE id = 'dompet-baru';").getSingle();
+      expect(dompetBaruCek.read<String>('nama'), equals('Dompet Baru'));
+
+      // Berkas keselamatan harus ada di tempDir
+      final berkasKeselamatan = File('${tempDir.path}/sebelum_pemulihan.json');
+      expect(berkasKeselamatan.existsSync(), isTrue);
+
+      // Pulihkan KEMBALI dari berkas keselamatan
+      final jsonKeselamatan = berkasKeselamatan.readAsStringSync();
+      final validasiKeselamatan = await repositori.validasiDanBuatPratinjau(jsonKeselamatan);
+      await repositori.pulihkanCadangan(validasiKeselamatan.dokumen, simpanKeselamatanOtomatis: false);
+
+      // Dompet Awal harus kembali pulih!
+      final dompetAwalPulih = await db.customSelect("SELECT * FROM tabel_dompet WHERE id = 'dompet-awal';").getSingle();
+      expect(dompetAwalPulih.read<String>('nama'), equals('Dompet Awal'));
+    });
+
+    test('15. Deterministik terhadap urutan penyisipan (ORDER BY Primary Key)', () async {
+      // Buat database 1 dengan insert urutan [id-3, id-1, id-2]
+      final db1 = BasisDataFunda(NativeDatabase.memory());
+      final repo1 = CadanganRepositori(db1);
+      final t = DateTime.utc(2026, 11, 1, 10, 0);
+
+      await db1.customStatement("INSERT INTO tabel_dompet (id, nama, jenis, ikon, warna, saldo_awal_rupiah, urutan, diarsipkan, dibuat_pada) VALUES ('d-3', 'Dompet 3', 'tunai', 'wallet', 'tintHijau', 0, 0, 0, '${t.toIso8601String()}');");
+      await db1.customStatement("INSERT INTO tabel_dompet (id, nama, jenis, ikon, warna, saldo_awal_rupiah, urutan, diarsipkan, dibuat_pada) VALUES ('d-1', 'Dompet 1', 'tunai', 'wallet', 'tintHijau', 0, 0, 0, '${t.toIso8601String()}');");
+      await db1.customStatement("INSERT INTO tabel_dompet (id, nama, jenis, ikon, warna, saldo_awal_rupiah, urutan, diarsipkan, dibuat_pada) VALUES ('d-2', 'Dompet 2', 'tunai', 'wallet', 'tintHijau', 0, 0, 0, '${t.toIso8601String()}');");
+
+      // Buat database 2 dengan insert urutan berbeda [id-1, id-2, id-3]
+      final db2 = BasisDataFunda(NativeDatabase.memory());
+      final repo2 = CadanganRepositori(db2);
+
+      await db2.customStatement("INSERT INTO tabel_dompet (id, nama, jenis, ikon, warna, saldo_awal_rupiah, urutan, diarsipkan, dibuat_pada) VALUES ('d-1', 'Dompet 1', 'tunai', 'wallet', 'tintHijau', 0, 0, 0, '${t.toIso8601String()}');");
+      await db2.customStatement("INSERT INTO tabel_dompet (id, nama, jenis, ikon, warna, saldo_awal_rupiah, urutan, diarsipkan, dibuat_pada) VALUES ('d-2', 'Dompet 2', 'tunai', 'wallet', 'tintHijau', 0, 0, 0, '${t.toIso8601String()}');");
+      await db2.customStatement("INSERT INTO tabel_dompet (id, nama, jenis, ikon, warna, saldo_awal_rupiah, urutan, diarsipkan, dibuat_pada) VALUES ('d-3', 'Dompet 3', 'tunai', 'wallet', 'tintHijau', 0, 0, 0, '${t.toIso8601String()}');");
+
+      final doc1 = await repo1.eksporCadangan(waktuDibuat: t);
+      final doc2 = await repo2.eksporCadangan(waktuDibuat: t);
+
+      // Checksum harus persis sama karena ORDER BY primary key
+      expect(doc1.checksum, equals(doc2.checksum));
+
+      await db1.close();
+      await db2.close();
     });
   });
 }

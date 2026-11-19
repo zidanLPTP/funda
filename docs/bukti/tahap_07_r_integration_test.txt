@@ -1,0 +1,35 @@
+00:00 +0: loading D:/Proyek Coding/Flutter/Funda/integration_test/tahap_07_laporan_dan_cadangan_emulator_test.dart
+Running Gradle task 'assembleDebug'...                             45.7s
+√ Built build\app\outputs\flutter-apk\app-debug.apk
+Installing build\app\outputs\flutter-apk\app-debug.apk...        1,098ms
+00:00 +0: [Tahap 7-R Integrasi Emulator] Regresi A(c), Alur UI Nyata G, dan Tolok Ukur Beban 20k F
+=== [REGRESI A.c] Menguji skenario regresi Tahap 5 di emulator ===
+--> Pernyataan profil_dilewati tersimpan: true
+--> Dompet dibuat: dmp_1795062657231456_1. Syarat gerbang Modul 1 (ada dompet) terpenuhi.
+--> Saran personalisasi dengan utang memuat utang_cicilan (tersedia: false / segera hadir): true
+--> Kuis deterministik benih 42 ([soal_2, soal_0, soal_1, soal_5, soal_8]) vs benih 99 ([soal_6, soal_3, soal_4, soal_5, soal_8]) terbukti berbeda dan kunci konsisten.
+=== [ALUR G] Memulai pengujian antarmuka pengguna nyata di emulator ===
+[SCREEN_READY: tahap_07_banner_beranda]
+[SCREEN_READY: tahap_07_cadangan]
+--> Buat cadangan lewat UI sukses. Berkas tersimpan di LayananBagikanPalsu.
+[SCREEN_READY: tahap_07_laporan_normal]
+[SCREEN_READY: tahap_07_laporan_sensor]
+--> Tombol Bagikan Gambar diketuk.
+--> Tombol Bagikan PDF diketuk.
+--> Data dompet dan transaksi dihapus untuk menguji pemulihan.
+[SCREEN_READY: tahap_07_pratinjau_pemulihan]
+[SCREEN_READY: tahap_07_pratinjau_setelah_pulih]
+--> Verifikasi integritas: Seluruh tabel SQLite kembali utuh dan identik.
+[SCREEN_READY: tahap_07_beranda_setelah_pulih]
+=== [TOLOK UKUR F] Beban 20.000 Transaksi, 20 Utang, 20 Tagihan di Emulator ===
+--> Berhasil memasukkan total transaksi: 20001
+[BENCHMARK EMULATOR] Waktu Ekspor Cadangan: 569ms (5.71 MB)
+[BENCHMARK EMULATOR] Waktu Pemulihan Cadangan: 1018ms
+[BENCHMARK EMULATOR] Waktu Susun Laporan (10 iterasi): [11, 12, 11, 13, 12, 13, 7, 10, 8, 9]
+[BENCHMARK EMULATOR] Rata-rata Waktu Susun Laporan: 10.6ms
+[BENCHMARK EMULATOR] Waktu Render PDF: 69ms (Ukuran: 14219 bytes)
+[BENCHMARK EMULATOR] Waktu Render PNG: 212ms (Ukuran: 277296 bytes)
+[BENCHMARK EMULATOR] Waktu Buka Layar Laporan Sampai Tampil: 1910ms
+[SELESAI: Seluruh pengujian regresi, alur UI, dan benchmark emulator berhasil 100%]
+00:51 +1: (tearDownAll)
+00:51 +1: All tests passed!

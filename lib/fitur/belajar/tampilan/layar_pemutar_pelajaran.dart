@@ -192,7 +192,7 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
     if (_memuat) {
       return const Scaffold(
         backgroundColor: WarnaFunda.latar,
-        body: Center(child: CircularProgressIndicator(color: WarnaFunda.utama)),
+        body: Center(child: IndikatorMemuat(warna: WarnaFunda.utama)),
       );
     }
 
@@ -248,11 +248,11 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
                   Expanded(
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(SudutFunda.pil),
-                      child: LinearProgressIndicator(
-                        value: (totalLangkah > 0) ? (_indeksLangkah + 1) / totalLangkah : 0.0,
-                        backgroundColor: WarnaFunda.garis,
-                        valueColor: const AlwaysStoppedAnimation<Color>(WarnaFunda.utama),
-                        minHeight: 8,
+                      child: IndikatorMemuat.garis(
+                        nilai: (totalLangkah > 0) ? (_indeksLangkah + 1) / totalLangkah : 0.0,
+                        warnaLatar: WarnaFunda.garis,
+                        warna: WarnaFunda.utama,
+                        tinggi: 8,
                       ),
                     ),
                   ),

@@ -180,7 +180,20 @@ Berdasarkan hasil pengujian terisolasi pada 10 iterasi bersih di emulator Pixel 
 
 ---
 
-## 15. Pemulihan Cadangan Data, Checksum SHA-256, dan Kebijakan Privasi File (Tahap 7)
+## 16. Penyelarasan Pengujian Anti-Menggantung & Agregasi SQL Laporan (Tahap 7-R)
+
+- **Konteks:**
+  1. *Masalah Pengujian Menggantung:* Pemanggilan `pumpAndSettle()` tanpa batas waktu dapat menunggu hingga 10 menit bila widget memiliki animasi tak terbatas (`CircularProgressIndicator`/`LinearProgressIndicator`) atau timer aliran data yang tertahan di dalam `FakeAsync`. Selain itu, pemanggilan `Future.delayed()` sebagai penunggu data asinkron menyebabkan flakiness pengujian.
+  2. *Skalabilitas Foto Data:* Waktu foto data pengguna naik dari 20,55 ms (5.000 tx) ke 35,15 ms (20.000 tx), mencatat kenaikan +71% saat data bertambah 4x (perilaku sub-linear indeks SQLite, bukan strictly konstan O(1)).
+  3. *Bottleneck Deserialisasi Laporan:* Pada implementasi awal, penyusunan laporan bulanan memuat seluruh 20.000 transaksi ke memori Dart (`select(tabelTransaksi).get()`) untuk menghitung saldo dompet dan komposisi per sifat, menghabiskan waktu 455 ms di host.
+- **Keputusan:**
+  1. **Helper Terpusat & Komponen Anti-Animasi:** Berkas `test/pembantu/pompa_uji.dart` dijadikan SATU-SATUNYA tempat pemanggilan `pumpAndSettle` dengan batas waktu pendek (5 detik). Semua progress indicator dialihkan ke `IndikatorMemuat` yang membaca provider `penyediaTanpaAnimasi` (saat pengujian bernilai `true`, progress bar berprogres tetap sehingga bebas ticker tak terbatas).
+  2. **Batas Waktu Suite 30 Detik:** Seluruh berkas uji widget diikat oleh anotasi `@Timeout(Duration(seconds: 30))` dan `dart_test.yaml`. Suite `test/penjaga/aturan_pengujian_test.dart` secara otomatis mendeteksi pelanggaran.
+  3. **Agregasi SQL Murni:** Seluruh penghitungan komposisi per sifat dan per kategori dialihkan ke kueri SQL `GROUP BY`, dan saldo dompet menggunakan `hitungSaldoDompetSQL`. Waktu komputasi susun laporan terpangkas dari 458 ms menjadi 10.3 ms di host.
+- **Rencana Peninjauan:**
+  1. *Sub-Linear Foto Data (+71% pada data x4):* Terus pantau pada volume data 50.000 transaksi di Tahap 8/12 untuk memastikan indeks komposit `idx_transaksi_waktu` tetap optimal.
+  2. *Pengukuran Ulang Render Build UI di HP Sungguhan (Tahap 12):* Durasi "Render build widget UI" (340–353 ms) di emulator perlu diukur ulang pada perangkat Android/iOS fisik di Tahap 12 setelah memastikan jeda buatan harness test tidak ikut terukur.
+
 
 - **Konteks:**
   Pada Tahap 7, fitur cadangan data diekspor sebagai JSON teks terbuka kanonikal dengan ringkasan integritas SHA-256 deterministik. Berkas ini mencakup seluruh tabel pengguna (transaksi, utang, anggaran, profil, progres belajar).

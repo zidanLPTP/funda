@@ -23,6 +23,7 @@ class _LayarLaporanBulananState extends ConsumerState<LayarLaporanBulanan> {
   bool _sedangMengekspor = false;
 
   Future<void> _bagikanGambar(LaporanBulanan laporan, bool sensor) async {
+    debugPrint('--> _bagikanGambar MULAI DIPANGGIL');
     setState(() => _sedangMengekspor = true);
     try {
       final pngBytes = await PembuatGambarLaporan.tangkapDariKunci(_kunciKartuLaporan, pixelRatio: 3.0);
@@ -37,6 +38,7 @@ class _LayarLaporanBulananState extends ConsumerState<LayarLaporanBulanan> {
         teks: 'Berikut laporan edukasi keuangan pribadi dari aplikasi Funda.',
       );
     } catch (e) {
+      debugPrint('GALAT DI _BAGIKANGAMBAR: $e');
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -71,6 +73,7 @@ class _LayarLaporanBulananState extends ConsumerState<LayarLaporanBulanan> {
         teks: 'Berikut laporan edukasi keuangan pribadi (format PDF) dari aplikasi Funda.',
       );
     } catch (e) {
+      debugPrint('GALAT DI _BAGIKANGAMBAR: $e');
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -100,7 +103,7 @@ class _LayarLaporanBulananState extends ConsumerState<LayarLaporanBulanan> {
         foregroundColor: WarnaFunda.teks,
       ),
       body: asyncLaporan.when(
-        loading: () => const Center(child: CircularProgressIndicator()),
+        loading: () => const Center(child: IndikatorMemuat()),
         error: (err, stack) => Center(
           child: Padding(
             padding: const EdgeInsets.all(24),
@@ -121,7 +124,7 @@ class _LayarLaporanBulananState extends ConsumerState<LayarLaporanBulanan> {
         data: (laporan) {
           final konten = asyncKonten.asData?.value;
           if (konten == null) {
-            return const Center(child: CircularProgressIndicator());
+            return const Center(child: IndikatorMemuat());
           }
 
           final teks = terapkanSensor(laporan, konten, sensor: sensorAktif);
@@ -172,7 +175,7 @@ class _LayarLaporanBulananState extends ConsumerState<LayarLaporanBulanan> {
                                 }
                               },
                             ),
-                            loading: () => const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2)),
+                            loading: () => const IndikatorMemuat(ukuran: 16, ketebalan: 2),
                             error: (e, s) => const SizedBox(),
                           ),
                         ],

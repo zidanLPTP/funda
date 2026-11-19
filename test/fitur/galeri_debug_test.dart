@@ -1,3 +1,7 @@
+@Timeout(Duration(seconds: 30))
+library;
+
+import '../pembantu/pompa_uji.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -46,7 +50,7 @@ void main() {
             child: const AplikasiFunda(),
           ),
         );
-        await tester.pumpAndSettle();
+        await pompaAman(tester);
 
         expect(find.byType(LayarBeranda), findsOneWidget);
         expect(
@@ -55,7 +59,7 @@ void main() {
         );
 
         await tester.pumpWidget(const SizedBox());
-        await tester.pumpAndSettle();
+        await pompaAman(tester);
       },
     );
 
@@ -78,17 +82,17 @@ void main() {
           child: const AplikasiFunda(),
         ),
       );
-      await tester.pumpAndSettle();
+      await pompaAman(tester);
 
       // Pindah ke tab Lainnya
       await tester.tap(find.text('Lainnya'));
-      await tester.pumpAndSettle();
+      await pompaAman(tester);
 
       expect(find.byType(LayarLainnya), findsOneWidget);
       expect(find.text('Galeri Komponen UI'), findsOneWidget);
 
       await tester.pumpWidget(const SizedBox());
-      await tester.pumpAndSettle();
+      await pompaAman(tester);
     });
   });
 }

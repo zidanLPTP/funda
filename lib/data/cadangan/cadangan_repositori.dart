@@ -42,12 +42,14 @@ class CadanganRepositori {
     return File(p.join(dir.path, 'sebelum_pemulihan.json'));
   }
 
-  /// Mendapatkan daftar seluruh nama tabel SQLite yang diawali 'tabel_' secara langsung dari sqlite_master.
+  /// Mendapatkan daftar seluruh nama tabel pengguna pada skema basis data.
   Future<List<String>> dapatkanDaftarTabelSkema() async {
     final rows = await basisData.customSelect(
-      "SELECT name FROM sqlite_master WHERE type = 'table' AND name LIKE 'tabel_%' ORDER BY name ASC;",
+      "SELECT name FROM sqlite_master WHERE type = 'table' AND name NOT LIKE 'sqlite_%' AND name NOT LIKE 'android_%' ORDER BY name ASC;",
     ).get();
-    return rows.map((r) => r.read<String>('name')).toList();
+    final tabelDb = rows.map((r) => r.read<String>('name')).toSet();
+    final tabelDrift = basisData.allTables.map((t) => t.actualTableName).toSet();
+    return (tabelDb.union(tabelDrift)).toList()..sort();
   }
 
   /// Menemukan kolom kunci utama dari tabel tertentu untuk pengurutan kanonikal deterministik.

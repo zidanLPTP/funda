@@ -1,3 +1,7 @@
+@Timeout(Duration(seconds: 30))
+library;
+
+import '../pembantu/pompa_uji.dart';
 import 'package:drift/native.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -66,7 +70,7 @@ void main() {
       'Layar Anggaran menampilkan navigasi bulan dan keadaan kosong awal',
       (tester) async {
         await tester.pumpWidget(buatAplikasiUji(const LayarAnggaran()));
-        await tester.pumpAndSettle();
+        await pompaAman(tester);
 
         expect(find.text('Anggaran Bulanan'), findsOneWidget);
         expect(find.text('Total Anggaran'), findsOneWidget);
@@ -74,7 +78,7 @@ void main() {
         expect(find.text('Atur Anggaran Sekarang'), findsOneWidget);
 
         await tester.pumpWidget(const SizedBox());
-        await tester.pumpAndSettle();
+        await pompaAman(tester);
       },
     );
 
@@ -84,12 +88,12 @@ void main() {
         await tester.pumpWidget(
           buatAplikasiUji(const LayarAnggaran(), skalaTeks: 2.0),
         );
-        await tester.pumpAndSettle();
+        await pompaAman(tester);
 
         expect(tester.takeException(), isNull);
 
         await tester.pumpWidget(const SizedBox());
-        await tester.pumpAndSettle();
+        await pompaAman(tester);
       },
     );
   });
@@ -99,14 +103,14 @@ void main() {
       tester,
     ) async {
       await tester.pumpWidget(buatAplikasiUji(const LayarDaftarTujuan()));
-      await tester.pumpAndSettle();
+      await pompaAman(tester);
 
       expect(find.text('Tujuan Keuangan'), findsOneWidget);
       expect(find.text('Belum Ada Tujuan'), findsOneWidget);
       expect(find.text('Buat Tujuan Pertamamu'), findsOneWidget);
 
       await tester.pumpWidget(const SizedBox());
-      await tester.pumpAndSettle();
+      await pompaAman(tester);
     });
 
     testWidgets('Layar Form Tujuan validasi nama dan target dana', (
@@ -120,18 +124,18 @@ void main() {
       });
 
       await tester.pumpWidget(buatAplikasiUji(const LayarFormTujuan()));
-      await tester.pumpAndSettle();
+      await pompaAman(tester);
 
       expect(find.text('Tambah Tujuan'), findsOneWidget);
 
       // Coba tekan simpan tanpa mengisi
       await tester.tap(find.text('Buat Tujuan'));
-      await tester.pumpAndSettle();
+      await pompaAman(tester);
 
       expect(find.text('Nama tujuan wajib diisi'), findsOneWidget);
 
       await tester.pumpWidget(const SizedBox());
-      await tester.pumpAndSettle();
+      await pompaAman(tester);
     });
 
     testWidgets(
@@ -140,12 +144,12 @@ void main() {
         await tester.pumpWidget(
           buatAplikasiUji(const LayarFormTujuan(), skalaTeks: 2.0),
         );
-        await tester.pumpAndSettle();
+        await pompaAman(tester);
 
         expect(tester.takeException(), isNull);
 
         await tester.pumpWidget(const SizedBox());
-        await tester.pumpAndSettle();
+        await pompaAman(tester);
       },
     );
   });
@@ -155,7 +159,7 @@ void main() {
       'Layar Daftar Kantong menampilkan teks edukasi bantuan yang tenang',
       (tester) async {
         await tester.pumpWidget(buatAplikasiUji(const LayarDaftarKantong()));
-        await tester.pumpAndSettle();
+        await pompaAman(tester);
 
         expect(find.text('Kantong Dompet'), findsOneWidget);
         expect(
@@ -170,7 +174,7 @@ void main() {
         );
 
         await tester.pumpWidget(const SizedBox());
-        await tester.pumpAndSettle();
+        await pompaAman(tester);
       },
     );
 
@@ -183,7 +187,7 @@ void main() {
         await tester.pumpWidget(
           buatAplikasiUji(LayarDetailDompet(dompetId: dompetId)),
         );
-        await tester.pumpAndSettle();
+        await pompaAman(tester);
 
         expect(find.text('BCA Utama'), findsWidgets);
         expect(find.text('Saldo Bebas:'), findsOneWidget);
@@ -191,7 +195,7 @@ void main() {
         expect(find.text('Riwayat Transaksi Dompet Ini'), findsOneWidget);
 
         await tester.pumpWidget(const SizedBox());
-        await tester.pumpAndSettle();
+        await pompaAman(tester);
       },
     );
 
@@ -207,12 +211,12 @@ void main() {
             skalaTeks: 2.0,
           ),
         );
-        await tester.pumpAndSettle();
+        await pompaAman(tester);
 
         expect(tester.takeException(), isNull);
 
         await tester.pumpWidget(const SizedBox());
-        await tester.pumpAndSettle();
+        await pompaAman(tester);
       },
     );
   });

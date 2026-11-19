@@ -124,6 +124,8 @@
 | safety backup | cadanganKeselamatan | Cadangan otomatis (`sebelum_pemulihan.json`) sebelum penggantian data |
 | backup reminder | PerhitunganPengingatCadangan | Logika pengingat 14 hari pencadangan data di Beranda |
 | schema upgrader | RegistriPeningkatCadangan | Penjaga peningkatan versi skema berkas cadangan lama |
+| loading indicator | IndikatorMemuat | Komponen pemuat terpusat pengganti Circular/LinearProgressIndicator dengan kontrol tanpa animasi untuk pengujian |
+| test pump helper | pompaAman / pompaHingga / pompaHinggaAda | Pembantu pengujian widget anti-menggantung berbatas waktu |
 
 ## Aturan Cabang Kerja (Git)
 - Setiap tahap dikerjakan pada cabang khusus (contoh: `tahap-02-dompet-transaksi`).

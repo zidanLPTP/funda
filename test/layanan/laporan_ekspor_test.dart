@@ -1,3 +1,7 @@
+@Timeout(Duration(seconds: 30))
+library;
+
+import '../pembantu/pompa_uji.dart';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
@@ -73,10 +77,12 @@ void main() {
         sensor: false,
       );
       expect(pdfNormalBytes.isNotEmpty, isTrue);
-      // Simpan contoh ekspor PDF
-      final folderEkspor = Directory('docs/contoh_ekspor');
-      if (!folderEkspor.existsSync()) folderEkspor.createSync(recursive: true);
-      File('docs/contoh_ekspor/laporan.pdf').writeAsBytesSync(pdfNormalBytes);
+      // Simpan contoh ekspor PDF ke direktori sementara pengujian
+      final folderTemp = Directory.systemTemp.createTempSync('funda_uji_pdf_');
+      addTearDown(() {
+        if (folderTemp.existsSync()) folderTemp.deleteSync(recursive: true);
+      });
+      File('${folderTemp.path}/laporan.pdf').writeAsBytesSync(pdfNormalBytes);
 
       // Validasi awalan %PDF
       final headerStr = String.fromCharCodes(pdfNormalBytes.take(5));
@@ -118,7 +124,7 @@ void main() {
           ),
         ),
       );
-      await tester.pumpAndSettle();
+      await pompaAman(tester);
 
       Uint8List? pngBytes;
       await tester.runAsync(() async {
@@ -136,8 +142,12 @@ void main() {
       final lebar = byteData.getUint32(16, Endian.big);
       expect(lebar, equals(1080), reason: 'Lebar gambar PNG harus tepat 1080 px (360 dp * 3.0)');
 
-      // Simpan contoh ekspor PNG Normal
-      File('docs/contoh_ekspor/laporan_normal.png').writeAsBytesSync(pngBytes!);
+      // Simpan contoh ekspor PNG ke direktori sementara pengujian
+      final folderTempPng = Directory.systemTemp.createTempSync('funda_uji_png_');
+      addTearDown(() {
+        if (folderTempPng.existsSync()) folderTempPng.deleteSync(recursive: true);
+      });
+      File('${folderTempPng.path}/laporan_normal.png').writeAsBytesSync(pngBytes!);
 
       // Mode Sensor PNG
       final kunciSensor = GlobalKey();
@@ -157,14 +167,14 @@ void main() {
           ),
         ),
       );
-      await tester.pumpAndSettle();
+      await pompaAman(tester);
 
       Uint8List? pngSensorBytes;
       await tester.runAsync(() async {
         pngSensorBytes = await PembuatGambarLaporan.tangkapDariKunci(kunciSensor, pixelRatio: 3.0);
       });
       expect(pngSensorBytes, isNotNull);
-      File('docs/contoh_ekspor/laporan_sensor.png').writeAsBytesSync(pngSensorBytes!);
+      File('${folderTempPng.path}/laporan_sensor.png').writeAsBytesSync(pngSensorBytes!);
     });
 
     test('3. LayananBagikanPalsu: simpan, bagikan, format nama berkas benar, dan bersihkan cache > 24 jam', () async {
@@ -199,5 +209,147 @@ void main() {
       // Bersihkan direktori uji
       dirTemp.deleteSync(recursive: true);
     });
+
+    test('4. Ekstraksi teks byte PDF membuktikan PDF sensor bebas teks Rp dan mendukung nominal negatif U+2212', () async {
+      final pembuatPdf = PembuatPdfLaporan(
+        fontRegularBytes: fontRegBytes,
+        fontBoldBytes: fontBoldBytes,
+      );
+
+      // Skenario kekayaan bersih negatif (utang > dompet -> U+2212)
+      final masukanNegatif = MasukanLaporanBulanan(
+        bulan: DateTime(2026, 11, 1),
+        waktuDibuat: DateTime(2026, 11, 18, 14, 0),
+        uangMasukRupiah: 2000000,
+        uangKeluarRupiah: 1500000,
+        pengeluaranPerSifat: {'kebutuhan': 1500000},
+        daftarPosAnggaran: [],
+        daftarTujuanAktif: [],
+        saldoDompetAktifRupiah: 1000000,
+        sisaUtangAktifRupiah: 3000000, // Bersih: -2.000.000 (mengandung U+2212)
+      );
+      final laporanNegatif = susunLaporanBulanan(masukanNegatif, konten: konten);
+
+      // 1. Ekspor Normal PDF dengan U+2212
+      final pdfNormal = await pembuatPdf.buatPdf(
+        laporan: laporanNegatif,
+        konten: konten,
+        sensor: false,
+      );
+      expect(pdfNormal.isNotEmpty, isTrue);
+
+      // Ekstraksi teks dari PDF Normal
+      final teksNormalPdf = _ekstrakTeksDariBytePdf(pdfNormal);
+      expect(teksNormalPdf.contains('Rp'), isTrue, reason: 'PDF normal wajib memuat simbol Rp');
+
+      // 2. Ekspor Sensor PDF
+      final pdfSensor = await pembuatPdf.buatPdf(
+        laporan: laporanNegatif,
+        konten: konten,
+        sensor: true,
+      );
+      expect(pdfSensor.isNotEmpty, isTrue);
+
+      // Ekstraksi teks dari PDF Sensor
+      final teksSensorPdf = _ekstrakTeksDariBytePdf(pdfSensor);
+      expect(
+        teksSensorPdf.contains('Rp'),
+        isFalse,
+        reason: 'Aliran teks PDF mode sensor tidak boleh memuat kata "Rp"',
+      );
+    });
   });
+}
+
+String _ekstrakTeksDariBytePdf(Uint8List bytes) {
+  final patternStream = [115, 116, 114, 101, 97, 109]; // 'stream'
+  final patternEnd = [101, 110, 100, 115, 116, 114, 101, 97, 109]; // 'endstream'
+
+  final List<Uint8List> decompressedStreams = [];
+  int i = 0;
+  while (i < bytes.length) {
+    int sIdx = -1;
+    for (int j = i; j <= bytes.length - patternStream.length; j++) {
+      bool m = true;
+      for (int k = 0; k < patternStream.length; k++) {
+        if (bytes[j + k] != patternStream[k]) {
+          m = false;
+          break;
+        }
+      }
+      if (m) {
+        sIdx = j;
+        break;
+      }
+    }
+    if (sIdx == -1) break;
+
+    var start = sIdx + patternStream.length;
+    while (start < bytes.length && (bytes[start] == 10 || bytes[start] == 13)) {
+      start++;
+    }
+
+    int eIdx = -1;
+    for (int j = start; j <= bytes.length - patternEnd.length; j++) {
+      bool m = true;
+      for (int k = 0; k < patternEnd.length; k++) {
+        if (bytes[j + k] != patternEnd[k]) {
+          m = false;
+          break;
+        }
+      }
+      if (m) {
+        eIdx = j;
+        break;
+      }
+    }
+    if (eIdx == -1) break;
+
+    var end = eIdx;
+    while (end > start && (bytes[end - 1] == 10 || bytes[end - 1] == 13)) {
+      end--;
+    }
+
+    final sBytes = bytes.sublist(start, end);
+    try {
+      final decomp = zlib.decode(sBytes);
+      decompressedStreams.add(Uint8List.fromList(decomp));
+    } catch (_) {}
+
+    i = eIdx + patternEnd.length;
+  }
+
+  // 1. Ekstrak kamus ToUnicode CMap dari stream
+  final Map<String, String> cmap = {};
+  final List<String> contentStreams = [];
+
+  for (final s in decompressedStreams) {
+    final str = String.fromCharCodes(s);
+    if (str.contains('beginbfchar')) {
+      final regexBf = RegExp(r'<([0-9a-fA-F]+)>\s*<([0-9a-fA-F]+)>');
+      for (final match in regexBf.allMatches(str)) {
+        final cid = match.group(1)!.toUpperCase();
+        final codePoint = int.parse(match.group(2)!, radix: 16);
+        cmap[cid] = String.fromCharCode(codePoint);
+      }
+    } else if (str.contains('BT') && str.contains('ET')) {
+      contentStreams.add(str);
+    }
+  }
+
+  // 2. Dekode urutan teks dari content streams
+  final buffer = StringBuffer();
+  final regexHexStr = RegExp(r'<([0-9a-fA-F]+)>');
+  for (final cs in contentStreams) {
+    for (final match in regexHexStr.allMatches(cs)) {
+      final hex = match.group(1)!.toUpperCase();
+      for (int k = 0; k + 4 <= hex.length; k += 4) {
+        final code = hex.substring(k, k + 4);
+        buffer.write(cmap[code] ?? '');
+      }
+      buffer.write(' ');
+    }
+  }
+
+  return buffer.toString();
 }

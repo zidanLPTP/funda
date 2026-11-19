@@ -1,5 +1,9 @@
+@Timeout(Duration(seconds: 30))
+library;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:funda/komponen/indikator_memuat.dart';
 import 'package:funda/komponen/tombol_funda.dart';
 import 'package:funda/tema/tema.dart';
 
@@ -54,7 +58,7 @@ void main() {
         ),
       );
 
-      expect(find.byType(CircularProgressIndicator), findsOneWidget);
+      expect(find.byType(IndikatorMemuat), findsOneWidget);
       expect(find.text('Proses'), findsNothing);
     });
 

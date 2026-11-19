@@ -104,7 +104,7 @@ class _LayarSemuaTagihanState extends ConsumerState<LayarSemuaTagihan> {
       ),
       body: SafeArea(
         child: semuaTagihanAsync.when(
-          loading: () => const Center(child: CircularProgressIndicator()),
+          loading: () => const Center(child: IndikatorMemuat()),
           error: (err, _) => Center(child: Text('Terjadi kesalahan: $err')),
           data: (daftar) {
             final disaring = daftar.where((t) {

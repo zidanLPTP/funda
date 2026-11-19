@@ -26,6 +26,11 @@ void main() {
       expect(persenTerdekat(2300000, 2000000), equals(115));
       // 400.000 / 600.000 = 66.666% -> 67%
       expect(persenTerdekat(400000, 600000), equals(67));
+      // Batas pembulatan integer: 1 dari 8 = 12.5% dibulatkan ke atas -> 13%
+      expect(persenTerdekat(1, 8), equals(13));
+      // Total 0 -> tidak ada hasil (null)
+      expect(persenTerdekat(0, 0), isNull);
+      expect(persenTerdekat(5, 0), isNull);
     });
 
     // Vektor V1

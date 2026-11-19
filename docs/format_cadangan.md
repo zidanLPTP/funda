@@ -112,9 +112,18 @@ Sebelum menghapus data lama, aplikasi secara otomatis mengekspor seluruh isi dat
 
 ---
 
-## 5. Peningkat Versi Skema Cadangan (*Schema Upgrader*)
+## 5. Penjaga Skema & Peningkat Cadangan (*Schema Guard & Upgrader*)
 
-Jika berkas cadangan yang dipulihkan dibuat pada versi skema masa lalu (`versi_skema < basisData.schemaVersion`), kelas `RegistriPeningkatCadangan` secara berantai menjalankan transformasi data antarversi sebelum disisipkan ke basis data (misalnya: penambahan kolom default, pemetaan nama kolom lama ke baru).
+### A. Uji Penjaga Tabel Skema (Table Guard)
+Untuk mencegah risiko kelalaian developer saat menambahkan tabel baru pada `BasisDataFunda` di masa depan:
+- Uji penjaga otomatis `test/data/cadangan_test.dart` (butir 1) membaca seluruh tabel terdaftar di skema SQLite dan Drift (`basisData.allTables`).
+- Uji ini memastikan setiap tabel baru **wajib** ikut diekspor ke dalam cadangan, kecuali bila tabel tersebut secara eksplisit terdaftar di dalam himpunan `CadanganRepositori.tabelDikecualikan`.
+- Saat ini `CadanganRepositori.tabelDikecualikan` bernilai kosong (`{}`), menegaskan bahwa seluruh tabel data pengguna wajib tercakup dalam cadangan.
+
+### B. Registri Peningkat Cadangan (RegistriPeningkatCadangan)
+Jika berkas cadangan yang dipulihkan dibuat pada versi skema masa lalu (`versiSkema < basisData.schemaVersion`), kelas `RegistriPeningkatCadangan` secara berantai menjalankan transformasi data antarversi sebelum disisipkan ke basis data:
+- Konstanta `versiSkemaCadanganPertama = 10;` menandai versi skema awal saat fitur cadangan diperkenalkan di Tahap 7.
+- Uji penjaga otomatis (butir 2) memastikan bahwa untuk setiap rentang versi `v` dari `versiSkemaCadanganPertama` hingga `schemaVersion - 1`, **wajib** terdaftar sebuah fungsi `FungsiPeningkatTabel` di `RegistriPeningkatCadangan`. Bila ada versi skema yang dinaikkan tanpa mendaftarkan fungsi peningkat, uji otomatis akan langsung gagal.
 
 ---
 

@@ -214,6 +214,35 @@ Laporan harus jujur. Jika sesuatu belum jalan, katakan. Jangan menyatakan "seles
 2. Klaim apa pun yang belum dibuktikan dengan perintah nyata di sesi ini **WAJIB ditulis "BELUM TERVERIFIKASI"**, bukan "selesai" atau "lolos".
 3. Kata **"LOLOS"** adalah hak pemilik proyek dan reviewer, **BUKAN agen**. Di laporan, agen hanya menyatakan "pengujian lulus: X/Y" atau "verifikasi mandiri terpenuhi", tidak pernah menyatakan tahap lolos.
 
+### Aturan Pengujian Anti-Menggantung (WAJIB & KETAT Mulai Tahap 7-R)
+1. **Pemisahan Lingkup Pengujian:**
+   - **Uji Widget:** Hanya menguji antarmuka pengguna (UI) murni dengan provider palsu/mock (override bernilai langsung seperti `AsyncValue.data(...)` atau `Stream.value(...)`) tanpa basis data nyata.
+   - **Uji Repositori & Perhitungan:** Menggunakan `test()` biasa dengan `NativeDatabase.memory()`.
+   - **Alur Nyata End-to-End:** Dijalankan di dalam `integration_test/` pada emulator atau perangkat fisik.
+   - Bila uji widget terpaksa memakai basis data nyata: wajib dibungkus dengan `await tester.runAsync(...)`.
+2. **Helper Terpusat `pompa_uji.dart`:**
+   - Berkas `test/pembantu/pompa_uji.dart` adalah **SATU-SATUNYA** tempat memanggil `pumpAndSettle()`.
+   - Pemanggilan selalu menggunakan batas waktu pendek aman (default 5 detik: `pumpAndSettle(100 ms, EnginePhase.sendSemanticsUpdate, 5 detik)`).
+   - Dilarang memanggil `tester.pumpAndSettle()` langsung di berkas uji di luar helper.
+   - Sediakan helper `pompaHingga(tester, kondisi)` dan `pompaHinggaAda(tester, pencari)`.
+3. **Komponen Indikator Memuat Terpusat (`IndikatorMemuat`):**
+   - Seluruh pemanggilan `CircularProgressIndicator` dan `LinearProgressIndicator` di `lib/` dialihkan ke `IndikatorMemuat` di `lib/komponen/indikator_memuat.dart`.
+   - Komponen ini membaca provider `penyediaTanpaAnimasi` (default `false`). Pengujian widget meng-override `penyediaTanpaAnimasi: true` sehingga animasi tidak berulang tanpa akhir di dalam `FakeAsync`.
+4. **Batas Waktu Pengujian 30 Detik:**
+   - Setiap berkas uji widget wajib menyertakan anotasi `@Timeout(Duration(seconds: 30))`.
+   - Berkas `dart_test.yaml` di root proyek mengunci `timeout: 30s` secara global.
+5. **Pelepasan Widget Sebelum Teardown:**
+   - Pada `addTearDown`, sebelum menutup basis data, pohon widget wajib dilepas menggunakan `await tester.pumpWidget(const SizedBox.shrink())` lalu `await tester.pump(Duration.zero)`.
+6. **Larangan Penunggu Buta:**
+   - DILARANG menggunakan `Future.delayed()` di dalam berkas uji widget.
+   - DILARANG menggunakan `tester.pump(Duration)` tetap sebagai penunggu data asinkron.
+7. **Linter Penjaga Pengujian Otomatis:**
+   - Suite `test/penjaga/aturan_pengujian_test.dart` secara otomatis memeriksa seluruh berkas sumber dan GAGAL jika menemukan:
+     * `pumpAndSettle(` di luar `pompa_uji.dart`.
+     * `Future.delayed(` di uji widget.
+     * `Circular/LinearProgressIndicator` di `lib/` di luar `IndikatorMemuat`.
+     * Berkas uji widget tanpa timeout.
+
 ---
 
 ## 10. Hal yang Dilarang

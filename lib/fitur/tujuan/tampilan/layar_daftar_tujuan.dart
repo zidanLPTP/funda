@@ -53,7 +53,7 @@ class LayarDaftarTujuan extends ConsumerWidget {
       ),
       body: SafeArea(
         child: daftarTujuanAsync.when(
-          loading: () => const Center(child: CircularProgressIndicator()),
+          loading: () => const Center(child: IndikatorMemuat()),
           error: (e, _) => Center(child: Text('Terjadi kesalahan: $e')),
           data: (daftar) {
             if (daftar.isEmpty) {
@@ -190,13 +190,11 @@ class _KartuBentoTujuan extends ConsumerWidget {
           const SizedBox(height: SpasiFunda.s),
           ClipRRect(
             borderRadius: BorderRadius.circular(SudutFunda.pil),
-            child: LinearProgressIndicator(
-              value: (progres / 100).clamp(0.0, 1.0),
-              minHeight: 6,
-              backgroundColor: WarnaFunda.garis,
-              valueColor: AlwaysStoppedAnimation<Color>(
-                progres >= 100 ? WarnaFunda.sukses : WarnaFunda.utama,
-              ),
+            child: IndikatorMemuat.garis(
+              nilai: (progres / 100).clamp(0.0, 1.0),
+              tinggi: 6,
+              warnaLatar: WarnaFunda.garis,
+              warna: progres >= 100 ? WarnaFunda.sukses : WarnaFunda.utama,
             ),
           ),
           const SizedBox(height: SpasiFunda.xs),

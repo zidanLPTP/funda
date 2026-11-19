@@ -148,7 +148,7 @@ class _LayarTesAwalState extends ConsumerState<LayarTesAwal> {
   Widget build(BuildContext context) {
     if (_memuat) {
       return const Scaffold(
-        body: Center(child: CircularProgressIndicator()),
+        body: Center(child: IndikatorMemuat()),
       );
     }
 
@@ -347,10 +347,10 @@ class _LayarTesAwalState extends ConsumerState<LayarTesAwal> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              LinearProgressIndicator(
-                value: (_indeksPertanyaanProfil + 1) / daftarPertanyaan.length,
-                backgroundColor: WarnaFunda.garis,
-                color: WarnaFunda.utama,
+              IndikatorMemuat.garis(
+                nilai: (_indeksPertanyaanProfil + 1) / daftarPertanyaan.length,
+                warnaLatar: WarnaFunda.garis,
+                warna: WarnaFunda.utama,
               ),
               const SizedBox(height: SpasiFunda.l),
               TeksFunda.judulBagian(pertanyaan.tanya),
@@ -458,10 +458,10 @@ class _LayarTesAwalState extends ConsumerState<LayarTesAwal> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              LinearProgressIndicator(
-                value: (_indeksSoal + 1) / daftarSoal.length,
-                backgroundColor: WarnaFunda.garis,
-                color: WarnaFunda.utama,
+              IndikatorMemuat.garis(
+                nilai: (_indeksSoal + 1) / daftarSoal.length,
+                warnaLatar: WarnaFunda.garis,
+                warna: WarnaFunda.utama,
               ),
               const SizedBox(height: SpasiFunda.l),
               TeksFunda.judulBagian(soal.tanya),
@@ -653,8 +653,7 @@ class _LayarTesAwalState extends ConsumerState<LayarTesAwal> {
                             }).toList(),
                           );
                         },
-                        loading: () => const Center(
-                            child: CircularProgressIndicator()),
+                        loading: () => const Center(child: IndikatorMemuat()),
                         error: (err, stack) =>
                             const Text('Gagal memuat rekomendasi.'),
                       ),

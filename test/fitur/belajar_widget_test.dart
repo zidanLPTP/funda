@@ -1,3 +1,7 @@
+@Timeout(Duration(seconds: 30))
+library;
+
+import '../pembantu/pompa_uji.dart';
 import 'package:drift/native.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -50,7 +54,7 @@ void main() {
           ),
         ),
       );
-      await tester.pumpAndSettle();
+      await pompaAman(tester);
 
       // Memastikan teks dan istilah terurai dalam RichText
       expect(find.textContaining('Pahami bagaimana'), findsOneWidget);
@@ -70,7 +74,7 @@ void main() {
         return true;
       });
       expect(ditemukan, isTrue, reason: 'Span istilah harus ditemukan');
-      await tester.pumpAndSettle();
+      await pompaAman(tester);
 
       // Dialog kamus terbuka
       expect(find.text('Arus Kas'), findsOneWidget);
@@ -79,7 +83,7 @@ void main() {
 
       // Tutup dialog
       await tester.tap(find.text('Mengerti'));
-      await tester.pumpAndSettle();
+      await pompaAman(tester);
       expect(find.text('Aliran uang masuk dan uang keluar dalam kurun waktu tertentu.'), findsNothing);
     });
   });
@@ -212,7 +216,7 @@ void main() {
           ),
         ),
       );
-      await tester.pumpAndSettle();
+      await pompaAman(tester);
 
       // Cek judul layar dan bagian
       expect(find.text('Belajar Finansial'), findsOneWidget);
@@ -229,9 +233,9 @@ void main() {
 
       // Ketuk tombol "Aku tidak punya ini"
       await tester.ensureVisible(find.text('Aku tidak punya ini'));
-      await tester.pumpAndSettle();
+      await pompaAman(tester);
       await tester.tap(find.text('Aku tidak punya ini'));
-      await tester.pumpAndSettle();
+      await pompaAman(tester);
 
       // Verifikasi di DB bahwa pernyataan tersimpan
       final repo = PernyataanRepositori(db);
@@ -314,14 +318,14 @@ void main() {
 
       // Pilih jawaban benar soal 1
       await tester.tap(find.text(jawaban1));
-      await tester.pumpAndSettle();
+      await pompaAman(tester);
 
       // Penjelasan langsung muncul
       expect(find.text(penjelasan1), findsOneWidget);
 
       // Lanjut ke soal 2
       await tester.tap(find.text('Soal Berikutnya'));
-      await tester.pumpAndSettle();
+      await pompaAman(tester);
 
       // Soal 2 tampil
       expect(find.text('Soal 2/2'), findsOneWidget);
@@ -330,12 +334,12 @@ void main() {
 
       // Pilih jawaban benar soal 2
       await tester.tap(find.text(jawaban2));
-      await tester.pumpAndSettle();
+      await pompaAman(tester);
       expect(find.text(penjelasan2), findsOneWidget);
 
       // Selesaikan kuis
       await tester.tap(find.text('Lihat Hasil Kuis'));
-      await tester.pumpAndSettle();
+      await pompaAman(tester);
 
       // Layar Hasil Kelulusan
       expect(find.text('Selamat, Kamu Lulus!'), findsOneWidget);
@@ -382,7 +386,7 @@ void main() {
       );
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 200));
-      await tester.pumpAndSettle();
+      await pompaAman(tester);
 
       // Langkah 1: Pemantik
       expect(find.text('Pemantik'), findsOneWidget);
@@ -391,66 +395,66 @@ void main() {
 
       // Ketuk Lanjut -> Langkah 2: Kartu Konsep 1/3
       await tester.tap(find.text('Lanjut'));
-      await tester.pumpAndSettle();
+      await pompaAman(tester);
       expect(find.text('Arus kas: uang masuk dikurangi uang keluar'), findsOneWidget);
 
       // Ketuk Lanjut -> Langkah 3: Kartu Konsep 2/3
       await tester.tap(find.text('Lanjut'));
-      await tester.pumpAndSettle();
+      await pompaAman(tester);
       expect(find.text('Petakan dari mana dan ke mana'), findsOneWidget);
 
       // Ketuk Lanjut -> Langkah 4: Kartu Konsep 3/3
       await tester.tap(find.text('Lanjut'));
-      await tester.pumpAndSettle();
+      await pompaAman(tester);
       expect(find.text('Membaca hasilnya dengan tenang'), findsOneWidget);
 
       // Ketuk Lanjut -> Langkah 5: Contoh Angka
       await tester.tap(find.text('Lanjut'));
-      await tester.pumpAndSettle();
+      await pompaAman(tester);
       expect(find.text('Contoh arus kas satu bulan'), findsOneWidget);
       expect(find.text('Uang saku dan gaji paruh waktu'), findsOneWidget);
 
       // Ketuk Lanjut -> Langkah 6: Cek Paham
       await tester.tap(find.text('Lanjut'));
-      await tester.pumpAndSettle();
+      await pompaAman(tester);
       expect(find.text('Uji Pemahaman Singkat'), findsOneWidget);
       expect(find.textContaining('Pemasukan Rp3.000.000 dan pengeluaran Rp3.200.000'), findsOneWidget);
 
       // Jawab ketiga soal cek paham
       await tester.tap(find.text('Minus Rp200.000, uang keluar lebih besar'));
-      await tester.pumpAndSettle();
+      await pompaAman(tester);
 
       final soal2 = find.text('Biaya kos bulanan');
       await tester.ensureVisible(soal2);
-      await tester.pumpAndSettle();
+      await pompaAman(tester);
       await tester.tap(soal2);
-      await tester.pumpAndSettle();
+      await pompaAman(tester);
 
       final soal3 = find.text('Cari bagian pengeluaran terbesar dan lihat mana yang bisa disesuaikan');
       await tester.ensureVisible(soal3);
-      await tester.pumpAndSettle();
+      await pompaAman(tester);
       await tester.tap(soal3);
-      await tester.pumpAndSettle();
+      await pompaAman(tester);
 
       // Sekarang tombol Lanjut aktif -> Langkah 7: Misi Praktik
       await tester.tap(find.text('Lanjut'));
-      await tester.pumpAndSettle();
+      await pompaAman(tester);
       expect(find.text('Petakan uang masuk dan keluar'), findsOneWidget);
       expect(find.text('Belum relevan buat aku'), findsOneWidget);
 
       // Pengguna memilih lewati misi
       await tester.tap(find.text('Belum relevan buat aku'));
-      await tester.pumpAndSettle();
+      await pompaAman(tester);
       expect(find.text('Misi ini kamu lewati.'), findsOneWidget);
 
       // Ketuk Lanjut -> Langkah 8: Umpan Balik
       await tester.tap(find.text('Lanjut'));
-      await tester.pumpAndSettle();
+      await pompaAman(tester);
       expect(find.text('Hasil dari Datamu'), findsOneWidget);
 
       // Ketuk Lanjut -> Langkah 9: Tindak Lanjut
       await tester.tap(find.text('Lanjut'));
-      await tester.pumpAndSettle();
+      await pompaAman(tester);
       expect(find.text('Langkah Kecil Berikutnya'), findsOneWidget);
       expect(find.text('Selesai Belajar'), findsOneWidget);
 
@@ -536,7 +540,7 @@ void main() {
       );
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 200));
-      await tester.pumpAndSettle();
+      await pompaAman(tester);
 
       FlutterError.onError = previousOnError;
 

@@ -20,7 +20,7 @@ class LayarBelajar extends ConsumerWidget {
       body: SafeArea(
         child: petaAsync.when(
           loading: () => const Center(
-            child: CircularProgressIndicator(color: WarnaFunda.utama),
+            child: IndikatorMemuat(warna: WarnaFunda.utama),
           ),
           error: (err, stack) => Center(
             child: Padding(

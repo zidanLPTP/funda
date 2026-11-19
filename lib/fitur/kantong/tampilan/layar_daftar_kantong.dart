@@ -200,7 +200,7 @@ class _LayarDaftarKantongState extends ConsumerState<LayarDaftarKantong> {
               loading: () => const Center(
                 child: Padding(
                   padding: EdgeInsets.all(SpasiFunda.xl),
-                  child: CircularProgressIndicator(),
+                  child: IndikatorMemuat(),
                 ),
               ),
               error: (e, _) => Center(child: Text('Terjadi kesalahan: $e')),

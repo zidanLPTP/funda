@@ -1,3 +1,7 @@
+@Timeout(Duration(seconds: 30))
+library;
+
+import '../pembantu/pompa_uji.dart';
 import 'package:drift/native.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -198,13 +202,13 @@ void main() {
         ),
       ),
     );
-    await tester.pumpAndSettle();
+    await pompaAman(tester);
 
     expect(find.text('Mulai & Tes Awal'), findsOneWidget);
     expect(find.text('Lewati'), findsOneWidget);
 
     await tester.tap(find.text('Lewati'));
-    await tester.pumpAndSettle();
+    await pompaAman(tester);
 
     // Verifikasi pernyataan profil_dilewati tersimpan di DB
     final pernyataan = await (db.select(db.tabelPernyataan)
@@ -230,15 +234,15 @@ void main() {
         ),
       ),
     );
-    await tester.pumpAndSettle();
+    await pompaAman(tester);
 
     // Isi tujuan utama di tahap pembuka
     await tester.enterText(find.byType(TextField), 'Bebas utang dan punya tabungan');
-    await tester.pumpAndSettle();
+    await pompaAman(tester);
 
     // Ketuk Mulai Sekarang -> masuk ke Tahap Profil
     await tester.tap(find.text('Mulai Sekarang'));
-    await tester.pumpAndSettle();
+    await pompaAman(tester);
 
     // Jawab 6 pertanyaan profil
     for (var i = 0; i < 6; i++) {
@@ -247,14 +251,14 @@ void main() {
       // Pilih opsi pertama
       final pilihanPertama = find.byType(InkWell).first;
       await tester.tap(pilihanPertama);
-      await tester.pumpAndSettle();
+      await pompaAman(tester);
 
       if (i < 5) {
         await tester.tap(find.text('Pertanyaan Berikutnya'));
-        await tester.pumpAndSettle();
+        await pompaAman(tester);
       } else {
         await tester.tap(find.text('Lanjut ke Tes Pemahaman'));
-        await tester.pumpAndSettle();
+        await pompaAman(tester);
       }
     }
 
@@ -265,14 +269,14 @@ void main() {
       // Pilih opsi kedua ('B') untuk semua soal
       final opsiJawaban = find.text('B');
       await tester.tap(opsiJawaban);
-      await tester.pumpAndSettle();
+      await pompaAman(tester);
 
       if (i < 11) {
         await tester.tap(find.text('Soal Berikutnya'));
-        await tester.pumpAndSettle();
+        await pompaAman(tester);
       } else {
         await tester.tap(find.text('Lihat Hasil'));
-        await tester.pumpAndSettle();
+        await pompaAman(tester);
       }
     }
 

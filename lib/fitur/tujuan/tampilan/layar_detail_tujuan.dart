@@ -66,7 +66,7 @@ class LayarDetailTujuan extends ConsumerWidget {
 
     return tujuanAsync.when(
       loading: () =>
-          const Scaffold(body: Center(child: CircularProgressIndicator())),
+          const Scaffold(body: Center(child: IndikatorMemuat())),
       error: (e, _) =>
           Scaffold(body: Center(child: Text('Terjadi kesalahan: $e'))),
       data: (tujuan) {
@@ -220,15 +220,13 @@ class LayarDetailTujuan extends ConsumerWidget {
                       const SizedBox(height: SpasiFunda.m),
                       ClipRRect(
                         borderRadius: BorderRadius.circular(SudutFunda.pil),
-                        child: LinearProgressIndicator(
-                          value: (progres / 100).clamp(0.0, 1.0),
-                          minHeight: 8,
-                          backgroundColor: WarnaFunda.garis,
-                          valueColor: AlwaysStoppedAnimation<Color>(
-                            progres >= 100
-                                ? WarnaFunda.sukses
-                                : WarnaFunda.utama,
-                          ),
+                        child: IndikatorMemuat.garis(
+                          nilai: (progres / 100).clamp(0.0, 1.0),
+                          tinggi: 8,
+                          warnaLatar: WarnaFunda.garis,
+                          warna: progres >= 100
+                              ? WarnaFunda.sukses
+                              : WarnaFunda.utama,
                         ),
                       ),
                       const SizedBox(height: SpasiFunda.s),
@@ -399,7 +397,7 @@ class LayarDetailTujuan extends ConsumerWidget {
                 const SizedBox(height: SpasiFunda.s),
                 daftarKantongAsync.when(
                   loading: () =>
-                      const Center(child: CircularProgressIndicator()),
+                      const Center(child: IndikatorMemuat()),
                   error: (e, _) => Center(child: Text('Terjadi kesalahan: $e')),
                   data: (daftarKantong) {
                     if (daftarKantong.isEmpty) {
@@ -473,7 +471,7 @@ class LayarDetailTujuan extends ConsumerWidget {
                 const SizedBox(height: SpasiFunda.s),
                 riwayatAlokasiAsync.when(
                   loading: () =>
-                      const Center(child: CircularProgressIndicator()),
+                      const Center(child: IndikatorMemuat()),
                   error: (e, _) => Center(child: Text('Terjadi kesalahan: $e')),
                   data: (daftarAlokasi) {
                     if (daftarAlokasi.isEmpty) {

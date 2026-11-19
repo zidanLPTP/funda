@@ -266,7 +266,7 @@ class _LayarCadanganState extends ConsumerState<LayarCadangan> {
         foregroundColor: WarnaFunda.teks,
       ),
       body: asyncStatus.when(
-        loading: () => const Center(child: CircularProgressIndicator()),
+        loading: () => const Center(child: IndikatorMemuat()),
         error: (err, _) => Center(child: Text('Gagal memuat status: $err')),
         data: (status) {
           final teksStatus = status.terakhirDicadangkan != null

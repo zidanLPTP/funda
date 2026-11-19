@@ -353,7 +353,7 @@ class LayarBeranda extends ConsumerWidget {
                 labelAkses: 'Sisa anggaran bulan ini',
                 anak: sisaAnggaranAsync.when(
                   loading: () =>
-                      const Center(child: CircularProgressIndicator()),
+                      const Center(child: IndikatorMemuat()),
                   error: (_, _) => const Center(child: Text('Gagal')),
                   data: (sisa) {
                     return Column(
@@ -850,7 +850,7 @@ class LayarBeranda extends ConsumerWidget {
                   const SizedBox(height: SpasiFunda.s),
                   limaTransaksiAsync.when(
                     loading: () =>
-                        const Center(child: CircularProgressIndicator()),
+                        const Center(child: IndikatorMemuat()),
                     error: (_, _) =>
                         const TeksFunda.catatan('Gagal memuat transaksi.'),
                     data: (daftar) {

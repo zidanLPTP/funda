@@ -454,7 +454,7 @@ class _LayarJadwalTagihanState extends ConsumerState<LayarJadwalTagihan> {
             jadwalBulanAsync.when(
               loading: () => const Padding(
                 padding: EdgeInsets.all(SpasiFunda.xl),
-                child: Center(child: CircularProgressIndicator()),
+                child: Center(child: IndikatorMemuat()),
               ),
               error: (err, _) => Center(child: Text('Terjadi kesalahan: $err')),
               data: (daftarItem) {

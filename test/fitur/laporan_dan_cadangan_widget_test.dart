@@ -1,3 +1,7 @@
+@Timeout(Duration(seconds: 30))
+library;
+
+import '../pembantu/pompa_uji.dart';
 import 'package:drift/drift.dart' hide isNull, isNotNull;
 import 'package:drift/native.dart';
 import 'package:flutter/material.dart';
@@ -9,11 +13,13 @@ import 'package:funda/data/penyedia_basis_data.dart';
 import 'package:funda/fitur/beranda/tampilan/layar_beranda.dart';
 import 'package:funda/fitur/cadangan/kontroler/penyedia_cadangan.dart';
 import 'package:funda/fitur/cadangan/tampilan/layar_cadangan.dart';
+import 'package:funda/komponen/indikator_memuat.dart';
 import 'package:funda/fitur/laporan/kontroler/penyedia_laporan.dart';
 import 'package:funda/fitur/laporan/tampilan/layar_laporan_bulanan.dart';
 import 'package:funda/fitur/laporan/tampilan/tampilan_kartu_laporan.dart';
 import 'package:funda/layanan/laporan/layanan_bagikan.dart';
 import 'package:funda/fitur/belajar/model/pembaca_konten.dart';
+import 'package:funda/layanan/laporan/pembuat_gambar_laporan.dart';
 import 'dart:io';
 
 void main() {
@@ -26,6 +32,8 @@ void main() {
   late CadanganRepositori cadanganRepo;
 
   setUp(() {
+    PembuatGambarLaporan.penangkapOverride = (kunci, ratio) async =>
+        Uint8List.fromList([0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A]);
     db = BasisDataFunda(NativeDatabase.memory());
     tempDir = Directory.systemTemp.createTempSync('funda_test_widget_cadangan_');
     cadanganRepo = CadanganRepositori(db, direktoriPenyimpananUji: tempDir);
@@ -36,6 +44,7 @@ void main() {
   });
 
   tearDown(() async {
+    PembuatGambarLaporan.penangkapOverride = null;
     await db.close();
     try {
       if (tempDir.existsSync()) {
@@ -51,10 +60,20 @@ void main() {
   }) {
     return ProviderScope(
       overrides: [
+        penyediaTanpaAnimasi.overrideWithValue(true),
         penyediaBasisData.overrideWithValue(db),
         penyediaCadanganRepositori.overrideWithValue(cadanganRepo),
         penyediaLayananBagikan.overrideWithValue(layananPalsu),
         penyediaKontenLaporan.overrideWith((ref) => Future.value(dummyKonten)),
+        if (!overrides.any((o) => o.toString().contains('StatusFiturCadangan')))
+          penyediaStatusCadangan.overrideWith((ref) => const StatusFiturCadangan(
+            terakhirDicadangkan: null,
+            adaCadanganKeselamatan: false,
+            jumlahTransaksi: 0,
+            hariSejakDataPertama: 0,
+            ditundaSampai: null,
+            perluPengingat: false,
+          )),
         ...overrides,
       ],
       child: MaterialApp(
@@ -71,22 +90,15 @@ void main() {
 
   Future<void> selesaikanAsync(WidgetTester tester) async {
     await tester.pump();
-    await tester.runAsync(() async {
-      await Future.delayed(const Duration(milliseconds: 200));
-    });
-    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 100));
+    await pompaAman(tester);
   }
 
   Future<void> ketukDanSelesaikan(WidgetTester tester, Finder finder) async {
     await tester.tap(finder);
     await tester.pump();
-    await tester.runAsync(() async {
-      for (int i = 0; i < 50; i++) {
-        await Future.delayed(const Duration(milliseconds: 50));
-        if (layananPalsu.riwayatDisimpan.isNotEmpty) break;
-      }
-    });
-    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 100));
+    await pompaAman(tester);
   }
 
   group('Pengujian Widget: Layar Laporan Bulanan', () {
@@ -147,13 +159,17 @@ void main() {
       }
 
       // Tekan tombol bagikan gambar
+      await tester.ensureVisible(find.text('Bagikan Gambar'));
       await ketukDanSelesaikan(tester, find.text('Bagikan Gambar'));
+      await pompaHingga(tester, () => layananPalsu.riwayatDisimpan.isNotEmpty);
       expect(layananPalsu.riwayatDisimpan.isNotEmpty, isTrue);
       expect(layananPalsu.riwayatDibagikan.isNotEmpty, isTrue);
       expect(layananPalsu.riwayatDibagikan.first, contains('.png'));
 
       // Tekan tombol bagikan PDF
+      await tester.ensureVisible(find.text('Bagikan PDF'));
       await ketukDanSelesaikan(tester, find.text('Bagikan PDF'));
+      await pompaHingga(tester, () => layananPalsu.riwayatDibagikan.any((item) => item.contains('.pdf')));
       expect(layananPalsu.riwayatDibagikan.any((item) => item.contains('.pdf')), isTrue);
     });
 
@@ -176,6 +192,7 @@ void main() {
       expect(find.text('Buat Cadangan dan Bagikan'), findsOneWidget);
       expect(find.text('Pulihkan dari Berkas'), findsOneWidget);
 
+      await tester.ensureVisible(find.text('Buat Cadangan dan Bagikan'));
       await ketukDanSelesaikan(tester, find.text('Buat Cadangan dan Bagikan'));
 
       expect(layananPalsu.riwayatDisimpan.isNotEmpty, isTrue);
@@ -193,6 +210,7 @@ void main() {
       ));
       await selesaikanAsync(tester);
 
+      await tester.ensureVisible(find.text('Pulihkan dari Berkas'));
       await ketukDanSelesaikan(tester, find.text('Pulihkan dari Berkas'));
 
       expect(find.text('Pratinjau Data Cadangan'), findsOneWidget);
@@ -204,12 +222,8 @@ void main() {
       expect(find.text('Yakin ingin menimpa seluruh data saat ini? Data lama akan disimpan otomatis di cadangan keselamatan.'), findsOneWidget);
 
       await tester.tap(find.text('Ya, Pulihkan Sekarang'));
-      for (int i = 0; i < 20; i++) {
-        await tester.pump(const Duration(milliseconds: 100));
-        await tester.runAsync(() => Future.delayed(const Duration(milliseconds: 100)));
-        if (find.byType(SnackBar).evaluate().isNotEmpty) break;
-      }
-      await tester.pump();
+      await pompaAman(tester);
+      await pompaHinggaAda(tester, find.text('Data berhasil dipulihkan dari cadangan.'));
 
       expect(find.text('Data berhasil dipulihkan dari cadangan.'), findsOneWidget);
     });
@@ -258,7 +272,7 @@ void main() {
       await tester.pumpWidget(bangunAplikasiUji(
         child: const LayarBeranda(),
         overrides: [
-          penyediaStatusCadangan.overrideWith((ref) => Future.value(statusPerlu)),
+          penyediaStatusCadangan.overrideWith((ref) => statusPerlu),
         ],
       ));
       await selesaikanAsync(tester);
@@ -276,9 +290,8 @@ void main() {
           .getSingleOrNull();
       expect(rowTunda, isNotNull);
 
-      // Unmount dan flush timer Drift sebelum test selesai
-      await tester.pumpWidget(const SizedBox());
-      await tester.pumpAndSettle();
+      await bongkarWidget(tester);
+      await tester.pump(const Duration(milliseconds: 100));
     });
   });
 }

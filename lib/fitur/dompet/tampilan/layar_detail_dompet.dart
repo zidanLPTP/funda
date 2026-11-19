@@ -43,7 +43,7 @@ class _LayarDetailDompetState extends ConsumerState<LayarDetailDompet> {
 
     return daftarDompetAsync.when(
       loading: () =>
-          const Scaffold(body: Center(child: CircularProgressIndicator())),
+          const Scaffold(body: Center(child: IndikatorMemuat())),
       error: (e, _) =>
           Scaffold(body: Center(child: Text('Terjadi kesalahan: $e'))),
       data: (daftar) {
@@ -354,7 +354,7 @@ class _LayarDetailDompetState extends ConsumerState<LayarDetailDompet> {
               ),
               const SizedBox(height: SpasiFunda.s),
               daftarKantongAsync.when(
-                loading: () => const Center(child: CircularProgressIndicator()),
+                loading: () => const Center(child: IndikatorMemuat()),
                 error: (e, _) => Center(child: Text('Terjadi kesalahan: $e')),
                 data: (daftarKantong) {
                   if (daftarKantong.isEmpty) {

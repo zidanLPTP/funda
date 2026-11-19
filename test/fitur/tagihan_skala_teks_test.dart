@@ -1,3 +1,7 @@
+@Timeout(Duration(seconds: 30))
+library;
+
+import '../pembantu/pompa_uji.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -117,7 +121,7 @@ void main() {
       tester,
     ) async {
       await tester.pumpWidget(bungkusSkala2(const LayarFormTagihan()));
-      await tester.pumpAndSettle();
+      await pompaAman(tester);
 
       expect(tester.takeException(), isNull);
       expect(find.text('Jenis Tagihan'), findsOneWidget);
@@ -127,7 +131,7 @@ void main() {
       tester,
     ) async {
       await tester.pumpWidget(bungkusSkala2(const LayarSemuaTagihan()));
-      await tester.pumpAndSettle();
+      await pompaAman(tester);
 
       expect(tester.takeException(), isNull);
       expect(find.text('Listrik PLN Pascabayar'), findsOneWidget);
@@ -137,7 +141,7 @@ void main() {
       tester,
     ) async {
       await tester.pumpWidget(bungkusSkala2(const LayarJadwalTagihan()));
-      await tester.pumpAndSettle();
+      await pompaAman(tester);
 
       expect(tester.takeException(), isNull);
       expect(find.text('Listrik PLN Pascabayar'), findsOneWidget);
@@ -147,7 +151,7 @@ void main() {
       tester,
     ) async {
       await tester.pumpWidget(bungkusSkala2(const LayarPengaturan()));
-      await tester.pumpAndSettle();
+      await pompaAman(tester);
 
       expect(tester.takeException(), isNull);
       expect(find.text('Nyalakan Pengingat Lokal'), findsOneWidget);

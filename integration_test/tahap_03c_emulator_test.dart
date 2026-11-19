@@ -1,3 +1,4 @@
+import '../test/pembantu/pompa_uji.dart';
 import 'dart:io';
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
@@ -210,31 +211,31 @@ void main() {
       ),
     );
 
-    await tester.pumpAndSettle();
+    await pompaAman(tester);
     _sinyalkanLayar('01_beranda');
     await tester.runAsync(() => Future.delayed(const Duration(seconds: 5)));
 
     // Navigasi ke Jadwal Tagihan (/tagihan)
     tester.element(find.byType(Scaffold).first).push('/tagihan');
-    await tester.pumpAndSettle();
+    await pompaAman(tester);
     _sinyalkanLayar('02_jadwal_tagihan');
     await tester.runAsync(() => Future.delayed(const Duration(seconds: 5)));
 
     // Navigasi ke Semua Tagihan (/tagihan/semua)
     tester.element(find.byType(Scaffold).first).push('/tagihan/semua');
-    await tester.pumpAndSettle();
+    await pompaAman(tester);
     _sinyalkanLayar('03_semua_tagihan');
     await tester.runAsync(() => Future.delayed(const Duration(seconds: 5)));
 
     // Navigasi ke Form Tambah Tagihan (/tagihan/tambah)
     tester.element(find.byType(Scaffold).first).push('/tagihan/tambah');
-    await tester.pumpAndSettle();
+    await pompaAman(tester);
     _sinyalkanLayar('04_form_tagihan');
     await tester.runAsync(() => Future.delayed(const Duration(seconds: 5)));
 
     // Navigasi ke Pengaturan (/pengaturan)
     tester.element(find.byType(Scaffold).first).go('/pengaturan');
-    await tester.pumpAndSettle();
+    await pompaAman(tester);
     _sinyalkanLayar('05_pengaturan');
     await tester.runAsync(() => Future.delayed(const Duration(seconds: 3)));
 
@@ -245,7 +246,7 @@ void main() {
     );
     if (tombolUji.evaluate().isNotEmpty) {
       await tester.tap(tombolUji);
-      await tester.pumpAndSettle();
+      await pompaAman(tester);
       _sinyalkanLayar('08_notifikasi');
       debugPrint('[NOTIFIKASI_TERJADWAL: Pengingat 2 menit berhasil dipicu]');
     }
@@ -253,13 +254,13 @@ void main() {
 
     // Navigasi ke Daftar Utang (/utang)
     tester.element(find.byType(Scaffold).first).go('/utang');
-    await tester.pumpAndSettle();
+    await pompaAman(tester);
     _sinyalkanLayar('06_daftar_utang');
     await tester.runAsync(() => Future.delayed(const Duration(seconds: 5)));
 
     // Navigasi ke Kekayaan Bersih (/kekayaan-bersih)
     tester.element(find.byType(Scaffold).first).go('/kekayaan-bersih');
-    await tester.pumpAndSettle();
+    await pompaAman(tester);
     _sinyalkanLayar('07_kekayaan_bersih');
     await tester.runAsync(() => Future.delayed(const Duration(seconds: 5)));
 

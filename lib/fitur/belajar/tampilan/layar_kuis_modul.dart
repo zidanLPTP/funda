@@ -113,7 +113,7 @@ class _LayarKuisModulState extends ConsumerState<LayarKuisModul> {
     if (_memuat) {
       return const Scaffold(
         backgroundColor: WarnaFunda.latar,
-        body: Center(child: CircularProgressIndicator(color: WarnaFunda.utama)),
+        body: Center(child: IndikatorMemuat(warna: WarnaFunda.utama)),
       );
     }
 
@@ -173,11 +173,11 @@ class _LayarKuisModulState extends ConsumerState<LayarKuisModul> {
                   Expanded(
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(SudutFunda.pil),
-                      child: LinearProgressIndicator(
-                        value: (_indeksSoal + 1) / totalSoal,
-                        backgroundColor: WarnaFunda.garis,
-                        valueColor: const AlwaysStoppedAnimation<Color>(WarnaFunda.utama),
-                        minHeight: 8,
+                      child: IndikatorMemuat.garis(
+                        nilai: (_indeksSoal + 1) / totalSoal,
+                        warnaLatar: WarnaFunda.garis,
+                        warna: WarnaFunda.utama,
+                        tinggi: 8,
                       ),
                     ),
                   ),

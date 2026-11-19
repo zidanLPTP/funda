@@ -8,12 +8,19 @@ import '../../fitur/laporan/tampilan/tampilan_kartu_laporan.dart';
 
 /// Layanan pembuat gambar PNG 1080 px dari kartu bento laporan bulanan.
 class PembuatGambarLaporan {
+  /// Hook override untuk pengujian headless/widget test di mana
+  /// RenderRepaintBoundary.toImage() memerlukan interaksi thread rasterizer riil.
+  static Future<Uint8List> Function(GlobalKey kunci, double pixelRatio)? penangkapOverride;
+
   /// Mengambil gambar PNG 1080 px dari RepaintBoundary yang terpasang pada GlobalKey.
   /// Rasio pixel 3.0 atas lebar 360 dp menghasilkan lebar tepat 1080 px.
   static Future<Uint8List> tangkapDariKunci(
     GlobalKey kunci, {
     double pixelRatio = 3.0,
   }) async {
+    if (penangkapOverride != null) {
+      return await penangkapOverride!(kunci, pixelRatio);
+    }
     final boundary = kunci.currentContext?.findRenderObject() as RenderRepaintBoundary?;
     if (boundary == null) {
       throw StateError('RenderRepaintBoundary tidak ditemukan untuk kunci ini.');

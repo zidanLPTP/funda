@@ -1,3 +1,7 @@
+@Timeout(Duration(seconds: 30))
+library;
+
+import '../pembantu/pompa_uji.dart';
 import 'package:drift/native.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -104,104 +108,104 @@ void main() {
   group('Uji Aksesibilitas Skala Teks 2.0 Tanpa Overflow', () {
     testWidgets('1. Layar Form Catat Transaksi bebas overflow', (tester) async {
       await tester.pumpWidget(bungkusAplikasiUji(const LayarFormTransaksi()));
-      await tester.pumpAndSettle();
+      await pompaAman(tester);
       expect(tester.takeException(), isNull);
       await tester.pumpWidget(const SizedBox());
-      await tester.pumpAndSettle();
+      await pompaAman(tester);
     });
 
     testWidgets('2. Layar Catatan Riwayat Transaksi bebas overflow', (
       tester,
     ) async {
       await tester.pumpWidget(bungkusAplikasiUji(const LayarCatatan()));
-      await tester.pumpAndSettle();
+      await pompaAman(tester);
       expect(tester.takeException(), isNull);
       await tester.pumpWidget(const SizedBox());
-      await tester.pumpAndSettle();
+      await pompaAman(tester);
     });
 
     testWidgets('3. Layar Daftar Dompet bebas overflow', (tester) async {
       await tester.pumpWidget(bungkusAplikasiUji(const LayarDaftarDompet()));
-      await tester.pumpAndSettle();
+      await pompaAman(tester);
       expect(tester.takeException(), isNull);
       await tester.pumpWidget(const SizedBox());
-      await tester.pumpAndSettle();
+      await pompaAman(tester);
     });
 
     testWidgets('4. Layar Daftar Kategori bebas overflow', (tester) async {
       await tester.pumpWidget(bungkusAplikasiUji(const LayarDaftarKategori()));
-      await tester.pumpAndSettle();
+      await pompaAman(tester);
       expect(tester.takeException(), isNull);
       await tester.pumpWidget(const SizedBox());
-      await tester.pumpAndSettle();
+      await pompaAman(tester);
     });
 
     testWidgets('5. Layar Form Tujuan bebas overflow', (tester) async {
       await tester.pumpWidget(bungkusAplikasiUji(const LayarFormTujuan()));
-      await tester.pumpAndSettle();
+      await pompaAman(tester);
       expect(tester.takeException(), isNull);
       await tester.pumpWidget(const SizedBox());
-      await tester.pumpAndSettle();
+      await pompaAman(tester);
     });
 
     testWidgets('6. Layar Detail Tujuan bebas overflow', (tester) async {
       await tester.pumpWidget(
         bungkusAplikasiUji(LayarDetailTujuan(tujuanId: tujuanId)),
       );
-      await tester.pumpAndSettle();
+      await pompaAman(tester);
       expect(tester.takeException(), isNull);
       await tester.pumpWidget(const SizedBox());
-      await tester.pumpAndSettle();
+      await pompaAman(tester);
     });
 
     testWidgets('7. Layar Daftar Kantong bebas overflow', (tester) async {
       await tester.pumpWidget(bungkusAplikasiUji(const LayarDaftarKantong()));
-      await tester.pumpAndSettle();
+      await pompaAman(tester);
       expect(tester.takeException(), isNull);
       await tester.pumpWidget(const SizedBox());
-      await tester.pumpAndSettle();
+      await pompaAman(tester);
     });
 
     testWidgets('8. Layar Daftar Utang bebas overflow', (tester) async {
       await tester.pumpWidget(bungkusAplikasiUji(const LayarDaftarUtang()));
-      await tester.pumpAndSettle();
+      await pompaAman(tester);
       expect(tester.takeException(), isNull);
       await tester.pumpWidget(const SizedBox());
-      await tester.pumpAndSettle();
+      await pompaAman(tester);
     });
 
     testWidgets('9. Layar Form Utang bebas overflow', (tester) async {
       await tester.pumpWidget(bungkusAplikasiUji(const LayarFormUtang()));
-      await tester.pumpAndSettle();
+      await pompaAman(tester);
       expect(tester.takeException(), isNull);
       await tester.pumpWidget(const SizedBox());
-      await tester.pumpAndSettle();
+      await pompaAman(tester);
     });
 
     testWidgets('10. Layar Detail Utang bebas overflow', (tester) async {
       await tester.pumpWidget(
         bungkusAplikasiUji(LayarDetailUtang(utangId: utangId)),
       );
-      await tester.pumpAndSettle();
+      await pompaAman(tester);
       expect(tester.takeException(), isNull);
       await tester.pumpWidget(const SizedBox());
-      await tester.pumpAndSettle();
+      await pompaAman(tester);
     });
 
     testWidgets('11. Layar Kekayaan Bersih bebas overflow', (tester) async {
       await tester.pumpWidget(bungkusAplikasiUji(const LayarKekayaanBersih()));
-      await tester.pumpAndSettle();
+      await pompaAman(tester);
       expect(tester.takeException(), isNull);
       await tester.pumpWidget(const SizedBox());
-      await tester.pumpAndSettle();
+      await pompaAman(tester);
     });
 
     testWidgets('12. Layar Beranda Penuh bebas overflow', (tester) async {
       await tester.pumpWidget(bungkusAplikasiUji(const LayarBeranda()));
-      await tester.pumpAndSettle();
+      await pompaAman(tester);
       expect(tester.takeException(), isNull);
       await tester.pumpWidget(const SizedBox());
-      await tester.pumpAndSettle();
+      await pompaAman(tester);
     });
   });
 }

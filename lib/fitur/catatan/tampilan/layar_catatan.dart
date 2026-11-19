@@ -310,7 +310,7 @@ class _LayarCatatanState extends ConsumerState<LayarCatatan> {
           // Daftar Riwayat Transaksi Dikelompokkan Per Hari
           Expanded(
             child: daftarTransaksiAsync.when(
-              loading: () => const Center(child: CircularProgressIndicator()),
+              loading: () => const Center(child: IndikatorMemuat()),
               error: (e, _) => Center(child: Text('Terjadi kesalahan: $e')),
               data: (transaksiTersaring) {
                 if (transaksiTersaring.isEmpty) {

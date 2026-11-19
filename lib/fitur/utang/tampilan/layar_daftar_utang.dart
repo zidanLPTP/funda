@@ -129,7 +129,7 @@ class LayarDaftarUtang extends ConsumerWidget {
                 loading: () => const Center(
                   child: Padding(
                     padding: EdgeInsets.all(SpasiFunda.m),
-                    child: CircularProgressIndicator(),
+                    child: IndikatorMemuat(),
                   ),
                 ),
                 error: (err, _) => Center(child: Text('Gagal memuat: $err')),

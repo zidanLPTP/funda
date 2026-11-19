@@ -106,7 +106,7 @@ class _LayarDetailUtangState extends ConsumerState<LayarDetailUtang> {
       builder: (context, snapshot) {
         if (!snapshot.hasData || snapshot.data == null) {
           return const Scaffold(
-            body: Center(child: CircularProgressIndicator()),
+            body: Center(child: IndikatorMemuat()),
           );
         }
 

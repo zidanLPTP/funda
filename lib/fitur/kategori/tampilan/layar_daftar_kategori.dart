@@ -62,7 +62,7 @@ class _LayarDaftarKategoriState extends ConsumerState<LayarDaftarKategori>
       ),
       body: SafeArea(
         child: daftarKategoriAsync.when(
-          loading: () => const Center(child: CircularProgressIndicator()),
+          loading: () => const Center(child: IndikatorMemuat()),
           error: (e, _) => Center(child: Text('Terjadi kesalahan: $e')),
           data: (semuaKategori) {
             final daftarKeluar = semuaKategori

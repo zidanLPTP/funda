@@ -5,6 +5,42 @@ Format penulisan mengacu pada standar Keep a Changelog dan penamaan commit Funda
 
 ---
 
+## [0.9.1] - 2026-11-19 — Penyelarasan Tahap 7 (Tahap 7-R)
+
+Tahap 7-R: Penyelarasan Laporan Bulanan & Cadangan Data, Penegakan Aturan Pengujian Anti-Menggantung Terpusat, Optimasi Agregasi SQL Laporan (< 15 ms), Penjaga Skema & Peningkat Cadangan, Verifikasi Font TTF U+2212 & Ekstraksi ToUnicode CMap PDF, Pengujian Regresi Tahap 5 di Emulator, dan Validasi Alur UI End-to-End dengan 7 Tangkapan Layar Resmi Emulator.
+
+### Ditambahkan & Dioptimasi
+- **Aturan Pengujian Anti-Menggantung Terpusat (`test/pembantu/pompa_uji.dart`, `test/penjaga/aturan_pengujian_test.dart`):**
+  - Menerapkan helper terpusat `pompaAman(tester)` sebagai SATU-SATUNYA tempat pemanggilan `pumpAndSettle()` dengan batas aman 5 detik (menggantikan 142 pemanggilan `pumpAndSettle` langsung di seluruh repositori).
+  - Menyediakan `pompaHingga(tester, kondisi)` dan `pompaHinggaAda(tester, pencari)` dengan penanganan galat cepat.
+  - Komponen `IndikatorMemuat` di `lib/komponen/indikator_memuat.dart` dengan provider `penyediaTanpaAnimasi` (mengalihkan 35 pemanggilan `CircularProgressIndicator` dan `LinearProgressIndicator` di `lib/`).
+  - Mengeliminasi seluruh pemanggilan `Future.delayed` pada berkas uji widget.
+  - Menetapkan batas waktu suite `@Timeout(Duration(seconds: 30))` di seluruh berkas uji widget serta file konfigurasi global `dart_test.yaml`.
+  - Suite linter otomatis `test/penjaga/aturan_pengujian_test.dart` yang memvalidasi 4 aturan anti-menggantung secara ketat pada setiap eksekusi CI/test.
+- **Optimasi Agregasi SQL Laporan Bulanan (`lib/fitur/laporan/kontroler/penyedia_laporan.dart`):**
+  - Mengalihkan penghitungan komposisi per-sifat/per-kategori ke SQL `GROUP BY` dan saldo dompet ke `hitungSaldoDompetSQL`, menghilangkan pemuatan 20.000 transaksi ke memori Dart.
+  - Waktu susun laporan pada beban 20.000 transaksi dipangkas dari 458 ms menjadi 10.3 ms di host (~45x lebih cepat, jauh melampaui target < 150 ms).
+  - Ditambahkan uji kesetaraan otomatis antara agregasi SQL vs fungsi murni Dart pada `test/performa/performa_laporan_dan_cadangan_test.dart`.
+- **Penyelarasan Vektor Uji Laporan V1–V9 (`test/perhitungan/perhitungan_laporan_bulanan_test.dart`):**
+  - Assertion lengkap pada string keluaran teks normal dan sensor sesuai prompt resmi.
+  - Kasus batas pembulatan: `persenTerdekat(1, 8) == 13` (12.5% dibulatkan ke atas) dan total 0 mengembalikan `null`.
+  - Pemindaian seluruh teks mode sensor bebas simbol "Rp" dan format nominal angka Rupiah bertitik.
+- **Penyelarasan Cadangan & Peningkat Skema (`lib/data/cadangan/`, `test/data/cadangan_test.dart`):**
+  - Penjaga tabel skema (`dapatkanDaftarTabelSkema`) memverifikasi seluruh tabel SQLite dan Drift ikut diekspor (kecuali terdaftar di `CadanganRepositori.tabelDikecualikan = {}`).
+  - Penjaga peningkat skema (`RegistriPeningkatCadangan.versiSkemaCadanganPertama = 10`) memastikan rantai transformasi skema terdaftar.
+  - Pengujian penolakan berkas > 50 MB, jaminan kategori bawaan tidak ganda setelah pemulihan, dan pemulihan darurat dari `sebelum_pemulihan.json`.
+  - Pengujian deterministik terhadap variasi urutan penyisipan (*INSERT order independence*).
+- **Verifikasi Ekspor PDF & PNG (`test/layanan/laporan_ekspor_test.dart`):**
+  - Verifikasi glyph U+2212 pada font tertanam `PlusJakartaSans-Regular.ttf` dan `PlusJakartaSans-Bold.ttf`.
+  - Parser ekstraksi teks byte PDF berbasis ToUnicode CMap untuk membuktikan ketiadaan kata "Rp" pada dokumen mode sensor.
+  - Isolasi ekspor pengujian ke direktori sementara sistem sehingga `docs/contoh_ekspor/laporan.pdf` tidak terotori pada setiap eksekusi `flutter test`.
+- **Pengujian Integrasi Emulator & Bukti Tangkapan Layar:**
+  - Skenario regresi Tahap 5: "Lewati" menyimpan `profil_dilewati`, buka dompet membuka Modul 1, catat utang memicu saran Modul 4, kuis dua benih menghasilkan urutan berbeda dengan kunci benar konsisten.
+  - Alur UI nyata Tahap 7: Beranda → Laporan → Sensor ON/OFF → Bagikan PNG & PDF → Cadangan → Buat Cadangan → Hapus Data → Pulihkan 2 langkah → Verifikasi tabel identik → Beranda pulih.
+  - 7 tangkapan layar resmi emulator termasuk `tahap_07_pratinjau_setelah_pulih.png` dan `tahap_07_beranda_setelah_pulih.png`.
+
+---
+
 ## [0.9.0] - 2026-11-19 — Tahap 7: Laporan Bulanan (PNG + PDF) & Cadangan Data
 
 Tahap 7: Implementasi Lengkap Laporan Bulanan (Pratinjau Soft Bento, Ekspor PNG 1080px, Dokumen PDF A4 Teks Asli Tertanam Font TTF Plus Jakarta Sans), Saklar Sensor Privasi Nominal, Cadangan Data Mandiri (JSON v1 dengan Checksum SHA-256 Deterministik), Pemulihan Atomik dengan Cadangan Keselamatan Otomatis, Pengingat Cadangan di Beranda, Tolok Ukur Beban Nyata (20.000 Transaksi), dan Penuntasan Seluruh Milestone MVP (Tahap 1–7).

@@ -146,20 +146,15 @@ class LayarAnggaran extends ConsumerWidget {
                   // Progress Bar Total
                   ClipRRect(
                     borderRadius: BorderRadius.circular(SudutFunda.pil),
-                    child: LinearProgressIndicator(
-                      value: (ringkasan.persentaseTerpakai / 100).clamp(
-                        0.0,
-                        1.0,
-                      ),
-                      minHeight: 8,
-                      backgroundColor: WarnaFunda.garis,
-                      valueColor: AlwaysStoppedAnimation<Color>(
-                        ringkasan.persentaseTerpakai > 100
-                            ? WarnaFunda.pengeluaran
-                            : ringkasan.persentaseTerpakai >= 80
-                            ? WarnaFunda.peringatan
-                            : WarnaFunda.utama,
-                      ),
+                    child: IndikatorMemuat.garis(
+                      nilai: (ringkasan.persentaseTerpakai / 100).clamp(0.0, 1.0),
+                      tinggi: 8,
+                      warnaLatar: WarnaFunda.garis,
+                      warna: ringkasan.persentaseTerpakai > 100
+                          ? WarnaFunda.pengeluaran
+                          : ringkasan.persentaseTerpakai >= 80
+                          ? WarnaFunda.peringatan
+                          : WarnaFunda.utama,
                     ),
                   ),
                   const SizedBox(height: SpasiFunda.m),
@@ -251,7 +246,7 @@ class LayarAnggaran extends ConsumerWidget {
               loading: () => const Center(
                 child: Padding(
                   padding: EdgeInsets.all(SpasiFunda.xl),
-                  child: CircularProgressIndicator(),
+                  child: IndikatorMemuat(),
                 ),
               ),
               error: (e, _) => Center(child: Text('Terjadi kesalahan: $e')),
@@ -470,11 +465,11 @@ class _KartuItemAnggaran extends StatelessWidget {
             // Progress Bar
             ClipRRect(
               borderRadius: BorderRadius.circular(SudutFunda.pil),
-              child: LinearProgressIndicator(
-                value: (item.persentase / 100).clamp(0.0, 1.0),
-                minHeight: 6,
-                backgroundColor: WarnaFunda.garis,
-                valueColor: AlwaysStoppedAnimation<Color>(warnaStatus),
+              child: IndikatorMemuat.garis(
+                nilai: (item.persentase / 100).clamp(0.0, 1.0),
+                tinggi: 6,
+                warnaLatar: WarnaFunda.garis,
+                warna: warnaStatus,
               ),
             ),
             const SizedBox(height: SpasiFunda.xs),

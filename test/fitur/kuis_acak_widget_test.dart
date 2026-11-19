@@ -1,3 +1,7 @@
+@Timeout(Duration(seconds: 30))
+library;
+
+import '../pembantu/pompa_uji.dart';
 import 'package:drift/native.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -98,7 +102,7 @@ void main() {
         ),
       ),
     );
-    await tester.pumpAndSettle();
+    await pompaAman(tester);
 
     // Catat urutan soal pada benih 1
     final daftarSoalBenih1 = <String>[];
@@ -121,14 +125,14 @@ void main() {
 
       expect(finderJawabanBenar, isNotNull);
       await tester.tap(finderJawabanBenar!);
-      await tester.pumpAndSettle();
+      await pompaAman(tester);
 
       if (i < 2) {
         await tester.tap(find.text('Soal Berikutnya'));
-        await tester.pumpAndSettle();
+        await pompaAman(tester);
       } else {
         await tester.tap(find.text('Lihat Hasil Kuis'));
-        await tester.pumpAndSettle();
+        await pompaAman(tester);
       }
     }
 
@@ -138,7 +142,7 @@ void main() {
 
     // Bersihkan widget sebelum test kedua
     await tester.pumpWidget(const SizedBox());
-    await tester.pumpAndSettle();
+    await pompaAman(tester);
 
     // 2. Instance kedua dengan benih 2
     await tester.pumpWidget(
@@ -158,7 +162,7 @@ void main() {
         ),
       ),
     );
-    await tester.pumpAndSettle();
+    await pompaAman(tester);
 
     final daftarSoalBenih2 = <String>[];
 
@@ -179,14 +183,14 @@ void main() {
 
       expect(finderJawabanBenar, isNotNull);
       await tester.tap(finderJawabanBenar!);
-      await tester.pumpAndSettle();
+      await pompaAman(tester);
 
       if (i < 2) {
         await tester.tap(find.text('Soal Berikutnya'));
-        await tester.pumpAndSettle();
+        await pompaAman(tester);
       } else {
         await tester.tap(find.text('Lihat Hasil Kuis'));
-        await tester.pumpAndSettle();
+        await pompaAman(tester);
       }
     }
 
@@ -206,6 +210,6 @@ void main() {
     expect(find.text('Selamat, Kamu Lulus!'), findsOneWidget);
 
     await tester.pumpWidget(const SizedBox());
-    await tester.pumpAndSettle();
+    await pompaAman(tester);
   });
 }

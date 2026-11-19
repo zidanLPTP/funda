@@ -4,7 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../data/basis_data.dart';
 import '../../../data/penyedia_basis_data.dart';
 import '../../../perhitungan/perhitungan_anggaran_tujuan.dart';
-import '../../../perhitungan/perhitungan_keuangan.dart';
 import '../../../perhitungan/perhitungan_laporan_bulanan.dart';
 import '../../belajar/model/pembaca_konten.dart';
 
@@ -108,15 +107,24 @@ final penyediaDataLaporanBulanan = FutureProvider<LaporanBulanan>((ref) async {
   // 1. Arus kas bulan terpilih
   final arusKas = await repoTransaksi.hitungArusKasSQL(mulai: awalBulan, selesai: akhirBulan);
 
-  // 2. Komposisi pengeluaran per sifat
-  final transaksiBulan = await (db.select(db.tabelTransaksi)
-        ..where((t) =>
-            t.waktuTransaksi.isBiggerOrEqual(Variable.withDateTime(awalBulan)) &
-            t.waktuTransaksi.isSmallerOrEqual(Variable.withDateTime(akhirBulan)) &
-            t.jenis.equals('keluar')))
-      .get();
-  final semuaKategori = await db.select(db.tabelKategori).get();
-  final petaKategori = {for (final k in semuaKategori) k.id: k};
+  // 2. Komposisi pengeluaran per sifat dan kategori belum dilabeli via agregasi SQL
+  const sqlKomposisi = '''
+    SELECT 
+      COALESCE(k.sifat, 'belum_dilabeli') AS sifat,
+      COALESCE(k.nama, 'Tanpa Kategori') AS nama_kategori,
+      COALESCE(SUM(t.jumlah_rupiah), 0) AS total
+    FROM tabel_transaksi t
+    LEFT JOIN tabel_kategori k ON t.kategori_id = k.id
+    WHERE t.waktu_transaksi >= ? AND t.waktu_transaksi <= ? AND t.jenis = 'keluar'
+    GROUP BY COALESCE(k.sifat, 'belum_dilabeli'), COALESCE(k.nama, 'Tanpa Kategori');
+  ''';
+  final rowsKomposisi = await db.customSelect(
+    sqlKomposisi,
+    variables: [
+      Variable.withDateTime(awalBulan),
+      Variable.withDateTime(akhirBulan),
+    ],
+  ).get();
 
   final perSifat = <String, int>{
     'kebutuhan': 0,
@@ -128,16 +136,16 @@ final penyediaDataLaporanBulanan = FutureProvider<LaporanBulanan>((ref) async {
 
   final pengeluaranPerKategoriBelumDilabeli = <String, int>{};
 
-  for (final tx in transaksiBulan) {
-    final kat = tx.kategoriId != null ? petaKategori[tx.kategoriId] : null;
-    final sifat = kat?.sifat ?? 'belum_dilabeli';
+  for (final r in rowsKomposisi) {
+    final sifat = r.read<String>('sifat');
+    final total = r.read<int>('total');
     final sifatNormal = perSifat.containsKey(sifat) ? sifat : 'belum_dilabeli';
-    perSifat[sifatNormal] = (perSifat[sifatNormal] ?? 0) + tx.jumlahRupiah;
+    perSifat[sifatNormal] = (perSifat[sifatNormal] ?? 0) + total;
 
     if (sifatNormal == 'belum_dilabeli') {
-      final namaKat = kat?.nama ?? 'Tanpa Kategori';
+      final namaKat = r.read<String>('nama_kategori');
       pengeluaranPerKategoriBelumDilabeli[namaKat] =
-          (pengeluaranPerKategoriBelumDilabeli[namaKat] ?? 0) + tx.jumlahRupiah;
+          (pengeluaranPerKategoriBelumDilabeli[namaKat] ?? 0) + total;
     }
   }
 
@@ -172,15 +180,13 @@ final penyediaDataLaporanBulanan = FutureProvider<LaporanBulanan>((ref) async {
     );
   }
 
-  // 5. Snapshot Saldo Dompet & Utang per saat ini
+  // 5. Snapshot Saldo Dompet & Utang per saat ini via agregasi SQL (bebas N+1)
   final dompetAktif = await (db.select(db.tabelDompet)..where((t) => t.diarsipkan.equals(false))).get();
-  final semuaTx = await db.select(db.tabelTransaksi).get();
   var totalSaldoDompet = 0;
   for (final d in dompetAktif) {
-    totalSaldoDompet += hitungSaldoDompet(
+    totalSaldoDompet += await repoTransaksi.hitungSaldoDompetSQL(
       dompetId: d.id,
       saldoAwalRupiah: d.saldoAwalRupiah,
-      daftarTransaksi: semuaTx,
     );
   }
 

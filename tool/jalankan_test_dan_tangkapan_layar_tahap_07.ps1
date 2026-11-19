@@ -1,7 +1,7 @@
 # Skrip eksekutor integration test Tahap 7 dan penangkap tangkapan layar otomatis
 $adb = "$env:LOCALAPPDATA\Android\Sdk\platform-tools\adb.exe"
 $folder = "docs/tangkapan_layar"
-$buktiLog = "docs/bukti/tahap_07_integration_test.txt"
+$buktiLog = "docs/bukti/tahap_07_r_integration_test.txt"
 
 if (-not (Test-Path $folder)) {
     New-Item -ItemType Directory -Path $folder -Force | Out-Null
@@ -15,7 +15,7 @@ if (-not (Test-Path $folderBukti)) {
 Write-Host "Menjalankan integration test Tahap 7 pada emulator-5554..."
 $pinfo = New-Object System.Diagnostics.ProcessStartInfo
 $pinfo.FileName = "powershell.exe"
-$pinfo.Arguments = "-Command flutter test integration_test/tahap_07_laporan_dan_cadangan_emulator_test.dart -d emulator-5554"
+$pinfo.Arguments = "-Command flutter test integration_test/tahap_07_laporan_dan_cadangan_emulator_test.dart -d emulator-5554 2>&1"
 $pinfo.RedirectStandardOutput = $true
 $pinfo.RedirectStandardError = $true
 $pinfo.UseShellExecute = $false

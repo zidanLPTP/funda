@@ -1,3 +1,7 @@
+@Timeout(Duration(seconds: 30))
+library;
+
+import '../pembantu/pompa_uji.dart';
 import 'package:drift/native.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -86,13 +90,13 @@ void main() {
         ),
       );
 
-      await tester.pumpAndSettle();
+      await pompaAman(tester);
 
       // Berpindah dari Pemantik -> Konsep Inti -> Contoh Nyata
       await tester.tap(find.text('Lanjut'));
-      await tester.pumpAndSettle();
+      await pompaAman(tester);
       await tester.tap(find.text('Lanjut'));
-      await tester.pumpAndSettle();
+      await pompaAman(tester);
 
       // Periksa judul dan kesimpulan contohAngka
       expect(find.text('Contoh Arus Kas Budi'), findsOneWidget);
@@ -201,13 +205,13 @@ void main() {
           ),
         ),
       );
-      await tester.pumpAndSettle();
+      await pompaAman(tester);
 
       // Berpindah dari Pemantik (langkah 0) -> Cek Paham (langkah 1) -> Misi (langkah 2)
       await tester.tap(find.text('Lanjut'));
-      await tester.pumpAndSettle();
+      await pompaAman(tester);
       await tester.tap(find.text('Lanjut'));
-      await tester.pumpAndSettle();
+      await pompaAman(tester);
 
       expect(find.text('Misi Praktik Nyata'), findsOneWidget);
       expect(find.text('Buat 3 Anggaran'), findsOneWidget);
@@ -354,7 +358,7 @@ void main() {
         ),
       );
 
-      await tester.pumpAndSettle();
+      await pompaAman(tester);
 
       // Memastikan tidak ada FlutterError di langkah 0 (Pemantik)
       expect(tester.takeException(), isNull);
@@ -362,24 +366,24 @@ void main() {
 
       // Pindah ke Konsep
       await tester.tap(find.text('Lanjut'));
-      await tester.pumpAndSettle();
+      await pompaAman(tester);
       expect(tester.takeException(), isNull);
       expect(find.text('Konsep Arus Kas Rinci'), findsOneWidget);
 
       // Pindah ke Contoh Angka
       await tester.tap(find.text('Lanjut'));
-      await tester.pumpAndSettle();
+      await pompaAman(tester);
       expect(tester.takeException(), isNull);
       expect(find.text('Arus Kas Bulanan Detail'), findsOneWidget);
 
       // Pindah ke Cek Paham (kosong, lanjut)
       await tester.tap(find.text('Lanjut'));
-      await tester.pumpAndSettle();
+      await pompaAman(tester);
       expect(tester.takeException(), isNull);
 
       // Pindah ke Misi Praktik Nyata
       await tester.tap(find.text('Lanjut'));
-      await tester.pumpAndSettle();
+      await pompaAman(tester);
       expect(tester.takeException(), isNull);
       expect(find.text('Misi Praktik Nyata'), findsOneWidget);
       expect(find.text('Misi Uji Skala'), findsOneWidget);

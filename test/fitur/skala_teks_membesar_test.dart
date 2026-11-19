@@ -1,3 +1,7 @@
+@Timeout(Duration(seconds: 30))
+library;
+
+import '../pembantu/pompa_uji.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -92,7 +96,7 @@ void main() {
               ),
             ),
           );
-          await tester.pumpAndSettle();
+          await pompaAman(tester);
 
           // 1. Ambil ukuran teks saat skala 1.0
           final finderTeks = find.byType(TeksFunda).first;
@@ -100,7 +104,7 @@ void main() {
 
           // 2. Ubah skala teks menjadi 2.0 secara reaktif
           skalaTeksNotifier.value = 2.0;
-          await tester.pumpAndSettle();
+          await pompaAman(tester);
 
           final ukuranSkala2 = tester.getSize(finderTeks);
 
