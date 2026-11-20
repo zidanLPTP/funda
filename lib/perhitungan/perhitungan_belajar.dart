@@ -890,12 +890,16 @@ HasilStatusBelajar tentukanStatusPelajaran({
   }
 
   // 2. Evaluasi gerbang modul induk
+  final prasyaratModulBelumSelesai = gerbangModul.any(
+    (s) => s.tipe == 'modul_selesai' && !evaluasiSyarat(s, fotoData).terpenuhi,
+  );
+
   for (final syarat in gerbangModul) {
     final hasil = evaluasiSyarat(syarat, fotoData);
     if (!hasil.terpenuhi) {
       apaYangKurang.add(hasil.pesan);
       ruteAksi ??= hasil.rutePengisian;
-      if (hasil.atauPernyataan != null) {
+      if (hasil.atauPernyataan != null && !prasyaratModulBelumSelesai) {
         daftarAtau.add(hasil.atauPernyataan!);
       }
     }
@@ -952,12 +956,16 @@ HasilStatusBelajar tentukanStatusModul({
   final daftarAtau = <String>[];
 
   // Evaluasi gerbang modul
+  final prasyaratModulBelumSelesai = modul.gerbang.any(
+    (s) => s.tipe == 'modul_selesai' && !evaluasiSyarat(s, fotoData).terpenuhi,
+  );
+
   for (final syarat in modul.gerbang) {
     final hasil = evaluasiSyarat(syarat, fotoData);
     if (!hasil.terpenuhi) {
       apaYangKurang.add(hasil.pesan);
       ruteAksi ??= hasil.rutePengisian;
-      if (hasil.atauPernyataan != null) {
+      if (hasil.atauPernyataan != null && !prasyaratModulBelumSelesai) {
         daftarAtau.add(hasil.atauPernyataan!);
       }
     }

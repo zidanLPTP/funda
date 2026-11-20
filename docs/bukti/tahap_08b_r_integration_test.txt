@@ -1,0 +1,91 @@
+﻿00:00 +0: loading D:/Proyek Coding/Flutter/Funda/integration_test/tahap_08b_emulator_test.dart
+Running Gradle task 'assembleDebug'...                            142.3s
+√ Built build\app\outputs\flutter-apk\app-debug.apk
+Installing build\app\outputs\flutter-apk\app-debug.apk...           5.8s
+00:00 +0: [Tahap 8B Integrasi Emulator] Modul 4 Utang & Cicilan, Jalur A & B, Regresi 19 Tabel, dan Tolok Ukur Beban 20k
+=== [LANGKAH 1]: Setup Prasyarat Modul 1-3 Selesai ===
+=== [LANGKAH 2]: JALUR A - Verifikasi Gerbang Sebelum Syarat & Input 1 Utang via Form ===
+ASSERT PESAN GERBANG: Lalu catat utang atau cicilanmu di menu Utang. Kalau kamu memang tidak punya utang, pilih Aku tidak punya ini.
+[FORM UI BERHASIL]: Kredit HP tersimpan (pokok: 6000000, sisa: 4000000)
+=== [LANGKAH 3]: Pelajaran 4.1 & Umpan Balik ringkasan_utang ===
+ASSERT 4.1 STRING LENGKAP: Kamu punya 3 utang aktif dengan sisa total Rp6.300.000. Cicilan per bulan: Rp1.030.000. Itu sekitar 25 persen dari pemasukanmu (rata-rata 3 bulan terakhir). Ini gambaran, bukan penilaian.
+[SCREEN_READY: tahap_08b_01_umpan_balik_ringkasan_utang]
+=== [LANGKAH 4]: Pelajaran 4.2 & Umpan Balik biaya_pinjaman_tercatat ===
+ASSERT 4.2: Biaya pinjaman Rp600.000, Rp120.000, Rp0
+[SCREEN_READY: tahap_08b_02_umpan_balik_biaya_pinjaman]
+=== [LANGKAH 5]: Pelajaran 4.3 & Umpan Balik rasio_cicilan_bulan_ini ===
+ASSERT 4.3 STRING LENGKAP: Total cicilanmu Rp1.030.000 per bulan, dibandingkan pemasukan Rp4.000.000 per bulan (rata-rata 3 bulan terakhir). Rasio cicilanmu 25 persen. Kalau pemasukanmu turun 25 persen, rasionya menjadi 34 persen. Ini angka untuk kamu pahami, bukan nilai.
+[SCREEN_READY: tahap_08b_03_umpan_balik_rasio_cicilan]
+=== [LANGKAH 6]: Pelajaran 4.4 & Umpan Balik urutan_pelunasan ===
+ASSERT 4.4: Urutan bola salju & longsor
+[SCREEN_READY: tahap_08b_04_umpan_balik_urutan_pelunasan]
+=== [LANGKAH 7]: Kuis Modul 4 (Percobaan 1 Gagal & Percobaan 2 Lulus) ===
+ASSERT KUIS: Percobaan 1 Belum Lulus (skor 60%)
+[SCREEN_READY: tahap_08b_05_kuis_tidak_lulus]
+ASSERT KUIS: Percobaan 2 Lulus
+[SCREEN_READY: tahap_08b_06_kuis_lulus]
+[SCREEN_READY: tahap_08b_07_beranda_modul_selesai]
+=== [LANGKAH 8]: Regresi Integritas 19 Tabel SQLite (Kondisi Berisi Utang) ===
+=== RINCIAN JUMLAH BARIS PER TABEL SEBELUM CADANGAN/PEMULIHAN (BERISI UTANG) ===
+tabel_alokasi_kantong: 0 baris
+tabel_anggaran: 0 baris
+tabel_dompet: 1 baris
+tabel_hasil_kuis: 6 baris
+tabel_hasil_misi: 0 baris
+tabel_hasil_tes_awal: 0 baris
+tabel_kantong: 0 baris
+tabel_kategori: 25 baris
+tabel_pembayaran_tagihan: 0 baris
+tabel_pembayaran_utang: 0 baris
+tabel_pengaturan: 4 baris
+tabel_penyesuaian_utang: 0 baris
+tabel_pernyataan: 1 baris
+tabel_profil_keuangan: 0 baris
+tabel_progres_pelajaran: 15 baris
+tabel_tagihan: 0 baris
+tabel_transaksi: 3 baris
+tabel_tujuan: 0 baris
+tabel_utang: 3 baris
+=== TOTAL BARIS SEBELUM CADANGAN/PEMULIHAN (BERISI UTANG): 58 ===
+=== RINCIAN JUMLAH BARIS PER TABEL SESUDAH CADANGAN/PEMULIHAN (BERISI UTANG) ===
+tabel_alokasi_kantong: 0 baris
+tabel_anggaran: 0 baris
+tabel_dompet: 1 baris
+tabel_hasil_kuis: 6 baris
+tabel_hasil_misi: 0 baris
+tabel_hasil_tes_awal: 0 baris
+tabel_kantong: 0 baris
+tabel_kategori: 25 baris
+tabel_pembayaran_tagihan: 0 baris
+tabel_pembayaran_utang: 0 baris
+tabel_pengaturan: 4 baris
+tabel_penyesuaian_utang: 0 baris
+tabel_pernyataan: 1 baris
+tabel_profil_keuangan: 0 baris
+tabel_progres_pelajaran: 15 baris
+tabel_tagihan: 0 baris
+tabel_transaksi: 3 baris
+tabel_tujuan: 0 baris
+tabel_utang: 3 baris
+=== TOTAL BARIS SESUDAH CADANGAN/PEMULIHAN (BERISI UTANG): 58 ===
+[REGRESI SUKSES]: 19 Tabel SQLite lolos uji integritas pemulihan saat berisi utang!
+=== [LANGKAH 9]: JALUR B - Pengguna Tanpa Utang & Pernyataan ===
+[SCREEN_READY: tahap_08b_08_modul_terkunci_tombol_pernyataan]
+TEKS DI LAYAR 4.1 JALUR B: [8/9, Draf, Umpan Balik Nyata, Hasil dari Datamu, Analisis Data Pengguna, Memuat analisis datamu..., Ini adalah gambaran nyata dari keuanganmu saat ini tanpa kata-kata menghakimi., Lanjut]
+ASSERT PERNYATAAN 4.1: Kamu menyatakan tidak punya utang. Pelajaran ini tetap berguna untuk jaga-jaga. Kalau suatu saat berutang, catat di menu Utang.
+[SCREEN_READY: tahap_08b_09_umpan_balik_pernyataan_tanpa_utang]
+ASSERT EMPAT PERNYATAAN 4.1 s.d. 4.4 LENGKAP: Terverifikasi!
+[SCREEN_READY: tahap_08b_10_modul_terkunci_kembali]
+=== [LANGKAH 10]: Tolok Ukur Beban Nyata (20.000 Tx + 20 Utang) ===
+[BENCHMARK] Waktu Suntik 20.000 Transaksi: 1589ms
+[BENCHMARK] Waktu Suntik 20 Utang: 3ms
+=== HASIL TOLOK UKUR TAB BELAJAR (20.000 TX + 20 UTANG, 10 ITERASI) ===
+Waktu Komputasi (ms): [121, 64, 61, 59, 67, 64, 75, 60, 92, 70] (Median: 67ms)
+Waktu Frame Pertama (ms): [234, 36, 14, 23, 14, 21, 23, 19, 37, 18] (Median: 23ms)
+Jumlah kueri FotoDataRepositori: 11 kueri tunggal teroptimasi (tidak bertambah)
+=== HASIL TOLOK UKUR ON-DEMAND PELAJARAN MODUL 4 (20 UTANG + 20K TX, 10 ITERASI) ===
+Waktu Komputasi On-Demand (ms): [5, 15, 8, 6, 3, 3, 3, 2, 5, 7] (Median: 5ms)
+Jumlah kueri UtangRepositori on-demand: 1 kueri tunggal teroptimasi
+=== [SELESAI]: Seluruh Skenario Pengujian Tahap 8B Selesai! ===
+01:31 +1: (tearDownAll)
+01:32 +1: All tests passed!

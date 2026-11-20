@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:funda/perhitungan/perhitungan_belajar.dart';
 
 void main() {
   group('Uji Kesesuaian Lampiran Tahap 6-R', () {
@@ -610,6 +611,7 @@ void main() {
       expect(modulJson['urutan'], equals(4));
       expect(modulJson['tersedia'], isTrue);
 
+      // Verifikasi gerbang modul & pesan persis lampiran
       final gerbangModul = modulJson['gerbang'] as List;
       expect(gerbangModul.length, equals(2));
       expect(gerbangModul[0]['tipe'], equals('modul_selesai'));
@@ -621,41 +623,42 @@ void main() {
       expect(gerbangModul[1]['atauPernyataan'], equals('tidak_punya_utang'));
       expect(gerbangModul[1]['pesan'], equals('Lalu catat utang atau cicilanmu di menu Utang. Kalau kamu memang tidak punya utang, pilih Aku tidak punya ini.'));
 
-      // 4_1
-      final p1 = pelajaranJson['utang_cicilan_4_1']!;
-      expect(p1['judul'], equals('Utang yang Membantu dan yang Menjerat'));
-      expect(p1['durasiMenit'], equals(5));
-      expect(p1['gerbang'], isEmpty);
-      expect(p1['misi']['tipe'], equals('lihat_hitungan'));
-      expect(p1['misi']['umpanBalik'], equals('ringkasan_utang'));
+      // Ekstrak durasiMenit per pelajaran dari lampiran markdown secara dinamis
+      for (final entry in pelajaranJson.entries) {
+        final id = entry.key;
+        final regDurasi = RegExp('PELAJARAN $id[\\s\\S]*?durasiMenit:\\s*(\\d+)');
+        final matchDurasi = regDurasi.firstMatch(isiMateriLampiran);
+        expect(matchDurasi, isNotNull, reason: 'durasiMenit untuk $id harus ada di lampiran');
+        final durasiDariLampiran = int.parse(matchDurasi!.group(1)!);
+        expect(entry.value['durasiMenit'], equals(durasiDariLampiran), reason: 'durasiMenit $id harus cocok dengan lampiran');
+      }
 
-      // 4_2
-      final p2 = pelajaranJson['utang_cicilan_4_2']!;
-      expect(p2['judul'], equals('Bunga dan Biaya yang Sebenarnya'));
-      expect(p2['durasiMenit'], equals(6));
-      expect(p2['catatanReviewer'], contains('TODO-VERIFIKASI'));
-      expect(p2['gerbang'], isEmpty);
-      expect(p2['misi']['tipe'], equals('lihat_hitungan'));
-      expect(p2['misi']['umpanBalik'], equals('biaya_pinjaman_tercatat'));
+      // Verifikasi spesifik durasi: 4_1=5, 4_2=6, 4_3=5, 4_4=6
+      expect(pelajaranJson['utang_cicilan_4_1']!['durasiMenit'], equals(5));
+      expect(pelajaranJson['utang_cicilan_4_2']!['durasiMenit'], equals(6));
+      expect(pelajaranJson['utang_cicilan_4_3']!['durasiMenit'], equals(5));
+      expect(pelajaranJson['utang_cicilan_4_4']!['durasiMenit'], equals(6));
 
-      // 4_3
-      final p3 = pelajaranJson['utang_cicilan_4_3']!;
-      expect(p3['judul'], equals('Rasio Cicilan terhadap Pemasukan'));
-      expect(p3['durasiMenit'], equals(5));
-      expect(p3['aturanPraktis'], isTrue);
-      expect(p3['catatanReviewer'], contains('TODO-VERIFIKASI'));
-      expect(p3['gerbang'], isEmpty);
-      expect(p3['misi']['tipe'], equals('lihat_hitungan'));
-      expect(p3['misi']['umpanBalik'], equals('rasio_cicilan_bulan_ini'));
+      // Verifikasi gerbang pelajaran 4_1 sampai 4_4: tidak ada
+      for (final p in pelajaranJson.values) {
+        expect(p['gerbang'], isEmpty, reason: 'Gerbang pelajaran harus kosong (berlaku gerbang modul dan urutan)');
+        expect(p['misi']['tipe'], equals('lihat_hitungan'));
+      }
+      expect(pelajaranJson['utang_cicilan_4_1']!['misi']['umpanBalik'], equals('ringkasan_utang'));
+      expect(pelajaranJson['utang_cicilan_4_2']!['misi']['umpanBalik'], equals('biaya_pinjaman_tercatat'));
+      expect(pelajaranJson['utang_cicilan_4_3']!['misi']['umpanBalik'], equals('rasio_cicilan_bulan_ini'));
+      expect(pelajaranJson['utang_cicilan_4_4']!['misi']['umpanBalik'], equals('urutan_pelunasan'));
 
-      // 4_4
-      final p4 = pelajaranJson['utang_cicilan_4_4']!;
-      expect(p4['judul'], equals('Strategi Melunasi: Bola Salju dan Longsor'));
-      expect(p4['durasiMenit'], equals(6));
-      expect(p4['catatanReviewer'], contains('TODO-VERIFIKASI'));
-      expect(p4['gerbang'], isEmpty);
-      expect(p4['misi']['tipe'], equals('lihat_hitungan'));
-      expect(p4['misi']['umpanBalik'], equals('urutan_pelunasan'));
+      // Verifikasi catatanReviewer dan aturanPraktis persis lampiran
+      for (final id in ['utang_cicilan_4_2', 'utang_cicilan_4_3', 'utang_cicilan_4_4']) {
+        final regCatatan = RegExp('PELAJARAN $id[\\s\\S]*?catatanReviewer:\\s*([\\s\\S]*?)(?=\\n\\s*gerbang pelajaran:|\\n\\s*aturanPraktis:|\\n\\s*pemantik:)');
+        final matchCatatan = regCatatan.firstMatch(isiMateriLampiran);
+        expect(matchCatatan, isNotNull, reason: 'catatanReviewer untuk $id harus ada di lampiran');
+        final catatanLampiran = matchCatatan!.group(1)!.replaceAll(RegExp(r'\s+'), ' ').trim();
+        final catatanJson = (pelajaranJson[id]!['catatanReviewer'] as String).replaceAll(RegExp(r'\s+'), ' ').trim();
+        expect(catatanJson, equals(catatanLampiran), reason: 'catatanReviewer $id harus persis teks lampiran');
+      }
+      expect(pelajaranJson['utang_cicilan_4_3']!['aturanPraktis'], isTrue);
 
       // Kartu, CekPaham, ContohAngka
       for (final entry in pelajaranJson.entries) {
@@ -667,14 +670,34 @@ void main() {
         expect(p['tindakLanjut'], isA<String>(), reason: '$id harus punya tindakLanjut');
       }
 
-      // Kuis Modul 4
+      // Kuis Modul 4: ambang global 70% dan sebaran soal dari lampiran
       expect(modulJson['kuis']['jumlahSoal'], equals(5));
+      expect(modulJson['kuis']['ambang'], isNull, reason: 'Ambang khusus modul harus null (menggunakan konstanta global ambangLulusKuis)');
+      expect(ambangLulusKuis, equals(70), reason: 'Konstanta global ambangLulusKuis harus bernilai 70');
+
       final bankSoal = modulJson['kuis']['bankSoal'] as List;
       expect(bankSoal.length, equals(10));
-      for (final soal in bankSoal) {
-        final pelId = soal['pelajaranId'] as String;
-        expect(pelajaranJson.containsKey(pelId), isTrue, reason: 'pelajaranId $pelId tidak valid');
+
+      final regSoalLampiran = RegExp(r'(\d+)\.\s*\[(utang_cicilan_4_\d)\]\s*tanya:\s*(.+?)(?=\n\s*pilihan:)');
+      final matchesSoal = regSoalLampiran.allMatches(isiMateriLampiran).toList();
+      expect(matchesSoal.length, equals(10), reason: 'Bank soal di lampiran harus 10 butir');
+
+      final sebaranPelajaranIdLampiran = <String, int>{};
+      final sebaranPelajaranIdJson = <String, int>{};
+
+      for (var i = 0; i < matchesSoal.length; i++) {
+        final pelIdLampiran = matchesSoal[i].group(2)!;
+        final pelIdJson = bankSoal[i]['pelajaranId'] as String;
+        expect(pelIdJson, equals(pelIdLampiran), reason: 'pelajaranId soal ${i + 1} harus persis lampiran');
+        sebaranPelajaranIdLampiran[pelIdLampiran] = (sebaranPelajaranIdLampiran[pelIdLampiran] ?? 0) + 1;
+        sebaranPelajaranIdJson[pelIdJson] = (sebaranPelajaranIdJson[pelIdJson] ?? 0) + 1;
       }
+
+      expect(sebaranPelajaranIdJson, equals(sebaranPelajaranIdLampiran));
+      expect(sebaranPelajaranIdJson['utang_cicilan_4_1'], equals(3));
+      expect(sebaranPelajaranIdJson['utang_cicilan_4_2'], equals(3));
+      expect(sebaranPelajaranIdJson['utang_cicilan_4_3'], equals(2));
+      expect(sebaranPelajaranIdJson['utang_cicilan_4_4'], equals(2));
     });
 
     test('(b) Kesesuaian KATA PER KATA seluruh teks JSON Modul 4 terhadap Lampiran Markdown', () {

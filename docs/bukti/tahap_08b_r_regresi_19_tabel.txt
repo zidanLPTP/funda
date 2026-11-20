@@ -1,0 +1,44 @@
+﻿=== RINCIAN JUMLAH BARIS PER TABEL SEBELUM CADANGAN/PEMULIHAN (BERISI UTANG) ===
+tabel_alokasi_kantong: 0 baris
+tabel_anggaran: 0 baris
+tabel_dompet: 1 baris
+tabel_hasil_kuis: 6 baris
+tabel_hasil_misi: 0 baris
+tabel_hasil_tes_awal: 0 baris
+tabel_kantong: 0 baris
+tabel_kategori: 25 baris
+tabel_pembayaran_tagihan: 0 baris
+tabel_pembayaran_utang: 0 baris
+tabel_pengaturan: 4 baris
+tabel_penyesuaian_utang: 0 baris
+tabel_pernyataan: 1 baris
+tabel_profil_keuangan: 0 baris
+tabel_progres_pelajaran: 15 baris
+tabel_tagihan: 0 baris
+tabel_transaksi: 3 baris
+tabel_tujuan: 0 baris
+tabel_utang: 3 baris
+=== TOTAL BARIS SEBELUM CADANGAN/PEMULIHAN (BERISI UTANG): 58 ===
+=== RINCIAN JUMLAH BARIS PER TABEL SESUDAH CADANGAN/PEMULIHAN (BERISI UTANG) ===
+tabel_alokasi_kantong: 0 baris
+tabel_anggaran: 0 baris
+tabel_dompet: 1 baris
+tabel_hasil_kuis: 6 baris
+tabel_hasil_misi: 0 baris
+tabel_hasil_tes_awal: 0 baris
+tabel_kantong: 0 baris
+tabel_kategori: 25 baris
+tabel_pembayaran_tagihan: 0 baris
+tabel_pembayaran_utang: 0 baris
+tabel_pengaturan: 4 baris
+tabel_penyesuaian_utang: 0 baris
+tabel_pernyataan: 1 baris
+tabel_profil_keuangan: 0 baris
+tabel_progres_pelajaran: 15 baris
+tabel_tagihan: 0 baris
+tabel_transaksi: 3 baris
+tabel_tujuan: 0 baris
+tabel_utang: 3 baris
+=== TOTAL BARIS SESUDAH CADANGAN/PEMULIHAN (BERISI UTANG): 58 ===
+[REGRESI SUKSES]: 19 Tabel SQLite lolos uji integritas pemulihan saat berisi utang!
+

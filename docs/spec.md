@@ -309,7 +309,7 @@ Kamu mengirim **prompt per tahap** ke agent → agent kerja dan menulis laporan 
 | 7 | **Laporan bulanan (PNG + PDF) & cadangan data** | **MVP selesai** |
 | 8A | **Tingkat Pemula Bagian 1:** Modul 2 "Tabungan" & Modul 3 "Dana Darurat" | Pembelajaran tabungan & dana darurat selesai |
 | 8B | **Tingkat Pemula Bagian 2:** Modul 4 "Utang & Cicilan" | Pembelajaran utang & cicilan aktif |
-| 8C | **Tingkat Pemula Bagian 3:** Modul 5 "Waspada Penipuan" & Modul 6 "Psikologi Uang" | Fondasi pemula lengkap |
+| 8C | **Tingkat Pemula Bagian 3:** Modul 5 "Waspada Penipuan & Pinjol Ilegal" & Modul 6 "Psikologi Uang & Kebiasaan Belanja" | Fondasi pemula lengkap |
 | 9 | **Sandbox + Langkah Dunia Nyata + modul 7, 10, 11** | Materi non-langsung |
 | 10 | **Tingkat Menengah** sisanya (modul 8, 9, 12) | Menengah lengkap |
 | 11 | **Tingkat Lanjutan** (modul 13–18) | Kurikulum penuh |

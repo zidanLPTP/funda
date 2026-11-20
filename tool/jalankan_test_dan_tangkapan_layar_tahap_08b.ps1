@@ -9,7 +9,7 @@ if (-not (Test-Path $adb)) {
     }
 }
 $folder = "docs/tangkapan_layar"
-$buktiLog = "docs/bukti/tahap_08b_integration_test.txt"
+$buktiLog = "docs/bukti/tahap_08b_r_integration_test.txt"
 
 if (-not (Test-Path $folder)) {
     New-Item -ItemType Directory -Path $folder -Force | Out-Null
@@ -55,7 +55,8 @@ while (-not $proc.HasExited -or -not $proc.StandardOutput.EndOfStream) {
                 $sudahDiambil[$nama] = $true
                 $tujuan = Join-Path $folder "$nama.png"
                 Write-Host "--> MENGAMBIL SCREENSHOT: $tujuan"
-                cmd /c "`"$adb`" exec-out screencap -p > `"$tujuan`""
+                & "$adb" -s emulator-5554 shell screencap -p /sdcard/temp_screen.png
+                & "$adb" -s emulator-5554 pull /sdcard/temp_screen.png "$tujuan" | Out-Null
                 Start-Sleep -Milliseconds 500
                 if (Test-Path $tujuan) {
                     $ukuran = (Get-Item $tujuan).Length
@@ -68,6 +69,15 @@ while (-not $proc.HasExited -or -not $proc.StandardOutput.EndOfStream) {
 
 $proc.WaitForExit()
 $logStream.Close()
+
+if (Test-Path $buktiLog) {
+    $content = Get-Content $buktiLog -Raw
+    if ($content -match '(?s)(=== RINCIAN JUMLAH BARIS PER TABEL SEBELUM CADANGAN/PEMULIHAN.*\[REGRESI SUKSES\].*?\n)') {
+        $Matches[1] | Out-File -FilePath "docs/bukti/tahap_08b_r_regresi_19_tabel.txt" -Encoding utf8
+        Write-Host "--> BUKTI REGRESI TERSIMPAN: docs/bukti/tahap_08b_r_regresi_19_tabel.txt"
+    }
+}
+
 Write-Host "================================================================="
 Write-Host "Integration test Tahap 8B selesai dengan kode keluar: $($proc.ExitCode)"
 Write-Host "================================================================="

@@ -358,5 +358,140 @@ void main() {
       await tester.pumpWidget(const SizedBox());
       await tester.pump(const Duration(milliseconds: 50));
     });
+
+    test('6. Evaluasi murni gerbang Modul 4 (6 kombinasi)', () {
+      final modulFile = File('aset/konten/pemula/utang_cicilan/modul.json');
+      final modul = PembacaKonten.uraiModul(modulFile.readAsStringSync(), namaBerkas: 'modul.json');
+
+      final fotoDasar = FotoDataPengguna.kosong();
+
+      // (1) Modul 3 selesai, tanpa utang, tanpa pernyataan -> terkunci (syarat utang belum)
+      final foto1 = fotoDasar.copyWith(
+        hasilKuisTerbaik: {'dana_darurat': const HasilKuisSnapshot(skorPersen: 100, lulus: true)},
+        jumlahUtangAktif: 0,
+      );
+      final status1 = tentukanStatusModul(modul: modul, fotoData: foto1);
+      expect(status1.status, equals(StatusBelajar.terkunci));
+      expect(status1.apaYangKurang, contains(contains('Lalu catat utang atau cicilanmu')));
+      expect(status1.daftarAtauPernyataan, contains('tidak_punya_utang'));
+
+      // (2) Modul 3 selesai, utang 1 -> terbuka
+      final foto2 = foto1.copyWith(jumlahUtangAktif: 1);
+      final status2 = tentukanStatusModul(modul: modul, fotoData: foto2);
+      expect(status2.status, equals(StatusBelajar.terbuka));
+
+      // (3) Modul 3 selesai, pernyataan tidak_punya_utang -> terbuka
+      final foto3 = foto1.copyWith(pernyataan: {'tidak_punya_utang': 'true'});
+      final status3 = tentukanStatusModul(modul: modul, fotoData: foto3);
+      expect(status3.status, equals(StatusBelajar.terbuka));
+
+      // (4) Modul 3 belum selesai, utang 1 -> terkunci
+      final foto4 = fotoDasar.copyWith(jumlahUtangAktif: 1);
+      final status4 = tentukanStatusModul(modul: modul, fotoData: foto4);
+      expect(status4.status, equals(StatusBelajar.terkunci));
+      expect(status4.apaYangKurang, contains('Selesaikan Modul 3 dulu.'));
+      // Tombol pernyataan TIDAK boleh muncul bila prasyarat modul_selesai belum selesai
+      expect(status4.daftarAtauPernyataan, isEmpty);
+
+      // (5) Pernyataan dicabut -> terkunci lagi
+      final foto5 = foto3.copyWith(pernyataan: {});
+      final status5 = tentukanStatusModul(modul: modul, fotoData: foto5);
+      expect(status5.status, equals(StatusBelajar.terkunci));
+
+      // (6) Utang berstatus lunas / arsip (jumlahUtangAktif = 0) -> terkunci
+      final foto6 = foto1.copyWith(jumlahUtangAktif: 0);
+      final status6 = tentukanStatusModul(modul: modul, fotoData: foto6);
+      expect(status6.status, equals(StatusBelajar.terkunci));
+    });
+
+    testWidgets('7. Tombol "Aku tidak punya ini" TIDAK tampil bila Modul 3 belum selesai', (tester) async {
+      tester.view.physicalSize = const Size(1080, 2400);
+      tester.view.devicePixelRatio = 2.0;
+      addTearDown(() => tester.view.resetPhysicalSize());
+
+      final fileModul = File('aset/konten/pemula/utang_cicilan/modul.json');
+      final modul = PembacaKonten.uraiModul(fileModul.readAsStringSync(), namaBerkas: 'modul.json');
+
+      final fotoDataModul3Belum = FotoDataPengguna.kosong(); // Modul 3 belum selesai
+      final status = tentukanStatusModul(modul: modul, fotoData: fotoDataModul3Belum);
+      expect(status.status, equals(StatusBelajar.terkunci));
+      expect(status.daftarAtauPernyataan, isEmpty); // Tidak menawarkan pernyataan karena Modul 3 belum selesai
+
+      // Render LayarBelajar
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            penyediaBasisData.overrideWithValue(db),
+            penyediaFotoData.overrideWith((ref) => Future.value(fotoDataModul3Belum)),
+            penyediaDaftarSemuaModul.overrideWith((ref) => Future.value([modul])),
+            penyediaStreamPernyataan.overrideWith((ref) => Stream.value(<String, String>{})),
+          ],
+          child: MaterialApp(
+            theme: TemaFunda.temaTerang,
+            home: const LayarBelajar(),
+          ),
+        ),
+      );
+
+      await pompaAman(tester);
+      expect(find.textContaining('Selesaikan Modul 3 dulu.'), findsWidgets);
+      // Pastikan tombol pernyataan tidak ada
+      expect(find.text('Aku tidak punya ini'), findsNothing);
+
+      await tester.pumpWidget(const SizedBox());
+      await tester.pump(const Duration(milliseconds: 50));
+    });
+
+    testWidgets('8. Aksesibilitas: Tombol "Lanjut" pemutar pelajaran dapat dijangkau (dengan scroll) pada layar 360x640 dengan skala teks 2.0', (tester) async {
+      tester.view.physicalSize = const Size(360, 640);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(() => tester.view.resetPhysicalSize());
+
+      final file = File('aset/konten/pemula/utang_cicilan/utang_cicilan_4_1.json');
+      final pel = PembacaKonten.uraiPelajaran(file.readAsStringSync(), namaBerkas: 'utang_cicilan_4_1.json');
+
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            penyediaBasisData.overrideWithValue(db),
+            penyediaFotoData.overrideWith((ref) => Future.value(FotoDataPengguna.kosong())),
+            penyediaKamus.overrideWith((ref) => Future.value(<String, IstilahKamus>{})),
+            penyediaTeksUmpanBalikMisi(pel.misi.umpanBalik ?? '').overrideWith((ref) => Future.value('Umpan balik 360x640 skala 2.0')),
+          ],
+          child: MaterialApp(
+            theme: TemaFunda.temaTerang,
+            home: MediaQuery(
+              data: const MediaQueryData(
+                textScaler: TextScaler.linear(2.0),
+              ),
+              child: LayarPemutarPelajaran(
+                modulId: 'utang_cicilan',
+                pelajaranId: pel.id,
+                pelajaranOverride: pel,
+              ),
+            ),
+          ),
+        ),
+      );
+
+      await pompaAman(tester);
+      expect(tester.takeException(), isNull);
+
+      // Scroll layar 360x640 bila tombol Lanjut berada di bawah viewport
+      final scrollable = find.byType(SingleChildScrollView);
+      if (scrollable.evaluate().isNotEmpty) {
+        await tester.drag(scrollable.first, const Offset(0, -300));
+        await pompaAman(tester);
+      }
+
+      final tombolLanjut = find.text('Lanjut');
+      expect(tombolLanjut, findsOneWidget);
+      await tester.tap(tombolLanjut);
+      await pompaAman(tester);
+      expect(tester.takeException(), isNull);
+
+      await tester.pumpWidget(const SizedBox());
+      await tester.pump(const Duration(milliseconds: 50));
+    });
   });
 }

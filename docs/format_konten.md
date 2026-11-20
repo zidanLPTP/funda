@@ -398,4 +398,25 @@ Berkas ini adalah sumber kebenaran teks (*single source of truth*) untuk antarmu
 4. **`target_dana_darurat`**: Menghitung kisaran aturan praktis dana darurat 3 sampai 6 kali pengeluaran wajib bulanan dan menyarankan titik awal 3 kali.
 5. **`progres_dana_darurat`**: Merangkum posisi dana darurat saat ini (Rupiah, persentase) dan mengonversinya ke dalam satuan bulan bertahan (`formatBulanDesimal`).
 
+---
+
+## 10. Objek Gerbang/Misi, Kunci Pernyataan & Umpan Balik Baru (Tahap 8B: Modul 4)
+
+### 10.1 Gerbang Modul & Kunci Pernyataan
+1. **Gerbang Modul:**
+   - Syarat 1: `modul_selesai` -> `dana_darurat`
+   - Syarat 2: `ada_data` -> `utang` minimal 1, atau pernyataan dengan kunci `tidak_punya_utang`.
+2. **Kunci Pernyataan (`atauPernyataan`):**
+   - Menggunakan nilai resmi `tidak_punya_utang` (tersimpan di `tabel_pernyataan`).
+
+### 10.2 Ambang Kelulusan Kuis
+- Ambang kelulusan kuis bersifat **global** mengacu pada konstanta `ambangLulusKuis = 70%` (skor minimal 70%, atau 4 benar dari 5 soal acak). Tidak ada ambang kelulusan khusus per modul.
+
+### 10.3 Kunci Umpan Balik Misi Belajar Modul 4 (`umpanBalik`)
+1. **`ringkasan_utang`**: Merangkum jumlah utang aktif, sisa total utang, cicilan per bulan, dan porsi cicilan terhadap pemasukan bulanan (3 bulan terakhir atau bulan berjalan).
+2. **`biaya_pinjaman_tercatat`**: Menghitung biaya pinjaman (total cicilan x tenor - pokok awal) dari utang aktif ber-tenor lengkap.
+3. **`rasio_cicilan_bulan_ini`**: Menghitung rasio cicilan terhadap pemasukan bulanan serta menghitung proyeksi kenaikan rasio jika pemasukan turun 25 persen.
+4. **`urutan_pelunasan`**: Menghitung urutan pelunasan utang aktif berdasarkan strategi bola salju (sisa pokok terkecil) dan longsor (bunga persen tertinggi).
+
+
 

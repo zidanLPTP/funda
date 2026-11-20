@@ -33,6 +33,9 @@ class _LayarKuisModulState extends ConsumerState<LayarKuisModul> {
   int _skorAkhir = 0;
   bool _lulus = false;
 
+  @visibleForTesting
+  int get indeksJawabanBenarSaatIni => _soalKuis.isNotEmpty && _indeksSoal < _soalKuis.length ? _soalKuis[_indeksSoal].benar : 0;
+
   @override
   void initState() {
     super.initState();

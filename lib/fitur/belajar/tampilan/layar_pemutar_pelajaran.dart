@@ -88,6 +88,8 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
         daftarIstilahKamus: kamus,
       );
 
+      ref.invalidate(penyediaTeksUmpanBalikMisi);
+
       // Ambil progres langkah terakhir yang tersimpan
       final progresRepo = ref.read(penyediaProgresRepositori);
       final progresLama = await progresRepo.ambilProgresPelajaran(widget.pelajaranId);

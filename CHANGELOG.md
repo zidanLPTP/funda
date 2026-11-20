@@ -5,6 +5,32 @@ Format penulisan mengacu pada standar Keep a Changelog dan penamaan commit Funda
 
 ---
 
+## [0.11.1] - 2026-11-20 — Tahap 8B-R: Kesesuaian Lampiran Modul 4
+
+Tahap 8B-R menyelaraskan seluruh metadata Modul 4 ("Utang & Cicilan") agar tepat dan patuh 100% pada teks lampiran resmi reviewer (`docs/materi/modul_4_utang_cicilan.md` dan `kamus_modul_4.md`), mengembalikan teks lampiran asli `catatanReviewer` pada pelajaran 4.2, 4.3, dan 4.4, menyelaraskan durasi pelajaran (5, 6, 5, 6 menit), menerapkan ambang lulus kuis global 70% (`ambangLulusKuis`) tanpa ambang khusus modul, mengoreksi sebaran soal bankSoal (3, 3, 2, 2) tanpa soal sintesis, menyelaraskan kunci pernyataan menjadi `tidak_punya_utang` di seluruh kode, provider, pengujian, dan dokumentasi, memperluas uji kesesuaian lampiran dinamis dari markdown, menyempurnakan evaluasi gerbang dan tombol "Cabut pernyataan", menutup Langkah 0 (a sampai e), serta menjalankan alur integrasi emulator Pixel 8 (Android 16 API 36) dengan assertion string lengkap, regresi 19 tabel pada kondisi berisi utang (`tabel_utang: 3 baris`), dan tolok ukur beban komputasi on-demand.
+
+### Diperbaiki & Diselaraskan
+- **Kesesuaian Metadata Modul 4 (`aset/konten/pemula/utang_cicilan/`):**
+  - Durasi diselaraskan: 4_1 = 5, 4_2 = 6, 4_3 = 5, 4_4 = 6 menit.
+  - Ambang kelulusan kuis dikembalikan ke konstanta global `ambangLulusKuis = 70` (ambang khusus modul dihapus dari `modul.json`).
+  - Sebaran 10 bankSoal: 4_1 (soal 1-3 = 3 soal), 4_2 (soal 4-6 = 3 soal), 4_3 (soal 7-8 = 2 soal), 4_4 (soal 9-10 = 2 soal). Soal 7 menyertakan metadata `aturanPraktis: true` dan `catatanReviewer: "TODO-VERIFIKASI: angka hanya ilustrasi"`.
+  - Catatan reviewer pelajaran dikembalikan persis teks lampiran untuk 4_2, 4_3, dan 4_4 (4_3 ber-`aturanPraktis: true`).
+  - Kunci pernyataan distandarkan menjadi `tidak_punya_utang` (menggantikan `tanpa_utang`).
+- **Penyempurnaan Gerbang Belajar & Tombol Cabut Pernyataan (`lib/perhitungan/perhitungan_belajar.dart`, `lib/fitur/belajar/tampilan/layar_belajar.dart`):**
+  - Tombol "Aku tidak punya ini" hanya muncul jika modul terkunci karena syarat utang dan prasyarat Modul 3 sudah selesai.
+  - Tombol "Cabut pernyataan" ditambahkan saat pengguna menyatakan `tidak_punya_utang`, sehingga pengguna dapat mengunci kembali modul secara interaktif.
+  - 6 kombinasi gerbang murni dan uji widget divalidasi pada `test/fitur/belajar_tahap_08b_widget_test.dart`.
+- **Aksesibilitas Skala Teks 2.0:**
+  - Uji widget memvalidasi tombol "Lanjut" pemutar pelajaran dapat dijangkau dan di-scroll pada layar 360x640 dengan skala teks 2.0 tanpa error.
+- **Pengujian Integrasi E2E Emulator Pixel 8 (`integration_test/tahap_08b_emulator_test.dart`):**
+  - Jalur A: input utang riil melalui formulir `/utang/tambah`, assertion string lengkap pada umpan balik 4.1 s.d. 4.4, kuis percobaan 1 (skor 60% gagal) lalu percobaan 2 (lulus >= 70%), dan pembaruan petak Beranda.
+  - Jalur B: verifikasi gerbang terkunci -> tombol "Aku tidak punya ini" -> terbuka -> verifikasi teks umpan balik pernyataan -> cabut pernyataan -> terkunci kembali.
+  - Regresi Integritas 19 Tabel SQLite pada kondisi berisi utang (`tabel_utang: 3 baris`) membuktikan 58 baris sebelum dan sesudah cadangan/pemulihan identik 100% (`docs/bukti/tahap_08b_r_regresi_19_tabel.txt`).
+  - Tolok ukur beban 20.000 transaksi + 20 utang: Tab Belajar komputasi median 67ms, frame pertama median 23ms; On-Demand Pelajaran Modul 4 komputasi median 5ms (1 kueri tunggal teroptimasi).
+  - 10 tangkapan layar bersih diambil ulang secara segar ke `docs/tangkapan_layar/tahap_08b_01` s.d. `10` (nomor 11 dihapus).
+
+---
+
 ## [0.11.0] - 2026-11-20 — Tahap 8B: Modul 4 "Utang & Cicilan"
 
 Tahap 8B mengimplementasikan konten lengkap Modul 4 ("Utang & Cicilan": 4 pelajaran, kuis akhir 5 dari 10 bankSoal ber-pelajaranId valid, 6 entri kamus baru) beserta empat fungsi murni umpan balik belajar berbasis data pengguna riil (`ringkasan_utang`, `biaya_pinjaman_tercatat`, `rasio_cicilan_bulan_ini`, `urutan_pelunasan`), kueri rincian baris utang on-demand pada repositori utang tanpa menambah kueri pada foto data agregat, mekanisme tombol pernyataan "Aku tidak punya ini" pada modul terkunci, eliminasi total `warnIfMissed: false`, penutupan Langkah 0 (a sampai e), pengujian integrasi E2E emulator Pixel 8 (Jalur A punya utang & Jalur B tanpa utang), regresi 19 tabel via `sqlite_master`, dan tolok ukur beban 20.000 transaksi + 20 utang.
