@@ -209,10 +209,10 @@ Berdasarkan hasil pengujian terisolasi pada 10 iterasi bersih di emulator Pixel 
 
 ## 17. Penghapusan Dependency Overrides `image: 4.10.2` (Tahap 8A Langkah 0d)
 
-- **Konteks:**
-  Pada Tahap 7, `dependency_overrides: image: 4.10.2` sempat ditambahkan ke `pubspec.yaml` untuk mengunci dependensi pemrosesan gambar laporan.
-- **Keputusan:**
-  Pada Langkah 0(d) Tahap 8A, blok `dependency_overrides` tersebut telah dihapus secara resmi. Perintah `flutter pub get` membuktikan seluruh grafik dependensi berhasil diselesaikan secara normal (*clean resolution*) tanpa penimpaan versi darurat.
+- **Konteks & Alasan:**
+  Pada Tahap 7, `dependency_overrides: image: 4.10.2` sempat ditambahkan ke `pubspec.yaml` untuk mengatasi resolusi transitif pemrosesan gambar laporan. Pada Tahap 8A, dependensi pustaka `pdf`, `qr`, dan ekosistem Flutter telah memperbarui batasan versinya sehingga Dart pub resolver mampu menyelesaikan grafik dependensi secara normal (*clean resolution*) tanpa pemaksaan. Blok `dependency_overrides` dicabut agar dependensi aplikasi tetap bersih dan tidak menutupi potensi konflik dependensi di masa depan.
+- **Kapan Boleh Dipasang Kembali:**
+  Blok `dependency_overrides` HANYA boleh dipasang kembali dalam keadaan darurat teknis sementara jika terjadi *breaking change* atau tabrakan versi mayor antar-pustaka pihak ketiga di ekosistem pub yang menyebabkan `flutter pub get` gagal total, dan harus dicabut kembali segera setelah pustaka upstream terkait merilis pembaruan perbaikan.
 - **Status:** Tuntas / Ditutup pada Tahap 8A.
 
 ---

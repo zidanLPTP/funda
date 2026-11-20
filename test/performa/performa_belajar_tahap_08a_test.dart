@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:drift/native.dart';
 import 'package:funda/data/basis_data.dart';
 import 'package:funda/data/repositori/foto_data_repositori.dart';
+import 'package:funda/perhitungan/perhitungan_belajar.dart';
 
 void main() {
   group('Performa & Kesetaraan Agregasi SQL Tahap 8A (Modul 2 & 3)', () {
@@ -19,9 +20,7 @@ void main() {
       await db.close();
     });
 
-    test('Kesetaraan Agregasi SQL FotoDataRepositori vs Komputasi Murni Dart untuk 5 Objek Baru', () async {
-      final now = DateTime.now();
-
+    Future<void> isiDataDummy(DateTime now) async {
       // 1. Data Dompet
       await db.into(db.tabelDompet).insert(
         TabelDompetCompanion.insert(
@@ -221,6 +220,11 @@ void main() {
           dibuatPada: now,
         ),
       );
+    }
+
+    test('Kesetaraan Agregasi SQL FotoDataRepositori vs Komputasi Murni Dart untuk 5 Objek Baru', () async {
+      final now = DateTime.now();
+      await isiDataDummy(now);
 
       // Ambil foto data via SQL agregasi
       final foto = await repo.ambilFotoData();
@@ -275,6 +279,38 @@ void main() {
 
       expect(foto.jumlahIsiDanaDarurat, equals(hitungIsiDarurat), reason: 'jumlahIsiDanaDarurat harus sama persis');
       expect(foto.jumlahIsiDanaDarurat, equals(1));
+    });
+
+    test('Tujuan tabungan dan dana darurat berstatus "tercapai" tetap dihitung dan membuka gerbang 3.3', () async {
+      final now = DateTime.now();
+      await isiDataDummy(now);
+
+      // Ubah status tujuan dana darurat menjadi tercapai
+      await (db.update(db.tabelTujuan)..where((t) => t.id.equals('tujuan_darurat_1'))).write(
+        const TabelTujuanCompanion(status: Value('tercapai')),
+      );
+
+      final foto = await repo.ambilFotoData();
+
+      // (i) Tujuan tabungan tercapai tetap dihitung
+      expect(foto.jumlahTujuanTabungan, equals(2)); // 1 aktif + 1 tercapai
+
+      // (ii) Tujuan dana darurat tercapai tetap dihitung
+      expect(foto.jumlahTujuanDanaDarurat, equals(1)); // 1 tercapai
+
+      // (iii) Gerbang pelajaran 3.3 tetap terbuka
+      const syaratPelajaran33 = SyaratGerbangData(
+        tipe: 'ada_data',
+        objek: 'tujuan_dana_darurat',
+        min: 1,
+        pesan: 'Buat minimal 1 tujuan dana darurat',
+      );
+      final hasilEvaluasi = evaluasiSyarat(syaratPelajaran33, foto);
+      expect(hasilEvaluasi.terpenuhi, isTrue, reason: 'Pelajaran 3.3 wajib terbuka saat tujuan dana darurat berstatus tercapai');
+
+      // (iv) isi_* tidak bergantung pada status tujuan
+      expect(foto.jumlahIsiDanaDarurat, equals(1));
+      expect(foto.jumlahIsiTujuanTabungan, equals(2));
     });
 
     test('EXPLAIN QUERY PLAN untuk 5 subkueri baru Foto Data Pengguna', () async {

@@ -1303,6 +1303,45 @@ void main() {
           );
         }
       });
+
+      test('Kasus 8: penolakan status selain "draf" dan "ditinjau" (status "rilis", "aktif", kosong ditolak)', () {
+        final statusIlegal = ['rilis', 'aktif', 'publikasi', 'selesai', ''];
+        for (final st in statusIlegal) {
+          final jsonRusak = templatePelajaranValid.replaceAll(
+            '"status": "draf"',
+            '"status": "$st"',
+          );
+          expect(
+            () => PembacaKonten.uraiPelajaran(jsonRusak, namaBerkas: 'tabungan_status_rusak.json'),
+            throwsA(predicate((e) => e is GalatKonten && e.kolom == 'status' && e.pesan.contains('draf') && e.pesan.contains('ditinjau'))),
+            reason: 'Status "$st" harus ditolak oleh pemeriksa konten',
+          );
+        }
+
+        // Uji status null / hilang
+        final jsonTanpaStatus = templatePelajaranValid.replaceAll('"status": "draf",', '');
+        expect(
+          () => PembacaKonten.uraiPelajaran(jsonTanpaStatus, namaBerkas: 'tabungan_tanpa_status.json'),
+          throwsA(predicate((e) => e is GalatKonten && e.kolom == 'status')),
+        );
+      });
+
+      test('Kasus 9 (pembuktian positif): status "draf" dan "ditinjau" keduanya diterima', () {
+        final jsonDraf = templatePelajaranValid;
+        expect(
+          () => PembacaKonten.uraiPelajaran(jsonDraf, namaBerkas: 'tabungan_draf.json'),
+          returnsNormally,
+        );
+
+        final jsonDitinjau = templatePelajaranValid.replaceAll(
+          '"status": "draf"',
+          '"status": "ditinjau"',
+        );
+        expect(
+          () => PembacaKonten.uraiPelajaran(jsonDitinjau, namaBerkas: 'tabungan_ditinjau.json'),
+          returnsNormally,
+        );
+      });
     });
   });
 }

@@ -517,5 +517,60 @@ void main() {
         }
       }
     });
+
+    test('(c) Kesesuaian KATA PER KATA 6 Entri Kamus Baru Modul 2 & 3', () {
+      final kamusFile = File('aset/konten/kamus.json');
+      expect(kamusFile.existsSync(), isTrue);
+      final daftarKamus = (jsonDecode(kamusFile.readAsStringSync()) as List).cast<Map<String, dynamic>>();
+
+      final kamusMateriFile = File('docs/materi/kamus_modul_2_3.md');
+      expect(kamusMateriFile.existsSync(), isTrue);
+      final isiMateriKamus = kamusMateriFile.readAsStringSync();
+
+      final entriWajib = <String, ({String arti, String contohRupiah})>{
+        'tenggat': (
+          arti: 'Batas waktu yang kamu tetapkan untuk mencapai sebuah tujuan.',
+          contohRupiah: 'Tenggat 12 bulan untuk target Rp6.000.000.',
+        ),
+        'setoran': (
+          arti: 'Uang yang kamu sisihkan ke sebuah tujuan pada satu kali pengisian atau tiap bulan.',
+          contohRupiah: 'Setoran Rp250.000 per bulan.',
+        ),
+        'kantong': (
+          arti: 'Penanda bagian saldo sebuah dompet untuk tujuan tertentu. Uangnya tidak berpindah.',
+          contohRupiah: 'Kantong Laptop Skripsi berisi Rp500.000 dari dompet bank.',
+        ),
+        'saldo bebas': (
+          arti: 'Saldo dompet yang belum ditandai untuk tujuan apa pun.',
+          contohRupiah: 'Saldo dompet Rp1.000.000 dengan kantong Rp200.000 berarti saldo bebas Rp800.000.',
+        ),
+        'pengeluaran wajib': (
+          arti: 'Pengeluaran yang tetap harus dibayar saat keadaan sulit, yaitu kebutuhan pokok dan cicilan.',
+          contohRupiah: 'Kos Rp900.000, makan Rp600.000, dan cicilan Rp200.000.',
+        ),
+        'tonggak': (
+          arti: 'Target kecil di tengah jalan menuju target besar.',
+          contohRupiah: 'Tonggak pertama dana darurat: satu bulan pengeluaran wajib, Rp1.900.000.',
+        ),
+      };
+
+      for (final e in entriWajib.entries) {
+        final istilah = e.key;
+        final target = e.value;
+
+        // Cek di aset/konten/kamus.json
+        final entriJson = daftarKamus.firstWhere(
+          (k) => k['istilah'] == istilah,
+          orElse: () => throw Exception('Istilah "$istilah" tidak ditemukan di kamus.json'),
+        );
+        expect(entriJson['arti'], equals(target.arti), reason: 'Arti "$istilah" di kamus.json tidak cocok kata per kata');
+        expect(entriJson['contohRupiah'], equals(target.contohRupiah), reason: 'Contoh Rupiah "$istilah" di kamus.json tidak cocok kata per kata');
+
+        // Cek di docs/materi/kamus_modul_2_3.md
+        expect(isiMateriKamus.contains(istilah), isTrue, reason: 'Istilah "$istilah" tidak ditemukan di docs/materi/kamus_modul_2_3.md');
+        expect(isiMateriKamus.contains(target.arti), isTrue, reason: 'Arti "$istilah" tidak ditemukan di docs/materi/kamus_modul_2_3.md');
+        expect(isiMateriKamus.contains(target.contohRupiah), isTrue, reason: 'Contoh Rupiah "$istilah" tidak ditemukan di docs/materi/kamus_modul_2_3.md');
+      }
+    });
   });
 }

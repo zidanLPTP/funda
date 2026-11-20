@@ -5,6 +5,28 @@ Format penulisan mengacu pada standar Keep a Changelog dan penamaan commit Funda
 
 ---
 
+## [0.10.1] - 2026-11-20 — Penyelarasan Tahap 8A (Tahap 8A-R)
+
+Tahap 8A-R: Penyelarasan Kesesuaian Lampiran Modul 2 & 3 Kata per Kata, Penyelarasan Kamus Keuangan (6 istilah baru), Eliminasi Total Tipe `double` dan `round()` pada 5 Fungsi Murni Umpan Balik Belajar, Uji String Lengkap 41 Kasus Uji Umpan Balik, Pemulihan Cadangan Data dengan Enumerasi Dinamis 19 Tabel SQLite (`sqlite_master`), Penutupan Regresi Emulator Pixel 8 dengan 11 Tangkapan Layar Resmi, dan Tolok Ukur Beban 20.000 Transaksi (Komputasi 44 ms vs Frame Pertama 32 ms).
+
+### Ditambahkan & Diselaraskan
+- **Kamus Keuangan (`aset/konten/kamus.json` & `docs/materi/kamus_modul_2_3.md`):**
+  - Menyelaraskan teks 6 istilah baru (`tenggat`, `setoran`, `kantong`, `saldo bebas`, `pengeluaran wajib`, `tonggak`) persis kata per kata dengan dokumen materi resmi.
+  - Memperluas suite uji `test/konten/kesesuaian_lampiran_test.dart` untuk memvalidasi teks kamus baru secara otomatis.
+- **Fungsi Murni Umpan Balik Integer Murni Tanpa Double (`lib/perhitungan/perhitungan_umpan_balik_belajar.dart`):**
+  - Menghilangkan seluruh operasi bertipe `double` dan pembulatan `round()` pada uang, persen, dan konversi bulan.
+  - Mengimplementasikan penghitungan pembulatan ke atas integer murni `(sisa + setoran - 1) ~/ setoran` dan format koma desimal `desimalSatuTempat()` berbasis aritmatika integer modulus/pembagian integer.
+  - Menulis 41 kasus uji `test/perhitungan/perhitungan_umpan_balik_tahap_08a_test.dart` yang menguji string keluaran lengkap (bukan sekadar `contains`).
+- **Foto Data & Status Konten (`lib/data/repositori/foto_data_repositori.dart`, `lib/fitur/belajar/pemeriksa_konten_rusak.dart`):**
+  - Menyaring status tujuan tabungan dan dana darurat dengan `status IN ('aktif', 'tercapai')`.
+  - Mengunci status konten valid hanya untuk `'draf'` dan `'ditinjau'` (status `'rilis'` atau lainnya ditolak tegas oleh pemeriksa konten).
+- **Pengujian Integrasi Emulator & Cadangan Dinamis (`integration_test/tahap_08a_emulator_test.dart`):**
+  - Menerapkan enumerasi dinamis kueri SQLite `sqlite_master` untuk memverifikasi kesamaan jumlah baris sebelum dan sesudah ekspor-impor cadangan di seluruh 19 tabel basis data.
+  - Menghasilkan 11 berkas tangkapan layar resmi beresolusi native di `docs/tangkapan_layar/`.
+  - Tolok ukur 20.000 transaksi mencatat median komputasi `ambilFotoData` 44 ms dan median frame pertama 32 ms.
+
+---
+
 ## [0.10.0] - 2026-11-19 — Tahap 8A: Modul 2 "Tabungan" & Modul 3 "Dana Darurat"
 
 Tahap 8A mengimplementasikan konten lengkap Modul 2 ("Tabungan": 3 pelajaran, kuis akhir 5 dari 10 soal, kamus baru) dan Modul 3 ("Dana Darurat": 3 pelajaran, kuis akhir 5 dari 10 soal, kamus baru) beserta mesin pendukungnya, agregasi SQL agregat pada SATU foto data, 5 fungsi murni umpan balik belajar berbasis data pengguna nyata, unit test kesesuaian lampiran kata per kata, widget test, penutupan utang Langkah 0(c), dan pengujian integrasi emulator dengan tangkapan layar resmi.
