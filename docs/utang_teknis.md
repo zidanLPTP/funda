@@ -233,6 +233,26 @@ Berdasarkan hasil pengujian terisolasi pada 10 iterasi bersih di emulator Pixel 
 - **Tindakan Lanjutan:**
   Harness benchmark emulator berikutnya dipisahkan secara tegas antara pengukuran komputasi kueri/render dan jeda frame simulasi pump agar tidak bias oleh tidur buatan harness.
 
+---
+
+## 19. Investigasi Gradle Daemon JVM Mismatch dan Arsitektur Kueri On-Demand Utang Belajar (Tahap 8B)
+
+- **Konteks & Akar Masalah Gradle Daemon (Langkah 0a):**
+  Pada eksekusi pengujian integrasi emulator di mesin Windows pengguna, sempat teramati proses Gradle berjalan sangat lama atau keluar mendadak dengan asynchronous gap pada `AndroidDevice.startApp`.
+  Investigasi mendalam pada log Gradle (`C:\Users\M S I\.gradle\daemon\8.14\`) dan lingkungan JDK menemukan penyebab utama:
+  1. Terdapat beberapa instalasi Java berbeda di mesin host: JBR Android Studio (`jdk-21.0.10`), Adoptium OpenJDK (`21.0.11`), dan Oracle JDK (`jdk-21`).
+  2. Ketika environment `JAVA_HOME` tidak di-pin secara eksplisit ke instalasi JBR Android Studio yang kompatibel dengan Android Gradle Plugin, Gradle mendeteksi *incompatible JVM* dan menolak me-reuse daemon yang ada (`3 incompatible and 13 stopped Daemons could not be reused`), lalu men-spawn daemon baru secara berulang.
+  3. Pemanggilan `powershell -ExecutionPolicy Bypass -File .\tool\jalankan_test_dan_tangkapan_layar_tahap_08b.ps1` yang mengeksekusi `flutter test` di latar belakang tanpa jendela terlihat membuat pengguna menunggu tanpa kejelasan progres log.
+  4. Penyelesaian: Skrip `tool/jalankan_test_dan_tangkapan_layar_tahap_08b.ps1` kini secara eksplisit menetapkan `$env:JAVA_HOME = "C:\Program Files\Android\Android Studio\jbr"` dan `$env:PATH` lengkap, serta menyediakan mekanisme peluncuran jendela terminal terlihat (foreground console) untuk pemantauan interaktif real-time.
+
+- **Arsitektur Kueri On-Demand Utang Belajar vs Foto Data Agregat:**
+  Pada kurikulum Modul 4 ("Utang & Cicilan"), terdapat 4 kartu umpan balik yang membutuhkan data rincian baris utang aktif (`nama`, `pokok`, `sisa`, `cicilan`, `tenor`, `bunga`, `jenis_bunga`).
+  Untuk menjaga kinerja Tab Belajar dan Beranda tetap berkecepatan konstan O(1) di bawah 50 ms pada beban 20.000 transaksi + 20 utang:
+  1. `FotoDataRepositori` (`ambilFotoData`) TIDAK menambahkan kueri baru dan tetap mempertahankan **11 kueri tunggal teroptimasi** (`jumlahTransaksi`, `jumlahAkun`, `jumlahKategori`, `jumlahAnggaran`, `jumlahTujuanTabungan`, `jumlahDanaDarurat`, `jumlahUtang`, `jumlahTagihan`, `rataRataPemasukan3Bulan`, `arusKasBulanIni`, `persentasePengeluaranWajib`).
+  2. Data rincian baris utang ditarik secara **On-Demand** oleh `penyediaTeksUmpanBalikMisi` melalui `UtangRepositori.ambilDaftarUtangUmpanBalik()` HANYA saat pengguna benar-benar membuka kartu pelajaran mikro terkait.
+  3. Dengan pemisahan ini, Tab Belajar dan Peta Belajar utama tidak terbebani pemuatan baris utang, dan hasil benchmark pada 20.000 transaksi + 20 utang membuktikan waktu komputasi median tetap stabil di **57 ms** dan frame pertama di **18 ms**.
+
+
 
 
 

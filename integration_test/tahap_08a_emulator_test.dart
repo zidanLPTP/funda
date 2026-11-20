@@ -225,7 +225,7 @@ void main() {
             try {
               await tester.ensureVisible(f.first);
               await pompaAman(tester, 100);
-              await tester.tap(f.first, warnIfMissed: false);
+              await tester.tap(f.first);
               await pompaAman(tester, 150);
             } catch (_) {}
           }

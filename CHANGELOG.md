@@ -5,6 +5,41 @@ Format penulisan mengacu pada standar Keep a Changelog dan penamaan commit Funda
 
 ---
 
+## [0.11.0] - 2026-11-20 — Tahap 8B: Modul 4 "Utang & Cicilan"
+
+Tahap 8B mengimplementasikan konten lengkap Modul 4 ("Utang & Cicilan": 4 pelajaran, kuis akhir 5 dari 10 bankSoal ber-pelajaranId valid, 6 entri kamus baru) beserta empat fungsi murni umpan balik belajar berbasis data pengguna riil (`ringkasan_utang`, `biaya_pinjaman_tercatat`, `rasio_cicilan_bulan_ini`, `urutan_pelunasan`), kueri rincian baris utang on-demand pada repositori utang tanpa menambah kueri pada foto data agregat, mekanisme tombol pernyataan "Aku tidak punya ini" pada modul terkunci, eliminasi total `warnIfMissed: false`, penutupan Langkah 0 (a sampai e), pengujian integrasi E2E emulator Pixel 8 (Jalur A punya utang & Jalur B tanpa utang), regresi 19 tabel via `sqlite_master`, dan tolok ukur beban 20.000 transaksi + 20 utang.
+
+### Ditambahkan & Diselaraskan
+- **Konten Edukasi Resmi Modul 4 (`aset/konten/pemula/utang_cicilan/`):**
+  - `modul.json`: Gerbang `modul_selesai dana_darurat` DAN (`ada_data utang min 1` ATAU `pernyataan tidak_punya_utang`), status `tersedia: true`, bankSoal kuis 10 butir berpelajaranId valid.
+  - `utang_cicilan_4_1.json`: "Utang yang Membantu dan yang Menjerat", durasi 5 menit, contohAngka "Tiga cicilan kecil yang menumpuk", misi `lihat_hitungan`, umpanBalik `ringkasan_utang`.
+  - `utang_cicilan_4_2.json`: "Berapa Harga Utang Sebenarnya?", durasi 5 menit, contohAngka "Pinjaman Rp12.000.000 selama 12 bulan, bunga flat 12 persen per tahun", misi `lihat_hitungan`, umpanBalik `biaya_pinjaman_tercatat`.
+  - `utang_cicilan_4_3.json`: "Batas Aman Cicilan", durasi 5 menit, contohAngka "Rasio cicilan untuk pemasukan Rp3.000.000", misi `lihat_hitungan`, umpanBalik `rasio_cicilan_bulan_ini`.
+  - `utang_cicilan_4_4.json`: "Dua Cara Melunasi: Bola Salju dan Longsor", durasi 6 menit, contohAngka "Tiga utang dengan bunga berbeda (contoh)", misi `lihat_hitungan`, umpanBalik `urutan_pelunasan`.
+- **Ekstensi Kamus Keuangan (`aset/konten/kamus.json` & `docs/materi/kamus_modul_4.md`):**
+  - Menambahkan 6 entri istilah baru: `pokok`, `bunga flat`, `bunga efektif`, `paylater`, `bola salju`, `longsor` dengan definisi dan contoh Rupiah konkret persis kata per kata sesuai lampiran resmi.
+  - Memperluas suite uji `test/konten/kesesuaian_lampiran_test.dart` untuk memvalidasi teks Modul 4 dan 6 entri kamus baru secara otomatis (18/18 lulus).
+- **Fungsi Murni Umpan Balik Integer Murni Tanpa Double (`lib/perhitungan/perhitungan_umpan_balik_belajar.dart`):**
+  - Mengimplementasikan 4 fungsi murni umpan balik belajar berbasis data pengguna riil:
+    - `formatRingkasanUtang`: evaluasi jumlah utang aktif, sisa total utang, cicilan per bulan, dan persentase rasio cicilan terhadap pemasukan rata-rata 3 bulan terakhir.
+    - `formatBiayaPinjamanTercatat`: perhitungan biaya pinjaman (bunga + biaya lain) dari salah satu pinjaman aktif ber-tenor (cicilan x tenor - pokok).
+    - `formatRasioCicilanBulanIni`: rasio cicilan terhadap pemasukan rata-rata 3 bulan terakhir, serta simulasi sensitivitas risiko bila pemasukan turun 25 persen.
+    - `formatUrutanPelunasan`: panduan urutan prioritas pelunasan utang aktif berdasarkan metode bola salju (sisa terkecil dahulu) dan metode longsor (bunga tertinggi dahulu).
+  - Seluruh uang, persen, dan bunga menggunakan integer murni (Rupiah, persen integer, bunga basis poin per tahun) tanpa tipe `double` dan tanpa `round()`.
+  - 30 kasus uji vektor V1 sampai V8 diuji dengan assertion string lengkap pada `test/perhitungan/perhitungan_umpan_balik_tahap_08b_test.dart` (lulus 100%).
+- **Arsitektur On-Demand Kueri Utang & Registri Misi (`lib/data/repositori/utang_repositori.dart`, `lib/fitur/belajar/kontroler/penyedia_belajar.dart`):**
+  - Menambahkan metode `ambilDaftarUtangUmpanBalik()` pada `UtangRepositori`. Kueri rincian utang dieksekusi secara on-demand HANYA saat pengguna membuka kartu misi pelajaran terkait, sehingga `FotoDataRepositori` tetap bebas dari kueri tambahan (tetap 11 kueri teroptimasi).
+  - Menghubungkan tombol "Aku tidak punya ini" pada `LayarBelajar` untuk menyimpan dan mencabut klaim `tidak_punya_utang` di `tabel_pernyataan`.
+- **Eliminasi Total `warnIfMissed: false`:**
+  - Mengeliminasi seluruh 4 pemanggilan `warnIfMissed: false` pada suite pengujian integrasi (`integration_test/tahap_06_alur_modul_1_emulator_test.dart` dan `integration_test/tahap_08a_emulator_test.dart`), diganti dengan assertion dan tap standar yang lolos pengujian widget pada skala teks 2.0 (`TextScaler.linear(2.0)`).
+- **Pengujian Integrasi Emulator & Regresi 19 Tabel SQLite (`integration_test/tahap_08b_emulator_test.dart`):**
+  - Menguji alur Jalur A (pengguna punya utang: 3 utang aktif, pemasukan 3 bulan terakhir, 4 pelajaran Modul 4, kuis tidak lulus 60% lalu lulus 80%).
+  - Menguji alur Jalur B (pengguna tanpa utang: tombol pernyataan "Aku tidak punya ini", verifikasi 4 teks umpan balik pernyataan, cabut pernyataan).
+  - Regresi integritas 19 tabel basis data SQLite via kueri dinamis `sqlite_master` sebelum dan sesudah ekspor-impor cadangan.
+  - Tolok ukur performa beban 20.000 transaksi + 20 utang mencatat waktu komputasi `ambilFotoData` dan frame render terpisah dari jeda harness.
+
+---
+
 ## [0.10.1] - 2026-11-20 — Penyelarasan Tahap 8A (Tahap 8A-R)
 
 Tahap 8A-R: Penyelarasan Kesesuaian Lampiran Modul 2 & 3 Kata per Kata, Penyelarasan Kamus Keuangan (6 istilah baru), Eliminasi Total Tipe `double` dan `round()` pada 5 Fungsi Murni Umpan Balik Belajar, Uji String Lengkap 41 Kasus Uji Umpan Balik, Pemulihan Cadangan Data dengan Enumerasi Dinamis 19 Tabel SQLite (`sqlite_master`), Penutupan Regresi Emulator Pixel 8 dengan 11 Tangkapan Layar Resmi, dan Tolok Ukur Beban 20.000 Transaksi (Komputasi 44 ms vs Frame Pertama 32 ms).

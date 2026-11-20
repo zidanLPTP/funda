@@ -1,0 +1,86 @@
+{
+  "id": "utang_cicilan_4_2",
+  "modul": "utang_cicilan",
+  "judul": "Bunga dan Biaya yang Sebenarnya",
+  "durasiMenit": 6,
+  "status": "draf",
+  "catatanReviewer": "TODO-VERIFIKASI. (1) Penjelasan bunga flat dan bunga efektif. (2) Klaim bahwa pada paylater dan kartu kredit, membayar jumlah minimum bisa membuat bunga terus berjalan. (3) Angka bunga pada contoh hanya ilustrasi.",
+  "gerbang": [],
+  "pemantik": "Cicilan Rp1.120.000 per bulan terdengar ringan. Tapi berapa total yang akhirnya kamu bayar?",
+  "kartu": [
+    {
+      "judul": "Lihat total, bukan hanya cicilan",
+      "isi": "{{Pokok}} adalah jumlah yang kamu pinjam. Total bayar adalah cicilan dikali jumlah bulan. Selisih antara total bayar dan pokok adalah biaya pinjaman, yaitu bunga ditambah biaya lain. Cicilan bulanan yang kecil bisa menyembunyikan total yang besar."
+    },
+    {
+      "judul": "Bunga flat dan bunga efektif",
+      "isi": "{{Bunga flat}} dihitung dari pokok awal terus, walau sisa pokokmu sudah menurun. {{Bunga efektif}} dihitung dari sisa pokok yang menurun. Karena itu bunga flat dengan persen yang sama terasa lebih mahal daripada bunga efektif. Saat membandingkan dua penawaran, pastikan jenis bunganya sama, atau minta total bayarnya."
+    },
+    {
+      "judul": "Biaya yang sering terlupa",
+      "isi": "Selain bunga, ada biaya admin, asuransi, dan denda keterlambatan. Pada {{paylater}} dan kartu kredit, membayar jumlah minimum saja bisa membuat bunga terus berjalan. Pertanyaan sederhana ini sah kamu ajukan: total yang harus saya bayar sampai lunas berapa?"
+    }
+  ],
+  "contohAngka": {
+    "judul": "Pinjaman Rp12.000.000 selama 12 bulan, bunga flat 12 persen per tahun",
+    "baris": [
+      {
+        "label": "Pokok",
+        "jumlah": 12000000
+      },
+      {
+        "label": "Bunga flat selama 12 bulan",
+        "jumlah": 1440000
+      },
+      {
+        "label": "Total yang dibayar",
+        "jumlah": 13440000,
+        "tipe": "ringkasan"
+      },
+      {
+        "label": "Cicilan per bulan",
+        "jumlah": 1120000
+      }
+    ],
+    "kesimpulan": "Cicilan Rp1.120.000 terlihat ringan, tetapi total yang dibayar Rp13.440.000, atau Rp1.440.000 lebih besar dari pokok."
+  },
+  "cekPaham": [
+    {
+      "tanya": "Pokok Rp6.000.000, cicilan Rp550.000 selama 12 bulan. Berapa biaya pinjamannya?",
+      "pilihan": [
+        "Rp600.000",
+        "Rp550.000",
+        "Rp6.600.000"
+      ],
+      "benar": 0,
+      "penjelasan": "Rp550.000 dikali 12 hasilnya Rp6.600.000. Dikurangi pokok Rp6.000.000, biaya pinjamannya Rp600.000."
+    },
+    {
+      "tanya": "Kenapa bunga flat dengan persen yang sama terasa lebih mahal daripada bunga efektif?",
+      "pilihan": [
+        "Karena dihitung dari pokok awal terus, walau sisa pokok sudah menurun",
+        "Karena bunga flat selalu punya angka persen lebih besar",
+        "Karena bunga efektif tidak pernah ada"
+      ],
+      "benar": 0,
+      "penjelasan": "Bunga flat tidak ikut mengecil saat pokokmu berkurang, jadi biaya totalnya lebih besar."
+    },
+    {
+      "tanya": "Pertanyaan mana yang paling berguna sebelum menyetujui pinjaman?",
+      "pilihan": [
+        "Total yang harus saya bayar sampai lunas berapa?",
+        "Cicilan paling kecil berapa?",
+        "Apakah ada hadiah untuk peminjam baru?"
+      ],
+      "benar": 0,
+      "penjelasan": "Total bayar menunjukkan biaya sebenarnya. Cicilan kecil dan hadiah bisa mengalihkan perhatian dari total itu."
+    }
+  ],
+  "misi": {
+    "tipe": "lihat_hitungan",
+    "judul": "Lihat biaya pinjamanmu",
+    "instruksi": "Buka hitungan biaya pinjaman, baca isinya, lalu tekan Mengerti.",
+    "umpanBalik": "biaya_pinjaman_tercatat"
+  },
+  "tindakLanjut": "Lengkapi data pokok awal, tenor, dan cicilan di menu Utang untuk tiap utangmu. Dengan begitu biaya pinjamannya bisa dihitung."
+}

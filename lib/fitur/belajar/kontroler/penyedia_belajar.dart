@@ -12,6 +12,7 @@ import '../../../data/repositori/pernyataan_repositori.dart';
 import '../../../perhitungan/perhitungan_belajar.dart';
 import '../../../perhitungan/perhitungan_tes_awal_personalisasi.dart';
 import '../../../perhitungan/perhitungan_umpan_balik_belajar.dart';
+import '../../../perhitungan/perhitungan_utang_dashboard.dart';
 import '../../utang/kontroler/penyedia_utang.dart';
 import '../model/pembaca_konten.dart';
 import '../model/registri_misi.dart';
@@ -435,7 +436,7 @@ final penyediaLanjutBelajarBeranda =
 });
 
 /// Provider penghasil teks umpan balik dari data riil pengguna secara reaktif.
-final penyediaTeksUmpanBalikMisi = FutureProvider.family<String, String>((ref, kunci) async {
+final penyediaTeksUmpanBalikMisi = FutureProvider.autoDispose.family<String, String>((ref, kunci) async {
   final db = ref.watch(penyediaBasisData);
   final waktuSekarang = DateTime.now();
 
@@ -774,6 +775,59 @@ final penyediaTeksUmpanBalikMisi = FutureProvider.family<String, String>((ref, k
       return formatProgresDanaDarurat(
         tujuan: tujuanDarurat,
         pengeluaranWajibPerBulan: w,
+      );
+
+    case 'ringkasan_utang':
+      final repoUtang = ref.watch(penyediaUtangRepositori);
+      final daftarUtang = await repoUtang.ambilDaftarUtangUmpanBalik();
+      final pernyataan = await (db.select(db.tabelPernyataan)
+            ..where((p) => p.kunci.equals('tidak_punya_utang') & p.nilai.equals('true')))
+          .getSingleOrNull();
+      final semuaTx = await db.select(db.tabelTransaksi).get();
+      final pemasukan = hitungPemasukanBulananRataRata(
+        daftarTransaksi: semuaTx,
+        waktuSekarang: waktuSekarang,
+      );
+      return formatRingkasanUtang(
+        daftarUtang: daftarUtang,
+        pemasukan: pemasukan,
+        tidakPunyaUtang: pernyataan != null,
+      );
+
+    case 'biaya_pinjaman_tercatat':
+      final repoUtang = ref.watch(penyediaUtangRepositori);
+      final daftarUtang = await repoUtang.ambilDaftarUtangUmpanBalik();
+      final pernyataan = await (db.select(db.tabelPernyataan)
+            ..where((p) => p.kunci.equals('tidak_punya_utang') & p.nilai.equals('true')))
+          .getSingleOrNull();
+      return formatBiayaPinjamanTercatat(
+        daftarUtang: daftarUtang,
+        tidakPunyaUtang: pernyataan != null,
+      );
+
+    case 'rasio_cicilan_bulan_ini':
+      final repoUtang = ref.watch(penyediaUtangRepositori);
+      final daftarUtang = await repoUtang.ambilDaftarUtangUmpanBalik();
+      final totalCicilan = daftarUtang.fold<int>(0, (prev, u) => prev + u.cicilanBulananRupiah);
+      final semuaTx = await db.select(db.tabelTransaksi).get();
+      final pemasukan = hitungPemasukanBulananRataRata(
+        daftarTransaksi: semuaTx,
+        waktuSekarang: waktuSekarang,
+      );
+      return formatRasioCicilanBulanIni(
+        totalCicilanBulanan: totalCicilan,
+        pemasukan: pemasukan,
+      );
+
+    case 'urutan_pelunasan':
+      final repoUtang = ref.watch(penyediaUtangRepositori);
+      final daftarUtang = await repoUtang.ambilDaftarUtangUmpanBalik();
+      final pernyataan = await (db.select(db.tabelPernyataan)
+            ..where((p) => p.kunci.equals('tidak_punya_utang') & p.nilai.equals('true')))
+          .getSingleOrNull();
+      return formatUrutanPelunasan(
+        daftarUtang: daftarUtang,
+        tidakPunyaUtang: pernyataan != null,
       );
 
     case 'arus_kas_bulan_ini':

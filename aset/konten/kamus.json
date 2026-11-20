@@ -113,5 +113,35 @@
     "istilah": "tonggak",
     "arti": "Target kecil di tengah jalan menuju target besar.",
     "contohRupiah": "Tonggak pertama dana darurat: satu bulan pengeluaran wajib, Rp1.900.000."
+  },
+  {
+    "istilah": "pokok",
+    "arti": "Jumlah uang yang kamu pinjam, belum termasuk bunga dan biaya lain.",
+    "contohRupiah": "Pinjam Rp12.000.000, maka pokoknya Rp12.000.000."
+  },
+  {
+    "istilah": "bunga flat",
+    "arti": "Bunga yang dihitung dari pokok awal terus selama tenor, walau sisa pokok sudah menurun.",
+    "contohRupiah": "Pokok Rp12.000.000 dengan bunga flat 12 persen per tahun selama 1 tahun berarti bunga Rp1.440.000."
+  },
+  {
+    "istilah": "bunga efektif",
+    "arti": "Bunga yang dihitung dari sisa pokok yang terus menurun.",
+    "contohRupiah": "Sisa pokok Rp10.000.000 dengan bunga efektif 1 persen per bulan berarti bunga bulan itu Rp100.000."
+  },
+  {
+    "istilah": "paylater",
+    "arti": "Layanan beli sekarang bayar nanti, dengan tagihan yang muncul kemudian dan bisa disertai bunga atau denda.",
+    "contohRupiah": "Belanja Rp500.000 hari ini dan membayarnya bulan depan."
+  },
+  {
+    "istilah": "bola salju",
+    "arti": "Cara melunasi utang dengan mendahulukan utang yang sisanya paling kecil.",
+    "contohRupiah": "Dari tiga utang, lunasi dulu yang sisanya Rp800.000."
+  },
+  {
+    "istilah": "longsor",
+    "arti": "Cara melunasi utang dengan mendahulukan utang yang bunganya paling tinggi.",
+    "contohRupiah": "Dari tiga utang, lunasi dulu yang bunganya 36 persen per tahun."
   }
 ]

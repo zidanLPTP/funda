@@ -105,6 +105,18 @@ funda/
 
 ## 📸 Tangkapan Layar Aplikasi
 Tangkapan layar otomatis yang dihasilkan dari pengujian dan emulator tersimpan pada:
+- **Tahap 8B (Modul 4 "Utang & Cicilan" di Emulator Pixel 8):** [docs/tangkapan_layar/](docs/tangkapan_layar/)
+  - `tahap_08b_01_umpan_balik_ringkasan_utang.png` — Pelajaran 4.1 dengan umpan balik `ringkasan_utang`
+  - `tahap_08b_02_umpan_balik_biaya_pinjaman.png` — Pelajaran 4.2 dengan umpan balik `biaya_pinjaman_tercatat`
+  - `tahap_08b_03_umpan_balik_rasio_cicilan.png` — Pelajaran 4.3 dengan umpan balik `rasio_cicilan_bulan_ini`
+  - `tahap_08b_04_umpan_balik_urutan_pelunasan.png` — Pelajaran 4.4 dengan umpan balik `urutan_pelunasan` (bola salju & longsor)
+  - `tahap_08b_05_kuis_tidak_lulus.png` — Layar hasil Kuis Akhir Modul 4 percobaan pertama tidak lulus (skor 60%)
+  - `tahap_08b_06_kuis_lulus.png` — Layar kelulusan Kuis Akhir Modul 4 percobaan kedua lulus (skor >= 70%)
+  - `tahap_08b_07_beranda_modul_selesai.png` — Dasbor Beranda setelah Modul 4 lulus
+  - `tahap_08b_08_modul_terkunci_tombol_pernyataan.png` — Modul 4 terkunci untuk pengguna tanpa utang dengan tombol "Aku tidak punya ini"
+  - `tahap_08b_09_umpan_balik_pernyataan_tanpa_utang.png` — Pelajaran 4.1 dengan umpan balik adaptif pernyataan tanpa utang
+  - `tahap_08b_10_modul_terkunci_kembali.png` — Modul 4 terkunci kembali setelah pernyataan dicabut
+  - `tahap_08b_11_regresi_19_tabel.png` — Pembuktian integritas pemulihan 19 tabel SQLite via `sqlite_master`
 - **Tahap 8A (Modul 2 "Tabungan" & Modul 3 "Dana Darurat" di Emulator Pixel 8):** [docs/tangkapan_layar/](docs/tangkapan_layar/)
   - `tahap_08a_peta_belajar_modul_2_terbuka.png` — Tab Belajar dengan Modul 2 terbuka setelah Modul 1 selesai
   - `tahap_08a_pelajaran_2_1_umpan_balik.png` — Pelajaran 2_1 dengan umpan balik `ringkasan_tujuan_tabungan`

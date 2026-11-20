@@ -1,0 +1,82 @@
+{
+  "id": "utang_cicilan_4_3",
+  "modul": "utang_cicilan",
+  "judul": "Rasio Cicilan terhadap Pemasukan",
+  "durasiMenit": 5,
+  "status": "draf",
+  "aturanPraktis": true,
+  "catatanReviewer": "TODO-VERIFIKASI. (1) Batas sekitar 30 persen untuk total cicilan terhadap pemasukan: aturan praktis yang umum disebut; periksa sumber resmi (mis. materi edukasi OJK atau ketentuan perbankan tentang rasio cicilan), termasuk apakah batasnya berbeda menurut jenis kredit. (2) Klaim bahwa penghasilan tidak tetap atau tanggungan menyempitkan ruang cicilan.",
+  "gerbang": [],
+  "pemantik": "Semua cicilanmu masih terbayar. Tapi seberapa besar bagian pemasukanmu yang sudah terikat untuk cicilan?",
+  "kartu": [
+    {
+      "judul": "Rasio cicilan, satu angka yang jujur",
+      "isi": "Rasio cicilan adalah bagian pemasukan bulanan yang dipakai untuk membayar cicilan. Caranya, bagi total cicilan per bulan dengan pemasukan per bulan, lalu kali 100 persen. Makin besar rasionya, makin kecil ruang untuk kebutuhan lain dan tabungan."
+    },
+    {
+      "judul": "Pegangan dari aturan praktis",
+      "isi": "Sebagai {{aturan praktis}}, banyak panduan menyebut total cicilan sebaiknya tidak melewati sekitar 30 persen dari pemasukan. Ini titik awal untuk bertanya pada dirimu, bukan penilaian atas dirimu. Kalau penghasilanmu tidak tetap atau kamu punya tanggungan, ruangnya bisa lebih sempit."
+    },
+    {
+      "judul": "Kalau rasionya terasa besar",
+      "isi": "Kamu punya tiga tuas: menambah pemasukan, menurunkan cicilan, atau menahan utang baru. Untuk menurunkan cicilan, tanyakan opsi yang sah ke pemberi pinjaman dan hitung total biayanya dulu, karena cicilan lebih kecil bisa berarti total lebih besar. Jangan menutup cicilan dengan utang baru."
+    }
+  ],
+  "contohAngka": {
+    "judul": "Rasio cicilan untuk pemasukan Rp3.000.000",
+    "baris": [
+      {
+        "label": "Total cicilan per bulan",
+        "jumlah": 900000
+      },
+      {
+        "label": "Pemasukan per bulan",
+        "jumlah": 3000000
+      },
+      {
+        "label": "Pemasukan kalau turun 25 persen",
+        "jumlah": 2250000
+      }
+    ],
+    "kesimpulan": "Rasio sekarang 30 persen (Rp900.000 dibagi Rp3.000.000). Kalau pemasukan turun 25 persen menjadi Rp2.250.000, rasionya naik menjadi 40 persen, padahal cicilannya sama."
+  },
+  "cekPaham": [
+    {
+      "tanya": "Cicilan Rp600.000 dan pemasukan Rp2.400.000. Berapa rasio cicilannya?",
+      "pilihan": [
+        "25 persen",
+        "20 persen",
+        "40 persen"
+      ],
+      "benar": 0,
+      "penjelasan": "Rp600.000 dibagi Rp2.400.000 hasilnya 0,25, atau 25 persen."
+    },
+    {
+      "tanya": "Rasio cicilan sebaiknya diperlakukan sebagai apa?",
+      "pilihan": [
+        "Bahan bertanya tentang kondisimu, bukan penilaian atas dirimu",
+        "Hukum yang sama untuk semua orang",
+        "Tanda bahwa kamu harus berhenti membayar"
+      ],
+      "benar": 0,
+      "penjelasan": "Rasio membantumu melihat gambaran. Kondisi tiap orang berbeda, jadi angkanya tidak menilai dirimu."
+    },
+    {
+      "tanya": "Pemasukan turun, cicilan tetap sama. Apa yang terjadi pada rasionya?",
+      "pilihan": [
+        "Naik",
+        "Turun",
+        "Tetap"
+      ],
+      "benar": 0,
+      "penjelasan": "Pembaginya mengecil sementara cicilan sama, sehingga rasionya naik."
+    }
+  ],
+  "misi": {
+    "tipe": "lihat_hitungan",
+    "judul": "Baca rasio cicilanmu",
+    "instruksi": "Buka hitungan rasio cicilan, baca isinya, lalu tekan Mengerti.",
+    "umpanBalik": "rasio_cicilan_bulan_ini"
+  },
+  "tindakLanjut": "Catat semua pemasukan bulan ini, termasuk yang kecil. Rasio cicilanmu hanya akurat kalau pemasukannya lengkap."
+}

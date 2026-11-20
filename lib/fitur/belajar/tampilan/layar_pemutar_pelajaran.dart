@@ -36,7 +36,7 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
   String? _galat;
 
   int _indeksLangkah = 0;
-  final PageController _pageController = PageController();
+  PageController _pageController = PageController();
 
   // State kuis Cek Paham per soal: indeksSoal -> jawabanDipilih
   final Map<int, int> _jawabanCekPaham = {};
@@ -97,17 +97,18 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
         langkahAwal = progresLama.indeksLangkah;
       }
 
+      var controllerBaru = _pageController;
+      if (langkahAwal > 0) {
+        _pageController.dispose();
+        controllerBaru = PageController(initialPage: langkahAwal);
+      }
+
       if (mounted) {
         setState(() {
           _pelajaran = pel;
           _indeksLangkah = langkahAwal;
+          _pageController = controllerBaru;
           _memuat = false;
-        });
-
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          if (_pageController.hasClients && langkahAwal > 0) {
-            _pageController.jumpToPage(langkahAwal);
-          }
         });
       }
     } catch (e) {

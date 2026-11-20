@@ -1,0 +1,85 @@
+{
+  "id": "utang_cicilan_4_1",
+  "modul": "utang_cicilan",
+  "judul": "Utang yang Membantu dan yang Menjerat",
+  "durasiMenit": 5,
+  "status": "draf",
+  "gerbang": [],
+  "pemantik": "Cicilan pertama terasa ringan. Beberapa bulan kemudian, cicilan lain ikut menumpuk, dan akhir bulan terasa makin sempit.",
+  "kartu": [
+    {
+      "judul": "Utang itu alat",
+      "isi": "Utang adalah uang yang kamu pakai sekarang dan harus dikembalikan nanti, biasanya dengan tambahan biaya. Utang bisa membantu, misalnya untuk biaya kuliah atau alat kerja yang menambah penghasilan. Utang menjadi masalah saat dipakai untuk hal yang cepat habis, dan cicilannya terus menekan pemasukanmu."
+    },
+    {
+      "judul": "Tiga pertanyaan sebelum berutang",
+      "isi": "Tanyakan tiga hal. Pertama, untuk apa uang ini: kebutuhan atau keinginan? Kedua, berapa total yang harus kukembalikan, termasuk biayanya? Ketiga, apakah cicilannya masih nyaman kalau pemasukanku turun? Kalau jawabannya masih samar, tunda dulu."
+    },
+    {
+      "judul": "Tanda utang mulai menjerat",
+      "isi": "Waspadai beberapa tanda: menutup utang lama dengan utang baru, hanya sanggup membayar jumlah minimum, cicilan memakan sebagian besar pemasukan, dan rasa cemas setiap tagihan datang. Kalau tanda itu muncul, itu sinyal untuk bertindak lebih awal. Itu bukan alasan untuk malu. Di Funda, semua utang dicatat supaya terlihat jelas."
+    }
+  ],
+  "contohAngka": {
+    "judul": "Tiga cicilan kecil yang menumpuk (pemasukan Rp3.000.000 per bulan)",
+    "baris": [
+      {
+        "label": "Cicilan HP",
+        "jumlah": 450000
+      },
+      {
+        "label": "Paylater",
+        "jumlah": 300000
+      },
+      {
+        "label": "Pinjaman teman",
+        "jumlah": 250000
+      },
+      {
+        "label": "Jumlah cicilan per bulan",
+        "jumlah": 1000000,
+        "tipe": "ringkasan"
+      }
+    ],
+    "kesimpulan": "Tiga cicilan yang masing-masing terasa kecil menjadi Rp1.000.000 per bulan, sekitar sepertiga dari pemasukan Rp3.000.000."
+  },
+  "cekPaham": [
+    {
+      "tanya": "Mana yang paling dekat dengan utang yang membantu?",
+      "pilihan": [
+        "Pinjaman untuk membeli alat kerja yang menambah penghasilan",
+        "Cicilan gadget baru hanya karena sedang diskon",
+        "Paylater untuk mentraktir teman"
+      ],
+      "benar": 0,
+      "penjelasan": "Utang yang membantu biasanya menambah kemampuanmu menghasilkan atau memenuhi kebutuhan penting. Diskon dan traktiran bukan itu."
+    },
+    {
+      "tanya": "Mana yang termasuk tanda utang mulai menjerat?",
+      "pilihan": [
+        "Menutup utang lama dengan utang baru",
+        "Membayar cicilan tepat waktu",
+        "Mencatat semua utang di Funda"
+      ],
+      "benar": 0,
+      "penjelasan": "Utang baru untuk menutup utang lama membuat beban terus berpindah dan membesar. Membayar tepat waktu dan mencatat justru langkah yang sehat."
+    },
+    {
+      "tanya": "Pertanyaan mana yang BUKAN bagian dari tiga pertanyaan sebelum berutang?",
+      "pilihan": [
+        "Apakah pemberi pinjamannya terkenal?",
+        "Berapa total yang harus kukembalikan?",
+        "Apakah cicilannya masih nyaman kalau pemasukanku turun?"
+      ],
+      "benar": 0,
+      "penjelasan": "Nama besar tidak menunjukkan seberapa nyaman cicilannya bagimu. Total dan kenyamanan saat pemasukan turun lebih menentukan."
+    }
+  ],
+  "misi": {
+    "tipe": "lihat_hitungan",
+    "judul": "Lihat ringkasan utangmu",
+    "instruksi": "Buka ringkasan utangmu, baca isinya, lalu tekan Mengerti.",
+    "umpanBalik": "ringkasan_utang"
+  },
+  "tindakLanjut": "Untuk dipikirkan, tidak perlu dijawab di aplikasi: kalau pemasukanmu turun sedikit bulan depan, cicilan mana yang paling terasa?"
+}

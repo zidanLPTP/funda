@@ -173,6 +173,15 @@ Berikut adalah registri kunci umpan balik edukatif yang diolah dari data riil pe
 - **`catatan_pengeluaran_terbaru`**: Evaluasi jumlah catatan pengeluaran, kategori pengeluaran terakhir, dan nominal Rupiah rapat.
 - **`perbandingan_pola_anggaran`**: Perbandingan anggaran riil pengguna (Kebutuhan, Keinginan, Tabungan/Utang, Belum Dilabeli) terhadap pola aturan praktis 50/30/20.
 - **`realisasi_anggaran_bulan_ini`**: Evaluasi status pemakaian pos anggaran berjalan (aman <80%, mendekati 80-100%, melewati >100%), sisa pos terbanyak, dan pos melewati batas terjauh.
+- **`ringkasan_tujuan_tabungan`**: Evaluasi tujuan tabungan pertama pengguna, nama tujuan, nominal terkumpul, dan target total.
+- **`estimasi_tabungan`**: Estimasi kecepatan menabung, sisa dana yang perlu dikumpulkan, dan proyeksi bulan ketercapaian berdasarkan setoran bulanan.
+- **`pengeluaran_wajib_bulanan`**: Rata-rata pengeluaran wajib bulanan (kebutuhan + cicilan) berdasarkan rata-rata 3 bulan kalender terakhir yang sudah selesai.
+- **`target_dana_darurat`**: Perhitungan titik awal masuk akal dana darurat (3 kali pengeluaran wajib bulanan).
+- **`progres_dana_darurat`**: Rasio akumulasi dana darurat terhadap pengeluaran wajib bulanan (dinyatakan dalam kelipatan bulan pengeluaran wajib).
+- **`ringkasan_utang`**: Ringkasan jumlah utang aktif, sisa total utang, cicilan per bulan, dan persentase rasio cicilan terhadap pemasukan rata-rata 3 bulan terakhir.
+- **`biaya_pinjaman_tercatat`**: Rincian biaya pinjaman (bunga + biaya lain) dari salah satu pinjaman aktif ber-tenor yang dicatat pengguna (cicilan x tenor - pokok).
+- **`rasio_cicilan_bulan_ini`**: Evaluasi porsi cicilan per bulan terhadap pemasukan rata-rata 3 bulan terakhir, serta simulasi sensitivitas risiko bila pemasukan turun 25 persen.
+- **`urutan_pelunasan`**: Panduan urutan prioritas pelunasan utang aktif berdasarkan metode bola salju (sisa terkecil dahulu) dan metode longsor (bunga tertinggi dahulu).
 
 ---
 

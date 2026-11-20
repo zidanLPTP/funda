@@ -187,7 +187,8 @@ void main() {
 
     // Pemantik -> Konsep 1 -> Konsep 2 -> Konsep 3 -> Contoh Angka
     for (var i = 0; i < 4; i++) {
-      await tester.tap(find.text('Lanjut'), warnIfMissed: false);
+      expect(find.text('Lanjut'), findsWidgets);
+      await tester.tap(find.text('Lanjut').first);
       await pompaAman(tester, 400);
     }
 
@@ -286,7 +287,8 @@ void main() {
 
     // Pemantik -> Konsep 1, 2, 3 -> Contoh Angka -> Cek Paham
     for (var i = 0; i < 5; i++) {
-      await tester.tap(find.text('Lanjut'), warnIfMissed: false);
+      expect(find.text('Lanjut'), findsWidgets);
+      await tester.tap(find.text('Lanjut').first);
       await pompaAman(tester, 400);
     }
 
@@ -329,7 +331,8 @@ void main() {
 
     // Pemantik -> Konsep 1, 2, 3 -> Contoh Angka -> Cek Paham
     for (var i = 0; i < 5; i++) {
-      await tester.tap(find.text('Lanjut'), warnIfMissed: false);
+      expect(find.text('Lanjut'), findsWidgets);
+      await tester.tap(find.text('Lanjut').first);
       await pompaAman(tester, 400);
     }
 

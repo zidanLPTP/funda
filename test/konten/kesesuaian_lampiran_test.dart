@@ -299,8 +299,11 @@ void main() {
         final normal = teks.replaceAll(RegExp(r'\s+'), ' ').trim();
         if (normal.isEmpty) return;
 
-        final tanpaToken = normal.replaceAll('{{', '').replaceAll('}}', '');
-        final cocok = isiMateriLampiran.contains(normal) || isiMateriLampiran.contains(tanpaToken);
+        final materiBersih = isiMateriLampiran.replaceAll('{{', '').replaceAll('}}', '');
+        final teksBersih = normal.replaceAll('{{', '').replaceAll('}}', '');
+        final cocok = isiMateriLampiran.contains(normal) ||
+            isiMateriLampiran.contains(teksBersih) ||
+            materiBersih.contains(teksBersih);
         expect(
           cocok,
           isTrue,
@@ -456,8 +459,11 @@ void main() {
         final normal = teks.replaceAll(RegExp(r'\s+'), ' ').trim();
         if (normal.isEmpty) return;
 
-        final tanpaToken = normal.replaceAll('{{', '').replaceAll('}}', '');
-        final cocok = isiMateriLampiran.contains(normal) || isiMateriLampiran.contains(tanpaToken);
+        final materiBersih = isiMateriLampiran.replaceAll('{{', '').replaceAll('}}', '');
+        final teksBersih = normal.replaceAll('{{', '').replaceAll('}}', '');
+        final cocok = isiMateriLampiran.contains(normal) ||
+            isiMateriLampiran.contains(teksBersih) ||
+            materiBersih.contains(teksBersih);
         expect(
           cocok,
           isTrue,
@@ -570,6 +576,222 @@ void main() {
         expect(isiMateriKamus.contains(istilah), isTrue, reason: 'Istilah "$istilah" tidak ditemukan di docs/materi/kamus_modul_2_3.md');
         expect(isiMateriKamus.contains(target.arti), isTrue, reason: 'Arti "$istilah" tidak ditemukan di docs/materi/kamus_modul_2_3.md');
         expect(isiMateriKamus.contains(target.contohRupiah), isTrue, reason: 'Contoh Rupiah "$istilah" tidak ditemukan di docs/materi/kamus_modul_2_3.md');
+      }
+    });
+  });
+
+  group('Uji Kesesuaian Lampiran Modul 4 (Utang & Cicilan)', () {
+    late String isiMateriLampiran;
+    late Map<String, dynamic> modulJson;
+    late Map<String, Map<String, dynamic>> pelajaranJson;
+
+    setUpAll(() {
+      final fileLampiran = File('docs/materi/modul_4_utang_cicilan.md');
+      expect(fileLampiran.existsSync(), isTrue, reason: 'Berkas lampiran docs/materi/modul_4_utang_cicilan.md harus ada');
+      isiMateriLampiran = fileLampiran.readAsStringSync();
+
+      final fileModul = File('aset/konten/pemula/utang_cicilan/modul.json');
+      expect(fileModul.existsSync(), isTrue, reason: 'Berkas modul.json utang_cicilan harus ada');
+      modulJson = jsonDecode(fileModul.readAsStringSync()) as Map<String, dynamic>;
+
+      pelajaranJson = {};
+      final daftarPelajaran = (modulJson['daftarPelajaran'] as List).cast<String>();
+      for (final id in daftarPelajaran) {
+        final f = File('aset/konten/pemula/utang_cicilan/$id.json');
+        expect(f.existsSync(), isTrue, reason: 'Berkas pelajaran $id.json harus ada');
+        pelajaranJson[id] = jsonDecode(f.readAsStringSync()) as Map<String, dynamic>;
+      }
+    });
+
+    test('(a) Validasi Metadata, Gerbang, Misi, Durasi, Kartu, dan Soal Modul 4 sesuai Lampiran', () {
+      expect(modulJson['id'], equals('utang_cicilan'));
+      expect(modulJson['judul'], equals('Utang & Cicilan'));
+      expect(modulJson['tingkat'], equals('pemula'));
+      expect(modulJson['urutan'], equals(4));
+      expect(modulJson['tersedia'], isTrue);
+
+      final gerbangModul = modulJson['gerbang'] as List;
+      expect(gerbangModul.length, equals(2));
+      expect(gerbangModul[0]['tipe'], equals('modul_selesai'));
+      expect(gerbangModul[0]['modulId'], equals('dana_darurat'));
+      expect(gerbangModul[0]['pesan'], equals('Selesaikan Modul 3 dulu.'));
+      expect(gerbangModul[1]['tipe'], equals('ada_data'));
+      expect(gerbangModul[1]['objek'], equals('utang'));
+      expect(gerbangModul[1]['min'], equals(1));
+      expect(gerbangModul[1]['atauPernyataan'], equals('tidak_punya_utang'));
+      expect(gerbangModul[1]['pesan'], equals('Lalu catat utang atau cicilanmu di menu Utang. Kalau kamu memang tidak punya utang, pilih Aku tidak punya ini.'));
+
+      // 4_1
+      final p1 = pelajaranJson['utang_cicilan_4_1']!;
+      expect(p1['judul'], equals('Utang yang Membantu dan yang Menjerat'));
+      expect(p1['durasiMenit'], equals(5));
+      expect(p1['gerbang'], isEmpty);
+      expect(p1['misi']['tipe'], equals('lihat_hitungan'));
+      expect(p1['misi']['umpanBalik'], equals('ringkasan_utang'));
+
+      // 4_2
+      final p2 = pelajaranJson['utang_cicilan_4_2']!;
+      expect(p2['judul'], equals('Bunga dan Biaya yang Sebenarnya'));
+      expect(p2['durasiMenit'], equals(6));
+      expect(p2['catatanReviewer'], contains('TODO-VERIFIKASI'));
+      expect(p2['gerbang'], isEmpty);
+      expect(p2['misi']['tipe'], equals('lihat_hitungan'));
+      expect(p2['misi']['umpanBalik'], equals('biaya_pinjaman_tercatat'));
+
+      // 4_3
+      final p3 = pelajaranJson['utang_cicilan_4_3']!;
+      expect(p3['judul'], equals('Rasio Cicilan terhadap Pemasukan'));
+      expect(p3['durasiMenit'], equals(5));
+      expect(p3['aturanPraktis'], isTrue);
+      expect(p3['catatanReviewer'], contains('TODO-VERIFIKASI'));
+      expect(p3['gerbang'], isEmpty);
+      expect(p3['misi']['tipe'], equals('lihat_hitungan'));
+      expect(p3['misi']['umpanBalik'], equals('rasio_cicilan_bulan_ini'));
+
+      // 4_4
+      final p4 = pelajaranJson['utang_cicilan_4_4']!;
+      expect(p4['judul'], equals('Strategi Melunasi: Bola Salju dan Longsor'));
+      expect(p4['durasiMenit'], equals(6));
+      expect(p4['catatanReviewer'], contains('TODO-VERIFIKASI'));
+      expect(p4['gerbang'], isEmpty);
+      expect(p4['misi']['tipe'], equals('lihat_hitungan'));
+      expect(p4['misi']['umpanBalik'], equals('urutan_pelunasan'));
+
+      // Kartu, CekPaham, ContohAngka
+      for (final entry in pelajaranJson.entries) {
+        final p = entry.value;
+        final id = entry.key;
+        expect((p['kartu'] as List).length, equals(3), reason: '$id harus punya 3 kartu');
+        expect((p['cekPaham'] as List).length, equals(3), reason: '$id harus punya 3 cekPaham');
+        expect(p['contohAngka'], isA<Map<String, dynamic>>(), reason: '$id contohAngka harus objek');
+        expect(p['tindakLanjut'], isA<String>(), reason: '$id harus punya tindakLanjut');
+      }
+
+      // Kuis Modul 4
+      expect(modulJson['kuis']['jumlahSoal'], equals(5));
+      final bankSoal = modulJson['kuis']['bankSoal'] as List;
+      expect(bankSoal.length, equals(10));
+      for (final soal in bankSoal) {
+        final pelId = soal['pelajaranId'] as String;
+        expect(pelajaranJson.containsKey(pelId), isTrue, reason: 'pelajaranId $pelId tidak valid');
+      }
+    });
+
+    test('(b) Kesesuaian KATA PER KATA seluruh teks JSON Modul 4 terhadap Lampiran Markdown', () {
+      void cekStringMuncul(String teks, String konteks) {
+        final normal = teks.replaceAll(RegExp(r'\s+'), ' ').trim();
+        if (normal.isEmpty) return;
+
+        final materiBersih = isiMateriLampiran.replaceAll('{{', '').replaceAll('}}', '');
+        final teksBersih = normal.replaceAll('{{', '').replaceAll('}}', '');
+        final cocok = isiMateriLampiran.contains(normal) ||
+            isiMateriLampiran.contains(teksBersih) ||
+            materiBersih.contains(teksBersih);
+        expect(
+          cocok,
+          isTrue,
+          reason: 'Teks pada $konteks TIDAK DITEMUKAN di lampiran materi: "$normal"',
+        );
+      }
+
+      for (final entry in pelajaranJson.entries) {
+        final id = entry.key;
+        final p = entry.value;
+
+        cekStringMuncul(p['judul'] as String, '$id.judul');
+        cekStringMuncul(p['pemantik'] as String, '$id.pemantik');
+        cekStringMuncul(p['tindakLanjut'] as String, '$id.tindakLanjut');
+
+        for (final k in (p['kartu'] as List)) {
+          cekStringMuncul(k['judul'] as String, '$id.kartu.judul');
+          cekStringMuncul(k['isi'] as String, '$id.kartu.isi');
+        }
+
+        final ca = p['contohAngka'] as Map<String, dynamic>;
+        cekStringMuncul(ca['judul'] as String, '$id.contohAngka.judul');
+        cekStringMuncul(ca['kesimpulan'] as String, '$id.contohAngka.kesimpulan');
+        for (final b in (ca['baris'] as List)) {
+          cekStringMuncul(b['label'] as String, '$id.contohAngka.baris.label');
+        }
+
+        final cpList = p['cekPaham'] as List;
+        for (var i = 0; i < cpList.length; i++) {
+          final cp = cpList[i] as Map<String, dynamic>;
+          cekStringMuncul(cp['tanya'] as String, '$id.cekPaham[$i].tanya');
+          cekStringMuncul(cp['penjelasan'] as String, '$id.cekPaham[$i].penjelasan');
+          for (final pil in (cp['pilihan'] as List)) {
+            cekStringMuncul(pil as String, '$id.cekPaham[$i].pilihan');
+          }
+        }
+
+        final m = p['misi'] as Map<String, dynamic>;
+        cekStringMuncul(m['judul'] as String, '$id.misi.judul');
+        cekStringMuncul(m['instruksi'] as String, '$id.misi.instruksi');
+      }
+
+      final bankSoal = modulJson['kuis']['bankSoal'] as List;
+      for (var i = 0; i < bankSoal.length; i++) {
+        final s = bankSoal[i] as Map<String, dynamic>;
+        cekStringMuncul(s['tanya'] as String, 'kuis.bankSoal[$i].tanya');
+        cekStringMuncul(s['penjelasan'] as String, 'kuis.bankSoal[$i].penjelasan');
+        for (final pil in (s['pilihan'] as List)) {
+          cekStringMuncul(pil as String, 'kuis.bankSoal[$i].pilihan');
+        }
+      }
+    });
+
+    test('(c) Kesesuaian KATA PER KATA 6 Entri Kamus Baru Modul 4', () {
+      final kamusFile = File('aset/konten/kamus.json');
+      expect(kamusFile.existsSync(), isTrue);
+      final daftarKamus = (jsonDecode(kamusFile.readAsStringSync()) as List).cast<Map<String, dynamic>>();
+
+      final kamusMateriFile = File('docs/materi/kamus_modul_4.md');
+      expect(kamusMateriFile.existsSync(), isTrue);
+      final isiMateriKamus = kamusMateriFile.readAsStringSync();
+
+      final entriWajib = <String, ({String arti, String contohRupiah})>{
+        'pokok': (
+          arti: 'Jumlah uang yang kamu pinjam, belum termasuk bunga dan biaya lain.',
+          contohRupiah: 'Pinjam Rp12.000.000, maka pokoknya Rp12.000.000.',
+        ),
+        'bunga flat': (
+          arti: 'Bunga yang dihitung dari pokok awal terus selama tenor, walau sisa pokok sudah menurun.',
+          contohRupiah: 'Pokok Rp12.000.000 dengan bunga flat 12 persen per tahun selama 1 tahun berarti bunga Rp1.440.000.',
+        ),
+        'bunga efektif': (
+          arti: 'Bunga yang dihitung dari sisa pokok yang terus menurun.',
+          contohRupiah: 'Sisa pokok Rp10.000.000 dengan bunga efektif 1 persen per bulan berarti bunga bulan itu Rp100.000.',
+        ),
+        'paylater': (
+          arti: 'Layanan beli sekarang bayar nanti, dengan tagihan yang muncul kemudian dan bisa disertai bunga atau denda.',
+          contohRupiah: 'Belanja Rp500.000 hari ini dan membayarnya bulan depan.',
+        ),
+        'bola salju': (
+          arti: 'Cara melunasi utang dengan mendahulukan utang yang sisanya paling kecil.',
+          contohRupiah: 'Dari tiga utang, lunasi dulu yang sisanya Rp800.000.',
+        ),
+        'longsor': (
+          arti: 'Cara melunasi utang dengan mendahulukan utang yang bunganya paling tinggi.',
+          contohRupiah: 'Dari tiga utang, lunasi dulu yang bunganya 36 persen per tahun.',
+        ),
+      };
+
+      for (final e in entriWajib.entries) {
+        final istilah = e.key;
+        final target = e.value;
+
+        // Cek di aset/konten/kamus.json
+        final entriJson = daftarKamus.firstWhere(
+          (k) => k['istilah'] == istilah,
+          orElse: () => throw Exception('Istilah "$istilah" tidak ditemukan di kamus.json'),
+        );
+        expect(entriJson['arti'], equals(target.arti), reason: 'Arti "$istilah" di kamus.json tidak cocok kata per kata');
+        expect(entriJson['contohRupiah'], equals(target.contohRupiah), reason: 'Contoh Rupiah "$istilah" di kamus.json tidak cocok kata per kata');
+
+        // Cek di docs/materi/kamus_modul_4.md
+        expect(isiMateriKamus.contains(istilah), isTrue, reason: 'Istilah "$istilah" tidak ditemukan di docs/materi/kamus_modul_4.md');
+        expect(isiMateriKamus.contains(target.arti), isTrue, reason: 'Arti "$istilah" tidak ditemukan di docs/materi/kamus_modul_4.md');
+        expect(isiMateriKamus.contains(target.contohRupiah), isTrue, reason: 'Contoh Rupiah "$istilah" tidak ditemukan di docs/materi/kamus_modul_4.md');
       }
     });
   });

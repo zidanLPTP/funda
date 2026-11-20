@@ -1343,5 +1343,172 @@ void main() {
         );
       });
     });
+
+    group('Tahap 8B: Validasi Kunci Umpan Balik dan Gerbang atauPernyataan Modul 4 (Minimal 6 Kasus)', () {
+      const templatePelajaranUtangValid = '''
+      {
+        "id": "utang_cicilan_4_1",
+        "modul": "utang_cicilan",
+        "judul": "Utang yang Membantu dan yang Menjerat",
+        "durasiMenit": 5,
+        "status": "draf",
+        "gerbang": [],
+        "pemantik": "Pemantik pelajaran yang valid dan cukup panjang tentang utang.",
+        "kartu": [
+          {"judul": "Judul 1", "isi": "Penjelasan konsep utang satu."},
+          {"judul": "Judul 2", "isi": "Penjelasan konsep utang dua."}
+        ],
+        "cekPaham": [
+          {
+            "tanya": "Pertanyaan satu?",
+            "pilihan": ["Pilihan satu", "Pilihan dua"],
+            "benar": 0,
+            "penjelasan": "Penjelasan satu"
+          },
+          {
+            "tanya": "Pertanyaan dua?",
+            "pilihan": ["Pilihan satu", "Pilihan dua"],
+            "benar": 0,
+            "penjelasan": "Penjelasan dua"
+          }
+        ],
+        "misi": {
+          "tipe": "lihat_hitungan",
+          "judul": "Lihat ringkasan utangmu",
+          "instruksi": "Instruksi misi",
+          "umpanBalik": "ringkasan_utang"
+        },
+        "tindakLanjut": "Tindak lanjut pelajaran valid."
+      }
+      ''';
+
+      const templateModulUtangValid = '''
+      {
+        "id": "utang_cicilan",
+        "judul": "Utang & Cicilan",
+        "tingkat": "pemula",
+        "urutan": 4,
+        "deskripsiSingkat": "Deskripsi singkat modul utang dan cicilan.",
+        "tersedia": true,
+        "gerbang": [
+          {
+            "tipe": "modul_selesai",
+            "modulId": "dana_darurat",
+            "pesan": "Selesaikan Modul 3 dulu."
+          },
+          {
+            "tipe": "ada_data",
+            "objek": "utang",
+            "min": 1,
+            "atauPernyataan": "tidak_punya_utang",
+            "pesan": "Lalu catat utang atau cicilanmu di menu Utang."
+          }
+        ],
+        "daftarPelajaran": [
+          "utang_cicilan_4_1"
+        ],
+        "kuis": {
+          "jumlahSoal": 1,
+          "bankSoal": [
+            {
+              "id": "soal_4_1",
+              "pelajaranId": "utang_cicilan_4_1",
+              "tanya": "Tanya soal?",
+              "pilihan": ["A", "B"],
+              "benar": 0,
+              "penjelasan": "Penjelasan"
+            }
+          ]
+        }
+      }
+      ''';
+
+      test('Kasus 1: kunci umpan balik ringkasan_utang_rusak ditolak', () {
+        final jsonRusak = templatePelajaranUtangValid.replaceAll(
+          '"umpanBalik": "ringkasan_utang"',
+          '"umpanBalik": "ringkasan_utang_rusak"',
+        );
+        expect(
+          () => PembacaKonten.uraiPelajaran(jsonRusak, namaBerkas: 'utang_rusak_1.json'),
+          throwsA(predicate((e) => e is GalatKonten && e.kolom == 'misi.umpanBalik' && e.berkas == 'utang_rusak_1.json')),
+        );
+      });
+
+      test('Kasus 2: kunci umpan balik biaya_pinjaman_rusak ditolak', () {
+        final jsonRusak = templatePelajaranUtangValid.replaceAll(
+          '"umpanBalik": "ringkasan_utang"',
+          '"umpanBalik": "biaya_pinjaman_rusak"',
+        );
+        expect(
+          () => PembacaKonten.uraiPelajaran(jsonRusak, namaBerkas: 'utang_rusak_2.json'),
+          throwsA(predicate((e) => e is GalatKonten && e.kolom == 'misi.umpanBalik' && e.berkas == 'utang_rusak_2.json')),
+        );
+      });
+
+      test('Kasus 3: kunci umpan balik rasio_cicilan_rusak ditolak', () {
+        final jsonRusak = templatePelajaranUtangValid.replaceAll(
+          '"umpanBalik": "ringkasan_utang"',
+          '"umpanBalik": "rasio_cicilan_rusak"',
+        );
+        expect(
+          () => PembacaKonten.uraiPelajaran(jsonRusak, namaBerkas: 'utang_rusak_3.json'),
+          throwsA(predicate((e) => e is GalatKonten && e.kolom == 'misi.umpanBalik' && e.berkas == 'utang_rusak_3.json')),
+        );
+      });
+
+      test('Kasus 4: kunci umpan balik urutan_pelunasan_rusak ditolak', () {
+        final jsonRusak = templatePelajaranUtangValid.replaceAll(
+          '"umpanBalik": "ringkasan_utang"',
+          '"umpanBalik": "urutan_pelunasan_rusak"',
+        );
+        expect(
+          () => PembacaKonten.uraiPelajaran(jsonRusak, namaBerkas: 'utang_rusak_4.json'),
+          throwsA(predicate((e) => e is GalatKonten && e.kolom == 'misi.umpanBalik' && e.berkas == 'utang_rusak_4.json')),
+        );
+      });
+
+      test('Kasus 5: gerbang modul atauPernyataan kosong ditolak', () {
+        final jsonRusak = templateModulUtangValid.replaceAll(
+          '"atauPernyataan": "tidak_punya_utang"',
+          '"atauPernyataan": "   "',
+        );
+        expect(
+          () => PembacaKonten.uraiModul(jsonRusak, namaBerkas: 'modul_utang_rusak.json'),
+          throwsA(predicate((e) => e is GalatKonten && e.kolom == 'gerbang[1].atauPernyataan' && e.berkas == 'modul_utang_rusak.json')),
+        );
+      });
+
+      test('Kasus 6: aturanPraktis: true tanpa catatanReviewer TODO-VERIFIKASI ditolak', () {
+        final jsonRusak = templatePelajaranUtangValid.replaceAll(
+          '"status": "draf",',
+          '"status": "draf", "aturanPraktis": true,',
+        );
+        expect(
+          () => PembacaKonten.uraiPelajaran(jsonRusak, namaBerkas: 'utang_4_3_rusak.json'),
+          throwsA(predicate((e) => e is GalatKonten && e.kolom == 'catatanReviewer' && e.berkas == 'utang_4_3_rusak.json')),
+        );
+      });
+
+      test('Kasus 7 (pembuktian positif): 4 kunci umpan balik baru dan gerbang atauPernyataan valid', () {
+        const umpanBalikBaru = [
+          'ringkasan_utang',
+          'biaya_pinjaman_tercatat',
+          'rasio_cicilan_bulan_ini',
+          'urutan_pelunasan',
+        ];
+        for (final ub in umpanBalikBaru) {
+          final jsonUji = templatePelajaranUtangValid.replaceAll('"ringkasan_utang"', '"$ub"');
+          expect(
+            () => PembacaKonten.uraiPelajaran(jsonUji, namaBerkas: 'uji_${ub}_valid.json'),
+            returnsNormally,
+          );
+        }
+
+        expect(
+          () => PembacaKonten.uraiModul(templateModulUtangValid, namaBerkas: 'modul_utang_valid.json'),
+          returnsNormally,
+        );
+      });
+    });
   });
 }

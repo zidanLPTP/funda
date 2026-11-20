@@ -1,0 +1,81 @@
+{
+  "id": "utang_cicilan_4_4",
+  "modul": "utang_cicilan",
+  "judul": "Strategi Melunasi: Bola Salju dan Longsor",
+  "durasiMenit": 6,
+  "status": "draf",
+  "catatanReviewer": "TODO-VERIFIKASI. (1) Klaim bahwa cara longsor biasanya menekan total biaya dan cara bola salju memberi semangat dari kemenangan kecil: periksa sumber. (2) Persen bunga pada contoh hanya ilustrasi.",
+  "gerbang": [],
+  "pemantik": "Ada beberapa cicilan, dan uang ekstramu terbatas. Mana yang dilunasi lebih dulu?",
+  "kartu": [
+    {
+      "judul": "Dua cara populer",
+      "isi": "Dengan cara {{bola salju}}, kamu melunasi utang dengan sisa terkecil lebih dulu. Satu utang tuntas lebih awal, dan itu memberi semangat. Dengan cara {{longsor}}, kamu mendahulukan utang dengan bunga tertinggi, yang biasanya menekan total biaya. Pada keduanya, cicilan minimum semua utang tetap dibayar. Uang ekstra diarahkan ke satu utang."
+    },
+    {
+      "judul": "Memilih yang cocok untukmu",
+      "isi": "Kalau kamu butuh kemenangan kecil agar tetap semangat, bola salju bisa cocok. Kalau kamu ingin menekan total biaya, longsor bisa cocok. Tidak ada yang paling benar. Yang penting kamu konsisten menjalankannya."
+    },
+    {
+      "judul": "Jangan hentikan alurnya",
+      "isi": "Setelah satu utang lunas, jangan lepas nominal cicilannya. Arahkan nominal itu ke utang berikutnya. Itu yang membuat laju melunasi makin cepat. Catat setiap pembayaran di Funda, supaya sisa utangmu selalu terbaru."
+    }
+  ],
+  "contohAngka": {
+    "judul": "Tiga utang dengan bunga berbeda (contoh)",
+    "baris": [
+      {
+        "label": "Paylater: sisa, bunga 36 persen per tahun",
+        "jumlah": 800000
+      },
+      {
+        "label": "Pinjaman teman: sisa, tanpa bunga",
+        "jumlah": 1500000
+      },
+      {
+        "label": "Kredit HP: sisa, bunga 18 persen per tahun",
+        "jumlah": 4000000
+      }
+    ],
+    "kesimpulan": "Urutan bola salju: Paylater, Pinjaman teman, Kredit HP. Urutan longsor: Paylater, Kredit HP, Pinjaman teman. Pada contoh ini Paylater menjadi yang pertama di kedua cara, karena sisanya terkecil dan bunganya tertinggi."
+  },
+  "cekPaham": [
+    {
+      "tanya": "Tiga utang bersisa Rp2.000.000, Rp500.000, dan Rp1.200.000. Bola salju melunasi yang mana lebih dulu?",
+      "pilihan": [
+        "Yang bersisa Rp500.000",
+        "Yang bersisa Rp2.000.000",
+        "Yang cicilannya paling kecil"
+      ],
+      "benar": 0,
+      "penjelasan": "Bola salju mendahulukan sisa terkecil."
+    },
+    {
+      "tanya": "Longsor mengutamakan utang yang mana?",
+      "pilihan": [
+        "Yang bunganya paling tinggi",
+        "Yang sisanya paling kecil",
+        "Yang paling lama"
+      ],
+      "benar": 0,
+      "penjelasan": "Longsor mendahulukan bunga tertinggi karena itulah yang paling menambah biaya."
+    },
+    {
+      "tanya": "Setelah satu utang lunas, nominal cicilannya sebaiknya bagaimana?",
+      "pilihan": [
+        "Diarahkan ke utang berikutnya agar melunasi makin cepat",
+        "Dipakai untuk belanja",
+        "Dihapus dari catatan"
+      ],
+      "benar": 0,
+      "penjelasan": "Nominal yang sama terus bekerja, sehingga utang berikutnya lunas lebih cepat."
+    }
+  ],
+  "misi": {
+    "tipe": "lihat_hitungan",
+    "judul": "Lihat urutan pelunasanmu",
+    "instruksi": "Buka urutan pelunasan, baca isinya, lalu tekan Mengerti.",
+    "umpanBalik": "urutan_pelunasan"
+  },
+  "tindakLanjut": "Pilih satu cara dan tulis alasannya. Lalu tentukan satu nominal ekstra yang realistis tiap bulan."
+}

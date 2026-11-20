@@ -1,4 +1,5 @@
 import '../util/format_rupiah.dart';
+import 'perhitungan_utang_dashboard.dart';
 
 /// Memformat nominal Rupiah tanpa spasi antara "Rp" dan angka sesuai konvensi teks materi edukasi.
 ///
@@ -598,4 +599,226 @@ String formatRealisasiAnggaranBulanIni(List<PosAnggaranEvaluasi> daftarPos) {
 
   sb.write(' Ini bahan belajar, bukan penilaian.');
   return sb.toString();
+}
+
+/// Data item utang untuk evaluasi umpan balik edukatif Tahap 8B.
+class ItemUtangUmpanBalik {
+  final String nama;
+  final int sisaRupiah;
+  final int pokokAwalRupiah;
+  final int cicilanBulananRupiah;
+  final int? tenorBulan;
+  final String jenisBunga; // 'tanpa_bunga', 'flat', 'efektif'
+  final int bungaBasisPoinPerTahun;
+  final String status; // 'aktif', 'lunas', 'diarsipkan'
+
+  const ItemUtangUmpanBalik({
+    required this.nama,
+    required this.sisaRupiah,
+    this.pokokAwalRupiah = 0,
+    this.cicilanBulananRupiah = 0,
+    this.tenorBulan,
+    this.jenisBunga = 'tanpa_bunga',
+    this.bungaBasisPoinPerTahun = 0,
+    this.status = 'aktif',
+  });
+}
+
+/// Memformat bunga tahunan dari basis poin menjadi string persentase integer murni tanpa desimal gantung.
+///
+/// Contoh:
+/// - 1800 -> "18"
+/// - 1850 -> "18,5"
+/// - 1205 -> "12,05"
+/// - 50 -> "0,5"
+/// - 0 -> "0"
+String formatBungaPersen(int bp) {
+  final bulat = bp ~/ 100;
+  final sisa = bp % 100;
+  if (sisa == 0) return '$bulat';
+  if (sisa % 10 == 0) {
+    return '$bulat,${sisa ~/ 10}';
+  }
+  final sisaStr = sisa < 10 ? '0$sisa' : '$sisa';
+  return '$bulat,$sisaStr';
+}
+
+/// Menghasilkan umpan balik untuk misi 4.1: ringkasan_utang
+String formatRingkasanUtang({
+  required List<ItemUtangUmpanBalik> daftarUtang,
+  required HasilPemasukanRataRata? pemasukan,
+  required bool tidakPunyaUtang,
+}) {
+  final utangAktif = daftarUtang.where((u) => u.status == 'aktif').toList();
+  final n = utangAktif.length;
+
+  if (n == 0) {
+    if (tidakPunyaUtang) {
+      return 'Kamu menyatakan tidak punya utang. Pelajaran ini tetap berguna untuk jaga-jaga. Kalau suatu saat berutang, catat di menu Utang.';
+    }
+    return 'Belum ada utang yang tercatat.';
+  }
+
+  var totalSisa = 0;
+  var totalCicilan = 0;
+  for (final u in utangAktif) {
+    totalSisa += u.sisaRupiah;
+    totalCicilan += u.cicilanBulananRupiah;
+  }
+
+  final sb = StringBuffer();
+  sb.write('Kamu punya $n utang aktif dengan sisa total ${formatRupiahRapat(totalSisa)}. Cicilan per bulan: ${formatRupiahRapat(totalCicilan)}.');
+
+  if (totalCicilan > 0) {
+    if (pemasukan != null && pemasukan.dasar != DasarPemasukanRataRata.belumAda && pemasukan.nilaiRupiah > 0) {
+      final persen = (totalCicilan * 100) ~/ pemasukan.nilaiRupiah;
+      final teksDasar = pemasukan.dasar == DasarPemasukanRataRata.rataRata3Bulan
+          ? 'rata-rata 3 bulan terakhir'
+          : 'bulan ini';
+      sb.write(' Itu sekitar $persen persen dari pemasukanmu ($teksDasar).');
+    } else {
+      sb.write(' Catat pemasukanmu supaya perbandingannya bisa dihitung.');
+    }
+  }
+
+  sb.write(' Ini gambaran, bukan penilaian.');
+  return sb.toString();
+}
+
+/// Menghasilkan umpan balik untuk misi 4.2: biaya_pinjaman_tercatat
+String formatBiayaPinjamanTercatat({
+  required List<ItemUtangUmpanBalik> daftarUtang,
+  required bool tidakPunyaUtang,
+}) {
+  final utangAktif = daftarUtang.where((u) => u.status == 'aktif').toList();
+  if (utangAktif.isEmpty) {
+    if (tidakPunyaUtang) {
+      return 'Kamu menyatakan tidak punya utang, jadi belum ada biaya pinjaman yang dihitung. Contoh di pelajaran ini bisa kamu pakai kalau nanti menerima tawaran pinjaman.';
+    }
+    return 'Belum ada utang yang tercatat.';
+  }
+
+  // Utang layak: pokok_awal > 0, tenor_bulan > 0, cicilan > 0
+  final utangLayak = <({ItemUtangUmpanBalik utang, int total, int biaya})>[];
+  for (final u in utangAktif) {
+    if (u.pokokAwalRupiah > 0 && u.tenorBulan != null && u.tenorBulan! > 0 && u.cicilanBulananRupiah > 0) {
+      final total = u.cicilanBulananRupiah * u.tenorBulan!;
+      final selisih = total - u.pokokAwalRupiah;
+      final biaya = selisih < 0 ? 0 : selisih;
+      utangLayak.add((utang: u, total: total, biaya: biaya));
+    }
+  }
+
+  if (utangLayak.isEmpty) {
+    return 'Belum ada utang dengan pokok awal, tenor, dan cicilan yang lengkap. Lengkapi datanya di menu Utang agar biaya pinjaman bisa dihitung.';
+  }
+
+  // Urut biaya menurun lalu nama menaik
+  utangLayak.sort((a, b) {
+    final bandingBiaya = b.biaya.compareTo(a.biaya);
+    if (bandingBiaya != 0) return bandingBiaya;
+    return a.utang.nama.compareTo(b.utang.nama);
+  });
+
+  final sb = StringBuffer();
+  final batas = utangLayak.length > 3 ? 3 : utangLayak.length;
+  for (var i = 0; i < batas; i++) {
+    final item = utangLayak[i];
+    if (i > 0) sb.write(' ');
+    sb.write('${item.utang.nama}: pokok ${formatRupiahRapat(item.utang.pokokAwalRupiah)}, cicilan ${formatRupiahRapat(item.utang.cicilanBulananRupiah)} x ${item.utang.tenorBulan} bulan = total ${formatRupiahRapat(item.total)}. Biaya pinjaman: ${formatRupiahRapat(item.biaya)}.');
+  }
+
+  if (utangLayak.length > 3) {
+    final sisa = utangLayak.length - 3;
+    sb.write(' Dan $sisa utang lain.');
+  }
+
+  sb.write(' Hitungan ini memakai cicilan x tenor yang kamu catat dan belum memasukkan denda.');
+  return sb.toString();
+}
+
+/// Menghasilkan umpan balik untuk misi 4.3: rasio_cicilan_bulan_ini
+String formatRasioCicilanBulanIni({
+  required int totalCicilanBulanan,
+  required HasilPemasukanRataRata? pemasukan,
+}) {
+  if (pemasukan == null || pemasukan.dasar == DasarPemasukanRataRata.belumAda || pemasukan.nilaiRupiah <= 0) {
+    return 'Belum ada pemasukan yang tercatat, jadi rasio cicilan belum bisa dihitung. Catat pemasukanmu dulu.';
+  }
+
+  if (totalCicilanBulanan <= 0) {
+    return 'Cicilan bulananmu belum tercatat (Rp0), jadi rasio cicilanmu 0 persen.';
+  }
+
+  final persen = (totalCicilanBulanan * 100) ~/ pemasukan.nilaiRupiah;
+  final pemasukan2 = (pemasukan.nilaiRupiah * 75) ~/ 100;
+  final persen2 = pemasukan2 <= 0 ? 0 : (totalCicilanBulanan * 100) ~/ pemasukan2;
+  final teksDasar = pemasukan.dasar == DasarPemasukanRataRata.rataRata3Bulan
+      ? 'rata-rata 3 bulan terakhir'
+      : 'bulan ini';
+
+  return 'Total cicilanmu ${formatRupiahRapat(totalCicilanBulanan)} per bulan, dibandingkan pemasukan ${formatRupiahRapat(pemasukan.nilaiRupiah)} per bulan ($teksDasar). Rasio cicilanmu $persen persen. Kalau pemasukanmu turun 25 persen, rasionya menjadi $persen2 persen. Ini angka untuk kamu pahami, bukan nilai.';
+}
+
+/// Menghasilkan umpan balik untuk misi 4.4: urutan_pelunasan
+String formatUrutanPelunasan({
+  required List<ItemUtangUmpanBalik> daftarUtang,
+  required bool tidakPunyaUtang,
+}) {
+  final utangAktifBersisa = daftarUtang.where((u) => u.status == 'aktif' && u.sisaRupiah > 0).toList();
+
+  if (utangAktifBersisa.isEmpty) {
+    if (tidakPunyaUtang) {
+      return 'Kamu menyatakan tidak punya utang, jadi belum ada yang perlu diurutkan. Pelajaran ini siap dipakai kalau nanti kamu berutang.';
+    }
+    return 'Belum ada utang aktif untuk diurutkan.';
+  }
+
+  if (utangAktifBersisa.length == 1) {
+    final u = utangAktifBersisa.first;
+    return 'Kamu hanya punya satu utang aktif: ${u.nama} (sisa ${formatRupiahRapat(u.sisaRupiah)}). Fokuskan uang ekstra ke utang ini.';
+  }
+
+  // Bola salju: sisa menaik lalu nama menaik
+  final bolaSalju = List<ItemUtangUmpanBalik>.from(utangAktifBersisa);
+  bolaSalju.sort((a, b) {
+    final bandingSisa = a.sisaRupiah.compareTo(b.sisaRupiah);
+    if (bandingSisa != 0) return bandingSisa;
+    return a.nama.compareTo(b.nama);
+  });
+  final daftarBolaSalju = bolaSalju.map((u) => '${u.nama} (${formatRupiahRapat(u.sisaRupiah)})').join(', lalu ');
+
+  // Longsor:
+  // Kelompok 1: bungaBasisPoinPerTahun > 0 -> bp menurun, sisa menaik, nama menaik
+  final kelompokBunga = utangAktifBersisa.where((u) => u.bungaBasisPoinPerTahun > 0).toList();
+  kelompokBunga.sort((a, b) {
+    final bandingBp = b.bungaBasisPoinPerTahun.compareTo(a.bungaBasisPoinPerTahun);
+    if (bandingBp != 0) return bandingBp;
+    final bandingSisa = a.sisaRupiah.compareTo(b.sisaRupiah);
+    if (bandingSisa != 0) return bandingSisa;
+    return a.nama.compareTo(b.nama);
+  });
+
+  // Kelompok 2: bungaBasisPoinPerTahun <= 0
+  final kelompokTanpaBunga = utangAktifBersisa.where((u) => u.bungaBasisPoinPerTahun <= 0).toList();
+  kelompokTanpaBunga.sort((a, b) {
+    final bandingSisa = a.sisaRupiah.compareTo(b.sisaRupiah);
+    if (bandingSisa != 0) return bandingSisa;
+    return a.nama.compareTo(b.nama);
+  });
+
+  final daftarLongsorItem = <String>[];
+  for (final u in kelompokBunga) {
+    daftarLongsorItem.add('${u.nama} (${formatBungaPersen(u.bungaBasisPoinPerTahun)} persen per tahun)');
+  }
+  for (final u in kelompokTanpaBunga) {
+    final label = u.jenisBunga == 'tanpa_bunga' ? 'tanpa bunga' : 'bunga belum dicatat';
+    daftarLongsorItem.add('${u.nama} ($label)');
+  }
+  final daftarLongsor = daftarLongsorItem.join(', lalu ');
+
+  return 'Urutan bola salju (sisa terkecil dulu): $daftarBolaSalju. '
+      'Urutan longsor (bunga tertinggi dulu): $daftarLongsor. '
+      'Urutan longsor memakai persen bunga yang kamu catat. Kalau jenis bunganya berbeda, anggap sebagai perkiraan. '
+      'Pilih salah satu dan konsisten. Ini bahan belajar, bukan keharusan.';
 }

@@ -284,5 +284,55 @@ void main() {
       await tester.pumpWidget(const SizedBox());
       await tester.pump(const Duration(milliseconds: 50));
     });
+
+    testWidgets('5. Tombol utama pemutar pelajaran ("Lanjut") dapat dijangkau dengan scroll pada layar 360x640 dengan skala teks 2.0', (tester) async {
+      tester.view.physicalSize = const Size(360, 640);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(() => tester.view.resetPhysicalSize());
+
+      final file = File('aset/konten/pemula/tabungan/tabungan_2_1.json');
+      final pel = PembacaKonten.uraiPelajaran(file.readAsStringSync(), namaBerkas: 'tabungan_2_1.json');
+
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            penyediaBasisData.overrideWithValue(db),
+            penyediaFotoData.overrideWith((ref) => Future.value(FotoDataPengguna.kosong())),
+            penyediaKamus.overrideWith((ref) => Future.value(<String, IstilahKamus>{})),
+            penyediaTeksUmpanBalikMisi(pel.misi.umpanBalik ?? '').overrideWith((ref) => Future.value('Umpan balik teks skala 2.0')),
+          ],
+          child: MaterialApp(
+            theme: TemaFunda.temaTerang,
+            home: MediaQuery(
+              data: const MediaQueryData(
+                size: Size(360, 640),
+                textScaler: TextScaler.linear(2.0),
+              ),
+              child: LayarPemutarPelajaran(
+                modulId: 'tabungan',
+                pelajaranId: pel.id,
+                pelajaranOverride: pel,
+              ),
+            ),
+          ),
+        ),
+      );
+
+      await pompaAman(tester);
+
+      // Verifikasi tombol Lanjut ada dan dapat dijangkau (ensureVisible)
+      final tombolLanjut = find.text('Lanjut');
+      expect(tombolLanjut, findsOneWidget);
+      await tester.ensureVisible(tombolLanjut);
+      await pompaAman(tester);
+      await tester.tap(tombolLanjut);
+      await pompaAman(tester);
+
+      // Pastikan langkah berpindah (Konsep 1)
+      expect(find.text('Konsep Inti (1/3)'), findsOneWidget);
+
+      await tester.pumpWidget(const SizedBox());
+      await tester.pump(const Duration(milliseconds: 50));
+    });
   });
 }

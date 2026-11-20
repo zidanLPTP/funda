@@ -1,6 +1,7 @@
 import '../../../perhitungan/perhitungan_belajar.dart';
 import '../../../perhitungan/perhitungan_keuangan.dart';
 import '../../../perhitungan/perhitungan_umpan_balik_belajar.dart';
+import '../../../perhitungan/perhitungan_utang_dashboard.dart';
 import '../../../util/format_rupiah.dart';
 
 /// Hasil evaluasi apakah suatu misi telah memenuhi syarat verifikasi pengguna.
@@ -255,6 +256,52 @@ class RegistriUmpanBalik {
     return formatProgresDanaDarurat(
       tujuan: tujuan,
       pengeluaranWajibPerBulan: pengeluaranWajibPerBulan,
+    );
+  }
+
+  /// Menghasilkan umpan balik ringkasan utang.
+  static String formatRingkasanUtangMisi({
+    required List<ItemUtangUmpanBalik> daftarUtang,
+    required HasilPemasukanRataRata? pemasukan,
+    required bool tidakPunyaUtang,
+  }) {
+    return formatRingkasanUtang(
+      daftarUtang: daftarUtang,
+      pemasukan: pemasukan,
+      tidakPunyaUtang: tidakPunyaUtang,
+    );
+  }
+
+  /// Menghasilkan umpan balik biaya pinjaman tercatat.
+  static String formatBiayaPinjamanTercatatMisi({
+    required List<ItemUtangUmpanBalik> daftarUtang,
+    required bool tidakPunyaUtang,
+  }) {
+    return formatBiayaPinjamanTercatat(
+      daftarUtang: daftarUtang,
+      tidakPunyaUtang: tidakPunyaUtang,
+    );
+  }
+
+  /// Menghasilkan umpan balik rasio cicilan bulan ini.
+  static String formatRasioCicilanBulanIniMisi({
+    required int totalCicilanBulanan,
+    required HasilPemasukanRataRata? pemasukan,
+  }) {
+    return formatRasioCicilanBulanIni(
+      totalCicilanBulanan: totalCicilanBulanan,
+      pemasukan: pemasukan,
+    );
+  }
+
+  /// Menghasilkan umpan balik urutan pelunasan.
+  static String formatUrutanPelunasanMisi({
+    required List<ItemUtangUmpanBalik> daftarUtang,
+    required bool tidakPunyaUtang,
+  }) {
+    return formatUrutanPelunasan(
+      daftarUtang: daftarUtang,
+      tidakPunyaUtang: tidakPunyaUtang,
     );
   }
 }

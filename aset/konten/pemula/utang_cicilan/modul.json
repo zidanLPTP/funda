@@ -1,20 +1,155 @@
 {
-    "kuis":  {
-                 "jumlahSoal":  0,
-                 "bankSoal":  [
-
-                              ]
-             },
-    "id":  "utang_cicilan",
-    "tersedia":  false,
-    "urutan":  4,
-    "gerbang":  [
-
-                ],
-    "deskripsiSingkat":  "Memahami cara kerja bunga, rasio cicilan sehat, dan strategi melunasi kewajiban.",
-    "daftarPelajaran":  [
-
-                        ],
-    "tingkat":  "pemula",
-    "judul":  "Utang \u0026 Cicilan"
+  "id": "utang_cicilan",
+  "judul": "Utang & Cicilan",
+  "tingkat": "pemula",
+  "urutan": 4,
+  "deskripsiSingkat": "Pahami cara kerja bunga, biaya pinjaman sebenarnya, dan strategi melunasi utang.",
+  "tersedia": true,
+  "gerbang": [
+    {
+      "tipe": "modul_selesai",
+      "modulId": "dana_darurat",
+      "pesan": "Selesaikan Modul 3 dulu."
+    },
+    {
+      "tipe": "ada_data",
+      "objek": "utang",
+      "min": 1,
+      "atauPernyataan": "tidak_punya_utang",
+      "pesan": "Lalu catat utang atau cicilanmu di menu Utang. Kalau kamu memang tidak punya utang, pilih Aku tidak punya ini."
+    }
+  ],
+  "daftarPelajaran": [
+    "utang_cicilan_4_1",
+    "utang_cicilan_4_2",
+    "utang_cicilan_4_3",
+    "utang_cicilan_4_4"
+  ],
+  "kuis": {
+    "jumlahSoal": 5,
+    "bankSoal": [
+      {
+        "id": "soal_4_1",
+        "pelajaranId": "utang_cicilan_4_1",
+        "tanya": "Mana yang paling dekat dengan utang yang membantu?",
+        "pilihan": [
+          "Pinjaman untuk membeli alat kerja yang menambah penghasilan",
+          "Cicilan barang baru hanya karena sedang diskon",
+          "Paylater untuk mentraktir teman"
+        ],
+        "benar": 0,
+        "penjelasan": "Utang yang membantu biasanya menambah kemampuanmu menghasilkan atau memenuhi kebutuhan penting."
+      },
+      {
+        "id": "soal_4_2",
+        "pelajaranId": "utang_cicilan_4_1",
+        "tanya": "Mana yang termasuk tanda utang mulai menjerat?",
+        "pilihan": [
+          "Menutup utang lama dengan utang baru",
+          "Membayar cicilan tepat waktu",
+          "Mencatat semua utang"
+        ],
+        "benar": 0,
+        "penjelasan": "Utang baru untuk menutup utang lama membuat beban terus berpindah dan membesar."
+      },
+      {
+        "id": "soal_4_3",
+        "pelajaranId": "utang_cicilan_4_1",
+        "tanya": "Sebelum berutang, pertanyaan mana yang paling berguna?",
+        "pilihan": [
+          "Berapa total yang harus kukembalikan, termasuk biayanya?",
+          "Apakah aplikasinya populer?",
+          "Apakah temanku juga berutang?"
+        ],
+        "benar": 0,
+        "penjelasan": "Total yang harus dikembalikan menunjukkan beban sebenarnya, termasuk biayanya."
+      },
+      {
+        "id": "soal_4_4",
+        "pelajaranId": "utang_cicilan_4_2",
+        "tanya": "Pokok Rp3.000.000, cicilan Rp280.000 selama 12 bulan. Berapa biaya pinjamannya?",
+        "pilihan": [
+          "Rp360.000",
+          "Rp280.000",
+          "Rp3.360.000"
+        ],
+        "benar": 0,
+        "penjelasan": "Rp280.000 dikali 12 hasilnya Rp3.360.000. Dikurangi pokok Rp3.000.000, biayanya Rp360.000."
+      },
+      {
+        "id": "soal_4_5",
+        "pelajaranId": "utang_cicilan_4_2",
+        "tanya": "Mana yang termasuk biaya yang sering terlupa saat melihat cicilan bulanan?",
+        "pilihan": [
+          "Biaya admin, asuransi, dan denda keterlambatan",
+          "Warna aplikasi pinjaman",
+          "Jumlah teman yang berutang"
+        ],
+        "benar": 0,
+        "penjelasan": "Biaya tambahan bisa menambah total yang kamu bayar, walau tidak terlihat di cicilan bulanan."
+      },
+      {
+        "id": "soal_4_6",
+        "pelajaranId": "utang_cicilan_4_2",
+        "tanya": "Bunga flat dihitung dari apa?",
+        "pilihan": [
+          "Pokok awal terus selama tenor",
+          "Sisa pokok yang menurun",
+          "Penghasilan peminjam"
+        ],
+        "benar": 0,
+        "penjelasan": "Bunga flat tidak ikut mengecil saat pokok berkurang, sedangkan bunga efektif dihitung dari sisa pokok."
+      },
+      {
+        "id": "soal_4_7",
+        "pelajaranId": "utang_cicilan_4_3",
+        "aturanPraktis": true,
+        "catatanReviewer": "TODO-VERIFIKASI: angka hanya ilustrasi",
+        "tanya": "Cicilan Rp800.000 dan pemasukan Rp4.000.000. Berapa rasio cicilannya?",
+        "pilihan": [
+          "20 persen",
+          "8 persen",
+          "50 persen"
+        ],
+        "benar": 0,
+        "penjelasan": "Rp800.000 dibagi Rp4.000.000 hasilnya 0,2, atau 20 persen."
+      },
+      {
+        "id": "soal_4_8",
+        "pelajaranId": "utang_cicilan_4_3",
+        "tanya": "Pemasukan turun sementara cicilan tetap sama. Apa yang terjadi pada rasio cicilan?",
+        "pilihan": [
+          "Naik",
+          "Turun",
+          "Tetap"
+        ],
+        "benar": 0,
+        "penjelasan": "Pemasukan yang mengecil membuat bagian untuk cicilan makin besar."
+      },
+      {
+        "id": "soal_4_9",
+        "pelajaranId": "utang_cicilan_4_4",
+        "tanya": "Tiga utang bersisa Rp3.000.000, Rp750.000, dan Rp1.500.000. Bola salju melunasi yang mana lebih dulu?",
+        "pilihan": [
+          "Yang bersisa Rp750.000",
+          "Yang bersisa Rp3.000.000",
+          "Yang bersisa Rp1.500.000"
+        ],
+        "benar": 0,
+        "penjelasan": "Bola salju mendahulukan utang dengan sisa terkecil."
+      },
+      {
+        "id": "soal_4_10",
+        "pelajaranId": "utang_cicilan_4_4",
+        "tanya": "Cara longsor mengutamakan utang yang mana?",
+        "pilihan": [
+          "Yang bunganya paling tinggi",
+          "Yang sisanya paling kecil",
+          "Yang paling baru"
+        ],
+        "benar": 0,
+        "penjelasan": "Longsor mendahulukan bunga tertinggi karena itulah yang paling menambah biaya."
+      }
+    ]
+  }
 }

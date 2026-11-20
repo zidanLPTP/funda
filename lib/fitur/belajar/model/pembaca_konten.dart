@@ -84,6 +84,10 @@ class PembacaKonten {
     'pengeluaran_wajib_bulanan',
     'target_dana_darurat',
     'progres_dana_darurat',
+    'ringkasan_utang',
+    'biaya_pinjaman_tercatat',
+    'rasio_cicilan_bulan_ini',
+    'urutan_pelunasan',
   };
 
   /// Mengurai string JSON kamus menjadi daftar istilah terindeks.
@@ -170,6 +174,12 @@ class PembacaKonten {
           final obj = g['objek'] as String?;
           if (tipe == 'ada_data' && obj != null && !objekGerbangValid.contains(obj.toLowerCase())) {
             throw GalatKonten('Objek gerbang data tidak dikenal: "$obj"', berkas: namaBerkas, kolom: 'gerbang[$i].objek');
+          }
+          if (g.containsKey('atauPernyataan')) {
+            final atau = g['atauPernyataan'];
+            if (atau is! String || atau.trim().isEmpty) {
+              throw GalatKonten('Kolom atauPernyataan harus berupa string tidak kosong', berkas: namaBerkas, kolom: 'gerbang[$i].atauPernyataan');
+            }
           }
         }
       }
@@ -288,6 +298,12 @@ class PembacaKonten {
           final obj = g['objek'] as String?;
           if (tipe == 'ada_data' && obj != null && !objekGerbangValid.contains(obj.toLowerCase())) {
             throw GalatKonten('Objek gerbang data tidak dikenal: "$obj"', berkas: namaBerkas, kolom: 'gerbang[$i].objek');
+          }
+          if (g.containsKey('atauPernyataan')) {
+            final atau = g['atauPernyataan'];
+            if (atau is! String || atau.trim().isEmpty) {
+              throw GalatKonten('Kolom atauPernyataan harus berupa string tidak kosong', berkas: namaBerkas, kolom: 'gerbang[$i].atauPernyataan');
+            }
           }
         }
       }

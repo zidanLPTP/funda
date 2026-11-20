@@ -2,6 +2,7 @@ import 'package:drift/drift.dart';
 import '../basis_data.dart';
 import '../model/arah_penyesuaian_utang.dart';
 import '../../perhitungan/perhitungan_utang_dashboard.dart';
+import '../../perhitungan/perhitungan_umpan_balik_belajar.dart';
 
 /// Item gabungan riwayat transaksi pembayaran utang.
 class ItemRiwayatPembayaranUtang {
@@ -58,6 +59,32 @@ class UtangRepositori {
         (u) => OrderingTerm(expression: u.dibuatPada, mode: OrderingMode.desc),
       ]);
     return kueri.watch();
+  }
+
+  /// Mengambil daftar utang aktif beserta sisa utang saat ini on-demand untuk umpan balik edukatif.
+  Future<List<ItemUtangUmpanBalik>> ambilDaftarUtangUmpanBalik() async {
+    final daftar = await (_db.select(_db.tabelUtang)
+          ..where((u) => u.status.equals('aktif'))
+          ..orderBy([
+            (u) => OrderingTerm(expression: u.dibuatPada, mode: OrderingMode.desc),
+          ]))
+        .get();
+
+    final hasil = <ItemUtangUmpanBalik>[];
+    for (final u in daftar) {
+      final sisa = await hitungSisaUtangSQL(u.id);
+      hasil.add(ItemUtangUmpanBalik(
+        nama: u.nama,
+        sisaRupiah: sisa,
+        pokokAwalRupiah: u.pokokAwalRupiah ?? 0,
+        cicilanBulananRupiah: u.cicilanBulananRupiah,
+        tenorBulan: u.tenorBulan,
+        jenisBunga: u.jenisBunga,
+        bungaBasisPoinPerTahun: u.bungaBasisPoinPerTahun,
+        status: u.status,
+      ));
+    }
+    return hasil;
   }
 
   /// Mengambil data satu utang berdasarkan ID.
