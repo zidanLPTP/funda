@@ -1,4 +1,3 @@
-import '../test/pembantu/pompa_uji.dart';
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
 import 'package:flutter/material.dart';
@@ -227,7 +226,7 @@ void main() {
         child: const AplikasiFunda(),
       ),
     );
-    await pompaAman(tester);
+    await tester.pump();
 
     debugPrint('=================================================================');
     debugPrint('[HASIL_BENCHMARK_BERANDA_EMULATOR]');

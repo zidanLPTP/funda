@@ -1,0 +1,114 @@
+{
+  "id": "waspada_penipuan_5_1",
+  "modul": "waspada_penipuan",
+  "judul": "Ciri Tawaran yang Mencurigakan",
+  "durasiMenit": 5,
+  "status": "draf",
+  "catatanReviewer": "TODO-VERIFIKASI. (1) Lima tanda dan tiga rem adalah ringkasan umum dari materi edukasi penipuan; periksa kecocokannya dengan sumber resmi. (2) Contoh hadiah dan skenario telepon bank bersifat fiktif.",
+  "gerbang": [],
+  "pemantik": "Pesan masuk: kamu menang hadiah Rp5.000.000. Transfer biaya admin Rp150.000 hari ini. Rasanya menggoda, dan waktunya terasa mepet.",
+  "kartu": [
+    {
+      "judul": "Penipuan bermain di perasaan",
+      "isi": "Penipu jarang memakai cara rumit. Mereka bermain di perasaan: senang karena hadiah, takut karena ancaman, atau buru-buru karena batas waktu. Saat perasaan itu naik, kita lebih mudah mengambil keputusan cepat. Karena itu, jeda sebentar adalah pertahanan yang kuat."
+    },
+    {
+      "judul": "Lima tanda yang sering muncul",
+      "isi": "Waspadai lima tanda. Pertama, kamu diminta mentransfer {{biaya di muka}} sebelum menerima apa pun. Kedua, ada tekanan waktu. Ketiga, kamu diminta kode {{OTP}}, PIN, atau kata sandi. Keempat, tautan atau nomornya tidak resmi, misalnya pesan {{phishing}} yang menyamar sebagai bank. Kelima, ada janji untung besar tanpa risiko. Satu tanda saja sudah cukup untuk berhenti dan memeriksa."
+    },
+    {
+      "judul": "Tiga rem sebelum bertindak",
+      "isi": "Pakai tiga rem. Berhenti: jangan membalas atau mentransfer dulu. Periksa: cari kontak resmi lewat situs atau aplikasi resmi, bukan dari pesan tadi. Tanya: ceritakan pada orang yang kamu percaya. Ingat juga, kode {{OTP}} dan PIN tidak dibagikan ke siapa pun, termasuk yang mengaku petugas."
+    }
+  ],
+  "contohAngka": {
+    "judul": "Hadiah yang tidak pernah datang",
+    "baris": [
+      {
+        "label": "Hadiah yang dijanjikan",
+        "jumlah": 5000000
+      },
+      {
+        "label": "Biaya admin yang diminta di muka",
+        "jumlah": -150000
+      },
+      {
+        "label": "Hadiah yang benar-benar diterima",
+        "jumlah": 0
+      },
+      {
+        "label": "Uang yang hilang",
+        "jumlah": -150000,
+        "ringkasan": true
+      }
+    ],
+    "kesimpulan": "Hadiahnya tidak pernah datang, tetapi uangmu Rp150.000 sudah hilang. Biaya kecil di muka adalah umpan yang sering dipakai."
+  },
+  "cekPaham": [
+    {
+      "tanya": "Kamu diminta transfer Rp150.000 dulu supaya hadiah Rp5.000.000 bisa cair. Apa yang paling masuk akal?",
+      "pilihan": [
+        "Berhenti, lalu periksa lewat kontak resmi dan tanya orang yang kamu percaya",
+        "Transfer cepat karena batasnya hari ini",
+        "Transfer sedikit dulu untuk mengetes"
+      ],
+      "benar": 0,
+      "penjelasan": "Biaya di muka dengan batas waktu adalah tanda yang sering muncul. Berhenti dan memeriksa lebih aman daripada mentransfer."
+    },
+    {
+      "tanya": "Siapa yang boleh kamu beri kode OTP?",
+      "pilihan": [
+        "Tidak seorang pun, termasuk yang mengaku petugas bank",
+        "Petugas yang menelepon dan tahu namamu",
+        "Siapa pun yang meminta dengan sopan"
+      ],
+      "benar": 0,
+      "penjelasan": "Kode OTP hanya untukmu. Penelepon yang tahu namamu pun bisa saja penipu."
+    },
+    {
+      "tanya": "Mana yang BUKAN tanda yang perlu diwaspadai?",
+      "pilihan": [
+        "Penyedia menjelaskan total biaya dan syarat secara tertulis dan jelas",
+        "Ada batas waktu yang sangat mepet",
+        "Kamu diminta transfer biaya di muka"
+      ],
+      "benar": 0,
+      "penjelasan": "Penjelasan biaya dan syarat yang jelas adalah tanda yang baik. Batas waktu mepet dan biaya di muka termasuk tanda yang perlu diwaspadai."
+    }
+  ],
+  "misi": {
+    "tipe": "keputusan",
+    "judul": "Latih rem-mu",
+    "instruksi": "Baca skenarionya, lalu pilih langkah yang menurutmu paling aman. Kamu boleh mencoba pilihan lain untuk melihat akibatnya.",
+    "skenario": {
+      "pemantik": "Seseorang menelepon dan mengaku dari bank. Katanya akunmu bermasalah dan akan diblokir hari ini. Dia meminta kode OTP yang baru kamu terima supaya akunmu \"diselamatkan\".",
+      "opsi": [
+        {
+          "id": "a",
+          "teks": "Berikan kode OTP supaya akunku selamat",
+          "aman": false,
+          "umpanBalik": "Kode OTP adalah kunci akunmu. Siapa pun yang memintanya, termasuk yang mengaku petugas, sebaiknya tidak diberi. Coba pilihan lain."
+        },
+        {
+          "id": "b",
+          "teks": "Tutup telepon, lalu hubungi bank lewat nomor di aplikasi atau kartu resminya",
+          "aman": true,
+          "umpanBalik": "Tepat. Kamu berhenti dan memeriksa lewat jalur resmi. Pihak yang benar tidak akan memintamu terburu-buru membagikan kode."
+        },
+        {
+          "id": "c",
+          "teks": "Tanya nama petugas dan minta dia menyebut saldoku dulu",
+          "aman": false,
+          "umpanBalik": "Penipu bisa saja sudah punya sebagian datamu. Menyebut nama atau saldo belum membuktikan dia petugas sungguhan. Coba pilihan lain."
+        },
+        {
+          "id": "d",
+          "teks": "Minta waktu lima menit, lalu transfer sedikit untuk \"mengamankan\" akun",
+          "aman": false,
+          "umpanBalik": "Memindahkan uang atas permintaan penelepon justru membuka jalan bagi penipuan. Coba pilihan lain."
+        }
+      ]
+    }
+  },
+  "tindakLanjut": "Simpan nomor resmi bank atau dompet digitalmu di kontak HP dengan nama yang jelas, supaya mudah dihubungi saat kamu ragu."
+}

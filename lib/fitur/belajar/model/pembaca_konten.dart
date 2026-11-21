@@ -219,6 +219,18 @@ class PembacaKonten {
             final pilihan = (soal['pilihan'] as List<dynamic>?)?.map((e) => e.toString()).join(' ') ?? '';
             final teksSoal = '$tanya $penjelasan $pilihan';
 
+            final isModul5 = namaBerkas.contains('waspada_penipuan') || id == 'waspada_penipuan';
+            if (isModul5) {
+              periksaTeksSensitifModul5(tanya, namaBerkas: namaBerkas, kolom: 'kuis.bankSoal[$i].tanya');
+              periksaTeksSensitifModul5(penjelasan, namaBerkas: namaBerkas, kolom: 'kuis.bankSoal[$i].penjelasan');
+              if (soal['pilihan'] is List) {
+                for (var pIdx = 0; pIdx < (soal['pilihan'] as List).length; pIdx++) {
+                  final pText = (soal['pilihan'] as List)[pIdx].toString();
+                  periksaTeksSensitifModul5(pText, namaBerkas: namaBerkas, kolom: 'kuis.bankSoal[$i].pilihan[$pIdx]');
+                }
+              }
+            }
+
             final polaAturanPraktis = RegExp(r'(50/30/20|50-30-20|\b50\s*persen\b|\b30\s*persen\b|\b20\s*persen\b)', caseSensitive: false);
             final adaAturanPraktis = polaAturanPraktis.hasMatch(teksSoal);
             final isAturanPraktis = soal['aturanPraktis'] == true;
@@ -276,6 +288,14 @@ class PembacaKonten {
       throw GalatKonten('Kolom judul pelajaran wajib ada', berkas: namaBerkas, kolom: 'judul');
     }
 
+    final isModul5 = namaBerkas.contains('waspada_penipuan') || id.startsWith('waspada_penipuan');
+    if (isModul5) {
+      if (RegExp(r'\b(aman|bahaya)\b', caseSensitive: false).hasMatch(judul)) {
+        throw GalatKonten('Judul pelajaran Modul 5 dilarang memuat label "aman" atau "bahaya": "$judul"', berkas: namaBerkas, kolom: 'judul');
+      }
+      periksaTeksSensitifModul5(judul, namaBerkas: namaBerkas, kolom: 'judul');
+    }
+
     // 3. Durasi menit (3 sampai 8 menit)
     final durasi = data['durasiMenit'];
     if (durasi is! num || durasi < 3 || durasi > 8) {
@@ -319,6 +339,9 @@ class PembacaKonten {
     final pemantik = data['pemantik'] as String? ?? '';
     _periksaIstilahKamus(pemantik, daftarIstilahKamus, namaBerkas, 'pemantik');
     periksaBahasaTeks(pemantik, namaBerkas: namaBerkas, daftarPeringatan: daftarPeringatan);
+    if (isModul5) {
+      periksaTeksSensitifModul5(pemantik, namaBerkas: namaBerkas, kolom: 'pemantik');
+    }
 
     // Periksa kartu
     for (var i = 0; i < kartuList.length; i++) {
@@ -332,6 +355,10 @@ class PembacaKonten {
       _periksaIstilahKamus(isiKartu, daftarIstilahKamus, namaBerkas, 'kartu[$i].isi');
       periksaBahasaTeks(judulKartu, namaBerkas: namaBerkas, daftarPeringatan: daftarPeringatan);
       periksaBahasaTeks(isiKartu, namaBerkas: namaBerkas, daftarPeringatan: daftarPeringatan);
+      if (isModul5) {
+        periksaTeksSensitifModul5(judulKartu, namaBerkas: namaBerkas, kolom: 'kartu[$i].judul');
+        periksaTeksSensitifModul5(isiKartu, namaBerkas: namaBerkas, kolom: 'kartu[$i].isi');
+      }
     }
 
     // 6. Cek Paham (2 sampai 3 soal)
@@ -351,12 +378,19 @@ class PembacaKonten {
         _periksaIstilahKamus(penjelasan, daftarIstilahKamus, namaBerkas, 'cekPaham[$i].penjelasan');
         periksaBahasaTeks(tanya, namaBerkas: namaBerkas, daftarPeringatan: daftarPeringatan);
         periksaBahasaTeks(penjelasan, namaBerkas: namaBerkas, daftarPeringatan: daftarPeringatan);
+        if (isModul5) {
+          periksaTeksSensitifModul5(tanya, namaBerkas: namaBerkas, kolom: 'cekPaham[$i].tanya');
+          periksaTeksSensitifModul5(penjelasan, namaBerkas: namaBerkas, kolom: 'cekPaham[$i].penjelasan');
+        }
 
         if (pilihan is List) {
           for (var j = 0; j < pilihan.length; j++) {
             final teksPilihan = pilihan[j].toString();
             _periksaIstilahKamus(teksPilihan, daftarIstilahKamus, namaBerkas, 'cekPaham[$i].pilihan[$j]');
             periksaBahasaTeks(teksPilihan, namaBerkas: namaBerkas, daftarPeringatan: daftarPeringatan);
+            if (isModul5) {
+              periksaTeksSensitifModul5(teksPilihan, namaBerkas: namaBerkas, kolom: 'cekPaham[$i].pilihan[$j]');
+            }
           }
           if (benar is num) {
             if (benar < 0 || benar >= pilihan.length) {
@@ -388,6 +422,10 @@ class PembacaKonten {
       _periksaIstilahKamus(kesimpulan, daftarIstilahKamus, namaBerkas, 'contohAngka.kesimpulan');
       periksaBahasaTeks(judulContoh, namaBerkas: namaBerkas, daftarPeringatan: daftarPeringatan);
       periksaBahasaTeks(kesimpulan, namaBerkas: namaBerkas, daftarPeringatan: daftarPeringatan);
+      if (isModul5) {
+        periksaTeksSensitifModul5(judulContoh, namaBerkas: namaBerkas, kolom: 'contohAngka.judul');
+        periksaTeksSensitifModul5(kesimpulan, namaBerkas: namaBerkas, kolom: 'contohAngka.kesimpulan');
+      }
 
       if (contohAngka.containsKey('baris')) {
         final baris = contohAngka['baris'];
@@ -409,6 +447,9 @@ class PembacaKonten {
           teksContohAngka += '$label ';
           _periksaIstilahKamus(label, daftarIstilahKamus, namaBerkas, 'contohAngka.baris[$bIdx].label');
           periksaBahasaTeks(label, namaBerkas: namaBerkas, daftarPeringatan: daftarPeringatan);
+          if (isModul5) {
+            periksaTeksSensitifModul5(label, namaBerkas: namaBerkas, kolom: 'contohAngka.baris[$bIdx].label');
+          }
         }
       } else {
         // Mendukung bentuk lama {masuk, keluar, hasil}
@@ -445,10 +486,135 @@ class PembacaKonten {
     if (tipeMisi == null) {
       throw GalatKonten('Kolom misi.tipe wajib ada', berkas: namaBerkas, kolom: 'misi.tipe');
     }
-    const jenisMisiDidukung = {'ada_data', 'aturan_data', 'lihat_hitungan'};
+    const jenisMisiDidukung = {
+      'ada_data',
+      'aturan_data',
+      'lihat_hitungan',
+      'keputusan',
+      'daftar_periksa',
+    };
     if (!jenisMisiDidukung.contains(tipeMisi)) {
       throw GalatKonten('Jenis misi "$tipeMisi" belum didukung pada versi ini', berkas: namaBerkas, kolom: 'misi.tipe');
     }
+    final judulMisi = misi['judul'] as String?;
+    if (judulMisi == null || judulMisi.trim().isEmpty) {
+      throw GalatKonten('Kolom misi.judul wajib ada dan tidak kosong', berkas: namaBerkas, kolom: 'misi.judul');
+    }
+    final instruksiMisi = (misi['instruksi'] ?? misi['deskripsi']) as String?;
+    if (instruksiMisi == null || instruksiMisi.trim().isEmpty) {
+      throw GalatKonten('Kolom misi.instruksi wajib ada dan tidak kosong', berkas: namaBerkas, kolom: 'misi.instruksi');
+    }
+    _periksaIstilahKamus(judulMisi, daftarIstilahKamus, namaBerkas, 'misi.judul');
+    _periksaIstilahKamus(instruksiMisi, daftarIstilahKamus, namaBerkas, 'misi.instruksi');
+    periksaBahasaTeks(judulMisi, namaBerkas: namaBerkas, daftarPeringatan: daftarPeringatan);
+    periksaBahasaTeks(instruksiMisi, namaBerkas: namaBerkas, daftarPeringatan: daftarPeringatan);
+
+    if (isModul5) {
+      periksaTeksSensitifModul5(judulMisi, namaBerkas: namaBerkas, kolom: 'misi.judul');
+      periksaTeksSensitifModul5(instruksiMisi, namaBerkas: namaBerkas, kolom: 'misi.instruksi');
+    }
+
+    if (tipeMisi == 'keputusan') {
+      final skenario = misi['skenario'];
+      if (skenario is! Map<String, dynamic>) {
+        throw GalatKonten('Kolom misi.skenario wajib berupa objek untuk misi keputusan', berkas: namaBerkas, kolom: 'misi.skenario');
+      }
+      final pemantikSkenario = skenario['pemantik'] as String?;
+      if (pemantikSkenario == null || pemantikSkenario.trim().isEmpty) {
+        throw GalatKonten('Kolom misi.skenario.pemantik wajib ada dan tidak kosong', berkas: namaBerkas, kolom: 'misi.skenario.pemantik');
+      }
+      _periksaIstilahKamus(pemantikSkenario, daftarIstilahKamus, namaBerkas, 'misi.skenario.pemantik');
+      periksaBahasaTeks(pemantikSkenario, namaBerkas: namaBerkas, daftarPeringatan: daftarPeringatan);
+      if (isModul5) {
+        periksaTeksSensitifModul5(pemantikSkenario, namaBerkas: namaBerkas, kolom: 'misi.skenario.pemantik');
+      }
+
+      final opsiList = skenario['opsi'];
+      if (opsiList is! List || opsiList.length < 2) {
+        throw GalatKonten('Kolom misi.skenario.opsi wajib berupa list minimal 2 opsi', berkas: namaBerkas, kolom: 'misi.skenario.opsi');
+      }
+
+      var adaOpsiAman = false;
+      for (var oIdx = 0; oIdx < opsiList.length; oIdx++) {
+        final opt = opsiList[oIdx];
+        if (opt is! Map<String, dynamic>) {
+          throw GalatKonten('Opsi keputusan indeks $oIdx harus berupa objek', berkas: namaBerkas, kolom: 'misi.skenario.opsi[$oIdx]');
+        }
+        final optId = opt['id'] as String?;
+        if (optId == null || optId.trim().isEmpty) {
+          throw GalatKonten('Kolom id pada opsi keputusan wajib ada', berkas: namaBerkas, kolom: 'misi.skenario.opsi[$oIdx].id');
+        }
+        final optTeks = opt['teks'] as String?;
+        if (optTeks == null || optTeks.trim().isEmpty) {
+          throw GalatKonten('Kolom teks pada opsi keputusan wajib ada', berkas: namaBerkas, kolom: 'misi.skenario.opsi[$oIdx].teks');
+        }
+        final optAman = opt['aman'];
+        if (optAman is! bool) {
+          throw GalatKonten('Kolom aman pada opsi keputusan wajib berupa boolean', berkas: namaBerkas, kolom: 'misi.skenario.opsi[$oIdx].aman');
+        }
+        if (optAman) adaOpsiAman = true;
+
+        final optUmpanBalik = opt['umpanBalik'] as String?;
+        if (optUmpanBalik == null || optUmpanBalik.trim().isEmpty) {
+          throw GalatKonten('Kolom umpanBalik pada opsi keputusan wajib ada dan tidak kosong', berkas: namaBerkas, kolom: 'misi.skenario.opsi[$oIdx].umpanBalik');
+        }
+
+        _periksaIstilahKamus(optTeks, daftarIstilahKamus, namaBerkas, 'misi.skenario.opsi[$oIdx].teks');
+        _periksaIstilahKamus(optUmpanBalik, daftarIstilahKamus, namaBerkas, 'misi.skenario.opsi[$oIdx].umpanBalik');
+        periksaBahasaTeks(optTeks, namaBerkas: namaBerkas, daftarPeringatan: daftarPeringatan);
+        periksaBahasaTeks(optUmpanBalik, namaBerkas: namaBerkas, daftarPeringatan: daftarPeringatan);
+        if (isModul5) {
+          periksaTeksSensitifModul5(optTeks, namaBerkas: namaBerkas, kolom: 'misi.skenario.opsi[$oIdx].teks');
+          periksaTeksSensitifModul5(optUmpanBalik, namaBerkas: namaBerkas, kolom: 'misi.skenario.opsi[$oIdx].umpanBalik');
+        }
+      }
+
+      if (!adaOpsiAman) {
+        throw GalatKonten('Misi keputusan wajib memiliki minimal 1 opsi dengan aman: true', berkas: namaBerkas, kolom: 'misi.skenario.opsi');
+      }
+    } else if (tipeMisi == 'daftar_periksa') {
+      final disclaimer = misi['disclaimer'];
+      if (disclaimer != true) {
+        throw GalatKonten('Kolom misi.disclaimer wajib bernilai true untuk misi daftar_periksa', berkas: namaBerkas, kolom: 'misi.disclaimer');
+      }
+
+      final langkahList = misi['langkah'];
+      if (langkahList is! List || langkahList.length < 3) {
+        throw GalatKonten('Kolom misi.langkah wajib berupa list minimal 3 langkah', berkas: namaBerkas, kolom: 'misi.langkah');
+      }
+
+      final minimalDicentang = misi['minimalDicentang'];
+      if (minimalDicentang is! int || minimalDicentang < 1 || minimalDicentang > langkahList.length) {
+        throw GalatKonten('Kolom misi.minimalDicentang wajib bernilai antara 1 sampai jumlah langkah', berkas: namaBerkas, kolom: 'misi.minimalDicentang');
+      }
+
+      final catatanReviewer = data['catatanReviewer'] as String? ?? '';
+      if (!catatanReviewer.contains('TODO-VERIFIKASI')) {
+        throw GalatKonten('Pelajaran dengan misi daftar_periksa wajib memuat "TODO-VERIFIKASI" pada catatanReviewer', berkas: namaBerkas, kolom: 'catatanReviewer');
+      }
+
+      for (var lIdx = 0; lIdx < langkahList.length; lIdx++) {
+        final lk = langkahList[lIdx];
+        if (lk is! Map<String, dynamic>) {
+          throw GalatKonten('Langkah indeks $lIdx harus berupa objek', berkas: namaBerkas, kolom: 'misi.langkah[$lIdx]');
+        }
+        final lkId = lk['id'] as String?;
+        if (lkId == null || lkId.trim().isEmpty) {
+          throw GalatKonten('Kolom id pada langkah wajib ada', berkas: namaBerkas, kolom: 'misi.langkah[$lIdx].id');
+        }
+        final lkTeks = lk['teks'] as String?;
+        if (lkTeks == null || lkTeks.trim().isEmpty) {
+          throw GalatKonten('Kolom teks pada langkah wajib ada', berkas: namaBerkas, kolom: 'misi.langkah[$lIdx].teks');
+        }
+
+        _periksaIstilahKamus(lkTeks, daftarIstilahKamus, namaBerkas, 'misi.langkah[$lIdx].teks');
+        periksaBahasaTeks(lkTeks, namaBerkas: namaBerkas, daftarPeringatan: daftarPeringatan);
+        if (isModul5) {
+          periksaTeksSensitifModul5(lkTeks, namaBerkas: namaBerkas, kolom: 'misi.langkah[$lIdx].teks');
+        }
+      }
+    }
+
     if (misi.containsKey('min')) {
       final minVal = misi['min'];
       if (minVal is num && minVal < 1) {
@@ -466,8 +632,11 @@ class PembacaKonten {
 
     // 8. Validasi Relasi Misi vs Gerbang Pelajaran
     // Pemeriksa konten GAGAL bila sebuah misi sudah otomatis terpenuhi oleh gerbang pelajarannya sendiri
-    // (misi tidak boleh lebih longgar atau sama dengan gerbang), kecuali bertipe lihat_hitungan.
-    if (tipeMisi != 'lihat_hitungan' && gerbang is List) {
+    // (misi tidak boleh lebih longgar atau sama dengan gerbang), kecuali bertipe lihat_hitungan, keputusan, dan daftar_periksa.
+    if (tipeMisi != 'lihat_hitungan' &&
+        tipeMisi != 'keputusan' &&
+        tipeMisi != 'daftar_periksa' &&
+        gerbang is List) {
       final minMisi = (misi['min'] as num?)?.toInt() ?? 1;
       final aturanMisi = misi['aturan'] as String?;
 
@@ -508,6 +677,15 @@ class PembacaKonten {
             }
           }
         }
+      }
+    }
+
+    final tindakLanjut = data['tindakLanjut'] as String?;
+    if (tindakLanjut != null && tindakLanjut.isNotEmpty) {
+      _periksaIstilahKamus(tindakLanjut, daftarIstilahKamus, namaBerkas, 'tindakLanjut');
+      periksaBahasaTeks(tindakLanjut, namaBerkas: namaBerkas, daftarPeringatan: daftarPeringatan);
+      if (isModul5) {
+        periksaTeksSensitifModul5(tindakLanjut, namaBerkas: namaBerkas, kolom: 'tindakLanjut');
       }
     }
   }
@@ -568,6 +746,53 @@ class PembacaKonten {
       if (jumlahKata > 25) {
         daftarPeringatan?.add('[$namaBerkas] Kalimat panjang ($jumlahKata kata > 25 kata): "$k"');
       }
+    }
+  }
+
+  /// Pemeriksa khusus teks sensitif Modul 5 (waspada penipuan):
+  /// Galat bila memuat "http", "www", "@", "OJK", "BSSN", atau urutan digit >= 8 tanpa titik pemisah.
+  static void periksaTeksSensitifModul5(
+    String teks, {
+    required String namaBerkas,
+    required String kolom,
+  }) {
+    final lower = teks.toLowerCase();
+    if (lower.contains('http')) {
+      throw GalatKonten('Teks pada $kolom memuat tautan web ("http") yang dilarang pada Modul 5: "$teks"', berkas: namaBerkas, kolom: kolom);
+    }
+    if (lower.contains('www')) {
+      throw GalatKonten('Teks pada $kolom memuat alamat web ("www") yang dilarang pada Modul 5: "$teks"', berkas: namaBerkas, kolom: kolom);
+    }
+    if (teks.contains('@')) {
+      throw GalatKonten('Teks pada $kolom memuat simbol surel/sosial media ("@") yang dilarang pada Modul 5: "$teks"', berkas: namaBerkas, kolom: kolom);
+    }
+    if (RegExp(r'\bojk\b', caseSensitive: false).hasMatch(teks)) {
+      throw GalatKonten('Teks pada $kolom menyebut nama lembaga "OJK" yang dilarang pada Modul 5: "$teks"', berkas: namaBerkas, kolom: kolom);
+    }
+    if (RegExp(r'\bbssn\b', caseSensitive: false).hasMatch(teks)) {
+      throw GalatKonten('Teks pada $kolom menyebut nama lembaga "BSSN" yang dilarang pada Modul 5: "$teks"', berkas: namaBerkas, kolom: kolom);
+    }
+    if (RegExp(r'\d{8,}').hasMatch(teks)) {
+      throw GalatKonten('Teks pada $kolom memuat urutan digit >= 8 tanpa titik pemisah (indikasi nomor telepon) yang dilarang pada Modul 5: "$teks"', berkas: namaBerkas, kolom: kolom);
+    }
+  }
+
+  /// Memvalidasi berkas aset/konten/disclaimer.json
+  static void validasiBerkasDisclaimer(Map<String, dynamic> data, {required String namaBerkas}) {
+    if (!data.containsKey('langkahDuniaNyata')) {
+      throw GalatKonten('Kunci "langkahDuniaNyata" wajib ada pada disclaimer.json', berkas: namaBerkas, kolom: 'langkahDuniaNyata');
+    }
+    final teks = data['langkahDuniaNyata'];
+    if (teks is! String || teks.trim().isEmpty) {
+      throw GalatKonten('Nilai "langkahDuniaNyata" wajib berupa string tidak kosong', berkas: namaBerkas, kolom: 'langkahDuniaNyata');
+    }
+    const teksResmi =
+        'Funda hanya memberi edukasi umum. Ini bukan ajakan membeli produk keuangan atau '
+        'nasihat keuangan, hukum, maupun pajak. Keputusan dan risikonya ada padamu. '
+        'Funda tidak bertanggung jawab atas kerugian dari tindakan di luar aplikasi. '
+        'Pastikan penyedia berizin sebelum memakai uangmu.';
+    if (teks.replaceAll(RegExp(r'\s+'), ' ').trim() != teksResmi.replaceAll(RegExp(r'\s+'), ' ').trim()) {
+      throw GalatKonten('Isi teks langkahDuniaNyata pada disclaimer.json tidak sesuai dengan lampiran resmi', berkas: namaBerkas, kolom: 'langkahDuniaNyata');
     }
   }
 

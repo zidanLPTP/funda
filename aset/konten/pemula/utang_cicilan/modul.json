@@ -16,7 +16,7 @@
       "objek": "utang",
       "min": 1,
       "atauPernyataan": "tidak_punya_utang",
-      "pesan": "Lalu catat utang atau cicilanmu di menu Utang. Kalau kamu memang tidak punya utang, pilih Aku tidak punya ini."
+      "pesan": "Catat utang atau cicilanmu di menu Utang. Kalau kamu memang tidak punya utang, pilih Aku tidak punya ini."
     }
   ],
   "daftarPelajaran": [

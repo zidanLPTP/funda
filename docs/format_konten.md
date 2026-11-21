@@ -183,6 +183,75 @@ Berikut adalah registri kunci umpan balik edukatif yang diolah dari data riil pe
 - **`rasio_cicilan_bulan_ini`**: Evaluasi porsi cicilan per bulan terhadap pemasukan rata-rata 3 bulan terakhir, serta simulasi sensitivitas risiko bila pemasukan turun 25 persen.
 - **`urutan_pelunasan`**: Panduan urutan prioritas pelunasan utang aktif berdasarkan metode bola salju (sisa terkecil dahulu) dan metode longsor (bunga tertinggi dahulu).
 
+### 4.4 Skema Baru Tahap 8C: Tipe Misi `keputusan`, `daftar_periksa`, dan Berkas `disclaimer.json`
+1. **Tipe Misi `keputusan`**:
+   - Skema:
+     ```json
+     {
+       "tipe": "keputusan",
+       "judul": "Judul Misi",
+       "instruksi": "Instruksi pengerjaan.",
+       "skenario": {
+         "pemantik": "Deskripsi situasi nyata atau dilema keputusan.",
+         "opsi": [
+           {
+             "id": "a",
+             "teks": "Teks opsi pilihan tindakan.",
+             "aman": false,
+             "umpanBalik": "Penjelasan mengapa opsi ini kurang aman."
+           },
+           {
+             "id": "b",
+             "teks": "Teks opsi pilihan tindakan aman.",
+             "aman": true,
+             "umpanBalik": "Penjelasan apresiasi tindakan aman."
+           }
+         ]
+       }
+     }
+     ```
+   - Aturan validasi:
+     - Minimal 2 opsi pilihan.
+     - Minimal 1 opsi dengan `aman: true`.
+     - Setiap opsi wajib memiliki `umpanBalik` yang tidak kosong.
+     - Opsi `aman: true` mengaktifkan tombol "Lanjut" dan menandai misi selesai.
+     - Opsi tidak aman menampilkan umpan balik dan tombol "Coba pilihan lain" (boleh diulang tanpa skor dan tanpa batas).
+     - Hasil tersimpan di `tabel_hasil_misi`: `status: 'selesai'`, `muatan_json: {"opsiDipilih": ["a", "c", "b"]}` mencatat seluruh urutan percobaan.
+2. **Tipe Misi `daftar_periksa`**:
+   - Skema:
+     ```json
+     {
+       "tipe": "daftar_periksa",
+       "judul": "Judul Misi",
+       "instruksi": "Instruksi daftar periksa.",
+       "disclaimer": true,
+       "minimalDicentang": 3,
+       "langkah": [
+         {
+           "id": "l1",
+           "teks": "Langkah konkret yang dilakukan pengguna di luar aplikasi."
+         }
+       ]
+     }
+     ```
+   - Aturan validasi:
+     - Wajib `disclaimer: true`.
+     - Minimal 3 butir `langkah`.
+     - `1 <= minimalDicentang <= jumlah langkah`.
+     - Pelajaran wajib memiliki `catatanReviewer` yang memuat teks `"TODO-VERIFIKASI"`.
+     - Komponen `DisclaimerLangkahDuniaNyata` membaca berkas `aset/konten/disclaimer.json`. Pengguna harus mengetuk "Mengerti" sebelum mencentang langkah.
+     - Tombol "Selesai" hanya aktif bila `jumlahDicentang >= minimalDicentang`.
+     - Hasil tersimpan di `tabel_hasil_misi`: `status: 'selesai'`, `muatan_json: {"dicentang": ["l1", "l2", "l3"]}`. Saat dibuka ulang, centang tersimpan dimuat kembali.
+3. **Pengecualian Aturan Misi**:
+   - Kedua tipe baru ini (`keputusan` dan `daftar_periksa`) dikecualikan dari aturan *"misi tidak boleh lebih longgar dari gerbang"* karena keduanya menguji keputusan perilaku pengguna di luar aplikasi dan tidak bergantung pada data transaksi riil.
+4. **Format Berkas `aset/konten/disclaimer.json`**:
+   ```json
+   {
+     "versi": 1,
+     "langkahDuniaNyata": "Funda hanya memberi edukasi umum dan bukan nasihat hukum, keuangan, atau perlindungan konsumen resmi. Langkah-langkah di bawah adalah kebiasaan baik yang kamu lakukan di luar aplikasi ini."
+   }
+   ```
+
 ---
 
 ## 5. Aturan Penulisan Kalimat & Gaya Bahasa
@@ -196,13 +265,20 @@ Berikut adalah registri kunci umpan balik edukatif yang diolah dari data riil pe
    - Istilah teknis finansial (*surplus, defisit, aset, liabilitas*) **HANYA boleh muncul** di teks pengguna dalam bentuk `{{istilah}}` agar memiliki bantuan tooltip interaktif dari kamus.
    - Kemunculan istilah teknis sebagai teks polos tanpa kurung kurawal ganda (`{{ }}`) adalah **GALAT** pada pemeriksa bahasa.
    - Teks umpan balik data nyata (`arus_kas_bulan_ini` dan `komposisi_sifat_bulan_ini`) **DILARANG memakai kata surplus atau defisit sama sekali**; wajib menggunakan padanan bahasa awam seperti *"uang masuk lebih besar"* atau *"uang keluar lebih besar"* disertai nominal Rupiah nyata.
-4. **Relasi Misi vs Gerbang Data**:
-   - Misi pada berkas pelajaran **tidak boleh otomatis terpenuhi oleh gerbang pelajarannya sendiri** (misi tidak boleh lebih longgar atau sama dengan gerbang), kecuali bertipe `lihat_hitungan`.
+4. **Aturan Khusus Konten Modul 5 (Keselamatan & Informasi Sensitif)**:
+   - Pada teks yang dilihat pengguna (judul, pemantik, kartu, contohAngka, cekPaham, misi, kuis, tindakLanjut), DILARANG memuat:
+     - Tautan web atau alamat URL: kata `"http"`, `"https"`, `"www"`.
+     - Alamat surel: simbol `"@"`.
+     - Nama lembaga spesifik: `"OJK"`, `"BSSN"`.
+     - Nomor kontak/telepon: urutan angka $\ge 8$ digit tanpa titik pemisah ribuan (misal `0812345678`).
+   - Judul pelajaran Modul 5 DILARANG memuat kata label biner seperti `"aman"` atau `"bahaya"`.
+5. **Relasi Misi vs Gerbang Data**:
+   - Misi pada berkas pelajaran **tidak boleh otomatis terpenuhi oleh gerbang pelajarannya sendiri** (misi tidak boleh lebih longgar atau sama dengan gerbang), kecuali bertipe `lihat_hitungan`, `keputusan`, atau `daftar_periksa`.
    - Aturan `semua_kategori_berlabel` terpenuhi **HANYA** bila terdapat minimal 1 kategori pengeluaran yang pernah dipakai dalam transaksi dan seluruhnya berlabel sifat (pada data kosong = belum terpenuhi).
-5. **Contoh Angka Nyata**:
+6. **Contoh Angka Nyata**:
    - Contoh angka wajib menggunakan mata uang Rupiah nominal bulat (`int`).
    - Hindari persentase abstrak tanpa padanan Rupiah (misal: "simpan 20% atau sekitar Rp600.000 dari gaji Rp3.000.000").
-6. **Nada Edukasi**:
+7. **Nada Edukasi**:
    - Bersahabat, suportif, dan realistis terhadap kondisi ekonomi Indonesia sehari-hari.
    - Pilihan "Belum relevan buat aku" selalu tersedia pada misi praktik nyata untuk menghargai kenyamanan pengguna.
 

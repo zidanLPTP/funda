@@ -1,7 +1,6 @@
 @Timeout(Duration(seconds: 30))
 library;
 
-import '../pembantu/pompa_uji.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -147,7 +146,7 @@ void main() {
             ),
           ),
         );
-        await pompaAman(tester);
+        await tester.pump();
 
         expect(find.text('Nama Tagihan / Layanan *'), findsOneWidget);
         expect(find.text('Perkiraan Nominal (Opsional)'), findsOneWidget);
@@ -158,7 +157,7 @@ void main() {
 
         // Coba submit kosong
         await tester.tap(find.widgetWithText(TombolFunda, 'Tambah Tagihan'));
-        await pompaAman(tester);
+        await tester.pump();
 
         expect(find.text('Nama tagihan wajib diisi.'), findsOneWidget);
       },
@@ -190,7 +189,7 @@ void main() {
             ),
           ),
         );
-        await pompaAman(tester);
+        await tester.pump();
 
         expect(find.text('Listrik PLN Pascabayar'), findsOneWidget);
         expect(find.textContaining('Tagihan • Bulanan'), findsOneWidget);
@@ -233,7 +232,7 @@ void main() {
             ),
           ),
         );
-        await pompaAman(tester);
+        await tester.pump();
 
         expect(find.text('Listrik PLN Pascabayar'), findsOneWidget);
         expect(find.text('Jatuh tempo hari ini'), findsOneWidget);
@@ -260,7 +259,7 @@ void main() {
             ),
           ),
         );
-        await pompaAman(tester);
+        await tester.pump();
 
         expect(find.text('Nyalakan Pengingat Lokal'), findsOneWidget);
         expect(find.text('Privasi & Baterai Ramah'), findsOneWidget);

@@ -202,13 +202,13 @@ void main() {
         ),
       ),
     );
-    await pompaAman(tester);
+    await tester.pump();
 
     expect(find.text('Mulai & Tes Awal'), findsOneWidget);
     expect(find.text('Lewati'), findsOneWidget);
 
     await tester.tap(find.text('Lewati'));
-    await pompaAman(tester);
+    await tester.pump();
 
     // Verifikasi pernyataan profil_dilewati tersimpan di DB
     final pernyataan = await (db.select(db.tabelPernyataan)
@@ -217,8 +217,7 @@ void main() {
     expect(pernyataan, isNotNull);
     expect(pernyataan!.nilai, equals('true'));
 
-    await tester.pumpWidget(const SizedBox());
-    await tester.pump(const Duration(milliseconds: 100));
+    await bongkarWidget(tester);
   });
 
   testWidgets('Pengguna mengisi tes awal lengkap dan melihat rekomendasi personalisasi', (tester) async {
@@ -234,15 +233,15 @@ void main() {
         ),
       ),
     );
-    await pompaAman(tester);
+    await tester.pump();
 
     // Isi tujuan utama di tahap pembuka
     await tester.enterText(find.byType(TextField), 'Bebas utang dan punya tabungan');
-    await pompaAman(tester);
+    await tester.pump();
 
     // Ketuk Mulai Sekarang -> masuk ke Tahap Profil
     await tester.tap(find.text('Mulai Sekarang'));
-    await pompaAman(tester);
+    await tester.pump();
 
     // Jawab 6 pertanyaan profil
     for (var i = 0; i < 6; i++) {
@@ -251,14 +250,14 @@ void main() {
       // Pilih opsi pertama
       final pilihanPertama = find.byType(InkWell).first;
       await tester.tap(pilihanPertama);
-      await pompaAman(tester);
+      await tester.pump();
 
       if (i < 5) {
         await tester.tap(find.text('Pertanyaan Berikutnya'));
-        await pompaAman(tester);
+        await tester.pump();
       } else {
         await tester.tap(find.text('Lanjut ke Tes Pemahaman'));
-        await pompaAman(tester);
+        await tester.pump();
       }
     }
 
@@ -269,14 +268,14 @@ void main() {
       // Pilih opsi kedua ('B') untuk semua soal
       final opsiJawaban = find.text('B');
       await tester.tap(opsiJawaban);
-      await pompaAman(tester);
+      await tester.pump();
 
       if (i < 11) {
         await tester.tap(find.text('Soal Berikutnya'));
-        await pompaAman(tester);
+        await tester.pump();
       } else {
         await tester.tap(find.text('Lihat Hasil'));
-        await pompaAman(tester);
+        await tester.pump();
       }
     }
 
@@ -294,7 +293,6 @@ void main() {
     expect(hasilTersimpan, isNotNull);
     expect(hasilTersimpan!.skorTotalPersen, inInclusiveRange(0, 100));
 
-    await tester.pumpWidget(const SizedBox());
-    await tester.pump(const Duration(milliseconds: 100));
+    await bongkarWidget(tester);
   });
 }

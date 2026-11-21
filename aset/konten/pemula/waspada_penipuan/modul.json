@@ -1,20 +1,145 @@
 {
-    "kuis":  {
-                 "jumlahSoal":  0,
-                 "bankSoal":  [
-
-                              ]
-             },
-    "id":  "waspada_penipuan",
-    "tersedia":  false,
-    "urutan":  5,
-    "gerbang":  [
-
-                ],
-    "deskripsiSingkat":  "Mengenali tawaran mencurigakan, memeriksa legalitas, dan langkah perlindungan diri.",
-    "daftarPelajaran":  [
-
-                        ],
-    "tingkat":  "pemula",
-    "judul":  "Waspada Penipuan \u0026 Pinjol Ilegal"
+  "id": "waspada_penipuan",
+  "judul": "Waspada Penipuan & Pinjol Ilegal",
+  "tingkat": "pemula",
+  "urutan": 5,
+  "deskripsiSingkat": "Kenali ciri tawaran mencurigakan, cara cek legalitas penyedia, dan langkah darurat bila terlanjur.",
+  "tersedia": true,
+  "gerbang": [
+    {
+      "tipe": "modul_selesai",
+      "modulId": "anggaran_arus_kas",
+      "pesan": "Selesaikan Modul 1 dulu, lalu modul ini terbuka."
+    }
+  ],
+  "daftarPelajaran": [
+    "waspada_penipuan_5_1",
+    "waspada_penipuan_5_2",
+    "waspada_penipuan_5_3"
+  ],
+  "kuis": {
+    "jumlahSoal": 5,
+    "bankSoal": [
+      {
+        "id": "soal_5_1",
+        "pelajaranId": "waspada_penipuan_5_1",
+        "tanya": "Mana yang termasuk tanda yang sering muncul pada penipuan?",
+        "pilihan": [
+          "Diminta transfer biaya di muka sebelum menerima apa pun",
+          "Penyedia menjelaskan total biaya secara tertulis",
+          "Penyedia memberimu waktu untuk berpikir"
+        ],
+        "benar": 0,
+        "penjelasan": "Biaya di muka adalah tanda yang sering muncul. Penjelasan tertulis dan waktu untuk berpikir justru tanda yang baik."
+      },
+      {
+        "id": "soal_5_2",
+        "pelajaranId": "waspada_penipuan_5_1",
+        "tanya": "Kode OTP sebaiknya dibagikan kepada siapa?",
+        "pilihan": [
+          "Tidak kepada siapa pun",
+          "Petugas bank yang menelepon",
+          "Teman dekat yang sedang butuh"
+        ],
+        "benar": 0,
+        "penjelasan": "Kode OTP adalah kunci masuk akunmu dan hanya untukmu."
+      },
+      {
+        "id": "soal_5_3",
+        "pelajaranId": "waspada_penipuan_5_1",
+        "tanya": "Apa tiga rem sebelum bertindak?",
+        "pilihan": [
+          "Berhenti, periksa, tanya",
+          "Transfer, tunggu, lapor",
+          "Klik, isi, kirim"
+        ],
+        "benar": 0,
+        "penjelasan": "Berhenti menahan keputusan cepat, periksa lewat jalur resmi, dan tanya orang yang kamu percaya."
+      },
+      {
+        "id": "soal_5_4",
+        "pelajaranId": "waspada_penipuan_5_1",
+        "tanya": "Kenapa penipu sering menekan dengan batas waktu?",
+        "pilihan": [
+          "Agar kamu tidak sempat berpikir dan memeriksa",
+          "Karena penawarannya memang hanya sebentar",
+          "Supaya kamu lebih tenang"
+        ],
+        "benar": 0,
+        "penjelasan": "Tekanan waktu mengurangi kesempatanmu untuk memeriksa dan bertanya."
+      },
+      {
+        "id": "soal_5_5",
+        "pelajaranId": "waspada_penipuan_5_2",
+        "tanya": "Di mana sebaiknya kamu mengecek izin sebuah penyedia pinjaman?",
+        "pilihan": [
+          "Lewat situs atau layanan resmi lembaga pengawas, dibuka sendiri",
+          "Lewat tautan di iklan",
+          "Lewat ulasan di media sosial"
+        ],
+        "benar": 0,
+        "penjelasan": "Tautan di iklan bisa palsu. Buka sendiri sumber resminya."
+      },
+      {
+        "id": "soal_5_6",
+        "pelajaranId": "waspada_penipuan_5_2",
+        "tanya": "Pinjaman dijanjikan Rp2.000.000, cair Rp1.500.000, dan harus dikembalikan Rp2.000.000. Berapa potongan di muka?",
+        "pilihan": [
+          "Rp500.000",
+          "Rp1.500.000",
+          "Rp2.000.000"
+        ],
+        "benar": 0,
+        "penjelasan": "Rp2.000.000 dikurangi Rp1.500.000 adalah Rp500.000."
+      },
+      {
+        "id": "soal_5_7",
+        "pelajaranId": "waspada_penipuan_5_2",
+        "tanya": "Aplikasi pinjaman meminta akses ke semua kontakmu. Sikap yang masuk akal?",
+        "pilihan": [
+          "Menganggapnya tanda bahaya dan tidak melanjutkan",
+          "Memberi akses supaya pinjaman cepat cair",
+          "Memberi akses tetapi mematikan notifikasi"
+        ],
+        "benar": 0,
+        "penjelasan": "Akses ke kontak bisa dipakai untuk menekanmu saat menagih."
+      },
+      {
+        "id": "soal_5_8",
+        "pelajaranId": "waspada_penipuan_5_3",
+        "tanya": "Setelah menyadari kamu tertipu, apa yang sebaiknya dilakukan lebih dulu?",
+        "pilihan": [
+          "Menghentikan kontak, mengamankan akun, dan menyimpan bukti",
+          "Mentransfer lagi",
+          "Menunggu sampai masalahnya hilang"
+        ],
+        "benar": 0,
+        "penjelasan": "Langkah itu membatasi kerugian dan menyiapkan bukti untuk melapor."
+      },
+      {
+        "id": "soal_5_9",
+        "pelajaranId": "waspada_penipuan_5_3",
+        "tanya": "Apa kegunaan verifikasi dua langkah?",
+        "pilihan": [
+          "Menambah lapisan pengaman selain kata sandi",
+          "Membuat kata sandi tidak perlu diganti",
+          "Menghapus semua riwayat masuk"
+        ],
+        "benar": 0,
+        "penjelasan": "Walau kata sandi bocor, orang lain masih membutuhkan langkah kedua untuk masuk."
+      },
+      {
+        "id": "soal_5_10",
+        "pelajaranId": "waspada_penipuan_5_3",
+        "tanya": "Penagih mengancam dan meminta transfer hari ini. Sikap yang masuk akal?",
+        "pilihan": [
+          "Tidak memutuskan dalam tekanan, periksa lewat jalur resmi, dan minta pendapat orang tepercaya",
+          "Langsung transfer",
+          "Membalas dengan ancaman"
+        ],
+        "benar": 0,
+        "penjelasan": "Keputusan di bawah tekanan sering merugikan. Jalur resmi dan orang tepercaya membantumu."
+      }
+    ]
+  }
 }

@@ -22,11 +22,6 @@ Future<void> mintaTangkapanLayar(String namaLayar) async {
   await Future.delayed(const Duration(milliseconds: 1800));
 }
 
-Future<void> pompaAman(WidgetTester tester, [int ms = 500]) async {
-  await tester.pump(Duration(milliseconds: ms));
-  await tester.pump(Duration(milliseconds: ms));
-}
-
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
@@ -55,19 +50,19 @@ void main() {
         child: const AplikasiFunda(),
       ),
     );
-    await pompaAman(tester, 1000);
+    await tester.pump();
 
     // =========================================================================
     // 1. Pengguna Baru -> Lewati Tes Awal -> Buat Dompet
     // =========================================================================
     debugPrint('=== [LANGKAH 1]: Pengguna Baru Lewati Tes Awal & Buat Dompet ===');
     tester.element(find.byType(Scaffold).first).go('/belajar/tes-awal');
-    await pompaAman(tester, 1000);
+    await tester.pump();
 
     final tombolLewati = find.text('Lewati');
     expect(tombolLewati, findsOneWidget);
     await tester.tap(tombolLewati);
-    await pompaAman(tester, 1000);
+    await tester.pump();
 
     // Verifikasi profil_dilewati tersimpan
     final pernyataanDilewati = await (basisData.select(basisData.tabelPernyataan)
@@ -103,7 +98,7 @@ void main() {
 
     // Buka Tab Belajar
     tester.element(find.byType(Scaffold).first).go('/belajar');
-    await pompaAman(tester, 1000);
+    await tester.pump();
     expect(find.text('Anggaran & Arus Kas'), findsWidgets);
     expect(find.text('Ke Mana Uangku Pergi?'), findsOneWidget);
 
@@ -112,12 +107,12 @@ void main() {
     // =========================================================================
     debugPrint('=== [LANGKAH 2]: Pelajaran 1_1 (Kartu Konsep & Contoh Angka 1_1) ===');
     tester.element(find.byType(Scaffold).first).push('/belajar/pelajaran/anggaran_arus_kas/anggaran_arus_kas_1_1');
-    await pompaAman(tester, 1000);
+    await tester.pump();
 
     // Layar Pemantik -> Ketuk Lanjut
     expect(find.text('Pemantik'), findsOneWidget);
     await tester.tap(find.text('Lanjut'));
-    await pompaAman(tester, 500);
+    await tester.pump();
 
     // Tangkapan Layar: Kartu Konsep
     expect(find.text('Uang tidak hilang, hanya tidak terlihat'), findsOneWidget);
@@ -126,11 +121,11 @@ void main() {
 
     // Lanjut ke Konsep 2, Konsep 3, dan Contoh Nyata
     await tester.tap(find.text('Lanjut'));
-    await pompaAman(tester, 400);
+    await tester.pump();
     await tester.tap(find.text('Lanjut'));
-    await pompaAman(tester, 400);
+    await tester.pump();
     await tester.tap(find.text('Lanjut'));
-    await pompaAman(tester, 500);
+    await tester.pump();
 
     // Tangkapan Layar: Contoh Angka 1_1
     expect(find.text('Pengeluaran kecil yang menumpuk (uang bulanan Rp2.000.000)'), findsOneWidget);
@@ -139,28 +134,28 @@ void main() {
 
     // Jawab Cek Paham 1_1
     await tester.tap(find.text('Lanjut'));
-    await pompaAman(tester, 500);
+    await tester.pump();
 
     // Jawab 3 soal cek paham
     await tester.tap(find.text('Supaya uang terlihat dan bisa dipahami'));
-    await pompaAman(tester, 300);
+    await tester.pump();
     final opsi2 = find.text('Tetap dicatat karena jumlahnya bisa menumpuk');
     await tester.ensureVisible(opsi2);
     await tester.tap(opsi2);
-    await pompaAman(tester, 300);
+    await tester.pump();
     final opsi3 = find.text('Selisih antara uang yang masuk dan uang yang keluar');
     await tester.ensureVisible(opsi3);
     await tester.tap(opsi3);
-    await pompaAman(tester, 300);
+    await tester.pump();
 
     // Lanjut ke Misi
     await tester.tap(find.text('Lanjut'));
-    await pompaAman(tester, 500);
+    await tester.pump();
 
     // Lanjut ke Umpan Balik Catatan Pengeluaran Terbaru
     await tester.tap(find.text('Lanjut'));
     for (var p = 0; p < 8; p++) {
-      await pompaAman(tester, 300);
+      await tester.pump();
     }
 
     // Tangkapan Layar: Umpan Balik Catatan Pengeluaran Terbaru
@@ -170,26 +165,26 @@ void main() {
 
     // Selesaikan Pelajaran 1_1
     await tester.tap(find.text('Lanjut'));
-    await pompaAman(tester, 300);
+    await tester.pump();
     await tester.tap(find.text('Selesai Belajar'));
-    await pompaAman(tester, 800);
+    await tester.pump();
     ScaffoldMessenger.of(tester.element(find.byType(Scaffold).first)).clearSnackBars();
-    await pompaAman(tester, 400);
+    await tester.pump();
 
     // =========================================================================
     // 3. Pelajaran 1_2: Contoh Angka 1_2 dengan Nilai Negatif Rapat (U+2212)
     // =========================================================================
     debugPrint('=== [LANGKAH 3]: Pelajaran 1_2 & Tangkapan Layar Contoh Angka Negatif ===');
     tester.element(find.byType(Scaffold).first).push('/belajar/pelajaran/anggaran_arus_kas/anggaran_arus_kas_1_2');
-    await pompaAman(tester, 1000);
+    await tester.pump();
     ScaffoldMessenger.of(tester.element(find.byType(Scaffold).first)).clearSnackBars();
-    await pompaAman(tester, 300);
+    await tester.pump();
 
     // Pemantik -> Konsep 1 -> Konsep 2 -> Konsep 3 -> Contoh Angka
     for (var i = 0; i < 4; i++) {
       expect(find.text('Lanjut'), findsWidgets);
       await tester.tap(find.text('Lanjut').first);
-      await pompaAman(tester, 400);
+      await tester.pump();
     }
 
     // Tangkapan Layar: Contoh Angka 1_2 (Kos −Rp900.000 dengan minus U+2212)
@@ -208,7 +203,7 @@ void main() {
     // =========================================================================
     debugPrint('=== [LANGKAH 4]: Pesan Gerbang Terkunci 1_4 ===');
     tester.element(find.byType(Scaffold).first).go('/belajar');
-    await pompaAman(tester, 1000);
+    await tester.pump();
 
     expect(find.text('Anggaran Pertamamu'), findsWidgets);
     await mintaTangkapanLayar('pesan_gerbang_terkunci_1_4');
@@ -281,37 +276,37 @@ void main() {
     // =========================================================================
     debugPrint('=== [LANGKAH 5]: Umpan Balik Perbandingan Pola Anggaran 1_4 ===');
     tester.element(find.byType(Scaffold).first).push('/belajar/pelajaran/anggaran_arus_kas/anggaran_arus_kas_1_4');
-    await pompaAman(tester, 1000);
+    await tester.pump();
     ScaffoldMessenger.of(tester.element(find.byType(Scaffold).first)).clearSnackBars();
-    await pompaAman(tester, 300);
+    await tester.pump();
 
     // Pemantik -> Konsep 1, 2, 3 -> Contoh Angka -> Cek Paham
     for (var i = 0; i < 5; i++) {
       expect(find.text('Lanjut'), findsWidgets);
       await tester.tap(find.text('Lanjut').first);
-      await pompaAman(tester, 400);
+      await tester.pump();
     }
 
     // Jawab 3 soal Cek Paham 1_4
     await tester.tap(find.text('Memberi arah pada uang sebelum dipakai'));
-    await pompaAman(tester, 300);
+    await tester.pump();
     final opsi4_2 = find.text('Pemasukan, lalu pengeluaran pasti, lalu tabungan, lalu keinginan');
     await tester.ensureVisible(opsi4_2);
     await tester.tap(opsi4_2);
-    await pompaAman(tester, 300);
+    await tester.pump();
     final opsi4_3 = find.text('Titik awal yang boleh disesuaikan');
     await tester.ensureVisible(opsi4_3);
     await tester.tap(opsi4_3);
-    await pompaAman(tester, 300);
+    await tester.pump();
 
     // Lanjut ke Misi (3 pos anggaran sudah disuntik)
     await tester.tap(find.text('Lanjut'));
-    await pompaAman(tester, 500);
+    await tester.pump();
 
     // Lanjut ke Umpan Balik Perbandingan Pola Anggaran
     await tester.tap(find.text('Lanjut'));
     for (var p = 0; p < 8; p++) {
-      await pompaAman(tester, 300);
+      await tester.pump();
     }
 
     // Tangkapan Layar: Umpan Balik Perbandingan Pola
@@ -325,37 +320,37 @@ void main() {
     // =========================================================================
     debugPrint('=== [LANGKAH 6]: Umpan Balik Realisasi Anggaran 1_5 ===');
     tester.element(find.byType(Scaffold).first).push('/belajar/pelajaran/anggaran_arus_kas/anggaran_arus_kas_1_5');
-    await pompaAman(tester, 1000);
+    await tester.pump();
     ScaffoldMessenger.of(tester.element(find.byType(Scaffold).first)).clearSnackBars();
-    await pompaAman(tester, 300);
+    await tester.pump();
 
     // Pemantik -> Konsep 1, 2, 3 -> Contoh Angka -> Cek Paham
     for (var i = 0; i < 5; i++) {
       expect(find.text('Lanjut'), findsWidgets);
       await tester.tap(find.text('Lanjut').first);
-      await pompaAman(tester, 400);
+      await tester.pump();
     }
 
     // Jawab 3 soal Cek Paham 1_5
     await tester.tap(find.text('Jumlah yang benar-benar terpakai pada sebuah pos'));
-    await pompaAman(tester, 300);
+    await tester.pump();
     final opsi5_2 = find.text('Cari penyebabnya, lalu putuskan mengubah batas atau kebiasaannya');
     await tester.ensureVisible(opsi5_2);
     await tester.tap(opsi5_2);
-    await pompaAman(tester, 300);
+    await tester.pump();
     final opsi5_3 = find.text('Kondisi dan kebiasaan berubah, dan data baru membuatnya lebih pas');
     await tester.ensureVisible(opsi5_3);
     await tester.tap(opsi5_3);
-    await pompaAman(tester, 300);
+    await tester.pump();
 
     // Lanjut ke Misi (tipe lihat_hitungan langsung selesai)
     await tester.tap(find.text('Lanjut'));
-    await pompaAman(tester, 500);
+    await tester.pump();
 
     // Lanjut ke Umpan Balik Realisasi Anggaran
     await tester.tap(find.text('Lanjut'));
     for (var p = 0; p < 8; p++) {
-      await pompaAman(tester, 300);
+      await tester.pump();
     }
 
     // Tangkapan Layar: Umpan Balik Realisasi Anggaran
@@ -370,9 +365,9 @@ void main() {
     debugPrint('=== [LANGKAH 7]: Kuis Modul Putaran 1 (Tidak Lulus 60%) ===');
     // Kembali ke /belajar lalu buka kuis
     tester.element(find.byType(Scaffold).first).go('/belajar');
-    await pompaAman(tester, 1000);
+    await tester.pump();
     tester.element(find.byType(Scaffold).first).push('/belajar/kuis/anggaran_arus_kas');
-    await pompaAman(tester, 1500);
+    await tester.pump();
 
     final modulKonten = await PembacaKonten.muatModulDariAset(
       rootBundle,
@@ -382,7 +377,7 @@ void main() {
 
     // Jawab 5 soal (3 benar, 2 sengaja salah)
     for (var s = 0; s < 5; s++) {
-      await pompaAman(tester, 600);
+      await tester.pump();
       final teksTanya = (tester.firstWidget(find.byKey(const Key('teks_soal_kuis'))) as TeksFunda).teks;
       final soalAsli = modulKonten.kuis.bankSoal.firstWhere((soal) => soal.tanya == teksTanya);
       final teksBenar = soalAsli.pilihan[soalAsli.benar];
@@ -399,12 +394,12 @@ void main() {
         await tester.ensureVisible(targetOpsi);
         await tester.tap(targetOpsi);
       }
-      await pompaAman(tester, 400);
+      await tester.pump();
 
       final tombolLanjut = find.text(s == 4 ? 'Lihat Hasil Kuis' : 'Soal Berikutnya');
       await tester.ensureVisible(tombolLanjut);
       await tester.tap(tombolLanjut);
-      await pompaAman(tester, 600);
+      await tester.pump();
     }
 
     // Assertion Layar Tidak Lulus
@@ -428,11 +423,11 @@ void main() {
     final tombolUlangi = find.text('Ulangi Kuis');
     expect(tombolUlangi, findsOneWidget);
     await tester.tap(tombolUlangi);
-    await pompaAman(tester, 1200);
+    await tester.pump();
 
     // Jawab 5 soal (4 benar, 1 salah)
     for (var s = 0; s < 5; s++) {
-      await pompaAman(tester, 600);
+      await tester.pump();
       final teksTanya = (tester.firstWidget(find.byKey(const Key('teks_soal_kuis'))) as TeksFunda).teks;
       final soalAsli = modulKonten.kuis.bankSoal.firstWhere((soal) => soal.tanya == teksTanya);
       final teksBenar = soalAsli.pilihan[soalAsli.benar];
@@ -449,12 +444,12 @@ void main() {
         await tester.ensureVisible(targetOpsi);
         await tester.tap(targetOpsi);
       }
-      await pompaAman(tester, 400);
+      await tester.pump();
 
       final tombolLanjut = find.text(s == 4 ? 'Lihat Hasil Kuis' : 'Soal Berikutnya');
       await tester.ensureVisible(tombolLanjut);
       await tester.tap(tombolLanjut);
-      await pompaAman(tester, 600);
+      await tester.pump();
     }
 
     // Assertion Layar Lulus
@@ -473,14 +468,14 @@ void main() {
 
     // Kembali ke Peta Belajar
     await tester.tap(find.text('Kembali ke Peta Belajar'));
-    await pompaAman(tester, 800);
+    await tester.pump();
 
     // =========================================================================
     // 9. Beranda: Modul 1 Selesai
     // =========================================================================
     debugPrint('=== [LANGKAH 9]: Beranda Modul 1 Selesai ===');
     tester.element(find.byType(Scaffold).first).go('/');
-    await pompaAman(tester, 1200);
+    await tester.pump();
 
     await mintaTangkapanLayar('beranda_modul_selesai');
     debugPrint('[BUKTI]: Tangkapan Layar Beranda Modul Selesai');
@@ -490,7 +485,7 @@ void main() {
     // =========================================================================
     debugPrint('=== [LANGKAH 10]: Tab Belajar Modul Selesai ===');
     tester.element(find.byType(Scaffold).first).go('/belajar');
-    await pompaAman(tester, 1200);
+    await tester.pump();
 
     await mintaTangkapanLayar('tab_belajar');
     debugPrint('[BUKTI]: Tangkapan Layar Tab Belajar Selesai');

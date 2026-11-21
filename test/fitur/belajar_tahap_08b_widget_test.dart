@@ -71,20 +71,19 @@ void main() {
           ),
         );
 
-        await pompaAman(tester);
+        await tester.pump();
 
         // Maju ke langkah Contoh Angka (setelah 3 kartu konsep)
         for (var i = 0; i < 4; i++) {
           await tester.tap(find.text('Lanjut'));
-          await pompaAman(tester);
+          await tester.pump();
         }
 
         expect(find.text(judulContoh), findsOneWidget, reason: '$pelajaranId harus menampilkan judul contoh angka');
         expect(find.text(labelBaris), findsOneWidget, reason: '$pelajaranId harus menampilkan label baris');
         expect(find.text(nilaiBaris), findsOneWidget, reason: '$pelajaranId harus menampilkan nilai baris');
 
-        await tester.pumpWidget(const SizedBox());
-        await tester.pump(const Duration(milliseconds: 50));
+        await bongkarWidget(tester);
       }
     });
 
@@ -148,22 +147,21 @@ void main() {
           ),
         );
 
-        await pompaAman(tester);
+        await tester.pump();
 
         // Maju ke langkah Umpan Balik (langkah ke-8)
         for (var i = 0; i < 7; i++) {
           final tombolLanjut = find.text('Lanjut');
           if (tombolLanjut.evaluate().isNotEmpty) {
             await tester.tap(tombolLanjut);
-            await pompaAman(tester);
+            await tester.pump();
           }
         }
 
         // Verifikasi kartu umpan balik
         expect(find.text(teksUmpanBalik), findsOneWidget, reason: 'Kunci $kunci harus merender teks umpan balik lengkap');
 
-        await tester.pumpWidget(const SizedBox());
-        await tester.pump(const Duration(milliseconds: 50));
+        await bongkarWidget(tester);
       }
     });
 
@@ -224,7 +222,7 @@ void main() {
         ),
       );
 
-      await pompaAman(tester);
+      await tester.pump();
 
       // Verifikasi modul Utang & Cicilan ada
       final teksModul = find.text('Utang & Cicilan');
@@ -232,7 +230,7 @@ void main() {
 
       // Scroll ke modul Utang & Cicilan
       await tester.ensureVisible(teksModul);
-      await pompaAman(tester);
+      await tester.pump();
 
       // Verifikasi tombol "Aku tidak punya ini" muncul
       final tombolPernyataan = find.text('Aku tidak punya ini');
@@ -241,15 +239,14 @@ void main() {
       // Ketuk tombol pernyataan
       await tester.ensureVisible(tombolPernyataan);
       await tester.tap(tombolPernyataan);
-      await pompaAman(tester);
+      await tester.pump();
 
       // Verifikasi pernyataan tersimpan di database
       final hasilDb = await (db.select(db.tabelPernyataan)..where((p) => p.kunci.equals('tidak_punya_utang'))).getSingleOrNull();
       expect(hasilDb, isNotNull);
       expect(hasilDb!.nilai, equals('true'));
 
-      await tester.pumpWidget(const SizedBox());
-      await tester.pump(const Duration(milliseconds: 50));
+      await bongkarWidget(tester);
     });
 
     testWidgets('4. Kuis Modul 4: pilih 5 dari 10 bankSoal dengan pelajaranId valid', (tester) async {
@@ -280,7 +277,7 @@ void main() {
         ),
       );
 
-      await pompaAman(tester);
+      await tester.pump();
 
       // Verifikasi judul kuis / indikator soal
       expect(find.text('Soal 1/5'), findsOneWidget);
@@ -292,26 +289,25 @@ void main() {
           (w) => modul.kuis.bankSoal.any((b) => b.pilihan.contains(w.data)),
         );
         await tester.tap(find.text(pilihanItem.data!));
-        await pompaAman(tester);
+        await tester.pump();
 
         if (s < 5) {
           final tombolLanjut = find.text('Soal Berikutnya');
           expect(tombolLanjut, findsOneWidget);
           await tester.tap(tombolLanjut);
-          await pompaAman(tester);
+          await tester.pump();
         } else {
           final tombolSelesai = find.text('Lihat Hasil Kuis');
           expect(tombolSelesai, findsOneWidget);
           await tester.tap(tombolSelesai);
-          await pompaAman(tester);
+          await tester.pump();
         }
       }
 
       // Verifikasi layar hasil kuis muncul
       expect(find.text('Skor Kuis Kamu'), findsOneWidget);
 
-      await tester.pumpWidget(const SizedBox());
-      await tester.pump(const Duration(milliseconds: 50));
+      await bongkarWidget(tester);
     });
 
     testWidgets('5. Aksesibilitas: Layar pemutar pelajaran Modul 4 pada TextScaler linear 2.0 tanpa overflow', (tester) async {
@@ -346,17 +342,16 @@ void main() {
         ),
       );
 
-      await pompaAman(tester);
+      await tester.pump();
       expect(tester.takeException(), isNull);
 
       for (var i = 0; i < 4; i++) {
         await tester.tap(find.text('Lanjut'));
-        await pompaAman(tester);
+        await tester.pump();
         expect(tester.takeException(), isNull);
       }
 
-      await tester.pumpWidget(const SizedBox());
-      await tester.pump(const Duration(milliseconds: 50));
+      await bongkarWidget(tester);
     });
 
     test('6. Evaluasi murni gerbang Modul 4 (6 kombinasi)', () {
@@ -372,7 +367,7 @@ void main() {
       );
       final status1 = tentukanStatusModul(modul: modul, fotoData: foto1);
       expect(status1.status, equals(StatusBelajar.terkunci));
-      expect(status1.apaYangKurang, contains(contains('Lalu catat utang atau cicilanmu')));
+      expect(status1.apaYangKurang, contains(contains('Catat utang atau cicilanmu')));
       expect(status1.daftarAtauPernyataan, contains('tidak_punya_utang'));
 
       // (2) Modul 3 selesai, utang 1 -> terbuka
@@ -433,13 +428,12 @@ void main() {
         ),
       );
 
-      await pompaAman(tester);
+      await tester.pump();
       expect(find.textContaining('Selesaikan Modul 3 dulu.'), findsWidgets);
       // Pastikan tombol pernyataan tidak ada
       expect(find.text('Aku tidak punya ini'), findsNothing);
 
-      await tester.pumpWidget(const SizedBox());
-      await tester.pump(const Duration(milliseconds: 50));
+      await bongkarWidget(tester);
     });
 
     testWidgets('8. Aksesibilitas: Tombol "Lanjut" pemutar pelajaran dapat dijangkau (dengan scroll) pada layar 360x640 dengan skala teks 2.0', (tester) async {
@@ -474,24 +468,23 @@ void main() {
         ),
       );
 
-      await pompaAman(tester);
+      await tester.pump();
       expect(tester.takeException(), isNull);
 
       // Scroll layar 360x640 bila tombol Lanjut berada di bawah viewport
       final scrollable = find.byType(SingleChildScrollView);
       if (scrollable.evaluate().isNotEmpty) {
         await tester.drag(scrollable.first, const Offset(0, -300));
-        await pompaAman(tester);
+        await tester.pump();
       }
 
       final tombolLanjut = find.text('Lanjut');
       expect(tombolLanjut, findsOneWidget);
       await tester.tap(tombolLanjut);
-      await pompaAman(tester);
+      await tester.pump();
       expect(tester.takeException(), isNull);
 
-      await tester.pumpWidget(const SizedBox());
-      await tester.pump(const Duration(milliseconds: 50));
+      await bongkarWidget(tester);
     });
   });
 }

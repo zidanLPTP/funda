@@ -21,11 +21,6 @@ void _sinyalkanLayar(String namaLayar) {
   debugPrint('[SCREEN_READY: $namaLayar]');
 }
 
-Future<void> pompaAman(WidgetTester tester, [int ms = 500]) async {
-  await tester.pump(Duration(milliseconds: ms));
-  await tester.pump(Duration(milliseconds: ms));
-}
-
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
@@ -60,32 +55,32 @@ void main() {
             child: const AplikasiFunda(),
           ),
         );
-        await pompaAman(tester, 1000);
+        await tester.pump();
         _sinyalkanLayar('01_beranda_awal');
 
         // Buka Tab Belajar via navigasi router
         tester.element(find.byType(Scaffold).first).go('/belajar');
-        await pompaAman(tester, 1000);
+        await tester.pump();
         _sinyalkanLayar('02_tab_belajar_peta');
 
         // Modul 0 tampil
         final tombolBukaTes = find.text('Buka Tes Awal');
         expect(tombolBukaTes, findsOneWidget);
         await tester.tap(tombolBukaTes);
-        await pompaAman(tester, 1000);
+        await tester.pump();
         _sinyalkanLayar('03_layar_tes_awal_pembuka');
 
         // Masukkan sasaran keuangan utama
         final inputTujuan = find.byType(TextField);
         expect(inputTujuan, findsOneWidget);
         await tester.enterText(inputTujuan, 'Bebas utang dan siapkan dana darurat');
-        await pompaAman(tester, 500);
+        await tester.pump();
 
         // Ketuk "Mulai Sekarang"
         final tombolMulai = find.text('Mulai Sekarang');
         expect(tombolMulai, findsOneWidget);
         await tester.tap(tombolMulai);
-        await pompaAman(tester, 800);
+        await tester.pump();
         _sinyalkanLayar('04_pertanyaan_profil_keuangan');
 
         // Jawab 6 pertanyaan profil kondisi nyata
@@ -93,14 +88,14 @@ void main() {
           expect(find.textContaining('Profil (${i + 1}/6)'), findsOneWidget);
           final opsi = find.byType(InkWell).first;
           await tester.tap(opsi);
-          await pompaAman(tester, 300);
+          await tester.pump();
 
           if (i < 5) {
             await tester.tap(find.text('Pertanyaan Berikutnya'));
-            await pompaAman(tester, 500);
+            await tester.pump();
           } else {
             await tester.tap(find.text('Lanjut ke Tes Pemahaman'));
-            await pompaAman(tester, 800);
+            await tester.pump();
           }
         }
         _sinyalkanLayar('05_pertanyaan_soal_tes_awal');
@@ -114,14 +109,14 @@ void main() {
           } else {
             await tester.tap(semuaPilihan.first);
           }
-          await pompaAman(tester, 300);
+          await tester.pump();
 
           if (i < 11) {
             await tester.tap(find.text('Soal Berikutnya'));
-            await pompaAman(tester, 500);
+            await tester.pump();
           } else {
             await tester.tap(find.text('Lihat Hasil'));
-            await pompaAman(tester, 1200);
+            await tester.pump();
           }
         }
         _sinyalkanLayar('06_layar_hasil_dan_rekomendasi');
@@ -155,7 +150,7 @@ void main() {
 
         // Kembali ke Tab Belajar
         await tester.tap(find.text('Buka Peta Belajar'));
-        await pompaAman(tester, 1000);
+        await tester.pump();
         _sinyalkanLayar('07_tab_belajar_dengan_rekomendasi');
 
         // Assertion: Modul 1 terbuka karena profil terisi dan dompet >= 1
@@ -171,13 +166,13 @@ void main() {
         } else {
           tester.element(find.byType(Scaffold).first).go('/belajar/tes-awal');
         }
-        await pompaAman(tester, 1000);
+        await tester.pump();
 
         // Ketuk "Lewati"
         final tombolLewati = find.text('Lewati');
         expect(tombolLewati, findsOneWidget);
         await tester.tap(tombolLewati);
-        await pompaAman(tester, 1000);
+        await tester.pump();
 
         // Verifikasi pernyataan profil_dilewati tersimpan di SQLite
         final pernyataanDilewati = await (basisData.select(basisData.tabelPernyataan)
@@ -202,7 +197,7 @@ void main() {
 
         // Refresh peta belajar
         tester.element(find.byType(Scaffold).first).go('/belajar');
-        await pompaAman(tester, 1200);
+        await tester.pump();
         _sinyalkanLayar('08_saran_modul_utang_segera_hadir');
 
         // Assertion: Rekomendasi modul utang_cicilan muncul dengan status segera hadir
@@ -214,18 +209,18 @@ void main() {
         // Skenario (iv): Petak Beranda "Lanjut belajar" berubah sesuai prioritas
         // ---------------------------------------------------------------------
         tester.element(find.byType(Scaffold).first).go('/');
-        await pompaAman(tester, 1000);
+        await tester.pump();
 
         // Tunggu penyedia asinkronus Beranda selesai resolusi
         for (var p = 0; p < 5; p++) {
-          await pompaAman(tester, 500);
+          await tester.pump();
         }
 
         // Gulir ke bawah untuk memunculkan petak belajar
         final listViewFinder = find.byType(ListView);
         if (listViewFinder.evaluate().isNotEmpty) {
           await tester.drag(listViewFinder.first, const Offset(0, -500));
-          await pompaAman(tester, 1000);
+          await tester.pump();
         }
         _sinyalkanLayar('09_beranda_petak_lanjut_belajar');
 

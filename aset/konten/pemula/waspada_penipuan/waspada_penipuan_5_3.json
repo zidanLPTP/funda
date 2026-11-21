@@ -1,0 +1,105 @@
+{
+  "id": "waspada_penipuan_5_3",
+  "modul": "waspada_penipuan",
+  "judul": "Kalau Sudah Terlanjur",
+  "durasiMenit": 5,
+  "status": "draf",
+  "catatanReviewer": "TODO-VERIFIKASI. (1) Urutan langkah penanganan dan pilihan kanal pelaporan: periksa panduan resmi penyedia layanan, lembaga pengawas, dan pihak berwenang; konten sengaja tidak menyebut nama lembaga atau nomor. (2) Pelajaran ini tidak memberi nasihat hukum, termasuk soal kewajiban membayar tagihan: pastikan redaksinya tetap berupa anjuran memeriksa lewat jalur resmi. (3) Angka pada contoh bersifat fiktif.",
+  "gerbang": [],
+  "pemantik": "Kamu terlanjur memberi kode, mentransfer uang, atau mengunduh aplikasi yang ternyata bermasalah. Perasaannya campur aduk, dan itu wajar. Yang penting sekarang adalah langkah berikutnya.",
+  "kartu": [
+    {
+      "judul": "Tenang dulu, lalu bertindak",
+      "isi": "Siapa pun bisa tertipu, termasuk orang yang teliti. Rasa malu sering membuat orang diam, padahal waktu sangat berharga. Mulailah dari langkah kecil yang bisa kamu lakukan sekarang. Makin cepat kamu bertindak, makin besar peluang kerugian dibatasi."
+    },
+    {
+      "judul": "Langkah pertama: amankan",
+      "isi": "Hentikan kontak dan jangan transfer lagi. Ubah kata sandi akun yang terkait, lalu aktifkan {{verifikasi dua langkah}}. Hubungi bank atau penyedia dompet digitalmu lewat kontak resmi untuk menanyakan cara mengamankan akun. Simpan bukti, seperti tangkapan layar pesan, nomor pengirim, dan bukti transfer."
+    },
+    {
+      "judul": "Langkah berikutnya: lapor dan cerita",
+      "isi": "Laporkan lewat kanal resmi, misalnya penyedia layanan yang terkait dan pihak berwenang. Ceritakan pada orang yang kamu percaya, karena dukungan membuat keputusan lebih jernih. Jangan memutuskan membayar atau mentransfer dalam keadaan tertekan. Periksa dulu lewat jalur resmi, lalu putuskan dengan kepala dingin."
+    }
+  ],
+  "contohAngka": {
+    "judul": "Satu kejadian, dua cara menanggapi",
+    "baris": [
+      {
+        "label": "Uang yang sudah ditransfer ke penipu",
+        "jumlah": -500000
+      },
+      {
+        "label": "Uang tambahan yang diminta \"untuk pelunasan\"",
+        "jumlah": -500000
+      },
+      {
+        "label": "Kerugian bila terus menuruti",
+        "jumlah": -1000000,
+        "ringkasan": true
+      }
+    ],
+    "kesimpulan": "Kalau berhenti setelah transfer pertama, kerugiannya Rp500.000. Kalau menuruti permintaan berikutnya, kerugiannya bisa menjadi Rp1.000.000 atau lebih. Berhenti lebih awal membatasi kerugian."
+  },
+  "cekPaham": [
+    {
+      "tanya": "Setelah sadar tertipu, apa langkah yang paling masuk akal lebih dulu?",
+      "pilihan": [
+        "Hentikan kontak, amankan akun, dan simpan bukti",
+        "Transfer lagi supaya urusannya selesai",
+        "Diam saja karena malu"
+      ],
+      "benar": 0,
+      "penjelasan": "Menghentikan kontak dan mengamankan akun membatasi kerugian. Bukti membantu saat melapor."
+    },
+    {
+      "tanya": "Mengapa bukti seperti tangkapan layar dan bukti transfer perlu disimpan?",
+      "pilihan": [
+        "Membantu saat melapor ke penyedia layanan atau pihak berwenang",
+        "Supaya bisa dipamerkan ke teman",
+        "Supaya bisa dihapus nanti"
+      ],
+      "benar": 0,
+      "penjelasan": "Bukti membuat laporanmu lebih jelas dan lebih mudah ditindaklanjuti."
+    },
+    {
+      "tanya": "Penagih mengancam dan menyuruhmu transfer hari ini. Sikap yang paling masuk akal?",
+      "pilihan": [
+        "Tidak memutuskan dalam tekanan, periksa lewat jalur resmi, dan minta pendapat orang tepercaya",
+        "Langsung transfer supaya tenang",
+        "Membalas dengan ancaman"
+      ],
+      "benar": 0,
+      "penjelasan": "Keputusan di bawah tekanan sering merugikan. Jalur resmi dan orang tepercaya membantumu berpikir jernih."
+    }
+  ],
+  "misi": {
+    "tipe": "daftar_periksa",
+    "judul": "Susun rencana daruratmu",
+    "instruksi": "Baca catatan di atas, lalu centang langkah yang sudah kamu siapkan. Minimal tiga langkah.",
+    "disclaimer": true,
+    "minimalDicentang": 3,
+    "langkah": [
+      {
+        "id": "l1",
+        "teks": "Aku tahu kontak resmi bank atau dompet digitalku dan menyimpannya di HP."
+      },
+      {
+        "id": "l2",
+        "teks": "Aku tahu cara mengubah kata sandi dan mengaktifkan verifikasi dua langkah di akun pentingku."
+      },
+      {
+        "id": "l3",
+        "teks": "Aku sudah memilih satu orang yang kupercaya untuk diajak bicara bila ada masalah."
+      },
+      {
+        "id": "l4",
+        "teks": "Aku tahu cara mengambil dan menyimpan tangkapan layar sebagai bukti."
+      },
+      {
+        "id": "l5",
+        "teks": "Aku tahu bahwa aku tidak perlu memutuskan apa pun dalam keadaan tertekan."
+      }
+    ]
+  },
+  "tindakLanjut": "Minggu ini, aktifkan verifikasi dua langkah di satu akun pentingmu, misalnya e-mail atau dompet digital."
+}

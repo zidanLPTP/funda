@@ -38,7 +38,7 @@
       {
         "label": "Jumlah cicilan per bulan",
         "jumlah": 1000000,
-        "tipe": "ringkasan"
+        "ringkasan": true
       }
     ],
     "kesimpulan": "Tiga cicilan yang masing-masing terasa kecil menjadi Rp1.000.000 per bulan, sekitar sepertiga dari pemasukan Rp3.000.000."

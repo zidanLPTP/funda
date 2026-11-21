@@ -253,6 +253,17 @@ Berdasarkan hasil pengujian terisolasi pada 10 iterasi bersih di emulator Pixel 
   2. Data rincian baris utang ditarik secara **On-Demand** oleh `penyediaTeksUmpanBalikMisi` melalui `UtangRepositori.ambilDaftarUtangUmpanBalik()` HANYA saat pengguna benar-benar membuka kartu pelajaran mikro terkait.
   3. Dengan pemisahan ini, Tab Belajar dan Peta Belajar utama tidak terbebani pemuatan baris utang, dan hasil benchmark pada 20.000 transaksi + 20 utang membuktikan waktu komputasi median tetap stabil di **57 ms** dan frame pertama di **18 ms**.
 
+---
+
+## 20. Rekaman Status Misi di `tabel_hasil_misi` dan Riwayat Retroaktif (Tahap 8C)
+
+- **Konteks:**
+  Sebelum Tahap 8C, `tabel_hasil_misi` hanya diisi oleh tipe misi tertentu atau saat misi dilewati (`status: 'dilewati'`). Pada Tahap 8C, diperkenalkan dua tipe misi baru (`keputusan` dan `daftar_periksa`) yang mencatat muatan jawaban pengguna (`muatan_json`) ke `tabel_hasil_misi`.
+- **Keputusan & Kebijakan:**
+  Mulai Tahap 8C, **SEMUA tipe misi** (`ada_data`, `aturan_data`, `lihat_hitungan`, `keputusan`, `daftar_periksa`) secara konsisten menulis baris `status: 'selesai'` ke `tabel_hasil_misi` ketika misi berhasil diselesaikan oleh pengguna (bidang `muatan_json` bernilai `null` untuk tiga tipe misi lama yang berbasis data riil).
+- **Batasan Retroaktif:**
+  Penyelesaian pelajaran/misi yang terjadi pada basis data sebelum Tahap 8C tidak memiliki baris retroaktif di `tabel_hasil_misi`. Sumber kebenaran mutlak status *"Pelajaran Selesai tidak terkunci ulang"* tetap merujuk pada `tabel_progres_pelajaran` (`status: 'selesai'`), sehingga modul dan pelajaran yang telah selesai sebelum Tahap 8C tetap berstatus selesai dan tidak terpengaruh oleh ketiadaan baris lama di `tabel_hasil_misi`.
+
 
 
 

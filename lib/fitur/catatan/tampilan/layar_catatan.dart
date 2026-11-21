@@ -782,7 +782,7 @@ class _LembarFilterState extends State<_LembarFilter> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Padding(
+      child: SingleChildScrollView(
         padding: const EdgeInsets.all(SpasiFunda.l),
         child: Column(
           mainAxisSize: MainAxisSize.min,

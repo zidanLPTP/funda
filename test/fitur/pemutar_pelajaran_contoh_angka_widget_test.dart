@@ -90,13 +90,13 @@ void main() {
         ),
       );
 
-      await pompaAman(tester);
+      await tester.pump();
 
       // Berpindah dari Pemantik -> Konsep Inti -> Contoh Nyata
       await tester.tap(find.text('Lanjut'));
-      await pompaAman(tester);
+      await tester.pump();
       await tester.tap(find.text('Lanjut'));
-      await pompaAman(tester);
+      await tester.pump();
 
       // Periksa judul dan kesimpulan contohAngka
       expect(find.text('Contoh Arus Kas Budi'), findsOneWidget);
@@ -111,8 +111,7 @@ void main() {
       final textSisaBersih = tester.widget<Text>(find.text('Sisa Bersih'));
       expect(textSisaBersih.style?.fontWeight, FontWeight.bold);
 
-      await tester.pumpWidget(const SizedBox());
-      await tester.pump(const Duration(milliseconds: 100));
+      await bongkarWidget(tester);
     });
 
     testWidgets('2. Kartu misi merender ketiga umpan balik baru dengan teks persis sesuai aturan angka', (tester) async {
@@ -205,19 +204,18 @@ void main() {
           ),
         ),
       );
-      await pompaAman(tester);
+      await tester.pump();
 
       // Berpindah dari Pemantik (langkah 0) -> Cek Paham (langkah 1) -> Misi (langkah 2)
       await tester.tap(find.text('Lanjut'));
-      await pompaAman(tester);
+      await tester.pump();
       await tester.tap(find.text('Lanjut'));
-      await pompaAman(tester);
+      await tester.pump();
 
       expect(find.text('Misi Praktik Nyata'), findsOneWidget);
       expect(find.text('Buat 3 Anggaran'), findsOneWidget);
 
-      await tester.pumpWidget(const SizedBox());
-      await tester.pump(const Duration(milliseconds: 100));
+      await bongkarWidget(tester);
     });
 
     testWidgets('3. Kuis modul mengambil acak 5 soal dari bank 10 soal & beda susunan pada benih berbeda', (tester) async {
@@ -281,8 +279,7 @@ void main() {
       expect(find.text('Soal 1/5'), findsOneWidget);
       expect(find.text(soalBenih1.first.tanya), findsOneWidget);
 
-      await tester.pumpWidget(const SizedBox());
-      await tester.pump(const Duration(milliseconds: 100));
+      await bongkarWidget(tester);
     });
 
     testWidgets('4. Aksesibilitas: teks skala 2.0 tidak meluap (overflow) di layar pemutar dan kartu misi', (tester) async {
@@ -358,7 +355,7 @@ void main() {
         ),
       );
 
-      await pompaAman(tester);
+      await tester.pump();
 
       // Memastikan tidak ada FlutterError di langkah 0 (Pemantik)
       expect(tester.takeException(), isNull);
@@ -366,30 +363,29 @@ void main() {
 
       // Pindah ke Konsep
       await tester.tap(find.text('Lanjut'));
-      await pompaAman(tester);
+      await tester.pump();
       expect(tester.takeException(), isNull);
       expect(find.text('Konsep Arus Kas Rinci'), findsOneWidget);
 
       // Pindah ke Contoh Angka
       await tester.tap(find.text('Lanjut'));
-      await pompaAman(tester);
+      await tester.pump();
       expect(tester.takeException(), isNull);
       expect(find.text('Arus Kas Bulanan Detail'), findsOneWidget);
 
       // Pindah ke Cek Paham (kosong, lanjut)
       await tester.tap(find.text('Lanjut'));
-      await pompaAman(tester);
+      await tester.pump();
       expect(tester.takeException(), isNull);
 
       // Pindah ke Misi Praktik Nyata
       await tester.tap(find.text('Lanjut'));
-      await pompaAman(tester);
+      await tester.pump();
       expect(tester.takeException(), isNull);
       expect(find.text('Misi Praktik Nyata'), findsOneWidget);
       expect(find.text('Misi Uji Skala'), findsOneWidget);
 
-      await tester.pumpWidget(const SizedBox());
-      await tester.pump(const Duration(milliseconds: 100));
+      await bongkarWidget(tester);
     });
   });
 }

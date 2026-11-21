@@ -70,15 +70,14 @@ void main() {
       'Layar Anggaran menampilkan navigasi bulan dan keadaan kosong awal',
       (tester) async {
         await tester.pumpWidget(buatAplikasiUji(const LayarAnggaran()));
-        await pompaAman(tester);
+        await tester.pump();
 
         expect(find.text('Anggaran Bulanan'), findsOneWidget);
         expect(find.text('Total Anggaran'), findsOneWidget);
         expect(find.text('Belum Ada Anggaran'), findsOneWidget);
         expect(find.text('Atur Anggaran Sekarang'), findsOneWidget);
 
-        await tester.pumpWidget(const SizedBox());
-        await pompaAman(tester);
+        await bongkarWidget(tester);
       },
     );
 
@@ -88,12 +87,11 @@ void main() {
         await tester.pumpWidget(
           buatAplikasiUji(const LayarAnggaran(), skalaTeks: 2.0),
         );
-        await pompaAman(tester);
+        await tester.pump();
 
         expect(tester.takeException(), isNull);
 
-        await tester.pumpWidget(const SizedBox());
-        await pompaAman(tester);
+        await bongkarWidget(tester);
       },
     );
   });
@@ -103,14 +101,13 @@ void main() {
       tester,
     ) async {
       await tester.pumpWidget(buatAplikasiUji(const LayarDaftarTujuan()));
-      await pompaAman(tester);
+      await tester.pump();
 
       expect(find.text('Tujuan Keuangan'), findsOneWidget);
       expect(find.text('Belum Ada Tujuan'), findsOneWidget);
       expect(find.text('Buat Tujuan Pertamamu'), findsOneWidget);
 
-      await tester.pumpWidget(const SizedBox());
-      await pompaAman(tester);
+      await bongkarWidget(tester);
     });
 
     testWidgets('Layar Form Tujuan validasi nama dan target dana', (
@@ -124,18 +121,17 @@ void main() {
       });
 
       await tester.pumpWidget(buatAplikasiUji(const LayarFormTujuan()));
-      await pompaAman(tester);
+      await tester.pump();
 
       expect(find.text('Tambah Tujuan'), findsOneWidget);
 
       // Coba tekan simpan tanpa mengisi
       await tester.tap(find.text('Buat Tujuan'));
-      await pompaAman(tester);
+      await tester.pump();
 
       expect(find.text('Nama tujuan wajib diisi'), findsOneWidget);
 
-      await tester.pumpWidget(const SizedBox());
-      await pompaAman(tester);
+      await bongkarWidget(tester);
     });
 
     testWidgets(
@@ -144,12 +140,11 @@ void main() {
         await tester.pumpWidget(
           buatAplikasiUji(const LayarFormTujuan(), skalaTeks: 2.0),
         );
-        await pompaAman(tester);
+        await tester.pump();
 
         expect(tester.takeException(), isNull);
 
-        await tester.pumpWidget(const SizedBox());
-        await pompaAman(tester);
+        await bongkarWidget(tester);
       },
     );
   });
@@ -159,7 +154,7 @@ void main() {
       'Layar Daftar Kantong menampilkan teks edukasi bantuan yang tenang',
       (tester) async {
         await tester.pumpWidget(buatAplikasiUji(const LayarDaftarKantong()));
-        await pompaAman(tester);
+        await tester.pump();
 
         expect(find.text('Kantong Dompet'), findsOneWidget);
         expect(
@@ -173,8 +168,7 @@ void main() {
           findsOneWidget,
         );
 
-        await tester.pumpWidget(const SizedBox());
-        await pompaAman(tester);
+        await bongkarWidget(tester);
       },
     );
 
@@ -187,15 +181,14 @@ void main() {
         await tester.pumpWidget(
           buatAplikasiUji(LayarDetailDompet(dompetId: dompetId)),
         );
-        await pompaAman(tester);
+        await tester.pump();
 
         expect(find.text('BCA Utama'), findsWidgets);
         expect(find.text('Saldo Bebas:'), findsOneWidget);
         expect(find.text('Kantong di Dompet Ini'), findsOneWidget);
         expect(find.text('Riwayat Transaksi Dompet Ini'), findsOneWidget);
 
-        await tester.pumpWidget(const SizedBox());
-        await pompaAman(tester);
+        await bongkarWidget(tester);
       },
     );
 
@@ -211,12 +204,11 @@ void main() {
             skalaTeks: 2.0,
           ),
         );
-        await pompaAman(tester);
+        await tester.pump();
 
         expect(tester.takeException(), isNull);
 
-        await tester.pumpWidget(const SizedBox());
-        await pompaAman(tester);
+        await bongkarWidget(tester);
       },
     );
   });

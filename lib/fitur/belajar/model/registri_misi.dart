@@ -23,6 +23,8 @@ class RegistriMisi {
     'ada_data',
     'aturan_data',
     'lihat_hitungan',
+    'keputusan',
+    'daftar_periksa',
   };
 
   /// Mengevaluasi misi berdasarkan foto data pengguna.
@@ -97,6 +99,18 @@ class RegistriMisi {
           statusTeks: 'Hitungan siap dipelajari.',
         );
 
+      case 'keputusan':
+        return const HasilEvaluasiMisi(
+          selesai: false,
+          statusTeks: 'Tentukan keputusanmu pada skenario di atas.',
+        );
+
+      case 'daftar_periksa':
+        return const HasilEvaluasiMisi(
+          selesai: false,
+          statusTeks: 'Centang langkah-langkah yang sudah kamu lakukan.',
+        );
+
       default:
         return const HasilEvaluasiMisi(
           selesai: false,
@@ -137,6 +151,19 @@ class RegistriMisi {
       default:
         return 0;
     }
+  }
+
+  /// Evaluasi logika untuk opsi misi keputusan.
+  static bool evaluasiKeputusan(OpsiKeputusanMisi opsi) {
+    return opsi.aman;
+  }
+
+  /// Evaluasi logika untuk misi daftar periksa.
+  static bool evaluasiDaftarPeriksa({
+    required Set<String> dicentang,
+    required int minimalDicentang,
+  }) {
+    return dicentang.length >= minimalDicentang;
   }
 }
 

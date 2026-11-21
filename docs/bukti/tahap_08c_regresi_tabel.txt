@@ -1,0 +1,44 @@
+﻿=== RINCIAN JUMLAH BARIS PER TABEL SEBELUM CADANGAN/PEMULIHAN ===
+tabel_alokasi_kantong: 0 baris
+tabel_anggaran: 0 baris
+tabel_dompet: 0 baris
+tabel_hasil_kuis: 3 baris
+tabel_hasil_misi: 3 baris
+tabel_hasil_tes_awal: 0 baris
+tabel_kantong: 0 baris
+tabel_kategori: 25 baris
+tabel_pembayaran_tagihan: 0 baris
+tabel_pembayaran_utang: 0 baris
+tabel_pengaturan: 4 baris
+tabel_penyesuaian_utang: 0 baris
+tabel_pernyataan: 1 baris
+tabel_profil_keuangan: 0 baris
+tabel_progres_pelajaran: 8 baris
+tabel_tagihan: 0 baris
+tabel_transaksi: 0 baris
+tabel_tujuan: 0 baris
+tabel_utang: 0 baris
+=== TOTAL BARIS SEBELUM CADANGAN/PEMULIHAN: 44 ===
+=== RINCIAN JUMLAH BARIS PER TABEL SESUDAH PEMULIHAN ===
+tabel_alokasi_kantong: 0 baris
+tabel_anggaran: 0 baris
+tabel_dompet: 0 baris
+tabel_hasil_kuis: 3 baris
+tabel_hasil_misi: 3 baris
+tabel_hasil_tes_awal: 0 baris
+tabel_kantong: 0 baris
+tabel_kategori: 25 baris
+tabel_pembayaran_tagihan: 0 baris
+tabel_pembayaran_utang: 0 baris
+tabel_pengaturan: 4 baris
+tabel_penyesuaian_utang: 0 baris
+tabel_pernyataan: 1 baris
+tabel_profil_keuangan: 0 baris
+tabel_progres_pelajaran: 8 baris
+tabel_tagihan: 0 baris
+tabel_transaksi: 0 baris
+tabel_tujuan: 0 baris
+tabel_utang: 0 baris
+=== TOTAL BARIS SESUDAH PEMULIHAN: 44 ===
+[REGRESI SUKSES]: Seluruh tabel (19 tabel) identik 100%!
+

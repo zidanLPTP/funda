@@ -90,15 +90,15 @@ void main() {
 
   Future<void> selesaikanAsync(WidgetTester tester) async {
     await tester.pump();
-    await tester.pump(const Duration(milliseconds: 100));
-    await pompaAman(tester);
+    await tester.pump();
+    await tester.pump();
   }
 
   Future<void> ketukDanSelesaikan(WidgetTester tester, Finder finder) async {
     await tester.tap(finder);
     await tester.pump();
-    await tester.pump(const Duration(milliseconds: 100));
-    await pompaAman(tester);
+    await tester.pump();
+    await tester.pump();
   }
 
   group('Pengujian Widget: Layar Laporan Bulanan', () {
@@ -222,7 +222,7 @@ void main() {
       expect(find.text('Yakin ingin menimpa seluruh data saat ini? Data lama akan disimpan otomatis di cadangan keselamatan.'), findsOneWidget);
 
       await tester.tap(find.text('Ya, Pulihkan Sekarang'));
-      await pompaAman(tester);
+      await tester.pump();
       await pompaHinggaAda(tester, find.text('Data berhasil dipulihkan dari cadangan.'));
 
       expect(find.text('Data berhasil dipulihkan dari cadangan.'), findsOneWidget);
@@ -283,7 +283,7 @@ void main() {
 
       await tester.tap(find.text('Nanti'));
       await tester.pump();
-      await tester.pump(const Duration(milliseconds: 500));
+      await tester.pump();
 
       final rowTunda = await (db.select(db.tabelPengaturan)
             ..where((t) => t.kunci.equals('pengingat_cadangan_ditunda_sampai')))
@@ -291,7 +291,7 @@ void main() {
       expect(rowTunda, isNotNull);
 
       await bongkarWidget(tester);
-      await tester.pump(const Duration(milliseconds: 100));
+      await tester.pump();
     });
   });
 }

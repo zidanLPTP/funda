@@ -278,6 +278,83 @@ class CekPahamKonten {
   }
 }
 
+class OpsiKeputusanMisi {
+  final String id;
+  final String teks;
+  final bool aman;
+  final String umpanBalik;
+
+  const OpsiKeputusanMisi({
+    required this.id,
+    required this.teks,
+    required this.aman,
+    required this.umpanBalik,
+  });
+
+  factory OpsiKeputusanMisi.fromJson(Map<String, dynamic> json) {
+    return OpsiKeputusanMisi(
+      id: json['id'] as String? ?? '',
+      teks: json['teks'] as String? ?? '',
+      aman: json['aman'] as bool? ?? false,
+      umpanBalik: json['umpanBalik'] as String? ?? '',
+    );
+  }
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'teks': teks,
+        'aman': aman,
+        'umpanBalik': umpanBalik,
+      };
+}
+
+class SkenarioKeputusanMisi {
+  final String pemantik;
+  final List<OpsiKeputusanMisi> opsi;
+
+  const SkenarioKeputusanMisi({
+    required this.pemantik,
+    required this.opsi,
+  });
+
+  factory SkenarioKeputusanMisi.fromJson(Map<String, dynamic> json) {
+    return SkenarioKeputusanMisi(
+      pemantik: json['pemantik'] as String? ?? '',
+      opsi: (json['opsi'] as List<dynamic>?)
+              ?.map((e) => OpsiKeputusanMisi.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, dynamic> toJson() => {
+        'pemantik': pemantik,
+        'opsi': opsi.map((e) => e.toJson()).toList(),
+      };
+}
+
+class LangkahDaftarPeriksa {
+  final String id;
+  final String teks;
+
+  const LangkahDaftarPeriksa({
+    required this.id,
+    required this.teks,
+  });
+
+  factory LangkahDaftarPeriksa.fromJson(Map<String, dynamic> json) {
+    return LangkahDaftarPeriksa(
+      id: json['id'] as String? ?? '',
+      teks: json['teks'] as String? ?? '',
+    );
+  }
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'teks': teks,
+      };
+}
+
 class MisiKonten {
   final String tipe;
   final String? objek;
@@ -285,8 +362,13 @@ class MisiKonten {
   final int min;
   final String judul;
   final String deskripsi;
+  final String instruksi;
   final int perkiraanMenit;
   final String? umpanBalik;
+  final SkenarioKeputusanMisi? skenario;
+  final bool? disclaimer;
+  final int? minimalDicentang;
+  final List<LangkahDaftarPeriksa>? langkah;
 
   const MisiKonten({
     required this.tipe,
@@ -295,20 +377,35 @@ class MisiKonten {
     this.min = 1,
     required this.judul,
     required this.deskripsi,
+    this.instruksi = '',
     required this.perkiraanMenit,
     this.umpanBalik,
+    this.skenario,
+    this.disclaimer,
+    this.minimalDicentang,
+    this.langkah,
   });
 
   factory MisiKonten.fromJson(Map<String, dynamic> json) {
+    final instruksi = json['instruksi'] as String? ?? json['deskripsi'] as String? ?? '';
     return MisiKonten(
       tipe: json['tipe'] as String? ?? 'ada_data',
       objek: json['objek'] as String?,
       aturan: json['aturan'] as String?,
       min: (json['min'] as num?)?.toInt() ?? 1,
       judul: json['judul'] as String? ?? 'Misi Praktik',
-      deskripsi: json['deskripsi'] as String? ?? '',
+      deskripsi: json['deskripsi'] as String? ?? instruksi,
+      instruksi: instruksi,
       perkiraanMenit: (json['perkiraanMenit'] as num?)?.toInt() ?? 2,
       umpanBalik: json['umpanBalik'] as String?,
+      skenario: json['skenario'] != null
+          ? SkenarioKeputusanMisi.fromJson(json['skenario'] as Map<String, dynamic>)
+          : null,
+      disclaimer: json['disclaimer'] as bool?,
+      minimalDicentang: (json['minimalDicentang'] as num?)?.toInt(),
+      langkah: (json['langkah'] as List<dynamic>?)
+          ?.map((e) => LangkahDaftarPeriksa.fromJson(e as Map<String, dynamic>))
+          .toList(),
     );
   }
 }
@@ -969,6 +1066,15 @@ HasilStatusBelajar tentukanStatusModul({
         daftarAtau.add(hasil.atauPernyataan!);
       }
     }
+  }
+
+  // Khusus Modul 4 (utang_cicilan): jika kedua syarat belum terpenuhi,
+  // tampilkan pesan modul utuh dari lampiran dengan kata sambung "Lalu".
+  if (modul.id == 'utang_cicilan' && apaYangKurang.length == 2) {
+    apaYangKurang.clear();
+    apaYangKurang.add(
+      'Selesaikan Modul 3 dulu. Lalu catat utang atau cicilanmu di menu Utang. Kalau kamu memang tidak punya utang, pilih Aku tidak punya ini.',
+    );
   }
 
   // Cek apakah seluruh pelajaran selesai

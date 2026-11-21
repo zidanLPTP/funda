@@ -21,11 +21,6 @@ void _sinyalkanLayar(String namaLayar) {
 }
 
 
-Future<void> pompaAman(WidgetTester tester, [int ms = 500]) async {
-  await tester.pump(Duration(milliseconds: ms));
-  await tester.pump(Duration(milliseconds: ms));
-}
-
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
@@ -84,7 +79,7 @@ void main() {
       ),
     );
 
-    await pompaAman(tester);
+    await tester.pump();
 
     // -------------------------------------------------------------------------
     // LANGKAH 1: DOMPET ADA, CATAT 1 PEMASUKAN DAN 1 PENGELUARAN
@@ -120,7 +115,7 @@ void main() {
     // -------------------------------------------------------------------------
     debugPrint('[LANGKAH 2] Membuka Tab Belajar (Peta Belajar)...');
     tester.element(find.byType(Scaffold).first).go('/belajar');
-    await pompaAman(tester);
+    await tester.pump();
     _sinyalkanLayar('01_tab_belajar_peta');
     await tester.runAsync(() => Future.delayed(const Duration(seconds: 4)));
 
@@ -129,7 +124,7 @@ void main() {
     // -------------------------------------------------------------------------
     debugPrint('[LANGKAH 3] Membuka Pelajaran 1.2 (Pemantik)...');
     tester.element(find.byType(Scaffold).first).push('/belajar/pelajaran/anggaran_arus_kas/anggaran_arus_kas_1_2');
-    await pompaAman(tester);
+    await tester.pump();
     _sinyalkanLayar('02_pelajaran_terbuka_pemantik');
     await tester.runAsync(() => Future.delayed(const Duration(seconds: 4)));
 
@@ -137,7 +132,7 @@ void main() {
     final tombolMulaiBaca = find.text('Mulai Membaca');
     if (tombolMulaiBaca.evaluate().isNotEmpty) {
       await tester.tap(tombolMulaiBaca);
-      await pompaAman(tester);
+      await tester.pump();
     }
     _sinyalkanLayar('03_kartu_konsep_istilah');
     await tester.runAsync(() => Future.delayed(const Duration(seconds: 4)));
@@ -146,7 +141,7 @@ void main() {
     final tombolCekPaham = find.text('Cek Pemahaman');
     if (tombolCekPaham.evaluate().isNotEmpty) {
       await tester.tap(tombolCekPaham);
-      await pompaAman(tester);
+      await tester.pump();
     }
     _sinyalkanLayar('04_cek_paham_interaktif');
     await tester.runAsync(() => Future.delayed(const Duration(seconds: 4)));
@@ -155,7 +150,7 @@ void main() {
     final tombolKeMisi = find.text('Lanjut ke Misi Praktik');
     if (tombolKeMisi.evaluate().isNotEmpty) {
       await tester.tap(tombolKeMisi);
-      await pompaAman(tester);
+      await tester.pump();
     }
     _sinyalkanLayar('06_misi_praktik_selesai_umpan_balik');
     await tester.runAsync(() => Future.delayed(const Duration(seconds: 4)));
@@ -176,7 +171,7 @@ void main() {
     // -------------------------------------------------------------------------
     debugPrint('[LANGKAH 4] Kembali ke Peta Belajar -> Pelajaran 1.3 Terkunci...');
     tester.element(find.byType(Scaffold).first).go('/belajar');
-    await pompaAman(tester);
+    await tester.pump();
     _sinyalkanLayar('07_pelajaran_terkunci_gerbang_data');
     await tester.runAsync(() => Future.delayed(const Duration(seconds: 4)));
 
@@ -213,7 +208,7 @@ void main() {
     // Buka Pelajaran 1.3 (Kebutuhan vs Keinginan)
     debugPrint('[LANGKAH 5.2] Membuka Pelajaran 1.3 -> Misi Praktik Belum Lolos...');
     tester.element(find.byType(Scaffold).first).push('/belajar/pelajaran/anggaran_arus_kas/anggaran_arus_kas_1_3');
-    await pompaAman(tester);
+    await tester.pump();
 
     // Langsung buka bagian Misi Praktik Pelajaran 1.3
     _sinyalkanLayar('05_misi_praktik_belum_selesai');
@@ -227,7 +222,7 @@ void main() {
       const TabelKategoriCompanion(sifat: Value('kebutuhan')),
     );
 
-    await pompaAman(tester);
+    await tester.pump();
 
     // Selesaikan Pelajaran 1.3
     await basisData.into(basisData.tabelProgresPelajaran).insertOnConflictUpdate(
@@ -245,7 +240,7 @@ void main() {
     // -------------------------------------------------------------------------
     debugPrint('[LANGKAH 7] Membuka Kuis Akhir Modul 1...');
     tester.element(find.byType(Scaffold).first).push('/belajar/kuis/anggaran_arus_kas');
-    await pompaAman(tester);
+    await tester.pump();
     _sinyalkanLayar('08_kuis_akhir_modul');
     await tester.runAsync(() => Future.delayed(const Duration(seconds: 4)));
 
@@ -279,7 +274,7 @@ void main() {
           ),
         );
 
-    await pompaAman(tester);
+    await tester.pump();
     _sinyalkanLayar('09_kuis_selesai_lulus');
     await tester.runAsync(() => Future.delayed(const Duration(seconds: 4)));
 
@@ -288,7 +283,7 @@ void main() {
     // -------------------------------------------------------------------------
     debugPrint('[LANGKAH 10] Membuka Beranda (Petak Belajar berubah modul selesai)...');
     tester.element(find.byType(Scaffold).first).go('/beranda');
-    await pompaAman(tester);
+    await tester.pump();
     _sinyalkanLayar('10_beranda_petak_belajar');
     await tester.runAsync(() => Future.delayed(const Duration(seconds: 4)));
 

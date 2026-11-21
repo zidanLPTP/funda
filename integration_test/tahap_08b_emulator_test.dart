@@ -1,3 +1,4 @@
+import '../test/pembantu/pompa_uji.dart';
 // ignore_for_file: avoid_print
 import 'package:drift/drift.dart' hide isNotNull, isNull;
 import 'package:drift/native.dart';
@@ -25,18 +26,8 @@ Future<void> mintaTangkapanLayar(String namaLayar) async {
   await Future.delayed(const Duration(milliseconds: 2000));
 }
 
-Future<void> pompaAman(WidgetTester tester, [int ms = 400]) async {
-  await tester.pump(Duration(milliseconds: ms));
-  await tester.pump(Duration(milliseconds: ms));
-}
-
 Future<void> tungguSampaiTeksMuncul(WidgetTester tester, String potonganTeks) async {
-  for (var i = 0; i < 30; i++) {
-    await tester.pump(const Duration(milliseconds: 300));
-    if (find.textContaining(potonganTeks).evaluate().isNotEmpty) {
-      return;
-    }
-  }
+  await pompaHinggaAda(tester, find.textContaining(potonganTeks));
 }
 
 Future<Map<String, int>> ambilRincianBarisTabel(BasisDataFunda db) async {
@@ -95,7 +86,7 @@ void main() {
         child: const AplikasiFunda(),
       ),
     );
-    await pompaAman(tester, 1000);
+    await tester.pump();
 
     // =========================================================================
     // 1. SETUP PRASYARAT: Modul 1, 2, 3 Selesai & Profil Dilewati
@@ -182,7 +173,7 @@ void main() {
 
     // Buka /belajar sebelum ada utang
     tester.element(find.byType(Scaffold).first).go('/belajar');
-    await pompaAman(tester, 1000);
+    await tester.pump();
 
     // Assert pesan gerbang modul 4 saat belum ada data utang
     final pesanGerbangSebelum = 'Lalu catat utang atau cicilanmu di menu Utang. Kalau kamu memang tidak punya utang, pilih Aku tidak punya ini.';
@@ -191,78 +182,83 @@ void main() {
 
     // Input Utang 1: "Kredit HP" via Formulir UI Nyata (/utang/tambah)
     tester.element(find.byType(Scaffold).first).go('/utang/tambah');
-    await pompaAman(tester, 1000);
+    await pompaHinggaAda(tester, find.byKey(const Key('bidang_nama_utang')));
 
     final scrollUtang = find.byType(ListView);
     expect(scrollUtang, findsOneWidget);
 
-    // Nama Utang
-    final inputFieldsAwal = find.byType(TextFormField);
-    await tester.enterText(inputFieldsAwal.at(0), 'Kredit HP');
-    await pompaAman(tester, 200);
+    // 1. Nama Utang
+    final fieldNama = find.byKey(const Key('bidang_nama_utang'));
+    expect(fieldNama, findsOneWidget);
+    await tester.enterText(fieldNama, 'Kredit HP');
+    await tester.pump();
 
-    // Sisa Utang Saat Ini (index 2)
-    await tester.enterText(inputFieldsAwal.at(2), '4000000');
-    await pompaAman(tester, 200);
+    // 2. Sisa Utang Saat Ini
+    final fieldSisa = find.byKey(const Key('bidang_sisa_utang'));
+    expect(fieldSisa, findsOneWidget);
+    await tester.enterText(fieldSisa, '4000000');
+    await tester.pump();
 
-    // Pokok Awal Pinjaman (index 3)
-    await tester.enterText(inputFieldsAwal.at(3), '6000000');
-    await pompaAman(tester, 200);
+    // 3. Pokok Awal Pinjaman
+    final fieldPokok = find.byKey(const Key('bidang_pokok_awal'));
+    expect(fieldPokok, findsOneWidget);
+    await tester.enterText(fieldPokok, '6000000');
+    await tester.pump();
 
     // Scroll untuk memunculkan Cicilan, Bunga, Tenor
     await tester.drag(scrollUtang, const Offset(0, -350));
-    await pompaAman(tester, 500);
+    await tester.pump();
 
-    // Cicilan Bulanan (TextField dengan hint 'Rp 0' yang masih kosong)
-    final fieldCicilan = find.byWidgetPredicate((w) => w is TextField && (w.controller?.text.isEmpty ?? true) && w.decoration?.hintText == 'Rp 0');
-    if (fieldCicilan.evaluate().isNotEmpty) {
-      await tester.enterText(fieldCicilan.first, '550000');
-      await pompaAman(tester, 200);
-    }
+    // 4. Cicilan Bulanan
+    final fieldCicilan = find.byKey(const Key('bidang_cicilan_bulanan'));
+    await tester.ensureVisible(fieldCicilan);
+    expect(fieldCicilan, findsOneWidget);
+    await tester.enterText(fieldCicilan, '550000');
+    await tester.pump();
 
-    // Bunga per Tahun (hint: 'Misal: 8.5')
-    final fieldBunga = find.byWidgetPredicate((w) => w is TextField && w.decoration?.hintText == 'Misal: 8.5');
-    if (fieldBunga.evaluate().isNotEmpty) {
-      await tester.enterText(fieldBunga.first, '18');
-      await pompaAman(tester, 200);
-    }
+    // 5. Bunga per Tahun
+    final fieldBunga = find.byKey(const Key('bidang_bunga_per_tahun'));
+    await tester.ensureVisible(fieldBunga);
+    expect(fieldBunga, findsOneWidget);
+    await tester.enterText(fieldBunga, '18');
+    await tester.pump();
 
-    // Tenor (hint: 'Misal: 12')
-    final fieldTenor = find.byWidgetPredicate((w) => w is TextField && w.decoration?.hintText == 'Misal: 12');
-    if (fieldTenor.evaluate().isNotEmpty) {
-      await tester.enterText(fieldTenor.first, '12');
-      await pompaAman(tester, 200);
-    }
+    // 6. Tenor
+    final fieldTenor = find.byKey(const Key('bidang_tenor_bulan'));
+    await tester.ensureVisible(fieldTenor);
+    expect(fieldTenor, findsOneWidget);
+    await tester.enterText(fieldTenor, '12');
+    await tester.pump();
 
     // Scroll lagi untuk tombol Catat Utang
     await tester.drag(scrollUtang, const Offset(0, -350));
-    await pompaAman(tester, 500);
+    await tester.pump();
 
     // Tekan Tombol Simpan / Catat Utang
-    final tombolCatatUtang = find.text('Catat Utang');
+    final tombolCatatUtang = find.byKey(const Key('tombol_simpan_utang'));
     await tester.ensureVisible(tombolCatatUtang);
-    await pompaAman(tester, 300);
+    expect(tombolCatatUtang, findsOneWidget);
     await tester.tap(tombolCatatUtang);
-    await pompaAman(tester, 1000);
+    await tester.pump();
 
     // Verifikasi Utang 1 masuk ke basis data
     final utangTersimpan = await (basisData.select(basisData.tabelUtang)..where((u) => u.nama.equals('Kredit HP'))).getSingleOrNull();
     expect(utangTersimpan, isNotNull, reason: 'Utang Kredit HP wajib tersimpan dari formulir UI');
     debugPrint('[FORM UI BERHASIL]: Kredit HP tersimpan (pokok: ${utangTersimpan!.pokokAwalRupiah}, sisa: ${utangTersimpan.sisaAwalRupiah})');
 
-    // Suntik Utang 2 dan Utang 3
+    // Suntik Utang 2 (Paylater) dan Utang 3 (Pinjaman Teman) sesuai parameter persis prompt 8B
     await basisData.into(basisData.tabelUtang).insert(
           TabelUtangCompanion.insert(
-            id: 'utang_paylater_app',
-            nama: 'Paylater App',
+            id: 'utang_paylater',
+            nama: 'Paylater',
             jenis: 'paylater',
-            pemberi: const Value('Paylater App'),
-            pokokAwalRupiah: const Value(800000),
+            pemberi: const Value('Paylater'),
+            pokokAwalRupiah: const Value(900000),
             sisaAwalRupiah: 800000,
-            cicilanBulananRupiah: const Value(230000),
-            tenorBulan: const Value(4),
-            bungaBasisPoinPerTahun: const Value(3600), // 36% flat
-            jenisBunga: 'flat',
+            cicilanBulananRupiah: const Value(330000),
+            tenorBulan: const Value(3),
+            bungaBasisPoinPerTahun: const Value(3600), // 36% efektif
+            jenisBunga: 'efektif',
             status: const Value('aktif'),
             dibuatPada: now,
           ),
@@ -276,8 +272,8 @@ void main() {
             pemberi: const Value('Teman'),
             pokokAwalRupiah: const Value(1500000),
             sisaAwalRupiah: 1500000,
-            cicilanBulananRupiah: const Value(250000),
-            tenorBulan: const Value(6),
+            cicilanBulananRupiah: const Value(150000),
+            tenorBulan: const Value(10),
             bungaBasisPoinPerTahun: const Value(0),
             jenisBunga: 'tanpa_bunga',
             status: const Value('aktif'),
@@ -339,11 +335,9 @@ void main() {
     tester.element(find.byType(Scaffold).first).go('/belajar/pelajaran/utang_cicilan/utang_cicilan_4_2');
     await tungguSampaiTeksMuncul(tester, 'Kredit HP: pokok');
 
-    debugPrint('ASSERT 4.2: Biaya pinjaman Rp600.000, Rp120.000, Rp0');
-    expect(find.textContaining('Kredit HP: pokok Rp6.000.000, cicilan Rp550.000 x 12 bulan = total Rp6.600.000. Biaya pinjaman: Rp600.000.'), findsWidgets);
-    expect(find.textContaining('Paylater App: pokok Rp800.000, cicilan Rp230.000 x 4 bulan = total Rp920.000. Biaya pinjaman: Rp120.000.'), findsWidgets);
-    expect(find.textContaining('Pinjaman Teman: pokok Rp1.500.000, cicilan Rp250.000 x 6 bulan = total Rp1.500.000. Biaya pinjaman: Rp0.'), findsWidgets);
-    expect(find.textContaining('Hitungan ini memakai cicilan x tenor yang kamu catat dan belum memasukkan denda.'), findsWidgets);
+    final teks42 = 'Kredit HP: pokok Rp6.000.000, cicilan Rp550.000 x 12 bulan = total Rp6.600.000. Biaya pinjaman: Rp600.000. Paylater: pokok Rp900.000, cicilan Rp330.000 x 3 bulan = total Rp990.000. Biaya pinjaman: Rp90.000. Pinjaman Teman: pokok Rp1.500.000, cicilan Rp150.000 x 10 bulan = total Rp1.500.000. Biaya pinjaman: Rp0. Hitungan ini memakai cicilan x tenor yang kamu catat dan belum memasukkan denda.';
+    debugPrint('ASSERT 4.2 TEKS LENGKAP: $teks42');
+    expect(find.text(teks42), findsOneWidget);
     await mintaTangkapanLayar('tahap_08b_02_umpan_balik_biaya_pinjaman');
 
     // Tandai 4.2 selesai
@@ -413,10 +407,9 @@ void main() {
     tester.element(find.byType(Scaffold).first).go('/belajar/pelajaran/utang_cicilan/utang_cicilan_4_4');
     await tungguSampaiTeksMuncul(tester, 'Urutan bola salju');
 
-    debugPrint('ASSERT 4.4: Urutan bola salju & longsor');
-    expect(find.textContaining('Urutan bola salju (sisa terkecil dulu): Paylater App (Rp800.000), lalu Pinjaman Teman (Rp1.500.000), lalu Kredit HP (Rp4.000.000).'), findsWidgets);
-    expect(find.textContaining('Urutan longsor (bunga tertinggi dulu): Paylater App (36 persen per tahun), lalu Kredit HP (18 persen per tahun), lalu Pinjaman Teman (tanpa bunga).'), findsWidgets);
-    expect(find.textContaining('Pilih salah satu dan konsisten. Ini bahan belajar, bukan keharusan.'), findsWidgets);
+    final teks44 = 'Urutan bola salju (sisa terkecil dulu): Paylater (Rp800.000), lalu Pinjaman Teman (Rp1.500.000), lalu Kredit HP (Rp4.000.000). Urutan longsor (bunga tertinggi dulu): Paylater (36 persen per tahun), lalu Kredit HP (18 persen per tahun), lalu Pinjaman Teman (tanpa bunga). Urutan longsor memakai persen bunga yang kamu catat. Kalau jenis bunganya berbeda, anggap sebagai perkiraan. Pilih salah satu dan konsisten. Ini bahan belajar, bukan keharusan.';
+    debugPrint('ASSERT 4.4 TEKS LENGKAP: $teks44');
+    expect(find.text(teks44), findsOneWidget);
     await mintaTangkapanLayar('tahap_08b_04_umpan_balik_urutan_pelunasan');
 
     // Tandai 4.4 selesai
@@ -436,7 +429,7 @@ void main() {
     // =========================================================================
     debugPrint('=== [LANGKAH 7]: Kuis Modul 4 (Percobaan 1 Gagal & Percobaan 2 Lulus) ===');
     tester.element(find.byType(Scaffold).first).go('/belajar/kuis/utang_cicilan');
-    await pompaAman(tester, 1000);
+    await tester.pump();
 
     // Percobaan 1: Jawab salah 2 soal pertama, 3 benar -> skor 60% (tidak lulus)
     for (var s = 0; s < 5; s++) {
@@ -453,7 +446,7 @@ void main() {
         // Pilih jawaban yang benar
         await tester.tap(lingkaran.at(idxBenar));
       }
-      await pompaAman(tester, 300);
+      await tester.pump();
 
       final tombolBerikutnya = find.text('Soal Berikutnya');
       final tombolHasil = find.text('Lihat Hasil Kuis');
@@ -462,7 +455,7 @@ void main() {
       } else if (tombolHasil.evaluate().isNotEmpty) {
         await tester.tap(tombolHasil);
       }
-      await pompaAman(tester, 500);
+      await tester.pump();
     }
 
     debugPrint('ASSERT KUIS: Percobaan 1 Belum Lulus (skor 60%)');
@@ -473,7 +466,7 @@ void main() {
     final tombolUlangi = find.text('Ulangi Kuis');
     expect(tombolUlangi, findsOneWidget);
     await tester.tap(tombolUlangi);
-    await pompaAman(tester, 1000);
+    await tester.pump();
 
     // Percobaan 2: Jawab semua soal benar -> skor 100% (lulus >= 70%)
     for (var s = 0; s < 5; s++) {
@@ -482,7 +475,7 @@ void main() {
       final lingkaran = find.byIcon(LucideIcons.circle);
       expect(lingkaran, findsWidgets);
       await tester.tap(lingkaran.at(idxBenar));
-      await pompaAman(tester, 300);
+      await tester.pump();
 
       final tombolBerikutnya = find.text('Soal Berikutnya');
       final tombolHasil = find.text('Lihat Hasil Kuis');
@@ -491,20 +484,8 @@ void main() {
       } else if (tombolHasil.evaluate().isNotEmpty) {
         await tester.tap(tombolHasil);
       }
-      await pompaAman(tester, 500);
+      await tester.pump();
     }
-
-    // Catat hasil kuis lulus ke basis data
-    await basisData.into(basisData.tabelHasilKuis).insert(
-          TabelHasilKuisCompanion.insert(
-            modulId: 'utang_cicilan',
-            skorPersen: 80,
-            total: 5,
-            benar: 4,
-            lulus: true,
-            waktu: now.add(const Duration(minutes: 5)),
-          ),
-        );
 
     debugPrint('ASSERT KUIS: Percobaan 2 Lulus');
     expect(find.textContaining('Lulus'), findsWidgets);
@@ -512,7 +493,7 @@ void main() {
 
     // Buka Beranda, verifikasi modul selesai
     tester.element(find.byType(Scaffold).first).go('/');
-    await pompaAman(tester, 1000);
+    await tester.pump();
     await mintaTangkapanLayar('tahap_08b_07_beranda_modul_selesai');
 
     // =========================================================================
@@ -558,13 +539,13 @@ void main() {
     await (basisData.delete(basisData.tabelPernyataan)..where((p) => p.kunci.equals('tidak_punya_utang'))).go();
 
     tester.element(find.byType(Scaffold).first).go('/belajar');
-    await pompaAman(tester, 1000);
+    await tester.pump();
 
     // Scroll ke Modul 4
     final teksModul4 = find.text('Utang & Cicilan');
     expect(teksModul4, findsOneWidget);
     await tester.ensureVisible(teksModul4);
-    await pompaAman(tester, 500);
+    await tester.pump();
 
     // Verifikasi modul terkunci & tombol "Aku tidak punya ini" muncul
     final tombolPernyataan = find.text('Aku tidak punya ini');
@@ -573,7 +554,7 @@ void main() {
 
     // Tekan tombol pernyataan
     await tester.tap(tombolPernyataan.first);
-    await pompaAman(tester, 1000);
+    await tester.pump();
 
     // Verifikasi tersimpan di basis data
     final cekDbPernyataan = await (basisData.select(basisData.tabelPernyataan)..where((p) => p.kunci.equals('tidak_punya_utang'))).getSingleOrNull();
@@ -593,7 +574,7 @@ void main() {
         );
 
     tester.element(find.byType(Scaffold).first).go('/belajar/pelajaran/utang_cicilan/utang_cicilan_4_1');
-    await pompaAman(tester, 1500);
+    await tester.pump();
     final semuaTeks = tester.widgetList<Text>(find.byType(Text)).map((t) => t.data ?? '').toList();
     debugPrint('TEKS DI LAYAR 4.1 JALUR B: $semuaTeks');
     await tungguSampaiTeksMuncul(tester, 'Kamu menyatakan tidak punya utang');
@@ -619,14 +600,14 @@ void main() {
 
     // Kembali ke /belajar dan cabut pernyataan via tombol UI "Cabut pernyataan"
     tester.element(find.byType(Scaffold).first).go('/belajar');
-    await pompaAman(tester, 1000);
+    await tester.pump();
     await tester.ensureVisible(find.text('Utang & Cicilan'));
-    await pompaAman(tester, 500);
+    await tester.pump();
 
     final tombolCabut = find.text('Cabut pernyataan');
     expect(tombolCabut, findsOneWidget, reason: 'Tombol Cabut pernyataan wajib tampil saat pengguna menyatakan tidak punya utang');
     await tester.tap(tombolCabut);
-    await pompaAman(tester, 1000);
+    await tester.pump();
 
     // Verifikasi modul terkunci kembali
     expect(find.text('Aku tidak punya ini'), findsWidgets);

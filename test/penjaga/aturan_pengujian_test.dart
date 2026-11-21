@@ -120,5 +120,106 @@ void main() {
             '${berkasTanpaTimeout.join('\n')}',
       );
     });
+
+    test('5. pompaAman DILARANG di seluruh berkas uji (Tahap 8C)', () {
+      final berkasMelanggar = <String>[];
+
+      void periksa(Directory dir) {
+        if (!dir.existsSync()) return;
+        for (final entitas in dir.listSync(recursive: true)) {
+          if (entitas is! File || !entitas.path.endsWith('.dart')) continue;
+          final pathNormal = entitas.path.replaceAll('\\', '/');
+          if (pathNormal.endsWith('test/penjaga/aturan_pengujian_test.dart')) continue;
+
+          final baris = entitas.readAsLinesSync();
+          for (var i = 0; i < baris.length; i++) {
+            final b = baris[i];
+            if (b.trim().startsWith('//') || b.trim().startsWith('*')) continue;
+            if (b.contains('pompaAman(')) {
+              berkasMelanggar.add('$pathNormal:${i + 1} -> ${b.trim()}');
+            }
+          }
+        }
+      }
+
+      periksa(Directory('test'));
+      periksa(Directory('integration_test'));
+
+      expect(
+        berkasMelanggar,
+        isEmpty,
+        reason: 'pompaAman DILARANG di seluruh berkas uji. Gunakan pompaHingga/pompaHinggaAda:\n'
+            '${berkasMelanggar.join('\n')}',
+      );
+    });
+
+    test('6. pump(const Duration...) DILARANG di luar test/pembantu/pompa_uji.dart (Tahap 8C)', () {
+      final berkasMelanggar = <String>[];
+
+      void periksa(Directory dir) {
+        if (!dir.existsSync()) return;
+        for (final entitas in dir.listSync(recursive: true)) {
+          if (entitas is! File || !entitas.path.endsWith('.dart')) continue;
+          final pathNormal = entitas.path.replaceAll('\\', '/');
+          if (pathNormal.endsWith('test/pembantu/pompa_uji.dart') ||
+              pathNormal.endsWith('test/penjaga/aturan_pengujian_test.dart')) {
+            continue;
+          }
+
+          final baris = entitas.readAsLinesSync();
+          for (var i = 0; i < baris.length; i++) {
+            final b = baris[i];
+            if (b.trim().startsWith('//') || b.trim().startsWith('*')) continue;
+            if (b.contains('pump(const Duration') || b.contains('pump(Duration(')) {
+              // Abaikan pump(Duration.zero) yang murni memompa satu frame
+              if (b.contains('Duration.zero')) continue;
+              berkasMelanggar.add('$pathNormal:${i + 1} -> ${b.trim()}');
+            }
+          }
+        }
+      }
+
+      periksa(Directory('test'));
+      periksa(Directory('integration_test'));
+
+      expect(
+        berkasMelanggar,
+        isEmpty,
+        reason: 'pump(const Duration...) sebagai penunggu data DILARANG di luar test/pembantu/pompa_uji.dart:\n'
+            '${berkasMelanggar.join('\n')}',
+      );
+    });
+
+    test('7. warnIfMissed: false DILARANG di seluruh berkas uji (Tahap 8C)', () {
+      final berkasMelanggar = <String>[];
+
+      void periksa(Directory dir) {
+        if (!dir.existsSync()) return;
+        for (final entitas in dir.listSync(recursive: true)) {
+          if (entitas is! File || !entitas.path.endsWith('.dart')) continue;
+          final pathNormal = entitas.path.replaceAll('\\', '/');
+          if (pathNormal.endsWith('test/penjaga/aturan_pengujian_test.dart')) continue;
+
+          final baris = entitas.readAsLinesSync();
+          for (var i = 0; i < baris.length; i++) {
+            final b = baris[i];
+            if (b.trim().startsWith('//') || b.trim().startsWith('*')) continue;
+            if (b.contains('warnIfMissed: false') || b.contains('warnIfMissed:false')) {
+              berkasMelanggar.add('$pathNormal:${i + 1} -> ${b.trim()}');
+            }
+          }
+        }
+      }
+
+      periksa(Directory('test'));
+      periksa(Directory('integration_test'));
+
+      expect(
+        berkasMelanggar,
+        isEmpty,
+        reason: 'warnIfMissed: false DILARANG di seluruh berkas uji:\n'
+            '${berkasMelanggar.join('\n')}',
+      );
+    });
   });
 }

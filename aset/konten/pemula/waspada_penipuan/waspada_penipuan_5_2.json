@@ -1,0 +1,113 @@
+{
+  "id": "waspada_penipuan_5_2",
+  "modul": "waspada_penipuan",
+  "judul": "Cek Legalitas Sebelum Percaya",
+  "durasiMenit": 6,
+  "status": "draf",
+  "catatanReviewer": "TODO-VERIFIKASI. (1) Penyedia pinjaman online yang sah umumnya wajib berizin atau terdaftar pada lembaga pengawas keuangan di Indonesia: periksa kebenaran dan istilah resmi terkini. (2) Cara mengecek izin melalui situs atau layanan resmi lembaga itu: periksa langkah terkini; konten sengaja tidak menyebut alamat situs. (3) Tanda aplikasi pinjaman bermasalah (akses kontak dan foto, penagihan dengan ancaman, dana cair lebih kecil dari yang dijanjikan). (4) Angka pada contoh bersifat fiktif.",
+  "gerbang": [],
+  "pemantik": "Aplikasi pinjaman muncul di iklan. Prosesnya cepat dan syaratnya hanya KTP. Sebelum mengunduh, ada satu pertanyaan penting: penyedianya berizin atau tidak?",
+  "kartu": [
+    {
+      "judul": "Izin itu pintu pertama",
+      "isi": "Penyedia pinjaman yang sah umumnya berizin atau terdaftar di {{lembaga pengawas}} keuangan. Izin membuat ada pihak yang mengawasi cara mereka menagih dan menjaga datamu. {{Pinjol ilegal}} tidak punya pengawas itu, sehingga biaya dan cara penagihannya bisa tidak terkendali."
+    },
+    {
+      "judul": "Tanda aplikasi pinjaman bermasalah",
+      "isi": "Waspadai beberapa tanda. Aplikasi meminta akses ke seluruh kontak, foto, dan pesan di HP-mu. Biaya dan bunganya tidak dijelaskan di depan. Dana yang cair jauh lebih kecil dari yang dijanjikan. Penagih mengancam atau mempermalukanmu lewat kontakmu. Kalau tanda ini muncul, jangan lanjutkan."
+    },
+    {
+      "judul": "Cek sendiri lewat jalur resmi",
+      "isi": "Cek izin lewat situs atau layanan resmi lembaga pengawas, bukan lewat tautan di iklan atau pesan. Baca total yang harus dikembalikan, bukan hanya cicilan. Tanyakan: siapa penyedianya, di mana alamatnya, dan bagaimana cara mengadu? Kalau jawabannya tidak jelas, tunda dulu. Pinjaman bisa menunggu, dan keputusanmu tidak perlu terburu-buru."
+    }
+  ],
+  "contohAngka": {
+    "judul": "Pinjaman cepat yang cairnya lebih kecil",
+    "baris": [
+      {
+        "label": "Pinjaman yang dijanjikan",
+        "jumlah": 3000000
+      },
+      {
+        "label": "Potongan biaya admin di muka",
+        "jumlah": -900000
+      },
+      {
+        "label": "Dana yang benar-benar cair",
+        "jumlah": 2100000,
+        "ringkasan": true
+      },
+      {
+        "label": "Yang harus dikembalikan dalam 14 hari",
+        "jumlah": 3000000
+      }
+    ],
+    "kesimpulan": "Kamu menerima Rp2.100.000, tetapi harus mengembalikan Rp3.000.000 dalam dua minggu. Selisih Rp900.000 itu terasa sangat besar untuk waktu sesingkat itu."
+  },
+  "cekPaham": [
+    {
+      "tanya": "Aplikasi pinjaman meminta akses ke seluruh kontak dan foto di HP-mu. Apa artinya?",
+      "pilihan": [
+        "Tanda bahaya, lebih baik tidak dilanjutkan",
+        "Tanda bahwa aplikasinya canggih",
+        "Biasa saja, semua aplikasi melakukannya"
+      ],
+      "benar": 0,
+      "penjelasan": "Akses ke kontak dan foto bisa dipakai untuk menekan atau mempermalukanmu saat menagih. Itu tanda bahaya."
+    },
+    {
+      "tanya": "Di mana cara terbaik untuk mengecek izin sebuah penyedia pinjaman?",
+      "pilihan": [
+        "Lewat situs atau layanan resmi lembaga pengawas, dibuka sendiri",
+        "Lewat tautan di iklan yang kamu lihat",
+        "Lewat ulasan pengguna di media sosial"
+      ],
+      "benar": 0,
+      "penjelasan": "Tautan di iklan bisa palsu. Buka sendiri sumber resminya."
+    },
+    {
+      "tanya": "Kamu dijanjikan Rp2.000.000, tetapi yang cair Rp1.400.000, dan kamu tetap harus mengembalikan Rp2.000.000. Berapa selisihnya?",
+      "pilihan": [
+        "Rp600.000 yang tidak kamu terima tetapi tetap kamu kembalikan",
+        "Rp1.400.000",
+        "Tidak ada selisih"
+      ],
+      "benar": 0,
+      "penjelasan": "Rp2.000.000 dikurangi Rp1.400.000 adalah Rp600.000. Itu biaya yang kamu tanggung walau uangnya tidak sampai ke tanganmu."
+    }
+  ],
+  "misi": {
+    "tipe": "daftar_periksa",
+    "judul": "Siapkan cara cek penyedia",
+    "instruksi": "Baca catatan di atas, lalu centang langkah yang sudah atau akan kamu lakukan. Minimal tiga langkah.",
+    "disclaimer": true,
+    "minimalDicentang": 3,
+    "langkah": [
+      {
+        "id": "l1",
+        "teks": "Aku tahu cara membuka situs resmi lembaga pengawas keuangan lewat pencarian sendiri, bukan lewat tautan iklan."
+      },
+      {
+        "id": "l2",
+        "teks": "Aku mencatat nama penyedia yang ingin kuperiksa dan alamat resminya."
+      },
+      {
+        "id": "l3",
+        "teks": "Aku memeriksa apakah penyedia itu tercatat berizin di sumber resmi."
+      },
+      {
+        "id": "l4",
+        "teks": "Aku membaca total yang harus dikembalikan, bukan hanya cicilannya."
+      },
+      {
+        "id": "l5",
+        "teks": "Aku memeriksa izin akses yang diminta aplikasinya sebelum mengunduh."
+      },
+      {
+        "id": "l6",
+        "teks": "Aku menyimpan kontak pengaduan resmi di HP-ku."
+      }
+    ]
+  },
+  "tindakLanjut": "Kalau ada tawaran pinjaman yang menarik minggu ini, jalankan daftar ini sebelum mengunduh aplikasinya. Kalau ragu, tunda dulu."
+}

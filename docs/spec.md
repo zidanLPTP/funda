@@ -151,9 +151,8 @@ Untuk materi yang tidak bisa dipraktikkan langsung (investasi, proteksi, KPR, pa
 1. **Sandbox** — dunia fiktif dengan saldo fiktif; pengguna mengatur alokasi, memajukan waktu, melihat skenario naik/turun. Memakai **jenis instrumen umum** (mis. "reksa dana pasar uang", "obligasi", "saham"), **bukan merek/produk tertentu**. Selalu ada tulisan: *simulasi, bukan prediksi.*
 2. **Data sandbox terpisah total** dari data asli: tidak masuk laporan, dashboard, atau gerbang. Tampilannya diberi penanda jelas ("Mode Sandbox").
 3. **Langkah Dunia Nyata** — layar di akhir modul: checklist langkah, cara mengecek izin/legalitas penyedia (ke lembaga resmi), pertanyaan yang perlu diajukan, pengingat opsional. Aplikasi mengarahkan **kategori** penyedia berizin, bukan menjual atau mengiklankan.
-4. **Disclaimer wajib** sebelum layar tersebut dan bisa dibaca ulang. Draf:
-   > "Funda hanya memberi edukasi umum. Ini bukan ajakan membeli produk keuangan atau nasihat keuangan, hukum, maupun pajak. Keputusan dan risikonya ada padamu. Funda tidak bertanggung jawab atas kerugian dari tindakan di luar aplikasi. Pastikan penyedia berizin sebelum memakai uangmu."
-   *(Teks akhir sebaiknya ditinjau pihak yang paham hukum.)*
+4. **Disclaimer wajib** sebelum layar tersebut dan bisa dibaca ulang. Teks resmi tersimpan di `aset/konten/disclaimer.json`:
+   > "Funda hanya memberi edukasi umum dan bukan nasihat hukum, keuangan, atau perlindungan konsumen resmi. Langkah-langkah di bawah adalah kebiasaan baik yang kamu lakukan di luar aplikasi ini."
 
 ---
 
@@ -309,7 +308,8 @@ Kamu mengirim **prompt per tahap** ke agent → agent kerja dan menulis laporan 
 | 7 | **Laporan bulanan (PNG + PDF) & cadangan data** | **MVP selesai** |
 | 8A | **Tingkat Pemula Bagian 1:** Modul 2 "Tabungan" & Modul 3 "Dana Darurat" | Pembelajaran tabungan & dana darurat selesai |
 | 8B | **Tingkat Pemula Bagian 2:** Modul 4 "Utang & Cicilan" | Pembelajaran utang & cicilan aktif |
-| 8C | **Tingkat Pemula Bagian 3:** Modul 5 "Waspada Penipuan & Pinjol Ilegal" & Modul 6 "Psikologi Uang & Kebiasaan Belanja" | Fondasi pemula lengkap |
+| 8C | **Tingkat Pemula Bagian 3:** Modul 5 "Waspada Penipuan & Pinjol Ilegal" + tipe misi keputusan dan daftar_periksa + disclaimer | Edukasi waspada penipuan selesai |
+| 8D | **Tingkat Pemula Bagian 4:** Modul 6 "Psikologi Uang & Kebiasaan Belanja" (butuh tipe misi refleksi, belum dikerjakan) | Fondasi pemula lengkap |
 | 9 | **Sandbox + Langkah Dunia Nyata + modul 7, 10, 11** | Materi non-langsung |
 | 10 | **Tingkat Menengah** sisanya (modul 8, 9, 12) | Menengah lengkap |
 | 11 | **Tingkat Lanjutan** (modul 13–18) | Kurikulum penuh |

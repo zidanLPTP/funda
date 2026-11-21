@@ -1,7 +1,6 @@
 @Timeout(Duration(seconds: 30))
 library;
 
-import '../pembantu/pompa_uji.dart';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
@@ -124,7 +123,7 @@ void main() {
           ),
         ),
       );
-      await pompaAman(tester);
+      await tester.pump();
 
       Uint8List? pngBytes;
       await tester.runAsync(() async {
@@ -167,7 +166,7 @@ void main() {
           ),
         ),
       );
-      await pompaAman(tester);
+      await tester.pump();
 
       Uint8List? pngSensorBytes;
       await tester.runAsync(() async {

@@ -3,7 +3,6 @@ library;
 
 import '../pembantu/pompa_uji.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:funda/aplikasi/aplikasi.dart';
@@ -50,7 +49,7 @@ void main() {
             child: const AplikasiFunda(),
           ),
         );
-        await pompaAman(tester);
+        await tester.pump();
 
         expect(find.byType(LayarBeranda), findsOneWidget);
         expect(
@@ -58,8 +57,7 @@ void main() {
           findsOneWidget,
         );
 
-        await tester.pumpWidget(const SizedBox());
-        await pompaAman(tester);
+        await bongkarWidget(tester);
       },
     );
 
@@ -82,17 +80,16 @@ void main() {
           child: const AplikasiFunda(),
         ),
       );
-      await pompaAman(tester);
+      await tester.pump();
 
       // Pindah ke tab Lainnya
       await tester.tap(find.text('Lainnya'));
-      await pompaAman(tester);
+      await pompaHinggaAda(tester, find.byType(LayarLainnya));
 
       expect(find.byType(LayarLainnya), findsOneWidget);
       expect(find.text('Galeri Komponen UI'), findsOneWidget);
 
-      await tester.pumpWidget(const SizedBox());
-      await pompaAman(tester);
+      await bongkarWidget(tester);
     });
   });
 }

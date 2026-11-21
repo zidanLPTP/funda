@@ -102,7 +102,7 @@ void main() {
         ),
       ),
     );
-    await pompaAman(tester);
+    await tester.pump();
 
     // Catat urutan soal pada benih 1
     final daftarSoalBenih1 = <String>[];
@@ -125,14 +125,14 @@ void main() {
 
       expect(finderJawabanBenar, isNotNull);
       await tester.tap(finderJawabanBenar!);
-      await pompaAman(tester);
+      await tester.pump();
 
       if (i < 2) {
         await tester.tap(find.text('Soal Berikutnya'));
-        await pompaAman(tester);
+        await tester.pump();
       } else {
         await tester.tap(find.text('Lihat Hasil Kuis'));
-        await pompaAman(tester);
+        await tester.pump();
       }
     }
 
@@ -141,8 +141,7 @@ void main() {
     expect(find.text('Selamat, Kamu Lulus!'), findsOneWidget);
 
     // Bersihkan widget sebelum test kedua
-    await tester.pumpWidget(const SizedBox());
-    await pompaAman(tester);
+    await bongkarWidget(tester);
 
     // 2. Instance kedua dengan benih 2
     await tester.pumpWidget(
@@ -162,7 +161,7 @@ void main() {
         ),
       ),
     );
-    await pompaAman(tester);
+    await tester.pump();
 
     final daftarSoalBenih2 = <String>[];
 
@@ -183,14 +182,14 @@ void main() {
 
       expect(finderJawabanBenar, isNotNull);
       await tester.tap(finderJawabanBenar!);
-      await pompaAman(tester);
+      await tester.pump();
 
       if (i < 2) {
         await tester.tap(find.text('Soal Berikutnya'));
-        await pompaAman(tester);
+        await tester.pump();
       } else {
         await tester.tap(find.text('Lihat Hasil Kuis'));
-        await pompaAman(tester);
+        await tester.pump();
       }
     }
 
@@ -209,7 +208,6 @@ void main() {
     expect(find.text('100%'), findsOneWidget);
     expect(find.text('Selamat, Kamu Lulus!'), findsOneWidget);
 
-    await tester.pumpWidget(const SizedBox());
-    await pompaAman(tester);
+    await bongkarWidget(tester);
   });
 }

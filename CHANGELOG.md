@@ -5,6 +5,34 @@ Format penulisan mengacu pada standar Keep a Changelog dan penamaan commit Funda
 
 ---
 
+## [0.12.0] - 2026-11-21 — Tahap 8C: Modul 5 "Waspada Penipuan & Pinjol Ilegal" + Tipe Misi Keputusan & Daftar Periksa
+
+Tahap 8C mengimplementasikan kurikulum lengkap Modul 5 ("Waspada Penipuan & Pinjol Ilegal": 3 pelajaran, 1 kuis 5 dari 10 bankSoal sebaran 4/3/3 ber-pelajaranId valid, 6 entri kamus baru) beserta dua tipe misi baru (`keputusan` dan `daftar_periksa`), komponen reusable `DisclaimerLangkahDuniaNyata`, aturan pemeriksa bahasa sensitif khusus Modul 5 (larangan URL, surel, nama lembaga spesifik, nomor kontak), persistensi konsisten seluruh tipe misi ke `tabel_hasil_misi`, eliminasi total `pompaAman` dan `pump(const Duration` di luar `pompa_uji.dart`, penutupan sisa Tahap 8B, suite uji unit, widget, dan skrip pengujian integrasi E2E emulator.
+
+### Ditambahkan & Diselaraskan
+- **Dua Tipe Misi Baru (`lib/perhitungan/perhitungan_belajar.dart`, `lib/fitur/belajar/model/registri_misi.dart`, `lib/fitur/belajar/tampilan/layar_pemutar_pelajaran.dart`):**
+  - `keputusan`: Kartu skenario keputusan interaktif dengan opsi pilihan (tinggi >= 48dp). Memilih opsi menampilkan umpan balik edukatif; memilih opsi aman (`aman: true`) menyelesaikan misi dan mengaktifkan tombol "Lanjut"; opsi tidak aman menampilkan tombol "Coba pilihan lain" (tanpa batas, tanpa skor). Riwayat urutan percobaan dicatat ke `tabel_hasil_misi` (`muatan_json: {"opsiDipilih":["a","c","b"]}`).
+  - `daftar_periksa`: Komponen daftar centang langkah nyata di luar aplikasi (Semantics, tinggi >= 48dp). Dilengkapi kartu `DisclaimerLangkahDuniaNyata` di bagian atas dengan tombol "Mengerti", penghitung *"n dari minimal m langkah dicentang"*, serta tombol "Selesai" yang aktif hanya bila syarat minimal terpenuhi. Hasil centang dicatat ke `tabel_hasil_misi` (`muatan_json: {"dicentang":["l1","l2","l3"]}`) dan dimuat kembali saat layar dibuka ulang.
+- **Komponen Disclaimer Resmi (`lib/komponen/disclaimer_langkah_dunia_nyata.dart`, `aset/konten/disclaimer.json`):**
+  - Menampilkan disclaimer edukasi umum langkah dunia nyata persis teks lampiran resmi reviewer tanpa hardcoded string.
+- **Konten Edukasi Resmi Modul 5 (`aset/konten/pemula/waspada_penipuan/`):**
+  - `modul.json`: Gerbang `modul_selesai anggaran_arus_kas`, status `tersedia: true`, bankSoal kuis 10 butir dengan sebaran 4_1 (4), 4_2 (3), 4_3 (3).
+  - `waspada_penipuan_5_1.json`: "Ciri Tawaran yang Mencurigakan", durasi 5 menit, contohAngka "Hadiah yang tidak pernah datang", misi `keputusan` "Latih rem-mu".
+  - `waspada_penipuan_5_2.json`: "Cek Legalitas Sebelum Percaya", durasi 5 menit, contohAngka "Biaya potongan yang baru terasa saat pencairan", misi `daftar_periksa` "Siapkan cara cek penyedia" (`disclaimer: true`, minimal 3).
+  - `waspada_penipuan_5_3.json`: "Kalau Sudah Terlanjur", durasi 5 menit, contohAngka "Biaya memperpanjang pinjaman yang tidak menyelesaikan masalah", misi `daftar_periksa` "Susun rencana daruratmu" (`disclaimer: true`, minimal 3).
+- **Ekstensi Kamus Keuangan (`aset/konten/kamus.json` & `docs/materi/kamus_modul_5.md`):**
+  - Menambahkan 6 entri istilah baru: `biaya di muka`, `OTP`, `phishing`, `pinjol ilegal`, `akses berlebihan`, `kontak darurat` persis kata per kata sesuai lampiran resmi.
+- **Pemeriksa Konten & Validasi Ketat (`lib/fitur/belajar/model/pembaca_konten.dart`):**
+  - Menolak jenis misi di luar 5 tipe resmi (`ada_data`, `aturan_data`, `lihat_hitungan`, `keputusan`, `daftar_periksa`).
+  - Menolak teks Modul 5 yang memuat kata sensitif ("http", "www", "@", "OJK", "BSSN", atau digit >= 8 tanpa titik) serta label judul biner "aman"/"bahaya".
+- **Persistensi Konsisten `tabel_hasil_misi`:**
+  - Seluruh 5 tipe misi kini mencatat `status: 'selesai'` ke `tabel_hasil_misi` saat selesai. Sumber kebenaran "Selesai tidak terkunci ulang" tetap merujuk pada `tabel_progres_pelajaran`.
+- **Eliminasi Total `pompaAman` dan Pengujian Anti-Menggantung:**
+  - Menghapus `pompaAman` dari seluruh direktori `test/` dan `integration_test/`.
+  - Memperluas `test/penjaga/aturan_pengujian_test.dart` (7 aturan lolos).
+
+---
+
 ## [0.11.1] - 2026-11-20 — Tahap 8B-R: Kesesuaian Lampiran Modul 4
 
 Tahap 8B-R menyelaraskan seluruh metadata Modul 4 ("Utang & Cicilan") agar tepat dan patuh 100% pada teks lampiran resmi reviewer (`docs/materi/modul_4_utang_cicilan.md` dan `kamus_modul_4.md`), mengembalikan teks lampiran asli `catatanReviewer` pada pelajaran 4.2, 4.3, dan 4.4, menyelaraskan durasi pelajaran (5, 6, 5, 6 menit), menerapkan ambang lulus kuis global 70% (`ambangLulusKuis`) tanpa ambang khusus modul, mengoreksi sebaran soal bankSoal (3, 3, 2, 2) tanpa soal sintesis, menyelaraskan kunci pernyataan menjadi `tidak_punya_utang` di seluruh kode, provider, pengujian, dan dokumentasi, memperluas uji kesesuaian lampiran dinamis dari markdown, menyempurnakan evaluasi gerbang dan tombol "Cabut pernyataan", menutup Langkah 0 (a sampai e), serta menjalankan alur integrasi emulator Pixel 8 (Android 16 API 36) dengan assertion string lengkap, regresi 19 tabel pada kondisi berisi utang (`tabel_utang: 3 baris`), dan tolok ukur beban komputasi on-demand.

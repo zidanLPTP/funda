@@ -71,12 +71,12 @@ void main() {
           ),
         );
 
-        await pompaAman(tester);
+        await tester.pump();
 
         // Berpindah: Pemantik(0) -> Kartu1(1) -> Kartu2(2) -> Kartu3(3) -> Contoh(4)
         for (var i = 0; i < 4; i++) {
           await tester.tap(find.text('Lanjut'));
-          await pompaAman(tester);
+          await tester.pump();
         }
 
         // Verifikasi judul contohAngka dan teks baris
@@ -84,8 +84,7 @@ void main() {
         expect(find.text(labelBaris), findsOneWidget, reason: 'Label $labelBaris harus tampil di $pelId');
         expect(find.text(nominalStr), findsAtLeastNWidgets(1), reason: 'Nominal $nominalStr harus tampil di $pelId');
 
-        await tester.pumpWidget(const SizedBox());
-        await tester.pump(const Duration(milliseconds: 50));
+        await bongkarWidget(tester);
       }
     });
 
@@ -150,12 +149,12 @@ void main() {
           ),
         );
 
-        await pompaAman(tester);
+        await tester.pump();
 
         // Maju: Pemantik(0) -> Kartu(1) -> Contoh(2) -> CekPaham(3) -> Misi Praktik(4)
         for (var i = 0; i < 4; i++) {
           await tester.tap(find.text('Lanjut'));
-          await pompaAman(tester);
+          await tester.pump();
         }
 
         // Verifikasi kartu misi pada slide misi
@@ -163,13 +162,12 @@ void main() {
 
         // Maju ke Slide Umpan Balik (5) karena misi sudah selesai (jumlahTujuanTabungan = 1)
         await tester.tap(find.text('Lanjut'));
-        await pompaAman(tester);
+        await tester.pump();
 
         // Verifikasi umpan balik pada slide umpan balik
         expect(find.text(teksUmpanBalik), findsOneWidget, reason: 'Teks umpan balik untuk $kunci harus tampil di kartu umpan balik');
 
-        await tester.pumpWidget(const SizedBox());
-        await tester.pump(const Duration(milliseconds: 50));
+        await bongkarWidget(tester);
       }
     });
 
@@ -202,7 +200,7 @@ void main() {
         ),
       );
 
-      await pompaAman(tester);
+      await tester.pump();
 
       // Verifikasi layar kuis terbuka dengan indikator soal
       expect(find.text('Soal 1/5'), findsOneWidget);
@@ -215,26 +213,25 @@ void main() {
           (w) => modul3.kuis.bankSoal.any((b) => b.pilihan.contains(w.data)),
         );
         await tester.tap(find.text(pilihanItem.data!));
-        await pompaAman(tester);
+        await tester.pump();
 
         if (s < 5) {
           final tombolLanjut = find.text('Soal Berikutnya');
           expect(tombolLanjut, findsOneWidget);
           await tester.tap(tombolLanjut);
-          await pompaAman(tester);
+          await tester.pump();
         } else {
           final tombolSelesai = find.text('Lihat Hasil Kuis');
           expect(tombolSelesai, findsOneWidget);
           await tester.tap(tombolSelesai);
-          await pompaAman(tester);
+          await tester.pump();
         }
       }
 
       // Verifikasi layar hasil kuis
       expect(find.text('Skor Kuis Kamu'), findsOneWidget);
 
-      await tester.pumpWidget(const SizedBox());
-      await tester.pump(const Duration(milliseconds: 50));
+      await bongkarWidget(tester);
     });
 
     testWidgets('4. Aksesibilitas: Layar pemutar pelajaran dan kuis pada TextScaler linear 2.0 tanpa galat overflow', (tester) async {
@@ -269,7 +266,7 @@ void main() {
         ),
       );
 
-      await pompaAman(tester);
+      await tester.pump();
 
       // Verifikasi tidak ada AABB overflow error di konsol
       expect(tester.takeException(), isNull);
@@ -277,12 +274,11 @@ void main() {
       // Navigasi melalui seluruh slide pada skala 2.0
       for (var i = 0; i < 4; i++) {
         await tester.tap(find.text('Lanjut'));
-        await pompaAman(tester);
+        await tester.pump();
         expect(tester.takeException(), isNull);
       }
 
-      await tester.pumpWidget(const SizedBox());
-      await tester.pump(const Duration(milliseconds: 50));
+      await bongkarWidget(tester);
     });
 
     testWidgets('5. Tombol utama pemutar pelajaran ("Lanjut") dapat dijangkau dengan scroll pada layar 360x640 dengan skala teks 2.0', (tester) async {
@@ -318,21 +314,20 @@ void main() {
         ),
       );
 
-      await pompaAman(tester);
+      await tester.pump();
 
       // Verifikasi tombol Lanjut ada dan dapat dijangkau (ensureVisible)
       final tombolLanjut = find.text('Lanjut');
       expect(tombolLanjut, findsOneWidget);
       await tester.ensureVisible(tombolLanjut);
-      await pompaAman(tester);
+      await tester.pump();
       await tester.tap(tombolLanjut);
-      await pompaAman(tester);
+      await tester.pump();
 
       // Pastikan langkah berpindah (Konsep 1)
       expect(find.text('Konsep Inti (1/3)'), findsOneWidget);
 
-      await tester.pumpWidget(const SizedBox());
-      await tester.pump(const Duration(milliseconds: 50));
+      await bongkarWidget(tester);
     });
   });
 }

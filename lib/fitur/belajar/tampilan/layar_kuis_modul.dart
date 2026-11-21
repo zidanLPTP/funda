@@ -232,6 +232,7 @@ class _LayarKuisModulState extends ConsumerState<LayarKuisModul> {
                       }
 
                       return GestureDetector(
+                        key: Key('opsi_kuis_$pIdx'),
                         onTap: sudahDijawab
                             ? null
                             : () {

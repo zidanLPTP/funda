@@ -35,7 +35,7 @@
       {
         "label": "Total yang dibayar",
         "jumlah": 13440000,
-        "tipe": "ringkasan"
+        "ringkasan": true
       },
       {
         "label": "Cicilan per bulan",

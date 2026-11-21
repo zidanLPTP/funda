@@ -68,7 +68,7 @@ void main() {
         );
 
         await tester.pumpWidget(buatAplikasiUji(const LayarFormTransaksi()));
-        await pompaAman(tester);
+        await tester.pump();
 
         // Cari field nominal
         final bidangNominal = find.byType(TextField).first;
@@ -76,7 +76,7 @@ void main() {
 
         // Ketik 50000
         await tester.enterText(bidangNominal, '50000');
-        await pompaAman(tester);
+        await tester.pump();
 
         // Cek teks terformat Rp 50.000
         expect(find.text('Rp 50.000'), findsOneWidget);
@@ -85,14 +85,13 @@ void main() {
         final tombolPintasan50rb = find.text('+50rb');
         expect(tombolPintasan50rb, findsOneWidget);
         await tester.tap(tombolPintasan50rb);
-        await pompaAman(tester);
+        await tester.pump();
 
         // Nominal menjadi 50.000 + 50.000 = Rp 100.000
         expect(find.text('Rp 100.000'), findsOneWidget);
 
         // Bersihkan widget tree dan tuntaskan timer stream drift
-        await tester.pumpWidget(const SizedBox());
-        await pompaAman(tester);
+        await bongkarWidget(tester);
       },
     );
 
@@ -112,12 +111,12 @@ void main() {
         );
 
         await tester.pumpWidget(buatAplikasiUji(const LayarFormTransaksi()));
-        await pompaAman(tester);
+        await tester.pump();
 
         final bidangNominal = find.byType(TextField).first;
         // Masukkan nominal pengeluaran 100.000 (melebihi 50.000)
         await tester.enterText(bidangNominal, '100000');
-        await pompaAman(tester);
+        await tester.pump();
 
         // Periksa peringatan lembut muncul
         expect(
@@ -126,8 +125,7 @@ void main() {
         );
 
         // Bersihkan widget tree dan tuntaskan timer stream drift
-        await tester.pumpWidget(const SizedBox());
-        await pompaAman(tester);
+        await bongkarWidget(tester);
       },
     );
   });
@@ -185,8 +183,8 @@ void main() {
 
         await tester.pumpWidget(buatAplikasiUji(const LayarCatatan()));
         await tester.pump();
-        await tester.pump(const Duration(milliseconds: 100));
-        await pompaAman(tester);
+        await tester.pump();
+        await tester.pump();
 
         // Memastikan riwayat muncul dengan teks catatan dan kategori
         expect(find.textContaining('Bonus mingguan'), findsOneWidget);
@@ -204,21 +202,32 @@ void main() {
         );
         expect(bidangCari, findsOneWidget);
         await tester.enterText(bidangCari, 'bakso');
-        await pompaAman(tester);
+        await pompaHingga(
+          tester,
+          () =>
+              find.textContaining('Bonus mingguan').evaluate().isEmpty &&
+              find.textContaining('Makan siang bakso').evaluate().isNotEmpty,
+        );
 
         // "Makan siang bakso" tetap tampil, "Bonus mingguan" tersaring hilang
         expect(find.textContaining('Makan siang bakso'), findsOneWidget);
         expect(find.textContaining('Bonus mingguan'), findsNothing);
 
         // Bersihkan widget tree dan tuntaskan timer stream drift
-        await tester.pumpWidget(const SizedBox());
-        await pompaAman(tester);
+        await bongkarWidget(tester);
       },
     );
 
     testWidgets(
       'membuka lembar bawah filter dan mereset filter bekerja dengan baik',
       (tester) async {
+        tester.view.physicalSize = const Size(1080, 2400);
+        tester.view.devicePixelRatio = 1.0;
+        addTearDown(() {
+          tester.view.resetPhysicalSize();
+          tester.view.resetDevicePixelRatio();
+        });
+
         // Buat 1 dompet agar tidak menampilkan keadaan kosong
         await repoDompet.tambahDompet(
           const TabelDompetCompanion(
@@ -232,19 +241,13 @@ void main() {
         );
 
         await tester.pumpWidget(buatAplikasiUji(const LayarCatatan()));
-        await tester.pump();
-        await tester.pump(const Duration(milliseconds: 100));
-        await pompaAman(tester);
-
-        for (final element in find.byType(Text).evaluate()) {
-          debugPrint('TEXT WIDGET: ${(element.widget as Text).data}');
-        }
+        await pompaHinggaAda(tester, find.byTooltip('Filter Transaksi'));
 
         // Cari tombol ikon filter (ikon slidersHorizontal / tooltip Filter Transaksi)
         final tombolFilter = find.byTooltip('Filter Transaksi');
         expect(tombolFilter, findsOneWidget);
         await tester.tap(tombolFilter);
-        await pompaAman(tester);
+        await pompaHinggaAda(tester, find.text('Filter Catatan'));
 
         // Lembar bawah terbuka, menampilkan judul Filter Catatan
         expect(find.text('Filter Catatan'), findsOneWidget);
@@ -257,15 +260,28 @@ void main() {
           'Terapkan Filter',
         );
         expect(tombolTerapkan, findsOneWidget);
+        await pompaHingga(
+          tester,
+          () {
+            try {
+              final center = tester.getCenter(tombolTerapkan);
+              return center.dy >= 0 &&
+                  center.dy <=
+                      tester.view.physicalSize.height /
+                          tester.view.devicePixelRatio;
+            } catch (_) {
+              return false;
+            }
+          },
+        );
         await tester.tap(tombolTerapkan);
-        await pompaAman(tester);
+        await pompaHinggaHilang(tester, find.text('Filter Catatan'));
 
         // Lembar bawah tertutup kembali
         expect(find.text('Filter Catatan'), findsNothing);
 
         // Bersihkan widget tree dan tuntaskan timer stream drift
-        await tester.pumpWidget(const SizedBox());
-        await pompaAman(tester);
+        await bongkarWidget(tester);
       },
     );
   });

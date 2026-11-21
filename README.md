@@ -105,6 +105,20 @@ funda/
 
 ## 📸 Tangkapan Layar Aplikasi
 Tangkapan layar otomatis yang dihasilkan dari pengujian dan emulator tersimpan pada:
+- **Tahap 8C (Modul 5 "Waspada Penipuan & Pinjol Ilegal" di Emulator Pixel 8):** [docs/tangkapan_layar/](docs/tangkapan_layar/)
+  - `tahap_08c_01_modul_5_terkunci.png` — Modul 5 terkunci untuk pengguna baru dengan pesan lampiran resmi
+  - `tahap_08c_02_modul_5_terbuka.png` — Modul 5 terbuka setelah prasyarat Modul 1 diselesaikan
+  - `tahap_08c_03_pelajaran_5_1_opsi_a.png` — Pelajaran 5.1 misi keputusan: memilih opsi a (tidak aman) dengan umpan balik edukatif
+  - `tahap_08c_04_pelajaran_5_1_opsi_c.png` — Pelajaran 5.1 misi keputusan: memilih opsi c (tidak aman) dengan umpan balik edukatif
+  - `tahap_08c_05_pelajaran_5_1_opsi_b_selesai.png` — Pelajaran 5.1 misi keputusan: memilih opsi b (aman) dan tombol Lanjut aktif
+  - `tahap_08c_06_pelajaran_5_2_disclaimer.png` — Pelajaran 5.2 misi daftar periksa: komponen disclaimer tampil di atas
+  - `tahap_08c_07_pelajaran_5_2_dua_centang.png` — Pelajaran 5.2 misi daftar periksa: 2 langkah dicentang (tombol Selesai nonaktif)
+  - `tahap_08c_08_pelajaran_5_2_tiga_centang_selesai.png` — Pelajaran 5.2 misi daftar periksa: 3 langkah dicentang (tombol Selesai aktif)
+  - `tahap_08c_09_pelajaran_5_3_selesai.png` — Pelajaran 5.3 misi daftar periksa: rencana darurat selesai
+  - `tahap_08c_10_kuis_percobaan_1_tidak_lulus.png` — Kuis Modul 5 percobaan 1 (skor 60% tidak lulus)
+  - `tahap_08c_11_kuis_percobaan_2_lulus.png` — Kuis Modul 5 percobaan 2 (skor 80% lulus)
+  - `tahap_08c_12_beranda_modul_5_selesai.png` — Dasbor Beranda menampilkan petak Modul 5 selesai
+  - `tahap_08c_13_regresi_pemulihan_selesai.png` — Pembuktian integritas pemulihan seluruh tabel SQLite (termasuk tabel_hasil_misi)
 - **Tahap 8B (Modul 4 "Utang & Cicilan" di Emulator Pixel 8):** [docs/tangkapan_layar/](docs/tangkapan_layar/)
   - `tahap_08b_01_umpan_balik_ringkasan_utang.png` — Pelajaran 4.1 dengan umpan balik `ringkasan_utang`
   - `tahap_08b_02_umpan_balik_biaya_pinjaman.png` — Pelajaran 4.2 dengan umpan balik `biaya_pinjaman_tercatat`

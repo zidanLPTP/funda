@@ -193,7 +193,8 @@ void main() {
               !f.path.endsWith('kamus.json') &&
               !f.path.endsWith('rekomendasi.json') &&
               !f.path.endsWith('tes_awal.json') &&
-              !f.path.endsWith('laporan.json'))
+              !f.path.endsWith('laporan.json') &&
+              !f.path.endsWith('disclaimer.json'))
           .toList();
 
       expect(semuaBerkasJson.length, greaterThanOrEqualTo(19), reason: 'Minimal 19 modul (modul 0..18)');

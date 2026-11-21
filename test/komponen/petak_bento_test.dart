@@ -1,7 +1,6 @@
 @Timeout(Duration(seconds: 30))
 library;
 
-import '../pembantu/pompa_uji.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:funda/komponen/petak_bento.dart';
@@ -34,7 +33,7 @@ void main() {
       expect(find.text('Isi Petak Bento'), findsOneWidget);
 
       await tester.tap(find.byType(PetakBento));
-      await pompaAman(tester);
+      await tester.pump();
 
       expect(diketuk, isTrue);
     });

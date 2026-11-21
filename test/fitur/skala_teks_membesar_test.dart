@@ -96,7 +96,7 @@ void main() {
               ),
             ),
           );
-          await pompaAman(tester);
+          await tester.pump();
 
           // 1. Ambil ukuran teks saat skala 1.0
           final finderTeks = find.byType(TeksFunda).first;
@@ -104,7 +104,7 @@ void main() {
 
           // 2. Ubah skala teks menjadi 2.0 secara reaktif
           skalaTeksNotifier.value = 2.0;
-          await pompaAman(tester);
+          await tester.pump();
 
           final ukuranSkala2 = tester.getSize(finderTeks);
 
@@ -121,8 +121,7 @@ void main() {
             reason: 'Teks tidak boleh disusutkan oleh FittedBox',
           );
 
-          await tester.pumpWidget(const SizedBox());
-          await tester.pump(const Duration(milliseconds: 100));
+          await bongkarWidget(tester);
         },
       );
     },

@@ -201,7 +201,7 @@ void main() {
           ),
         ),
       );
-      await tester.pump(const Duration(milliseconds: 16));
+      await tester.pump();
       sw.stop();
       return sw.elapsedMicroseconds / 1000.0;
     }

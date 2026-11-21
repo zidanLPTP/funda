@@ -143,5 +143,35 @@
     "istilah": "longsor",
     "arti": "Cara melunasi utang dengan mendahulukan utang yang bunganya paling tinggi.",
     "contohRupiah": "Dari tiga utang, lunasi dulu yang bunganya 36 persen per tahun."
+  },
+  {
+    "istilah": "OTP",
+    "arti": "Kode sekali pakai yang dikirim ke HP atau e-mailmu untuk memastikan itu benar-benar kamu. Jangan dibagikan ke siapa pun.",
+    "contohRupiah": "Kode 6 angka yang dikirim saat kamu mengonfirmasi transfer Rp100.000."
+  },
+  {
+    "istilah": "phishing",
+    "arti": "Penipuan lewat pesan, tautan, atau situs palsu yang menyamar sebagai pihak tepercaya untuk mencuri data atau uangmu.",
+    "contohRupiah": "Pesan \"akunmu akan diblokir\" dengan tautan palsu agar kamu memasukkan PIN."
+  },
+  {
+    "istilah": "pinjol ilegal",
+    "arti": "Layanan pinjaman online yang tidak berizin dari lembaga pengawas, sehingga biaya dan cara menagihnya tidak diawasi.",
+    "contohRupiah": "Pinjaman Rp3.000.000 yang hanya cair Rp2.100.000, tetapi harus dikembalikan Rp3.000.000 dalam dua minggu."
+  },
+  {
+    "istilah": "biaya di muka",
+    "arti": "Biaya yang diminta dibayar lebih dulu sebelum kamu menerima sesuatu, atau dipotong dari dana yang cair.",
+    "contohRupiah": "Diminta transfer Rp150.000 agar hadiah Rp5.000.000 bisa cair."
+  },
+  {
+    "istilah": "verifikasi dua langkah",
+    "arti": "Pengaman tambahan saat masuk akun: selain kata sandi, kamu perlu satu langkah lain, misalnya kode.",
+    "contohRupiah": "Masuk ke e-mail dengan kata sandi, lalu memasukkan kode yang dikirim ke HP."
+  },
+  {
+    "istilah": "lembaga pengawas",
+    "arti": "Lembaga yang mengawasi dan memberi izin kepada penyedia layanan keuangan.",
+    "contohRupiah": "Penyedia pinjaman yang berizin tercatat di lembaga pengawas keuangan."
   }
 ]

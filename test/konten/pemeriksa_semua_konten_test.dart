@@ -47,6 +47,9 @@ void main() {
             berkasLaporan = entitas;
             continue;
           }
+          if (nama == 'disclaimer.json') {
+            continue;
+          }
           if (nama == 'modul.json') {
             berkasModulDitemukan.add(entitas);
           } else {

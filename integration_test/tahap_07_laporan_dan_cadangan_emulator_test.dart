@@ -37,11 +37,6 @@ Future<void> mintaTangkapanLayar(String namaLayar) async {
   await Future.delayed(const Duration(milliseconds: 2000));
 }
 
-Future<void> pompaAman(WidgetTester tester, [int ms = 500]) async {
-  await tester.pump(Duration(milliseconds: ms));
-  await tester.pump(Duration(milliseconds: ms));
-}
-
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
@@ -217,7 +212,7 @@ void main() {
         child: const AplikasiFunda(),
       ),
     );
-    await pompaAman(tester, 1000);
+    await tester.pump();
 
     // 1. Tangkapan Layar: Banner Beranda
     expect(find.text('Yuk, amankan catatan keuanganmu'), findsOneWidget);
@@ -226,7 +221,7 @@ void main() {
     // 2. Navigasi ke Layar Cadangan & Pemulihan
     await tester.ensureVisible(find.text('Cadangkan sekarang'));
     await tester.tap(find.text('Cadangkan sekarang'));
-    await pompaAman(tester, 800);
+    await tester.pump();
     expect(find.text('Cadangan & Pemulihan'), findsWidgets);
     await mintaTangkapanLayar('tahap_07_cadangan');
 
@@ -234,13 +229,13 @@ void main() {
     final tombolBuatCadangan = find.text('Buat Cadangan dan Bagikan');
     await tester.ensureVisible(tombolBuatCadangan);
     await tester.tap(tombolBuatCadangan);
-    await pompaAman(tester, 1000);
+    await tester.pump();
     expect(layananBagikanPalsu.riwayatDisimpan.isNotEmpty, isTrue);
     debugPrint('--> Buat cadangan lewat UI sukses. Berkas tersimpan di LayananBagikanPalsu.');
 
     // 4. Navigasi ke Layar Laporan Bulanan (/laporan)
     GoRouter.of(tester.element(find.byType(Scaffold).first)).push('/laporan');
-    await pompaAman(tester, 1000);
+    await tester.pump();
     expect(find.text('Laporan Bulanan'), findsWidgets);
     await mintaTangkapanLayar('tahap_07_laporan_normal');
 
@@ -248,13 +243,13 @@ void main() {
     final saklarFinder = find.byType(Switch);
     if (saklarFinder.evaluate().isNotEmpty) {
       await tester.tap(saklarFinder.first);
-      await pompaAman(tester, 800);
+      await tester.pump();
       expect(find.text('Sembunyikan nominal'), findsOneWidget);
       await mintaTangkapanLayar('tahap_07_laporan_sensor');
 
       // Kembalikan ke OFF
       await tester.tap(saklarFinder.first);
-      await pompaAman(tester, 500);
+      await tester.pump();
     }
 
     // 6. Bagikan PNG dan PDF
@@ -262,7 +257,7 @@ void main() {
     if (tombolBagikanPng.evaluate().isNotEmpty) {
       await tester.ensureVisible(tombolBagikanPng.first);
       await tester.tap(tombolBagikanPng.first);
-      await pompaAman(tester, 1200);
+      await tester.pump();
       debugPrint('--> Tombol Bagikan Gambar diketuk.');
     }
 
@@ -270,13 +265,13 @@ void main() {
     if (tombolBagikanPdf.evaluate().isNotEmpty) {
       await tester.ensureVisible(tombolBagikanPdf.first);
       await tester.tap(tombolBagikanPdf.first);
-      await pompaAman(tester, 1200);
+      await tester.pump();
       debugPrint('--> Tombol Bagikan PDF diketuk.');
     }
 
     // 7. Navigasi kembali ke Cadangan untuk alur Pemulihan
     GoRouter.of(tester.element(find.byType(Scaffold).first)).go('/cadangan');
-    await pompaAman(tester, 800);
+    await tester.pump();
 
     // Ambil jumlah baris sebelum dihapus dan snapshot berkas cadangan
     stringCadanganDipilih = await cadanganRepo.eksporCadanganKeJson();
@@ -298,7 +293,7 @@ void main() {
     final tombolPulihkan = find.text('Pulihkan dari Berkas');
     await tester.ensureVisible(tombolPulihkan);
     await tester.tap(tombolPulihkan);
-    await pompaAman(tester, 800);
+    await tester.pump();
 
     // Pratinjau dialog
     expect(find.text('Pratinjau Data Cadangan'), findsOneWidget);
@@ -306,12 +301,12 @@ void main() {
 
     // Lanjut Pulihkan (langkah 1)
     await tester.tap(find.text('Lanjut Pulihkan'));
-    await pompaAman(tester, 500);
+    await tester.pump();
 
     // Konfirmasi kedua
     expect(find.text('Konfirmasi Penggantian Data'), findsOneWidget);
     await tester.tap(find.text('Ya, Pulihkan Sekarang'));
-    await pompaAman(tester, 1200);
+    await tester.pump();
 
     // Tangkapan Layar: Pratinjau setelah pulih
     await mintaTangkapanLayar('tahap_07_pratinjau_setelah_pulih');
@@ -329,7 +324,7 @@ void main() {
 
     // Kembali ke Beranda & Tangkapan Layar Beranda setelah pulih
     GoRouter.of(tester.element(find.byType(Scaffold).first)).go('/');
-    await pompaAman(tester, 1000);
+    await tester.pump();
     expect(find.text('Buat Dompet Pertamamu'), findsNothing);
     expect(find.textContaining('dompet aktif'), findsWidgets);
     await mintaTangkapanLayar('tahap_07_beranda_setelah_pulih');
@@ -487,7 +482,7 @@ void main() {
         ),
       ),
     );
-    await pompaAman(tester, 500);
+    await tester.pump();
 
     final swPng = Stopwatch()..start();
     final pngBytes = await PembuatGambarLaporan.tangkapDariKunci(kunciEkspor, pixelRatio: 3.0);
@@ -508,7 +503,7 @@ void main() {
         child: const AplikasiFunda(),
       ),
     );
-    await pompaAman(tester, 800);
+    await tester.pump();
     swRenderUi.stop();
     final durasiBukaLayarMs = swRenderUi.elapsedMilliseconds;
     debugPrint('[BENCHMARK EMULATOR] Waktu Buka Layar Laporan Sampai Tampil: ${durasiBukaLayarMs}ms');

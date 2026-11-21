@@ -222,6 +222,7 @@ class _LayarFormUtangState extends ConsumerState<LayarFormUtang> {
               const TeksFunda.label('Nama Utang / Cicilan *'),
               const SizedBox(height: SpasiFunda.xs),
               TextFormField(
+                key: const Key('bidang_nama_utang'),
                 controller: _pengontrolNama,
                 decoration: InputDecoration(
                   hintText: 'Misal: Cicilan Laptop, Paylater Belanja',
@@ -267,6 +268,7 @@ class _LayarFormUtangState extends ConsumerState<LayarFormUtang> {
               const TeksFunda.label('Pemberi Pinjaman / Lembaga (Opsional)'),
               const SizedBox(height: SpasiFunda.xs),
               TextFormField(
+                key: const Key('bidang_pemberi_pinjaman'),
                 controller: _pengontrolPemberi,
                 decoration: InputDecoration(
                   hintText: 'Misal: Bank Mandiri, Teman, Tokopedia Paylater',
@@ -284,6 +286,7 @@ class _LayarFormUtangState extends ConsumerState<LayarFormUtang> {
               const TeksFunda.label('Sisa Utang Saat Ini *'),
               const SizedBox(height: SpasiFunda.xs),
               TextFormField(
+                key: const Key('bidang_sisa_utang'),
                 controller: _pengontrolSisaAwal,
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(
@@ -317,6 +320,7 @@ class _LayarFormUtangState extends ConsumerState<LayarFormUtang> {
               const TeksFunda.label('Pokok Awal Pinjaman (Opsional)'),
               const SizedBox(height: SpasiFunda.xs),
               TextFormField(
+                key: const Key('bidang_pokok_awal'),
                 controller: _pengontrolPokokAwal,
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(
@@ -343,6 +347,7 @@ class _LayarFormUtangState extends ConsumerState<LayarFormUtang> {
               const TeksFunda.label('Cicilan per Bulan (Opsional)'),
               const SizedBox(height: SpasiFunda.xs),
               TextFormField(
+                key: const Key('bidang_cicilan_bulanan'),
                 controller: _pengontrolCicilan,
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(
@@ -417,6 +422,7 @@ class _LayarFormUtangState extends ConsumerState<LayarFormUtang> {
                         const TeksFunda.label('Bunga / Thn (%)'),
                         const SizedBox(height: SpasiFunda.xs),
                         TextFormField(
+                          key: const Key('bidang_bunga_per_tahun'),
                           controller: _pengontrolBunga,
                           keyboardType: const TextInputType.numberWithOptions(
                             decimal: true,
@@ -453,6 +459,7 @@ class _LayarFormUtangState extends ConsumerState<LayarFormUtang> {
                         const TeksFunda.label('Tenor (Bulan)'),
                         const SizedBox(height: SpasiFunda.xs),
                         TextFormField(
+                          key: const Key('bidang_tenor_bulan'),
                           controller: _pengontrolTenor,
                           keyboardType: TextInputType.number,
                           decoration: InputDecoration(
@@ -480,6 +487,7 @@ class _LayarFormUtangState extends ConsumerState<LayarFormUtang> {
                         const TeksFunda.label('Jatuh Tempo (Tgl 1-31)'),
                         const SizedBox(height: SpasiFunda.xs),
                         TextFormField(
+                          key: const Key('bidang_jatuh_tempo'),
                           controller: _pengontrolJatuhTempo,
                           keyboardType: TextInputType.number,
                           decoration: InputDecoration(
@@ -553,6 +561,7 @@ class _LayarFormUtangState extends ConsumerState<LayarFormUtang> {
 
               // Tombol Simpan
               TombolFunda.primer(
+                key: const Key('tombol_simpan_utang'),
                 teks: _sedangUbah ? 'Simpan Perubahan' : 'Catat Utang',
                 memuat: _sedangMemuat,
                 padaTekan: _sedangMemuat ? null : _simpan,

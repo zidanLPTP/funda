@@ -621,7 +621,17 @@ void main() {
       expect(gerbangModul[1]['objek'], equals('utang'));
       expect(gerbangModul[1]['min'], equals(1));
       expect(gerbangModul[1]['atauPernyataan'], equals('tidak_punya_utang'));
-      expect(gerbangModul[1]['pesan'], equals('Lalu catat utang atau cicilanmu di menu Utang. Kalau kamu memang tidak punya utang, pilih Aku tidak punya ini.'));
+      expect(gerbangModul[1]['pesan'], equals('Catat utang atau cicilanmu di menu Utang. Kalau kamu memang tidak punya utang, pilih Aku tidak punya ini.'));
+
+      // Verifikasi pesan modul utuh dari lampiran dan dua pesan turunan
+      final pesanUtuh = '${gerbangModul[0]['pesan']} Lalu ${gerbangModul[1]['pesan'][0].toLowerCase()}${gerbangModul[1]['pesan'].substring(1)}';
+      expect(pesanUtuh, equals('Selesaikan Modul 3 dulu. Lalu catat utang atau cicilanmu di menu Utang. Kalau kamu memang tidak punya utang, pilih Aku tidak punya ini.'));
+
+      // Verifikasi judul pelajaran Modul 4 persis lampiran
+      expect(pelajaranJson['utang_cicilan_4_1']!['judul'], equals('Utang yang Membantu dan yang Menjerat'));
+      expect(pelajaranJson['utang_cicilan_4_2']!['judul'], equals('Bunga dan Biaya yang Sebenarnya'));
+      expect(pelajaranJson['utang_cicilan_4_3']!['judul'], equals('Rasio Cicilan terhadap Pemasukan'));
+      expect(pelajaranJson['utang_cicilan_4_4']!['judul'], equals('Strategi Melunasi: Bola Salju dan Longsor'));
 
       // Ekstrak durasiMenit per pelajaran dari lampiran markdown secara dinamis
       for (final entry in pelajaranJson.entries) {
@@ -678,7 +688,7 @@ void main() {
       final bankSoal = modulJson['kuis']['bankSoal'] as List;
       expect(bankSoal.length, equals(10));
 
-      final regSoalLampiran = RegExp(r'(\d+)\.\s*\[(utang_cicilan_4_\d)\]\s*tanya:\s*(.+?)(?=\n\s*pilihan:)');
+      final regSoalLampiran = RegExp(r'(\d+)\.\s*\[(utang_cicilan_4_\d)\]\s*tanya:\s*(.+?)(?=\r?\n\s*pilihan:)');
       final matchesSoal = regSoalLampiran.allMatches(isiMateriLampiran).toList();
       expect(matchesSoal.length, equals(10), reason: 'Bank soal di lampiran harus 10 butir');
 
@@ -816,6 +826,226 @@ void main() {
         expect(isiMateriKamus.contains(target.arti), isTrue, reason: 'Arti "$istilah" tidak ditemukan di docs/materi/kamus_modul_4.md');
         expect(isiMateriKamus.contains(target.contohRupiah), isTrue, reason: 'Contoh Rupiah "$istilah" tidak ditemukan di docs/materi/kamus_modul_4.md');
       }
+    });
+  });
+
+  group('Uji Kesesuaian Lampiran Modul 5 dan Disclaimer (Tahap 8C)', () {
+    late String isiMateriLampiran;
+    late Map<String, dynamic> modulJson;
+    final Map<String, Map<String, dynamic>> pelajaranJson = {};
+    late List<dynamic> daftarKamus;
+    late String isiMateriKamus;
+    late Map<String, dynamic> disclaimerJson;
+
+    setUpAll(() {
+      final materiFile = File('docs/materi/modul_5_waspada_penipuan.md');
+      expect(materiFile.existsSync(), isTrue, reason: 'Berkas docs/materi/modul_5_waspada_penipuan.md wajib ada');
+      isiMateriLampiran = materiFile.readAsStringSync().replaceAll(RegExp(r'\s+'), ' ');
+
+      final modulFile = File('aset/konten/pemula/waspada_penipuan/modul.json');
+      expect(modulFile.existsSync(), isTrue);
+      modulJson = jsonDecode(modulFile.readAsStringSync()) as Map<String, dynamic>;
+
+      for (var i = 1; i <= 3; i++) {
+        final id = 'waspada_penipuan_5_$i';
+        final f = File('aset/konten/pemula/waspada_penipuan/$id.json');
+        expect(f.existsSync(), isTrue, reason: 'Berkas $id.json wajib ada');
+        pelajaranJson[id] = jsonDecode(f.readAsStringSync()) as Map<String, dynamic>;
+      }
+
+      final kamusFile = File('aset/konten/kamus.json');
+      expect(kamusFile.existsSync(), isTrue);
+      daftarKamus = jsonDecode(kamusFile.readAsStringSync()) as List<dynamic>;
+
+      final kamusMateriFile = File('docs/materi/kamus_modul_5.md');
+      expect(kamusMateriFile.existsSync(), isTrue);
+      isiMateriKamus = kamusMateriFile.readAsStringSync().replaceAll(RegExp(r'\s+'), ' ');
+
+      final disclaimerFile = File('aset/konten/disclaimer.json');
+      expect(disclaimerFile.existsSync(), isTrue);
+      disclaimerJson = jsonDecode(disclaimerFile.readAsStringSync()) as Map<String, dynamic>;
+    });
+
+    test('(a) Validasi Metadata Modul 5 dan Pesan Gerbang', () {
+      expect(modulJson['id'], equals('waspada_penipuan'));
+      expect(modulJson['judul'], equals('Waspada Penipuan & Pinjol Ilegal'));
+      expect(modulJson['tingkat'], equals('pemula'));
+      expect(modulJson['urutan'], equals(5));
+      expect(modulJson['tersedia'], isTrue);
+      expect(modulJson['daftarPelajaran'], equals([
+        'waspada_penipuan_5_1',
+        'waspada_penipuan_5_2',
+        'waspada_penipuan_5_3',
+      ]));
+
+      // Gerbang modul
+      final gerbang = modulJson['gerbang'] as List<dynamic>;
+      expect(gerbang, hasLength(1));
+      expect(gerbang[0]['tipe'], equals('modul_selesai'));
+      expect(gerbang[0]['modulId'], equals('anggaran_arus_kas'));
+      expect(gerbang[0]['pesan'], equals('Selesaikan Modul 1 dulu, lalu modul ini terbuka.'));
+
+      // Pesan gerbang pada lampiran
+      expect(isiMateriLampiran.contains('Selesaikan Modul 1 dulu, lalu modul ini terbuka.'), isTrue);
+    });
+
+    test('(b) Validasi Pelajaran 5.1 (Ciri Tawaran yang Mencurigakan & Misi Keputusan)', () {
+      final p = pelajaranJson['waspada_penipuan_5_1']!;
+      expect(p['judul'], equals('Ciri Tawaran yang Mencurigakan'));
+      expect(p['durasiMenit'], equals(5));
+      expect(p['gerbang'], isEmpty);
+      expect(p['catatanReviewer'], contains('TODO-VERIFIKASI'));
+
+      // Misi keputusan
+      final misi = p['misi'] as Map<String, dynamic>;
+      expect(misi['tipe'], equals('keputusan'));
+      expect(misi['judul'], equals('Latih rem-mu'));
+      expect(misi['instruksi'], contains('Baca skenarionya, lalu pilih langkah'));
+
+      final skenario = misi['skenario'] as Map<String, dynamic>;
+      expect(skenario['pemantik'], contains('Seseorang menelepon dan mengaku dari bank'));
+
+      final opsi = skenario['opsi'] as List<dynamic>;
+      expect(opsi, hasLength(4));
+      expect(opsi[0]['id'], equals('a'));
+      expect(opsi[0]['aman'], isFalse);
+      expect(opsi[1]['id'], equals('b'));
+      expect(opsi[1]['aman'], isTrue);
+      expect(opsi[2]['id'], equals('c'));
+      expect(opsi[2]['aman'], isFalse);
+      expect(opsi[3]['id'], equals('d'));
+      expect(opsi[3]['aman'], isFalse);
+
+      // Verifikasi teks lampiran
+      expect(isiMateriLampiran.contains('Ciri Tawaran yang Mencurigakan'), isTrue);
+      expect(isiMateriLampiran.contains('Penipuan bermain di perasaan'), isTrue);
+      expect(isiMateriLampiran.contains('Tiga rem sebelum bertindak'), isTrue);
+    });
+
+    test('(c) Validasi Pelajaran 5.2 (Cek Legalitas Sebelum Percaya & Misi Daftar Periksa)', () {
+      final p = pelajaranJson['waspada_penipuan_5_2']!;
+      expect(p['judul'], equals('Cek Legalitas Sebelum Percaya'));
+      expect(p['durasiMenit'], equals(6));
+      expect(p['gerbang'], isEmpty);
+      expect(p['catatanReviewer'], contains('TODO-VERIFIKASI'));
+
+      // Misi daftar periksa
+      final misi = p['misi'] as Map<String, dynamic>;
+      expect(misi['tipe'], equals('daftar_periksa'));
+      expect(misi['disclaimer'], isTrue);
+      expect(misi['minimalDicentang'], equals(3));
+      expect(misi['judul'], equals('Siapkan cara cek penyedia'));
+
+      final langkah = misi['langkah'] as List<dynamic>;
+      expect(langkah, hasLength(6));
+      expect(langkah[0]['id'], equals('l1'));
+      expect(langkah[5]['id'], equals('l6'));
+
+      expect(isiMateriLampiran.contains('Cek Legalitas Sebelum Percaya'), isTrue);
+      expect(isiMateriLampiran.contains('Izin itu pintu pertama'), isTrue);
+      expect(isiMateriLampiran.contains('Tanda aplikasi pinjaman bermasalah'), isTrue);
+    });
+
+    test('(d) Validasi Pelajaran 5.3 (Kalau Sudah Terlanjur & Misi Daftar Periksa)', () {
+      final p = pelajaranJson['waspada_penipuan_5_3']!;
+      expect(p['judul'], equals('Kalau Sudah Terlanjur'));
+      expect(p['durasiMenit'], equals(5));
+      expect(p['gerbang'], isEmpty);
+      expect(p['catatanReviewer'], contains('TODO-VERIFIKASI'));
+
+      // Misi daftar periksa
+      final misi = p['misi'] as Map<String, dynamic>;
+      expect(misi['tipe'], equals('daftar_periksa'));
+      expect(misi['disclaimer'], isTrue);
+      expect(misi['minimalDicentang'], equals(3));
+      expect(misi['judul'], equals('Susun rencana daruratmu'));
+
+      final langkah = misi['langkah'] as List<dynamic>;
+      expect(langkah, hasLength(5));
+      expect(langkah[0]['id'], equals('l1'));
+      expect(langkah[4]['id'], equals('l5'));
+
+      expect(isiMateriLampiran.contains('Kalau Sudah Terlanjur'), isTrue);
+      expect(isiMateriLampiran.contains('Tenang dulu, lalu bertindak'), isTrue);
+      expect(isiMateriLampiran.contains('Langkah pertama: amankan'), isTrue);
+    });
+
+    test('(e) Validasi Kuis Akhir Modul 5 (5 dari 10 bankSoal, sebaran 4/3/3)', () {
+      final kuis = modulJson['kuis'] as Map<String, dynamic>;
+      expect(kuis['jumlahSoal'], equals(5));
+
+      final bankSoal = kuis['bankSoal'] as List<dynamic>;
+      expect(bankSoal, hasLength(10));
+
+      final sebaran = <String, int>{};
+      for (final s in bankSoal) {
+        final pelId = s['pelajaranId'] as String;
+        sebaran[pelId] = (sebaran[pelId] ?? 0) + 1;
+      }
+
+      expect(sebaran['waspada_penipuan_5_1'], equals(4), reason: 'Pelajaran 5_1 wajib punya 4 soal');
+      expect(sebaran['waspada_penipuan_5_2'], equals(3), reason: 'Pelajaran 5_2 wajib punya 3 soal');
+      expect(sebaran['waspada_penipuan_5_3'], equals(3), reason: 'Pelajaran 5_3 wajib punya 3 soal');
+    });
+
+    test('(f) Validasi Enam Entri Kamus Modul 5 Kata per Kata', () {
+      final entriModul5 = {
+        'OTP': (
+          arti: 'Kode sekali pakai yang dikirim ke HP atau e-mailmu untuk memastikan itu benar-benar kamu. Jangan dibagikan ke siapa pun.',
+          contohRupiah: 'Kode 6 angka yang dikirim saat kamu mengonfirmasi transfer Rp100.000.',
+        ),
+        'phishing': (
+          arti: 'Penipuan lewat pesan, tautan, atau situs palsu yang menyamar sebagai pihak tepercaya untuk mencuri data atau uangmu.',
+          contohRupiah: 'Pesan "akunmu akan diblokir" dengan tautan palsu agar kamu memasukkan PIN.',
+        ),
+        'pinjol ilegal': (
+          arti: 'Layanan pinjaman online yang tidak berizin dari lembaga pengawas, sehingga biaya dan cara menagihnya tidak diawasi.',
+          contohRupiah: 'Pinjaman Rp3.000.000 yang hanya cair Rp2.100.000, tetapi harus dikembalikan Rp3.000.000 dalam dua minggu.',
+        ),
+        'biaya di muka': (
+          arti: 'Biaya yang diminta dibayar lebih dulu sebelum kamu menerima sesuatu, atau dipotong dari dana yang cair.',
+          contohRupiah: 'Diminta transfer Rp150.000 agar hadiah Rp5.000.000 bisa cair.',
+        ),
+        'verifikasi dua langkah': (
+          arti: 'Pengaman tambahan saat masuk akun: selain kata sandi, kamu perlu satu langkah lain, misalnya kode.',
+          contohRupiah: 'Masuk ke e-mail dengan kata sandi, lalu memasukkan kode yang dikirim ke HP.',
+        ),
+        'lembaga pengawas': (
+          arti: 'Lembaga yang mengawasi dan memberi izin kepada penyedia layanan keuangan.',
+          contohRupiah: 'Penyedia pinjaman yang berizin tercatat di lembaga pengawas keuangan.',
+        ),
+      };
+
+      for (final e in entriModul5.entries) {
+        final istilah = e.key;
+        final target = e.value;
+
+        // Cek di aset/konten/kamus.json
+        final entriJson = daftarKamus.firstWhere(
+          (k) => k['istilah'] == istilah,
+          orElse: () => throw Exception('Istilah "$istilah" tidak ditemukan di kamus.json'),
+        );
+        expect(entriJson['arti'], equals(target.arti), reason: 'Arti "$istilah" di kamus.json tidak cocok kata per kata');
+        expect(entriJson['contohRupiah'], equals(target.contohRupiah), reason: 'Contoh Rupiah "$istilah" di kamus.json tidak cocok kata per kata');
+
+        // Cek di docs/materi/kamus_modul_5.md
+        expect(isiMateriKamus.contains(istilah), isTrue, reason: 'Istilah "$istilah" tidak ditemukan di docs/materi/kamus_modul_5.md');
+        expect(isiMateriKamus.contains(target.arti), isTrue, reason: 'Arti "$istilah" tidak ditemukan di docs/materi/kamus_modul_5.md');
+        expect(isiMateriKamus.contains(target.contohRupiah), isTrue, reason: 'Contoh Rupiah "$istilah" tidak ditemukan di docs/materi/kamus_modul_5.md');
+      }
+    });
+
+    test('(g) Validasi Berkas aset/konten/disclaimer.json Kata per Kata', () {
+      expect(disclaimerJson.containsKey('langkahDuniaNyata'), isTrue);
+      const teksHarapan =
+          'Funda hanya memberi edukasi umum. Ini bukan ajakan membeli produk keuangan atau '
+          'nasihat keuangan, hukum, maupun pajak. Keputusan dan risikonya ada padamu. '
+          'Funda tidak bertanggung jawab atas kerugian dari tindakan di luar aplikasi. '
+          'Pastikan penyedia berizin sebelum memakai uangmu.';
+      expect(
+        (disclaimerJson['langkahDuniaNyata'] as String).replaceAll(RegExp(r'\s+'), ' ').trim(),
+        equals(teksHarapan.replaceAll(RegExp(r'\s+'), ' ').trim()),
+      );
     });
   });
 }

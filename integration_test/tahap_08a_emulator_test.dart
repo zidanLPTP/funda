@@ -20,11 +20,6 @@ Future<void> mintaTangkapanLayar(String namaLayar) async {
   await Future.delayed(const Duration(milliseconds: 2000));
 }
 
-Future<void> pompaAman(WidgetTester tester, [int ms = 400]) async {
-  await tester.pump(Duration(milliseconds: ms));
-  await tester.pump(Duration(milliseconds: ms));
-}
-
 Future<Map<String, int>> ambilRincianBarisTabel(BasisDataFunda db) async {
   final hasil = <String, int>{};
   final barisTabel = await db.customSelect(
@@ -76,19 +71,19 @@ void main() {
         child: const AplikasiFunda(),
       ),
     );
-    await pompaAman(tester, 1000);
+    await tester.pump();
 
     // =========================================================================
     // 1. Setup Awal: Lewati Tes Awal, Buat Dompet, Selesaikan Modul 1
     // =========================================================================
     debugPrint('=== [LANGKAH 1]: Setup Prasyarat Modul 1 Selesai ===');
     tester.element(find.byType(Scaffold).first).go('/belajar/tes-awal');
-    await pompaAman(tester, 800);
+    await tester.pump();
 
     final tombolLewati = find.text('Lewati');
     if (tombolLewati.evaluate().isNotEmpty) {
       await tester.tap(tombolLewati);
-      await pompaAman(tester, 800);
+      await tester.pump();
     }
 
     final now = DateTime.now();
@@ -158,7 +153,7 @@ void main() {
     // =========================================================================
     debugPrint('=== [LANGKAH 2]: Buka Tab Belajar, Modul 2 Terbuka ===');
     tester.element(find.byType(Scaffold).first).go('/belajar');
-    await pompaAman(tester, 1000);
+    await tester.pump();
 
     expect(find.text('Tabungan'), findsWidgets);
     await mintaTangkapanLayar('tahap_08a_peta_belajar_modul_2_terbuka');
@@ -196,7 +191,7 @@ void main() {
         );
 
     tester.element(find.byType(Scaffold).first).go('/belajar/pelajaran/tabungan/tabungan_2_1');
-    await pompaAman(tester, 1000);
+    await tester.pump();
 
     expect(find.text('Menabung Itu Soal Tujuan'), findsOneWidget);
 
@@ -224,9 +219,9 @@ void main() {
           if (f.evaluate().isNotEmpty) {
             try {
               await tester.ensureVisible(f.first);
-              await pompaAman(tester, 100);
+              await tester.pump();
               await tester.tap(f.first);
-              await pompaAman(tester, 150);
+              await tester.pump();
             } catch (_) {}
           }
         }
@@ -240,17 +235,17 @@ void main() {
         final tombolPeriksa = find.text('Periksa Misi');
         if (tombolPeriksa.evaluate().isNotEmpty) {
           await tester.tap(tombolPeriksa);
-          await pompaAman(tester, 500);
+          await tester.pump();
         }
 
         final tombolLanjut = find.text('Lanjut');
         final tombolSelesai = find.text('Selesai Belajar');
         if (tombolLanjut.evaluate().isNotEmpty) {
           await tester.tap(tombolLanjut);
-          await pompaAman(tester, 500);
+          await tester.pump();
         } else if (tombolSelesai.evaluate().isNotEmpty) {
           await tester.tap(tombolSelesai);
-          await pompaAman(tester, 500);
+          await tester.pump();
           break;
         }
       }
@@ -269,16 +264,16 @@ void main() {
         final tombolPeriksa = find.text('Periksa Misi');
         if (tombolPeriksa.evaluate().isNotEmpty) {
           await tester.tap(tombolPeriksa);
-          await pompaAman(tester, 500);
+          await tester.pump();
         }
 
         final tombolLanjut = find.text('Lanjut');
         if (tombolLanjut.evaluate().isNotEmpty) {
           await tester.tap(tombolLanjut);
-          await pompaAman(tester, 500);
+          await tester.pump();
         }
       }
-      await pompaAman(tester, 1500);
+      await tester.pump();
     }
 
     // Maju ke Slide Contoh Angka (4 kali tap Lanjut)
@@ -321,7 +316,7 @@ void main() {
         );
 
     tester.element(find.byType(Scaffold).first).go('/belajar/pelajaran/tabungan/tabungan_2_2');
-    await pompaAman(tester, 1000);
+    await tester.pump();
     expect(find.text('Bayar Diri Sendiri Dulu'), findsOneWidget);
 
     // Navigasi ke Slide Misi
@@ -345,7 +340,7 @@ void main() {
     // =========================================================================
     debugPrint('=== [LANGKAH 5]: Pelajaran 2_3 & Estimasi Kecepatan Menabung ===');
     tester.element(find.byType(Scaffold).first).go('/belajar/pelajaran/tabungan/tabungan_2_3');
-    await pompaAman(tester, 1000);
+    await tester.pump();
     expect(find.text('Menghitung Kecepatan Menabung'), findsOneWidget);
 
     await majuSampaiUmpanBalik();
@@ -396,13 +391,13 @@ void main() {
 
     // Buka kuis modul 2 via UI
     tester.element(find.byType(Scaffold).first).go('/belajar/kuis/tabungan');
-    await pompaAman(tester, 1000);
+    await tester.pump();
 
     for (var s = 1; s <= 5; s++) {
       final daftarTeks = tester.widgetList<Text>(find.byType(Text));
       final opsi = daftarTeks.firstWhere((w) => w.data != null && w.data!.length > 5 && !w.data!.startsWith('Soal') && !w.data!.startsWith('Kuis'));
       await tester.tap(find.text(opsi.data!));
-      await pompaAman(tester, 400);
+      await tester.pump();
 
       final tombolBerikutnya = find.text('Soal Berikutnya');
       final tombolHasil = find.text('Lihat Hasil Kuis');
@@ -411,7 +406,7 @@ void main() {
       } else if (tombolHasil.evaluate().isNotEmpty) {
         await tester.tap(tombolHasil);
       }
-      await pompaAman(tester, 500);
+      await tester.pump();
     }
     await mintaTangkapanLayar('tahap_08a_kuis_modul_2_lulus');
 
@@ -420,7 +415,7 @@ void main() {
     // =========================================================================
     debugPrint('=== [LANGKAH 7]: Gerbang Modul 3 & Pencatatan 3 Pengeluaran Kebutuhan ===');
     tester.element(find.byType(Scaffold).first).go('/belajar');
-    await pompaAman(tester, 800);
+    await tester.pump();
     expect(find.textContaining('Dana Darurat'), findsWidgets);
     await mintaTangkapanLayar('tahap_08a_modul_3_terkunci');
 
@@ -535,7 +530,7 @@ void main() {
 
     // Buka kembali Tab Belajar: Modul 3 sekarang terbuka
     tester.element(find.byType(Scaffold).first).go('/belajar');
-    await pompaAman(tester, 800);
+    await tester.pump();
     await mintaTangkapanLayar('tahap_08a_modul_3_terbuka');
 
     // =========================================================================
@@ -544,7 +539,7 @@ void main() {
     debugPrint('=== [LANGKAH 8]: Pelajaran Modul 3 & Pengisian Dana Darurat ===');
     // Pelajaran 3_1
     tester.element(find.byType(Scaffold).first).go('/belajar/pelajaran/dana_darurat/dana_darurat_3_1');
-    await pompaAman(tester, 1000);
+    await tester.pump();
     await majuSampaiUmpanBalik();
     expect(find.textContaining('Pengeluaran wajibmu rata-rata Rp1.900.000 per bulan'), findsWidgets);
     await mintaTangkapanLayar('tahap_08a_pelajaran_3_1_pengeluaran_wajib');
@@ -588,7 +583,7 @@ void main() {
 
     // Pelajaran 3_2
     tester.element(find.byType(Scaffold).first).go('/belajar/pelajaran/dana_darurat/dana_darurat_3_2');
-    await pompaAman(tester, 1000);
+    await tester.pump();
     await majuSampaiUmpanBalik();
     expect(find.textContaining('Rp5.700.000 sampai Rp11.400.000'), findsWidgets);
     await mintaTangkapanLayar('tahap_08a_pelajaran_3_2_target_darurat');
@@ -618,7 +613,7 @@ void main() {
 
     // Pelajaran 3_3
     tester.element(find.byType(Scaffold).first).go('/belajar/pelajaran/dana_darurat/dana_darurat_3_3');
-    await pompaAman(tester, 1000);
+    await tester.pump();
     await majuSampaiUmpanBalik();
     expect(find.textContaining('1,5 bulan pengeluaran wajibmu'), findsWidgets);
     await mintaTangkapanLayar('tahap_08a_pelajaran_3_3_progres_darurat');
@@ -636,12 +631,12 @@ void main() {
 
     // Kuis Modul 3
     tester.element(find.byType(Scaffold).first).go('/belajar/kuis/dana_darurat');
-    await pompaAman(tester, 1000);
+    await tester.pump();
     for (var s = 1; s <= 5; s++) {
       final daftarTeks = tester.widgetList<Text>(find.byType(Text));
       final opsi = daftarTeks.firstWhere((w) => w.data != null && w.data!.length > 5 && !w.data!.startsWith('Soal') && !w.data!.startsWith('Kuis'));
       await tester.tap(find.text(opsi.data!));
-      await pompaAman(tester, 400);
+      await tester.pump();
 
       final tombolBerikutnya = find.text('Soal Berikutnya');
       final tombolHasil = find.text('Lihat Hasil Kuis');
@@ -650,13 +645,13 @@ void main() {
       } else if (tombolHasil.evaluate().isNotEmpty) {
         await tester.tap(tombolHasil);
       }
-      await pompaAman(tester, 500);
+      await tester.pump();
     }
     await mintaTangkapanLayar('tahap_08a_kuis_modul_3_lulus');
 
     // Buka Beranda dan periksa pembaruan petak belajar
     tester.element(find.byType(Scaffold).first).go('/');
-    await pompaAman(tester, 1000);
+    await tester.pump();
     expect(find.byType(Scaffold), findsWidgets);
 
     // =========================================================================
