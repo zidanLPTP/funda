@@ -1,5 +1,8 @@
 import 'dart:convert';
+import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:funda/data/basis_data.dart';
+import 'package:funda/data/repositori/hasil_misi_repositori.dart';
 import 'package:funda/perhitungan/perhitungan_belajar.dart';
 import 'package:funda/fitur/belajar/model/registri_misi.dart';
 
@@ -123,6 +126,53 @@ void main() {
 
       expect(setPulih, equals({'l1', 'l3', 'l5'}));
       expect(RegistriMisi.evaluasiDaftarPeriksa(dicentang: setPulih, minimalDicentang: 3), isTrue);
+    });
+  });
+
+  group('Pembuktian 5 Tipe Misi Menulis Status Selesai ke tabel_hasil_misi (Tahap 8C Butir C.e)', () {
+    late BasisDataFunda db;
+    late HasilMisiRepositori repo;
+
+    setUp(() {
+      db = BasisDataFunda(NativeDatabase.memory());
+      repo = HasilMisiRepositori(db);
+    });
+
+    tearDown(() async {
+      await db.close();
+    });
+
+    test('Semua 5 tipe misi (ada_data, aturan_data, lihat_hitungan, keputusan, daftar_periksa) mencatat status selesai', () async {
+      final daftarMisi = [
+        ('misi_ada_data', 'pel_1_1', 'ada_data', '{"min": 1, "objek": "transaksi"}'),
+        ('misi_aturan_data', 'pel_1_3', 'aturan_data', '{"aturan": "semua_kategori_berlabel"}'),
+        ('misi_lihat_hitungan', 'pel_2_1', 'lihat_hitungan', '{"objek": "ringkasan_tujuan_tabungan"}'),
+        ('misi_keputusan', 'waspada_penipuan_5_1', 'keputusan', '{"opsiDipilih": ["a", "c", "b"]}'),
+        ('misi_daftar_periksa', 'waspada_penipuan_5_2', 'daftar_periksa', '{"dicentang": ["l1", "l2", "l3"]}'),
+      ];
+
+      for (final (misiId, pelId, tipe, muatan) in daftarMisi) {
+        await repo.simpanHasilMisi(
+          misiId: misiId,
+          pelajaranId: pelId,
+          tipe: tipe,
+          status: 'selesai',
+          muatanJson: muatan,
+        );
+      }
+
+      // Ambil seluruh isi tabel_hasil_misi dari database
+      final seluruhHasil = await db.select(db.tabelHasilMisi).get();
+      expect(seluruhHasil.length, equals(5));
+
+      for (final (misiId, pelId, tipe, muatan) in daftarMisi) {
+        final hasil = seluruhHasil.firstWhere((h) => h.misiId == misiId);
+        expect(hasil.pelajaranId, equals(pelId));
+        expect(hasil.tipe, equals(tipe));
+        expect(hasil.status, equals('selesai'));
+        expect(hasil.muatanJson, equals(muatan));
+        expect(hasil.selesaiPada, isNotNull);
+      }
     });
   });
 }

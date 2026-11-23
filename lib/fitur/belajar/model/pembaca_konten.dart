@@ -500,18 +500,23 @@ class PembacaKonten {
     if (judulMisi == null || judulMisi.trim().isEmpty) {
       throw GalatKonten('Kolom misi.judul wajib ada dan tidak kosong', berkas: namaBerkas, kolom: 'misi.judul');
     }
-    final instruksiMisi = (misi['instruksi'] ?? misi['deskripsi']) as String?;
-    if (instruksiMisi == null || instruksiMisi.trim().isEmpty) {
-      throw GalatKonten('Kolom misi.instruksi wajib ada dan tidak kosong', berkas: namaBerkas, kolom: 'misi.instruksi');
-    }
     _periksaIstilahKamus(judulMisi, daftarIstilahKamus, namaBerkas, 'misi.judul');
-    _periksaIstilahKamus(instruksiMisi, daftarIstilahKamus, namaBerkas, 'misi.instruksi');
     periksaBahasaTeks(judulMisi, namaBerkas: namaBerkas, daftarPeringatan: daftarPeringatan);
-    periksaBahasaTeks(instruksiMisi, namaBerkas: namaBerkas, daftarPeringatan: daftarPeringatan);
-
     if (isModul5) {
       periksaTeksSensitifModul5(judulMisi, namaBerkas: namaBerkas, kolom: 'misi.judul');
-      periksaTeksSensitifModul5(instruksiMisi, namaBerkas: namaBerkas, kolom: 'misi.instruksi');
+    }
+    final instruksiMisi = (misi['instruksi'] ?? misi['deskripsi']) as String?;
+    if (instruksiMisi != null) {
+      if (instruksiMisi.trim().isEmpty) {
+        throw GalatKonten('Kolom misi.instruksi wajib ada dan tidak kosong', berkas: namaBerkas, kolom: 'misi.instruksi');
+      }
+      _periksaIstilahKamus(instruksiMisi, daftarIstilahKamus, namaBerkas, 'misi.instruksi');
+      periksaBahasaTeks(instruksiMisi, namaBerkas: namaBerkas, daftarPeringatan: daftarPeringatan);
+      if (isModul5) {
+        periksaTeksSensitifModul5(instruksiMisi, namaBerkas: namaBerkas, kolom: 'misi.instruksi');
+      }
+    } else if (tipeMisi == 'keputusan' || tipeMisi == 'daftar_periksa') {
+      throw GalatKonten('Kolom misi.instruksi wajib ada dan tidak kosong', berkas: namaBerkas, kolom: 'misi.instruksi');
     }
 
     if (tipeMisi == 'keputusan') {

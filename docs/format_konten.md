@@ -248,7 +248,7 @@ Berikut adalah registri kunci umpan balik edukatif yang diolah dari data riil pe
    ```json
    {
      "versi": 1,
-     "langkahDuniaNyata": "Funda hanya memberi edukasi umum dan bukan nasihat hukum, keuangan, atau perlindungan konsumen resmi. Langkah-langkah di bawah adalah kebiasaan baik yang kamu lakukan di luar aplikasi ini."
+     "langkahDuniaNyata": "Funda hanya memberi edukasi umum. Ini bukan ajakan membeli produk keuangan atau nasihat keuangan, hukum, maupun pajak. Keputusan dan risikonya ada padamu. Funda tidak bertanggung jawab atas kerugian dari tindakan di luar aplikasi. Pastikan penyedia berizin sebelum memakai uangmu."
    }
    ```
 

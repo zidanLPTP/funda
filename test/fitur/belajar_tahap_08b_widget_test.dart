@@ -399,7 +399,7 @@ void main() {
       expect(status6.status, equals(StatusBelajar.terkunci));
     });
 
-    testWidgets('7. Tombol "Aku tidak punya ini" TIDAK tampil bila Modul 3 belum selesai', (tester) async {
+    testWidgets('7. Uji widget ketiga kondisi pesan gerbang Modul 4 (keduanya belum, hanya Modul 3 belum, hanya utang belum tanpa kata "Lalu")', (tester) async {
       tester.view.physicalSize = const Size(1080, 2400);
       tester.view.devicePixelRatio = 2.0;
       addTearDown(() => tester.view.resetPhysicalSize());
@@ -407,17 +407,21 @@ void main() {
       final fileModul = File('aset/konten/pemula/utang_cicilan/modul.json');
       final modul = PembacaKonten.uraiModul(fileModul.readAsStringSync(), namaBerkas: 'modul.json');
 
-      final fotoDataModul3Belum = FotoDataPengguna.kosong(); // Modul 3 belum selesai
-      final status = tentukanStatusModul(modul: modul, fotoData: fotoDataModul3Belum);
-      expect(status.status, equals(StatusBelajar.terkunci));
-      expect(status.daftarAtauPernyataan, isEmpty); // Tidak menawarkan pernyataan karena Modul 3 belum selesai
+      // --- KONDISI 1: Keduanya belum (Modul 3 belum selesai & belum ada utang) ---
+      final fotoDataKeduanyaBelum = FotoDataPengguna.kosong();
+      final status1 = tentukanStatusModul(modul: modul, fotoData: fotoDataKeduanyaBelum);
+      expect(status1.status, equals(StatusBelajar.terkunci));
+      expect(
+        status1.apaYangKurang.first,
+        equals('Selesaikan Modul 3 dulu. Lalu catat utang atau cicilanmu di menu Utang. Kalau kamu memang tidak punya utang, pilih Aku tidak punya ini.'),
+      );
+      expect(status1.daftarAtauPernyataan, isEmpty);
 
-      // Render LayarBelajar
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
             penyediaBasisData.overrideWithValue(db),
-            penyediaFotoData.overrideWith((ref) => Future.value(fotoDataModul3Belum)),
+            penyediaFotoData.overrideWith((ref) => Future.value(fotoDataKeduanyaBelum)),
             penyediaDaftarSemuaModul.overrideWith((ref) => Future.value([modul])),
             penyediaStreamPernyataan.overrideWith((ref) => Stream.value(<String, String>{})),
           ],
@@ -427,12 +431,68 @@ void main() {
           ),
         ),
       );
-
       await tester.pump();
       expect(find.textContaining('Selesaikan Modul 3 dulu.'), findsWidgets);
-      // Pastikan tombol pernyataan tidak ada
+      expect(find.textContaining('Catat utang atau cicilanmu di menu Utang'), findsWidgets);
       expect(find.text('Aku tidak punya ini'), findsNothing);
+      await bongkarWidget(tester);
 
+      // --- KONDISI 2: Hanya Modul 3 belum (sudah ada 1 utang tercatat) ---
+      final fotoDataHanyaModul3Belum = FotoDataPengguna.kosong().copyWith(jumlahUtangAktif: 1);
+      final status2 = tentukanStatusModul(modul: modul, fotoData: fotoDataHanyaModul3Belum);
+      expect(status2.status, equals(StatusBelajar.terkunci));
+      expect(status2.apaYangKurang, equals(['Selesaikan Modul 3 dulu.']));
+      expect(status2.daftarAtauPernyataan, isEmpty);
+
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            penyediaBasisData.overrideWithValue(db),
+            penyediaFotoData.overrideWith((ref) => Future.value(fotoDataHanyaModul3Belum)),
+            penyediaDaftarSemuaModul.overrideWith((ref) => Future.value([modul])),
+            penyediaStreamPernyataan.overrideWith((ref) => Stream.value(<String, String>{})),
+          ],
+          child: MaterialApp(
+            theme: TemaFunda.temaTerang,
+            home: const LayarBelajar(),
+          ),
+        ),
+      );
+      await tester.pump();
+      expect(find.textContaining('Selesaikan Modul 3 dulu.'), findsWidgets);
+      expect(find.textContaining('Lalu catat utang'), findsNothing);
+      expect(find.textContaining('Catat utang'), findsNothing);
+      expect(find.text('Aku tidak punya ini'), findsNothing);
+      await bongkarWidget(tester);
+
+      // --- KONDISI 3: Hanya utang belum (Modul 3 sudah selesai, utang belum tercatat) ---
+      final fotoDataHanyaUtangBelum = FotoDataPengguna.kosong().copyWith(
+        hasilKuisTerbaik: {'dana_darurat': const HasilKuisSnapshot(lulus: true, skorPersen: 80)},
+      );
+      final status3 = tentukanStatusModul(modul: modul, fotoData: fotoDataHanyaUtangBelum);
+      expect(status3.status, equals(StatusBelajar.terkunci));
+      const pesanTanpaLalu = 'Catat utang atau cicilanmu di menu Utang. Kalau kamu memang tidak punya utang, pilih Aku tidak punya ini.';
+      expect(status3.apaYangKurang, equals([pesanTanpaLalu]));
+      expect(status3.apaYangKurang.first.startsWith('Lalu'), isFalse, reason: 'Pesan hanya utang belum tidak boleh diawali kata "Lalu"');
+      expect(status3.daftarAtauPernyataan, equals(['tidak_punya_utang']));
+
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            penyediaBasisData.overrideWithValue(db),
+            penyediaFotoData.overrideWith((ref) => Future.value(fotoDataHanyaUtangBelum)),
+            penyediaDaftarSemuaModul.overrideWith((ref) => Future.value([modul])),
+            penyediaStreamPernyataan.overrideWith((ref) => Stream.value(<String, String>{})),
+          ],
+          child: MaterialApp(
+            theme: TemaFunda.temaTerang,
+            home: const LayarBelajar(),
+          ),
+        ),
+      );
+      await tester.pump();
+      expect(find.text(pesanTanpaLalu), findsWidgets);
+      expect(find.text('Aku tidak punya ini'), findsWidgets);
       await bongkarWidget(tester);
     });
 

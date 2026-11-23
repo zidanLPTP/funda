@@ -1,6 +1,7 @@
 import '../test/pembantu/pompa_uji.dart';
 // ignore_for_file: avoid_print
 import 'dart:convert';
+import 'dart:io';
 import 'package:drift/drift.dart' hide isNotNull, isNull;
 import 'package:drift/native.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +12,7 @@ import 'package:funda/data/basis_data.dart';
 import 'package:funda/data/cadangan/cadangan_repositori.dart';
 import 'package:funda/data/penyedia_basis_data.dart';
 import 'package:funda/data/repositori/foto_data_repositori.dart';
+import 'package:funda/fitur/belajar/model/pembaca_konten.dart';
 import 'package:funda/fitur/belajar/tampilan/layar_kuis_modul.dart';
 import 'package:funda/komponen/tombol_funda.dart';
 import 'package:funda/layanan/pengingat/layanan_pengingat_nyata.dart';
@@ -669,6 +671,51 @@ void main() {
     debugPrint('Daftar durasi komputasi: $durasiKomputasi ms (Median: $medianKomputasi ms)');
     debugPrint('Daftar durasi frame: $durasiFramePertama ms (Median: $medianFrame ms)');
     expect(medianKomputasi, lessThan(100), reason: 'Median komputasi Tab Belajar wajib di bawah 100 ms');
+
+    // 8b. Tolok Ukur Membuka Layar Pelajaran Modul 5 (5.1, 5.2, 5.3) Beban 20.000 Transaksi + 20 Utang
+    final pelajaranIds = [
+      'waspada_penipuan_5_1',
+      'waspada_penipuan_5_2',
+      'waspada_penipuan_5_3',
+    ];
+
+    for (final pelId in pelajaranIds) {
+      final jsonStr = File('aset/konten/pemula/waspada_penipuan/$pelId.json').readAsStringSync();
+      // Pemanasan 1x: kueri status dan muat pelajaran
+      await (basisData.select(basisData.tabelHasilMisi)..where((m) => m.misiId.equals(pelId))).getSingleOrNull();
+      await (basisData.select(basisData.tabelProgresPelajaran)..where((p) => p.pelajaranId.equals(pelId))).getSingleOrNull();
+      PembacaKonten.uraiPelajaran(jsonStr, namaBerkas: '$pelId.json');
+      await tester.pump();
+
+      final listKompPel = <int>[];
+      final listFramePel = <int>[];
+
+      // 10 Iterasi tanpa helper pompa
+      for (var it = 0; it < 10; it++) {
+        final swKomp = Stopwatch()..start();
+        // 2 Kueri database yang dieksekusi saat membuka layar pemutar pelajaran:
+        await (basisData.select(basisData.tabelHasilMisi)..where((m) => m.misiId.equals(pelId))).getSingleOrNull();
+        await (basisData.select(basisData.tabelProgresPelajaran)..where((p) => p.pelajaranId.equals(pelId))).getSingleOrNull();
+        PembacaKonten.uraiPelajaran(jsonStr, namaBerkas: '$pelId.json');
+        swKomp.stop();
+        listKompPel.add(swKomp.elapsedMilliseconds);
+
+        final swFrame = Stopwatch()..start();
+        await tester.pump();
+        swFrame.stop();
+        listFramePel.add(swFrame.elapsedMilliseconds);
+      }
+
+      final listKompSorted = List<int>.from(listKompPel)..sort();
+      final medianKomp = listKompSorted[listKompSorted.length ~/ 2];
+      final terburukKomp = listKompSorted.last;
+
+      debugPrint('=== [TOLOK UKUR MEMBUKA LAYAR PELAJARAN $pelId] ===');
+      debugPrint('Jumlah kueri database per buka: 2 kueri (tabel_hasil_misi, tabel_progres_pelajaran)');
+      debugPrint('Durasi komputasi (10 iterasi): $listKompPel ms (Median: $medianKomp ms, Terburuk: $terburukKomp ms)');
+      debugPrint('Durasi frame pertama (10 iterasi): $listFramePel ms');
+      expect(medianKomp, lessThan(50), reason: 'Median waktu buka layar pelajaran $pelId wajib di bawah 50 ms');
+    }
 
     debugPrint('=== SELURUH PENGUJIAN INTEGRASI TAHAP 8C SELESAI DENGAN SUKSES ===');
   });

@@ -5,6 +5,16 @@ Format penulisan mengacu pada standar Keep a Changelog dan penamaan commit Funda
 
 ---
 
+## [0.12.1] - 2026-11-23 — Tahap 8C-R: Revisi & Pembuktian Penuh Modul 5
+
+Tahap 8C-R menuntaskan seluruh revisi dan pembuktian Tahap 8C sesuai panduan PROMPT TAHAP 8C-R:
+- **Investigasi Pengujian & Pemulihan (Butir A):** Mengembalikan seluruh 67 kasus uji lama yang sempat terhapus di `test/fitur/pemeriksa_konten_rusak_test.dart` dan menggabungkannya dengan 17 kasus uji baru Tahap 8C (total 84 kasus uji di berkas ini, seluruhnya lolos).
+- **Kesesuaian Lampiran Modul 5 & Kamus (Butir B):** Menyelaraskan 6 entri kamus Modul 5 menjadi frasa spasi persis lampiran reviewer (`OTP`, `phishing`, `pinjol ilegal`, `biaya di muka`, `verifikasi dua langkah`, `lembaga pengawas`). Menyelaraskan langkah pelajaran 5.2 menjadi 6 langkah (`l1`..`l6`) dan 5.3 menjadi 5 langkah (`l1`..`l5`). Uji kesesuaian lampiran kata per kata 100% lolos (17 pengujian).
+- **Langkah 0 & Pembuktian Modul 4 (Butir C):** Memverifikasi integritas berkas materi Modul 4 (1 commit), judul keempat pelajaran persis lampiran, penanda ringkasan contohAngka `"ringkasan": true`, uji widget untuk ketiga kondisi pesan gerbang Modul 4, pengujian 5 tipe misi menulis `selesai` ke `tabel_hasil_misi`, eliminasi total `pompaAman` dan `warnIfMissed: false`, serta penjelasan kode riwayat 6 baris kuis di 8B-R dan durasi terbaru `repositori_utang_test.dart`.
+- **Tolok Ukur Beban & E2E (Butir D):** Memverifikasi alur E2E emulator lengkap (opsi a->c->b dengan rekaman muatan urutan percobaan, disclaimer + centang bertahap 5.2, kuis 3/5 gagal lalu 4/5 lulus, regresi 19 tabel identik 44 baris), serta menambahkan tolok ukur beban 20.000 transaksi + 20 utang untuk pembukaan layar pelajaran 5.1, 5.2, dan 5.3 (1x pemanasan + 10 iterasi, median komputasi 1-2 ms, 2 kueri database per layar buka).
+
+---
+
 ## [0.12.0] - 2026-11-21 — Tahap 8C: Modul 5 "Waspada Penipuan & Pinjol Ilegal" + Tipe Misi Keputusan & Daftar Periksa
 
 Tahap 8C mengimplementasikan kurikulum lengkap Modul 5 ("Waspada Penipuan & Pinjol Ilegal": 3 pelajaran, 1 kuis 5 dari 10 bankSoal sebaran 4/3/3 ber-pelajaranId valid, 6 entri kamus baru) beserta dua tipe misi baru (`keputusan` dan `daftar_periksa`), komponen reusable `DisclaimerLangkahDuniaNyata`, aturan pemeriksa bahasa sensitif khusus Modul 5 (larangan URL, surel, nama lembaga spesifik, nomor kontak), persistensi konsisten seluruh tipe misi ke `tabel_hasil_misi`, eliminasi total `pompaAman` dan `pump(const Duration` di luar `pompa_uji.dart`, penutupan sisa Tahap 8B, suite uji unit, widget, dan skrip pengujian integrasi E2E emulator.
