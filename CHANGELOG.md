@@ -5,6 +5,24 @@ Format penulisan mengacu pada standar Keep a Changelog dan penamaan commit Funda
 
 ---
 
+## [0.14.1] - 2026-11-23 — Tahap 9A-R: Perbaikan Token UI, Integer Sandbox & Lampiran Modul 11
+
+Tahap 9A-R memperbaiki token UI, rumus pembagian integer simulasi sandbox, dan kesesuaian lampiran konten Modul 11:
+- **Perbaikan Token Desain & UI Sandbox (`lib/fitur/sandbox/tampilan/layar_sandbox.dart`):**
+  - Menghapus seluruh warna hard-coded (`Color(0x...)`, `Colors.white`, dll.) dan menggantikannya dengan token desain sistemik `WarnaFunda` (`aksen`, `peringatan`, `teks`, `teksRedup`, `sukses`, `bahaya`, `sifatKebutuhan`, `sifatKeinginan`, `teksPutih`, `garis`, `tintBiru`).
+  - Menghapus `fontFamily: 'Inter'` hard-coded dan menggunakan token `TipografiFunda.namaKeluargaFont`.
+  - Verifikasi `git grep -n "Color(0x\|Colors\.\|Inter" -- lib/fitur/sandbox/` bersih total (0 temuan).
+- **Perbaikan Sisa Pembagian Integer Sandbox (`lib/perhitungan/perhitungan_sandbox.dart`):**
+  - Menyelaraskan alokasi nominal aset terakhir agar menyerap seluruh sisa pembagian integer: `final nominalSaham = nilaiAwalRupiah - nominalPasarUang - nominalObligasi;` sehingga `nominalPasarUang + nominalObligasi + nominalSaham == nilaiAwalRupiah` selalu terpenuhi untuk nominal apa pun (termasuk yang tidak habis dibagi 100).
+  - Menambahkan pengujian unit khusus skenario sisa pembagian integer (`nilaiAwalRupiah = 1000001, 33/33/34`) di `test/perhitungan/perhitungan_sandbox_test.dart`.
+  - Memastikan seluruh perhitungan sandbox tetap murni integer tanpa tipe `double`.
+- **Penyelarasan Kesesuaian Lampiran Konten Modul 11 (`aset/konten/menengah/investasi_dasar/`, `test/konten/kesesuaian_lampiran_test.dart`):**
+  - Memastikan judul `contohAngka` pada `investasi_dasar_11_2.json` persis sesuai lampiran: `"Ilustrasi Rp10.000.000 saat pasar saham turun 20 persen"`.
+  - Memastikan sebaran bank soal kuis modul 11 adalah 4/3/3 (11.1: 4 butir, 11.2: 3 butir, 11.3: 3 butir).
+  - Menambahkan assertion ketat di `test/konten/kesesuaian_lampiran_test.dart` untuk judul `contohAngka` pada seluruh pelajaran Modul 11, sebaran bank soal kuis, serta pesan gerbang pembuka Modul 11.
+
+---
+
 ## [0.14.0] - 2026-11-23 — Tahap 9A: Mesin Sandbox & Modul 11 "Investasi Dasar"
 
 Tahap 9A menghadirkan Mesin Mode Sandbox untuk simulasi edukasi portofolio investasi uang fiktif dan konten Modul 11 "Investasi Dasar" (tingkat menengah pertama):

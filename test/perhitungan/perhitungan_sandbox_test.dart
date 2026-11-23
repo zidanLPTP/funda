@@ -212,6 +212,37 @@ void main() {
 
       expect(hasilCampuran.nilaiAkhirTotal > hasilSemuaSaham.nilaiAkhirTotal, isTrue);
     });
+
+    test('sisa pembagian integer alokasi: angka tidak habis dibagi 100 (1000001, 33/33/34)', () {
+      const nilaiAwal = 1000001;
+      const persenPU = 33;
+      const persenOB = 33;
+      const persenSH = 34;
+
+      final nominalPU = (nilaiAwal * persenPU) ~/ 100;
+      final nominalOB = (nilaiAwal * persenOB) ~/ 100;
+      final nominalSH = nilaiAwal - nominalPU - nominalOB;
+
+      // Buktikan nominalPasarUang + nominalObligasi + nominalSaham == nilaiAwalRupiah
+      expect(nominalPU + nominalOB + nominalSH, equals(nilaiAwal));
+
+      // Jalankan 0 tahun untuk memverifikasi porsi awal hasil simulasi
+      final hasil0Tahun = hitungSimulasiSandbox(
+        saldoAwal: nilaiAwal,
+        persenPasarUang: persenPU,
+        persenObligasi: persenOB,
+        persenSaham: persenSH,
+        jumlahTahun: 0,
+        skenario: 'normal',
+      );
+
+      expect(hasil0Tahun.nilaiPasarUang, equals(nominalPU));
+      expect(hasil0Tahun.nilaiObligasi, equals(nominalOB));
+      expect(hasil0Tahun.nilaiSaham, equals(nominalSH));
+      expect(hasil0Tahun.nilaiPasarUang + hasil0Tahun.nilaiObligasi + hasil0Tahun.nilaiSaham, equals(nilaiAwal));
+      expect(hasil0Tahun.nilaiAkhirTotal, equals(nilaiAwal));
+      expect(hasil0Tahun.selisihRupiah, equals(0));
+    });
   });
 
   group('Perhitungan Sandbox - Daya Beli Inflasi', () {

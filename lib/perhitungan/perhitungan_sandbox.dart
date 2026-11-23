@@ -102,11 +102,16 @@ HasilSimulasiSandbox hitungSimulasiSandbox({
       throw ArgumentError('Skenario tidak dikenal: $skenario');
   }
 
-  // Hitung alokasi porsi awal per instrumen dengan pembagian integer
-  int nilaiPU = saldoAwal * persenPasarUang ~/ 100;
-  int nilaiOB = saldoAwal * persenObligasi ~/ 100;
-  // Sisa porsi dialokasikan ke saham untuk mencegah selisih pembulatan integer
-  int nilaiSH = saldoAwal - nilaiPU - nilaiOB;
+  // Hitung alokasi porsi awal per instrumen dengan pembagian integer.
+  // Sisa porsi dialokasikan ke saham untuk mencegah selisih pembulatan integer.
+  final nilaiAwalRupiah = saldoAwal;
+  final nominalPasarUang = (nilaiAwalRupiah * persenPasarUang) ~/ 100;
+  final nominalObligasi = (nilaiAwalRupiah * persenObligasi) ~/ 100;
+  final nominalSaham = nilaiAwalRupiah - nominalPasarUang - nominalObligasi;
+
+  int nilaiPU = nominalPasarUang;
+  int nilaiOB = nominalObligasi;
+  int nilaiSH = nominalSaham;
 
   // Majukan per tahun secara majemuk dengan aritmetika integer
   for (int thn = 0; thn < jumlahTahun; thn++) {

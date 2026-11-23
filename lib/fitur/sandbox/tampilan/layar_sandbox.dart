@@ -62,7 +62,7 @@ class _LayarSandboxState extends ConsumerState<LayarSandbox> {
                 color: WarnaFunda.tintAmber,
                 borderRadius: BorderRadius.circular(SudutFunda.kartu),
                 border: Border.all(
-                  color: const Color(0xFFF59E0B),
+                  color: WarnaFunda.aksen,
                   width: 1.5,
                 ),
               ),
@@ -70,7 +70,7 @@ class _LayarSandboxState extends ConsumerState<LayarSandbox> {
                 children: [
                   Icon(
                     LucideIcons.flaskConical,
-                    color: Color(0xFFD97706),
+                    color: WarnaFunda.peringatan,
                     size: 22,
                   ),
                   SizedBox(width: SpasiFunda.s),
@@ -78,10 +78,10 @@ class _LayarSandboxState extends ConsumerState<LayarSandbox> {
                     child: Text(
                       'Mode Sandbox — Uang Fiktif (Simulasi, bukan prediksi)',
                       style: TextStyle(
-                        fontFamily: 'Inter',
+                        fontFamily: TipografiFunda.namaKeluargaFont,
                         fontSize: 13,
                         fontWeight: FontWeight.w700,
-                        color: Color(0xFF92400E),
+                        color: WarnaFunda.peringatan,
                       ),
                     ),
                   ),
@@ -130,7 +130,7 @@ class _LayarSandboxState extends ConsumerState<LayarSandbox> {
                             ? 'Tahun 0 (Awal)'
                             : 'Tahun ${keadaan.tahunBerjalan}',
                         style: const TextStyle(
-                          fontFamily: 'Inter',
+                          fontFamily: TipografiFunda.namaKeluargaFont,
                           fontSize: 12,
                           fontWeight: FontWeight.w600,
                           color: WarnaFunda.utama,
@@ -143,7 +143,7 @@ class _LayarSandboxState extends ConsumerState<LayarSandbox> {
                 Text(
                   formatRupiahRapat(keadaan.nilaiSaatIni),
                   style: const TextStyle(
-                    fontFamily: 'PlusJakartaSans',
+                    fontFamily: TipografiFunda.namaKeluargaFont,
                     fontSize: 26,
                     fontWeight: FontWeight.w800,
                     color: WarnaFunda.teks,
@@ -157,7 +157,7 @@ class _LayarSandboxState extends ConsumerState<LayarSandbox> {
                     Text(
                       'Modal Awal: ${formatRupiahRapat(keadaan.saldoAwal)}',
                       style: const TextStyle(
-                        fontFamily: 'Inter',
+                        fontFamily: TipografiFunda.namaKeluargaFont,
                         fontSize: 12,
                         color: WarnaFunda.teksRedup,
                       ),
@@ -167,13 +167,13 @@ class _LayarSandboxState extends ConsumerState<LayarSandbox> {
                           ? '+${formatRupiahRapat(keadaan.selisihDariAwal)}'
                           : formatRupiahRapat(keadaan.selisihDariAwal),
                       style: TextStyle(
-                        fontFamily: 'Inter',
+                        fontFamily: TipografiFunda.namaKeluargaFont,
                         fontSize: 12,
                         fontWeight: FontWeight.w700,
                         color: keadaan.selisihDariAwal > 0
-                            ? const Color(0xFF16A34A)
+                            ? WarnaFunda.sukses
                             : (keadaan.selisihDariAwal < 0
-                                ? const Color(0xFFDC2626)
+                                ? WarnaFunda.bahaya
                                 : WarnaFunda.teksRedup),
                       ),
                     ),
@@ -197,12 +197,12 @@ class _LayarSandboxState extends ConsumerState<LayarSandbox> {
               Text(
                 'Total: ${keadaan.totalAlokasi}%',
                 style: TextStyle(
-                  fontFamily: 'Inter',
+                  fontFamily: TipografiFunda.namaKeluargaFont,
                   fontSize: 13,
                   fontWeight: FontWeight.w700,
                   color: keadaan.alokasiSah
-                      ? const Color(0xFF16A34A)
-                      : const Color(0xFFDC2626),
+                      ? WarnaFunda.sukses
+                      : WarnaFunda.bahaya,
                 ),
               ),
             ],
@@ -213,7 +213,7 @@ class _LayarSandboxState extends ConsumerState<LayarSandbox> {
             label: 'Pasar Uang',
             persen: keadaan.persenPasarUang,
             nominal: keadaan.nilaiPasarUang,
-            warna: const Color(0xFF0284C7),
+            warna: WarnaFunda.sifatKebutuhan,
             onChanged: (val) => notifier.ubahAlokasi(persenPasarUang: val),
           ),
           const SizedBox(height: SpasiFunda.xs),
@@ -221,7 +221,7 @@ class _LayarSandboxState extends ConsumerState<LayarSandbox> {
             label: 'Obligasi',
             persen: keadaan.persenObligasi,
             nominal: keadaan.nilaiObligasi,
-            warna: const Color(0xFFD97706),
+            warna: WarnaFunda.aksen,
             onChanged: (val) => notifier.ubahAlokasi(persenObligasi: val),
           ),
           const SizedBox(height: SpasiFunda.xs),
@@ -229,7 +229,7 @@ class _LayarSandboxState extends ConsumerState<LayarSandbox> {
             label: 'Saham',
             persen: keadaan.persenSaham,
             nominal: keadaan.nilaiSaham,
-            warna: const Color(0xFF9333EA),
+            warna: WarnaFunda.sifatKeinginan,
             onChanged: (val) => notifier.ubahAlokasi(persenSaham: val),
           ),
           const SizedBox(height: SpasiFunda.l),
@@ -288,7 +288,7 @@ class _LayarSandboxState extends ConsumerState<LayarSandbox> {
                 label: const Text(
                   'Majukan 1 Tahun',
                   style: TextStyle(
-                    fontFamily: 'Inter',
+                    fontFamily: TipografiFunda.namaKeluargaFont,
                     fontSize: 15,
                     fontWeight: FontWeight.w700,
                   ),
@@ -296,9 +296,9 @@ class _LayarSandboxState extends ConsumerState<LayarSandbox> {
                 style: ElevatedButton.styleFrom(
                   minimumSize: const Size(double.infinity, 48),
                   backgroundColor: WarnaFunda.utama,
-                  foregroundColor: Colors.white,
-                  disabledBackgroundColor: const Color(0xFFCBD5E1),
-                  disabledForegroundColor: const Color(0xFF64748B),
+                  foregroundColor: WarnaFunda.teksPutih,
+                  disabledBackgroundColor: WarnaFunda.garis,
+                  disabledForegroundColor: WarnaFunda.teksRedup,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(SudutFunda.kecil),
                   ),
@@ -312,9 +312,9 @@ class _LayarSandboxState extends ConsumerState<LayarSandbox> {
               'Sesuaikan slider agar total alokasi pas 100% untuk menjalankan simulasi.',
               textAlign: TextAlign.center,
               style: TextStyle(
-                fontFamily: 'Inter',
+                fontFamily: TipografiFunda.namaKeluargaFont,
                 fontSize: 12,
-                color: Color(0xFFDC2626),
+                color: WarnaFunda.bahaya,
               ),
             ),
           ],
@@ -342,7 +342,7 @@ class _LayarSandboxState extends ConsumerState<LayarSandbox> {
                         Text(
                           'Tahun ${r.tahun} (${r.skenario})',
                           style: const TextStyle(
-                            fontFamily: 'Inter',
+                            fontFamily: TipografiFunda.namaKeluargaFont,
                             fontSize: 13,
                             fontWeight: FontWeight.w700,
                             color: WarnaFunda.teks,
@@ -352,7 +352,7 @@ class _LayarSandboxState extends ConsumerState<LayarSandbox> {
                         Text(
                           formatRupiahRapat(r.nilaiTotal),
                           style: const TextStyle(
-                            fontFamily: 'Inter',
+                            fontFamily: TipografiFunda.namaKeluargaFont,
                             fontSize: 14,
                             fontWeight: FontWeight.w600,
                             color: WarnaFunda.teks,
@@ -365,12 +365,12 @@ class _LayarSandboxState extends ConsumerState<LayarSandbox> {
                           ? '+${formatRupiahRapat(r.selisihTahun)}'
                           : formatRupiahRapat(r.selisihTahun),
                       style: TextStyle(
-                        fontFamily: 'Inter',
+                        fontFamily: TipografiFunda.namaKeluargaFont,
                         fontSize: 13,
                         fontWeight: FontWeight.w700,
                         color: r.selisihTahun >= 0
-                            ? const Color(0xFF16A34A)
-                            : const Color(0xFFDC2626),
+                            ? WarnaFunda.sukses
+                            : WarnaFunda.bahaya,
                       ),
                     ),
                   ],
@@ -460,7 +460,7 @@ class _PengaturAlokasi extends StatelessWidget {
                   Text(
                     label,
                     style: const TextStyle(
-                      fontFamily: 'Inter',
+                      fontFamily: TipografiFunda.namaKeluargaFont,
                       fontSize: 13,
                       fontWeight: FontWeight.w600,
                       color: WarnaFunda.teks,
@@ -471,7 +471,7 @@ class _PengaturAlokasi extends StatelessWidget {
               Text(
                 '$persen% (${formatRupiahRapat(nominal)})',
                 style: const TextStyle(
-                  fontFamily: 'Inter',
+                  fontFamily: TipografiFunda.namaKeluargaFont,
                   fontSize: 12,
                   fontWeight: FontWeight.w600,
                   color: WarnaFunda.teksRedup,
@@ -525,7 +525,7 @@ class _KartuPilihSkenario extends StatelessWidget {
             vertical: SpasiFunda.m,
           ),
           decoration: BoxDecoration(
-            color: terpilih ? const Color(0xFFEFF6FF) : WarnaFunda.permukaan,
+            color: terpilih ? WarnaFunda.tintBiru : WarnaFunda.permukaan,
             borderRadius: BorderRadius.circular(SudutFunda.kartu),
             border: Border.all(
               color: terpilih ? WarnaFunda.utama : WarnaFunda.garis,
@@ -537,7 +537,7 @@ class _KartuPilihSkenario extends StatelessWidget {
               Text(
                 label,
                 style: TextStyle(
-                  fontFamily: 'Inter',
+                  fontFamily: TipografiFunda.namaKeluargaFont,
                   fontSize: 13,
                   fontWeight: FontWeight.w700,
                   color: terpilih ? WarnaFunda.utama : WarnaFunda.teks,
@@ -548,7 +548,7 @@ class _KartuPilihSkenario extends StatelessWidget {
                 keterangan,
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontFamily: 'Inter',
+                  fontFamily: TipografiFunda.namaKeluargaFont,
                   fontSize: 10,
                   color: terpilih ? WarnaFunda.utama : WarnaFunda.teksRedup,
                 ),

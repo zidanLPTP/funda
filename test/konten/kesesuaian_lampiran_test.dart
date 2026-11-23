@@ -1368,6 +1368,8 @@ void main() {
       expect(isiMateriLampiran.contains(catatanEkspektasi), isTrue);
 
       final contohAngka = p['contohAngka'] as Map<String, dynamic>;
+      expect(contohAngka['judul'], equals('Ilustrasi daya beli Rp10.000.000 jika harga naik 4 persen per tahun'));
+      expect(isiMateriLampiran.contains(contohAngka['judul'] as String), isTrue);
       expect(contohAngka['baris'][0]['jumlah'], equals(10000000));
       expect(contohAngka['baris'][1]['jumlah'], equals(8219271));
       expect(contohAngka['baris'][2]['jumlah'], equals(-1780729));
@@ -1391,6 +1393,8 @@ void main() {
       expect(isiMateriLampiran.contains(catatanEkspektasi), isTrue);
 
       final contohAngka = p['contohAngka'] as Map<String, dynamic>;
+      expect(contohAngka['judul'], equals('Ilustrasi Rp10.000.000 saat pasar saham turun 20 persen'));
+      expect(isiMateriLampiran.contains(contohAngka['judul'] as String), isTrue);
       expect(contohAngka['baris'][0]['jumlah'], equals(8000000));
       expect(contohAngka['baris'][1]['jumlah'], equals(9150000));
       expect(contohAngka['baris'][2]['jumlah'], equals(1150000));
@@ -1411,6 +1415,8 @@ void main() {
       expect(isiMateriLampiran.contains(catatanEkspektasi), isTrue);
 
       final contohAngka = p['contohAngka'] as Map<String, dynamic>;
+      expect(contohAngka['judul'], equals('Ilustrasi menyisihkan rutin Rp200.000 per bulan selama 12 bulan'));
+      expect(isiMateriLampiran.contains(contohAngka['judul'] as String), isTrue);
       expect(contohAngka['baris'][0]['jumlah'], equals(2400000));
       expect(contohAngka['baris'][1]['jumlah'], equals(200000));
 
