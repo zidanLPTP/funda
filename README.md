@@ -105,6 +105,20 @@ funda/
 
 ## 📸 Tangkapan Layar Aplikasi
 Tangkapan layar otomatis yang dihasilkan dari pengujian dan emulator tersimpan pada:
+- **Tahap 8D (Modul 6 "Psikologi Uang & Kebiasaan Belanja" & Penutupan Tingkat Pemula di Emulator):** [docs/tangkapan_layar/](docs/tangkapan_layar/)
+  - `tahap_08d_01_modul_6_terkunci.png` — Modul 6 terkunci untuk pengguna baru dengan pesan lampiran resmi (Modul 1 + 5 pengeluaran)
+  - `tahap_08d_02_modul_6_terbuka.png` — Modul 6 terbuka setelah prasyarat terpenuhi
+  - `tahap_08d_03_pelajaran_6_1_refleksi_kosong.png` — Pelajaran 6.1 misi refleksi: tombol simpan nonaktif saat teks belum memenuhi syarat
+  - `tahap_08d_04_pelajaran_6_1_refleksi_terisi.png` — Pelajaran 6.1 misi refleksi: teks memenuhi minimal karakter dan tombol simpan aktif
+  - `tahap_08d_05_pelajaran_6_1_tersimpan.png` — Pelajaran 6.1 misi refleksi: konfirmasi tersimpan privat di perangkat dan tombol Lanjut aktif
+  - `tahap_08d_06_pelajaran_6_2_umpan_balik.png` — Pelajaran 6.2 misi lihat_hitungan: rincian langganan aktif, pengeluaran keinginan, dan total komitmen
+  - `tahap_08d_07_pelajaran_6_3_refleksi_jeda.png` — Pelajaran 6.3 misi refleksi: aturan jeda terisi dan tersimpan
+  - `tahap_08d_08_kuis_modul_6_mulai.png` — Layar awal kuis Modul 6 (5 soal dari bankSoal)
+  - `tahap_08d_09_kuis_modul_6_gagal.png` — Kuis Modul 6 percobaan 1 (skor 60% tidak lulus)
+  - `tahap_08d_10_kuis_modul_6_lulus.png` — Kuis Modul 6 percobaan 2 (skor 100% lulus)
+  - `tahap_08d_11_modul_6_selesai.png` — Peta Belajar menampilkan Modul 6 selesai
+  - `tahap_08d_12_beranda_seluruh_pemula_selesai.png` — Dasbor Beranda menampilkan petak apresiasi seluruh Tingkat Pemula selesai
+  - `tahap_08d_13_regresi_pemulihan_selesai.png` — Pembuktian integritas pemulihan seluruh tabel SQLite
 - **Tahap 8C (Modul 5 "Waspada Penipuan & Pinjol Ilegal" di Emulator Pixel 8):** [docs/tangkapan_layar/](docs/tangkapan_layar/)
   - `tahap_08c_01_modul_5_terkunci.png` — Modul 5 terkunci untuk pengguna baru dengan pesan lampiran resmi
   - `tahap_08c_02_modul_5_terbuka.png` — Modul 5 terbuka setelah prasyarat Modul 1 diselesaikan

@@ -1818,5 +1818,190 @@ void main() {
         throwsA(isA<GalatKonten>().having((e) => e.kolom, 'kolom', 'langkahDuniaNyata')),
       );
     });
+
+    // =========================================================================
+    // TAHAP 8D: Tipe Misi Refleksi & Kunci Umpan Balik Baru
+    // =========================================================================
+    // 16. Misi Refleksi: Kolom pertanyaan tidak ada (null)
+    test('16. Kasus Rusak: Misi refleksi tanpa kolom pertanyaan ditolak', () {
+      final data = buatPelajaranDasar(
+        id: 'psikologi_uang_6_1',
+        misi: {
+          'tipe': 'refleksi',
+          'judul': 'Kenali pemicu belanjamu',
+          'instruksi': 'Tulis satu situasi belanjamu.',
+          'minimalKarakter': 10,
+        },
+      );
+      expect(
+        () => PembacaKonten.validasiKontenPelajaran(data, namaBerkas: 'psikologi_uang_6_1.json'),
+        throwsA(isA<GalatKonten>()
+            .having((e) => e.berkas, 'berkas', 'psikologi_uang_6_1.json')
+            .having((e) => e.kolom, 'kolom', 'misi.pertanyaan')),
+      );
+    });
+
+    // 17. Misi Refleksi: Kolom pertanyaan string kosong
+    test('17. Kasus Rusak: Misi refleksi dengan pertanyaan kosong ditolak', () {
+      final data = buatPelajaranDasar(
+        id: 'psikologi_uang_6_1',
+        misi: {
+          'tipe': 'refleksi',
+          'judul': 'Kenali pemicu belanjamu',
+          'instruksi': 'Tulis satu situasi belanjamu.',
+          'pertanyaan': '   ',
+          'minimalKarakter': 10,
+        },
+      );
+      expect(
+        () => PembacaKonten.validasiKontenPelajaran(data, namaBerkas: 'psikologi_uang_6_1.json'),
+        throwsA(isA<GalatKonten>()
+            .having((e) => e.berkas, 'berkas', 'psikologi_uang_6_1.json')
+            .having((e) => e.kolom, 'kolom', 'misi.pertanyaan')),
+      );
+    });
+
+    // 18. Misi Refleksi: Kolom instruksi tidak ada atau kosong
+    test('18. Kasus Rusak: Misi refleksi tanpa kolom instruksi ditolak', () {
+      final data = buatPelajaranDasar(
+        id: 'psikologi_uang_6_1',
+        misi: {
+          'tipe': 'refleksi',
+          'judul': 'Kenali pemicu belanjamu',
+          'pertanyaan': 'Kapan kamu belanja tanpa rencana?',
+          'minimalKarakter': 10,
+        },
+      );
+      expect(
+        () => PembacaKonten.validasiKontenPelajaran(data, namaBerkas: 'psikologi_uang_6_1.json'),
+        throwsA(isA<GalatKonten>()
+            .having((e) => e.berkas, 'berkas', 'psikologi_uang_6_1.json')
+            .having((e) => e.kolom, 'kolom', 'misi.instruksi')),
+      );
+    });
+
+    // 19. Misi Refleksi: minimalKarakter < 5 ditolak
+    test('19. Kasus Rusak: Misi refleksi dengan minimalKarakter < 5 ditolak', () {
+      final data = buatPelajaranDasar(
+        id: 'psikologi_uang_6_1',
+        misi: {
+          'tipe': 'refleksi',
+          'judul': 'Kenali pemicu belanjamu',
+          'instruksi': 'Tulis satu situasi belanjamu.',
+          'pertanyaan': 'Kapan kamu belanja tanpa rencana?',
+          'minimalKarakter': 4,
+        },
+      );
+      expect(
+        () => PembacaKonten.validasiKontenPelajaran(data, namaBerkas: 'psikologi_uang_6_1.json'),
+        throwsA(isA<GalatKonten>()
+            .having((e) => e.berkas, 'berkas', 'psikologi_uang_6_1.json')
+            .having((e) => e.kolom, 'kolom', 'misi.minimalKarakter')),
+      );
+    });
+
+    // 20. Misi Refleksi: minimalKarakter > 200 ditolak
+    test('20. Kasus Rusak: Misi refleksi dengan minimalKarakter > 200 ditolak', () {
+      final data = buatPelajaranDasar(
+        id: 'psikologi_uang_6_1',
+        misi: {
+          'tipe': 'refleksi',
+          'judul': 'Kenali pemicu belanjamu',
+          'instruksi': 'Tulis satu situasi belanjamu.',
+          'pertanyaan': 'Kapan kamu belanja tanpa rencana?',
+          'minimalKarakter': 201,
+        },
+      );
+      expect(
+        () => PembacaKonten.validasiKontenPelajaran(data, namaBerkas: 'psikologi_uang_6_1.json'),
+        throwsA(isA<GalatKonten>()
+            .having((e) => e.berkas, 'berkas', 'psikologi_uang_6_1.json')
+            .having((e) => e.kolom, 'kolom', 'misi.minimalKarakter')),
+      );
+    });
+
+    // 21. Misi Refleksi: minimalKarakter bukan integer ditolak
+    test('21. Kasus Rusak: Misi refleksi dengan minimalKarakter bukan integer ditolak', () {
+      final data = buatPelajaranDasar(
+        id: 'psikologi_uang_6_1',
+        misi: {
+          'tipe': 'refleksi',
+          'judul': 'Kenali pemicu belanjamu',
+          'instruksi': 'Tulis satu situasi belanjamu.',
+          'pertanyaan': 'Kapan kamu belanja tanpa rencana?',
+          'minimalKarakter': 'sepuluh',
+        },
+      );
+      expect(
+        () => PembacaKonten.validasiKontenPelajaran(data, namaBerkas: 'psikologi_uang_6_1.json'),
+        throwsA(isA<GalatKonten>()
+            .having((e) => e.berkas, 'berkas', 'psikologi_uang_6_1.json')
+            .having((e) => e.kolom, 'kolom', 'misi.minimalKarakter')),
+      );
+    });
+
+    // 22. Umpan Balik: Kunci umpan balik tidak dikenal ditolak
+    test('22. Kasus Rusak: Kunci umpan balik tidak terdaftar ditolak', () {
+      final data = buatPelajaranDasar(
+        id: 'psikologi_uang_6_2',
+        misi: {
+          'tipe': 'lihat_hitungan',
+          'judul': 'Lihat langganan',
+          'instruksi': 'Buka ringkasan',
+          'umpanBalik': 'umpan_balik_tidak_dikenal_xyz',
+        },
+      );
+      expect(
+        () => PembacaKonten.validasiKontenPelajaran(data, namaBerkas: 'psikologi_uang_6_2.json'),
+        throwsA(isA<GalatKonten>()
+            .having((e) => e.berkas, 'berkas', 'psikologi_uang_6_2.json')
+            .having((e) => e.kolom, 'kolom', 'misi.umpanBalik')),
+      );
+    });
+
+    // 23. Tipe misi komitmen tetap ditolak
+    test('23. Kasus Rusak: Jenis misi komitmen tetap ditolak pada Tahap 8D', () {
+      final data = buatPelajaranDasar(
+        id: 'psikologi_uang_6_1',
+        misi: {
+          'tipe': 'komitmen',
+          'judul': 'Komitmen Finansial',
+          'instruksi': 'Tulis komitmenmu.',
+        },
+      );
+      expect(
+        () => PembacaKonten.validasiKontenPelajaran(data, namaBerkas: 'psikologi_uang_6_1.json'),
+        throwsA(isA<GalatKonten>()
+            .having((e) => e.berkas, 'berkas', 'psikologi_uang_6_1.json')
+            .having((e) => e.kolom, 'kolom', 'misi.tipe')),
+      );
+    });
+
+    // 24. Validasi Sukses: Pelajaran dengan misi refleksi dan umpan balik baru lolos
+    test('24. Validasi Sukses: Misi refleksi valid dan kunci umpan balik ringkasan_langganan_dan_keinginan diterima', () {
+      final dataRefleksi = buatPelajaranDasar(
+        id: 'psikologi_uang_6_1',
+        misi: {
+          'tipe': 'refleksi',
+          'judul': 'Kenali pemicu belanjamu',
+          'instruksi': 'Tulis satu situasi atau perasaan yang paling sering membuatmu belanja tanpa rencana. Catatan ini privat di HP-mu.',
+          'pertanyaan': 'Kapan atau dalam keadaan apa kamu paling sering membeli sesuatu tanpa rencana?',
+          'petunjukInput': 'Contoh: Saat capek pulang kuliah dan buka aplikasi belanja malam-malam.',
+          'minimalKarakter': 10,
+        },
+      );
+      expect(() => PembacaKonten.validasiKontenPelajaran(dataRefleksi, namaBerkas: 'psikologi_uang_6_1.json'), returnsNormally);
+
+      final dataHitungan = buatPelajaranDasar(
+        id: 'psikologi_uang_6_2',
+        misi: {
+          'tipe': 'lihat_hitungan',
+          'judul': 'Lihat langganan dan keinginanmu',
+          'instruksi': 'Buka ringkasan langganan aktif dan pengeluaran keinginan bulan ini, baca isinya, lalu tekan Mengerti.',
+          'umpanBalik': 'ringkasan_langganan_dan_keinginan',
+        },
+      );
+      expect(() => PembacaKonten.validasiKontenPelajaran(dataHitungan, namaBerkas: 'psikologi_uang_6_2.json'), returnsNormally);
+    });
   });
 }

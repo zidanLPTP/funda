@@ -1,0 +1,89 @@
+{
+  "id": "psikologi_uang_6_1",
+  "modulId": "psikologi_uang",
+  "judul": "Kenapa Kita Belanja Impulsif?",
+  "durasiMenit": 5,
+  "urutan": 1,
+  "status": "draf",
+  "gerbang": [],
+  "pemantik": "Awalnya cuma buka aplikasi belanja buat lihat-lihat. Lima menit kemudian, barangnya sudah dibayar, padahal tadi tidak ada niat membeli.",
+  "kartu": [
+    {
+      "judul": "Keputusan belanja sering datang dari rasa",
+      "isi": "{{Belanja impulsif}} adalah membeli sesuatu secara mendadak tanpa rencana sebelumnya. Ini bukan soal lemah niat. Sering kali kita membeli karena sedang lelah, bosan, stres, atau ingin merayakan sesuatu. Saat emosi naik, keputusan belanja jadi lebih cepat daripada pertimbangan kita."
+    },
+    {
+      "judul": "Kenali pemicu belanjamu",
+      "isi": "Setiap orang punya {{pemicu belanja}} yang berbeda. Ada yang terpicu notifikasi diskon, ada yang saat begadang, ada yang saat melihat unggahan teman. Mengenali pemicunya bukan untuk menyalahkan diri sendiri. Justru dari situ kamu tahu kapan perlu lebih pelan sebelum menekan tombol bayar."
+    },
+    {
+      "judul": "Ubah lingkungannya, bukan hanya niatnya",
+      "isi": "Mengandalkan niat saja sering melelahkan. Cara yang lebih ringan adalah menambah jarak kecil antara dorongan dan pembelian. Misalnya, matikan notifikasi promo, jangan simpan kartu di aplikasi belanja, atau keluar dari aplikasi saat sedang lelah."
+    }
+  ],
+  "contohAngka": {
+    "judul": "Belanja kecil mendadak dalam sebulan",
+    "baris": [
+      {
+        "label": "Beli minuman saat lelah, 6 kali x Rp25.000",
+        "jumlah": 150000
+      },
+      {
+        "label": "Checkout promo malam hari, 3 kali x Rp65.000",
+        "jumlah": 195000
+      },
+      {
+        "label": "Barang lucu saat melihat media sosial, 2 kali x Rp55.000",
+        "jumlah": 110000
+      },
+      {
+        "label": "Total belanja mendadak sebulan",
+        "jumlah": 455000,
+        "ringkasan": true
+      }
+    ],
+    "kesimpulan": "Masing-masing terasa kecil saat dibayar. Dalam sebulan, jumlahnya menjadi Rp455.000 yang keluar tanpa rencana."
+  },
+  "cekPaham": [
+    {
+      "tanya": "Apa yang dimaksud dengan belanja impulsif?",
+      "pilihan": [
+        "Membeli sesuatu secara mendadak tanpa rencana sebelumnya",
+        "Membeli kebutuhan pokok di awal bulan",
+        "Membeli barang yang sudah ditabung berbulan-bulan"
+      ],
+      "benar": 0,
+      "penjelasan": "Belanja impulsif terjadi mendadak tanpa rencana, sering kali dipicu emosi atau dorongan sesaat."
+    },
+    {
+      "tanya": "Mana yang termasuk pemicu belanja?",
+      "pilihan": [
+        "Notifikasi promo saat sedang lelah atau bosan",
+        "Daftar belanja yang sudah ditulis sebelum pergi",
+        "Mencatat pengeluaran di Funda"
+      ],
+      "benar": 0,
+      "penjelasan": "Pemicu belanja adalah situasi atau perasaan yang mendorong kita membeli tanpa rencana."
+    },
+    {
+      "tanya": "Cara ringan untuk mengurangi belanja mendadak?",
+      "pilihan": [
+        "Menambah jarak kecil, seperti mematikan notifikasi promo",
+        "Menyalahkan diri sendiri setiap kali belanja",
+        "Berhenti mencatat pengeluaran"
+      ],
+      "benar": 0,
+      "penjelasan": "Mengubah lingkungan lebih ringan dan bertahan lama daripada mengandalkan niat saja."
+    }
+  ],
+  "misi": {
+    "tipe": "refleksi",
+    "minimalKarakter": 10,
+    "judul": "Kenali pemicu belanjamu",
+    "instruksi": "Tulis satu situasi atau perasaan yang paling sering membuatmu belanja tanpa rencana. Catatan ini privat di HP-mu.",
+    "pertanyaan": "Kapan atau dalam keadaan apa kamu paling sering membeli sesuatu tanpa rencana?",
+    "petunjukInput": "Contoh: Saat capek pulang kuliah dan buka aplikasi belanja malam-malam.",
+    "perkiraanMenit": 2
+  },
+  "tindakLanjut": "Hari ini, matikan notifikasi promo dari satu aplikasi belanja yang paling sering menggodamu."
+}

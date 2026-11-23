@@ -369,6 +369,9 @@ class MisiKonten {
   final bool? disclaimer;
   final int? minimalDicentang;
   final List<LangkahDaftarPeriksa>? langkah;
+  final String? pertanyaan;
+  final String? petunjukInput;
+  final int minimalKarakter;
 
   const MisiKonten({
     required this.tipe,
@@ -384,6 +387,9 @@ class MisiKonten {
     this.disclaimer,
     this.minimalDicentang,
     this.langkah,
+    this.pertanyaan,
+    this.petunjukInput,
+    this.minimalKarakter = 10,
   });
 
   factory MisiKonten.fromJson(Map<String, dynamic> json) {
@@ -406,6 +412,9 @@ class MisiKonten {
       langkah: (json['langkah'] as List<dynamic>?)
           ?.map((e) => LangkahDaftarPeriksa.fromJson(e as Map<String, dynamic>))
           .toList(),
+      pertanyaan: json['pertanyaan'] as String?,
+      petunjukInput: json['petunjukInput'] as String?,
+      minimalKarakter: (json['minimalKarakter'] as num?)?.toInt() ?? 10,
     );
   }
 }

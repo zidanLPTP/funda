@@ -173,5 +173,25 @@
     "istilah": "lembaga pengawas",
     "arti": "Lembaga yang mengawasi dan memberi izin kepada penyedia layanan keuangan.",
     "contohRupiah": "Penyedia pinjaman yang berizin tercatat di lembaga pengawas keuangan."
+  },
+  {
+    "istilah": "belanja impulsif",
+    "arti": "Membeli sesuatu secara mendadak tanpa rencana sebelumnya, sering dipicu emosi atau promo.",
+    "contohRupiah": "Membeli barang Rp75.000 saat melihat promo malam hari padahal tidak sedang dicari."
+  },
+  {
+    "istilah": "pemicu belanja",
+    "arti": "Situasi, waktu, atau perasaan yang sering membuatmu ingin membeli sesuatu tanpa rencana.",
+    "contohRupiah": "Notifikasi diskon yang muncul saat kamu sedang lelah setelah beraktivitas."
+  },
+  {
+    "istilah": "langganan",
+    "arti": "Pembayaran rutin berkala untuk memakai layanan tertentu, seperti musik, film, atau aplikasi.",
+    "contohRupiah": "Membayar Rp55.000 tiap bulan untuk layanan musik."
+  },
+  {
+    "istilah": "aturan jeda",
+    "arti": "Kebiasaan menunda pembayaran keinginan selama waktu tertentu agar dorongan sesaat mereda.",
+    "contohRupiah": "Menunggu satu hari dulu sebelum membayar sepatu Rp350.000 di keranjang."
   }
 ]

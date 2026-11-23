@@ -1,0 +1,87 @@
+{
+  "id": "psikologi_uang_6_2",
+  "modulId": "psikologi_uang",
+  "judul": "Langganan dan Pengeluaran Diam-Diam",
+  "durasiMenit": 5,
+  "urutan": 2,
+  "status": "draf",
+  "gerbang": [],
+  "pemantik": "Saldo berkurang sendiri di tengah bulan. Ternyata dari layanan yang sudah jarang kamu buka sejak dua bulan lalu.",
+  "kartu": [
+    {
+      "judul": "Kecil per bulan, besar per tahun",
+      "isi": "{{Langganan}} adalah pembayaran rutin berkala untuk layanan seperti musik, film, penyimpanan, atau aplikasi. Karena nominalnya kecil dan berjalan otomatis, kita sering lupa ia masih aktif. Padahal kalau dijumlahkan setahun, nilainya bisa cukup besar."
+    },
+    {
+      "judul": "Audit ringan tiap beberapa bulan",
+      "isi": "Sesekali, buka daftar langgananmu dan tanyakan dua hal. Pertama, apakah aku benar-benar memakainya bulan ini? Kedua, kalau harus mendaftar ulang hari ini dengan harga yang sama, apakah aku mau? Kalau jawabannya tidak, mungkin saatnya berhenti sementara."
+    },
+    {
+      "judul": "Catat supaya tetap terlihat",
+      "isi": "Di Funda, kamu bisa mencatat langganan di menu Tagihan dan Langganan. Tujuannya bukan melarangmu menikmati hiburan. Tujuannya supaya setiap rupiah yang keluar secara rutin adalah pilihan sadarmu, bukan karena lupa membatalkan."
+    }
+  ],
+  "contohAngka": {
+    "judul": "Tiga langganan yang jarang dipakai",
+    "baris": [
+      {
+        "label": "Langganan tontonan, Rp54.000 x 12 bulan",
+        "jumlah": 648000
+      },
+      {
+        "label": "Langganan musik, Rp55.000 x 12 bulan",
+        "jumlah": 660000
+      },
+      {
+        "label": "Penyimpanan awan tambahan, Rp29.000 x 12 bulan",
+        "jumlah": 348000
+      },
+      {
+        "label": "Total dalam setahun",
+        "jumlah": 1656000,
+        "ringkasan": true
+      }
+    ],
+    "kesimpulan": "Tiga layanan yang terasa ringan tiap bulan menjadi Rp1.656.000 dalam setahun. Menghentikan satu saja yang jarang dipakai sudah menghemat ratusan ribu."
+  },
+  "cekPaham": [
+    {
+      "tanya": "Kenapa biaya langganan sering tidak terasa?",
+      "pilihan": [
+        "Nominalnya kecil dan berjalan rutin sehingga mudah terlupa",
+        "Karena langganan selalu gratis",
+        "Karena biayanya hanya sekali seumur hidup"
+      ],
+      "benar": 0,
+      "penjelasan": "Pembayaran kecil yang rutin sering berjalan tanpa kita sadari sampai dijumlahkan."
+    },
+    {
+      "tanya": "Pertanyaan mana yang membantu saat memeriksa langgananmu?",
+      "pilihan": [
+        "Apakah aku benar-benar memakainya bulan ini?",
+        "Apakah teman-temanku juga berlangganan?",
+        "Apakah ikon aplikasinya bagus?"
+      ],
+      "benar": 0,
+      "penjelasan": "Memeriksa pemakaian nyata membantumu memastikan uangmu dipakai untuk hal yang benar-benar kamu nikmati."
+    },
+    {
+      "tanya": "Langganan Rp50.000 per bulan setara berapa dalam setahun?",
+      "pilihan": [
+        "Rp600.000",
+        "Rp100.000",
+        "Rp500.000"
+      ],
+      "benar": 0,
+      "penjelasan": "Rp50.000 dikali 12 bulan hasilnya Rp600.000."
+    }
+  ],
+  "misi": {
+    "tipe": "lihat_hitungan",
+    "judul": "Lihat langganan dan keinginanmu",
+    "instruksi": "Buka ringkasan langganan aktif dan pengeluaran keinginan bulan ini, baca isinya, lalu tekan Mengerti.",
+    "umpanBalik": "ringkasan_langganan_dan_keinginan",
+    "perkiraanMenit": 2
+  },
+  "tindakLanjut": "Periksa daftar langganan di HP-mu minggu ini. Kalau ada yang tidak kamu pakai sebulan terakhir, pertimbangkan untuk menghentikannya."
+}

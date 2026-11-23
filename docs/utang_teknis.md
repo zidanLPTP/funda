@@ -264,6 +264,20 @@ Berdasarkan hasil pengujian terisolasi pada 10 iterasi bersih di emulator Pixel 
 - **Batasan Retroaktif:**
   Penyelesaian pelajaran/misi yang terjadi pada basis data sebelum Tahap 8C tidak memiliki baris retroaktif di `tabel_hasil_misi`. Sumber kebenaran mutlak status *"Pelajaran Selesai tidak terkunci ulang"* tetap merujuk pada `tabel_progres_pelajaran` (`status: 'selesai'`), sehingga modul dan pelajaran yang telah selesai sebelum Tahap 8C tetap berstatus selesai dan tidak terpengaruh oleh ketiadaan baris lama di `tabel_hasil_misi`.
 
+---
+
+## 21. Desain Privasi Misi Refleksi & Kueri On-Demand Langganan/Keinginan (Tahap 8D)
+
+- **Konteks & Privasi Misi Refleksi:**
+  Pada Modul 6 ("Psikologi Uang & Kebiasaan Belanja"), pengguna diajak mengenali pemicu belanja emosional dan menetapkan aturan jeda melalui tipe misi `refleksi`. Teks jawaban pengguna bersifat sangat personal dan sensitif.
+- **Keputusan:**
+  1. Jawaban refleksi disimpan secara lokal murni di `tabel_hasil_misi` dalam kolom `muatan_json` (`{"jawaban": "..."}`).
+  2. Aplikasi Funda tidak memiliki backend server, analitik eksternal, atau pelacak pihak ketiga, sehingga data teks tidak pernah meninggalkan perangkat.
+  3. UI Kartu Misi Refleksi menyertakan pemberitahuan transparan: *"Privat di perangkatmu: tulisan ini hanya tersimpan di HP-mu dan tidak pernah dikirim ke mana pun."*
+- **Kueri On-Demand Langganan & Pengeluaran Keinginan:**
+  Fungsi umpan balik `ringkasan_langganan_dan_keinginan` memerlukan data tagihan aktif dan akumulasi pengeluaran pos keinginan bulan berjalan. Kueri ini dieksekusi secara *on-demand* oleh `penyediaTeksUmpanBalikMisi` hanya saat kartu pelajaran 6.2 dibuka, sehingga Tab Belajar utama dan Beranda tetap beroperasi menggunakan agregasi SQL cepat tanpa pemuatan data tidak perlu.
+
+
 
 
 

@@ -5,7 +5,41 @@ Format penulisan mengacu pada standar Keep a Changelog dan penamaan commit Funda
 
 ---
 
-## [0.12.1] - 2026-11-23 — Tahap 8C-R: Revisi & Pembuktian Penuh Modul 5
+## [0.13.0] - 2026-11-23 — Tahap 8D: Modul 6 "Psikologi Uang & Kebiasaan Belanja" + Tipe Misi Refleksi + Penutupan Seluruh Tingkat Pemula
+
+Tahap 8D menuntaskan seluruh kurikulum Tingkat Pemula (Modul 0 sampai Modul 6) dengan mengimplementasikan Modul 6 ("Psikologi Uang & Kebiasaan Belanja": 3 pelajaran, 1 kuis 5 dari 10 bankSoal sebaran 4/3/3, 4 entri kamus baru), tipe misi baru `refleksi` (jawaban teks privat tersimpan lokal di perangkat pengguna), satu fungsi murni umpan balik baru `ringkasan_langganan_dan_keinginan`, penutupan seluruh kurikulum Pemula pada petak Beranda, pengujian unit murni TDD, evaluasi registri misi, pengujian widget, benchmark beban komputasi Tab Belajar, dan pengujian integrasi E2E emulator.
+
+### Ditambahkan & Diselaraskan
+- **Tipe Misi Baru `refleksi` (`lib/perhitungan/perhitungan_belajar.dart`, `lib/fitur/belajar/model/registri_misi.dart`, `lib/fitur/belajar/tampilan/layar_pemutar_pelajaran.dart`):**
+  - Misi berbasis refleksi tulisan privat yang hanya tersimpan di perangkat pengguna (`tabel_hasil_misi: {"jawaban": "..."}`).
+  - Dilengkapi label privasi: *"Privat di perangkatmu: tulisan ini hanya tersimpan di HP-mu dan tidak pernah dikirim ke mana pun."*
+  - Dilengkapi validasi panjang minimal karakter (`minimalKarakter`, rentang 5–200, default 10) dengan status hitungan interaktif.
+  - Tombol simpan refleksi (`Key('tombol_simpan_refleksi')`) nonaktif jika teks belum memenuhi syarat minimal karakter.
+  - Memuat kembali teks refleksi yang sudah tersimpan saat pelajaran dibuka ulang.
+- **Logika & Umpan Balik Murni `ringkasan_langganan_dan_keinginan` (`lib/perhitungan/perhitungan_umpan_balik_belajar.dart`):**
+  - Fungsi murni TDD dengan 5 vektor pengujian komprehensif (`V1` sampai `V5`) mencakup kasus 0 langganan, 1 langganan, banyak langganan, tanpa pengeluaran keinginan, serta kombinasi penuh.
+  - Seluruh nominal menggunakan tipe `int` murni (tanpa `double` atau pembulatan `round()`).
+  - Terhubung reaktif via `penyediaBelajar` dengan membaca langganan aktif dari `tabel_tagihan` dan transaksi berpos/sifat keinginan bulan berjalan dari `tabel_transaksi`.
+- **Konten Edukasi Resmi Modul 6 (`aset/konten/pemula/psikologi_uang/`):**
+  - `modul.json`: Gerbang ganda (`modul_selesai anggaran_arus_kas` dan `ada_data pengeluaran min 5`), status `tersedia: true`, bankSoal kuis 10 butir dengan sebaran 6_1 (4), 6_2 (3), 6_3 (3) ber-`pelajaranId` valid.
+  - `psikologi_uang_6_1.json`: "Mengenali Pemicu Belanja Impulsif", durasi 5 menit, contohAngka "Belanja saat lelah sepulang kerja", misi `refleksi` "Tulis pemicu belanjamu".
+  - `psikologi_uang_6_2.json`: "Jebakan Langganan & \"Bocor Halus\"", durasi 6 menit, contohAngka "Langganan yang terlupakan selama berbulan-bulan", misi `lihat_hitungan` "Hitung langganan & pengeluaran keinginanmu" dengan umpan balik `ringkasan_langganan_dan_keinginan`.
+  - `psikologi_uang_6_3.json`: "Membangun Jeda Sebelum Membeli", durasi 5 menit, contohAngka "Menunda pembelian sepatu baru selama 24 jam", misi `refleksi` "Pilih aturan jedamu" dengan metadata `aturanPraktis: true` dan `catatanReviewer: "TODO-VERIFIKASI: angka hanya ilustrasi"`.
+- **Ekstensi Kamus Keuangan (`aset/konten/kamus.json` & `docs/materi/kamus_modul_6.md`):**
+  - Menambahkan 4 entri istilah baru persis kata per kata sesuai lampiran resmi: `belanja impulsif`, `pemicu belanja`, `langganan`, dan `aturan jeda`.
+- **Penutupan Kurikulum Tingkat Pemula & Integrasi Beranda (`lib/fitur/beranda/tampilan/layar_beranda.dart`, `lib/fitur/belajar/kontroler/penyedia_belajar.dart`):**
+  - Menuntaskan seluruh 7 modul tingkat pemula (Modul 0 Fondasi Keuangan s.d. Modul 6 Psikologi Uang).
+  - Petak Beranda menampilkan status selesai hangat: *"Hebat! Semua Materi Selesai - Kamu telah menuntaskan seluruh pelajaran yang tersedia."*
+- **Suite Pengujian Unit, Widget & Integrasi (`test/`, `integration_test/`):**
+  - `test/perhitungan/perhitungan_umpan_balik_tahap_08d_test.dart` (5 pengujian murni TDD V1–V5).
+  - `test/fitur/evaluator_misi_tahap_08d_test.dart` (7 pengujian evaluator misi refleksi).
+  - `test/konten/kesesuaian_lampiran_test.dart` (23 pengujian kesesuaian kata per kata seluruh modul & kamus).
+  - `test/fitur/pemeriksa_konten_rusak_test.dart` (93 pengujian integritas parser konten).
+  - `test/fitur/belajar_tahap_08d_widget_test.dart` (4 pengujian widget kartu refleksi, umpan balik 6.2, kuis, dan skala teks 2.0).
+  - `test/fitur/benchmark_beban_modul_6_test.dart` (tolok ukur beban 20.000 transaksi + 20 utang + 20 tagihan: Tab Belajar median 39 ms < 100 ms, pembukaan pelajaran 6.1–6.3 median 0–1 ms < 50 ms).
+  - `integration_test/tahap_08d_emulator_test.dart` (alur E2E 9 langkah lengkap, regresi 19 tabel identik 100%, 13 titik tangkapan layar).
+
+---
 
 Tahap 8C-R menuntaskan seluruh revisi dan pembuktian Tahap 8C sesuai panduan PROMPT TAHAP 8C-R:
 - **Investigasi Pengujian & Pemulihan (Butir A):** Mengembalikan seluruh 67 kasus uji lama yang sempat terhapus di `test/fitur/pemeriksa_konten_rusak_test.dart` dan menggabungkannya dengan 17 kasus uji baru Tahap 8C (total 84 kasus uji di berkas ini, seluruhnya lolos).

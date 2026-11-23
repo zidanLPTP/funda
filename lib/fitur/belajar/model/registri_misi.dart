@@ -25,6 +25,7 @@ class RegistriMisi {
     'lihat_hitungan',
     'keputusan',
     'daftar_periksa',
+    'refleksi',
   };
 
   /// Mengevaluasi misi berdasarkan foto data pengguna.
@@ -111,6 +112,12 @@ class RegistriMisi {
           statusTeks: 'Centang langkah-langkah yang sudah kamu lakukan.',
         );
 
+      case 'refleksi':
+        return const HasilEvaluasiMisi(
+          selesai: false,
+          statusTeks: 'Tulis refleksimu pada kolom di atas.',
+        );
+
       default:
         return const HasilEvaluasiMisi(
           selesai: false,
@@ -164,6 +171,23 @@ class RegistriMisi {
     required int minimalDicentang,
   }) {
     return dicentang.length >= minimalDicentang;
+  }
+
+  /// Evaluasi logika untuk misi refleksi.
+  /// Memeriksa apakah teks setelah ditrim mencapai minimal karakter yang ditentukan (default 10).
+  static bool evaluasiRefleksi(String teks, {int minimalKarakter = 10}) {
+    return teks.trim().length >= minimalKarakter;
+  }
+
+  /// Menghasilkan umpan balik ringkasan langganan dan pengeluaran keinginan.
+  static String formatRingkasanLanggananDanKeinginanMisi({
+    required List<ItemLanggananUmpanBalik> daftarTagihan,
+    required int totalKeinginanBulanIniRupiah,
+  }) {
+    return formatRingkasanLanggananDanKeinginan(
+      daftarTagihan: daftarTagihan,
+      totalKeinginanBulanIniRupiah: totalKeinginanBulanIniRupiah,
+    );
   }
 }
 
@@ -329,6 +353,17 @@ class RegistriUmpanBalik {
     return formatUrutanPelunasan(
       daftarUtang: daftarUtang,
       tidakPunyaUtang: tidakPunyaUtang,
+    );
+  }
+
+  /// Menghasilkan umpan balik ringkasan langganan dan pengeluaran keinginan.
+  static String formatRingkasanLanggananDanKeinginanMisi({
+    required List<ItemLanggananUmpanBalik> daftarTagihan,
+    required int totalKeinginanBulanIniRupiah,
+  }) {
+    return formatRingkasanLanggananDanKeinginan(
+      daftarTagihan: daftarTagihan,
+      totalKeinginanBulanIniRupiah: totalKeinginanBulanIniRupiah,
     );
   }
 }

@@ -243,7 +243,7 @@ Berikut adalah registri kunci umpan balik edukatif yang diolah dari data riil pe
      - Tombol "Selesai" hanya aktif bila `jumlahDicentang >= minimalDicentang`.
      - Hasil tersimpan di `tabel_hasil_misi`: `status: 'selesai'`, `muatan_json: {"dicentang": ["l1", "l2", "l3"]}`. Saat dibuka ulang, centang tersimpan dimuat kembali.
 3. **Pengecualian Aturan Misi**:
-   - Kedua tipe baru ini (`keputusan` dan `daftar_periksa`) dikecualikan dari aturan *"misi tidak boleh lebih longgar dari gerbang"* karena keduanya menguji keputusan perilaku pengguna di luar aplikasi dan tidak bergantung pada data transaksi riil.
+   - Tipe-tipe misi perilaku (`lihat_hitungan`, `keputusan`, `daftar_periksa`, dan `refleksi`) dikecualikan dari aturan *"misi tidak boleh lebih longgar dari gerbang"* karena menguji pemahaman, refleksi privat, atau keputusan perilaku pengguna di luar aplikasi dan tidak bergantung pada data agregat transaksi riil.
 4. **Format Berkas `aset/konten/disclaimer.json`**:
    ```json
    {
@@ -251,6 +251,42 @@ Berikut adalah registri kunci umpan balik edukatif yang diolah dari data riil pe
      "langkahDuniaNyata": "Funda hanya memberi edukasi umum. Ini bukan ajakan membeli produk keuangan atau nasihat keuangan, hukum, maupun pajak. Keputusan dan risikonya ada padamu. Funda tidak bertanggung jawab atas kerugian dari tindakan di luar aplikasi. Pastikan penyedia berizin sebelum memakai uangmu."
    }
    ```
+
+### 4.5 Skema Baru Tahap 8D: Tipe Misi `refleksi` & Umpan Balik `ringkasan_langganan_dan_keinginan`
+1. **Tipe Misi `refleksi` (Privat di Perangkat)**:
+   - Skema:
+     ```json
+     {
+       "tipe": "refleksi",
+       "judul": "Tulis pemicu belanjamu",
+       "instruksi": "Kenali situasi atau emosi yang paling sering membuatmu ingin belanja tanpa rencana.",
+       "pertanyaan": "Kapan terakhir kali kamu membeli sesuatu yang sebenarnya tidak kamu butuhkan? Apa yang kamu rasakan saat itu?",
+       "petunjukInput": "Misalnya: saat stres sepulang kerja, saat melihat diskon kilat di ponsel...",
+       "minimalKarakter": 10
+     }
+     ```
+   - Karakteristik & Perilaku:
+     - Dilengkapi label privasi: *"Privat di perangkatmu: tulisan ini hanya tersimpan di HP-mu dan tidak pernah dikirim ke mana pun."*
+     - Memiliki `minimalKarakter` (antara 5 sampai 200 karakter, default 10 bila diabaikan).
+     - Tombol simpan nonaktif selama panjang teks (setelah `trim()`) kurang dari minimal karakter.
+     - Menyimpan refleksi pengguna ke `tabel_hasil_misi`: `status: 'selesai'`, `tipe: 'refleksi'`, `muatan_json: {"jawaban": "Teks jawaban pengguna..."}`.
+     - Saat layar dibuka kembali, jawaban tersimpan dimuat ulang secara otomatis.
+2. **Fungsi Umpan Balik Murni `ringkasan_langganan_dan_keinginan`**:
+   - Menghasilkan ringkasan komitmen rutin dari data aktif `tabel_tagihan` (jenis langganan) dan pengeluaran aktual bertanda pos/sifat 'keinginan' bulan ini.
+   - Format:
+     ```
+     Spotify Premium: Rp54.000/bln
+     Netflix: Rp186.000/bln
+     Total langganan aktif: 2 layanan (Rp240.000/bln)
+     Pengeluaran keinginan bulan ini: Rp150.000
+     Total komitmen & keinginan: Rp390.000/bln
+     ```
+     Bila tidak ada langganan aktif:
+     ```
+     Belum ada langganan aktif yang dicatat.
+     Pengeluaran keinginan bulan ini: Rp150.000
+     Total komitmen & keinginan: Rp150.000/bln
+     ```
 
 ---
 
@@ -273,7 +309,7 @@ Berikut adalah registri kunci umpan balik edukatif yang diolah dari data riil pe
      - Nomor kontak/telepon: urutan angka $\ge 8$ digit tanpa titik pemisah ribuan (misal `0812345678`).
    - Judul pelajaran Modul 5 DILARANG memuat kata label biner seperti `"aman"` atau `"bahaya"`.
 5. **Relasi Misi vs Gerbang Data**:
-   - Misi pada berkas pelajaran **tidak boleh otomatis terpenuhi oleh gerbang pelajarannya sendiri** (misi tidak boleh lebih longgar atau sama dengan gerbang), kecuali bertipe `lihat_hitungan`, `keputusan`, atau `daftar_periksa`.
+   - Misi pada berkas pelajaran **tidak boleh otomatis terpenuhi oleh gerbang pelajarannya sendiri** (misi tidak boleh lebih longgar atau sama dengan gerbang), kecuali bertipe `lihat_hitungan`, `keputusan`, `daftar_periksa`, atau `refleksi`.
    - Aturan `semua_kategori_berlabel` terpenuhi **HANYA** bila terdapat minimal 1 kategori pengeluaran yang pernah dipakai dalam transaksi dan seluruhnya berlabel sifat (pada data kosong = belum terpenuhi).
 6. **Contoh Angka Nyata**:
    - Contoh angka wajib menggunakan mata uang Rupiah nominal bulat (`int`).

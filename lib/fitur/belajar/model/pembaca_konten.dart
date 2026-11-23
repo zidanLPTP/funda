@@ -88,6 +88,7 @@ class PembacaKonten {
     'biaya_pinjaman_tercatat',
     'rasio_cicilan_bulan_ini',
     'urutan_pelunasan',
+    'ringkasan_langganan_dan_keinginan',
   };
 
   /// Mengurai string JSON kamus menjadi daftar istilah terindeks.
@@ -492,6 +493,7 @@ class PembacaKonten {
       'lihat_hitungan',
       'keputusan',
       'daftar_periksa',
+      'refleksi',
     };
     if (!jenisMisiDidukung.contains(tipeMisi)) {
       throw GalatKonten('Jenis misi "$tipeMisi" belum didukung pada versi ini', berkas: namaBerkas, kolom: 'misi.tipe');
@@ -515,7 +517,7 @@ class PembacaKonten {
       if (isModul5) {
         periksaTeksSensitifModul5(instruksiMisi, namaBerkas: namaBerkas, kolom: 'misi.instruksi');
       }
-    } else if (tipeMisi == 'keputusan' || tipeMisi == 'daftar_periksa') {
+    } else if (tipeMisi == 'keputusan' || tipeMisi == 'daftar_periksa' || tipeMisi == 'refleksi') {
       throw GalatKonten('Kolom misi.instruksi wajib ada dan tidak kosong', berkas: namaBerkas, kolom: 'misi.instruksi');
     }
 
@@ -618,6 +620,26 @@ class PembacaKonten {
           periksaTeksSensitifModul5(lkTeks, namaBerkas: namaBerkas, kolom: 'misi.langkah[$lIdx].teks');
         }
       }
+    } else if (tipeMisi == 'refleksi') {
+      final pertanyaan = misi['pertanyaan'] as String?;
+      if (pertanyaan == null || pertanyaan.trim().isEmpty) {
+        throw GalatKonten('Kolom misi.pertanyaan wajib ada dan tidak kosong untuk misi refleksi', berkas: namaBerkas, kolom: 'misi.pertanyaan');
+      }
+      _periksaIstilahKamus(pertanyaan, daftarIstilahKamus, namaBerkas, 'misi.pertanyaan');
+      periksaBahasaTeks(pertanyaan, namaBerkas: namaBerkas, daftarPeringatan: daftarPeringatan);
+
+      final petunjukInput = misi['petunjukInput'] as String?;
+      if (petunjukInput != null && petunjukInput.trim().isNotEmpty) {
+        _periksaIstilahKamus(petunjukInput, daftarIstilahKamus, namaBerkas, 'misi.petunjukInput');
+        periksaBahasaTeks(petunjukInput, namaBerkas: namaBerkas, daftarPeringatan: daftarPeringatan);
+      }
+
+      if (misi.containsKey('minimalKarakter')) {
+        final minKarakter = misi['minimalKarakter'];
+        if (minKarakter is! int || minKarakter < 5 || minKarakter > 200) {
+          throw GalatKonten('Kolom misi.minimalKarakter harus berupa integer antara 5 sampai 200', berkas: namaBerkas, kolom: 'misi.minimalKarakter');
+        }
+      }
     }
 
     if (misi.containsKey('min')) {
@@ -637,10 +659,11 @@ class PembacaKonten {
 
     // 8. Validasi Relasi Misi vs Gerbang Pelajaran
     // Pemeriksa konten GAGAL bila sebuah misi sudah otomatis terpenuhi oleh gerbang pelajarannya sendiri
-    // (misi tidak boleh lebih longgar atau sama dengan gerbang), kecuali bertipe lihat_hitungan, keputusan, dan daftar_periksa.
+    // (misi tidak boleh lebih longgar atau sama dengan gerbang), kecuali bertipe lihat_hitungan, keputusan, daftar_periksa, dan refleksi.
     if (tipeMisi != 'lihat_hitungan' &&
         tipeMisi != 'keputusan' &&
         tipeMisi != 'daftar_periksa' &&
+        tipeMisi != 'refleksi' &&
         gerbang is List) {
       final minMisi = (misi['min'] as num?)?.toInt() ?? 1;
       final aturanMisi = misi['aturan'] as String?;

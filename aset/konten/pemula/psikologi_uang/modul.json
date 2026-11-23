@@ -1,20 +1,151 @@
 {
-    "kuis":  {
-                 "jumlahSoal":  0,
-                 "bankSoal":  [
-
-                              ]
-             },
-    "id":  "psikologi_uang",
-    "tersedia":  false,
-    "urutan":  6,
-    "gerbang":  [
-
-                ],
-    "deskripsiSingkat":  "Memahami pemicu belanja impulsif dan membangun kebiasaan belanja yang tenang.",
-    "daftarPelajaran":  [
-
-                        ],
-    "tingkat":  "pemula",
-    "judul":  "Psikologi Uang \u0026 Kebiasaan Belanja"
+  "id": "psikologi_uang",
+  "judul": "Psikologi Uang & Kebiasaan Belanja",
+  "tingkat": "pemula",
+  "urutan": 6,
+  "deskripsiSingkat": "Memahami pemicu belanja impulsif, langganan rutin, dan membangun aturan jeda.",
+  "tersedia": true,
+  "gerbang": [
+    {
+      "tipe": "modul_selesai",
+      "modulId": "anggaran_arus_kas",
+      "pesan": "Selesaikan Modul 1 dulu, lalu catat minimal 5 pengeluaran agar kamu bisa mengenali pola belanjamu sendiri."
+    },
+    {
+      "tipe": "ada_data",
+      "objek": "pengeluaran",
+      "min": 5,
+      "pesan": "Selesaikan Modul 1 dulu, lalu catat minimal 5 pengeluaran agar kamu bisa mengenali pola belanjamu sendiri."
+    }
+  ],
+  "daftarPelajaran": [
+    "psikologi_uang_6_1",
+    "psikologi_uang_6_2",
+    "psikologi_uang_6_3"
+  ],
+  "kuis": {
+    "jumlahSoal": 5,
+    "bankSoal": [
+      {
+        "id": "soal_6_1",
+        "pelajaranId": "psikologi_uang_6_1",
+        "tanya": "Belanja impulsif biasanya paling sering dipicu oleh apa?",
+        "pilihan": [
+          "Emosi sesaat seperti lelah, bosan, atau tergoda promo",
+          "Rencana anggaran bulanan",
+          "Catatan transaksi harian"
+        ],
+        "benar": 0,
+        "penjelasan": "Emosi yang naik membuat keputusan belanja menjadi lebih cepat daripada pertimbangan kita."
+      },
+      {
+        "id": "soal_6_2",
+        "pelajaranId": "psikologi_uang_6_1",
+        "tanya": "Mengapa mengenali pemicu belanja itu berguna?",
+        "pilihan": [
+          "Supaya tahu kapan perlu lebih pelan sebelum membayar",
+          "Supaya bisa menyalahkan diri sendiri",
+          "Supaya tidak pernah belanja lagi"
+        ],
+        "benar": 0,
+        "penjelasan": "Mengenali pemicu membantumu bersiap, bukan menghakimi dirimu."
+      },
+      {
+        "id": "soal_6_3",
+        "pelajaranId": "psikologi_uang_6_1",
+        "tanya": "Mana contoh mengubah lingkungan agar lebih tenang saat belanja?",
+        "pilihan": [
+          "Mematikan notifikasi promo aplikasi belanja",
+          "Membuka aplikasi belanja setiap malam",
+          "Menyimpan semua kartu pembayaran otomatis"
+        ],
+        "benar": 0,
+        "penjelasan": "Mematikan notifikasi promo mengurangi godaan tanpa menguras tenaga niatmu."
+      },
+      {
+        "id": "soal_6_4",
+        "pelajaranId": "psikologi_uang_6_1",
+        "tanya": "Belanja mendadak Rp50.000 sebanyak 6 kali sebulan menjadi berapa?",
+        "pilihan": [
+          "Rp300.000",
+          "Rp50.000",
+          "Rp600.000"
+        ],
+        "benar": 0,
+        "penjelasan": "Rp50.000 dikali 6 kali hasilnya Rp300.000."
+      },
+      {
+        "id": "soal_6_5",
+        "pelajaranId": "psikologi_uang_6_2",
+        "tanya": "Mengapa langganan perlu diperiksa secara berkala?",
+        "pilihan": [
+          "Agar kita tidak terus membayar layanan yang sudah jarang dipakai",
+          "Karena semua langganan tidak berguna",
+          "Karena biaya langganan selalu gratis"
+        ],
+        "benar": 0,
+        "penjelasan": "Pemeriksaan berkala memastikan uangmu keluar untuk layanan yang benar-benar kamu manfaatkan."
+      },
+      {
+        "id": "soal_6_6",
+        "pelajaranId": "psikologi_uang_6_2",
+        "tanya": "Langganan Rp40.000 per bulan setara berapa dalam setahun?",
+        "pilihan": [
+          "Rp480.000",
+          "Rp400.000",
+          "Rp240.000"
+        ],
+        "benar": 0,
+        "penjelasan": "Rp40.000 dikali 12 bulan hasilnya Rp480.000."
+      },
+      {
+        "id": "soal_6_7",
+        "pelajaranId": "psikologi_uang_6_2",
+        "tanya": "Di mana kamu bisa mencatat langganan rutinmu di Funda?",
+        "pilihan": [
+          "Di menu Tagihan dan Langganan",
+          "Di menu Utang",
+          "Di menu Kamus"
+        ],
+        "benar": 0,
+        "penjelasan": "Menu Tagihan dan Langganan membantumu melihat semua biaya rutin yang berjalan."
+      },
+      {
+        "id": "soal_6_8",
+        "pelajaranId": "psikologi_uang_6_3",
+        "tanya": "Apa yang dilakukan saat menjalankan aturan jeda?",
+        "pilihan": [
+          "Menunda pembayaran keinginan selama waktu tertentu sebelum memutuskan",
+          "Langsung membayar agar tidak lupa",
+          "Menghapus semua kategori keinginan"
+        ],
+        "benar": 0,
+        "penjelasan": "Menunda sebentar memberi ruang bagi dorongan sesaat untuk mereda."
+      },
+      {
+        "id": "soal_6_9",
+        "pelajaranId": "psikologi_uang_6_3",
+        "tanya": "Kalau setelah jeda kamu masih ingin barangnya dan anggarannya cukup, bagaimana?",
+        "pilihan": [
+          "Kamu bisa membelinya dengan tenang",
+          "Kamu tetap tidak boleh membelinya",
+          "Kamu harus menunda setahun"
+        ],
+        "benar": 0,
+        "penjelasan": "Aturan jeda menyaring dorongan sesaat, bukan melarang keinginan yang memang kamu pilih sadar."
+      },
+      {
+        "id": "soal_6_10",
+        "pelajaranId": "psikologi_uang_6_3",
+        "tanya": "Mana contoh aturan jeda yang masuk akal?",
+        "pilihan": [
+          "Menunggu satu hari untuk keinginan di atas Rp100.000",
+          "Menunggu satu tahun untuk membeli makan siang",
+          "Tidak pernah membeli apa pun"
+        ],
+        "benar": 0,
+        "penjelasan": "Aturan jeda diterapkan pada keinginan dengan batas yang realistis untukmu."
+      }
+    ]
+  }
 }

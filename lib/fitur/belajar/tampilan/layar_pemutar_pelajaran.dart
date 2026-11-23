@@ -56,9 +56,21 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
   bool _disclaimerSudahMengerti = false;
   final Set<String> _langkahDicentang = {};
 
+  // State misi refleksi
+  late TextEditingController _pengontrolRefleksi;
+  String _teksRefleksi = '';
+
   @override
   void initState() {
     super.initState();
+    _pengontrolRefleksi = TextEditingController();
+    _pengontrolRefleksi.addListener(() {
+      if (mounted) {
+        setState(() {
+          _teksRefleksi = _pengontrolRefleksi.text;
+        });
+      }
+    });
     _muatKontenPelajaran();
   }
 
@@ -127,6 +139,10 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
                 _langkahDicentang.addAll(list.map((e) => e.toString()));
                 _disclaimerSudahMengerti = true;
               }
+              if (muatan.containsKey('jawaban')) {
+                _teksRefleksi = muatan['jawaban'] as String? ?? '';
+                _pengontrolRefleksi.text = _teksRefleksi;
+              }
             } catch (_) {}
           }
         }
@@ -167,6 +183,7 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
 
   @override
   void dispose() {
+    _pengontrolRefleksi.dispose();
     _pageController.dispose();
     super.dispose();
   }
@@ -396,7 +413,9 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
     final indeksMisi = indeksCekPaham + 1;
     if (_indeksLangkah == indeksMisi) {
       if (_misiDilewati) return true;
-      if (pel.misi.tipe == 'keputusan' || pel.misi.tipe == 'daftar_periksa') {
+      if (pel.misi.tipe == 'keputusan' ||
+          pel.misi.tipe == 'daftar_periksa' ||
+          pel.misi.tipe == 'refleksi') {
         return _misiTerverifikasi;
       }
       final evalMisi = RegistriMisi.evaluasi(misi: pel.misi, fotoData: fotoData);
@@ -684,6 +703,9 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
     }
     if (misi.tipe == 'daftar_periksa') {
       return _bangunKartuMisiDaftarPeriksa(misi);
+    }
+    if (misi.tipe == 'refleksi') {
+      return _bangunKartuMisiRefleksi(misi);
     }
 
     final evalMisi = RegistriMisi.evaluasi(misi: misi, fotoData: fotoData);
@@ -1231,6 +1253,165 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
               ),
             ),
           ],
+        ],
+      ),
+    );
+  }
+
+  Widget _bangunKartuMisiRefleksi(MisiKonten misi) {
+    final minimalKarakter = misi.minimalKarakter;
+    final panjangKarakter = _teksRefleksi.trim().length;
+    final cukupKarakter = panjangKarakter >= minimalKarakter;
+
+    return _pembungkusKartu(
+      tag: 'Misi Praktik Nyata',
+      judul: misi.judul,
+      isi: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          TeksFunda.isi(misi.instruksi),
+          const SizedBox(height: SpasiFunda.m),
+          Row(
+            children: [
+              const Icon(LucideIcons.timer, size: 16, color: WarnaFunda.teksRedup),
+              const SizedBox(width: SpasiFunda.xs),
+              Expanded(
+                child: TeksFunda.catatan('Perkiraan waktu: ${misi.perkiraanMenit} menit', warna: WarnaFunda.teksRedup),
+              ),
+            ],
+          ),
+          const SizedBox(height: SpasiFunda.l),
+
+          // Keterangan privat
+          Container(
+            padding: const EdgeInsets.all(SpasiFunda.m),
+            decoration: BoxDecoration(
+              color: WarnaFunda.latar,
+              borderRadius: BorderRadius.circular(SudutFunda.kartu),
+              border: Border.all(color: WarnaFunda.garis),
+            ),
+            child: const Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Icon(LucideIcons.lock, size: 18, color: WarnaFunda.utama),
+                SizedBox(width: SpasiFunda.s),
+                Expanded(
+                  child: TeksFunda.catatan(
+                    'Catatan ini privat dan hanya tersimpan di HP-mu.',
+                    warna: WarnaFunda.teks,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: SpasiFunda.l),
+
+          // Pertanyaan refleksi
+          if (misi.pertanyaan != null) ...[
+            TeksFunda.judulBagian(misi.pertanyaan!),
+            const SizedBox(height: SpasiFunda.m),
+          ],
+
+          // Kolom teks multi-baris
+          Semantics(
+            label: 'Kolom input refleksi',
+            child: TextFormField(
+              key: const Key('input_refleksi'),
+              controller: _pengontrolRefleksi,
+              minLines: 3,
+              maxLines: 6,
+              decoration: InputDecoration(
+                hintText: misi.petunjukInput ?? 'Tulis refleksimu di sini...',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(SudutFunda.kecil),
+                  borderSide: const BorderSide(color: WarnaFunda.garis),
+                ),
+                contentPadding: const EdgeInsets.all(SpasiFunda.m),
+              ),
+            ),
+          ),
+          const SizedBox(height: SpasiFunda.s),
+
+          // Penghitung karakter
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              TeksFunda.catatan(
+                'Minimal $minimalKarakter karakter',
+                warna: WarnaFunda.teksRedup,
+              ),
+              TeksFunda.catatan(
+                '$panjangKarakter / $minimalKarakter',
+                warna: cukupKarakter ? WarnaFunda.sukses : WarnaFunda.teksRedup,
+              ),
+            ],
+          ),
+          const SizedBox(height: SpasiFunda.l),
+
+          // Tombol simpan refleksi
+          TombolFunda(
+            key: const Key('tombol_simpan_refleksi'),
+            teks: _misiTerverifikasi ? 'Perbarui Refleksi' : 'Simpan Refleksi',
+            ikon: const Icon(LucideIcons.check, size: 18),
+            lebarPenuh: true,
+            padaTekan: cukupKarakter
+                ? () async {
+                    setState(() {
+                      _misiTerverifikasi = true;
+                    });
+                    await ref.read(penyediaHasilMisiRepositori).simpanHasilMisi(
+                          misiId: widget.pelajaranId,
+                          pelajaranId: widget.pelajaranId,
+                          tipe: misi.tipe,
+                          status: 'selesai',
+                          muatanJson: jsonEncode({'jawaban': _teksRefleksi.trim()}),
+                        );
+                  }
+                : null,
+          ),
+
+          if (_misiTerverifikasi) ...[
+            const SizedBox(height: SpasiFunda.m),
+            Container(
+              padding: const EdgeInsets.all(SpasiFunda.m),
+              decoration: BoxDecoration(
+                color: WarnaFunda.tintHijau,
+                borderRadius: BorderRadius.circular(SudutFunda.kartu),
+              ),
+              child: const Row(
+                children: [
+                  Icon(LucideIcons.checkCircle2, size: 20, color: WarnaFunda.sukses),
+                  SizedBox(width: SpasiFunda.s),
+                  Expanded(
+                    child: TeksFunda.catatan(
+                      'Refleksi tersimpan dengan aman di perangkatmu.',
+                      warna: WarnaFunda.sukses,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+
+          const SizedBox(height: SpasiFunda.xs),
+          Center(
+            child: TextButton(
+              key: const Key('tombol_lewati_misi'),
+              style: TextButton.styleFrom(minimumSize: const Size(48, 48)),
+              onPressed: () async {
+                setState(() {
+                  _misiDilewati = true;
+                });
+                await ref.read(penyediaHasilMisiRepositori).simpanHasilMisi(
+                      misiId: widget.pelajaranId,
+                      pelajaranId: widget.pelajaranId,
+                      tipe: misi.tipe,
+                      status: 'dilewati',
+                    );
+              },
+              child: const TeksFunda.catatan('Belum relevan buat aku', warna: WarnaFunda.teksRedup),
+            ),
+          ),
         ],
       ),
     );

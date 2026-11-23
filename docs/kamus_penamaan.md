@@ -136,6 +136,17 @@
 | mandatory expense feedback | pengeluaran_wajib_bulanan | Umpan balik rata-rata pengeluaran wajib bulanan |
 | emergency fund target feedback | target_dana_darurat | Umpan balik rekomendasi kelipatan 3-6 kali pengeluaran wajib |
 | emergency fund progress feedback | progres_dana_darurat | Umpan balik progres dana darurat dalam satuan bulan bertahan |
+| debt summary feedback | ringkasan_utang | Umpan balik total utang, sisa pokok, dan cicilan bulanan |
+| loan cost feedback | biaya_pinjaman_tercatat | Umpan balik bunga dan biaya admin pinjaman yang tercatat |
+| installment ratio feedback | rasio_cicilan_bulan_ini | Umpan balik perbandingan cicilan bulanan terhadap total pemasukan |
+| debt payoff order feedback | urutan_pelunasan | Panduan prioritas pelunasan utang metode bola salju dan longsor |
+| decision mission | keputusan | Tipe misi skenario keputusan interaktif dengan opsi pilihan |
+| checklist mission | daftar_periksa | Tipe misi daftar centang langkah nyata di luar aplikasi |
+| real world disclaimer | DisclaimerLangkahDuniaNyata | Komponen disclaimer edukasi langkah finansial dunia nyata |
+| reflection mission | refleksi | Tipe misi refleksi tulisan privat di perangkat |
+| subscription and wants feedback | ringkasan_langganan_dan_keinginan | Umpan balik komitmen langganan aktif dan pengeluaran keinginan bulan ini |
+| reflection answer | jawaban | Muatan teks refleksi tersimpan pengguna pada tabel_hasil_misi |
+| minimum characters | minimalKarakter | Ambang batas minimal panjang karakter masukan teks refleksi |
 
 ## Aturan Cabang Kerja (Git)
 - Setiap tahap dikerjakan pada cabang khusus (contoh: `tahap-02-dompet-transaksi`).

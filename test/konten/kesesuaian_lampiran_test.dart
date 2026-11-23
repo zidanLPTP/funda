@@ -1048,4 +1048,236 @@ void main() {
       );
     });
   });
+
+  group('Uji Kesesuaian Lampiran Tahap 8D (Modul 6 & Kamus Modul 6)', () {
+    late String isiMateriLampiran;
+    late Map<String, dynamic> modulJson;
+    final Map<String, Map<String, dynamic>> pelajaranJson = {};
+    late List<dynamic> daftarKamus;
+    late String isiMateriKamus;
+
+    setUpAll(() {
+      final materiFile = File('docs/materi/modul_6_psikologi_uang.md');
+      expect(materiFile.existsSync(), isTrue, reason: 'Berkas docs/materi/modul_6_psikologi_uang.md wajib ada');
+      isiMateriLampiran = materiFile.readAsStringSync().replaceAll(RegExp(r'\s+'), ' ');
+
+      final modulFile = File('aset/konten/pemula/psikologi_uang/modul.json');
+      expect(modulFile.existsSync(), isTrue);
+      modulJson = jsonDecode(modulFile.readAsStringSync()) as Map<String, dynamic>;
+
+      for (var i = 1; i <= 3; i++) {
+        final id = 'psikologi_uang_6_$i';
+        final f = File('aset/konten/pemula/psikologi_uang/$id.json');
+        expect(f.existsSync(), isTrue, reason: 'Berkas $id.json wajib ada');
+        pelajaranJson[id] = jsonDecode(f.readAsStringSync()) as Map<String, dynamic>;
+      }
+
+      final kamusFile = File('aset/konten/kamus.json');
+      expect(kamusFile.existsSync(), isTrue);
+      daftarKamus = jsonDecode(kamusFile.readAsStringSync()) as List<dynamic>;
+
+      final kamusMateriFile = File('docs/materi/kamus_modul_6.md');
+      expect(kamusMateriFile.existsSync(), isTrue);
+      isiMateriKamus = kamusMateriFile.readAsStringSync().replaceAll(RegExp(r'\s+'), ' ');
+    });
+
+    test('(a) Validasi Metadata Modul 6 dan Pesan Gerbang', () {
+      expect(modulJson['id'], equals('psikologi_uang'));
+      expect(modulJson['judul'], equals('Psikologi Uang & Kebiasaan Belanja'));
+      expect(modulJson['tingkat'], equals('pemula'));
+      expect(modulJson['urutan'], equals(6));
+      expect(modulJson['tersedia'], isTrue);
+      expect(modulJson['daftarPelajaran'], equals([
+        'psikologi_uang_6_1',
+        'psikologi_uang_6_2',
+        'psikologi_uang_6_3',
+      ]));
+
+      // Gerbang modul
+      final gerbang = modulJson['gerbang'] as List<dynamic>;
+      expect(gerbang, hasLength(2));
+      expect(gerbang[0]['tipe'], equals('modul_selesai'));
+      expect(gerbang[0]['modulId'], equals('anggaran_arus_kas'));
+      expect(gerbang[0]['pesan'], equals('Selesaikan Modul 1 dulu, lalu catat minimal 5 pengeluaran agar kamu bisa mengenali pola belanjamu sendiri.'));
+
+      expect(gerbang[1]['tipe'], equals('ada_data'));
+      expect(gerbang[1]['objek'], equals('pengeluaran'));
+      expect(gerbang[1]['min'], equals(5));
+      expect(gerbang[1]['pesan'], equals('Selesaikan Modul 1 dulu, lalu catat minimal 5 pengeluaran agar kamu bisa mengenali pola belanjamu sendiri.'));
+
+      // Pesan gerbang pada lampiran
+      expect(isiMateriLampiran.contains('Selesaikan Modul 1 dulu, lalu catat minimal 5 pengeluaran agar kamu bisa mengenali pola belanjamu sendiri.'), isTrue);
+
+      // Kuis Modul 6: bankSoal 10 (sebaran 4/3/3), jumlahSoal 5
+      expect(modulJson['kuis']['jumlahSoal'], equals(5));
+      final bankSoal = modulJson['kuis']['bankSoal'] as List;
+      expect(bankSoal.length, equals(10));
+
+      final hitungPerPelajaran = <String, int>{};
+      for (final soal in bankSoal) {
+        final pelId = soal['pelajaranId'] as String;
+        expect(pelajaranJson.containsKey(pelId), isTrue, reason: 'pelajaranId $pelId tidak valid');
+        hitungPerPelajaran[pelId] = (hitungPerPelajaran[pelId] ?? 0) + 1;
+      }
+      expect(hitungPerPelajaran['psikologi_uang_6_1'], equals(4), reason: '6.1 harus 4 soal');
+      expect(hitungPerPelajaran['psikologi_uang_6_2'], equals(3), reason: '6.2 harus 3 soal');
+      expect(hitungPerPelajaran['psikologi_uang_6_3'], equals(3), reason: '6.3 harus 3 soal');
+    });
+
+    test('(b) Validasi Pelajaran 6.1 (Kenapa Kita Belanja Impulsif? & Misi Refleksi)', () {
+      final p = pelajaranJson['psikologi_uang_6_1']!;
+      expect(p['judul'], equals('Kenapa Kita Belanja Impulsif?'));
+      expect(p['durasiMenit'], equals(5));
+      expect(p['gerbang'], isEmpty);
+
+      final misi = p['misi'] as Map<String, dynamic>;
+      expect(misi['tipe'], equals('refleksi'));
+      expect(misi['minimalKarakter'], equals(10));
+      expect(misi['judul'], equals('Kenali pemicu belanjamu'));
+      expect(misi['instruksi'], contains('Tulis satu situasi'));
+      expect(misi['pertanyaan'], contains('Kapan atau dalam keadaan apa'));
+      expect(misi['petunjukInput'], contains('Contoh: Saat capek'));
+    });
+
+    test('(c) Validasi Pelajaran 6.2 (Langganan dan Pengeluaran Diam-Diam & Misi Lihat Hitungan)', () {
+      final p = pelajaranJson['psikologi_uang_6_2']!;
+      expect(p['judul'], equals('Langganan dan Pengeluaran Diam-Diam'));
+      expect(p['durasiMenit'], equals(5));
+      expect(p['gerbang'], isEmpty);
+
+      final misi = p['misi'] as Map<String, dynamic>;
+      expect(misi['tipe'], equals('lihat_hitungan'));
+      expect(misi['judul'], equals('Lihat langganan dan keinginanmu'));
+      expect(misi['umpanBalik'], equals('ringkasan_langganan_dan_keinginan'));
+    });
+
+    test('(d) Validasi Pelajaran 6.3 (Aturan Jeda Sebelum Membeli & Misi Refleksi)', () {
+      final p = pelajaranJson['psikologi_uang_6_3']!;
+      expect(p['judul'], equals('Aturan Jeda Sebelum Membeli'));
+      expect(p['durasiMenit'], equals(5));
+      expect(p['aturanPraktis'], isTrue);
+      expect(p['catatanReviewer'], contains('TODO-VERIFIKASI'));
+      expect(p['gerbang'], isEmpty);
+
+      final misi = p['misi'] as Map<String, dynamic>;
+      expect(misi['tipe'], equals('refleksi'));
+      expect(misi['minimalKarakter'], equals(10));
+      expect(misi['judul'], equals('Tulis aturan jedamu sendiri'));
+      expect(misi['instruksi'], contains('Tulis satu aturan jeda sederhana'));
+      expect(misi['pertanyaan'], contains('Mulai batas nominal berapa'));
+      expect(misi['petunjukInput'], contains('Contoh: Untuk keinginan di atas Rp100.000'));
+    });
+
+    test('(e) Kesesuaian KATA PER KATA seluruh teks JSON Modul 6 terhadap Lampiran Markdown', () {
+      void cekStringMuncul(String teks, String konteks) {
+        final normal = teks.replaceAll(RegExp(r'\s+'), ' ').trim();
+        if (normal.isEmpty) return;
+        final tanpaToken = normal.replaceAll('{{', '').replaceAll('}}', '');
+        final cocok = isiMateriLampiran.contains(normal) || isiMateriLampiran.contains(tanpaToken);
+        expect(
+          cocok,
+          isTrue,
+          reason: 'Teks pada $konteks TIDAK DITEMUKAN di lampiran materi Modul 6: "$normal"',
+        );
+      }
+
+      for (final entry in pelajaranJson.entries) {
+        final p = entry.value;
+        final id = entry.key;
+
+        cekStringMuncul(p['judul'] as String, '$id.judul');
+        cekStringMuncul(p['pemantik'] as String, '$id.pemantik');
+
+        final kartuList = p['kartu'] as List;
+        for (var k = 0; k < kartuList.length; k++) {
+          final kartu = kartuList[k] as Map<String, dynamic>;
+          cekStringMuncul(kartu['judul'] as String, '$id.kartu[$k].judul');
+          cekStringMuncul(kartu['isi'] as String, '$id.kartu[$k].isi');
+        }
+
+        final contohAngka = p['contohAngka'] as Map<String, dynamic>;
+        cekStringMuncul(contohAngka['judul'] as String, '$id.contohAngka.judul');
+        cekStringMuncul(contohAngka['kesimpulan'] as String, '$id.contohAngka.kesimpulan');
+        final baris = contohAngka['baris'] as List;
+        for (var b = 0; b < baris.length; b++) {
+          final item = baris[b] as Map<String, dynamic>;
+          cekStringMuncul(item['label'] as String, '$id.contohAngka.baris[$b].label');
+        }
+
+        final cekPaham = p['cekPaham'] as List;
+        for (var c = 0; c < cekPaham.length; c++) {
+          final soal = cekPaham[c] as Map<String, dynamic>;
+          cekStringMuncul(soal['tanya'] as String, '$id.cekPaham[$c].tanya');
+          final pilihan = soal['pilihan'] as List;
+          for (var pil = 0; pil < pilihan.length; pil++) {
+            cekStringMuncul(pilihan[pil] as String, '$id.cekPaham[$c].pilihan[$pil]');
+          }
+          cekStringMuncul(soal['penjelasan'] as String, '$id.cekPaham[$c].penjelasan');
+        }
+
+        final misi = p['misi'] as Map<String, dynamic>;
+        cekStringMuncul(misi['judul'] as String, '$id.misi.judul');
+        cekStringMuncul(misi['instruksi'] as String, '$id.misi.instruksi');
+        if (misi.containsKey('pertanyaan')) {
+          cekStringMuncul(misi['pertanyaan'] as String, '$id.misi.pertanyaan');
+        }
+        if (misi.containsKey('petunjukInput')) {
+          cekStringMuncul(misi['petunjukInput'] as String, '$id.misi.petunjukInput');
+        }
+
+        cekStringMuncul(p['tindakLanjut'] as String, '$id.tindakLanjut');
+      }
+
+      // Periksa juga soal kuis
+      final bankSoal = modulJson['kuis']['bankSoal'] as List;
+      for (var s = 0; s < bankSoal.length; s++) {
+        final soal = bankSoal[s] as Map<String, dynamic>;
+        cekStringMuncul(soal['tanya'] as String, 'kuis.bankSoal[$s].tanya');
+        final pilihan = soal['pilihan'] as List;
+        for (var pil = 0; pil < pilihan.length; pil++) {
+          cekStringMuncul(pilihan[pil] as String, 'kuis.bankSoal[$s].pilihan[$pil]');
+        }
+        cekStringMuncul(soal['penjelasan'] as String, 'kuis.bankSoal[$s].penjelasan');
+      }
+    });
+
+    test('(f) Validasi 4 Istilah Kamus Modul 6 di kamus.json dan kamus_modul_6.md Kata per Kata', () {
+      final istilahModul6 = {
+        'belanja impulsif': (
+          arti: 'Membeli sesuatu secara mendadak tanpa rencana sebelumnya, sering dipicu emosi atau promo.',
+          contohRupiah: 'Membeli barang Rp75.000 saat melihat promo malam hari padahal tidak sedang dicari.',
+        ),
+        'pemicu belanja': (
+          arti: 'Situasi, waktu, atau perasaan yang sering membuatmu ingin membeli sesuatu tanpa rencana.',
+          contohRupiah: 'Notifikasi diskon yang muncul saat kamu sedang lelah setelah beraktivitas.',
+        ),
+        'langganan': (
+          arti: 'Pembayaran rutin berkala untuk memakai layanan tertentu, seperti musik, film, atau aplikasi.',
+          contohRupiah: 'Membayar Rp55.000 tiap bulan untuk layanan musik.',
+        ),
+        'aturan jeda': (
+          arti: 'Kebiasaan menunda pembayaran keinginan selama waktu tertentu agar dorongan sesaat mereda.',
+          contohRupiah: 'Menunggu satu hari dulu sebelum membayar sepatu Rp350.000 di keranjang.',
+        ),
+      };
+
+      for (final e in istilahModul6.entries) {
+        final istilah = e.key;
+        final target = e.value;
+
+        // Cek di aset/konten/kamus.json
+        final entriJson = daftarKamus.firstWhere(
+          (k) => k['istilah'] == istilah,
+          orElse: () => throw Exception('Istilah "$istilah" tidak ditemukan di kamus.json'),
+        );
+        expect(entriJson['arti'], equals(target.arti), reason: 'Arti "$istilah" di kamus.json tidak cocok kata per kata');
+        expect(entriJson['contohRupiah'], equals(target.contohRupiah), reason: 'Contoh Rupiah "$istilah" di kamus.json tidak cocok kata per kata');
+
+        // Cek di docs/materi/kamus_modul_6.md
+        expect(isiMateriKamus.contains(istilah), isTrue, reason: 'Istilah "$istilah" tidak ditemukan di docs/materi/kamus_modul_6.md');
+        expect(isiMateriKamus.contains(target.arti), isTrue, reason: 'Arti "$istilah" tidak ditemukan di docs/materi/kamus_modul_6.md');
+        expect(isiMateriKamus.contains(target.contohRupiah), isTrue, reason: 'Contoh Rupiah "$istilah" tidak ditemukan di docs/materi/kamus_modul_6.md');
+      }
+    });
+  });
 }

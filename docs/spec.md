@@ -309,7 +309,7 @@ Kamu mengirim **prompt per tahap** ke agent → agent kerja dan menulis laporan 
 | 8A | **Tingkat Pemula Bagian 1:** Modul 2 "Tabungan" & Modul 3 "Dana Darurat" | Pembelajaran tabungan & dana darurat selesai |
 | 8B | **Tingkat Pemula Bagian 2:** Modul 4 "Utang & Cicilan" | Pembelajaran utang & cicilan aktif |
 | 8C | **Tingkat Pemula Bagian 3:** Modul 5 "Waspada Penipuan & Pinjol Ilegal" + tipe misi keputusan dan daftar_periksa + disclaimer | Edukasi waspada penipuan selesai |
-| 8D | **Tingkat Pemula Bagian 4:** Modul 6 "Psikologi Uang & Kebiasaan Belanja" (butuh tipe misi refleksi, belum dikerjakan) | Fondasi pemula lengkap |
+| 8D | **Tingkat Pemula Bagian 4:** Modul 6 "Psikologi Uang & Kebiasaan Belanja" + tipe misi refleksi | Fondasi pemula lengkap (selesai, seluruh Tingkat Pemula tuntas) |
 | 9 | **Sandbox + Langkah Dunia Nyata + modul 7, 10, 11** | Materi non-langsung |
 | 10 | **Tingkat Menengah** sisanya (modul 8, 9, 12) | Menengah lengkap |
 | 11 | **Tingkat Lanjutan** (modul 13–18) | Kurikulum penuh |

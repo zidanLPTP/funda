@@ -830,6 +830,45 @@ final penyediaTeksUmpanBalikMisi = FutureProvider.autoDispose.family<String, Str
         tidakPunyaUtang: pernyataan != null,
       );
 
+    case 'ringkasan_langganan_dan_keinginan':
+      final semuaTagihan = await db.select(db.tabelTagihan).get();
+      final daftarTagihan = semuaTagihan
+          .map((t) => ItemLanggananUmpanBalik(
+                nama: t.nama,
+                jenis: t.jenis,
+                frekuensi: t.frekuensi,
+                jumlahPerkiraanRupiah: t.jumlahPerkiraanRupiah,
+                aktif: t.aktif,
+                diarsipkan: t.diarsipkan,
+              ))
+          .toList();
+
+      final semuaKategori = await db.select(db.tabelKategori).get();
+      final petaSifatKategori = {for (final k in semuaKategori) k.id: k.sifat};
+
+      final sekarangLokal = waktuSekarang.toLocal();
+      final awalBulan = DateTime(sekarangLokal.year, sekarangLokal.month, 1);
+      final akhirBulan = DateTime(sekarangLokal.year, sekarangLokal.month + 1, 1);
+
+      final txBulanIni = await (db.select(db.tabelTransaksi)
+            ..where((t) =>
+                (t.jenis.equals('keluar') | t.jenis.equals('pengeluaran')) &
+                t.waktuTransaksi.isBiggerOrEqualValue(awalBulan) &
+                t.waktuTransaksi.isSmallerThanValue(akhirBulan)))
+          .get();
+
+      var totalKeinginan = 0;
+      for (final tx in txBulanIni) {
+        if (tx.kategoriId != null && petaSifatKategori[tx.kategoriId] == 'keinginan') {
+          totalKeinginan += tx.jumlahRupiah;
+        }
+      }
+
+      return formatRingkasanLanggananDanKeinginan(
+        daftarTagihan: daftarTagihan,
+        totalKeinginanBulanIniRupiah: totalKeinginan,
+      );
+
     case 'arus_kas_bulan_ini':
     default:
       final arusKas = ref.watch(penyediaArusKasBulanIni);

@@ -822,3 +822,93 @@ String formatUrutanPelunasan({
       'Urutan longsor memakai persen bunga yang kamu catat. Kalau jenis bunganya berbeda, anggap sebagai perkiraan. '
       'Pilih salah satu dan konsisten. Ini bahan belajar, bukan keharusan.';
 }
+
+/// Data item langganan/tagihan untuk evaluasi umpan balik edukatif Tahap 8D.
+class ItemLanggananUmpanBalik {
+  final String nama;
+  final String jenis; // 'langganan' | 'tagihan'
+  final String frekuensi; // 'mingguan' | 'bulanan' | 'tahunan'
+  final int? jumlahPerkiraanRupiah;
+  final bool aktif;
+  final bool diarsipkan;
+
+  const ItemLanggananUmpanBalik({
+    required this.nama,
+    this.jenis = 'langganan',
+    this.frekuensi = 'bulanan',
+    this.jumlahPerkiraanRupiah,
+    this.aktif = true,
+    this.diarsipkan = false,
+  });
+}
+
+/// Menghasilkan umpan balik untuk misi 6.2: ringkasan_langganan_dan_keinginan
+String formatRingkasanLanggananDanKeinginan({
+  required List<ItemLanggananUmpanBalik> daftarTagihan,
+  required int totalKeinginanBulanIniRupiah,
+}) {
+  final langgananAktif = daftarTagihan
+      .where((t) => t.jenis == 'langganan' && t.aktif && !t.diarsipkan)
+      .toList();
+
+  final denganPerkiraan = langgananAktif
+      .where((t) => t.jumlahPerkiraanRupiah != null && t.jumlahPerkiraanRupiah! > 0)
+      .toList();
+  final tanpaPerkiraan = langgananAktif
+      .where((t) => t.jumlahPerkiraanRupiah == null || t.jumlahPerkiraanRupiah! <= 0)
+      .toList();
+
+  final n = denganPerkiraan.length;
+  final m = tanpaPerkiraan.length;
+
+  var totalPerkiraanBulanan = 0;
+  for (final item in denganPerkiraan) {
+    final nominal = item.jumlahPerkiraanRupiah!;
+    switch (item.frekuensi) {
+      case 'mingguan':
+        totalPerkiraanBulanan += nominal * 4;
+        break;
+      case 'tahunan':
+        totalPerkiraanBulanan += nominal ~/ 12;
+        break;
+      case 'bulanan':
+      default:
+        totalPerkiraanBulanan += nominal;
+        break;
+    }
+  }
+
+  final sbLangganan = StringBuffer();
+  if (n > 0) {
+    sbLangganan.write(
+      'Kamu punya $n langganan aktif dengan perkiraan sekitar ${formatRupiahRapat(totalPerkiraanBulanan)} per bulan.',
+    );
+    if (m > 0) {
+      sbLangganan.write(' ($m langganan belum ada perkiraan.)');
+    }
+  } else if (m > 0) {
+    sbLangganan.write(
+      'Kamu punya $m langganan aktif yang belum diisi perkiraan biayanya.',
+    );
+  } else {
+    sbLangganan.write(
+      'Belum ada langganan aktif yang tercatat di menu Tagihan.',
+    );
+  }
+
+  final sbKeinginan = StringBuffer();
+  if (totalKeinginanBulanIniRupiah > 0) {
+    sbKeinginan.write(
+      'Pengeluaran keinginanmu bulan ini tercatat ${formatRupiahRapat(totalKeinginanBulanIniRupiah)}.',
+    );
+  } else {
+    sbKeinginan.write(
+      'Belum ada pengeluaran keinginan yang tercatat bulan ini.',
+    );
+  }
+
+  const penutup = 'Ini gambaran untuk kamu kenali, bukan penilaian.';
+
+  return '${sbLangganan.toString()} ${sbKeinginan.toString()} $penutup';
+}
+

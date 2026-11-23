@@ -1,0 +1,91 @@
+{
+  "id": "psikologi_uang_6_3",
+  "modulId": "psikologi_uang",
+  "judul": "Aturan Jeda Sebelum Membeli",
+  "durasiMenit": 5,
+  "urutan": 3,
+  "status": "draf",
+  "aturanPraktis": true,
+  "catatanReviewer": "TODO-VERIFIKASI. Aturan jeda (menunggu 24 jam atau beberapa hari sebelum membeli keinginan) adalah teknik perilaku populer di literasi keuangan; periksa kecocokan redaksinya sebagai pedoman fleksibel.",
+  "gerbang": [],
+  "pemantik": "Barang di keranjang terasa sangat dibutuhkan hari ini. Anehnya, dua hari kemudian kamu hampir lupa kenapa ingin membelinya.",
+  "kartu": [
+    {
+      "judul": "Beri waktu sebelum membayar",
+      "isi": "{{Aturan jeda}} adalah kebiasaan menunda pembelian keinginan selama waktu tertentu sebelum membayar. Misalnya menunggu satu hari untuk barang kecil, atau beberapa hari untuk barang yang lebih mahal. Tujuannya memberi ruang bagi dorongan sesaat untuk reda."
+    },
+    {
+      "judul": "Bukan melarang, hanya menyaring",
+      "isi": "Aturan jeda tidak melarangmu membeli keinginan. Kalau setelah jeda kamu masih benar-benar menginginkannya dan masuk dalam anggaran, silakan beli dengan tenang. Justru rasanya lebih puas karena kamu tahu itu pilihan sadar, bukan dorongan sesaat."
+    },
+    {
+      "judul": "Buat versi yang cocok untukmu",
+      "isi": "Tidak ada satu lama jeda yang wajib untuk semua orang. Kamu bisa menentukan batasmu sendiri. Misalnya, setiap keinginan di atas Rp100.000 ditunggu satu hari di keranjang dulu. Simpan aturan kecil ini dan jalankan pelan-pelan."
+    }
+  ],
+  "contohAngka": {
+    "judul": "Memakai jeda pada empat keinginan dalam sebulan",
+    "baris": [
+      {
+        "label": "Sepatu diskon (batal setelah jeda)",
+        "jumlah": 350000
+      },
+      {
+        "label": "Aksesori HP (batal setelah jeda)",
+        "jumlah": 85000
+      },
+      {
+        "label": "Buku yang memang dicari (tetap dibeli)",
+        "jumlah": 95000
+      },
+      {
+        "label": "Pengeluaran yang tersaring oleh jeda",
+        "jumlah": 435000,
+        "ringkasan": true
+      }
+    ],
+    "kesimpulan": "Kamu tetap membeli buku yang benar-benar kamu mau, sambil menyaring Rp435.000 dari dorongan sesaat."
+  },
+  "cekPaham": [
+    {
+      "tanya": "Apa tujuan utama aturan jeda?",
+      "pilihan": [
+        "Memberi waktu agar dorongan sesaat reda sebelum memutuskan",
+        "Melarang diri sendiri membeli keinginan selamanya",
+        "Menunggu sampai barangnya habis"
+      ],
+      "benar": 0,
+      "penjelasan": "Jeda membantu memisahkan keinginan yang sungguhan dari dorongan sesaat."
+    },
+    {
+      "tanya": "Setelah jeda selesai, kamu masih ingin barangnya dan anggarannya cukup. Apa yang masuk akal?",
+      "pilihan": [
+        "Boleh dibeli dengan tenang sebagai pilihan sadar",
+        "Tetap dilarang membeli",
+        "Hapus anggarannya"
+      ],
+      "benar": 0,
+      "penjelasan": "Aturan jeda adalah penyaring, bukan larangan."
+    },
+    {
+      "tanya": "Lama jeda yang paling tepat untukmu ditentukan oleh siapa?",
+      "pilihan": [
+        "Dirimu sendiri sesuai kebiasaan dan batas nominalmu",
+        "Aturan baku yang sama untuk semua orang",
+        "Penjual barangnya"
+      ],
+      "benar": 0,
+      "penjelasan": "Setiap orang punya kondisi berbeda, jadi kamu bebas menentukan batas jedamu sendiri."
+    }
+  ],
+  "misi": {
+    "tipe": "refleksi",
+    "minimalKarakter": 10,
+    "judul": "Tulis aturan jedamu sendiri",
+    "instruksi": "Tulis satu aturan jeda sederhana yang ingin kamu coba mulai minggu ini. Catatan ini privat di HP-mu.",
+    "pertanyaan": "Mulai batas nominal berapa dan berapa lama kamu ingin memberi jeda sebelum membeli keinginan?",
+    "petunjukInput": "Contoh: Untuk keinginan di atas Rp100.000, aku tunggu 1 hari dulu sebelum bayar.",
+    "perkiraanMenit": 2
+  },
+  "tindakLanjut": "Saat ingin membeli sesuatu yang tidak direncanakan minggu ini, masukkan dulu ke keranjang lalu tutup aplikasinya."
+}
