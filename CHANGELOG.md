@@ -5,11 +5,25 @@ Format penulisan mengacu pada standar Keep a Changelog dan penamaan commit Funda
 
 ---
 
+## [0.15.1] - 2026-11-24 — Tahap 9B-R: Penyelarasan Umpan Balik Proteksi & Verifikasi Tahap 9B
+
+Tahap 9B-R melakukan verifikasi ketat dan penyelarasan implementasi umpan balik proteksi terhadap Prompt 9B Butir 2:
+- **Verifikasi Kunci Umpan Balik `ringkasan_proteksi_dasar` (`lib/perhitungan/perhitungan_umpan_balik_belajar.dart`, `lib/fitur/belajar/kontroler/penyedia_belajar.dart`):**
+  - Mengonfirmasi fungsi murni `formatRingkasanProteksiDasar` menggunakan parameter `pengeluaranWajibBulananRupiah` (dari `hitungPengeluaranWajibBulanan`), `dasarPengeluaranWajib`, dan `danaDaruratTerkumpul` (dari tujuan dana darurat).
+  - Memastikan teks kembalian bebas dari aturan tak berverifikasi 10% dan persis sesuai spesifikasi prompt: pengeluaran wajib per bulan dirangkai dengan dana darurat yang terkumpul dan pengingat bahwa risiko kesehatan mendadak dapat melampaui dana darurat.
+  - Verifikasi `git grep -n -e "batas wajar 10%" -e "batas sehat rekomendasi" -- lib test` bersih total (0 temuan).
+  - Assertion unit test V1, V2, V3 pada string lengkap lolos di `test/perhitungan/perhitungan_umpan_balik_tahap_09b_test.dart`.
+- **Koreksi Catatan & Penyelarasan Spesifikasi:**
+  - Memperbarui deskripsi catatan rilis agar persis mencerminkan implementasi aktual tanpa aturan tak berverifikasi.
+  - Memverifikasi `docs/spec.md` bagian 17 bahwa Tahap 10 mengacu pada Modul 8 (Penghasilan Tambahan & Freelance), Modul 9 (Pajak Dasar), dan Modul 12 (Tujuan Besar & Perencanaan).
+
+---
+
 ## [0.15.0] - 2026-11-24 — Tahap 9B: Modul 7 "Paylater, Kredit & Skor Kredit" & Modul 10 "Proteksi (Asuransi & Jaminan Sosial)"
 
 Tahap 9B melengkapi materi tingkat menengah Funda dengan merilis Modul 7 dan Modul 10 serta fungsi umpan balik baru:
 - **Kunci Umpan Balik Baru `ringkasan_proteksi_dasar` (`lib/perhitungan/perhitungan_umpan_balik_belajar.dart`, `lib/fitur/belajar/model/registri_misi.dart`, `lib/fitur/belajar/kontroler/penyedia_belajar.dart`):**
-  - Fungsi murni deterministik integer tanpa `double` (`formatRingkasanProteksiDasar`) yang menghitung pengeluaran pos proteksi/asuransi/premi 30 hari terakhir terhadap total pengeluaran dan membandingkan rasio terhadap batas sehat rekomendasi (maksimal 10%).
+  - Fungsi murni deterministik integer tanpa `double` (`formatRingkasanProteksiDasar`) yang merangkum pengeluaran wajib bulanan (rata-rata 3 bulan atau bulan berjalan) dan dana darurat yang terkumpul untuk mengilustrasikan pentingnya proteksi dasar pengalihan risiko.
   - Didaftarkan ke `PembacaKonten.kunciUmpanBalikValid`, `RegistriMisi.penghasilUmpanBalik`, dan evaluasi dinamis di `penyedia_belajar.dart`.
   - TDD unit test lengkap V1, V2, V3 di `test/perhitungan/perhitungan_umpan_balik_tahap_09b_test.dart` (3 tests passed).
 - **Konten Edukasi Resmi Modul 7 "Paylater, Kredit & Skor Kredit" (`aset/konten/menengah/paylater_kredit/`):**
