@@ -152,6 +152,7 @@
 | sandbox calculation | PerhitunganSandbox / perhitungan_sandbox | Logika matematika murni pembagian alokasi dan simulasi skenario pasar |
 | sandbox screen | LayarSandbox (`/sandbox`) | Antarmuka simulasi investasi uang fiktif berpenanda banner tintAmber |
 | sandbox mission | MisiKonten (tipe `sandbox`) | Tipe misi edukasi simulasi portofolio dengan verifikasi minimalSimulasi |
+| basic protection summary feedback | ringkasan_proteksi_dasar | Umpan balik keterkaitan pengeluaran wajib bulanan dan ketersediaan dana darurat terhadap kebutuhan proteksi risiko besar |
 
 ## Aturan Cabang Kerja (Git)
 - Setiap tahap dikerjakan pada cabang khusus (contoh: `tahap-02-dompet-transaksi`).

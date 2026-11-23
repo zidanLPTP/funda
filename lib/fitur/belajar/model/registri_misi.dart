@@ -196,6 +196,19 @@ class RegistriMisi {
       totalKeinginanBulanIniRupiah: totalKeinginanBulanIniRupiah,
     );
   }
+
+  /// Menghasilkan umpan balik ringkasan proteksi dasar (beban wajib dan dana darurat).
+  static String formatRingkasanProteksiDasarMisi({
+    required int pengeluaranWajibBulananRupiah,
+    String? dasarPengeluaranWajib,
+    required int danaDaruratTerkumpul,
+  }) {
+    return formatRingkasanProteksiDasar(
+      pengeluaranWajibBulananRupiah: pengeluaranWajibBulananRupiah,
+      dasarPengeluaranWajib: dasarPengeluaranWajib,
+      danaDaruratTerkumpul: danaDaruratTerkumpul,
+    );
+  }
 }
 
 /// Penyedia teks umpan balik dari data nyata pengguna tanpa jargon.
@@ -371,6 +384,19 @@ class RegistriUmpanBalik {
     return formatRingkasanLanggananDanKeinginan(
       daftarTagihan: daftarTagihan,
       totalKeinginanBulanIniRupiah: totalKeinginanBulanIniRupiah,
+    );
+  }
+
+  /// Menghasilkan umpan balik ringkasan proteksi dasar (beban wajib dan dana darurat).
+  static String formatRingkasanProteksiDasarMisi({
+    required int pengeluaranWajibBulananRupiah,
+    String? dasarPengeluaranWajib,
+    required int danaDaruratTerkumpul,
+  }) {
+    return formatRingkasanProteksiDasar(
+      pengeluaranWajibBulananRupiah: pengeluaranWajibBulananRupiah,
+      dasarPengeluaranWajib: dasarPengeluaranWajib,
+      danaDaruratTerkumpul: danaDaruratTerkumpul,
     );
   }
 }

@@ -912,3 +912,31 @@ String formatRingkasanLanggananDanKeinginan({
   return '${sbLangganan.toString()} ${sbKeinginan.toString()} $penutup';
 }
 
+/// Menghasilkan umpan balik untuk misi 10.3: ringkasan_proteksi_dasar
+///
+/// Masukan:
+/// - [pengeluaranWajibBulananRupiah]: nominal pengeluaran wajib bulanan (<= 0 jika belum ada).
+/// - [dasarPengeluaranWajib]: string dasar pengeluaran wajib ('rata-rata 3 bulan terakhir' atau 'bulan ini').
+/// - [danaDaruratTerkumpul]: nominal Rupiah dari tujuan dana_darurat aktif/tercapai, 0 bila belum ada.
+String formatRingkasanProteksiDasar({
+  required int pengeluaranWajibBulananRupiah,
+  String? dasarPengeluaranWajib,
+  required int danaDaruratTerkumpul,
+}) {
+  if (pengeluaranWajibBulananRupiah <= 0) {
+    return 'Belum ada catatan pengeluaran kebutuhan untuk melihat gambaran beban wajibmu. '
+        'Catat dulu pengeluaran kebutuhanmu agar gambarannya lebih jelas. '
+        'Ini gambaran umum, bukan rekomendasi produk.';
+  }
+
+  final wStr = formatRupiahRapat(pengeluaranWajibBulananRupiah);
+  final dasarStr = dasarPengeluaranWajib ?? 'rata-rata 3 bulan terakhir';
+  final danaStr = formatRupiahRapat(danaDaruratTerkumpul);
+
+  return 'Pengeluaran wajibmu sekitar $wStr per bulan ($dasarStr). '
+      'Dana darurat yang terkumpul saat ini: $danaStr. '
+      'Biaya kesehatan mendadak atau risiko besar bisa jauh melampaui dana darurat, sehingga proteksi dasar membantu melindungi rencana keuanganmu. '
+      'Ini gambaran umum, bukan rekomendasi produk.';
+}
+
+

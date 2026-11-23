@@ -869,6 +869,79 @@ final penyediaTeksUmpanBalikMisi = FutureProvider.autoDispose.family<String, Str
         totalKeinginanBulanIniRupiah: totalKeinginan,
       );
 
+    case 'ringkasan_proteksi_dasar':
+      final tujuanDaruratRow = await (db.select(db.tabelTujuan)
+            ..where((t) =>
+                t.jenis.equals('dana_darurat') &
+                (t.status.equals('aktif') | t.status.equals('tercapai')))
+            ..limit(1))
+          .getSingleOrNull();
+
+      var danaDaruratTerkumpul = 0;
+      if (tujuanDaruratRow != null) {
+        final kantongList = await (db.select(db.tabelKantong)
+              ..where((k) =>
+                  k.tujuanId.equals(tujuanDaruratRow.id) &
+                  k.diarsipkan.equals(false)))
+            .get();
+
+        for (final k in kantongList) {
+          final alokasi = await (db.select(db.tabelAlokasiKantong)
+                ..where((a) => a.kantongId.equals(k.id)))
+              .get();
+          for (final a in alokasi) {
+            if (a.jenis == 'isi') {
+              danaDaruratTerkumpul += a.jumlahRupiah;
+            } else if (a.jenis == 'ambil') {
+              danaDaruratTerkumpul -= a.jumlahRupiah;
+            }
+          }
+        }
+        if (danaDaruratTerkumpul < 0) {
+          danaDaruratTerkumpul = 0;
+        }
+      }
+
+      final semuaTransaksiKeluar = await (db.select(db.tabelTransaksi)
+            ..where((t) =>
+                t.jenis.equals('keluar') | t.jenis.equals('pengeluaran')))
+          .get();
+
+      final semuaKategori = await db.select(db.tabelKategori).get();
+      final petaSifatKategori = {for (final k in semuaKategori) k.id: k.sifat};
+
+      final daftarWajib = <ItemPengeluaranWajib>[];
+      for (final t in semuaTransaksiKeluar) {
+        if (t.kategoriId != null) {
+          final sifat = petaSifatKategori[t.kategoriId];
+          if (sifat == 'kebutuhan' || sifat == 'utang') {
+            daftarWajib.add(ItemPengeluaranWajib(
+              jumlahRupiah: t.jumlahRupiah,
+              sifat: sifat!,
+              waktu: t.waktuTransaksi,
+            ));
+          }
+        }
+      }
+
+      final hasilWajib = hitungPengeluaranWajibBulanan(
+        daftarPengeluaran: daftarWajib,
+        waktuSekarang: waktuSekarang,
+      );
+
+      final String dasarStr;
+      if (hasilWajib.dasar == DasarPengeluaranWajib.tigaBulanTerakhir) {
+        dasarStr = 'rata-rata 3 bulan terakhir';
+      } else {
+        dasarStr = 'bulan ini';
+      }
+
+      return formatRingkasanProteksiDasar(
+        pengeluaranWajibBulananRupiah: hasilWajib.total,
+        dasarPengeluaranWajib: dasarStr,
+        danaDaruratTerkumpul: danaDaruratTerkumpul,
+      );
+
     case 'arus_kas_bulan_ini':
     default:
       final arusKas = ref.watch(penyediaArusKasBulanIni);

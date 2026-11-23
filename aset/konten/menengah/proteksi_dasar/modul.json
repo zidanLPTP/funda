@@ -1,20 +1,145 @@
 {
-    "kuis":  {
-                 "jumlahSoal":  0,
-                 "bankSoal":  [
-
-                              ]
-             },
-    "id":  "proteksi_dasar",
-    "tersedia":  false,
-    "urutan":  10,
-    "gerbang":  [
-
-                ],
-    "deskripsiSingkat":  "Melindungi kesehatan dan barang berharga dari risiko pengeluaran tak terduga.",
-    "daftarPelajaran":  [
-
-                        ],
-    "tingkat":  "menengah",
-    "judul":  "Proteksi \u0026 Asuransi Dasar"
+  "id": "proteksi_dasar",
+  "judul": "Proteksi (Asuransi & Jaminan Sosial)",
+  "tingkat": "menengah",
+  "urutan": 10,
+  "deskripsiSingkat": "Memahami perbedaan dana darurat dan asuransi, jenis proteksi dasar, serta menyesuaikan perlindungan dengan anggaran.",
+  "tersedia": true,
+  "gerbang": [
+    {
+      "tipe": "modul_selesai",
+      "modulId": "dana_darurat",
+      "pesan": "Selesaikan Modul 3 (Dana Darurat) dulu, supaya kamu paham bedanya bantalan harian dan proteksi risiko besar."
+    }
+  ],
+  "daftarPelajaran": [
+    "proteksi_dasar_10_1",
+    "proteksi_dasar_10_2",
+    "proteksi_dasar_10_3"
+  ],
+  "kuis": {
+    "jumlahSoal": 5,
+    "bankSoal": [
+      {
+        "id": "soal_10_1",
+        "pelajaranId": "proteksi_dasar_10_1",
+        "tanya": "Mengapa dana darurat saja kadang belum cukup menghadapi sakit berat?",
+        "pilihan": [
+          "Biayanya bisa jauh melampaui dana darurat dan menguras tabungan",
+          "Karena dana darurat tidak boleh dipakai berobat",
+          "Karena rumah sakit menolak uang tunai"
+        ],
+        "benar": 0,
+        "penjelasan": "Asuransi melengkapi dana darurat dengan mengalihkan risiko biaya yang sangat besar."
+      },
+      {
+        "id": "soal_10_2",
+        "pelajaranId": "proteksi_dasar_10_1",
+        "tanya": "Apa arti premi dalam asuransi?",
+        "pilihan": [
+          "Iuran rutin yang dibayarkan untuk menjaga perlindungan tetap aktif",
+          "Biaya denda keterlambatan",
+          "Bunga pinjaman"
+        ],
+        "benar": 0,
+        "penjelasan": "Premi adalah iuran berkala agar perlindungan tetap berjalan."
+      },
+      {
+        "id": "soal_10_3",
+        "pelajaranId": "proteksi_dasar_10_1",
+        "tanya": "Apa tujuan utama memiliki proteksi?",
+        "pilihan": [
+          "Melindungi rencana keuangan agar tidak runtuh saat musibah besar",
+          "Mencari keuntungan cepat tiap bulan",
+          "Menggantikan kebutuhan menabung"
+        ],
+        "benar": 0,
+        "penjelasan": "Proteksi fokus menjaga kestabilan keuangan dari risiko tak terduga."
+      },
+      {
+        "id": "soal_10_4",
+        "pelajaranId": "proteksi_dasar_10_1",
+        "tanya": "Jika tidak pernah mengajukan klaim selama setahun, bagaimana memandangnya?",
+        "pilihan": [
+          "Tetap bermanfaat karena kamu mendapat perlindungan dan ketenangan",
+          "Uang terbuang percuma",
+          "Harus segera berutang"
+        ],
+        "benar": 0,
+        "penjelasan": "Kita tentu berharap tetap sehat; proteksi adalah pengaman bila hal buruk terjadi."
+      },
+      {
+        "id": "soal_10_5",
+        "pelajaranId": "proteksi_dasar_10_2",
+        "tanya": "Perlindungan paling mendasar bagi pekerja pemula tanpa tanggungan adalah?",
+        "pilihan": [
+          "Perlindungan kesehatan dasar",
+          "Proteksi barang mewah",
+          "Pinjaman cepat"
+        ],
+        "benar": 0,
+        "penjelasan": "Risiko kesehatan dapat menimpa siapa saja sehingga menjadi prioritas dasar."
+      },
+      {
+        "id": "soal_10_6",
+        "pelajaranId": "proteksi_dasar_10_2",
+        "tanya": "Siapa yang paling membutuhkan proteksi jiwa?",
+        "pilihan": [
+          "Orang yang memiliki tanggungan keuangan pada penghasilannya",
+          "Orang yang baru membuka dompet digital",
+          "Semua orang yang suka diskon"
+        ],
+        "benar": 0,
+        "penjelasan": "Proteksi jiwa menjaga kelangsungan hidup tanggungan bila pencari nafkah tiada."
+      },
+      {
+        "id": "soal_10_7",
+        "pelajaranId": "proteksi_dasar_10_2",
+        "tanya": "Apa yang wajib dibaca sebelum menyetujui sebuah layanan asuransi?",
+        "pilihan": [
+          "Isi polis, manfaat, syarat klaim, dan pengecualian",
+          "Hanya judul brosurnya",
+          "Komentar di media sosial"
+        ],
+        "benar": 0,
+        "penjelasan": "Polis memuat aturan resmi apa yang ditanggung dan tidak ditanggung."
+      },
+      {
+        "id": "soal_10_8",
+        "pelajaranId": "proteksi_dasar_10_3",
+        "tanya": "Mengapa iuran proteksi harus sesuai anggaran bulanan?",
+        "pilihan": [
+          "Agar bisa dibayar rutin dan perlindungan tetap aktif saat dibutuhkan",
+          "Supaya premi selalu naik tiap bulan",
+          "Agar tidak perlu mencatat pengeluaran"
+        ],
+        "benar": 0,
+        "penjelasan": "Keberlanjutan pembayaran menjaga perlindunganmu tetap berlaku."
+      },
+      {
+        "id": "soal_10_9",
+        "pelajaranId": "proteksi_dasar_10_3",
+        "tanya": "Kapan kebutuhan proteksi sebaiknya dievaluasi ulang?",
+        "pilihan": [
+          "Saat fase hidup atau tanggungan keuangan berubah",
+          "Tidak pernah perlu dievaluasi",
+          "Hanya saat sedang diskon"
+        ],
+        "benar": 0,
+        "penjelasan": "Risiko dan tanggung jawab berubah seiring perjalanan hidupmu."
+      },
+      {
+        "id": "soal_10_10",
+        "pelajaranId": "proteksi_dasar_10_3",
+        "tanya": "Apa peran Funda terkait produk asuransi?",
+        "pilihan": [
+          "Memberi edukasi umum dan pencatatan, bukan merekomendasikan produk tertentu",
+          "Menjual polis asuransi langsung",
+          "Mengurus klaim rumah sakit"
+        ],
+        "benar": 0,
+        "penjelasan": "Funda bersifat edukatif dan netral, tanpa menjual atau mengiklankan produk keuangan."
+      }
+    ]
+  }
 }

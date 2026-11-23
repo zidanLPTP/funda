@@ -1,20 +1,145 @@
 {
-    "kuis":  {
-                 "jumlahSoal":  0,
-                 "bankSoal":  [
-
-                              ]
-             },
-    "id":  "paylater_kredit",
-    "tersedia":  false,
-    "urutan":  7,
-    "gerbang":  [
-
-                ],
-    "deskripsiSingkat":  "Memahami cara kerja skema tunda bayar dan menjaga reputasi kredit yang baik.",
-    "daftarPelajaran":  [
-
-                        ],
-    "tingkat":  "menengah",
-    "judul":  "Paylater, Kredit \u0026 Skor Kredit"
+  "id": "paylater_kredit",
+  "judul": "Paylater, Kredit & Skor Kredit",
+  "tingkat": "menengah",
+  "urutan": 7,
+  "deskripsiSingkat": "Memahami cara kerja paylater, risiko di balik kemudahan, serta cara menjaga riwayat dan reputasi kredit.",
+  "tersedia": true,
+  "gerbang": [
+    {
+      "tipe": "modul_selesai",
+      "modulId": "utang_cicilan",
+      "pesan": "Selesaikan Modul 4 (Utang & Cicilan) dulu sebelum mempelajari cara kerja paylater dan reputasi kredit."
+    }
+  ],
+  "daftarPelajaran": [
+    "paylater_kredit_7_1",
+    "paylater_kredit_7_2",
+    "paylater_kredit_7_3"
+  ],
+  "kuis": {
+    "jumlahSoal": 5,
+    "bankSoal": [
+      {
+        "id": "soal_7_1",
+        "pelajaranId": "paylater_kredit_7_1",
+        "tanya": "Bagaimana seharusnya kamu memandang fasilitas paylater?",
+        "pilihan": [
+          "Sebagai utang yang harus dibayar dari pemasukan mendatang",
+          "Sebagai diskon belanja gratis",
+          "Sebagai tambahan gaji"
+        ],
+        "benar": 0,
+        "penjelasan": "Paylater tetaplah kewajiban utang yang mengurangi ruang pemasukan berikutnya."
+      },
+      {
+        "id": "soal_7_2",
+        "pelajaranId": "paylater_kredit_7_1",
+        "tanya": "Promo cicilan 0 persen tetap perlu dicek apanya?",
+        "pilihan": [
+          "Biaya layanan, denda keterlambatan, dan total bayar sampai lunas",
+          "Warna aplikasinya",
+          "Jumlah ulasan bintang lima"
+        ],
+        "benar": 0,
+        "penjelasan": "Beberapa promo tetap mengenakan biaya layanan di muka atau denda bila terlambat."
+      },
+      {
+        "id": "soal_7_3",
+        "pelajaranId": "paylater_kredit_7_1",
+        "tanya": "Mengapa beberapa cicilan kecil sekaligus bisa berbahaya bagi arus kas?",
+        "pilihan": [
+          "Total gabungannya dapat mengikat sebagian besar pemasukan bulanan",
+          "Karena cicilan kecil tidak bisa dilunasi",
+          "Karena saldo dompet otomatis bertambah"
+        ],
+        "benar": 0,
+        "penjelasan": "Akumulasi cicilan kecil mempersempit ruang kebutuhan pokok dan tabungan."
+      },
+      {
+        "id": "soal_7_4",
+        "pelajaranId": "paylater_kredit_7_1",
+        "tanya": "Harga barang Rp1.000.000, total bayar lewat paylater Rp1.095.000. Berapa biaya tambahannya?",
+        "pilihan": [
+          "Rp95.000",
+          "Rp100.000",
+          "Rp1.095.000"
+        ],
+        "benar": 0,
+        "penjelasan": "Rp1.095.000 dikurangi Rp1.000.000 menghasilkan biaya tambahan Rp95.000."
+      },
+      {
+        "id": "soal_7_5",
+        "pelajaranId": "paylater_kredit_7_2",
+        "tanya": "Apa yang dimaksud dengan riwayat kredit?",
+        "pilihan": [
+          "Catatan pinjaman dan ketepatan pembayaran pada layanan kredit berizin",
+          "Catatan uang saku harian",
+          "Daftar barang di keranjang belanja"
+        ],
+        "benar": 0,
+        "penjelasan": "Riwayat kredit menjadi rekam jejak kedisiplinan pembayaranmu."
+      },
+      {
+        "id": "soal_7_6",
+        "pelajaranId": "paylater_kredit_7_2",
+        "tanya": "Apakah keterlambatan paylater bernilai kecil tetap bisa memengaruhi reputasi kredit?",
+        "pilihan": [
+          "Ya, bila penyedianya berizin dan melaporkan catatan pembayaran",
+          "Tidak pernah berpengaruh sama sekali",
+          "Hanya berpengaruh jika di atas Rp100.000.000"
+        ],
+        "benar": 0,
+        "penjelasan": "Tunggakan kecil tetap bisa tercatat dan memengaruhi pengajuan kredit besar kelak."
+      },
+      {
+        "id": "soal_7_7",
+        "pelajaranId": "paylater_kredit_7_2",
+        "tanya": "Faktor utama yang menjaga skor kredit tetap baik adalah?",
+        "pilihan": [
+          "Membayar kewajiban tepat waktu",
+          "Sering menunda pembayaran",
+          "Mengajukan banyak pinjaman bersamaan"
+        ],
+        "benar": 0,
+        "penjelasan": "Ketepatan waktu membayar adalah pilar utama reputasi kredit."
+      },
+      {
+        "id": "soal_7_8",
+        "pelajaranId": "paylater_kredit_7_3",
+        "tanya": "Mengapa membayar hanya jumlah minimum pada kartu kredit kurang disarankan?",
+        "pilihan": [
+          "Sisa tagihan terus berbunga sehingga total bayar makin besar",
+          "Karena pembayaran minimum selalu ditolak",
+          "Karena utang langsung lunas"
+        ],
+        "benar": 0,
+        "penjelasan": "Membayar penuh sebelum jatuh tempo mencegah bunga berjalan."
+      },
+      {
+        "id": "soal_7_9",
+        "pelajaranId": "paylater_kredit_7_3",
+        "tanya": "Di mana kamu bisa memeriksa catatan riwayat kredit secara aman?",
+        "pilihan": [
+          "Lewat layanan resmi lembaga pengawas keuangan",
+          "Lewat tautan acak di pesan singkat",
+          "Lewat pihak tidak dikenal yang meminta OTP"
+        ],
+        "benar": 0,
+        "penjelasan": "Gunakan selalu kanal resmi lembaga pengawas untuk mengecek data kreditmu."
+      },
+      {
+        "id": "soal_7_10",
+        "pelajaranId": "paylater_kredit_7_3",
+        "tanya": "Sikap yang sehat terhadap batas kredit yang besar adalah?",
+        "pilihan": [
+          "Tetap memakainya sesuai anggaran dan kemampuan bayar",
+          "Menghabiskan seluruh batasnya",
+          "Menganggapnya sebagai uang tabungan"
+        ],
+        "benar": 0,
+        "penjelasan": "Batas kredit adalah batas pinjaman, bukan uang milikmu."
+      }
+    ]
+  }
 }

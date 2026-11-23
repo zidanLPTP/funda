@@ -2109,5 +2109,19 @@ void main() {
       );
       expect(() => PembacaKonten.validasiKontenPelajaran(data, namaBerkas: 'investasi_dasar_11_3.json'), returnsNormally);
     });
+
+    // 26. Validasi Kunci Umpan Balik ringkasan_proteksi_dasar (Tahap 9B)
+    test('26. Validasi Sukses: Misi lihat_hitungan dengan kunci ringkasan_proteksi_dasar lolos validasi', () {
+      final data = buatPelajaranDasar(
+        id: 'proteksi_dasar_10_3',
+        misi: {
+          'tipe': 'lihat_hitungan',
+          'judul': 'Lihat gambaran beban wajib dan dana daruratmu',
+          'instruksi': 'Buka ringkasan pengeluaran wajib dan dana daruratmu saat ini, baca isinya, lalu tekan Mengerti.',
+          'umpanBalik': 'ringkasan_proteksi_dasar',
+        },
+      );
+      expect(() => PembacaKonten.validasiKontenPelajaran(data, namaBerkas: 'proteksi_dasar_10_3.json'), returnsNormally);
+    });
   });
 }

@@ -89,6 +89,7 @@ class PembacaKonten {
     'rasio_cicilan_bulan_ini',
     'urutan_pelunasan',
     'ringkasan_langganan_dan_keinginan',
+    'ringkasan_proteksi_dasar',
   };
 
   /// Mengurai string JSON kamus menjadi daftar istilah terindeks.

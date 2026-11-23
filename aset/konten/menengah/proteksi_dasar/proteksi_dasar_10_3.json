@@ -1,0 +1,85 @@
+{
+  "id": "proteksi_dasar_10_3",
+  "modulId": "proteksi_dasar",
+  "judul": "Menyesuaikan Proteksi dengan Anggaran",
+  "durasiMenit": 5,
+  "status": "draf",
+  "catatanReviewer": "TODO-VERIFIKASI. Prinsip menyelaraskan biaya proteksi dengan pengeluaran wajib dan anggaran bulanan; bukan nasihat produk.",
+  "pemantik": "Proteksi itu penting, tetapi iuran yang terlalu mahal justru bisa membuatmu berhenti membayar di tengah jalan.",
+  "kartu": [
+    {
+      "judul": "Sesuaikan iuran dengan kemampuan",
+      "isi": "Proteksi baru berguna kalau statusnya tetap aktif saat dibutuhkan. Karena itu, pilih perlindungan yang iurannya nyaman dibayar rutin di dalam pos anggaran bulananmu."
+    },
+    {
+      "judul": "Pisahkan tujuan proteksi dan investasi",
+      "isi": "Untuk pemula, memisahkan perlindungan murni dan tabungan atau investasi biasanya lebih mudah dipahami biayanya. Kamu tahu persis berapa yang dibayar untuk perlindungan dan berapa yang kamu sisihkan untuk tujuanmu."
+    },
+    {
+      "judul": "Evaluasi saat fase hidup berubah",
+      "isi": "Kebutuhan proteksi saat kuliah, baru bekerja, menikah, atau punya anak pasti berbeda. Tinjau ulang perlindunganmu setiap kali ada perubahan besar dalam hidup atau penghasilanmu."
+    }
+  ],
+  "contohAngka": {
+    "judul": "Ilustrasi iuran proteksi dasar dalam anggaran Rp3.000.000",
+    "baris": [
+      {
+        "label": "Pemasukan bulanan",
+        "jumlah": 3000000
+      },
+      {
+        "label": "Pengeluaran kebutuhan pokok",
+        "jumlah": 1800000
+      },
+      {
+        "label": "Iuran proteksi kesehatan dasar (ilustrasi)",
+        "jumlah": 150000
+      },
+      {
+        "label": "Sisa ruang untuk tabungan dan keinginan",
+        "jumlah": 1050000,
+        "tipe": "ringkasan"
+      }
+    ],
+    "kesimpulan": "Iuran yang terukur menjaga perlindungan tetap aktif tanpa mengorbankan kebutuhan harian dan tabungan."
+  },
+  "cekPaham": [
+    {
+      "tanya": "Apa risiko jika memilih iuran proteksi yang terlalu berat untuk anggaranmu?",
+      "pilihan": [
+        "Berisiko berhenti membayar di tengah jalan sehingga perlindungan tidak aktif",
+        "Perlindungan otomatis menjadi gratis",
+        "Saldo tabungan bertambah sendiri"
+      ],
+      "benar": 0,
+      "penjelasan": "Perlindungan hanya bekerja bila iurannya bisa dijalankan secara konsisten."
+    },
+    {
+      "tanya": "Kapan waktu yang tepat untuk meninjau ulang kebutuhan proteksimu?",
+      "pilihan": [
+        "Saat ada perubahan fase hidup, seperti mulai bekerja atau punya tanggungan",
+        "Tidak perlu ditinjau seumur hidup",
+        "Setiap kali ada iklan baru"
+      ],
+      "benar": 0,
+      "penjelasan": "Perubahan tanggung jawab hidup mengubah skala risiko yang perlu dilindungi."
+    },
+    {
+      "tanya": "Mengapa memahami biaya proteksi secara terpisah berguna bagi pemula?",
+      "pilihan": [
+        "Lebih jelas melihat berapa biaya perlindungan dan berapa yang ditabung",
+        "Supaya tidak perlu membaca polis",
+        "Supaya bisa melewati anggaran"
+      ],
+      "benar": 0,
+      "penjelasan": "Kejelasan biaya membantumu mengatur anggaran dengan sadar."
+    }
+  ],
+  "misi": {
+    "tipe": "lihat_hitungan",
+    "judul": "Lihat gambaran beban wajib dan dana daruratmu",
+    "instruksi": "Buka ringkasan pengeluaran wajib dan dana daruratmu saat ini, baca isinya, lalu tekan Mengerti.",
+    "umpanBalik": "ringkasan_proteksi_dasar"
+  },
+  "tindakLanjut": "Catat iuran jaminan sosial atau proteksi rutinmu di menu Tagihan agar selalu masuk dalam perhitungan anggaran bulanan."
+}

@@ -105,6 +105,10 @@ funda/
 
 ## 📸 Tangkapan Layar Aplikasi
 Tangkapan layar otomatis yang dihasilkan dari pengujian dan emulator tersimpan pada:
+- **Tahap 9B (Modul 7 "Paylater, Kredit & Skor Kredit" & Modul 10 "Proteksi"):** [docs/tangkapan_layar/](docs/tangkapan_layar/)
+  - Menghadirkan materi pembelajaran paylater, reputasi kredit, dan proteksi dasar beserta umpan balik `ringkasan_proteksi_dasar`.
+- **Tahap 9A (Mesin Sandbox & Modul 11 "Investasi Dasar"):** [docs/tangkapan_layar/](docs/tangkapan_layar/)
+  - Menghadirkan Mode Sandbox investasi portofolio fiktif dan konten Modul 11 Investasi Dasar.
 - **Tahap 8D (Modul 6 "Psikologi Uang & Kebiasaan Belanja" & Penutupan Tingkat Pemula di Emulator):** [docs/tangkapan_layar/](docs/tangkapan_layar/)
   - `tahap_08d_01_modul_6_terkunci.png` — Modul 6 terkunci untuk pengguna baru dengan pesan lampiran resmi (Modul 1 + 5 pengeluaran)
   - `tahap_08d_02_modul_6_terbuka.png` — Modul 6 terbuka setelah prasyarat terpenuhi

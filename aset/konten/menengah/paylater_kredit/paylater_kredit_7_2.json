@@ -1,0 +1,103 @@
+{
+  "id": "paylater_kredit_7_2",
+  "modulId": "paylater_kredit",
+  "judul": "Mengenal Riwayat dan Skor Kredit",
+  "durasiMenit": 5,
+  "status": "draf",
+  "catatanReviewer": "TODO-VERIFIKASI. Penjelasan umum tentang catatan riwayat kredit dan faktor yang memengaruhinya; tidak menyebut nama sistem lembaga tertentu.",
+  "pemantik": "Pernah dengar pengajuan kredit rumah atau kendaraan ditolak karena tunggakan kecil beberapa tahun lalu? Itu berhubungan dengan riwayat kredit.",
+  "kartu": [
+    {
+      "judul": "Apa itu riwayat kredit?",
+      "isi": "{{Riwayat kredit}} adalah catatan tentang pinjaman, kartu kredit, atau paylater berizin yang pernah kamu pakai, termasuk apakah kamu membayarnya tepat waktu. Catatan ini menjadi bahan pertimbangan penyedia pinjaman di masa depan."
+    },
+    {
+      "judul": "Apa itu skor kredit?",
+      "isi": "{{Skor kredit}} adalah gambaran ringkas dari riwayat pembayaranmu. Makin rapi kamu membayar tepat waktu dan menjaga sisa pinjaman tetap wajar, makin baik pula reputasi kreditmu di mata pemberi pinjaman."
+    },
+    {
+      "judul": "Tunggakan kecil tetap tercatat",
+      "isi": "Banyak orang mengira tunggakan paylater Rp100.000 tidak berpengaruh. Padahal, keterlambatan pada layanan berizin tetap bisa tercatat dan memengaruhi pengajuan kredit besar di kemudian hari, seperti kredit rumah."
+    }
+  ],
+  "contohAngka": {
+    "judul": "Ilustrasi dampak keterlambatan pada tagihan Rp500.000",
+    "baris": [
+      {
+        "label": "Tagihan pokok",
+        "jumlah": 500000
+      },
+      {
+        "label": "Denda keterlambatan 1 bulan (ilustrasi)",
+        "jumlah": 50000
+      },
+      {
+        "label": "Total yang harus dibayar",
+        "jumlah": 550000,
+        "tipe": "ringkasan"
+      }
+    ],
+    "kesimpulan": "Selain menambah biaya Rp50.000, keterlambatan juga meninggalkan jejak pada riwayat kreditmu."
+  },
+  "cekPaham": [
+    {
+      "tanya": "Apa yang dicatat dalam riwayat kredit?",
+      "pilihan": [
+        "Jejak pinjaman dan ketepatan pembayaran pada layanan kredit berizin",
+        "Daftar belanja tunai di warung",
+        "Jumlah pengikut media sosial"
+      ],
+      "benar": 0,
+      "penjelasan": "Riwayat kredit merekam kedisiplinanmu membayar kewajiban kredit berizin."
+    },
+    {
+      "tanya": "Mengapa tunggakan paylater bernilai kecil tetap perlu diperhatikan?",
+      "pilihan": [
+        "Karena tetap bisa tercatat dan memengaruhi pengajuan kredit besar nanti",
+        "Karena nominal kecil tidak perlu dibayar",
+        "Karena langsung dihapus esok hari"
+      ],
+      "benar": 0,
+      "penjelasan": "Keterlambatan sekecil apa pun pada layanan berizin dapat memengaruhi penilaian kredit di masa depan."
+    },
+    {
+      "tanya": "Kebiasaan mana yang paling membantu menjaga reputasi kredit?",
+      "pilihan": [
+        "Membayar tagihan tepat waktu dan tidak menumpuk cicilan",
+        "Membayar hanya jika sempat",
+        "Membuka banyak akun paylater sekaligus"
+      ],
+      "benar": 0,
+      "penjelasan": "Ketepatan bayar adalah fondasi utama reputasi kredit yang sehat."
+    }
+  ],
+  "misi": {
+    "tipe": "keputusan",
+    "judul": "Saat tagihan mendekati jatuh tempo",
+    "instruksi": "Pilih langkah yang paling sehat untuk menjaga riwayat kreditmu.",
+    "skenario": {
+      "pemantik": "Tagihan paylater Rp400.000 jatuh tempo besok. Kamu punya uangnya, tetapi kamu juga ingin memakainya untuk nongkrong akhir pekan.",
+      "opsi": [
+        {
+          "id": "a",
+          "teks": "Bayar tagihan dulu hari ini, lalu sesuaikan rencana akhir pekan dengan sisanya",
+          "aman": true,
+          "umpanBalik": "Tepat. Membayar tepat waktu menghindarkanmu dari denda dan menjaga riwayat kredit tetap bersih."
+        },
+        {
+          "id": "b",
+          "teks": "Tunda bayar seminggu dulu, nanti bayar dendanya saja",
+          "aman": false,
+          "umpanBalik": "Selain menambah biaya denda, keterlambatan bisa tercatat di riwayat kreditmu. Coba pilihan lain."
+        },
+        {
+          "id": "c",
+          "teks": "Tutup tagihan dengan pinjaman dari aplikasi lain",
+          "aman": false,
+          "umpanBalik": "Menutup utang dengan utang baru hanya memperbesar beban dan risiko. Coba pilihan lain."
+        }
+      ]
+    }
+  },
+  "tindakLanjut": "Periksa semua akun kredit atau paylater yang masih aktif di HP-mu. Pastikan tidak ada tagihan kecil yang terlupa."
+}

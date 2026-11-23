@@ -549,5 +549,19 @@ Berkas ini adalah sumber kebenaran teks (*single source of truth*) untuk antarmu
 3. **`rasio_cicilan_bulan_ini`**: Menghitung rasio cicilan terhadap pemasukan bulanan serta menghitung proyeksi kenaikan rasio jika pemasukan turun 25 persen.
 4. **`urutan_pelunasan`**: Menghitung urutan pelunasan utang aktif berdasarkan strategi bola salju (sisa pokok terkecil) dan longsor (bunga persen tertinggi).
 
+---
+
+## 11. Kunci Umpan Balik Baru Tahap 8D (Modul 6)
+1. **`ringkasan_langganan_dan_keinginan`**: Merangkum jumlah langganan aktif, perkiraan biaya bulanan, serta total pengeluaran pos keinginan yang tercatat di bulan berjalan.
+
+---
+
+## 12. Kunci Umpan Balik Baru Tahap 9B (Modul 10)
+1. **`ringkasan_proteksi_dasar`**:
+   - Menghubungkan pengeluaran wajib bulanan (kebutuhan pokok + utang) dengan akumulasi dana darurat yang sudah terkumpul.
+   - Memberikan perspektif edukasi bahwa musibah kesehatan mendadak atau risiko besar bisa melampaui dana darurat sehingga proteksi dasar membantu melindungi rencana keuangan.
+   - Jika belum ada catatan pengeluaran kebutuhan, mengarahkan pengguna mencatat pengeluaran terlebih dahulu.
+
+
 
 

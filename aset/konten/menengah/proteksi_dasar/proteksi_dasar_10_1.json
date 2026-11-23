@@ -1,0 +1,103 @@
+{
+  "id": "proteksi_dasar_10_1",
+  "modulId": "proteksi_dasar",
+  "judul": "Kenapa Kita Butuh Proteksi?",
+  "durasiMenit": 5,
+  "status": "draf",
+  "catatanReviewer": "TODO-VERIFIKASI. Penjelasan umum perbedaan dana darurat dan asuransi sebagai pengalihan risiko keuangan.",
+  "pemantik": "Dana daruratmu sudah terkumpul tiga bulan pengeluaran. Tapi bagaimana kalau terjadi sakit berat yang biayanya setara satu tahun penghasilan?",
+  "kartu": [
+    {
+      "judul": "Dana darurat punya batas",
+      "isi": "Dana darurat sangat membantu untuk kejadian mendadak berskala kecil hingga sedang. Namun untuk risiko besar seperti perawatan rumah sakit berat, tabungan bertahun-tahun bisa habis dalam hitungan hari."
+    },
+    {
+      "judul": "Mengalihkan risiko besar",
+      "isi": "{{Asuransi}} adalah cara mengalihkan risiko biaya besar kepada pihak penyedia proteksi. Kamu membayar {{premi}} secara rutin dalam jumlah terukur, agar bila risiko yang ditanggung terjadi, biayanya tidak menghancurkan keuanganmu."
+    },
+    {
+      "judul": "Proteksi bukan untuk mencari untung",
+      "isi": "Tujuan utama proteksi adalah menjaga agar rencanamu tidak runtuh saat musibah datang. Jika selama setahun kamu sehat dan tidak mengajukan {{klaim}}, itu bukan berarti uangmu terbuang, melainkan kamu membeli ketenangan."
+    }
+  ],
+  "contohAngka": {
+    "judul": "Ilustrasi biaya perawatan mendadak Rp25.000.000",
+    "baris": [
+      {
+        "label": "Perkiraan biaya rumah sakit",
+        "jumlah": 25000000
+      },
+      {
+        "label": "Dana darurat yang tersedia",
+        "jumlah": 6000000
+      },
+      {
+        "label": "Kekurangan jika tanpa proteksi",
+        "jumlah": -19000000,
+        "tipe": "ringkasan"
+      }
+    ],
+    "kesimpulan": "Tanpa proteksi, kekurangan Rp19.000.000 bisa memaksa seseorang berutang besar. Proteksi membantu menutup risiko di luar jangkauan dana darurat."
+  },
+  "cekPaham": [
+    {
+      "tanya": "Apa perbedaan utama dana darurat dan asuransi?",
+      "pilihan": [
+        "Dana darurat untuk kejadian mendadak sedang, asuransi mengalihkan risiko biaya besar",
+        "Keduanya persis sama dan saling menggantikan",
+        "Asuransi hanya untuk orang yang sudah kaya"
+      ],
+      "benar": 0,
+      "penjelasan": "Keduanya saling melengkapi agar keuanganmu tetap aman di berbagai skala kejadian."
+    },
+    {
+      "tanya": "Apa yang dimaksud dengan premi?",
+      "pilihan": [
+        "Iuran berkala yang dibayarkan untuk menjaga perlindungan tetap aktif",
+        "Uang pinjaman dari bank",
+        "Hadiah tahunan dari rumah sakit"
+      ],
+      "benar": 0,
+      "penjelasan": "Premi adalah biaya rutin terukur untuk mengalihkan risiko besar."
+    },
+    {
+      "tanya": "Jika tidak pernah sakit selama membayar iuran proteksi kesehatan, bagaimana memandangnya?",
+      "pilihan": [
+        "Wajar, karena tujuannya membeli perlindungan dan ketenangan",
+        "Rugi besar karena tidak ada untungnya",
+        "Sebaiknya langsung berhenti tanpa perlindungan"
+      ],
+      "benar": 0,
+      "penjelasan": "Proteksi bertujuan mencegah kehancuran keuangan saat musibah, bukan mencari keuntungan."
+    }
+  ],
+  "misi": {
+    "tipe": "keputusan",
+    "judul": "Menentukan prioritas perlindungan",
+    "instruksi": "Baca skenarionya, lalu pilih langkah yang paling masuk akal.",
+    "skenario": {
+      "pemantik": "Kamu baru mulai bekerja dengan penghasilan rutin. Dana daruratmu baru mulai diisi, dan kamu belum punya perlindungan kesehatan sama sekali.",
+      "opsi": [
+        {
+          "id": "a",
+          "teks": "Pastikan punya perlindungan kesehatan dasar dulu sambil terus mengisi dana darurat",
+          "aman": true,
+          "umpanBalik": "Tepat. Perlindungan kesehatan dasar menjaga agar tabungan dan dana daruratmu tidak langsung habis bila mendadak sakit."
+        },
+        {
+          "id": "b",
+          "teks": "Tunda perlindungan kesehatan sampai tabungan mencapai Rp100.000.000",
+          "aman": false,
+          "umpanBalik": "Risiko sakit bisa datang kapan saja tanpa menunggu tabungan besar. Coba pilihan lain."
+        },
+        {
+          "id": "c",
+          "teks": "Ambil semua jenis proteksi mahal sampai gajimu habis",
+          "aman": false,
+          "umpanBalik": "Iuran proteksi harus tetap realistis sesuai anggaran agar tidak menekan kebutuhan pokok. Coba pilihan lain."
+        }
+      ]
+    }
+  },
+  "tindakLanjut": "Cek apakah kamu sudah terdaftar dan aktif dalam program jaminan sosial kesehatan yang berlaku di tempat tinggalmu."
+}

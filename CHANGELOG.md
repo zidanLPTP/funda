@@ -5,6 +5,35 @@ Format penulisan mengacu pada standar Keep a Changelog dan penamaan commit Funda
 
 ---
 
+## [0.15.0] - 2026-11-24 — Tahap 9B: Modul 7 "Paylater, Kredit & Skor Kredit" & Modul 10 "Proteksi (Asuransi & Jaminan Sosial)"
+
+Tahap 9B melengkapi materi tingkat menengah Funda dengan merilis Modul 7 dan Modul 10 serta fungsi umpan balik baru:
+- **Kunci Umpan Balik Baru `ringkasan_proteksi_dasar` (`lib/perhitungan/perhitungan_umpan_balik_belajar.dart`, `lib/fitur/belajar/model/registri_misi.dart`, `lib/fitur/belajar/kontroler/penyedia_belajar.dart`):**
+  - Fungsi murni deterministik integer tanpa `double` (`formatRingkasanProteksiDasar`) yang menghitung pengeluaran pos proteksi/asuransi/premi 30 hari terakhir terhadap total pengeluaran dan membandingkan rasio terhadap batas sehat rekomendasi (maksimal 10%).
+  - Didaftarkan ke `PembacaKonten.kunciUmpanBalikValid`, `RegistriMisi.penghasilUmpanBalik`, dan evaluasi dinamis di `penyedia_belajar.dart`.
+  - TDD unit test lengkap V1, V2, V3 di `test/perhitungan/perhitungan_umpan_balik_tahap_09b_test.dart` (3 tests passed).
+- **Konten Edukasi Resmi Modul 7 "Paylater, Kredit & Skor Kredit" (`aset/konten/menengah/paylater_kredit/`):**
+  - `modul.json`: Tingkat `menengah`, urutan 7, gerbang `anggaran_arus_kas` dan `utang_cicilan`, bankSoal kuis 10 butir dengan sebaran 4/3/3 (7.1: 4 butir, 7.2: 3 butir, 7.3: 3 butir).
+  - `paylater_kredit_7_1.json`: "Paylater: Kemudahan vs Biaya Tersembunyi", durasi 6 menit, contohAngka "Belanja Rp500.000 dengan cicilan 6 bulan", misi `keputusan` "Simulasi Checkout Keranjang".
+  - `paylater_kredit_7_2.json`: "Kartu Kredit & Kredit Multiguna", durasi 6 menit, contohAngka "Membayar tagihan minimum vs bayar penuh", misi `keputusan` "Pilih Cara Bayar Tagihan".
+  - `paylater_kredit_7_3.json`: "Mengenal Skor Kredit & SLIK OJK", durasi 5 menit, contohAngka "Perbedaan skor kredit saat butuh dana besar", misi `daftar_periksa` dengan disclaimer "Langkah Mengecek Riwayat Kredit Sendiri".
+- **Konten Edukasi Resmi Modul 10 "Proteksi (Asuransi & Jaminan Sosial)" (`aset/konten/menengah/proteksi_dasar/`):**
+  - `modul.json`: Tingkat `menengah`, urutan 10, gerbang `dana_darurat`, bankSoal kuis 10 butir dengan sebaran 4/3/3 (10.1: 4 butir, 10.2: 3 butir, 10.3: 3 butir).
+  - `proteksi_dasar_10_1.json`: "Konsep Dasar Proteksi: Mengalihkan Risiko", durasi 6 menit, contohAngka "Biaya sakit kritis tanpa vs dengan proteksi", misi `keputusan` "Pilih Sikap terhadap Risiko".
+  - `proteksi_dasar_10_2.json`: "Piramida Proteksi: Jaminan Sosial vs Komersial", durasi 7 menit, contohAngka "Urutan kepemilikan proteksi", misi `daftar_periksa` dengan disclaimer "Daftar Periksa Proteksi Pribadi".
+  - `proteksi_dasar_10_3.json`: "Berapa Porsi Anggaran untuk Proteksi?", durasi 5 menit, contohAngka "Simulasi porsi premi 5-10 persen penghasilan", misi `umpan_balik` kunci `ringkasan_proteksi_dasar`.
+- **Ekstensi Kamus Keuangan (`aset/konten/kamus.json`):**
+  - Menambahkan 10 entri istilah baru persis kata per kata sesuai lampiran resmi: `biaya layanan`, `denda keterlambatan`, `riwayat kredit`, `skor kredit`, `asuransi`, `premi`, `klaim`, `polis`, `jaminan sosial`, `tanggungan` (total 57 istilah tanpa duplikasi).
+- **Pengujian & Validasi (`test/`, `integration_test/`):**
+  - Pengujian widget komprehensif `belajar_tahap_09b_widget_test.dart` (5 uji: interaksi keputusan 7.1, daftar periksa 7.3 & 10.2, umpan balik 10.3, kuis 7 & 10, serta skala font 2.0).
+  - Pengujian kesesuaian lampiran materi kata-per-kata di `test/konten/kesesuaian_lampiran_test.dart` (37 tests passed).
+  - Pengujian pemeriksa semua konten di `test/konten/pemeriksa_semua_konten_test.dart` (19 modul dan 30 pelajaran valid).
+  - Skenario pengujian integrasi emulator di `integration_test/tahap_09b_emulator_test.dart` dan skrip runner `tool/jalankan_test_dan_tangkapan_layar_tahap_09b.ps1`.
+- **Dokumentasi & Spesifikasi:**
+  - `docs/spec.md`, `docs/format_konten.md`, `docs/kamus_penamaan.md`, dan `README.md` diperbarui mencakup Tahap 9B.
+
+---
+
 ## [0.14.1] - 2026-11-23 — Tahap 9A-R: Perbaikan Token UI, Integer Sandbox & Lampiran Modul 11
 
 Tahap 9A-R memperbaiki token UI, rumus pembagian integer simulasi sandbox, dan kesesuaian lampiran konten Modul 11:

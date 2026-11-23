@@ -1,0 +1,99 @@
+{
+  "id": "paylater_kredit_7_3",
+  "modulId": "paylater_kredit",
+  "judul": "Menjaga Reputasi Kredit Tetap Sehat",
+  "durasiMenit": 5,
+  "status": "draf",
+  "catatanReviewer": "TODO-VERIFIKASI. Langkah praktis menjaga reputasi kredit dan mengecek catatan riwayat kredit lewat jalur resmi; tanpa menyebut nama sistem/situs tertentu.",
+  "pemantik": "Reputasi kredit dibangun pelan-pelan lewat kebiasaan kecil, tetapi bisa rusak hanya karena satu kali lalai.",
+  "kartu": [
+    {
+      "judul": "Bayar penuh dan tepat waktu",
+      "isi": "Bila memakai kartu kredit atau paylater, usahakan membayar penuh sebelum jatuh tempo. Membayar jumlah minimum saja membuat sisa tagihan terus berbunga dan memperpanjang bebanmu."
+    },
+    {
+      "judul": "Pakai seperlunya, bukan sampai batas",
+      "isi": "Memiliki batas kredit besar bukan berarti semuanya harus dipakai. Menjaga pemakaian jauh di bawah batas memberi ruang bernapas dan menunjukkan pengelolaan yang terkendali."
+    },
+    {
+      "judul": "Cek catatan secara berkala",
+      "isi": "Di dunia nyata, kamu berhak memeriksa catatan riwayat kreditmu lewat layanan resmi {{lembaga pengawas}} keuangan. Pemeriksaan berkala membantumu memastikan tidak ada tagihan salah catat atau penyalahgunaan data."
+    }
+  ],
+  "contohAngka": {
+    "judul": "Membandingkan bayar penuh vs bayar minimum (tagihan Rp1.000.000)",
+    "baris": [
+      {
+        "label": "Bayar penuh sebelum jatuh tempo: biaya tambahan",
+        "jumlah": 0
+      },
+      {
+        "label": "Bayar sebagian dan menunda: perkiraan bunga dan biaya (ilustrasi)",
+        "jumlah": 60000
+      }
+    ],
+    "kesimpulan": "Membayar penuh tepat waktu menjaga biayamu tetap Rp0 dan riwayat kredit tetap bersih."
+  },
+  "cekPaham": [
+    {
+      "tanya": "Mengapa membayar penuh sebelum jatuh tempo lebih disarankan?",
+      "pilihan": [
+        "Menghindari bunga berjalan dan menjaga riwayat kredit tetap bersih",
+        "Supaya batas kredit langsung nol",
+        "Supaya denda makin besar"
+      ],
+      "benar": 0,
+      "penjelasan": "Membayar penuh tepat waktu mencegah penumpukan bunga dan denda."
+    },
+    {
+      "tanya": "Mengapa memeriksa riwayat kredit secara berkala itu berguna?",
+      "pilihan": [
+        "Memastikan catatan akurat dan mendeteksi penyalahgunaan data lebih awal",
+        "Supaya bisa menambah utang otomatis",
+        "Supaya tagihan lama hilang sendiri"
+      ],
+      "benar": 0,
+      "penjelasan": "Pengecekan berkala lewat jalur resmi melindungi reputasi kreditmu."
+    },
+    {
+      "tanya": "Jika kamu punya batas kredit Rp5.000.000, sikap yang paling sehat adalah?",
+      "pilihan": [
+        "Memakai hanya sesuai kemampuan bayar di anggaranmu",
+        "Menghabiskan seluruh batas setiap bulan",
+        "Meminjamkannya ke orang yang tidak dikenal"
+      ],
+      "benar": 0,
+      "penjelasan": "Batas kredit bukan tambahan penghasilan; sesuaikan selalu dengan kemampuan bayarmu."
+    }
+  ],
+  "misi": {
+    "tipe": "daftar_periksa",
+    "judul": "Daftar jaga reputasi kredit",
+    "instruksi": "Baca catatan di atas, lalu centang kebiasaan yang kamu siapkan untuk menjaga riwayat kreditmu. Minimal tiga langkah.",
+    "disclaimer": true,
+    "minimalDicentang": 3,
+    "langkah": [
+      {
+        "id": "l1",
+        "teks": "Aku mencatat setiap jatuh tempo cicilan atau paylater di Funda agar tidak terlewat."
+      },
+      {
+        "id": "l2",
+        "teks": "Aku mengutamakan bayar penuh sebelum jatuh tempo bila memakai fasilitas kredit."
+      },
+      {
+        "id": "l3",
+        "teks": "Aku membatasi pemakaian kredit sesuai anggaran, bukan mengikuti batas maksimal."
+      },
+      {
+        "id": "l4",
+        "teks": "Aku tahu bahwa riwayat kredit bisa dicek lewat layanan resmi lembaga pengawas."
+      },
+      {
+        "id": "l5",
+        "teks": "Aku tidak membagikan data identitas atau akun kreditku ke orang lain."
+      }
+    ]
+  },
+  "tindakLanjut": "Jika ada akun paylater yang sudah tidak terpakai dan lunas, pertimbangkan menonaktifkannya agar lebih tenang."
+}

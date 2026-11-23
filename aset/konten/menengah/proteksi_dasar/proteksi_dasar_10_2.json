@@ -1,0 +1,99 @@
+{
+  "id": "proteksi_dasar_10_2",
+  "modulId": "proteksi_dasar",
+  "judul": "Mengenal Jenis Proteksi Dasar",
+  "durasiMenit": 6,
+  "status": "draf",
+  "catatanReviewer": "TODO-VERIFIKASI. Gambaran umum jaminan sosial, asuransi kesehatan, dan asuransi jiwa murni; tanpa menyebut merek atau nama program spesifik.",
+  "pemantik": "Banyak tawaran perlindungan dengan istilah rumit. Mana yang sebenarnya paling mendasar untuk anak muda dan pekerja pemula?",
+  "kartu": [
+    {
+      "judul": "Jaminan sosial dan kesehatan",
+      "isi": "Langkah paling dasar adalah memastikan kamu terlindungi oleh {{jaminan sosial}} kesehatan yang dikelola resmi. Jika penghasilanmu bertambah dan ada kebutuhan tambahan, barulah mempertimbangkan proteksi kesehatan swasta berizin sesuai anggaran."
+    },
+    {
+      "judul": "Siapa yang butuh proteksi jiwa?",
+      "isi": "Proteksi jiwa berguna jika ada orang lain yang hidupnya bergantung pada penghasilanmu, misalnya orang tua atau anak. Jika belum ada {{tanggungan}} keuangan, biasanya fokus utamanya cukup di perlindungan kesehatan dulu."
+    },
+    {
+      "judul": "Pahami isi polis sebelum setuju",
+      "isi": "{{Polis}} adalah dokumen perjanjian perlindungan yang memuat apa saja yang ditanggung dan apa yang dikecualikan. Jangan hanya mendengar ringkasan lisan; baca syarat klaim dan pastikan penyedianya berizin di {{lembaga pengawas}}."
+    }
+  ],
+  "contohAngka": {
+    "judul": "Memilih fokus proteksi sesuai kondisi (ilustrasi)",
+    "baris": [
+      {
+        "label": "Lajang tanpa tanggungan: fokus utama kesehatan",
+        "jumlah": 1
+      },
+      {
+        "label": "Pencari nafkah dengan tanggungan: kesehatan dan jiwa",
+        "jumlah": 2
+      }
+    ],
+    "kesimpulan": "Jenis proteksi mengikuti tanggung jawab hidupmu saat ini, bukan ikut-ikutan orang lain."
+  },
+  "cekPaham": [
+    {
+      "tanya": "Bagi pekerja pemula yang belum punya tanggungan keuangan, proteksi mana yang umumnya paling utama?",
+      "pilihan": [
+        "Perlindungan kesehatan dasar",
+        "Proteksi kapal pesiar",
+        "Semua jenis proteksi sekaligus"
+      ],
+      "benar": 0,
+      "penjelasan": "Kesehatan adalah risiko yang bisa menimpa siapa saja dan biayanya bisa sangat besar."
+    },
+    {
+      "tanya": "Kapan proteksi jiwa menjadi sangat relevan?",
+      "pilihan": [
+        "Saat ada keluarga atau orang lain yang bergantung pada penghasilanmu",
+        "Saat ingin mendapat diskon belanja",
+        "Saat tidak punya penghasilan sama sekali"
+      ],
+      "benar": 0,
+      "penjelasan": "Proteksi jiwa membantu menopang biaya hidup tanggungan bila pencari nafkah tiada."
+    },
+    {
+      "tanya": "Dokumen apa yang memuat rincian manfaat dan pengecualian perlindungan?",
+      "pilihan": [
+        "Polis",
+        "Struk belanja",
+        "Brosur promosi singkat"
+      ],
+      "benar": 0,
+      "penjelasan": "Polis adalah perjanjian resmi yang wajib dibaca sebelum menyetujui perlindungan."
+    }
+  ],
+  "misi": {
+    "tipe": "daftar_periksa",
+    "judul": "Siapkan pengecekan proteksi dasarmu",
+    "instruksi": "Baca catatan di atas, lalu centang langkah yang sudah atau akan kamu cek di dunia nyata. Minimal tiga langkah.",
+    "disclaimer": true,
+    "minimalDicentang": 3,
+    "langkah": [
+      {
+        "id": "l1",
+        "teks": "Aku memeriksa apakah status jaminan sosial kesehatanku saat ini aktif."
+      },
+      {
+        "id": "l2",
+        "teks": "Aku mengenali apakah saat ini sudah ada orang yang bergantung pada penghasilanku."
+      },
+      {
+        "id": "l3",
+        "teks": "Aku akan membaca isi polis dan daftar pengecualian sebelum membeli proteksi tambahan."
+      },
+      {
+        "id": "l4",
+        "teks": "Aku akan mengecek izin penyedia proteksi lewat sumber resmi lembaga pengawas."
+      },
+      {
+        "id": "l5",
+        "teks": "Aku memastikan iuran proteksi masuk dalam anggaran bulananku tanpa memicu utang."
+      }
+    ]
+  },
+  "tindakLanjut": "Simpan salinan kartu atau nomor kepesertaan perlindungan kesehatanmu di tempat yang mudah diakses keluarga saat darurat."
+}

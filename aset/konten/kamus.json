@@ -233,5 +233,55 @@
     "istilah": "saham",
     "arti": "Bukti kepemilikan atas sebagian kecil sebuah usaha yang berpotensi tumbuh tinggi tetapi nilainya mudah bergejolak.",
     "contohRupiah": "Menempatkan Rp5.000.000 di saham untuk tujuan jangka panjang."
+  },
+  {
+    "istilah": "biaya layanan",
+    "arti": "Biaya tambahan yang dikenakan penyedia atas penggunaan fasilitas transaksi atau cicilan.",
+    "contohRupiah": "Belanja Rp1.000.000 dengan biaya layanan Rp25.000 membuat total menjadi Rp1.025.000."
+  },
+  {
+    "istilah": "denda keterlambatan",
+    "arti": "Biaya tambahan yang dikenakan bila pembayaran tagihan melewati tanggal jatuh tempo.",
+    "contohRupiah": "Terlambat membayar tagihan Rp500.000 dikenai denda Rp50.000."
+  },
+  {
+    "istilah": "riwayat kredit",
+    "arti": "Catatan tentang pinjaman dan ketepatan pembayaranmu pada layanan kredit berizin.",
+    "contohRupiah": "Membayar cicilan Rp300.000 tepat waktu setiap bulan membentuk riwayat kredit yang baik."
+  },
+  {
+    "istilah": "skor kredit",
+    "arti": "Gambaran ringkas tentang reputasi pembayaranmu berdasarkan riwayat kredit yang tercatat.",
+    "contohRupiah": "Riwayat bayar tepat waktu membantu menjaga skor kredit saat mengajukan kredit rumah."
+  },
+  {
+    "istilah": "asuransi",
+    "arti": "Cara mengalihkan risiko biaya besar kepada penyedia proteksi dengan membayar iuran rutin.",
+    "contohRupiah": "Membayar iuran Rp150.000 per bulan untuk perlindungan biaya rawat inap."
+  },
+  {
+    "istilah": "premi",
+    "arti": "Iuran berkala yang dibayarkan kepada penyedia proteksi agar perlindungan tetap aktif.",
+    "contohRupiah": "Membayar premi kesehatan Rp150.000 setiap awal bulan."
+  },
+  {
+    "istilah": "klaim",
+    "arti": "Pengajuan resmi kepada penyedia proteksi agar biaya risiko yang ditanggung dapat dibayarkan sesuai polis.",
+    "contohRupiah": "Mengajukan klaim biaya rawat inap Rp5.000.000 sesuai ketentuan polis."
+  },
+  {
+    "istilah": "polis",
+    "arti": "Dokumen perjanjian resmi yang memuat rincian manfaat, iuran, syarat klaim, dan pengecualian perlindungan.",
+    "contohRupiah": "Membaca polis sebelum menyetujui iuran Rp150.000 per bulan."
+  },
+  {
+    "istilah": "jaminan sosial",
+    "arti": "Program perlindungan dasar yang dikelola resmi untuk membantu masyarakat menghadapi risiko seperti kesehatan.",
+    "contohRupiah": "Membayar iuran jaminan sosial kesehatan rutin setiap bulan."
+  },
+  {
+    "istilah": "tanggungan",
+    "arti": "Orang yang biaya hidupnya bergantung pada penghasilanmu, seperti anak atau orang tua.",
+    "contohRupiah": "Pekerja yang menanggung biaya makan dan sekolah adiknya sebesar Rp1.500.000 per bulan."
   }
 ]

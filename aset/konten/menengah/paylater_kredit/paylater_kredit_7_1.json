@@ -1,0 +1,103 @@
+{
+  "id": "paylater_kredit_7_1",
+  "modulId": "paylater_kredit",
+  "judul": "Cara Kerja Paylater di Balik Layar",
+  "durasiMenit": 5,
+  "status": "draf",
+  "catatanReviewer": "TODO-VERIFIKASI. Gambaran umum biaya layanan, bunga, dan denda paylater bersifat ilustratif; periksa istilah umum terkini.",
+  "pemantik": "Promo cicilan 0 persen terasa seperti diskon gratis. Padahal, di baliknya tetap ada kewajiban bayar di bulan-bulan berikutnya.",
+  "kartu": [
+    {
+      "judul": "Paylater tetaplah utang",
+      "isi": "{{Paylater}} memudahkanmu membeli sekarang dan membayar nanti. Meski prosesnya hanya satu ketukan, secara keuangan ia tetap utang yang mengurangi ruang pemasukan bulan depan."
+    },
+    {
+      "judul": "Biaya di balik kemudahan",
+      "isi": "Selain harga barang, perhatikan {{biaya layanan}}, bunga cicilan, dan {{denda keterlambatan}}. Promo cicilan tanpa bunga pun kadang tetap mengenakan biaya layanan di awal. Selalu hitung total yang keluar sampai lunas."
+    },
+    {
+      "judul": "Jebakan cicilan kecil yang menumpuk",
+      "isi": "Satu cicilan Rp150.000 terasa ringan. Tetapi lima transaksi serupa dalam sebulan langsung menjadi Rp750.000 yang mengikat gajimu berikutnya. Catat semua tagihan paylater di Funda agar totalnya selalu terlihat."
+    }
+  ],
+  "contohAngka": {
+    "judul": "Belanja Rp1.000.000 dengan paylater 3 bulan (ilustrasi)",
+    "baris": [
+      {
+        "label": "Harga barang tunai",
+        "jumlah": 1000000
+      },
+      {
+        "label": "Biaya layanan dan bunga selama 3 bulan",
+        "jumlah": 95000
+      },
+      {
+        "label": "Total yang dibayar sampai lunas",
+        "jumlah": 1095000,
+        "tipe": "ringkasan"
+      }
+    ],
+    "kesimpulan": "Membeli lewat paylater membuatmu membayar Rp95.000 lebih mahal dibanding tunai, dan mengikat pemasukan selama 3 bulan."
+  },
+  "cekPaham": [
+    {
+      "tanya": "Secara keuangan, paylater paling tepat diperlakukan sebagai apa?",
+      "pilihan": [
+        "Utang yang mengikat pemasukan bulan depan",
+        "Uang tambahan gratis",
+        "Tabungan otomatis"
+      ],
+      "benar": 0,
+      "penjelasan": "Paylater menunda pembayaran, bukan menghilangkan kewajiban membayarnya."
+    },
+    {
+      "tanya": "Apa yang perlu dicek selain cicilan per bulan saat memakai paylater?",
+      "pilihan": [
+        "Biaya layanan, bunga, denda keterlambatan, dan total sampai lunas",
+        "Warna tombol bayar",
+        "Jumlah iklan di aplikasi"
+      ],
+      "benar": 0,
+      "penjelasan": "Total biaya sampai lunas menunjukkan harga sebenarnya dari transaksi tersebut."
+    },
+    {
+      "tanya": "Mengapa beberapa transaksi paylater kecil bisa memberatkan?",
+      "pilihan": [
+        "Karena saat digabung, total cicilan bulanannya bisa memakan banyak pemasukan",
+        "Karena nominal kecil tidak bisa dibayar",
+        "Karena tagihan hilang sendiri"
+      ],
+      "benar": 0,
+      "penjelasan": "Cicilan kecil yang menumpuk mempersempit ruang untuk kebutuhan pokok."
+    }
+  ],
+  "misi": {
+    "tipe": "keputusan",
+    "judul": "Cek sebelum menekan bayar nanti",
+    "instruksi": "Baca skenarionya, lalu pilih keputusan yang paling masuk akal.",
+    "skenario": {
+      "pemantik": "Sepatu seharga Rp600.000 sedang diskon. Uang tunaimu bulan ini pas untuk kebutuhan, tetapi ada opsi paylater 3 bulan dengan biaya layanan Rp45.000.",
+      "opsi": [
+        {
+          "id": "a",
+          "teks": "Pakai paylater saja karena cicilannya terasa kecil",
+          "aman": false,
+          "umpanBalik": "Cicilan itu tetap mengurangi pemasukanmu tiga bulan ke depan padahal uangmu sedang pas. Coba pilihan lain."
+        },
+        {
+          "id": "b",
+          "teks": "Tunda dulu dan sisihkan uang di tujuan tabungan sampai cukup",
+          "aman": true,
+          "umpanBalik": "Tepat. Menabung dulu menghindarkanmu dari biaya tambahan dan tekanan cicilan bulan depan."
+        },
+        {
+          "id": "c",
+          "teks": "Ambil tenor lebih panjang supaya cicilannya makin kecil",
+          "aman": false,
+          "umpanBalik": "Tenor lebih panjang biasanya membuat total biaya layanan dan bunga makin besar. Coba pilihan lain."
+        }
+      ]
+    }
+  },
+  "tindakLanjut": "Jika kamu memakai paylater, catat tanggal jatuh temponya di menu Tagihan agar tidak pernah kena denda keterlambatan."
+}
