@@ -23,6 +23,7 @@ import 'tabel/tabel_hasil_kuis.dart';
 import 'tabel/tabel_pernyataan.dart';
 import 'tabel/tabel_profil_keuangan.dart';
 import 'tabel/tabel_hasil_tes_awal.dart';
+import 'tabel/tabel_sesi_sandbox.dart';
 
 part 'basis_data.g.dart';
 
@@ -49,6 +50,7 @@ part 'basis_data.g.dart';
     TabelPernyataan,
     TabelProfilKeuangan,
     TabelHasilTesAwal,
+    TabelSesiSandbox,
   ],
 )
 class BasisDataFunda extends _$BasisDataFunda {
@@ -56,7 +58,7 @@ class BasisDataFunda extends _$BasisDataFunda {
     : super(pelaksanaKueri ?? _bukaKoneksi());
 
   @override
-  int get schemaVersion => 10;
+  int get schemaVersion => 11;
 
   @override
   MigrationStrategy get migration {
@@ -337,6 +339,11 @@ class BasisDataFunda extends _$BasisDataFunda {
           'CREATE INDEX IF NOT EXISTS idx_hasil_tes_awal_waktu '
           'ON tabel_hasil_tes_awal (waktu);',
         );
+        break;
+      case 11:
+        // Migrasi Skema Versi 11 (Tahap 9A - Mesin Sandbox):
+        // Membuat tabel_sesi_sandbox untuk simulasi investasi fiktif terisolasi.
+        await m.createTable(tabelSesiSandbox);
         break;
       default:
         break;

@@ -132,6 +132,13 @@ class LayarLainnya extends StatelessWidget {
               );
             },
           ),
+          const SizedBox(height: SpasiFunda.s),
+          _ItemMenu(
+            ikon: LucideIcons.flaskConical,
+            judul: 'Mode Sandbox',
+            keterangan: 'Simulasi portofolio investasi fiktif terisolasi dari data riil',
+            padaKetuk: () => context.push('/sandbox'),
+          ),
           const SizedBox(height: SpasiFunda.l),
 
           // Menu Pendukung

@@ -1,0 +1,102 @@
+{
+  "id": "investasi_dasar_11_1",
+  "judul": "Kenapa Uang Bisa Tergerus Inflasi?",
+  "durasiMenit": 5,
+  "status": "draf",
+  "catatanReviewer": "TODO-VERIFIKASI. Angka inflasi 4 persen per tahun hanya ilustrasi edukatif, bukan proyeksi resmi.",
+  "pemantik": "Uang Rp1.000.000 yang kamu simpan di lemari tetap tertulis Rp1.000.000 lima tahun lagi. Tapi barang yang bisa dibeli makin sedikit.",
+  "kartu": [
+    {
+      "judul": "Harga naik pelan-pelan",
+      "isi": "{{Inflasi}} adalah kenaikan harga barang dan jasa secara umum dari waktu ke waktu. Karena harga naik, daya beli uang yang diam saja ikut menyusut. Ini sebabnya uang untuk tujuan jangka panjang biasanya tidak cukup hanya disimpan tunai."
+    },
+    {
+      "judul": "Menabung vs berinvestasi",
+      "isi": "Menabung cocok untuk kebutuhan dekat dan dana darurat, karena nilainya stabil dan mudah diambil. {{Investasi}} adalah menempatkan uang pada instrumen yang berpotensi tumbuh seiring waktu, dengan risiko nilai bisa naik atau turun."
+    },
+    {
+      "judul": "Fondasi dulu, baru investasi",
+      "isi": "Sebelum mulai berinvestasi, pastikan kebutuhan harian aman, dana darurat mulai terisi, dan cicilan terkendali. Uang yang dipakai berinvestasi sebaiknya uang dingin, yaitu uang yang tidak kamu butuhkan dalam waktu dekat."
+    }
+  ],
+  "contohAngka": {
+    "judul": "Ilustrasi daya beli Rp10.000.000 jika harga naik 4 persen per tahun",
+    "baris": [
+      {
+        "label": "Nilai uang tunai hari ini",
+        "jumlah": 10000000
+      },
+      {
+        "label": "Perkiraan daya beli setelah 5 tahun",
+        "jumlah": 8219271
+      },
+      {
+        "label": "Selisih daya beli yang tergerus",
+        "jumlah": -1780729,
+        "ringkasan": true
+      }
+    ],
+    "kesimpulan": "Angka di kertas tetap Rp10.000.000, tetapi daya belinya menyusut seiring naiknya harga barang."
+  },
+  "cekPaham": [
+    {
+      "tanya": "Apa dampak inflasi terhadap uang tunai yang disimpan diam bertahun-tahun?",
+      "pilihan": [
+        "Daya belinya menyusut karena harga barang cenderung naik",
+        "Nominal uangnya berkurang sendiri di dompet",
+        "Harga semua barang ikut turun"
+      ],
+      "benar": 0,
+      "penjelasan": "Inflasi membuat uang dengan nominal sama membeli lebih sedikit barang di masa depan."
+    },
+    {
+      "tanya": "Uang mana yang paling cocok dipakai untuk mulai berinvestasi?",
+      "pilihan": [
+        "Uang dingin yang tidak dibutuhkan dalam waktu dekat",
+        "Uang bayar kos minggu depan",
+        "Seluruh isi dana darurat"
+      ],
+      "benar": 0,
+      "penjelasan": "Nilai investasi bisa turun sementara, jadi jangan memakai uang kebutuhan dekat atau dana darurat."
+    },
+    {
+      "tanya": "Kapan menabung lebih cocok daripada berinvestasi?",
+      "pilihan": [
+        "Untuk dana darurat dan tujuan jangka pendek",
+        "Untuk tujuan 15 tahun lagi",
+        "Saat ingin imbal hasil setinggi mungkin"
+      ],
+      "benar": 0,
+      "penjelasan": "Tabungan menjaga nilai tetap stabil dan mudah dicairkan untuk kebutuhan dekat."
+    }
+  ],
+  "misi": {
+    "tipe": "keputusan",
+    "judul": "Pilih pos uang yang tepat",
+    "instruksi": "Baca skenarionya, lalu pilih langkah yang paling masuk akal.",
+    "skenario": {
+      "pemantik": "Kamu punya Rp2.000.000 yang harus dipakai membayar uang kuliah bulan depan. Temanmu mengajak memasukkannya ke instrumen yang nilainya bisa naik turun tajam supaya cepat untung.",
+      "opsi": [
+        {
+          "id": "a",
+          "teks": "Masukkan semuanya supaya bulan depan untung besar",
+          "aman": false,
+          "umpanBalik": "Kalau nilainya turun bulan depan, kamu bisa kesulitan membayar kuliah. Coba pilihan lain."
+        },
+        {
+          "id": "b",
+          "teks": "Simpan di tabungan yang stabil karena uang ini dibutuhkan bulan depan",
+          "aman": true,
+          "umpanBalik": "Tepat. Uang untuk kebutuhan dekat lebih aman di tempat yang stabil dan mudah diambil."
+        },
+        {
+          "id": "c",
+          "teks": "Masukkan separuhnya saja, sisanya pinjam nanti kalau kurang",
+          "aman": false,
+          "umpanBalik": "Memakai uang kebutuhan dekat untuk instrumen berisiko tinggi bisa memicu utang baru. Coba pilihan lain."
+        }
+      ]
+    }
+  },
+  "tindakLanjut": "Pisahkan dengan jelas mana uang untuk kebutuhan dekat dan mana uang yang benar-benar bisa disisihkan jangka panjang."
+}

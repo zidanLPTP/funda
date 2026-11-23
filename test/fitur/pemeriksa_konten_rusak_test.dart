@@ -1521,6 +1521,7 @@ void main() {
       String? catatanReviewer = 'TODO-VERIFIKASI. Catatan reviewer resmi.',
       Map<String, dynamic>? misi,
       String pemantik = 'Pemantik edukasi keuangan umum tanpa hal terlarang.',
+      List<dynamic>? gerbang,
     }) {
       return {
         'id': id,
@@ -1528,6 +1529,7 @@ void main() {
         'durasiMenit': durasiMenit,
         'status': 'draf',
         'catatanReviewer': catatanReviewer,
+        'gerbang': ?gerbang,
         'pemantik': pemantik,
         'kartu': [
           {'judul': 'Kartu Satu', 'isi': 'Isi kartu edukasi yang baik dan memberdayakan.'},
@@ -2002,6 +2004,110 @@ void main() {
         },
       );
       expect(() => PembacaKonten.validasiKontenPelajaran(dataHitungan, namaBerkas: 'psikologi_uang_6_2.json'), returnsNormally);
+    });
+
+    // 25. Validasi Misi Sandbox (Tahap 9A)
+    test('25.1. Misi sandbox valid lolos validasi', () {
+      final data = buatPelajaranDasar(
+        id: 'investasi_dasar_11_3',
+        misi: {
+          'tipe': 'sandbox',
+          'judul': 'Coba Mode Sandbox investasi',
+          'instruksi': 'Buka Mode Sandbox, atur alokasi portofolio sesukamu, lalu majukan simulasi minimal 1 tahun untuk melihat hasilnya.',
+          'disclaimer': true,
+          'minimalSimulasi': 1,
+        },
+      );
+      expect(() => PembacaKonten.validasiKontenPelajaran(data, namaBerkas: 'investasi_dasar_11_3.json'), returnsNormally);
+    });
+
+    test('25.2. Misi sandbox tanpa disclaimer: true ditolak', () {
+      final data = buatPelajaranDasar(
+        id: 'investasi_dasar_11_3',
+        misi: {
+          'tipe': 'sandbox',
+          'judul': 'Coba Mode Sandbox investasi',
+          'instruksi': 'Buka Mode Sandbox.',
+          'minimalSimulasi': 1,
+        },
+      );
+      expect(
+        () => PembacaKonten.validasiKontenPelajaran(data, namaBerkas: 'investasi_dasar_11_3.json'),
+        throwsA(isA<GalatKonten>()
+            .having((e) => e.berkas, 'berkas', 'investasi_dasar_11_3.json')
+            .having((e) => e.kolom, 'kolom', 'misi.disclaimer')),
+      );
+
+      final dataFalse = buatPelajaranDasar(
+        id: 'investasi_dasar_11_3',
+        misi: {
+          'tipe': 'sandbox',
+          'judul': 'Coba Mode Sandbox investasi',
+          'instruksi': 'Buka Mode Sandbox.',
+          'disclaimer': false,
+          'minimalSimulasi': 1,
+        },
+      );
+      expect(
+        () => PembacaKonten.validasiKontenPelajaran(dataFalse, namaBerkas: 'investasi_dasar_11_3.json'),
+        throwsA(isA<GalatKonten>()
+            .having((e) => e.berkas, 'berkas', 'investasi_dasar_11_3.json')
+            .having((e) => e.kolom, 'kolom', 'misi.disclaimer')),
+      );
+    });
+
+    test('25.3. Misi sandbox dengan minimalSimulasi tidak valid ditolak', () {
+      final data = buatPelajaranDasar(
+        id: 'investasi_dasar_11_3',
+        misi: {
+          'tipe': 'sandbox',
+          'judul': 'Coba Mode Sandbox investasi',
+          'instruksi': 'Buka Mode Sandbox.',
+          'disclaimer': true,
+          'minimalSimulasi': 0,
+        },
+      );
+      expect(
+        () => PembacaKonten.validasiKontenPelajaran(data, namaBerkas: 'investasi_dasar_11_3.json'),
+        throwsA(isA<GalatKonten>()
+            .having((e) => e.berkas, 'berkas', 'investasi_dasar_11_3.json')
+            .having((e) => e.kolom, 'kolom', 'misi.minimalSimulasi')),
+      );
+    });
+
+    test('25.4. Misi sandbox tanpa instruksi ditolak', () {
+      final data = buatPelajaranDasar(
+        id: 'investasi_dasar_11_3',
+        misi: {
+          'tipe': 'sandbox',
+          'judul': 'Coba Mode Sandbox investasi',
+          'disclaimer': true,
+          'minimalSimulasi': 1,
+        },
+      );
+      expect(
+        () => PembacaKonten.validasiKontenPelajaran(data, namaBerkas: 'investasi_dasar_11_3.json'),
+        throwsA(isA<GalatKonten>()
+            .having((e) => e.berkas, 'berkas', 'investasi_dasar_11_3.json')
+            .having((e) => e.kolom, 'kolom', 'misi.instruksi')),
+      );
+    });
+
+    test('25.5. Misi sandbox dikecualikan dari perbandingan misi vs gerbang', () {
+      final data = buatPelajaranDasar(
+        id: 'investasi_dasar_11_3',
+        gerbang: [
+          {'tipe': 'ada_data', 'objek': 'transaksi', 'min': 5},
+        ],
+        misi: {
+          'tipe': 'sandbox',
+          'judul': 'Coba Mode Sandbox investasi',
+          'instruksi': 'Buka Mode Sandbox, atur alokasi, jalankan minimal 1 simulasi.',
+          'disclaimer': true,
+          'minimalSimulasi': 1,
+        },
+      );
+      expect(() => PembacaKonten.validasiKontenPelajaran(data, namaBerkas: 'investasi_dasar_11_3.json'), returnsNormally);
     });
   });
 }

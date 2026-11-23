@@ -9536,6 +9536,677 @@ class TabelHasilTesAwalCompanion extends UpdateCompanion<EntitasHasilTesAwal> {
   }
 }
 
+class $TabelSesiSandboxTable extends TabelSesiSandbox
+    with TableInfo<$TabelSesiSandboxTable, EntitasSesiSandbox> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $TabelSesiSandboxTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  static const VerificationMeta _saldoAwalRupiahMeta = const VerificationMeta(
+    'saldoAwalRupiah',
+  );
+  @override
+  late final GeneratedColumn<int> saldoAwalRupiah = GeneratedColumn<int>(
+    'saldo_awal_rupiah',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(10000000),
+  );
+  static const VerificationMeta _alokasiPasarUangPersenMeta =
+      const VerificationMeta('alokasiPasarUangPersen');
+  @override
+  late final GeneratedColumn<int> alokasiPasarUangPersen = GeneratedColumn<int>(
+    'alokasi_pasar_uang_persen',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _alokasiObligasiPersenMeta =
+      const VerificationMeta('alokasiObligasiPersen');
+  @override
+  late final GeneratedColumn<int> alokasiObligasiPersen = GeneratedColumn<int>(
+    'alokasi_obligasi_persen',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _alokasiSahamPersenMeta =
+      const VerificationMeta('alokasiSahamPersen');
+  @override
+  late final GeneratedColumn<int> alokasiSahamPersen = GeneratedColumn<int>(
+    'alokasi_saham_persen',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _bulanBerjalanMeta = const VerificationMeta(
+    'bulanBerjalan',
+  );
+  @override
+  late final GeneratedColumn<int> bulanBerjalan = GeneratedColumn<int>(
+    'bulan_berjalan',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0),
+  );
+  static const VerificationMeta _nilaiSaatIniRupiahMeta =
+      const VerificationMeta('nilaiSaatIniRupiah');
+  @override
+  late final GeneratedColumn<int> nilaiSaatIniRupiah = GeneratedColumn<int>(
+    'nilai_saat_ini_rupiah',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _skenarioAktifMeta = const VerificationMeta(
+    'skenarioAktif',
+  );
+  @override
+  late final GeneratedColumn<String> skenarioAktif = GeneratedColumn<String>(
+    'skenario_aktif',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _riwayatJsonMeta = const VerificationMeta(
+    'riwayatJson',
+  );
+  @override
+  late final GeneratedColumn<String> riwayatJson = GeneratedColumn<String>(
+    'riwayat_json',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _diperbaruiPadaMeta = const VerificationMeta(
+    'diperbaruiPada',
+  );
+  @override
+  late final GeneratedColumn<DateTime> diperbaruiPada =
+      GeneratedColumn<DateTime>(
+        'diperbarui_pada',
+        aliasedName,
+        false,
+        type: DriftSqlType.dateTime,
+        requiredDuringInsert: true,
+      );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    saldoAwalRupiah,
+    alokasiPasarUangPersen,
+    alokasiObligasiPersen,
+    alokasiSahamPersen,
+    bulanBerjalan,
+    nilaiSaatIniRupiah,
+    skenarioAktif,
+    riwayatJson,
+    diperbaruiPada,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'tabel_sesi_sandbox';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<EntitasSesiSandbox> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('saldo_awal_rupiah')) {
+      context.handle(
+        _saldoAwalRupiahMeta,
+        saldoAwalRupiah.isAcceptableOrUnknown(
+          data['saldo_awal_rupiah']!,
+          _saldoAwalRupiahMeta,
+        ),
+      );
+    }
+    if (data.containsKey('alokasi_pasar_uang_persen')) {
+      context.handle(
+        _alokasiPasarUangPersenMeta,
+        alokasiPasarUangPersen.isAcceptableOrUnknown(
+          data['alokasi_pasar_uang_persen']!,
+          _alokasiPasarUangPersenMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_alokasiPasarUangPersenMeta);
+    }
+    if (data.containsKey('alokasi_obligasi_persen')) {
+      context.handle(
+        _alokasiObligasiPersenMeta,
+        alokasiObligasiPersen.isAcceptableOrUnknown(
+          data['alokasi_obligasi_persen']!,
+          _alokasiObligasiPersenMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_alokasiObligasiPersenMeta);
+    }
+    if (data.containsKey('alokasi_saham_persen')) {
+      context.handle(
+        _alokasiSahamPersenMeta,
+        alokasiSahamPersen.isAcceptableOrUnknown(
+          data['alokasi_saham_persen']!,
+          _alokasiSahamPersenMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_alokasiSahamPersenMeta);
+    }
+    if (data.containsKey('bulan_berjalan')) {
+      context.handle(
+        _bulanBerjalanMeta,
+        bulanBerjalan.isAcceptableOrUnknown(
+          data['bulan_berjalan']!,
+          _bulanBerjalanMeta,
+        ),
+      );
+    }
+    if (data.containsKey('nilai_saat_ini_rupiah')) {
+      context.handle(
+        _nilaiSaatIniRupiahMeta,
+        nilaiSaatIniRupiah.isAcceptableOrUnknown(
+          data['nilai_saat_ini_rupiah']!,
+          _nilaiSaatIniRupiahMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_nilaiSaatIniRupiahMeta);
+    }
+    if (data.containsKey('skenario_aktif')) {
+      context.handle(
+        _skenarioAktifMeta,
+        skenarioAktif.isAcceptableOrUnknown(
+          data['skenario_aktif']!,
+          _skenarioAktifMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_skenarioAktifMeta);
+    }
+    if (data.containsKey('riwayat_json')) {
+      context.handle(
+        _riwayatJsonMeta,
+        riwayatJson.isAcceptableOrUnknown(
+          data['riwayat_json']!,
+          _riwayatJsonMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_riwayatJsonMeta);
+    }
+    if (data.containsKey('diperbarui_pada')) {
+      context.handle(
+        _diperbaruiPadaMeta,
+        diperbaruiPada.isAcceptableOrUnknown(
+          data['diperbarui_pada']!,
+          _diperbaruiPadaMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_diperbaruiPadaMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  EntitasSesiSandbox map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return EntitasSesiSandbox(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      saldoAwalRupiah: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}saldo_awal_rupiah'],
+      )!,
+      alokasiPasarUangPersen: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}alokasi_pasar_uang_persen'],
+      )!,
+      alokasiObligasiPersen: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}alokasi_obligasi_persen'],
+      )!,
+      alokasiSahamPersen: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}alokasi_saham_persen'],
+      )!,
+      bulanBerjalan: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}bulan_berjalan'],
+      )!,
+      nilaiSaatIniRupiah: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}nilai_saat_ini_rupiah'],
+      )!,
+      skenarioAktif: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}skenario_aktif'],
+      )!,
+      riwayatJson: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}riwayat_json'],
+      )!,
+      diperbaruiPada: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}diperbarui_pada'],
+      )!,
+    );
+  }
+
+  @override
+  $TabelSesiSandboxTable createAlias(String alias) {
+    return $TabelSesiSandboxTable(attachedDatabase, alias);
+  }
+}
+
+class EntitasSesiSandbox extends DataClass
+    implements Insertable<EntitasSesiSandbox> {
+  /// ID sesi sandbox (primary key).
+  final int id;
+
+  /// Saldo modal fiktif awal dalam satuan Rupiah penuh.
+  final int saldoAwalRupiah;
+
+  /// Persentase alokasi ke instrumen pasar uang (0..100).
+  final int alokasiPasarUangPersen;
+
+  /// Persentase alokasi ke instrumen obligasi (0..100).
+  final int alokasiObligasiPersen;
+
+  /// Persentase alokasi ke instrumen saham (0..100).
+  final int alokasiSahamPersen;
+
+  /// Jumlah bulan simulasi yang sudah berjalan (tiap loncatan 1 tahun = 12 bulan).
+  final int bulanBerjalan;
+
+  /// Nilai portofolio fiktif saat ini dalam satuan Rupiah penuh.
+  final int nilaiSaatIniRupiah;
+
+  /// Skenario pasar yang aktif: 'normal' | 'turun' | 'naik'.
+  final String skenarioAktif;
+
+  /// Rekaman JSON riwayat langkah simulasi tahun demi tahun.
+  final String riwayatJson;
+
+  /// Waktu sesi terakhir kali disimpan atau dimodifikasi.
+  final DateTime diperbaruiPada;
+  const EntitasSesiSandbox({
+    required this.id,
+    required this.saldoAwalRupiah,
+    required this.alokasiPasarUangPersen,
+    required this.alokasiObligasiPersen,
+    required this.alokasiSahamPersen,
+    required this.bulanBerjalan,
+    required this.nilaiSaatIniRupiah,
+    required this.skenarioAktif,
+    required this.riwayatJson,
+    required this.diperbaruiPada,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['saldo_awal_rupiah'] = Variable<int>(saldoAwalRupiah);
+    map['alokasi_pasar_uang_persen'] = Variable<int>(alokasiPasarUangPersen);
+    map['alokasi_obligasi_persen'] = Variable<int>(alokasiObligasiPersen);
+    map['alokasi_saham_persen'] = Variable<int>(alokasiSahamPersen);
+    map['bulan_berjalan'] = Variable<int>(bulanBerjalan);
+    map['nilai_saat_ini_rupiah'] = Variable<int>(nilaiSaatIniRupiah);
+    map['skenario_aktif'] = Variable<String>(skenarioAktif);
+    map['riwayat_json'] = Variable<String>(riwayatJson);
+    map['diperbarui_pada'] = Variable<DateTime>(diperbaruiPada);
+    return map;
+  }
+
+  TabelSesiSandboxCompanion toCompanion(bool nullToAbsent) {
+    return TabelSesiSandboxCompanion(
+      id: Value(id),
+      saldoAwalRupiah: Value(saldoAwalRupiah),
+      alokasiPasarUangPersen: Value(alokasiPasarUangPersen),
+      alokasiObligasiPersen: Value(alokasiObligasiPersen),
+      alokasiSahamPersen: Value(alokasiSahamPersen),
+      bulanBerjalan: Value(bulanBerjalan),
+      nilaiSaatIniRupiah: Value(nilaiSaatIniRupiah),
+      skenarioAktif: Value(skenarioAktif),
+      riwayatJson: Value(riwayatJson),
+      diperbaruiPada: Value(diperbaruiPada),
+    );
+  }
+
+  factory EntitasSesiSandbox.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return EntitasSesiSandbox(
+      id: serializer.fromJson<int>(json['id']),
+      saldoAwalRupiah: serializer.fromJson<int>(json['saldoAwalRupiah']),
+      alokasiPasarUangPersen: serializer.fromJson<int>(
+        json['alokasiPasarUangPersen'],
+      ),
+      alokasiObligasiPersen: serializer.fromJson<int>(
+        json['alokasiObligasiPersen'],
+      ),
+      alokasiSahamPersen: serializer.fromJson<int>(json['alokasiSahamPersen']),
+      bulanBerjalan: serializer.fromJson<int>(json['bulanBerjalan']),
+      nilaiSaatIniRupiah: serializer.fromJson<int>(json['nilaiSaatIniRupiah']),
+      skenarioAktif: serializer.fromJson<String>(json['skenarioAktif']),
+      riwayatJson: serializer.fromJson<String>(json['riwayatJson']),
+      diperbaruiPada: serializer.fromJson<DateTime>(json['diperbaruiPada']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'saldoAwalRupiah': serializer.toJson<int>(saldoAwalRupiah),
+      'alokasiPasarUangPersen': serializer.toJson<int>(alokasiPasarUangPersen),
+      'alokasiObligasiPersen': serializer.toJson<int>(alokasiObligasiPersen),
+      'alokasiSahamPersen': serializer.toJson<int>(alokasiSahamPersen),
+      'bulanBerjalan': serializer.toJson<int>(bulanBerjalan),
+      'nilaiSaatIniRupiah': serializer.toJson<int>(nilaiSaatIniRupiah),
+      'skenarioAktif': serializer.toJson<String>(skenarioAktif),
+      'riwayatJson': serializer.toJson<String>(riwayatJson),
+      'diperbaruiPada': serializer.toJson<DateTime>(diperbaruiPada),
+    };
+  }
+
+  EntitasSesiSandbox copyWith({
+    int? id,
+    int? saldoAwalRupiah,
+    int? alokasiPasarUangPersen,
+    int? alokasiObligasiPersen,
+    int? alokasiSahamPersen,
+    int? bulanBerjalan,
+    int? nilaiSaatIniRupiah,
+    String? skenarioAktif,
+    String? riwayatJson,
+    DateTime? diperbaruiPada,
+  }) => EntitasSesiSandbox(
+    id: id ?? this.id,
+    saldoAwalRupiah: saldoAwalRupiah ?? this.saldoAwalRupiah,
+    alokasiPasarUangPersen:
+        alokasiPasarUangPersen ?? this.alokasiPasarUangPersen,
+    alokasiObligasiPersen: alokasiObligasiPersen ?? this.alokasiObligasiPersen,
+    alokasiSahamPersen: alokasiSahamPersen ?? this.alokasiSahamPersen,
+    bulanBerjalan: bulanBerjalan ?? this.bulanBerjalan,
+    nilaiSaatIniRupiah: nilaiSaatIniRupiah ?? this.nilaiSaatIniRupiah,
+    skenarioAktif: skenarioAktif ?? this.skenarioAktif,
+    riwayatJson: riwayatJson ?? this.riwayatJson,
+    diperbaruiPada: diperbaruiPada ?? this.diperbaruiPada,
+  );
+  EntitasSesiSandbox copyWithCompanion(TabelSesiSandboxCompanion data) {
+    return EntitasSesiSandbox(
+      id: data.id.present ? data.id.value : this.id,
+      saldoAwalRupiah: data.saldoAwalRupiah.present
+          ? data.saldoAwalRupiah.value
+          : this.saldoAwalRupiah,
+      alokasiPasarUangPersen: data.alokasiPasarUangPersen.present
+          ? data.alokasiPasarUangPersen.value
+          : this.alokasiPasarUangPersen,
+      alokasiObligasiPersen: data.alokasiObligasiPersen.present
+          ? data.alokasiObligasiPersen.value
+          : this.alokasiObligasiPersen,
+      alokasiSahamPersen: data.alokasiSahamPersen.present
+          ? data.alokasiSahamPersen.value
+          : this.alokasiSahamPersen,
+      bulanBerjalan: data.bulanBerjalan.present
+          ? data.bulanBerjalan.value
+          : this.bulanBerjalan,
+      nilaiSaatIniRupiah: data.nilaiSaatIniRupiah.present
+          ? data.nilaiSaatIniRupiah.value
+          : this.nilaiSaatIniRupiah,
+      skenarioAktif: data.skenarioAktif.present
+          ? data.skenarioAktif.value
+          : this.skenarioAktif,
+      riwayatJson: data.riwayatJson.present
+          ? data.riwayatJson.value
+          : this.riwayatJson,
+      diperbaruiPada: data.diperbaruiPada.present
+          ? data.diperbaruiPada.value
+          : this.diperbaruiPada,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('EntitasSesiSandbox(')
+          ..write('id: $id, ')
+          ..write('saldoAwalRupiah: $saldoAwalRupiah, ')
+          ..write('alokasiPasarUangPersen: $alokasiPasarUangPersen, ')
+          ..write('alokasiObligasiPersen: $alokasiObligasiPersen, ')
+          ..write('alokasiSahamPersen: $alokasiSahamPersen, ')
+          ..write('bulanBerjalan: $bulanBerjalan, ')
+          ..write('nilaiSaatIniRupiah: $nilaiSaatIniRupiah, ')
+          ..write('skenarioAktif: $skenarioAktif, ')
+          ..write('riwayatJson: $riwayatJson, ')
+          ..write('diperbaruiPada: $diperbaruiPada')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    id,
+    saldoAwalRupiah,
+    alokasiPasarUangPersen,
+    alokasiObligasiPersen,
+    alokasiSahamPersen,
+    bulanBerjalan,
+    nilaiSaatIniRupiah,
+    skenarioAktif,
+    riwayatJson,
+    diperbaruiPada,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is EntitasSesiSandbox &&
+          other.id == this.id &&
+          other.saldoAwalRupiah == this.saldoAwalRupiah &&
+          other.alokasiPasarUangPersen == this.alokasiPasarUangPersen &&
+          other.alokasiObligasiPersen == this.alokasiObligasiPersen &&
+          other.alokasiSahamPersen == this.alokasiSahamPersen &&
+          other.bulanBerjalan == this.bulanBerjalan &&
+          other.nilaiSaatIniRupiah == this.nilaiSaatIniRupiah &&
+          other.skenarioAktif == this.skenarioAktif &&
+          other.riwayatJson == this.riwayatJson &&
+          other.diperbaruiPada == this.diperbaruiPada);
+}
+
+class TabelSesiSandboxCompanion extends UpdateCompanion<EntitasSesiSandbox> {
+  final Value<int> id;
+  final Value<int> saldoAwalRupiah;
+  final Value<int> alokasiPasarUangPersen;
+  final Value<int> alokasiObligasiPersen;
+  final Value<int> alokasiSahamPersen;
+  final Value<int> bulanBerjalan;
+  final Value<int> nilaiSaatIniRupiah;
+  final Value<String> skenarioAktif;
+  final Value<String> riwayatJson;
+  final Value<DateTime> diperbaruiPada;
+  const TabelSesiSandboxCompanion({
+    this.id = const Value.absent(),
+    this.saldoAwalRupiah = const Value.absent(),
+    this.alokasiPasarUangPersen = const Value.absent(),
+    this.alokasiObligasiPersen = const Value.absent(),
+    this.alokasiSahamPersen = const Value.absent(),
+    this.bulanBerjalan = const Value.absent(),
+    this.nilaiSaatIniRupiah = const Value.absent(),
+    this.skenarioAktif = const Value.absent(),
+    this.riwayatJson = const Value.absent(),
+    this.diperbaruiPada = const Value.absent(),
+  });
+  TabelSesiSandboxCompanion.insert({
+    this.id = const Value.absent(),
+    this.saldoAwalRupiah = const Value.absent(),
+    required int alokasiPasarUangPersen,
+    required int alokasiObligasiPersen,
+    required int alokasiSahamPersen,
+    this.bulanBerjalan = const Value.absent(),
+    required int nilaiSaatIniRupiah,
+    required String skenarioAktif,
+    required String riwayatJson,
+    required DateTime diperbaruiPada,
+  }) : alokasiPasarUangPersen = Value(alokasiPasarUangPersen),
+       alokasiObligasiPersen = Value(alokasiObligasiPersen),
+       alokasiSahamPersen = Value(alokasiSahamPersen),
+       nilaiSaatIniRupiah = Value(nilaiSaatIniRupiah),
+       skenarioAktif = Value(skenarioAktif),
+       riwayatJson = Value(riwayatJson),
+       diperbaruiPada = Value(diperbaruiPada);
+  static Insertable<EntitasSesiSandbox> custom({
+    Expression<int>? id,
+    Expression<int>? saldoAwalRupiah,
+    Expression<int>? alokasiPasarUangPersen,
+    Expression<int>? alokasiObligasiPersen,
+    Expression<int>? alokasiSahamPersen,
+    Expression<int>? bulanBerjalan,
+    Expression<int>? nilaiSaatIniRupiah,
+    Expression<String>? skenarioAktif,
+    Expression<String>? riwayatJson,
+    Expression<DateTime>? diperbaruiPada,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (saldoAwalRupiah != null) 'saldo_awal_rupiah': saldoAwalRupiah,
+      if (alokasiPasarUangPersen != null)
+        'alokasi_pasar_uang_persen': alokasiPasarUangPersen,
+      if (alokasiObligasiPersen != null)
+        'alokasi_obligasi_persen': alokasiObligasiPersen,
+      if (alokasiSahamPersen != null)
+        'alokasi_saham_persen': alokasiSahamPersen,
+      if (bulanBerjalan != null) 'bulan_berjalan': bulanBerjalan,
+      if (nilaiSaatIniRupiah != null)
+        'nilai_saat_ini_rupiah': nilaiSaatIniRupiah,
+      if (skenarioAktif != null) 'skenario_aktif': skenarioAktif,
+      if (riwayatJson != null) 'riwayat_json': riwayatJson,
+      if (diperbaruiPada != null) 'diperbarui_pada': diperbaruiPada,
+    });
+  }
+
+  TabelSesiSandboxCompanion copyWith({
+    Value<int>? id,
+    Value<int>? saldoAwalRupiah,
+    Value<int>? alokasiPasarUangPersen,
+    Value<int>? alokasiObligasiPersen,
+    Value<int>? alokasiSahamPersen,
+    Value<int>? bulanBerjalan,
+    Value<int>? nilaiSaatIniRupiah,
+    Value<String>? skenarioAktif,
+    Value<String>? riwayatJson,
+    Value<DateTime>? diperbaruiPada,
+  }) {
+    return TabelSesiSandboxCompanion(
+      id: id ?? this.id,
+      saldoAwalRupiah: saldoAwalRupiah ?? this.saldoAwalRupiah,
+      alokasiPasarUangPersen:
+          alokasiPasarUangPersen ?? this.alokasiPasarUangPersen,
+      alokasiObligasiPersen:
+          alokasiObligasiPersen ?? this.alokasiObligasiPersen,
+      alokasiSahamPersen: alokasiSahamPersen ?? this.alokasiSahamPersen,
+      bulanBerjalan: bulanBerjalan ?? this.bulanBerjalan,
+      nilaiSaatIniRupiah: nilaiSaatIniRupiah ?? this.nilaiSaatIniRupiah,
+      skenarioAktif: skenarioAktif ?? this.skenarioAktif,
+      riwayatJson: riwayatJson ?? this.riwayatJson,
+      diperbaruiPada: diperbaruiPada ?? this.diperbaruiPada,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (saldoAwalRupiah.present) {
+      map['saldo_awal_rupiah'] = Variable<int>(saldoAwalRupiah.value);
+    }
+    if (alokasiPasarUangPersen.present) {
+      map['alokasi_pasar_uang_persen'] = Variable<int>(
+        alokasiPasarUangPersen.value,
+      );
+    }
+    if (alokasiObligasiPersen.present) {
+      map['alokasi_obligasi_persen'] = Variable<int>(
+        alokasiObligasiPersen.value,
+      );
+    }
+    if (alokasiSahamPersen.present) {
+      map['alokasi_saham_persen'] = Variable<int>(alokasiSahamPersen.value);
+    }
+    if (bulanBerjalan.present) {
+      map['bulan_berjalan'] = Variable<int>(bulanBerjalan.value);
+    }
+    if (nilaiSaatIniRupiah.present) {
+      map['nilai_saat_ini_rupiah'] = Variable<int>(nilaiSaatIniRupiah.value);
+    }
+    if (skenarioAktif.present) {
+      map['skenario_aktif'] = Variable<String>(skenarioAktif.value);
+    }
+    if (riwayatJson.present) {
+      map['riwayat_json'] = Variable<String>(riwayatJson.value);
+    }
+    if (diperbaruiPada.present) {
+      map['diperbarui_pada'] = Variable<DateTime>(diperbaruiPada.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('TabelSesiSandboxCompanion(')
+          ..write('id: $id, ')
+          ..write('saldoAwalRupiah: $saldoAwalRupiah, ')
+          ..write('alokasiPasarUangPersen: $alokasiPasarUangPersen, ')
+          ..write('alokasiObligasiPersen: $alokasiObligasiPersen, ')
+          ..write('alokasiSahamPersen: $alokasiSahamPersen, ')
+          ..write('bulanBerjalan: $bulanBerjalan, ')
+          ..write('nilaiSaatIniRupiah: $nilaiSaatIniRupiah, ')
+          ..write('skenarioAktif: $skenarioAktif, ')
+          ..write('riwayatJson: $riwayatJson, ')
+          ..write('diperbaruiPada: $diperbaruiPada')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$BasisDataFunda extends GeneratedDatabase {
   _$BasisDataFunda(QueryExecutor e) : super(e);
   $BasisDataFundaManager get managers => $BasisDataFundaManager(this);
@@ -9569,6 +10240,9 @@ abstract class _$BasisDataFunda extends GeneratedDatabase {
       $TabelProfilKeuanganTable(this);
   late final $TabelHasilTesAwalTable tabelHasilTesAwal =
       $TabelHasilTesAwalTable(this);
+  late final $TabelSesiSandboxTable tabelSesiSandbox = $TabelSesiSandboxTable(
+    this,
+  );
   late final Index idxTransaksiWaktu = Index(
     'idx_transaksi_waktu',
     'CREATE INDEX idx_transaksi_waktu ON tabel_transaksi (waktu_transaksi)',
@@ -9617,6 +10291,7 @@ abstract class _$BasisDataFunda extends GeneratedDatabase {
     tabelPernyataan,
     tabelProfilKeuangan,
     tabelHasilTesAwal,
+    tabelSesiSandbox,
     idxTransaksiWaktu,
     idxTransaksiDompet,
     idxTransaksiJenis,
@@ -17654,6 +18329,323 @@ typedef $$TabelHasilTesAwalTableProcessedTableManager =
       EntitasHasilTesAwal,
       PrefetchHooks Function()
     >;
+typedef $$TabelSesiSandboxTableCreateCompanionBuilder =
+    TabelSesiSandboxCompanion Function({
+      Value<int> id,
+      Value<int> saldoAwalRupiah,
+      required int alokasiPasarUangPersen,
+      required int alokasiObligasiPersen,
+      required int alokasiSahamPersen,
+      Value<int> bulanBerjalan,
+      required int nilaiSaatIniRupiah,
+      required String skenarioAktif,
+      required String riwayatJson,
+      required DateTime diperbaruiPada,
+    });
+typedef $$TabelSesiSandboxTableUpdateCompanionBuilder =
+    TabelSesiSandboxCompanion Function({
+      Value<int> id,
+      Value<int> saldoAwalRupiah,
+      Value<int> alokasiPasarUangPersen,
+      Value<int> alokasiObligasiPersen,
+      Value<int> alokasiSahamPersen,
+      Value<int> bulanBerjalan,
+      Value<int> nilaiSaatIniRupiah,
+      Value<String> skenarioAktif,
+      Value<String> riwayatJson,
+      Value<DateTime> diperbaruiPada,
+    });
+
+class $$TabelSesiSandboxTableFilterComposer
+    extends Composer<_$BasisDataFunda, $TabelSesiSandboxTable> {
+  $$TabelSesiSandboxTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get saldoAwalRupiah => $composableBuilder(
+    column: $table.saldoAwalRupiah,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get alokasiPasarUangPersen => $composableBuilder(
+    column: $table.alokasiPasarUangPersen,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get alokasiObligasiPersen => $composableBuilder(
+    column: $table.alokasiObligasiPersen,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get alokasiSahamPersen => $composableBuilder(
+    column: $table.alokasiSahamPersen,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get bulanBerjalan => $composableBuilder(
+    column: $table.bulanBerjalan,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get nilaiSaatIniRupiah => $composableBuilder(
+    column: $table.nilaiSaatIniRupiah,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get skenarioAktif => $composableBuilder(
+    column: $table.skenarioAktif,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get riwayatJson => $composableBuilder(
+    column: $table.riwayatJson,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get diperbaruiPada => $composableBuilder(
+    column: $table.diperbaruiPada,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$TabelSesiSandboxTableOrderingComposer
+    extends Composer<_$BasisDataFunda, $TabelSesiSandboxTable> {
+  $$TabelSesiSandboxTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get saldoAwalRupiah => $composableBuilder(
+    column: $table.saldoAwalRupiah,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get alokasiPasarUangPersen => $composableBuilder(
+    column: $table.alokasiPasarUangPersen,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get alokasiObligasiPersen => $composableBuilder(
+    column: $table.alokasiObligasiPersen,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get alokasiSahamPersen => $composableBuilder(
+    column: $table.alokasiSahamPersen,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get bulanBerjalan => $composableBuilder(
+    column: $table.bulanBerjalan,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get nilaiSaatIniRupiah => $composableBuilder(
+    column: $table.nilaiSaatIniRupiah,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get skenarioAktif => $composableBuilder(
+    column: $table.skenarioAktif,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get riwayatJson => $composableBuilder(
+    column: $table.riwayatJson,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get diperbaruiPada => $composableBuilder(
+    column: $table.diperbaruiPada,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$TabelSesiSandboxTableAnnotationComposer
+    extends Composer<_$BasisDataFunda, $TabelSesiSandboxTable> {
+  $$TabelSesiSandboxTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<int> get saldoAwalRupiah => $composableBuilder(
+    column: $table.saldoAwalRupiah,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get alokasiPasarUangPersen => $composableBuilder(
+    column: $table.alokasiPasarUangPersen,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get alokasiObligasiPersen => $composableBuilder(
+    column: $table.alokasiObligasiPersen,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get alokasiSahamPersen => $composableBuilder(
+    column: $table.alokasiSahamPersen,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get bulanBerjalan => $composableBuilder(
+    column: $table.bulanBerjalan,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get nilaiSaatIniRupiah => $composableBuilder(
+    column: $table.nilaiSaatIniRupiah,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get skenarioAktif => $composableBuilder(
+    column: $table.skenarioAktif,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get riwayatJson => $composableBuilder(
+    column: $table.riwayatJson,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<DateTime> get diperbaruiPada => $composableBuilder(
+    column: $table.diperbaruiPada,
+    builder: (column) => column,
+  );
+}
+
+class $$TabelSesiSandboxTableTableManager
+    extends
+        RootTableManager<
+          _$BasisDataFunda,
+          $TabelSesiSandboxTable,
+          EntitasSesiSandbox,
+          $$TabelSesiSandboxTableFilterComposer,
+          $$TabelSesiSandboxTableOrderingComposer,
+          $$TabelSesiSandboxTableAnnotationComposer,
+          $$TabelSesiSandboxTableCreateCompanionBuilder,
+          $$TabelSesiSandboxTableUpdateCompanionBuilder,
+          (
+            EntitasSesiSandbox,
+            BaseReferences<
+              _$BasisDataFunda,
+              $TabelSesiSandboxTable,
+              EntitasSesiSandbox
+            >,
+          ),
+          EntitasSesiSandbox,
+          PrefetchHooks Function()
+        > {
+  $$TabelSesiSandboxTableTableManager(
+    _$BasisDataFunda db,
+    $TabelSesiSandboxTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$TabelSesiSandboxTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$TabelSesiSandboxTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$TabelSesiSandboxTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<int> saldoAwalRupiah = const Value.absent(),
+                Value<int> alokasiPasarUangPersen = const Value.absent(),
+                Value<int> alokasiObligasiPersen = const Value.absent(),
+                Value<int> alokasiSahamPersen = const Value.absent(),
+                Value<int> bulanBerjalan = const Value.absent(),
+                Value<int> nilaiSaatIniRupiah = const Value.absent(),
+                Value<String> skenarioAktif = const Value.absent(),
+                Value<String> riwayatJson = const Value.absent(),
+                Value<DateTime> diperbaruiPada = const Value.absent(),
+              }) => TabelSesiSandboxCompanion(
+                id: id,
+                saldoAwalRupiah: saldoAwalRupiah,
+                alokasiPasarUangPersen: alokasiPasarUangPersen,
+                alokasiObligasiPersen: alokasiObligasiPersen,
+                alokasiSahamPersen: alokasiSahamPersen,
+                bulanBerjalan: bulanBerjalan,
+                nilaiSaatIniRupiah: nilaiSaatIniRupiah,
+                skenarioAktif: skenarioAktif,
+                riwayatJson: riwayatJson,
+                diperbaruiPada: diperbaruiPada,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<int> saldoAwalRupiah = const Value.absent(),
+                required int alokasiPasarUangPersen,
+                required int alokasiObligasiPersen,
+                required int alokasiSahamPersen,
+                Value<int> bulanBerjalan = const Value.absent(),
+                required int nilaiSaatIniRupiah,
+                required String skenarioAktif,
+                required String riwayatJson,
+                required DateTime diperbaruiPada,
+              }) => TabelSesiSandboxCompanion.insert(
+                id: id,
+                saldoAwalRupiah: saldoAwalRupiah,
+                alokasiPasarUangPersen: alokasiPasarUangPersen,
+                alokasiObligasiPersen: alokasiObligasiPersen,
+                alokasiSahamPersen: alokasiSahamPersen,
+                bulanBerjalan: bulanBerjalan,
+                nilaiSaatIniRupiah: nilaiSaatIniRupiah,
+                skenarioAktif: skenarioAktif,
+                riwayatJson: riwayatJson,
+                diperbaruiPada: diperbaruiPada,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$TabelSesiSandboxTableProcessedTableManager =
+    ProcessedTableManager<
+      _$BasisDataFunda,
+      $TabelSesiSandboxTable,
+      EntitasSesiSandbox,
+      $$TabelSesiSandboxTableFilterComposer,
+      $$TabelSesiSandboxTableOrderingComposer,
+      $$TabelSesiSandboxTableAnnotationComposer,
+      $$TabelSesiSandboxTableCreateCompanionBuilder,
+      $$TabelSesiSandboxTableUpdateCompanionBuilder,
+      (
+        EntitasSesiSandbox,
+        BaseReferences<
+          _$BasisDataFunda,
+          $TabelSesiSandboxTable,
+          EntitasSesiSandbox
+        >,
+      ),
+      EntitasSesiSandbox,
+      PrefetchHooks Function()
+    >;
 
 class $BasisDataFundaManager {
   final _$BasisDataFunda _db;
@@ -17699,4 +18691,6 @@ class $BasisDataFundaManager {
       $$TabelProfilKeuanganTableTableManager(_db, _db.tabelProfilKeuangan);
   $$TabelHasilTesAwalTableTableManager get tabelHasilTesAwal =>
       $$TabelHasilTesAwalTableTableManager(_db, _db.tabelHasilTesAwal);
+  $$TabelSesiSandboxTableTableManager get tabelSesiSandbox =>
+      $$TabelSesiSandboxTableTableManager(_db, _db.tabelSesiSandbox);
 }

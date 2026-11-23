@@ -1,0 +1,82 @@
+{
+  "id": "investasi_dasar_11_2",
+  "judul": "Risiko, Imbal Hasil, dan Diversifikasi",
+  "durasiMenit": 6,
+  "status": "draf",
+  "aturanPraktis": true,
+  "catatanReviewer": "TODO-VERIFIKASI. Gambaran umum karakter pasar uang, obligasi, dan saham bersifat edukatif umum; periksa kecocokannya dengan materi literasi keuangan resmi.",
+  "pemantik": "Ada instrumen yang naiknya pelan tapi tenang. Ada yang bisa naik tinggi, tetapi juga bisa turun tajam dalam seminggu.",
+  "kartu": [
+    {
+      "judul": "Risiko dan imbal hasil berjalan beriringan",
+      "isi": "{{Imbal hasil}} adalah potensi keuntungan dari investasi. {{Risiko investasi}} adalah kemungkinan nilainya turun atau berbeda dari harapan. Umumnya, makin tinggi potensi imbal hasil, makin besar pula risikonya. Kalau ada tawaran untung besar tanpa risiko, waspadalah."
+    },
+    {
+      "judul": "Tiga kelompok instrumen umum",
+      "isi": "Secara sederhana, ada tiga kelompok umum. Instrumen {{pasar uang}} cenderung paling stabil dengan pertumbuhan kecil. {{Obligasi}} adalah surat utang yang biasanya berada di tengah. {{Saham}} adalah bukti kepemilikan usaha yang berpotensi tumbuh tinggi, tetapi paling bergejolak."
+    },
+    {
+      "judul": "Jangan taruh semua di satu tempat",
+      "isi": "{{Diversifikasi}} berarti membagi uangmu ke beberapa jenis instrumen yang berbeda. Tujuannya, saat satu instrumen sedang turun, instrumen lain bisa membantu menahan guncangannya. Ini cara sederhana mengelola risiko, bukan menjamin selalu untung."
+    }
+  ],
+  "contohAngka": {
+    "judul": "Ilustrasi Rp10.000.000 saat pasar saham turun 20 persen",
+    "baris": [
+      {
+        "label": "Jika 100 persen di saham: nilai menjadi",
+        "jumlah": 8000000
+      },
+      {
+        "label": "Jika dibagi 50 persen pasar uang dan 50 persen saham",
+        "jumlah": 9150000
+      },
+      {
+        "label": "Selisih penahan penurunan",
+        "jumlah": 1150000,
+        "ringkasan": true
+      }
+    ],
+    "kesimpulan": "Membagi alokasi tidak menghilangkan risiko sepenuhnya, tetapi membantu meredam penurunan tajam."
+  },
+  "cekPaham": [
+    {
+      "tanya": "Bagaimana hubungan umum antara potensi imbal hasil dan risiko?",
+      "pilihan": [
+        "Makin tinggi potensi imbal hasil, umumnya makin besar risikonya",
+        "Makin tinggi imbal hasil, risikonya selalu nol",
+        "Risiko tidak berhubungan dengan imbal hasil"
+      ],
+      "benar": 0,
+      "penjelasan": "Potensi keuntungan yang lebih besar biasanya disertai gejolak nilai yang lebih besar pula."
+    },
+    {
+      "tanya": "Apa tujuan utama diversifikasi?",
+      "pilihan": [
+        "Meredam guncangan dengan membagi dana ke beberapa jenis instrumen",
+        "Menjamin investasi tidak pernah turun",
+        "Menaruh seluruh uang di satu tempat saja"
+      ],
+      "benar": 0,
+      "penjelasan": "Diversifikasi membantu menyeimbangkan risiko saat salah satu instrumen sedang turun."
+    },
+    {
+      "tanya": "Kelompok instrumen mana yang umumnya paling bergejolak nilainya?",
+      "pilihan": [
+        "Saham",
+        "Pasar uang",
+        "Tabungan biasa"
+      ],
+      "benar": 0,
+      "penjelasan": "Saham punya potensi pertumbuhan tinggi, tetapi harganya bisa naik turun cukup tajam."
+    }
+  ],
+  "misi": {
+    "tipe": "sandbox",
+    "judul": "Coba simulasi di Mode Sandbox",
+    "instruksi": "Buka Mode Sandbox, atur pembagian alokasi uang fiktifmu, lalu majukan waktu minimal 1 tahun untuk melihat perubahannya.",
+    "disclaimer": true,
+    "minimalSimulasi": 1
+  },
+  "tindakLanjut": "Coba jalankan simulasi lagi dengan skenario Pasar Turun agar kamu merasakan beda dampaknya pada berbagai pembagian alokasi."
+}

@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '../../../komponen/komponen_funda.dart';
+import '../../../data/penyedia_basis_data.dart';
 import '../../../perhitungan/perhitungan_belajar.dart';
 import '../../../perhitungan/perhitungan_umpan_balik_belajar.dart';
 import '../../../tema/token.dart';
@@ -59,6 +60,9 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
   // State misi refleksi
   late TextEditingController _pengontrolRefleksi;
   String _teksRefleksi = '';
+
+  // State misi sandbox
+  String _ringkasanSandbox = '';
 
   @override
   void initState() {
@@ -142,6 +146,10 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
               if (muatan.containsKey('jawaban')) {
                 _teksRefleksi = muatan['jawaban'] as String? ?? '';
                 _pengontrolRefleksi.text = _teksRefleksi;
+              }
+              if (muatan.containsKey('ringkasanSandbox')) {
+                _ringkasanSandbox = muatan['ringkasanSandbox'] as String? ?? '';
+                _disclaimerSudahMengerti = true;
               }
             } catch (_) {}
           }
@@ -415,7 +423,8 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
       if (_misiDilewati) return true;
       if (pel.misi.tipe == 'keputusan' ||
           pel.misi.tipe == 'daftar_periksa' ||
-          pel.misi.tipe == 'refleksi') {
+          pel.misi.tipe == 'refleksi' ||
+          pel.misi.tipe == 'sandbox') {
         return _misiTerverifikasi;
       }
       final evalMisi = RegistriMisi.evaluasi(misi: pel.misi, fotoData: fotoData);
@@ -706,6 +715,9 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
     }
     if (misi.tipe == 'refleksi') {
       return _bangunKartuMisiRefleksi(misi);
+    }
+    if (misi.tipe == 'sandbox') {
+      return _bangunKartuMisiSandbox(misi);
     }
 
     final evalMisi = RegistriMisi.evaluasi(misi: misi, fotoData: fotoData);
@@ -1412,6 +1424,172 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
               child: const TeksFunda.catatan('Belum relevan buat aku', warna: WarnaFunda.teksRedup),
             ),
           ),
+        ],
+      ),
+    );
+  }
+
+  Widget _bangunKartuMisiSandbox(MisiKonten misi) {
+    final sudahSelesai = _misiTerverifikasi;
+
+    return _pembungkusKartu(
+      tag: 'Misi Praktik Nyata',
+      judul: misi.judul,
+      isi: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          TeksFunda.isi(misi.instruksi.isNotEmpty ? misi.instruksi : misi.deskripsi),
+          const SizedBox(height: SpasiFunda.m),
+          Row(
+            children: [
+              const Icon(LucideIcons.timer, size: 16, color: WarnaFunda.teksRedup),
+              const SizedBox(width: SpasiFunda.xs),
+              Expanded(
+                child: TeksFunda.catatan('Perkiraan waktu: ${misi.perkiraanMenit} menit', warna: WarnaFunda.teksRedup),
+              ),
+            ],
+          ),
+          const SizedBox(height: SpasiFunda.l),
+
+          // 1. Komponen Disclaimer di atas
+          DisclaimerLangkahDuniaNyata(
+            key: const Key('disclaimer_langkah_dunia_nyata'),
+            sudahMengerti: _disclaimerSudahMengerti,
+            padaMengerti: () {
+              setState(() {
+                _disclaimerSudahMengerti = true;
+              });
+            },
+          ),
+          const SizedBox(height: SpasiFunda.m),
+
+          // 2. Status Verifikasi Misi
+          Container(
+            padding: const EdgeInsets.all(SpasiFunda.m),
+            decoration: BoxDecoration(
+              color: sudahSelesai
+                  ? WarnaFunda.tintHijau
+                  : (_misiDilewati ? WarnaFunda.tintNetral : WarnaFunda.tintAmber),
+              borderRadius: BorderRadius.circular(SudutFunda.kartu),
+            ),
+            child: Row(
+              children: [
+                Icon(
+                  sudahSelesai
+                      ? LucideIcons.checkCircle
+                      : (_misiDilewati ? LucideIcons.forward : LucideIcons.flaskConical),
+                  color: sudahSelesai
+                      ? WarnaFunda.pemasukan
+                      : (_misiDilewati ? WarnaFunda.teksRedup : const Color(0xFFD97706)),
+                ),
+                const SizedBox(width: SpasiFunda.s),
+                Expanded(
+                  child: TeksFunda.label(
+                    _misiDilewati
+                        ? 'Misi ini kamu lewati.'
+                        : (sudahSelesai
+                            ? (_ringkasanSandbox.isNotEmpty
+                                ? 'Simulasi selesai! $_ringkasanSandbox'
+                                : 'Syarat misi terpenuhi. Simulasi sandbox sudah kamu jalankan.')
+                            : 'Buka Mode Sandbox, atur alokasi, lalu jalankan minimal 1 tahun simulasi.'),
+                    warna: sudahSelesai ? WarnaFunda.pemasukan : WarnaFunda.teks,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: SpasiFunda.l),
+
+          // 3. Tombol Aksi Buka Sandbox & Periksa Misi
+          if (!sudahSelesai && !_misiDilewati) ...[
+            SizedBox(
+              height: 48,
+              width: double.infinity,
+              child: OutlinedButton.icon(
+                key: const Key('tombol_buka_sandbox'),
+                icon: const Icon(LucideIcons.externalLink, size: 18),
+                label: const Text('Buka Mode Sandbox'),
+                onPressed: () => context.push('/sandbox'),
+                style: OutlinedButton.styleFrom(
+                  minimumSize: const Size(double.infinity, 48),
+                  foregroundColor: WarnaFunda.utama,
+                ),
+              ),
+            ),
+            const SizedBox(height: SpasiFunda.m),
+            SizedBox(
+              height: 48,
+              width: double.infinity,
+              child: ElevatedButton.icon(
+                key: const Key('tombol_periksa_misi_sandbox'),
+                icon: const Icon(LucideIcons.check, size: 18),
+                label: const Text('Periksa Misi'),
+                style: ElevatedButton.styleFrom(
+                  minimumSize: const Size(double.infinity, 48),
+                  backgroundColor: WarnaFunda.utama,
+                  foregroundColor: Colors.white,
+                ),
+                onPressed: () async {
+                  final repo = ref.read(penyediaSandboxRepositori);
+                  final sesi = await repo.ambilSesiTerakhir();
+                  if (sesi != null && sesi.bulanBerjalan >= 12) {
+                    final ringkasan =
+                        'PU ${sesi.alokasiPasarUangPersen}%, OB ${sesi.alokasiObligasiPersen}%, SH ${sesi.alokasiSahamPersen}%. Nilai: ${formatRupiahRapat(sesi.nilaiSaatIniRupiah)}';
+                    final muatan = jsonEncode({
+                      'skenario': sesi.skenarioAktif,
+                      'bulanBerjalan': sesi.bulanBerjalan,
+                      'nilaiSaatIni': sesi.nilaiSaatIniRupiah,
+                      'ringkasanSandbox': ringkasan,
+                    });
+                    setState(() {
+                      _misiTerverifikasi = true;
+                      _ringkasanSandbox = ringkasan;
+                    });
+                    await ref.read(penyediaHasilMisiRepositori).simpanHasilMisi(
+                          misiId: widget.pelajaranId,
+                          pelajaranId: widget.pelajaranId,
+                          tipe: 'sandbox',
+                          status: 'selesai',
+                          muatanJson: muatan,
+                        );
+                  } else {
+                    if (mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text(
+                            'Jalankan minimal 1 tahun simulasi di Mode Sandbox terlebih dahulu.',
+                          ),
+                          backgroundColor: WarnaFunda.peringatan,
+                        ),
+                      );
+                    }
+                  }
+                },
+              ),
+            ),
+            const SizedBox(height: SpasiFunda.xs),
+            Center(
+              child: TextButton(
+                key: const Key('tombol_lewati_misi'),
+                style: TextButton.styleFrom(minimumSize: const Size(48, 48)),
+                onPressed: () async {
+                  setState(() {
+                    _misiDilewati = true;
+                  });
+                  await ref.read(penyediaHasilMisiRepositori).simpanHasilMisi(
+                        misiId: widget.pelajaranId,
+                        pelajaranId: widget.pelajaranId,
+                        tipe: misi.tipe,
+                        status: 'dilewati',
+                      );
+                },
+                child: const TeksFunda.catatan(
+                  'Belum relevan buat aku',
+                  warna: WarnaFunda.teksRedup,
+                ),
+              ),
+            ),
+          ],
         ],
       ),
     );

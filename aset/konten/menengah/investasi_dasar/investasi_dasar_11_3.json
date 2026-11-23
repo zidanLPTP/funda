@@ -1,0 +1,98 @@
+{
+  "id": "investasi_dasar_11_3",
+  "judul": "Mulai Kecil dan Cek Izin Penyedia",
+  "durasiMenit": 5,
+  "status": "draf",
+  "catatanReviewer": "TODO-VERIFIKASI. Langkah persiapan sebelum memakai penyedia investasi berizin di luar aplikasi; tidak menyebut merek atau situs tertentu.",
+  "pemantik": "Kamu sudah paham dasarnya dan mencoba simulasi. Pertanyaan terakhir: kalau suatu saat ingin mencoba di dunia nyata, apa yang perlu dicek dulu?",
+  "kartu": [
+    {
+      "judul": "Mulai dari nominal yang kamu rela pelajari",
+      "isi": "Tidak perlu menunggu uang besar untuk belajar. Di dunia nyata, banyak instrumen umum bisa dimulai dari nominal kecil. Memulai kecil membantumu mengenali rasanya melihat nilai naik turun tanpa mengganggu tidurmu."
+    },
+    {
+      "judul": "Cek izin sebelum setor uang",
+      "isi": "Sama seperti saat memilih layanan pinjaman, pastikan penyedia layanan investasimu berizin dan diawasi oleh {{lembaga pengawas}} keuangan. Jangan hanya percaya tangkapan layar keuntungan di media sosial."
+    },
+    {
+      "judul": "Pahami sebelum membeli",
+      "isi": "Tanyakan tiga hal sederhana: uangku ditempatkan di mana, apa risikonya jika turun, dan bagaimana cara mencairkannya nanti? Kalau kamu belum paham jawabannya, tidak ada salahnya menunda dan belajar dulu."
+    }
+  ],
+  "contohAngka": {
+    "judul": "Ilustrasi menyisihkan rutin Rp200.000 per bulan selama 12 bulan",
+    "baris": [
+      {
+        "label": "Total uang yang disisihkan dalam setahun",
+        "jumlah": 2400000
+      },
+      {
+        "label": "Disisihkan per bulan",
+        "jumlah": 200000
+      }
+    ],
+    "kesimpulan": "Memulai dengan nominal kecil yang rutin lebih ringan dijalankan daripada menunggu jumlah besar sekaligus."
+  },
+  "cekPaham": [
+    {
+      "tanya": "Mengapa memulai dari nominal kecil itu masuk akal bagi pemula?",
+      "pilihan": [
+        "Membantu belajar mengenali naik turun nilai tanpa mengganggu kebutuhan",
+        "Supaya pasti langsung untung besar",
+        "Karena nominal besar dilarang"
+      ],
+      "benar": 0,
+      "penjelasan": "Nominal kecil membuatmu tetap tenang saat belajar memahami pergerakan nilai."
+    },
+    {
+      "tanya": "Apa hal pertama yang perlu dicek dari sebuah penyedia layanan investasi?",
+      "pilihan": [
+        "Apakah penyedia itu berizin di lembaga pengawas resmi",
+        "Apakah iklannya sering muncul di media sosial",
+        "Apakah menjanjikan untung pasti"
+      ],
+      "benar": 0,
+      "penjelasan": "Izin dari lembaga pengawas adalah pintu keamanan pertama sebelum memakai uangmu."
+    },
+    {
+      "tanya": "Jika kamu belum paham cara kerja sebuah tawaran investasi, langkah terbaik adalah?",
+      "pilihan": [
+        "Menunda dulu sampai kamu benar-benar memahaminya",
+        "Langsung ikut karena takut ketinggalan",
+        "Meminjam uang supaya bisa ikut"
+      ],
+      "benar": 0,
+      "penjelasan": "Menunda keputusan sampai paham jauh lebih aman daripada ikut-ikutan."
+    }
+  ],
+  "misi": {
+    "tipe": "daftar_periksa",
+    "judul": "Daftar siap sebelum mulai di dunia nyata",
+    "instruksi": "Baca catatan di atas, lalu centang langkah yang sudah kamu pahami sebelum suatu saat berinvestasi di luar Funda. Minimal tiga langkah.",
+    "disclaimer": true,
+    "minimalDicentang": 3,
+    "langkah": [
+      {
+        "id": "l1",
+        "teks": "Aku memastikan dana darurat dan kebutuhan harianku tidak tercampur dengan uang investasi."
+      },
+      {
+        "id": "l2",
+        "teks": "Aku tahu bahwa nilai investasi bisa naik maupun turun, dan tidak ada janji untung pasti."
+      },
+      {
+        "id": "l3",
+        "teks": "Aku akan mengecek izin penyedia lewat sumber resmi lembaga pengawas sebelum menyetor uang."
+      },
+      {
+        "id": "l4",
+        "teks": "Aku akan membaca risiko dan cara pencairan sebelum memilih instrumen apa pun."
+      },
+      {
+        "id": "l5",
+        "teks": "Aku siap memulai dari nominal kecil yang tidak mengganggu ketenanganku."
+      }
+    ]
+  },
+  "tindakLanjut": "Ingat, Funda hanya tempat belajar dan simulasi. Keputusan di dunia nyata sepenuhnya ada di tanganmu."
+}

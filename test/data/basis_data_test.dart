@@ -16,8 +16,8 @@ void main() {
   });
 
   group('BasisDataFunda & TabelPengaturan', () {
-    test('skema versi 10 terdaftar pada basis data', () async {
-      expect(basisData.schemaVersion, equals(10));
+    test('skema versi 11 terdaftar pada basis data', () async {
+      expect(basisData.schemaVersion, equals(11));
 
       final nilaiAwal = await basisData.bacaPengaturan('sudah_onboarding');
       expect(nilaiAwal, isNull);
@@ -426,6 +426,62 @@ void main() {
 
         // Jalankan lagi (idempoten)
         await basisData.migration.onUpgrade(migrator, 9, 10);
+      },
+    );
+
+    test(
+      'Migrasi Bertingkat Skema v10 -> v11 aman, membuat tabel sesi sandbox terisolasi',
+      () async {
+        final migrator = Migrator(basisData);
+        // Hapus tabel_sesi_sandbox untuk simulasi keadaan database di versi 10
+        await basisData.customStatement('DROP TABLE IF EXISTS tabel_sesi_sandbox;');
+
+        var infoTabel = await basisData.customSelect(
+          "SELECT name FROM sqlite_master WHERE type='table' AND name='tabel_sesi_sandbox';",
+        ).get();
+        expect(infoTabel.isEmpty, isTrue);
+
+        // Jalankan migrasi v10 -> v11
+        await basisData.migration.onUpgrade(migrator, 10, 11);
+
+        infoTabel = await basisData.customSelect(
+          "SELECT name FROM sqlite_master WHERE type='table' AND name='tabel_sesi_sandbox';",
+        ).get();
+        expect(infoTabel.length, equals(1));
+
+        // Pastikan kolom-kolom skema sesuai
+        final kolomInfo = await basisData.customSelect(
+          "PRAGMA table_info('tabel_sesi_sandbox');",
+        ).get();
+        final daftarKolom = kolomInfo.map((r) => r.read<String>('name')).toSet();
+        expect(daftarKolom.contains('id'), isTrue);
+        expect(daftarKolom.contains('saldo_awal_rupiah'), isTrue);
+        expect(daftarKolom.contains('alokasi_pasar_uang_persen'), isTrue);
+        expect(daftarKolom.contains('alokasi_obligasi_persen'), isTrue);
+        expect(daftarKolom.contains('alokasi_saham_persen'), isTrue);
+        expect(daftarKolom.contains('bulan_berjalan'), isTrue);
+        expect(daftarKolom.contains('nilai_saat_ini_rupiah'), isTrue);
+        expect(daftarKolom.contains('skenario_aktif'), isTrue);
+        expect(daftarKolom.contains('riwayat_json'), isTrue);
+        expect(daftarKolom.contains('diperbarui_pada'), isTrue);
+
+        // Jalankan lagi (idempoten)
+        await basisData.migration.onUpgrade(migrator, 10, 11);
+      },
+    );
+
+    test(
+      'Migrasi Beruntun Seluruh Versi Skema v1 -> v11 sukses dan aman',
+      () async {
+        final migrator = Migrator(basisData);
+        // Jalankan seluruh rantai migrasi dari versi 1 hingga versi 11
+        await basisData.migration.onUpgrade(migrator, 1, 11);
+
+        // Pastikan tabel_sesi_sandbox ada
+        final infoTabel = await basisData.customSelect(
+          "SELECT name FROM sqlite_master WHERE type='table' AND name='tabel_sesi_sandbox';",
+        ).get();
+        expect(infoTabel.length, equals(1));
       },
     );
   });

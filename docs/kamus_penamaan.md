@@ -147,6 +147,11 @@
 | subscription and wants feedback | ringkasan_langganan_dan_keinginan | Umpan balik komitmen langganan aktif dan pengeluaran keinginan bulan ini |
 | reflection answer | jawaban | Muatan teks refleksi tersimpan pengguna pada tabel_hasil_misi |
 | minimum characters | minimalKarakter | Ambang batas minimal panjang karakter masukan teks refleksi |
+| sandbox session table | EntitasSesiSandbox (`tabel_sesi_sandbox`) | Tabel sesi simulasi investasi portofolio fiktif yang terisolasi total |
+| sandbox repository | SandboxRepositori | Repositori pengelola data sesi dan riwayat mode sandbox |
+| sandbox calculation | PerhitunganSandbox / perhitungan_sandbox | Logika matematika murni pembagian alokasi dan simulasi skenario pasar |
+| sandbox screen | LayarSandbox (`/sandbox`) | Antarmuka simulasi investasi uang fiktif berpenanda banner tintAmber |
+| sandbox mission | MisiKonten (tipe `sandbox`) | Tipe misi edukasi simulasi portofolio dengan verifikasi minimalSimulasi |
 
 ## Aturan Cabang Kerja (Git)
 - Setiap tahap dikerjakan pada cabang khusus (contoh: `tahap-02-dompet-transaksi`).

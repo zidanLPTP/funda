@@ -25,8 +25,10 @@ class CadanganRepositori {
     this.direktoriPenyimpananUji,
   });
 
-  /// Daftar tabel yang sengaja dikecualikan dari ekspor/impor cadangan (kosong saat ini; untuk tabel sandbox kelak).
-  static const Set<String> tabelDikecualikan = {};
+  /// Daftar tabel yang sengaja dikecualikan dari ekspor/impor cadangan (tabel sesi sandbox fiktif).
+  static const Set<String> tabelDikecualikan = {
+    'tabel_sesi_sandbox',
+  };
 
   Future<File> _dapatkanBerkasKeselamatan() async {
     Directory dir;

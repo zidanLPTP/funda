@@ -1,20 +1,150 @@
 {
-    "kuis":  {
-                 "jumlahSoal":  0,
-                 "bankSoal":  [
-
-                              ]
-             },
-    "id":  "investasi_dasar",
-    "tersedia":  false,
-    "urutan":  11,
-    "gerbang":  [
-
-                ],
-    "deskripsiSingkat":  "Memahami inflasi, hubungan imbal hasil dan risiko, serta memulai investasi kecil.",
-    "daftarPelajaran":  [
-
-                        ],
-    "tingkat":  "menengah",
-    "judul":  "Investasi Dasar"
+  "id": "investasi_dasar",
+  "judul": "Investasi Dasar",
+  "tingkat": "menengah",
+  "urutan": 11,
+  "deskripsiSingkat": "Memahami inflasi, hubungan imbal hasil dan risiko, serta memulai investasi kecil.",
+  "tersedia": true,
+  "gerbang": [
+    {
+      "tipe": "modul_selesai",
+      "modulId": "dana_darurat",
+      "pesan": "Selesaikan Modul 3 (Dana Darurat) dan Modul 4 (Utang & Cicilan) dulu, supaya fondasimu kuat sebelum belajar investasi."
+    },
+    {
+      "tipe": "modul_selesai",
+      "modulId": "utang_cicilan",
+      "pesan": "Selesaikan Modul 3 (Dana Darurat) dan Modul 4 (Utang & Cicilan) dulu, supaya fondasimu kuat sebelum belajar investasi."
+    }
+  ],
+  "daftarPelajaran": [
+    "investasi_dasar_11_1",
+    "investasi_dasar_11_2",
+    "investasi_dasar_11_3"
+  ],
+  "kuis": {
+    "jumlahSoal": 5,
+    "bankSoal": [
+      {
+        "id": "soal_11_1",
+        "pelajaranId": "investasi_dasar_11_1",
+        "tanya": "Apa yang dimaksud dengan inflasi?",
+        "pilihan": [
+          "Kenaikan harga barang dan jasa secara umum dari waktu ke waktu",
+          "Penurunan harga semua barang setiap tahun",
+          "Tambahan saldo otomatis di dompet"
+        ],
+        "benar": 0,
+        "penjelasan": "Inflasi membuat harga barang naik pelan-pelan sehingga daya beli uang menurun."
+      },
+      {
+        "id": "soal_11_2",
+        "pelajaranId": "investasi_dasar_11_1",
+        "tanya": "Mana yang paling tepat disebut uang dingin?",
+        "pilihan": [
+          "Uang yang tidak dibutuhkan dalam waktu dekat",
+          "Uang untuk membayar kos minggu depan",
+          "Uang pinjaman berbunga tinggi"
+        ],
+        "benar": 0,
+        "penjelasan": "Uang dingin aman dipakai belajar investasi karena tidak mengganggu kebutuhan dekat bila nilainya turun sementara."
+      },
+      {
+        "id": "soal_11_3",
+        "pelajaranId": "investasi_dasar_11_1",
+        "tanya": "Sebelum mulai berinvestasi, fondasi apa yang sebaiknya disiapkan dulu?",
+        "pilihan": [
+          "Kebutuhan harian aman, dana darurat mulai terisi, dan cicilan terkendali",
+          "Mengosongkan semua tabungan",
+          "Membeli barang konsumtif dulu"
+        ],
+        "benar": 0,
+        "penjelasan": "Fondasi yang kuat membuatmu tidak terpaksa mencairkan investasi saat sedang rugi."
+      },
+      {
+        "id": "soal_11_4",
+        "pelajaranId": "investasi_dasar_11_1",
+        "tanya": "Untuk tujuan 3 bulan lagi, mana yang umumnya lebih cocok?",
+        "pilihan": [
+          "Tabungan yang stabil dan mudah diambil",
+          "Instrumen yang nilainya bergejolak tajam",
+          "Pinjaman online"
+        ],
+        "benar": 0,
+        "penjelasan": "Tujuan jangka pendek membutuhkan kestabilan nilai."
+      },
+      {
+        "id": "soal_11_5",
+        "pelajaranId": "investasi_dasar_11_2",
+        "tanya": "Jika ada tawaran investasi yang menjanjikan untung sangat besar tanpa risiko, sikap yang masuk akal?",
+        "pilihan": [
+          "Waspada dan periksa, karena imbal hasil tinggi umumnya disertai risiko tinggi",
+          "Langsung transfer sebelum kehabisan",
+          "Mengajak semua teman ikut"
+        ],
+        "benar": 0,
+        "penjelasan": "Janji untung besar tanpa risiko adalah tanda yang patut diwaspadai."
+      },
+      {
+        "id": "soal_11_6",
+        "pelajaranId": "investasi_dasar_11_2",
+        "tanya": "Apa fungsi diversifikasi?",
+        "pilihan": [
+          "Membagi dana ke beberapa jenis instrumen agar guncangan lebih teredam",
+          "Menaruh semua uang di satu instrumen saja",
+          "Menjamin keuntungan setiap hari"
+        ],
+        "benar": 0,
+        "penjelasan": "Diversifikasi membantu menyeimbangkan risiko saat satu instrumen sedang turun."
+      },
+      {
+        "id": "soal_11_7",
+        "pelajaranId": "investasi_dasar_11_2",
+        "tanya": "Di antara tiga kelompok umum, mana yang cenderung paling stabil?",
+        "pilihan": [
+          "Pasar uang",
+          "Saham",
+          "Keduanya sama saja"
+        ],
+        "benar": 0,
+        "penjelasan": "Pasar uang umumnya memiliki gejolak paling kecil dibanding obligasi dan saham."
+      },
+      {
+        "id": "soal_11_8",
+        "pelajaranId": "investasi_dasar_11_3",
+        "tanya": "Mengapa mengecek izin penyedia di lembaga pengawas itu penting?",
+        "pilihan": [
+          "Memastikan penyedia diawasi secara resmi sebelum memakai uangmu",
+          "Supaya aplikasi terlihat lebih keren",
+          "Karena diwajibkan oleh media sosial"
+        ],
+        "benar": 0,
+        "penjelasan": "Izin resmi membantu melindungimu dari tawaran ilegal."
+      },
+      {
+        "id": "soal_11_9",
+        "pelajaranId": "investasi_dasar_11_3",
+        "tanya": "Pertanyaan mana yang penting diajukan sebelum memilih instrumen investasi?",
+        "pilihan": [
+          "Apa risikonya jika turun dan bagaimana cara mencairkannya?",
+          "Apakah iklannya dibintangi artis terkenal?",
+          "Apakah temanku sudah ikut?"
+        ],
+        "benar": 0,
+        "penjelasan": "Memahami risiko dan cara pencairan membantumu mengambil keputusan sadar."
+      },
+      {
+        "id": "soal_11_10",
+        "pelajaranId": "investasi_dasar_11_3",
+        "tanya": "Apa peran Mode Sandbox di Funda?",
+        "pilihan": [
+          "Tempat simulasi dengan uang fiktif untuk belajar, bukan prediksi hasil nyata",
+          "Tempat membeli saham sungguhan",
+          "Tempat menyimpan uang tunai asli"
+        ],
+        "benar": 0,
+        "penjelasan": "Mode Sandbox murni simulasi edukatif yang terpisah dari uang aslimu."
+      }
+    ]
+  }
 }

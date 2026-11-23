@@ -310,7 +310,8 @@ Kamu mengirim **prompt per tahap** ke agent → agent kerja dan menulis laporan 
 | 8B | **Tingkat Pemula Bagian 2:** Modul 4 "Utang & Cicilan" | Pembelajaran utang & cicilan aktif |
 | 8C | **Tingkat Pemula Bagian 3:** Modul 5 "Waspada Penipuan & Pinjol Ilegal" + tipe misi keputusan dan daftar_periksa + disclaimer | Edukasi waspada penipuan selesai |
 | 8D | **Tingkat Pemula Bagian 4:** Modul 6 "Psikologi Uang & Kebiasaan Belanja" + tipe misi refleksi | Fondasi pemula lengkap (selesai, seluruh Tingkat Pemula tuntas) |
-| 9 | **Sandbox + Langkah Dunia Nyata + modul 7, 10, 11** | Materi non-langsung |
+| 9A | **Mesin Sandbox & Modul 11 "Investasi Dasar":** Mesin simulasi portofolio fiktif terisolasi, tipe misi sandbox, konten Modul 11 | Fitur sandbox edukasi & investasi dasar selesai |
+| 9B | **Modul 7 "Paylater & Kartu Kredit" & Modul 10 "Proteksi & Asuransi"** | Pembelajaran paylater & proteksi |
 | 10 | **Tingkat Menengah** sisanya (modul 8, 9, 12) | Menengah lengkap |
 | 11 | **Tingkat Lanjutan** (modul 13–18) | Kurikulum penuh |
 | 12 | **Polesan, aksesibilitas, uji pengguna, tinjauan konten, rilis** | v1.0 |

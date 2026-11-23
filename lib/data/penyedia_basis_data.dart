@@ -10,6 +10,7 @@ import 'repositori/tujuan_repositori.dart';
 import 'repositori/utang_repositori.dart';
 import 'repositori/profil_repositori.dart';
 import 'repositori/tes_awal_repositori.dart';
+import 'repositori/sandbox_repositori.dart';
 
 /// Provider instans tunggal basis data Drift.
 final penyediaBasisData = Provider<BasisDataFunda>((ref) {
@@ -77,4 +78,10 @@ final penyediaProfilRepositori = Provider<ProfilRepositori>((ref) {
 final penyediaTesAwalRepositori = Provider<TesAwalRepositori>((ref) {
   final db = ref.watch(penyediaBasisData);
   return TesAwalRepositori(db);
+});
+
+/// Provider repositori sesi mode sandbox investasi fiktif.
+final penyediaSandboxRepositori = Provider<SandboxRepositori>((ref) {
+  final db = ref.watch(penyediaBasisData);
+  return SandboxRepositori(db);
 });

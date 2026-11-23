@@ -193,5 +193,45 @@
     "istilah": "aturan jeda",
     "arti": "Kebiasaan menunda pembayaran keinginan selama waktu tertentu agar dorongan sesaat mereda.",
     "contohRupiah": "Menunggu satu hari dulu sebelum membayar sepatu Rp350.000 di keranjang."
+  },
+  {
+    "istilah": "inflasi",
+    "arti": "Kenaikan harga barang dan jasa secara umum dari waktu ke waktu yang menurunkan daya beli uang.",
+    "contohRupiah": "Makanan Rp20.000 hari ini bisa menjadi Rp22.000 beberapa tahun lagi."
+  },
+  {
+    "istilah": "investasi",
+    "arti": "Menempatkan uang pada instrumen yang berpotensi tumbuh seiring waktu, dengan risiko nilai bisa naik atau turun.",
+    "contohRupiah": "Menyisihkan Rp200.000 per bulan untuk tujuan 10 tahun lagi."
+  },
+  {
+    "istilah": "imbal hasil",
+    "arti": "Potensi keuntungan yang diperoleh dari sebuah instrumen investasi.",
+    "contohRupiah": "Nilai Rp10.000.000 tumbuh menjadi Rp10.600.000 dalam setahun berarti imbal hasil Rp600.000."
+  },
+  {
+    "istilah": "risiko investasi",
+    "arti": "Kemungkinan nilai investasi turun atau hasilnya berbeda dari yang diharapkan.",
+    "contohRupiah": "Nilai Rp10.000.000 bisa sementara turun menjadi Rp8.500.000 saat pasar lesu."
+  },
+  {
+    "istilah": "diversifikasi",
+    "arti": "Membagi dana investasi ke beberapa jenis instrumen berbeda untuk membantu meredam guncangan.",
+    "contohRupiah": "Membagi Rp10.000.000 menjadi Rp5.000.000 di pasar uang dan Rp5.000.000 di saham."
+  },
+  {
+    "istilah": "pasar uang",
+    "arti": "Kelompok instrumen investasi jangka pendek yang nilainya cenderung paling stabil dengan pertumbuhan kecil.",
+    "contohRupiah": "Menempatkan Rp5.000.000 di instrumen pasar uang agar nilainya relatif tenang."
+  },
+  {
+    "istilah": "obligasi",
+    "arti": "Surat utang yang diterbitkan negara atau perusahaan dengan potensi imbal hasil dan risiko di tingkat menengah.",
+    "contohRupiah": "Menempatkan Rp5.000.000 di obligasi sebagai penyeimbang portofolio."
+  },
+  {
+    "istilah": "saham",
+    "arti": "Bukti kepemilikan atas sebagian kecil sebuah usaha yang berpotensi tumbuh tinggi tetapi nilainya mudah bergejolak.",
+    "contohRupiah": "Menempatkan Rp5.000.000 di saham untuk tujuan jangka panjang."
   }
 ]

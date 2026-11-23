@@ -9,7 +9,7 @@
 ## 🎯 Gambaran Tiga Sisi Funda
 1. **Dompet Digital Pencatatan:** Pencatatan kas, banyak dompet, alokasi kantong, tagihan berulang, dan transfer antar dompet (aplikasi **tidak** menyimpan atau memindahkan uang asli).
 2. **Belajar Sambil Praktik:** Pelajaran micro-learning berjenjang (Pemula, Menengah, Lanjutan) yang berujung pada misi praktik menggunakan **data uang pengguna sendiri** melalui mekanisme **Gerbang Data**.
-3. **Sandbox:** Ruang simulasi terpisah untuk topik non-langsung (seperti simulasi investasi atau skenario darurat) tanpa memengaruhi data asli.
+3. **Sandbox:** Ruang simulasi terpisah untuk topik non-langsung (seperti simulasi investasi atau skenario darurat) tanpa memengaruhi data asli. Dilengkapi Mode Sandbox uang fiktif terisolasi pada rute `/sandbox` (Tahap 9A).
 
 ---
 

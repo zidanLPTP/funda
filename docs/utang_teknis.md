@@ -277,6 +277,19 @@ Berdasarkan hasil pengujian terisolasi pada 10 iterasi bersih di emulator Pixel 
 - **Kueri On-Demand Langganan & Pengeluaran Keinginan:**
   Fungsi umpan balik `ringkasan_langganan_dan_keinginan` memerlukan data tagihan aktif dan akumulasi pengeluaran pos keinginan bulan berjalan. Kueri ini dieksekusi secara *on-demand* oleh `penyediaTeksUmpanBalikMisi` hanya saat kartu pelajaran 6.2 dibuka, sehingga Tab Belajar utama dan Beranda tetap beroperasi menggunakan agregasi SQL cepat tanpa pemuatan data tidak perlu.
 
+---
+
+## 22. Isolasi Total Mode Sandbox & Migrasi Skema v11 (Tahap 9A)
+
+- **Konteks & Desain Isolasi:**
+  Pada Tahap 9A, diperkenalkan fitur Mode Sandbox untuk simulasi edukasi portofolio investasi uang fiktif (Modul 11 "Investasi Dasar"). Simulasi ini melibatkan modal awal fiktif Rp10.000.000 dan alokasi instrumen pasar uang, obligasi, dan saham.
+- **Keputusan Desain:**
+  1. **Isolasi Basis Data:** Data sesi simulasi disimpan di `tabel_sesi_sandbox` tanpa *foreign key* ke tabel data riil pengguna (`tabel_dompet`, `tabel_transaksi`, dsb.).
+  2. **Isolasi Cadangan:** Tabel `tabel_sesi_sandbox` didaftarkan secara eksplisit ke dalam `CadanganRepositori.tabelDikecualikan` sehingga tidak pernah ikut diekspor ke dalam berkas cadangan data keuangan pengguna.
+  3. **Peningkat Cadangan:** Skema dinaikkan ke v11 dengan menyertakan peningkat skema v10 -> v11 di `RegistriPeningkatCadangan` agar backward compatibility pemulihan cadangan versi lama tetap terjaga 100%.
+  4. **Pemisahan UI:** Banner penanda warna `tintAmber` bertuliskan *"Mode Sandbox — Uang Fiktif (Simulasi, bukan prediksi)"* dan komponen disclaimer langkah dunia nyata dipasang permanen untuk mencegah salah tafsir pengguna.
+
+
 
 
 

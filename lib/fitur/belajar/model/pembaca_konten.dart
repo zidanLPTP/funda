@@ -494,6 +494,7 @@ class PembacaKonten {
       'keputusan',
       'daftar_periksa',
       'refleksi',
+      'sandbox',
     };
     if (!jenisMisiDidukung.contains(tipeMisi)) {
       throw GalatKonten('Jenis misi "$tipeMisi" belum didukung pada versi ini', berkas: namaBerkas, kolom: 'misi.tipe');
@@ -517,8 +518,21 @@ class PembacaKonten {
       if (isModul5) {
         periksaTeksSensitifModul5(instruksiMisi, namaBerkas: namaBerkas, kolom: 'misi.instruksi');
       }
-    } else if (tipeMisi == 'keputusan' || tipeMisi == 'daftar_periksa' || tipeMisi == 'refleksi') {
+    } else if (tipeMisi == 'keputusan' || tipeMisi == 'daftar_periksa' || tipeMisi == 'refleksi' || tipeMisi == 'sandbox') {
       throw GalatKonten('Kolom misi.instruksi wajib ada dan tidak kosong', berkas: namaBerkas, kolom: 'misi.instruksi');
+    }
+
+    if (tipeMisi == 'sandbox') {
+      final disclaimer = misi['disclaimer'];
+      if (disclaimer != true) {
+        throw GalatKonten('Misi tipe sandbox wajib memiliki disclaimer: true', berkas: namaBerkas, kolom: 'misi.disclaimer');
+      }
+      if (misi.containsKey('minimalSimulasi')) {
+        final minSimulasi = misi['minimalSimulasi'];
+        if (minSimulasi is! int || minSimulasi < 1) {
+          throw GalatKonten('Kolom misi.minimalSimulasi harus berupa integer >= 1', berkas: namaBerkas, kolom: 'misi.minimalSimulasi');
+        }
+      }
     }
 
     if (tipeMisi == 'keputusan') {
@@ -664,6 +678,7 @@ class PembacaKonten {
         tipeMisi != 'keputusan' &&
         tipeMisi != 'daftar_periksa' &&
         tipeMisi != 'refleksi' &&
+        tipeMisi != 'sandbox' &&
         gerbang is List) {
       final minMisi = (misi['min'] as num?)?.toInt() ?? 1;
       final aturanMisi = misi['aturan'] as String?;

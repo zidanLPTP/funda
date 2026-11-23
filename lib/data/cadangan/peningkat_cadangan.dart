@@ -8,7 +8,10 @@ class RegistriPeningkatCadangan {
   /// Versi skema basis data saat sistem cadangan pertama kali diimplementasikan (Tahap 7 = skema 10).
   static const int versiSkemaCadanganPertama = 10;
 
-  static final Map<int, FungsiPeningkatTabel> _registri = {};
+  static final Map<int, FungsiPeningkatTabel> _registri = {
+    // Versi 10 -> 11 (Tahap 9A: Penambahan tabel_sesi_sandbox yang dikecualikan dari cadangan)
+    10: (tabel) => tabel,
+  };
 
   /// Mendaftarkan fungsi peningkat dari versi [dariVersi] ke [dariVersi + 1].
   static void daftarkan(int dariVersi, FungsiPeningkatTabel peningkat) {

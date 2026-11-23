@@ -243,7 +243,7 @@ Berikut adalah registri kunci umpan balik edukatif yang diolah dari data riil pe
      - Tombol "Selesai" hanya aktif bila `jumlahDicentang >= minimalDicentang`.
      - Hasil tersimpan di `tabel_hasil_misi`: `status: 'selesai'`, `muatan_json: {"dicentang": ["l1", "l2", "l3"]}`. Saat dibuka ulang, centang tersimpan dimuat kembali.
 3. **Pengecualian Aturan Misi**:
-   - Tipe-tipe misi perilaku (`lihat_hitungan`, `keputusan`, `daftar_periksa`, dan `refleksi`) dikecualikan dari aturan *"misi tidak boleh lebih longgar dari gerbang"* karena menguji pemahaman, refleksi privat, atau keputusan perilaku pengguna di luar aplikasi dan tidak bergantung pada data agregat transaksi riil.
+   - Tipe-tipe misi perilaku (`lihat_hitungan`, `keputusan`, `daftar_periksa`, `refleksi`, dan `sandbox`) dikecualikan dari aturan *"misi tidak boleh lebih longgar dari gerbang"* karena menguji pemahaman, refleksi privat, simulasi fiktif, atau keputusan perilaku pengguna di luar aplikasi dan tidak bergantung pada data agregat transaksi riil.
 4. **Format Berkas `aset/konten/disclaimer.json`**:
    ```json
    {
@@ -288,6 +288,25 @@ Berikut adalah registri kunci umpan balik edukatif yang diolah dari data riil pe
      Total komitmen & keinginan: Rp150.000/bln
      ```
 
+### 4.6 Skema Baru Tahap 9A: Tipe Misi `sandbox` (Mode Simulasi Portofolio Fiktif)
+1. **Tipe Misi `sandbox`**:
+   - Skema:
+     ```json
+     {
+       "tipe": "sandbox",
+       "judul": "Coba alokasi aset di Mode Sandbox",
+       "instruksi": "Buka Mode Sandbox, atur pembagian uang fiktifmu, dan jalankan simulasi minimal 1 kali.",
+       "disclaimer": true,
+       "minimalSimulasi": 1
+     }
+     ```
+   - Karakteristik & Validasi:
+     - Wajib memiliki atribut `disclaimer: true` yang menegaskan simulasi bersifat fiktif dan bukan prediksi masa depan.
+     - Wajib memiliki `minimalSimulasi` bernilai integer positif ($\ge 1$).
+     - Terhubung ke `SandboxRepositori` untuk memverifikasi apakah pengguna telah menjalankan minimal simulasi yang diminta.
+     - Menyimpan hasil ke `tabel_hasil_misi`: `status: 'selesai'`, `tipe: 'sandbox'`.
+     - Tipe misi `sandbox` dikecualikan dari aturan *"misi tidak boleh lebih longgar dari gerbang"*.
+
 ---
 
 ## 5. Aturan Penulisan Kalimat & Gaya Bahasa
@@ -309,7 +328,7 @@ Berikut adalah registri kunci umpan balik edukatif yang diolah dari data riil pe
      - Nomor kontak/telepon: urutan angka $\ge 8$ digit tanpa titik pemisah ribuan (misal `0812345678`).
    - Judul pelajaran Modul 5 DILARANG memuat kata label biner seperti `"aman"` atau `"bahaya"`.
 5. **Relasi Misi vs Gerbang Data**:
-   - Misi pada berkas pelajaran **tidak boleh otomatis terpenuhi oleh gerbang pelajarannya sendiri** (misi tidak boleh lebih longgar atau sama dengan gerbang), kecuali bertipe `lihat_hitungan`, `keputusan`, `daftar_periksa`, atau `refleksi`.
+   - Misi pada berkas pelajaran **tidak boleh otomatis terpenuhi oleh gerbang pelajarannya sendiri** (misi tidak boleh lebih longgar atau sama dengan gerbang), kecuali bertipe `lihat_hitungan`, `keputusan`, `daftar_periksa`, `refleksi`, atau `sandbox`.
    - Aturan `semua_kategori_berlabel` terpenuhi **HANYA** bila terdapat minimal 1 kategori pengeluaran yang pernah dipakai dalam transaksi dan seluruhnya berlabel sifat (pada data kosong = belum terpenuhi).
 6. **Contoh Angka Nyata**:
    - Contoh angka wajib menggunakan mata uang Rupiah nominal bulat (`int`).

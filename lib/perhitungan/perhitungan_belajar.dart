@@ -372,6 +372,7 @@ class MisiKonten {
   final String? pertanyaan;
   final String? petunjukInput;
   final int minimalKarakter;
+  final int? minimalSimulasi;
 
   const MisiKonten({
     required this.tipe,
@@ -390,6 +391,7 @@ class MisiKonten {
     this.pertanyaan,
     this.petunjukInput,
     this.minimalKarakter = 10,
+    this.minimalSimulasi,
   });
 
   factory MisiKonten.fromJson(Map<String, dynamic> json) {
@@ -415,6 +417,8 @@ class MisiKonten {
       pertanyaan: json['pertanyaan'] as String?,
       petunjukInput: json['petunjukInput'] as String?,
       minimalKarakter: (json['minimalKarakter'] as num?)?.toInt() ?? 10,
+      minimalSimulasi: (json['minimalSimulasi'] as num?)?.toInt() ??
+          (json['tipe'] == 'sandbox' ? 1 : null),
     );
   }
 }

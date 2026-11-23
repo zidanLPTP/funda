@@ -118,11 +118,12 @@ Sebelum menghapus data lama, aplikasi secara otomatis mengekspor seluruh isi dat
 Untuk mencegah risiko kelalaian developer saat menambahkan tabel baru pada `BasisDataFunda` di masa depan:
 - Uji penjaga otomatis `test/data/cadangan_test.dart` (butir 1) membaca seluruh tabel terdaftar di skema SQLite dan Drift (`basisData.allTables`).
 - Uji ini memastikan setiap tabel baru **wajib** ikut diekspor ke dalam cadangan, kecuali bila tabel tersebut secara eksplisit terdaftar di dalam himpunan `CadanganRepositori.tabelDikecualikan`.
-- Saat ini `CadanganRepositori.tabelDikecualikan` bernilai kosong (`{}`), menegaskan bahwa seluruh tabel data pengguna wajib tercakup dalam cadangan.
+- Pada Tahap 9A, tabel `tabel_sesi_sandbox` didaftarkan ke dalam `CadanganRepositori.tabelDikecualikan` (`{'tabel_sesi_sandbox'}`) untuk menjamin isolasi total data simulasi portofolio fiktif agar tidak bercampur atau masuk ke dalam cadangan data riil pengguna.
 
 ### B. Registri Peningkat Cadangan (RegistriPeningkatCadangan)
 Jika berkas cadangan yang dipulihkan dibuat pada versi skema masa lalu (`versiSkema < basisData.schemaVersion`), kelas `RegistriPeningkatCadangan` secara berantai menjalankan transformasi data antarversi sebelum disisipkan ke basis data:
 - Konstanta `versiSkemaCadanganPertama = 10;` menandai versi skema awal saat fitur cadangan diperkenalkan di Tahap 7.
+- Pada Tahap 9A, skema dinaikkan ke versi `11` dengan penambahan peningkat skema v10 -> v11 di `RegistriPeningkatCadangan`.
 - Uji penjaga otomatis (butir 2) memastikan bahwa untuk setiap rentang versi `v` dari `versiSkemaCadanganPertama` hingga `schemaVersion - 1`, **wajib** terdaftar sebuah fungsi `FungsiPeningkatTabel` di `RegistriPeningkatCadangan`. Bila ada versi skema yang dinaikkan tanpa mendaftarkan fungsi peningkat, uji otomatis akan langsung gagal.
 
 ---

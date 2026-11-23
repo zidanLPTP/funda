@@ -26,6 +26,7 @@ class RegistriMisi {
     'keputusan',
     'daftar_periksa',
     'refleksi',
+    'sandbox',
   };
 
   /// Mengevaluasi misi berdasarkan foto data pengguna.
@@ -116,6 +117,12 @@ class RegistriMisi {
         return const HasilEvaluasiMisi(
           selesai: false,
           statusTeks: 'Tulis refleksimu pada kolom di atas.',
+        );
+
+      case 'sandbox':
+        return const HasilEvaluasiMisi(
+          selesai: false,
+          statusTeks: 'Jalankan simulasi di Mode Sandbox.',
         );
 
       default:

@@ -5,6 +5,39 @@ Format penulisan mengacu pada standar Keep a Changelog dan penamaan commit Funda
 
 ---
 
+## [0.14.0] - 2026-11-23 — Tahap 9A: Mesin Sandbox & Modul 11 "Investasi Dasar"
+
+Tahap 9A menghadirkan Mesin Mode Sandbox untuk simulasi edukasi portofolio investasi uang fiktif dan konten Modul 11 "Investasi Dasar" (tingkat menengah pertama):
+- **Mesin Mode Sandbox Terisolasi Total (`lib/perhitungan/perhitungan_sandbox.dart`, `lib/fitur/sandbox/`):**
+  - Logika murni integer tanpa tipe `double`: alokasi portofolio modal awal fiktif Rp10.000.000 ke tiga instrumen (pasar uang, obligasi, saham).
+  - Tiga skenario pergerakan pasar (Normal +6,4%, Pasar Turun -2,8%, Pasar Naik +11,4%) dengan kalkulasi per tahun deterministik.
+  - Simulasi efek inflasi majemuk integer half-up berulang (Dayung vs Arus).
+  - Skema database `tabel_sesi_sandbox` (migrasi v10 -> v11), repositori `SandboxRepositori`, dan kontroler `penyediaSandbox`.
+  - Isolasi total data fiktif: tidak mempengaruhi data riil pengguna, tidak ada foreign key ke data transaksi, dan dikecualikan dari berkas cadangan (`CadanganRepositori.tabelDikecualikan`).
+  - Penambahan peningkat cadangan v10 -> v11 di `RegistriPeningkatCadangan`.
+- **Tipe Misi Baru `sandbox` (`lib/perhitungan/perhitungan_belajar.dart`, `lib/fitur/belajar/model/registri_misi.dart`, `lib/fitur/belajar/tampilan/layar_pemutar_pelajaran.dart`):**
+  - Model dan registri misi baru tipe `sandbox` dengan validasi `disclaimer: true` dan `minimalSimulasi >= 1`.
+  - Kartu misi interaktif pada pelajaran mikro dengan tombol buka langsung ke Mode Sandbox dan tombol periksa kemajuan simulasi.
+- **Konten Edukasi Resmi Modul 11 (`aset/konten/menengah/investasi_dasar/`):**
+  - `modul.json`: Tingkat `menengah`, urutan 11, gerbang 2 modul (`dana_darurat` dan `utang_cicilan`), bankSoal 10 butir dengan sebaran 11_1 (3), 11_2 (4), 11_3 (3).
+  - `investasi_dasar_11_1.json`: "Kenapa Uang Perlu Bertumbuh?", durasi 5 menit, contohAngka "Uang diam Rp10 juta vs inflasi".
+  - `investasi_dasar_11_2.json`: "Mengenal Tiga Keranjang Dasar", durasi 6 menit, contohAngka "Alokasi Rp10 juta saat pasar turun 20%", misi `sandbox` "Coba alokasi aset di Mode Sandbox".
+  - `investasi_dasar_11_3.json`: "Bunga Berbunga dan Waktu", durasi 5 menit, contohAngka "Efek mulai lebih awal".
+- **Ekstensi Kamus Keuangan (`aset/konten/kamus.json`):**
+  - Menambahkan 8 entri istilah baru persis kata per kata sesuai lampiran resmi: `investasi`, `inflasi`, `pasar uang`, `obligasi`, `saham`, `diversifikasi`, `imbal hasil`, `bunga berbunga` (total 47 istilah tanpa duplikasi).
+- **Antarmuka & Navigasi Mode Sandbox (`lib/fitur/sandbox/tampilan/layar_sandbox.dart`, `lib/aplikasi/rute.dart`, `lib/fitur/lainnya/tampilan/layar_lainnya.dart`):**
+  - Rute `/sandbox` dan menu Mode Sandbox di Tab Lainnya.
+  - Banner penanda `tintAmber`: *"Mode Sandbox — Uang Fiktif (Simulasi, bukan prediksi)"* dan komponen disclaimer langkah dunia nyata.
+  - Slider alokasi aset dengan validasi tepat 100%, kartu bento ringkasan portofolio, pemilih skenario, tombol majukan 1 tahun, dan riwayat simulasi.
+- **Suite Pengujian Unit, Widget & Integrasi (`test/`, `integration_test/`):**
+  - 11 uji unit murni TDD `test/perhitungan/perhitungan_sandbox_test.dart`.
+  - 5 uji repositori `test/data/repositori/sandbox_repositori_test.dart`.
+  - 6 uji widget `test/fitur/layar_sandbox_widget_test.dart` (termasuk aksesibilitas skala teks 2.0 pada 360x640).
+  - 28 uji kesesuaian lampiran kata per kata `test/konten/kesesuaian_lampiran_test.dart`.
+  - Skrip pengujian integrasi `integration_test/tahap_09a_emulator_test.dart`, runner `tool/jalankan_test_dan_tangkapan_layar_tahap_09a.ps1`, dan `tool/buka_terminal_tahap_09a.bat`.
+
+---
+
 ## [0.13.1] - 2026-11-23 — Tahap 8D-R: Revisi & Penyelarasan Lampiran Modul 6
 
 Tahap 8D-R menuntaskan seluruh revisi dan penyelarasan lampiran resmi reviewer untuk Modul 6 ("Psikologi Uang & Kebiasaan Belanja"):
