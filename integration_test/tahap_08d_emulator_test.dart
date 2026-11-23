@@ -235,12 +235,12 @@ void main() {
     await mintaTangkapanLayar('tahap_08d_02_modul_6_terbuka');
 
     // =========================================================================
-    // 3. PELAJARAN 6.1: Misi Refleksi "Tulis pemicu belanjamu"
+    // 3. PELAJARAN 6.1: Misi Refleksi "Kenali pemicu belanjamu"
     // =========================================================================
-    debugPrint('=== [LANGKAH 3]: Pelajaran 6.1 - Misi Refleksi Tulis pemicu belanjamu ===');
+    debugPrint('=== [LANGKAH 3]: Pelajaran 6.1 - Misi Refleksi Kenali pemicu belanjamu ===');
     tester.element(find.byType(Scaffold).first).push('/belajar/pelajaran/psikologi_uang/psikologi_uang_6_1');
     await tester.pump();
-    await pompaHinggaAda(tester, find.text('Mengenali Pemicu Belanja Impulsif'));
+    await pompaHinggaAda(tester, find.text('Kenapa Kita Belanja Impulsif?'));
     await pompaHinggaAda(tester, find.byKey(const Key('tombol_lanjut')));
 
     // Maju ke Cek Paham
@@ -278,8 +278,8 @@ void main() {
     await tester.tap(btnKeMisi61);
     await tester.pump();
 
-    await pompaHinggaAda(tester, find.text('Tulis pemicu belanjamu'));
-    expect(find.text('Tulis pemicu belanjamu'), findsOneWidget);
+    await pompaHinggaAda(tester, find.text('Kenali pemicu belanjamu'));
+    expect(find.text('Kenali pemicu belanjamu'), findsOneWidget);
 
     // Assert disclaimer privat tampil di kartu refleksi
     const teksPrivat = 'Privat di perangkatmu: tulisan ini hanya tersimpan di HP-mu dan tidak pernah dikirim ke mana pun.';
@@ -337,12 +337,12 @@ void main() {
     debugPrint('[VERIFIKASI DB SUKSES]: tabel_hasil_misi psikologi_uang_6_1 tercatat refleksi privat');
 
     // =========================================================================
-    // 4. PELAJARAN 6.2: Misi Lihat Hitungan "Hitung langganan & pengeluaran keinginanmu"
+    // 4. PELAJARAN 6.2: Misi Lihat Hitungan "Lihat langganan dan keinginanmu"
     // =========================================================================
     debugPrint('=== [LANGKAH 4]: Pelajaran 6.2 - Misi Lihat Hitungan Ringkasan Langganan & Keinginan ===');
     tester.element(find.byType(Scaffold).first).push('/belajar/pelajaran/psikologi_uang/psikologi_uang_6_2');
     await tester.pump();
-    await pompaHinggaAda(tester, find.text('Jebakan Langganan & "Bocor Halus"'));
+    await pompaHinggaAda(tester, find.text('Langganan dan Pengeluaran Diam-Diam'));
     await pompaHinggaAda(tester, find.byKey(const Key('tombol_lanjut')));
 
     // Maju ke Cek Paham
@@ -380,16 +380,13 @@ void main() {
     await tester.tap(btnKeMisi62);
     await tester.pump();
 
-    await pompaHinggaAda(tester, find.text('Hitung langganan & pengeluaran keinginanmu'));
-    expect(find.text('Hitung langganan & pengeluaran keinginanmu'), findsOneWidget);
+    await pompaHinggaAda(tester, find.text('Lihat langganan dan keinginanmu'));
+    expect(find.text('Lihat langganan dan keinginanmu'), findsOneWidget);
 
-    // Assert rincian umpan balik tampil: 2 langganan aktif, pengeluaran keinginan Rp150.000, total Rp390.000
-    await pompaHinggaAda(tester, find.textContaining('Spotify Premium: Rp54.000/bln'));
-    expect(find.textContaining('Spotify Premium: Rp54.000/bln'), findsOneWidget);
-    expect(find.textContaining('Netflix: Rp186.000/bln'), findsOneWidget);
-    expect(find.textContaining('Total langganan aktif: 2 layanan (Rp240.000/bln)'), findsOneWidget);
-    expect(find.textContaining('Pengeluaran keinginan bulan ini: Rp150.000'), findsOneWidget);
-    expect(find.textContaining('Total komitmen & keinginan: Rp390.000/bln'), findsOneWidget);
+    // Assert rincian umpan balik STRING LENGKAP
+    const teksUmpanBalik62 = 'Kamu punya 2 langganan aktif dengan perkiraan sekitar Rp240.000 per bulan. Pengeluaran keinginanmu bulan ini tercatat Rp150.000. Ini gambaran untuk kamu kenali, bukan penilaian.';
+    await pompaHinggaAda(tester, find.text(teksUmpanBalik62));
+    expect(find.text(teksUmpanBalik62), findsOneWidget);
     await mintaTangkapanLayar('tahap_08d_06_pelajaran_6_2_umpan_balik');
 
     // Selesaikan Pelajaran 6.2
@@ -404,12 +401,12 @@ void main() {
     await tester.pump();
 
     // =========================================================================
-    // 5. PELAJARAN 6.3: Misi Refleksi "Pilih aturan jedamu"
+    // 5. PELAJARAN 6.3: Misi Refleksi "Tulis aturan jedamu sendiri"
     // =========================================================================
-    debugPrint('=== [LANGKAH 5]: Pelajaran 6.3 - Misi Refleksi Pilih aturan jedamu ===');
+    debugPrint('=== [LANGKAH 5]: Pelajaran 6.3 - Misi Refleksi Tulis aturan jedamu sendiri ===');
     tester.element(find.byType(Scaffold).first).push('/belajar/pelajaran/psikologi_uang/psikologi_uang_6_3');
     await tester.pump();
-    await pompaHinggaAda(tester, find.text('Membangun Jeda Sebelum Membeli'));
+    await pompaHinggaAda(tester, find.text('Aturan Jeda Sebelum Membeli'));
     await pompaHinggaAda(tester, find.byKey(const Key('tombol_lanjut')));
 
     // Maju ke Cek Paham
@@ -447,8 +444,8 @@ void main() {
     await tester.tap(btnKeMisi63);
     await tester.pump();
 
-    await pompaHinggaAda(tester, find.text('Pilih aturan jedamu'));
-    expect(find.text('Pilih aturan jedamu'), findsOneWidget);
+    await pompaHinggaAda(tester, find.text('Tulis aturan jedamu sendiri'));
+    expect(find.text('Tulis aturan jedamu sendiri'), findsOneWidget);
 
     // Isi Refleksi 6.3
     const jawabanRefleksi63 = 'Saya memilih aturan jeda 24 jam untuk pembelian non-esensial di atas Rp100.000.';

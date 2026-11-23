@@ -1156,7 +1156,10 @@ void main() {
       expect(p['judul'], equals('Aturan Jeda Sebelum Membeli'));
       expect(p['durasiMenit'], equals(5));
       expect(p['aturanPraktis'], isTrue);
-      expect(p['catatanReviewer'], contains('TODO-VERIFIKASI'));
+      const catatanReviewerEkspektasi =
+          'TODO-VERIFIKASI. Aturan jeda (menunggu 24 jam atau beberapa hari sebelum membeli keinginan) adalah teknik perilaku populer di literasi keuangan; periksa kecocokan redaksinya sebagai pedoman fleksibel.';
+      expect(p['catatanReviewer'], equals(catatanReviewerEkspektasi));
+      expect(isiMateriLampiran, contains(catatanReviewerEkspektasi), reason: 'catatanReviewer harus persis muncul di lampiran markdown');
       expect(p['gerbang'], isEmpty);
 
       final misi = p['misi'] as Map<String, dynamic>;

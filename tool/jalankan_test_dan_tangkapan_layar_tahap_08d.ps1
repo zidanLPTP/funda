@@ -27,8 +27,9 @@ Write-Host "Tangkapan layar di: $folder"
 Write-Host "================================================================="
 
 $devicesOutput = & "$adb" devices
+$devicesText = ($devicesOutput | Out-String)
 $deviceId = "emulator-5554"
-if ($devicesOutput -match '(emulator-\d+)\s+device') {
+if ($devicesText -match '(emulator-\d+)\s+device') {
     $deviceId = $Matches[1]
     Write-Host "Ditemukan device aktif: $deviceId"
 } else {

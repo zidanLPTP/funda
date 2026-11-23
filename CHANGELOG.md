@@ -5,7 +5,24 @@ Format penulisan mengacu pada standar Keep a Changelog dan penamaan commit Funda
 
 ---
 
-## [0.13.0] - 2026-11-23 — Tahap 8D: Modul 6 "Psikologi Uang & Kebiasaan Belanja" + Tipe Misi Refleksi + Penutupan Seluruh Tingkat Pemula
+## [0.13.1] - 2026-11-23 — Tahap 8D-R: Revisi & Penyelarasan Lampiran Modul 6
+
+Tahap 8D-R menuntaskan seluruh revisi dan penyelarasan lampiran resmi reviewer untuk Modul 6 ("Psikologi Uang & Kebiasaan Belanja"):
+- **Penyelarasan Judul & Durasi Pelajaran (Butir A):** Menyelaraskan berkas konten JSON persis ke judul dan durasi resmi lampiran:
+  - `psikologi_uang_6_1`: judul `"Kenapa Kita Belanja Impulsif?"`, durasi `5` menit.
+  - `psikologi_uang_6_2`: judul `"Langganan dan Pengeluaran Diam-Diam"`, durasi `5` menit.
+  - `psikologi_uang_6_3`: judul `"Aturan Jeda Sebelum Membeli"`, durasi `5` menit, `aturanPraktis: true`, dan `catatanReviewer` persis teks lampiran (`"TODO-VERIFIKASI. Aturan jeda (menunggu 24 jam atau beberapa hari sebelum membeli keinginan) adalah teknik perilaku populer di literasi keuangan; periksa kecocokan redaksinya sebagai pedoman fleksibel."`).
+- **Penyelarasan Kesesuaian Lampiran & Uji Unit (Butir A & B):**
+  - Memperluas `test/konten/kesesuaian_lampiran_test.dart` untuk memverifikasi secara ketat judul, durasi, dan teks `catatanReviewer` terhadap markdown lampiran resmi.
+  - Memperbaiki kutipan laporan dan menegaskan implementasi `formatRingkasanLanggananDanKeinginan` sesuai prompt Bagian 2.2, dengan assertion string lengkap pada vektor V1 sampai V5 di `test/perhitungan/perhitungan_umpan_balik_tahap_08d_test.dart`.
+- **Pengujian Integrasi Emulator & Otomasi Runner (Butir C):**
+  - Memperbaiki parsing deteksi device ID pada skrip `tool/jalankan_test_dan_tangkapan_layar_tahap_08d.ps1`.
+  - Menyiapkan berkas batch launcher interaktif `tool/buka_terminal_tahap_08d.bat` untuk menjalankan pengujian integrasi di jendela terminal baru pengguna.
+- **Verifikasi Bukti Analisis & Pengujian Penuh (Butir D):**
+  - Menyimpan keluaran lengkap `flutter analyze` ke `docs/bukti/tahap_08d_r_flutter_analyze.txt` (bersih tanpa galat).
+  - Menyimpan keluaran lengkap `flutter test --reporter expanded` ke `docs/bukti/tahap_08d_r_flutter_test.txt` (537 pengujian lulus 100%).
+
+---
 
 Tahap 8D menuntaskan seluruh kurikulum Tingkat Pemula (Modul 0 sampai Modul 6) dengan mengimplementasikan Modul 6 ("Psikologi Uang & Kebiasaan Belanja": 3 pelajaran, 1 kuis 5 dari 10 bankSoal sebaran 4/3/3, 4 entri kamus baru), tipe misi baru `refleksi` (jawaban teks privat tersimpan lokal di perangkat pengguna), satu fungsi murni umpan balik baru `ringkasan_langganan_dan_keinginan`, penutupan seluruh kurikulum Pemula pada petak Beranda, pengujian unit murni TDD, evaluasi registri misi, pengujian widget, benchmark beban komputasi Tab Belajar, dan pengujian integrasi E2E emulator.
 
