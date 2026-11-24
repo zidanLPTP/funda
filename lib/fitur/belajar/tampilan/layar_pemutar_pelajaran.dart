@@ -14,6 +14,7 @@ import '../../../tema/token.dart';
 import '../kontroler/penyedia_belajar.dart';
 import '../model/pembaca_konten.dart';
 import '../model/registri_misi.dart';
+import '../../transaksi/tampilan/layar_form_transaksi.dart';
 import 'komponen_teks_istilah.dart';
 
 /// Layar pemutar pelajaran kartu geser berurutan (Micro-learning Funda).
@@ -872,7 +873,16 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
               lebarPenuh: true,
               padaTekan: () {
                 final rute = ambilRutePengisianObjek(misi.objek) ?? '/catatan';
-                context.push(rute);
+                if (rute == '/catatan' || rute == '/transaksi/tambah') {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const LayarFormTransaksi(),
+                    ),
+                  );
+                } else {
+                  context.push(rute);
+                }
               },
             ),
             const SizedBox(height: SpasiFunda.s),

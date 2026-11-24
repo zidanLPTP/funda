@@ -22,6 +22,7 @@ import '../fitur/sandbox/tampilan/layar_sandbox.dart';
 import '../fitur/tagihan/tampilan/layar_form_tagihan.dart';
 import '../fitur/tagihan/tampilan/layar_jadwal_tagihan.dart';
 import '../fitur/tagihan/tampilan/layar_semua_tagihan.dart';
+import '../fitur/transaksi/tampilan/layar_form_transaksi.dart';
 import '../fitur/tujuan/tampilan/layar_daftar_tujuan.dart';
 import '../fitur/tujuan/tampilan/layar_detail_tujuan.dart';
 import '../fitur/utang/tampilan/layar_daftar_utang.dart';
@@ -84,6 +85,13 @@ final ruteFunda = GoRouter(
           ],
         ),
       ],
+    ),
+
+    // Rute Fitur Tahap 2: Transaksi (Form Tambah Transaksi Modal)
+    GoRoute(
+      parentNavigatorKey: _kunciNavigatorAkar,
+      path: '/transaksi/tambah',
+      builder: (context, state) => const LayarFormTransaksi(),
     ),
 
     // Rute Fitur Tahap 3A: Anggaran, Tujuan, Kantong

@@ -83,6 +83,7 @@ class _LayarCatatanState extends ConsumerState<LayarCatatan> {
   KondisiFilterTransaksi _filter = const KondisiFilterTransaksi();
   String _kataKunci = '';
   int _limit = 50;
+  bool _sedangMemuatHalamanBerikutnya = false;
 
   @override
   void initState() {
@@ -91,11 +92,20 @@ class _LayarCatatanState extends ConsumerState<LayarCatatan> {
   }
 
   void _padaGulir() {
-    if (_pengontrolGulir.position.pixels >=
-        _pengontrolGulir.position.maxScrollExtent - 200) {
-      if (_limit < 100000) {
+    if (!_pengontrolGulir.hasClients) return;
+    final posisi = _pengontrolGulir.position;
+    // Cegah infinite loop jika list kosong atau pendek (maxScrollExtent <= 200)
+    if (posisi.maxScrollExtent > 200 &&
+        posisi.pixels >= posisi.maxScrollExtent - 200) {
+      if (!_sedangMemuatHalamanBerikutnya && _limit < 10000) {
+        _sedangMemuatHalamanBerikutnya = true;
         setState(() {
           _limit += 50;
+        });
+        Future.delayed(const Duration(milliseconds: 300), () {
+          if (mounted) {
+            _sedangMemuatHalamanBerikutnya = false;
+          }
         });
       }
     }
@@ -134,33 +144,40 @@ class _LayarCatatanState extends ConsumerState<LayarCatatan> {
 
   @override
   Widget build(BuildContext context) {
-    final daftarDompetAktif = ref.watch(penyediaDaftarDompetAktif).value ?? [];
-    final daftarSemuaDompet = ref.watch(penyediaDaftarDompet).value ?? [];
+    final dompetAktifAsync = ref.watch(penyediaDaftarDompetAktif);
+    final semuaDompetAsync = ref.watch(penyediaDaftarDompet);
+
+    // Tampilkan pemuat saat data dompet pertama kali diambil
+    if (dompetAktifAsync.isLoading && !dompetAktifAsync.hasValue) {
+      return PembungkusLayar(
+        appBar: AppBar(
+          leading: Navigator.canPop(context) ? const BackButton() : null,
+          title: const TeksFunda.judulBagian('Catatan Keuangan'),
+        ),
+        anak: const Center(child: IndikatorMemuat()),
+      );
+    }
+
+    final daftarDompetAktif = dompetAktifAsync.value ?? [];
+    final daftarSemuaDompet = semuaDompetAsync.value ?? [];
     final daftarKategori = ref.watch(penyediaDaftarKategori).value ?? [];
-    final repoTransaksi = ref.watch(penyediaTransaksiRepositori);
 
     DateTime? mulai;
     DateTime? selesai;
     final sekarang = DateTime.now();
+    final hariIni = DateTime(sekarang.year, sekarang.month, sekarang.day);
     switch (_filter.rentang) {
       case RentangWaktuFilter.hariIni:
-        mulai = DateTime(sekarang.year, sekarang.month, sekarang.day);
-        selesai = DateTime(
-          sekarang.year,
-          sekarang.month,
-          sekarang.day,
-          23,
-          59,
-          59,
-        );
+        mulai = hariIni;
+        selesai = DateTime(hariIni.year, hariIni.month, hariIni.day, 23, 59, 59);
         break;
       case RentangWaktuFilter.tujuhHari:
-        mulai = sekarang.subtract(const Duration(days: 7));
-        selesai = sekarang;
+        mulai = hariIni.subtract(const Duration(days: 7));
+        selesai = DateTime(hariIni.year, hariIni.month, hariIni.day, 23, 59, 59);
         break;
       case RentangWaktuFilter.bulanIni:
-        mulai = DateTime(sekarang.year, sekarang.month, 1);
-        selesai = DateTime(sekarang.year, sekarang.month + 1, 0, 23, 59, 59);
+        mulai = DateTime(hariIni.year, hariIni.month, 1);
+        selesai = DateTime(hariIni.year, hariIni.month + 1, 0, 23, 59, 59);
         break;
       case RentangWaktuFilter.semua:
         break;
@@ -186,7 +203,10 @@ class _LayarCatatanState extends ConsumerState<LayarCatatan> {
     if (daftarDompetAktif.isEmpty && daftarSemuaDompet.isEmpty) {
       return PembungkusLayar(
         bisaGulir: true,
-        appBar: AppBar(title: const TeksFunda.judulBagian('Catatan Keuangan')),
+        appBar: AppBar(
+          leading: Navigator.canPop(context) ? const BackButton() : null,
+          title: const TeksFunda.judulBagian('Catatan Keuangan'),
+        ),
         anak: KeadaanKosong(
           ikon: LucideIcons.wallet,
           judul: 'Belum Ada Dompet',
@@ -205,6 +225,7 @@ class _LayarCatatanState extends ConsumerState<LayarCatatan> {
 
     return PembungkusLayar(
       appBar: AppBar(
+        leading: Navigator.canPop(context) ? const BackButton() : null,
         title: const TeksFunda.judulBagian('Catatan Keuangan'),
         actions: [
           IconButton(
@@ -379,16 +400,6 @@ class _LayarCatatanState extends ConsumerState<LayarCatatan> {
                     }
                     final selisihHariLokal = masukHari - keluarHari;
 
-                    final awalHari = DateTime(hari.year, hari.month, hari.day);
-                    final akhirHari = DateTime(
-                      hari.year,
-                      hari.month,
-                      hari.day,
-                      23,
-                      59,
-                      59,
-                    );
-
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -407,21 +418,11 @@ class _LayarCatatanState extends ConsumerState<LayarCatatan> {
                                 ).format(hari),
                                 warna: WarnaFunda.teksRedup,
                               ),
-                              FutureBuilder<int>(
-                                future: repoTransaksi.hitungSubjumlahHarianSQL(
-                                  awalHari: awalHari,
-                                  akhirHari: akhirHari,
-                                ),
-                                builder: (context, snapshot) {
-                                  final selisihHari =
-                                      snapshot.data ?? selisihHariLokal;
-                                  return TeksFunda.catatan(
-                                    '${selisihHari >= 0 ? '+' : ''}${formatRupiah(selisihHari)}',
-                                    warna: selisihHari >= 0
-                                        ? WarnaFunda.pemasukan
-                                        : WarnaFunda.pengeluaran,
-                                  );
-                                },
+                              TeksFunda.catatan(
+                                '${selisihHariLokal >= 0 ? '+' : ''}${formatRupiah(selisihHariLokal)}',
+                                warna: selisihHariLokal >= 0
+                                    ? WarnaFunda.pemasukan
+                                    : WarnaFunda.pengeluaran,
                               ),
                             ],
                           ),

@@ -7,6 +7,9 @@ import '../util/haptic.dart';
 void tampilkanEfekPerayaan(BuildContext context) {
   UtilHaptic.suksesBesar();
 
+  // Hormati preferensi aksesibilitas bebas animasi pengguna
+  if (MediaQuery.disableAnimationsOf(context)) return;
+
   final overlay = Overlay.maybeOf(context);
   if (overlay == null) return;
 
@@ -14,7 +17,9 @@ void tampilkanEfekPerayaan(BuildContext context) {
   entri = OverlayEntry(
     builder: (ctx) => _WidgetPerayaan(
       onSelesai: () {
-        entri.remove();
+        if (entri.mounted) {
+          entri.remove();
+        }
       },
     ),
   );
@@ -73,6 +78,7 @@ class _WidgetPerayaanState extends State<_WidgetPerayaan>
   @override
   void dispose() {
     _kontroler.dispose();
+    widget.onSelesai();
     super.dispose();
   }
 

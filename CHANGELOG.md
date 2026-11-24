@@ -5,6 +5,31 @@ Format penulisan mengacu pada standar Keep a Changelog dan penamaan commit Funda
 
 ---
 
+## [1.0.2] - 2026-11-24 — Tahap 13A: Hotfix Kritis Navigasi, Layar Catatan & ANR
+
+Tahap 13A merupakan pembaruan hotfix kritis setelah pengujian langsung pada perangkat Android fisik untuk memperbaiki 3 kendala utama:
+- **Bug 1: Navigasi Tombol "Kerjakan Sekarang" pada Misi Praktik Nyata:**
+  - Menambahkan rute modal root `/transaksi/tambah` pada `lib/aplikasi/rute.dart` dengan `parentNavigatorKey: _kunciNavigatorAkar` yang membungkus `LayarFormTransaksi`.
+  - Di `lib/fitur/belajar/tampilan/layar_pemutar_pelajaran.dart`, tombol "Kerjakan Sekarang" diarahkan langsung ke `LayarFormTransaksi()` via modal `Navigator.push` jika target misi mengarah ke pencatatan transaksi (`/catatan` atau `/transaksi/tambah`), lengkap dengan tombol kembali (`AppBar(leading: BackButton())`) sehingga layar tidak kosong dan pengguna dapat kembali ke pemutar pelajaran setelah selesai mencatat.
+- **Bug 2: Stabilitas Tab Catatan & Navigasi Antar Tab Pasca Modul Selesai:**
+  - Memperbaiki `_padaGulir` di `ScrollController` pada `lib/fitur/catatan/tampilan/layar_catatan.dart`: menambahkan proteksi `_pengontrolGulir.hasClients`, guard `maxScrollExtent > 200`, dan flag `_sedangMemuatHalamanBerikutnya` untuk mencegah siklus pemuatan data tak hingga ketika daftar transaksi pendek atau kosong.
+  - Memperbaiki stabilitas filter tanggal di `LayarCatatan`: menggunakan tanggal awal dan akhir hari bulat (`DateTime(hari.year, hari.month, hari.day)`) untuk parameter kueri transaksi, mencegah instansiasi `DateTime.now()` baru pada setiap frame `build()` yang memicu pembatalan dan pembukaan ulang stream SQLite (`penyediaAliranTransaksi`) secara berulang.
+  - Menghilangkan kueri N+1 `repoTransaksi.hitungSubjumlahHarianSQL` di dalam `ListView.builder` dan menggantinya dengan agregasi sinkron per tanggal (`selisihHariLokal`).
+  - Menangani status pemuatan awal dompet (`aliranDompet.isLoading`) dengan menampilkan `IndikatorMemuat()` alih-alih langsung memvonis tampilan kosong (`KeadaanKosong`).
+- **Bug 3: Pencegahan "Funda Tidak Menanggapi" (ANR / UI Freeze):**
+  - Mengeliminasi loop pemicu *rebuild storm* dan *stream thrashing* di `LayarCatatan`.
+  - Pada `lib/komponen/efek_perayaan.dart`: memastikan `MediaQuery.disableAnimationsOf(context)` dihormati, memanggil `widget.onSelesai()` saat `dispose()`, serta memverifikasi `if (entri.mounted) entri.remove()` agar tidak terjadi kebocoran `OverlayEntry` saat layar ditutup sebelum animasi perayaan berakhir.
+- **Pengujian Regresi Komprehensif:**
+  - Menambahkan berkas pengujian regresi `test/fitur/regresi_navigasi_catatan_test.dart` yang menguji 6 skenario kritis:
+    1. Tombol "Kerjakan Sekarang" membuka form transaksi dengan input dan tombol simpan lengkap.
+    2. Navigasi kembali dari form transaksi ke pemutar pelajaran bekerja normal.
+    3. Tab Catatan menampilkan widget lengkap dan daftar transaksi setelah modul & kuis diselesaikan.
+    4. Navigasi bolak-balik antar 4 tab (`Beranda`, `Catatan`, `Belajar`, `Lainnya`) konsisten tanpa dilempar ke Beranda.
+    5. Layar catatan kosong tidak memicu siklus pemuatan tak hingga (`ScrollController`).
+    6. Efek perayaan tidak membocorkan `OverlayEntry` setelah selesai atau saat layar di-pop.
+
+---
+
 ## [1.0.0] - 2026-11-24 — Tahap 12: Polesan, Audit Akhir & Kesiapan Rilis v1.0 (Rilis Publik Perdana v1.0.0+1)
 
 Tahap 12 merupakan tahap penutup dari seluruh roadmap pengembangan Funda v1.0, mencakup audit menyeluruh kode, token UI, bahasa, privasi log rilis, keamanan izin, dan kompilasi APK rilis:
