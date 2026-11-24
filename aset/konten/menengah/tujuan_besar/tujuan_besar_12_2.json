@@ -1,0 +1,81 @@
+{
+  "id": "tujuan_besar_12_2",
+  "modulId": "tujuan_besar",
+  "judul": "Menghitung Proyeksi dan Dampak Kenaikan Harga",
+  "durasiMenit": 5,
+  "status": "draf",
+  "catatanReviewer": "TODO-VERIFIKASI. Ilustrasi kenaikan biaya pendidikan/tujuan jangka panjang bersifat edukatif umum, bukan proyeksi resmi.",
+  "pemantik": "Biaya kuliah atau rumah hari ini Rp50.000.000. Lima tahun lagi, apakah harganya masih sama?",
+  "kartu": [
+    {
+      "judul": "Hitung dengan proyeksi yang sadar",
+      "isi": "{{Proyeksi keuangan}} adalah perkiraan angka di masa depan berdasarkan data dan asumsi yang kamu pakai hari ini. Untuk tujuan lebih dari tiga tahun, ada baiknya mengingat bahwa harga barang dan jasa cenderung naik dari waktu ke waktu."
+    },
+    {
+      "judul": "Siapkan ruang cadangan pada target",
+      "isi": "Kamu tidak perlu rumus rumit untuk memulai. Menambahkan sedikit ruang cadangan pada target jangka panjang, atau meninjau ulang target setahun sekali, sudah cukup membantu menjaga rencanamu tetap relevan."
+    },
+    {
+      "judul": "Cek kemajuan secara berkala",
+      "isi": "Di Funda, kamu bisa melihat persentase dan sisa target tujuanmu kapan saja. Mengecek kemajuan setiap beberapa bulan membantumu tahu apakah setoranmu masih sesuai jalur atau perlu disesuaikan."
+    }
+  ],
+  "contohAngka": {
+    "judul": "Ilustrasi target biaya pendidikan Rp30.000.000 dengan ruang cadangan",
+    "baris": [
+      {
+        "label": "Perkiraan biaya hari ini",
+        "jumlah": 30000000
+      },
+      {
+        "label": "Tambahan ruang cadangan kenaikan harga (ilustrasi)",
+        "jumlah": 6000000
+      },
+      {
+        "label": "Target perencanaan yang lebih lega",
+        "jumlah": 36000000,
+        "ringkasan": true
+      }
+    ],
+    "kesimpulan": "Memberi ruang cadangan pada tujuan jangka panjang mencegahmu kekurangan dana saat harinya tiba."
+  },
+  "cekPaham": [
+    {
+      "tanya": "Mengapa tujuan jangka panjang lebih dari tiga tahun perlu mempertimbangkan kenaikan harga?",
+      "pilihan": [
+        "Karena biaya barang dan jasa cenderung naik dari waktu ke waktu",
+        "Karena harga semua barang pasti turun",
+        "Karena uang tunai bertambah sendiri"
+      ],
+      "benar": 0,
+      "penjelasan": "Memperhitungankan kenaikan harga membuat targetmu lebih realistis saat waktunya tiba."
+    },
+    {
+      "tanya": "Apa cara sederhana menjaga target jangka panjang tetap relevan?",
+      "pilihan": [
+        "Meninjau ulang target dan setoran minimal setahun sekali",
+        "Tidak pernah membuka catatan tujuan lagi",
+        "Mengubah target setiap jam"
+      ],
+      "benar": 0,
+      "penjelasan": "Evaluasi berkala membantumu menyesuaikan rencana dengan harga dan penghasilan terbaru."
+    },
+    {
+      "tanya": "Apa yang dimaksud dengan proyeksi keuangan?",
+      "pilihan": [
+        "Perkiraan angka keuangan di masa depan berdasarkan data dan asumsi saat ini",
+        "Janji keuntungan pasti",
+        "Catatan belanja kemarin"
+      ],
+      "benar": 0,
+      "penjelasan": "Proyeksi adalah alat bantu perencanaan, bukan kepastian mutlak."
+    }
+  ],
+  "misi": {
+    "tipe": "lihat_hitungan",
+    "judul": "Lihat proyeksi tujuan besarmu",
+    "instruksi": "Buka ringkasan proyeksi tujuan besarmu saat ini, baca angkanya, lalu tekan Mengerti.",
+    "umpanBalik": "ringkasan_tujuan_besar"
+  },
+  "tindakLanjut": "Jadwalkan evaluasi tahunan di kalendermu untuk mengecek ulang target dan kemajuan tujuan besarmu."
+}

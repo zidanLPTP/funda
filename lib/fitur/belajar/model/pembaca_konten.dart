@@ -93,6 +93,7 @@ class PembacaKonten {
     'ringkasan_proteksi_dasar',
     'ringkasan_pemasukan_tambahan',
     'ringkasan_penghasilan_tahunan',
+    'ringkasan_tujuan_besar',
   };
 
   /// Mengurai string JSON kamus menjadi daftar istilah terindeks.

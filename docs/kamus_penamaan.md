@@ -157,6 +157,8 @@
 | single income source declaration | baru_satu_sumber | Kunci pernyataan pengguna yang baru memiliki satu sumber penghasilan |
 | side income summary feedback | ringkasan_pemasukan_tambahan | Umpan balik analisis sebaran sumber dan nominal pemasukan bulan berjalan |
 | annual income summary feedback | ringkasan_penghasilan_tahunan | Umpan balik rekapitulasi total pemasukan tahun berjalan untuk persiapan pelaporan pajak |
+| big goals summary feedback | ringkasan_tujuan_besar | Umpan balik proyeksi setoran bulanan dan evaluasi target tujuan non-dana-darurat |
+| big goal feedback data | DataTujuanBesarUmpanBalik | Model data evaluasi kandidat tujuan finansial besar |
 
 ## Aturan Cabang Kerja (Git)
 - Setiap tahap dikerjakan pada cabang khusus (contoh: `tahap-02-dompet-transaksi`).

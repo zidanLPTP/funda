@@ -582,6 +582,20 @@ Berkas ini adalah sumber kebenaran teks (*single source of truth*) untuk antarmu
    - Merangkum total akumulasi pemasukan sepanjang tahun berjalan dan jumlah bulan kalender yang memiliki catatan pemasukan.
    - Dilengkapi penegasan eksplisit bahwa ringkasan ini adalah edukasi umum dan bukan nasihat pajak berlisensi.
 
+---
+
+## 14. Kunci Umpan Balik On-Demand Misi Belajar Tahap 10B (Modul 12)
+
+### 14.1 `ringkasan_tujuan_besar`
+- **Konteks:** Digunakan pada misi tipe `lihat_hitungan` pelajaran 12.2 ("Menghitung Proyeksi dan Dampak Kenaikan Harga").
+- **Karakteristik:** Dipanggil secara on-demand saat misi 12.2 dibuka tanpa menambah kueri di `FotoDataRepositori`.
+- **Logika Perhitungan & Seleksi:**
+  - Masukan: daftar tujuan non-dana-darurat milik pengguna (`nama`, `targetRupiah`, `danaTerkumpulRupiah`, `bulanTersisa`, `jenis`, `dibuatPada`).
+  - Seleksi: utamakan tujuan bertipe `tujuan_besar` dengan tenggat paling dekat (`bulanTersisa` terkecil). Jika seri/tanpa tenggat, pilih yang paling baru dibuat. Jika tidak ada jenis `tujuan_besar`, pilih tujuan non-dana-darurat dengan target nominal terbesar.
+  - Perhitungan setoran bulanan integer bulat ke atas: `setoran = (sisa + bulan - 1) ~/ bulan`.
+  - Penutup tetap edukatif: *"Fokus pada satu atau dua tujuan utama lebih mudah dijalankan daripada mengejar semuanya sekaligus."*
+
+
 
 
 

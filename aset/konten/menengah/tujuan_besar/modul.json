@@ -1,20 +1,151 @@
 {
-    "kuis":  {
-                 "jumlahSoal":  0,
-                 "bankSoal":  [
-
-                              ]
-             },
-    "id":  "tujuan_besar",
-    "tersedia":  false,
-    "urutan":  12,
-    "gerbang":  [
-
-                ],
-    "deskripsiSingkat":  "Merencanakan pernikahan, hunian pertama, pendidikan, dan proyeksi jangka panjang.",
-    "daftarPelajaran":  [
-
-                        ],
-    "tingkat":  "menengah",
-    "judul":  "Tujuan Besar \u0026 Perencanaan"
+  "id": "tujuan_besar",
+  "judul": "Tujuan Besar & Perencanaan",
+  "tingkat": "menengah",
+  "urutan": 12,
+  "deskripsiSingkat": "Merencanakan pernikahan, hunian pertama, pendidikan, dan proyeksi jangka panjang.",
+  "tersedia": true,
+  "gerbang": [
+    {
+      "tipe": "modul_selesai",
+      "modulId": "tabungan",
+      "pesan": "Selesaikan Modul 2 (Tabungan) dulu dan buat minimal satu tujuan, supaya kita bisa merencanakan tujuan besarmu dengan data nyata."
+    },
+    {
+      "tipe": "ada_data",
+      "objek": "tujuan",
+      "min": 1,
+      "pesan": "Selesaikan Modul 2 (Tabungan) dulu dan buat minimal satu tujuan, supaya kita bisa merencanakan tujuan besarmu dengan data nyata."
+    }
+  ],
+  "daftarPelajaran": [
+    "tujuan_besar_12_1",
+    "tujuan_besar_12_2",
+    "tujuan_besar_12_3"
+  ],
+  "kuis": {
+    "jumlahSoal": 5,
+    "bankSoal": [
+      {
+        "id": "soal_12_1",
+        "pelajaranId": "tujuan_besar_12_1",
+        "tanya": "Apa langkah pertama yang paling membantu saat menghadapi target keuangan bernilai besar?",
+        "pilihan": [
+          "Memecahnya menjadi target setoran bulanan sesuai tenggat",
+          "Menunggu sampai mendapat uang kaget",
+          "Mengabaikannya karena terlalu besar"
+        ],
+        "benar": 0,
+        "penjelasan": "Memecah target besar menjadi langkah bulanan membuatnya terukur dan bisa dimulai."
+      },
+      {
+        "id": "soal_12_2",
+        "pelajaranId": "tujuan_besar_12_1",
+        "tanya": "Target Rp24.000.000 dalam 24 bulan membutuhkan setoran berapa per bulan?",
+        "pilihan": [
+          "Rp1.000.000",
+          "Rp2.400.000",
+          "Rp500.000"
+        ],
+        "benar": 0,
+        "penjelasan": "Rp24.000.000 dibagi 24 bulan menghasilkan Rp1.000.000 per bulan."
+      },
+      {
+        "id": "soal_12_3",
+        "pelajaranId": "tujuan_besar_12_1",
+        "tanya": "Jika setoran bulanan sebuah tujuan besar melebihi kemampuan anggaranmu, apa yang paling sehat dilakukan?",
+        "pilihan": [
+          "Memperpanjang tenggat atau menyesuaikan targetnya",
+          "Berutang untuk menabung",
+          "Menghentikan seluruh kebutuhan pokok"
+        ],
+        "benar": 0,
+        "penjelasan": "Menyesuaikan rencana menjaga arus kas tetap sehat dan berkelanjutan."
+      },
+      {
+        "id": "soal_12_4",
+        "pelajaranId": "tujuan_besar_12_1",
+        "tanya": "Untuk tujuan yang waktunya dekat di bawah dua tahun, hal apa yang umumnya lebih diutamakan?",
+        "pilihan": [
+          "Kestabilan nilai dan kemudahan dicairkan",
+          "Instrumen yang nilainya sangat bergejolak",
+          "Pinjaman berbunga tinggi"
+        ],
+        "benar": 0,
+        "penjelasan": "Waktu singkat memberi sedikit ruang untuk pulih jika nilai instrumen sedang turun."
+      },
+      {
+        "id": "soal_12_5",
+        "pelajaranId": "tujuan_besar_12_2",
+        "tanya": "Mengapa tujuan jangka panjang perlu mempertimbangkan kenaikan harga?",
+        "pilihan": [
+          "Karena biaya barang dan jasa cenderung naik seiring waktu",
+          "Karena harga selalu tetap selamanya",
+          "Karena tabungan tidak bisa dihitung"
+        ],
+        "benar": 0,
+        "penjelasan": "Memberi ruang cadangan menjaga agar dana yang terkumpul tetap cukup saat dibutuhkan."
+      },
+      {
+        "id": "soal_12_6",
+        "pelajaranId": "tujuan_besar_12_2",
+        "tanya": "Apa fungsi proyeksi keuangan?",
+        "pilihan": [
+          "Membantu memperkirakan kebutuhan dan langkah di masa depan berdasarkan data saat ini",
+          "Menjamin hasil pasti tanpa perubahan",
+          "Menggantikan catatan harian"
+        ],
+        "benar": 0,
+        "penjelasan": "Proyeksi adalah kompas perencanaan yang perlu ditinjau secara berkala."
+      },
+      {
+        "id": "soal_12_7",
+        "pelajaranId": "tujuan_besar_12_2",
+        "tanya": "Seberapa sering target jangka panjang sebaiknya ditinjau ulang?",
+        "pilihan": [
+          "Secara berkala, misalnya setahun sekali atau saat penghasilan berubah",
+          "Tidak pernah ditinjau lagi",
+          "Setiap lima menit"
+        ],
+        "benar": 0,
+        "penjelasan": "Peninjauan berkala menjaga rencana tetap selaras dengan kondisi hidupmu."
+      },
+      {
+        "id": "soal_12_8",
+        "pelajaranId": "tujuan_besar_12_3",
+        "tanya": "Apa manfaat menentukan prioritas keuangan saat punya banyak keinginan besar?",
+        "pilihan": [
+          "Tujuan utama lebih cepat tercapai karena dana tidak terpecah terlalu tipis",
+          "Semua keinginan langsung gratis",
+          "Tidak perlu membuat anggaran"
+        ],
+        "benar": 0,
+        "penjelasan": "Fokus membuat kemajuan terasa nyata dan menjaga motivasi tetap stabil."
+      },
+      {
+        "id": "soal_12_9",
+        "pelajaranId": "tujuan_besar_12_3",
+        "tanya": "Apa yang dimaksud dengan biaya kesempatan?",
+        "pilihan": [
+          "Pilihan lain yang harus ditunda atau dilepaskan saat kamu memilih satu alokasi uang",
+          "Biaya administrasi ATM",
+          "Pajak penghasilan tahunan"
+        ],
+        "benar": 0,
+        "penjelasan": "Setiap keputusan keuangan memiliki alternatif lain yang tidak dipilih pada saat itu."
+      },
+      {
+        "id": "soal_12_10",
+        "pelajaranId": "tujuan_besar_12_3",
+        "tanya": "Setelah tujuan prioritas pertama tercapai, sebaiknya apa yang dilakukan dengan setoran bulanannya?",
+        "pilihan": [
+          "Dialihkan untuk mengisi tujuan prioritas berikutnya",
+          "Dihabiskan seluruhnya tanpa rencana",
+          "Berhenti mencatat keuangan"
+        ],
+        "benar": 0,
+        "penjelasan": "Meneruskan kebiasaan setor yang sama mempercepat pencapaian tujuan selanjutnya."
+      }
+    ]
+  }
 }

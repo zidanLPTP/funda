@@ -1017,4 +1017,122 @@ String formatRingkasanPenghasilanTahunan({
       'Ini edukasi umum, bukan nasihat pajak.';
 }
 
+/// Data tujuan untuk evaluasi umpan balik ringkasan_tujuan_besar.
+class DataTujuanBesarUmpanBalik {
+  final String nama;
+  final int targetRupiah;
+  final int danaTerkumpulRupiah;
+  final int? bulanTersisa;
+  final String jenis;
+  final DateTime dibuatPada;
+  final DateTime? tenggat;
+
+  const DataTujuanBesarUmpanBalik({
+    required this.nama,
+    required this.targetRupiah,
+    required this.danaTerkumpulRupiah,
+    this.bulanTersisa,
+    required this.jenis,
+    required this.dibuatPada,
+    this.tenggat,
+  });
+}
+
+/// Menghitung selisih bulan dari waktu sekarang menuju tenggat (minimal 1 bulan).
+int hitungBulanTersisa(DateTime tenggat, DateTime waktuSekarang) {
+  final selisih = (tenggat.year - waktuSekarang.year) * 12 +
+      (tenggat.month - waktuSekarang.month);
+  return selisih <= 0 ? 1 : selisih;
+}
+
+/// Memilih satu tujuan dari daftar tujuan non-dana-darurat untuk umpan balik misi 12.2.
+///
+/// Aturan pemilihan:
+/// - Jika ada tujuan dengan jenis `tujuan_besar`:
+///   - Utamakan yang memiliki tenggat (bulanTersisa != null && bulanTersisa > 0) dengan tenggat paling dekat (bulanTersisa terkecil).
+///   - Jika tenggat sama/seri, pilih yang paling baru dibuat (dibuatPada terbaru).
+///   - Jika tidak ada yang memiliki tenggat, pilih yang paling baru dibuat (dibuatPada terbaru).
+/// - Jika tidak ada jenis `tujuan_besar`, pilih tujuan non-dana-darurat mana pun yang target nominalnya terbesar.
+///   - Jika target nominal sama/seri, pilih yang paling baru dibuat.
+DataTujuanBesarUmpanBalik? pilihTujuanBesarUmpanBalik(
+  List<DataTujuanBesarUmpanBalik> daftar,
+) {
+  final valid = daftar.where((d) => d.jenis != 'dana_darurat').toList();
+  if (valid.isEmpty) return null;
+
+  final daftarTujuanBesar =
+      valid.where((d) => d.jenis == 'tujuan_besar').toList();
+
+  if (daftarTujuanBesar.isNotEmpty) {
+    final bertenggat = daftarTujuanBesar
+        .where((d) => d.bulanTersisa != null && d.bulanTersisa! > 0)
+        .toList();
+    if (bertenggat.isNotEmpty) {
+      bertenggat.sort((a, b) {
+        final bandingBulan = a.bulanTersisa!.compareTo(b.bulanTersisa!);
+        if (bandingBulan != 0) return bandingBulan;
+        return b.dibuatPada.compareTo(a.dibuatPada);
+      });
+      return bertenggat.first;
+    }
+
+    daftarTujuanBesar.sort((a, b) => b.dibuatPada.compareTo(a.dibuatPada));
+    return daftarTujuanBesar.first;
+  }
+
+  valid.sort((a, b) {
+    final bandingTarget = b.targetRupiah.compareTo(a.targetRupiah);
+    if (bandingTarget != 0) return bandingTarget;
+    return b.dibuatPada.compareTo(a.dibuatPada);
+  });
+  return valid.first;
+}
+
+/// Menghasilkan umpan balik untuk misi 12.2: ringkasan_tujuan_besar
+///
+/// Aturan:
+/// - Jika belum ada tujuan selain dana darurat:
+///   "Belum ada tujuan aktif selain dana darurat. Buat satu tujuan di menu Tujuan agar proyeksinya bisa dihitung."
+/// - Jika ada tujuan:
+///   - Kalimat 1: "Tujuan besarmu: {nama} (target {target}, terkumpul {dana})."
+///   - Kalimat 2:
+///     - Jika target tercapai (dana >= target): "Targetmu sudah tercapai."
+///     - Jika belum tercapai dan ada tenggat: "Sisa {sisa} dalam {N} bulan berarti kamu perlu menyisihkan sekitar {setoran} per bulan."
+///       dengan setoran = (sisa + bulan - 1) ~/ bulan
+///     - Jika belum tercapai dan tanpa tenggat: "Sisa {sisa}. Tambahkan tenggat agar setoran bulanannya bisa dihitung."
+///   - Kalimat 3 (penutup tetap):
+///     "Fokus pada satu atau dua tujuan utama lebih mudah dijalankan daripada mengejar semuanya sekaligus."
+String formatRingkasanTujuanBesar({
+  required DataTujuanBesarUmpanBalik? tujuan,
+}) {
+  if (tujuan == null) {
+    return 'Belum ada tujuan aktif selain dana darurat. Buat satu tujuan di menu Tujuan agar proyeksinya bisa dihitung.';
+  }
+
+  final targetStr = formatRupiahRapat(tujuan.targetRupiah);
+  final danaStr = formatRupiahRapat(tujuan.danaTerkumpulRupiah);
+  final k1 = 'Tujuan besarmu: ${tujuan.nama} (target $targetStr, terkumpul $danaStr).';
+
+  String k2;
+  if (tujuan.danaTerkumpulRupiah >= tujuan.targetRupiah) {
+    k2 = 'Targetmu sudah tercapai.';
+  } else {
+    final sisa = tujuan.targetRupiah - tujuan.danaTerkumpulRupiah;
+    final sisaStr = formatRupiahRapat(sisa);
+    final bulan = tujuan.bulanTersisa;
+    if (bulan != null && bulan > 0) {
+      final setoran = (sisa + bulan - 1) ~/ bulan;
+      final setoranStr = formatRupiahRapat(setoran);
+      k2 = 'Sisa $sisaStr dalam $bulan bulan berarti kamu perlu menyisihkan sekitar $setoranStr per bulan.';
+    } else {
+      k2 = 'Sisa $sisaStr. Tambahkan tenggat agar setoran bulanannya bisa dihitung.';
+    }
+  }
+
+  const k3 = 'Fokus pada satu atau dua tujuan utama lebih mudah dijalankan daripada mengejar semuanya sekaligus.';
+
+  return '$k1 $k2 $k3';
+}
+
+
 

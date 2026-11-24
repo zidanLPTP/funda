@@ -313,7 +313,7 @@ Kamu mengirim **prompt per tahap** ke agent → agent kerja dan menulis laporan 
 | 9A | **Mesin Sandbox & Modul 11 "Investasi Dasar":** Mesin simulasi portofolio fiktif terisolasi, tipe misi sandbox, konten Modul 11 | Fitur sandbox edukasi & investasi dasar selesai |
 | 9B | **Modul 7 "Paylater, Kredit & Skor Kredit" & Modul 10 "Proteksi (Asuransi & Jaminan Sosial)":** Pembelajaran paylater, reputasi kredit, proteksi dasar, serta umpan balik ringkasan proteksi | Pembelajaran paylater & proteksi selesai (Tahap 9 tuntas) |
 | 10A | **Tingkat Menengah Bagian 2:** Modul 8 "Penghasilan Tambahan & Freelance" & Modul 9 "Pajak Dasar" | Pembelajaran penghasilan tambahan & pajak dasar selesai |
-| 10B | **Tingkat Menengah Bagian 3:** Modul 12 "Tujuan Besar & Perencanaan" | Menengah lengkap |
+| 10B | **Tingkat Menengah Bagian 3:** Modul 12 "Tujuan Besar & Perencanaan" | Pembelajaran tujuan besar & perencanaan selesai (seluruh Tingkat Menengah tuntas) |
 | 11 | **Tingkat Lanjutan** (modul 13–18) | Kurikulum penuh |
 | 12 | **Polesan, aksesibilitas, uji pengguna, tinjauan konten, rilis** | v1.0 |
 

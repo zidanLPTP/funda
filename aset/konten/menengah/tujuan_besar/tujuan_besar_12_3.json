@@ -1,0 +1,77 @@
+{
+  "id": "tujuan_besar_12_3",
+  "modulId": "tujuan_besar",
+  "judul": "Menentukan Prioritas Saat Banyak Tujuan",
+  "durasiMenit": 5,
+  "status": "draf",
+  "pemantik": "Ingin beli kendaraan, ingin lanjut kuliah, ingin dana nikah, dan ingin rumah. Kalau semua dikejar bersamaan dengan dana terbatas, semuanya terasa jalan di tempat.",
+  "kartu": [
+    {
+      "judul": "Tidak semua harus dikejar bersamaan",
+      "isi": "{{Prioritas keuangan}} berarti memilih mana tujuan yang paling penting dan paling dekat waktunya untuk didahulukan. Fokus pada satu atau dua tujuan utama membuat kemajuanmu terlihat nyata dan menjaga semangat tetap tinggi."
+    },
+    {
+      "judul": "Urutkan berdasarkan urgensi dan waktu",
+      "isi": "Gunakan dua pertanyaan sederhana. Pertama, tujuan mana yang waktunya paling dekat? Kedua, tujuan mana yang dampaknya paling besar bagi hidup dan penghasilanmu? Tujuan yang mendesak dan berdampak besar layak berada di urutan atas."
+    },
+    {
+      "judul": "Pahami biaya kesempatan",
+      "isi": "Setiap rupiah yang kamu arahkan ke satu tujuan berarti tidak dipakai untuk tujuan lain saat ini. Itu disebut {{biaya kesempatan}}. Menyadarinya membantumu memilih dengan tenang, bukan merasa bersalah karena belum bisa mengejar semuanya sekaligus."
+    }
+  ],
+  "contohAngka": {
+    "judul": "Membandingkan fokus 1 tujuan vs memecah ke 4 tujuan (setoran Rp1.200.000 per bulan)",
+    "baris": [
+      {
+        "label": "Jika dibagi rata ke 4 tujuan: per tujuan per bulan",
+        "jumlah": 300000
+      },
+      {
+        "label": "Jika fokus ke 1 tujuan utama: per bulan",
+        "jumlah": 1200000
+      }
+    ],
+    "kesimpulan": "Dengan fokus pada satu tujuan utama, target Rp12.000.000 selesai dalam 10 bulan, lalu setoran yang sama bisa langsung dialihkan ke tujuan berikutnya."
+  },
+  "cekPaham": [
+    {
+      "tanya": "Mengapa fokus pada satu atau dua tujuan utama lebih disarankan saat dana terbatas?",
+      "pilihan": [
+        "Agar tiap tujuan lebih cepat tercapai dan kemajuannya terasa nyata",
+        "Agar tidak perlu membuat tujuan lain selamanya",
+        "Agar setoran menjadi nol"
+      ],
+      "benar": 0,
+      "penjelasan": "Memecah dana kecil ke terlalu banyak tujuan membuat semuanya terasa sangat lambat."
+    },
+    {
+      "tanya": "Apa yang dimaksud dengan biaya kesempatan?",
+      "pilihan": [
+        "Pilihan lain yang dilepaskan saat kamu memilih mengalokasikan uang ke satu tujuan",
+        "Biaya admin transfer antar bank",
+        "Denda keterlambatan tagihan"
+      ],
+      "benar": 0,
+      "penjelasan": "Menyadari biaya kesempatan membantumu menentukan prioritas secara sadar."
+    },
+    {
+      "tanya": "Setelah tujuan prioritas pertama tercapai, apa langkah berikutnya?",
+      "pilihan": [
+        "Alihkan ritme setoran bulanan yang sama ke tujuan prioritas berikutnya",
+        "Berhenti menabung selamanya",
+        "Hapus seluruh riwayat catatan"
+      ],
+      "benar": 0,
+      "penjelasan": "Kebiasaan menyisihkan yang sudah terbentuk langsung mempercepat tujuan berikutnya."
+    }
+  ],
+  "misi": {
+    "tipe": "refleksi",
+    "minimalKarakter": 10,
+    "judul": "Tentukan prioritas utamamu",
+    "instruksi": "Tulis satu tujuan besar yang ingin kamu jadikan prioritas utama saat ini beserta alasannya. Catatan ini privat di HP-mu.",
+    "pertanyaan": "Tujuan besar apa yang paling ingin kamu dahulukan dalam beberapa tahun ke depan, dan mengapa?",
+    "petunjukInput": "Contoh: Prioritas utamaku dana pendidikan S2 dalam 3 tahun karena ingin meningkatkan karier."
+  },
+  "tindakLanjut": "Periksa daftar tujuanmu di Funda. Pastikan tujuan prioritas utamamu berada di posisi yang paling rutin kamu isi setiap bulan."
+}

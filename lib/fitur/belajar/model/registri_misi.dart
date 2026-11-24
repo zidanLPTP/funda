@@ -231,6 +231,15 @@ class RegistriMisi {
       jumlahBulanTercatat: jumlahBulanTercatat,
     );
   }
+
+  /// Menghasilkan umpan balik ringkasan tujuan besar (proyeksi dan setoran bulanan).
+  static String formatRingkasanTujuanBesarMisi({
+    required DataTujuanBesarUmpanBalik? tujuan,
+  }) {
+    return formatRingkasanTujuanBesar(
+      tujuan: tujuan,
+    );
+  }
 }
 
 /// Penyedia teks umpan balik dari data nyata pengguna tanpa jargon.
@@ -441,6 +450,15 @@ class RegistriUmpanBalik {
     return formatRingkasanPenghasilanTahunan(
       totalPemasukanTahunIni: totalPemasukanTahunIni,
       jumlahBulanTercatat: jumlahBulanTercatat,
+    );
+  }
+
+  /// Menghasilkan umpan balik ringkasan tujuan besar (proyeksi dan setoran bulanan).
+  static String formatRingkasanTujuanBesarMisi({
+    required DataTujuanBesarUmpanBalik? tujuan,
+  }) {
+    return formatRingkasanTujuanBesar(
+      tujuan: tujuan,
     );
   }
 }

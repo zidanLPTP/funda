@@ -5,6 +5,35 @@ Format penulisan mengacu pada standar Keep a Changelog dan penamaan commit Funda
 
 ---
 
+## [0.17.0] - 2026-11-24 — Tahap 10B: Modul 12 "Tujuan Besar & Perencanaan" (Penutupan Tingkat Menengah)
+
+Tahap 10B menuntaskan seluruh kurikulum Tingkat Menengah Funda dengan menghadirkan Modul 12 "Tujuan Besar & Perencanaan", kunci umpan balik on-demand baru, dan penambahan kamus istilah:
+- **Kunci Umpan Balik On-Demand Misi 12.2 (`lib/perhitungan/perhitungan_umpan_balik_belajar.dart`, `lib/fitur/belajar/model/registri_misi.dart`, `lib/fitur/belajar/kontroler/penyedia_belajar.dart`):**
+  - Kunci `ringkasan_tujuan_besar`: dihitung on-demand saat misi 12.2 dibuka tanpa menambah kueri pada `FotoDataRepositori`.
+  - Fungsi murni integer deterministik tanpa `double` (`formatRingkasanTujuanBesar`):
+    - Seleksi tujuan: mengutamakan jenis `tujuan_besar` dengan tenggat terdekat (`bulanTersisa` terkecil). Jika tanpa tenggat atau seri, pilih yang paling baru dibuat. Jika tidak ada jenis `tujuan_besar`, pilih tujuan non-dana-darurat mana pun dengan target nominal terbesar.
+    - Menghitung setoran bulanan integer bulat ke atas: `(sisa + bulan - 1) ~/ bulan`.
+    - 4 variasi teks (V1: belum ada tujuan selain dana darurat, V2: target sudah tercapai, V3: belum tercapai dengan tenggat, V4: belum tercapai tanpa tenggat), ditutup kalimat tetap: *"Fokus pada satu atau dua tujuan utama lebih mudah dijalankan daripada mengejar semuanya sekaligus."*
+  - Model data baru: `DataTujuanBesarUmpanBalik` dan helper `pilihTujuanBesarUmpanBalik` serta `hitungBulanTersisa`.
+  - TDD unit test lengkap V1-V4, variasi seleksi kandidat, dan helper bulan di `test/perhitungan/perhitungan_umpan_balik_tahap_10b_test.dart` (6 tests passed).
+- **Konten Edukasi Resmi Modul 12 "Tujuan Besar & Perencanaan" (`aset/konten/menengah/tujuan_besar/`):**
+  - Mengubah stub `modul.json` menjadi `tersedia: true`, urutan 12, gerbang ganda `modul_selesai tabungan` DAN `ada_data tujuan min 1`, bankSoal kuis 10 butir dengan sebaran 4/3/3 (12.1: 4 butir, 12.2: 3 butir, 12.3: 3 butir).
+  - `tujuan_besar_12_1.json`: "Memecah Tujuan Besar Jadi Langkah Kecil", durasi 5 menit, contohAngka "Memecah target dana nikah Rp48.000.000", misi `keputusan` "Menyelaraskan target dengan kemampuan".
+  - `tujuan_besar_12_2.json`: "Menghitung Proyeksi dan Dampak Kenaikan Harga", durasi 5 menit, contohAngka "Ilustrasi target biaya pendidikan Rp30.000.000 dengan ruang cadangan", misi `lihat_hitungan` kunci `ringkasan_tujuan_besar`, menyertakan `catatanReviewer: "TODO-VERIFIKASI. Ilustrasi kenaikan biaya pendidikan/tujuan jangka panjang bersifat edukatif umum, bukan proyeksi resmi."`.
+  - `tujuan_besar_12_3.json`: "Menentukan Prioritas Saat Banyak Tujuan", durasi 5 menit, contohAngka "Membandingkan fokus 1 tujuan vs memecah ke 4 tujuan", misi `refleksi` "Tentukan prioritas utamamu" (`minimalKarakter: 10`).
+- **Ekstensi Kamus Keuangan (`aset/konten/kamus.json`):**
+  - Menambahkan 4 entri istilah baru persis kata per kata sesuai lampiran resmi: `tujuan jangka panjang`, `proyeksi keuangan`, `prioritas keuangan`, `biaya kesempatan` (total 69 istilah tanpa duplikasi).
+- **Pengujian & Validasi (`test/`, `integration_test/`):**
+  - Pengujian widget komprehensif `belajar_tahap_10b_widget_test.dart` (6 uji: status Modul 12 terkunci vs terbuka, misi keputusan 12.1, umpan balik 12.2, misi refleksi 12.3, kuis Modul 12, serta aksesibilitas skala font 2.0 pada 360x640).
+  - Pengujian kesesuaian lampiran materi kata-per-kata di `test/konten/kesesuaian_lampiran_test.dart` (51 tests passed).
+  - Pengujian pemeriksa semua konten di `test/konten/pemeriksa_semua_konten_test.dart` (19 modul dan 39 pelajaran valid).
+  - Skenario pengujian integrasi emulator di `integration_test/tahap_10b_emulator_test.dart` dan skrip runner `tool/jalankan_test_dan_tangkapan_layar_tahap_10b.ps1`.
+- **Dokumentasi & Spesifikasi:**
+  - `docs/spec.md` bagian 17: menandai Modul 12 dan penutupan seluruh Tingkat Menengah selesai.
+  - `docs/format_konten.md`, `docs/kamus_penamaan.md`, dan `README.md` diperbarui mencakup Tahap 10B.
+
+---
+
 ## [0.16.0] - 2026-11-24 — Tahap 10A: Modul 8 "Penghasilan Tambahan & Freelance" & Modul 9 "Pajak Dasar"
 
 Tahap 10A melanjutkan kurikulum tingkat menengah Funda dengan menghadirkan Modul 8 dan Modul 9, objek gerbang baru, opsi pernyataan, serta dua fungsi umpan balik baru:

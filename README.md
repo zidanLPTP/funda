@@ -105,6 +105,8 @@ funda/
 
 ## 📸 Tangkapan Layar Aplikasi
 Tangkapan layar otomatis yang dihasilkan dari pengujian dan emulator tersimpan pada:
+- **Tahap 10B (Modul 12 "Tujuan Besar & Perencanaan" & Penutupan Tingkat Menengah):** [docs/tangkapan_layar/](docs/tangkapan_layar/)
+  - Menghadirkan materi memecah target besar, proyeksi kenaikan harga, evaluasi prioritas keuangan, misi refleksi privat, dan umpan balik on-demand `ringkasan_tujuan_besar` serta penutupan seluruh kurikulum Tingkat Menengah.
 - **Tahap 10A (Modul 8 "Penghasilan Tambahan & Freelance" & Modul 9 "Pajak Dasar"):** [docs/tangkapan_layar/](docs/tangkapan_layar/)
   - Menghadirkan materi pengelolaan penghasilan tambahan / kerja lepas, persiapan pajak dasar (NPWP, PTKP, SPT Tahunan), objek gerbang `sumber_pemasukan`, serta umpan balik `ringkasan_pemasukan_tambahan` dan `ringkasan_penghasilan_tahunan`.
 - **Tahap 9B (Modul 7 "Paylater, Kredit & Skor Kredit" & Modul 10 "Proteksi"):** [docs/tangkapan_layar/](docs/tangkapan_layar/)

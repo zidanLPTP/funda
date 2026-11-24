@@ -999,6 +999,54 @@ final penyediaTeksUmpanBalikMisi = FutureProvider.autoDispose.family<String, Str
         jumlahBulanTercatat: bulanSet.length,
       );
 
+    case 'ringkasan_tujuan_besar':
+      final db = ref.read(penyediaBasisData);
+      final semuaTujuan = await (db.select(db.tabelTujuan)
+            ..where((t) =>
+                t.status.equals('aktif') & t.jenis.isNotIn(['dana_darurat'])))
+          .get();
+
+      final waktuSekarang = DateTime.now();
+      final daftarTujuan = <DataTujuanBesarUmpanBalik>[];
+      for (final t in semuaTujuan) {
+        final kantongList = await (db.select(db.tabelKantong)
+              ..where((k) =>
+                  k.tujuanId.equals(t.id) & k.diarsipkan.equals(false)))
+            .get();
+
+        var saldo = 0;
+        for (final k in kantongList) {
+          final alokasi = await (db.select(db.tabelAlokasiKantong)
+                ..where((a) => a.kantongId.equals(k.id)))
+              .get();
+          for (final a in alokasi) {
+            if (a.jenis == 'isi') {
+              saldo += a.jumlahRupiah;
+            } else if (a.jenis == 'ambil') {
+              saldo -= a.jumlahRupiah;
+            }
+          }
+        }
+
+        int? bulanTersisa;
+        if (t.tenggat != null) {
+          bulanTersisa = hitungBulanTersisa(t.tenggat!, waktuSekarang);
+        }
+
+        daftarTujuan.add(DataTujuanBesarUmpanBalik(
+          nama: t.nama,
+          targetRupiah: t.targetRupiah,
+          danaTerkumpulRupiah: saldo,
+          bulanTersisa: bulanTersisa,
+          jenis: t.jenis,
+          dibuatPada: t.dibuatPada,
+          tenggat: t.tenggat,
+        ));
+      }
+
+      final terpilih = pilihTujuanBesarUmpanBalik(daftarTujuan);
+      return formatRingkasanTujuanBesar(tujuan: terpilih);
+
     case 'arus_kas_bulan_ini':
     default:
       final arusKas = ref.watch(penyediaArusKasBulanIni);

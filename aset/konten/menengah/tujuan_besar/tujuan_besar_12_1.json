@@ -1,0 +1,101 @@
+{
+  "id": "tujuan_besar_12_1",
+  "modulId": "tujuan_besar",
+  "judul": "Memecah Tujuan Besar Jadi Langkah Kecil",
+  "durasiMenit": 5,
+  "status": "draf",
+  "pemantik": "Target dana nikah, uang muka rumah, atau biaya kuliah lanjut terasa sangat besar. Kalau hanya dilihat angka totalnya, rasanya ingin menyerah sebelum mulai.",
+  "kartu": [
+    {
+      "judul": "Tujuan besar butuh waktu panjang",
+      "isi": "{{Tujuan jangka panjang}} adalah rencana keuangan yang target waktunya beberapa tahun ke depan, seperti pendidikan, pernikahan, atau tempat tinggal. Karena nilainya besar, cara terbaik menghadapinya adalah memecahnya menjadi setoran bulanan yang terukur."
+    },
+    {
+      "judul": "Pisahkan angka total dan langkah bulanan",
+      "isi": "Angka Rp60.000.000 terasa berat. Tetapi saat dipecah menjadi 40 bulan, angkanya menjadi Rp1.500.000 per bulan. Memecah target besar menjadi langkah bulanan membantumu menilai apakah rencanamu realistis dengan arus kas saat ini."
+    },
+    {
+      "judul": "Sesuaikan tempat simpan dengan waktunya",
+      "isi": "Untuk tujuan yang waktunya dekat di bawah dua tahun, kestabilan nilai biasanya lebih diutamakan. Untuk tujuan yang waktunya lebih panjang, kamu punya ruang lebih lega untuk mempelajari instrumen yang sesuai dengan profil risikomu."
+    }
+  ],
+  "contohAngka": {
+    "judul": "Memecah target dana nikah Rp48.000.000",
+    "baris": [
+      {
+        "label": "Target dana",
+        "jumlah": 48000000
+      },
+      {
+        "label": "Jika tenggat 24 bulan: setoran per bulan",
+        "jumlah": 2000000
+      },
+      {
+        "label": "Jika tenggat 36 bulan: setoran per bulan",
+        "jumlah": 1333334
+      }
+    ],
+    "kesimpulan": "Memperpanjang tenggat dari 24 menjadi 36 bulan menurunkan beban bulanan hampir Rp667.000 agar lebih nyaman di anggaran."
+  },
+  "cekPaham": [
+    {
+      "tanya": "Mengapa tujuan besar sebaiknya dipecah menjadi setoran bulanan?",
+      "pilihan": [
+        "Agar lebih mudah diukur dan disesuaikan dengan kemampuan arus kas bulanan",
+        "Agar angka totalnya langsung mengecil sendiri",
+        "Agar tidak perlu menabung sama sekali"
+      ],
+      "benar": 0,
+      "penjelasan": "Memecah target menjadi setoran bulanan membuat rencana besar terasa konkret dan bisa dijalankan."
+    },
+    {
+      "tanya": "Target Rp36.000.000 dalam 24 bulan membutuhkan setoran sekitar berapa per bulan?",
+      "pilihan": [
+        "Rp1.500.000",
+        "Rp3.600.000",
+        "Rp1.000.000"
+      ],
+      "benar": 0,
+      "penjelasan": "Rp36.000.000 dibagi 24 bulan hasilnya Rp1.500.000 per bulan."
+    },
+    {
+      "tanya": "Jika setoran bulanan untuk tujuan besar terasa terlalu berat bagi anggaranmu, langkah yang masuk akal adalah?",
+      "pilihan": [
+        "Memperpanjang tenggat, menyesuaikan target, atau mencari tambahan pemasukan",
+        "Mengorbankan seluruh biaya makan harian",
+        "Mengambil utang konsumtif"
+      ],
+      "benar": 0,
+      "penjelasan": "Menyesuaikan rencana jauh lebih sehat daripada menekan kebutuhan pokok atau berutang."
+    }
+  ],
+  "misi": {
+    "tipe": "keputusan",
+    "judul": "Menyelaraskan target dengan kemampuan",
+    "instruksi": "Baca skenarionya, lalu pilih langkah perencanaan yang paling masuk akal.",
+    "skenario": {
+      "pemantik": "Kamu ingin mengumpulkan uang muka Rp60.000.000 dalam 2 tahun (Rp2.500.000 per bulan), tetapi ruang menabungmu saat ini hanya Rp1.500.000 per bulan.",
+      "opsi": [
+        {
+          "id": "a",
+          "teks": "Perpanjang tenggat menjadi sekitar 40 bulan sambil mencari cara menambah pemasukan",
+          "aman": true,
+          "umpanBalik": "Tepat. Rencana yang realistis lebih mungkin bertahan sampai target benar-benar tercapai."
+        },
+        {
+          "id": "b",
+          "teks": "Paksakan Rp2.500.000 per bulan lalu tutup kekurangan makan pakai paylater",
+          "aman": false,
+          "umpanBalik": "Menabung dengan memicu utang baru justru membuat keuanganmu makin berat. Coba pilihan lain."
+        },
+        {
+          "id": "c",
+          "teks": "Batalkan semua rencana menabung karena tidak bisa tercapai dalam 2 tahun",
+          "aman": false,
+          "umpanBalik": "Lebih lambat sedikit bukan berarti gagal. Mulai dari Rp1.500.000 per bulan tetap membawamu maju."
+        }
+      ]
+    }
+  },
+  "tindakLanjut": "Buat atau tinjau satu tujuan besar di menu Tujuan, lalu pastikan tenggatnya sudah terisi."
+}
