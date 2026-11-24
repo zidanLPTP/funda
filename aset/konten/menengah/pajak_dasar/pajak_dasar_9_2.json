@@ -1,0 +1,81 @@
+{
+  "id": "pajak_dasar_9_2",
+  "modulId": "pajak_dasar",
+  "judul": "Penghasilan Kena Pajak dan Catatan Tahunan",
+  "durasiMenit": 5,
+  "status": "draf",
+  "catatanReviewer": "TODO-VERIFIKASI. Konsep umum PTKP (Penghasilan Tidak Kena Pajak) dan perbedaan karyawan vs pekerja lepas tanpa menyebut nominal tarif/PTKP spesifik.",
+  "pemantik": "Banyak pekerja pemula mengira kalau pajak sudah dipotong kantor, urusannya selesai begitu saja. Padahal masih ada pelaporan tahunan.",
+  "kartu": [
+    {
+      "judul": "Mengenal batas tidak kena pajak",
+      "isi": "Pemerintah menetapkan batas {{PTKP}}, yaitu jumlah penghasilan tahunan yang tidak dikenai pajak. Besarannya mempertimbangkan status, seperti lajang, menikah, dan jumlah tanggungan. Bagian di atas batas itulah yang umumnya menjadi dasar hitungan pajak."
+    },
+    {
+      "judul": "Karyawan vs pekerja lepas",
+      "isi": "Untuk karyawan, pemberi kerja biasanya membantu memotong pajak dan memberikan bukti potong di akhir tahun. Untuk pekerja lepas atau pemilik usaha kecil, kamu perlu merekap penghasilanmu sendiri secara rapi sepanjang tahun."
+    },
+    {
+      "judul": "Catatan rapi menghemat waktu",
+      "isi": "Mencatat setiap pemasukan di Funda sepanjang tahun bukan hanya membantu anggaran bulanan. Di akhir tahun, kamu langsung punya gambaran total penghasilanmu tanpa harus membongkar mutasi satu per satu dengan panik."
+    }
+  ],
+  "contohAngka": {
+    "judul": "Ilustrasi rekap pemasukan 12 bulan (angka fiktif)",
+    "baris": [
+      {
+        "label": "Gaji bersih 12 bulan",
+        "jumlah": 48000000
+      },
+      {
+        "label": "Proyek sampingan setahun",
+        "jumlah": 6000000
+      },
+      {
+        "label": "Total pemasukan tercatat setahun",
+        "jumlah": 54000000,
+        "ringkasan": true
+      }
+    ],
+    "kesimpulan": "Rekap yang tercatat sejak Januari membuatmu tenang saat menyiapkan laporan tahunan."
+  },
+  "cekPaham": [
+    {
+      "tanya": "Apa yang dimaksud dengan PTKP?",
+      "pilihan": [
+        "Batas penghasilan tahunan yang tidak dikenai pajak sesuai ketentuan resmi",
+        "Biaya admin bank tahunan",
+        "Denda keterlambatan tagihan"
+      ],
+      "benar": 0,
+      "penjelasan": "PTKP adalah batas dasar sebelum penghasilan dihitung pajaknya."
+    },
+    {
+      "tanya": "Apa perbedaan utama urusan pajak karyawan dan pekerja lepas?",
+      "pilihan": [
+        "Karyawan umumnya mendapat bukti potong dari kantor, pekerja lepas merekap sendiri",
+        "Karyawan tidak pernah punya catatan",
+        "Pekerja lepas tidak perlu mencatat pemasukan"
+      ],
+      "benar": 0,
+      "penjelasan": "Karena tidak ada pemotong tunggal, pekerja lepas perlu disiplin mencatat pemasukannya sendiri."
+    },
+    {
+      "tanya": "Mengapa mencatat pemasukan sejak awal tahun membantu urusan pajak?",
+      "pilihan": [
+        "Memudahkan rekap total penghasilan saat waktunya melapor",
+        "Membuat pajak otomatis nol",
+        "Menggantikan dokumen resmi pemerintah"
+      ],
+      "benar": 0,
+      "penjelasan": "Data yang rapi menghemat waktu dan mengurangi risiko lupa mencatat sumber penghasilan."
+    }
+  ],
+  "misi": {
+    "tipe": "lihat_hitungan",
+    "judul": "Lihat rekap pemasukanmu tahun ini",
+    "instruksi": "Buka ringkasan total pemasukanmu yang tercatat tahun ini, baca isinya, lalu tekan Mengerti.",
+    "umpanBalik": "ringkasan_penghasilan_tahunan"
+  },
+  "tindakLanjut": "Jika kamu karyawan, tanyakan ke bagian personalia kapan biasanya bukti potong tahunan dibagikan."
+}

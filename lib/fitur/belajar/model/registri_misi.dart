@@ -209,6 +209,28 @@ class RegistriMisi {
       danaDaruratTerkumpul: danaDaruratTerkumpul,
     );
   }
+
+  /// Menghasilkan umpan balik ringkasan pemasukan tambahan (banyak sumber).
+  static String formatRingkasanPemasukanTambahanMisi({
+    required Map<String, int> petaPemasukanPerKategori,
+    required bool baruSatuSumber,
+  }) {
+    return formatRingkasanPemasukanTambahan(
+      petaPemasukanPerKategori: petaPemasukanPerKategori,
+      baruSatuSumber: baruSatuSumber,
+    );
+  }
+
+  /// Menghasilkan umpan balik ringkasan penghasilan tahunan (persiapan pajak).
+  static String formatRingkasanPenghasilanTahunanMisi({
+    required int totalPemasukanTahunIni,
+    required int jumlahBulanTercatat,
+  }) {
+    return formatRingkasanPenghasilanTahunan(
+      totalPemasukanTahunIni: totalPemasukanTahunIni,
+      jumlahBulanTercatat: jumlahBulanTercatat,
+    );
+  }
 }
 
 /// Penyedia teks umpan balik dari data nyata pengguna tanpa jargon.
@@ -397,6 +419,28 @@ class RegistriUmpanBalik {
       pengeluaranWajibBulananRupiah: pengeluaranWajibBulananRupiah,
       dasarPengeluaranWajib: dasarPengeluaranWajib,
       danaDaruratTerkumpul: danaDaruratTerkumpul,
+    );
+  }
+
+  /// Menghasilkan umpan balik ringkasan pemasukan tambahan (banyak sumber).
+  static String formatRingkasanPemasukanTambahanMisi({
+    required Map<String, int> petaPemasukanPerKategori,
+    required bool baruSatuSumber,
+  }) {
+    return formatRingkasanPemasukanTambahan(
+      petaPemasukanPerKategori: petaPemasukanPerKategori,
+      baruSatuSumber: baruSatuSumber,
+    );
+  }
+
+  /// Menghasilkan umpan balik ringkasan penghasilan tahunan (persiapan pajak).
+  static String formatRingkasanPenghasilanTahunanMisi({
+    required int totalPemasukanTahunIni,
+    required int jumlahBulanTercatat,
+  }) {
+    return formatRingkasanPenghasilanTahunan(
+      totalPemasukanTahunIni: totalPemasukanTahunIni,
+      jumlahBulanTercatat: jumlahBulanTercatat,
     );
   }
 }

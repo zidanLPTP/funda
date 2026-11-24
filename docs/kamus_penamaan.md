@@ -153,6 +153,10 @@
 | sandbox screen | LayarSandbox (`/sandbox`) | Antarmuka simulasi investasi uang fiktif berpenanda banner tintAmber |
 | sandbox mission | MisiKonten (tipe `sandbox`) | Tipe misi edukasi simulasi portofolio dengan verifikasi minimalSimulasi |
 | basic protection summary feedback | ringkasan_proteksi_dasar | Umpan balik keterkaitan pengeluaran wajib bulanan dan ketersediaan dana darurat terhadap kebutuhan proteksi risiko besar |
+| income sources gate object | sumber_pemasukan | Objek gerbang agregasi kategori unik pada transaksi jenis pemasukan |
+| single income source declaration | baru_satu_sumber | Kunci pernyataan pengguna yang baru memiliki satu sumber penghasilan |
+| side income summary feedback | ringkasan_pemasukan_tambahan | Umpan balik analisis sebaran sumber dan nominal pemasukan bulan berjalan |
+| annual income summary feedback | ringkasan_penghasilan_tahunan | Umpan balik rekapitulasi total pemasukan tahun berjalan untuk persiapan pelaporan pajak |
 
 ## Aturan Cabang Kerja (Git)
 - Setiap tahap dikerjakan pada cabang khusus (contoh: `tahap-02-dompet-transaksi`).

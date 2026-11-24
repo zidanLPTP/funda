@@ -1,0 +1,80 @@
+{
+  "id": "penghasilan_tambahan_8_2",
+  "modulId": "penghasilan_tambahan",
+  "judul": "Mencatat Banyak Sumber Penghasilan",
+  "durasiMenit": 5,
+  "status": "draf",
+  "pemantik": "Ada uang dari gaji, ada dari proyek desain, ada juga dari jualan kecil. Kalau semuanya dicampur tanpa label, sulit tahu mana yang paling menopangmu.",
+  "kartu": [
+    {
+      "judul": "Bedakan sumber utama dan tambahan",
+      "isi": "Mencatat tiap sumber dengan kategorinya masing-masing membantumu melihat kontribusi tiap pekerjaan. Kamu jadi tahu berapa yang datang dari penghasilan rutin dan berapa dari penghasilan tambahan."
+    },
+    {
+      "judul": "Bayar dirimu dengan angka tetap",
+      "isi": "Jika seluruh penghasilanmu tidak tetap, kamu bisa membuat aturan sederhana: kumpulkan semua pemasukan di satu dompet, lalu keluarkan jatah rutin yang sama setiap bulan ke dompet harian. Cara ini meniru rasanya punya gaji bulanan."
+    },
+    {
+      "judul": "Evaluasi tenaga dan hasil",
+      "isi": "Dengan catatan yang rapi, kamu bisa menilai apakah sebuah pekerjaan sampingan sepadan dengan waktu dan tenagamu. Data nyata membantu keputusanmu lebih jernih."
+    }
+  ],
+  "contohAngka": {
+    "judul": "Memisahkan dua sumber pemasukan dalam sebulan",
+    "baris": [
+      {
+        "label": "Gaji bulanan",
+        "jumlah": 3000000
+      },
+      {
+        "label": "Proyek desain lepas",
+        "jumlah": 1200000
+      },
+      {
+        "label": "Total pemasukan bulan ini",
+        "jumlah": 4200000,
+        "ringkasan": true
+      }
+    ],
+    "kesimpulan": "Memisahkan catatan membuatmu tahu Rp3.000.000 bersifat rutin dan Rp1.200.000 bersifat tambahan yang bisa diarahkan ke tujuan tabungan."
+  },
+  "cekPaham": [
+    {
+      "tanya": "Apa manfaat mencatat setiap sumber pemasukan dengan kategori terpisah?",
+      "pilihan": [
+        "Mudah melihat mana penghasilan rutin dan mana yang tambahan",
+        "Supaya saldo dompet berubah dua kali lipat",
+        "Supaya tidak perlu membuat anggaran"
+      ],
+      "benar": 0,
+      "penjelasan": "Pemisahan kategori membuat pola pemasukanmu terbaca jelas."
+    },
+    {
+      "tanya": "Bagaimana cara pekerja lepas meniru kestabilan gaji bulanan?",
+      "pilihan": [
+        "Menampung pemasukan lalu mengeluarkan jatah tetap bulanan untuk kebutuhan",
+        "Menghabiskan semua uang di hari bayaran masuk",
+        "Tidak pernah menyisihkan tabungan"
+      ],
+      "benar": 0,
+      "penjelasan": "Jatah bulanan yang stabil menjaga pengeluaran tetap terkendali meski proyek naik turun."
+    },
+    {
+      "tanya": "Penghasilan tambahan yang tidak rutin paling aman diarahkan ke mana dulu?",
+      "pilihan": [
+        "Bantalan masa sepi, dana darurat, atau tujuan tabungan",
+        "Cicilan jangka panjang baru",
+        "Pengeluaran rutin yang sulit dihentikan"
+      ],
+      "benar": 0,
+      "penjelasan": "Mengandalkan pemasukan tidak tetap untuk cicilan rutin bisa memberatkan saat bulan sepi."
+    }
+  ],
+  "misi": {
+    "tipe": "lihat_hitungan",
+    "judul": "Lihat ringkasan sumber pemasukanmu",
+    "instruksi": "Buka ringkasan sumber pemasukan bulan ini, baca gambarannya, lalu tekan Mengerti.",
+    "umpanBalik": "ringkasan_pemasukan_tambahan"
+  },
+  "tindakLanjut": "Periksa kategori pemasukanmu di Kelola Kategori. Tambahkan kategori baru bila ada sumber penghasilan yang belum terwakili."
+}

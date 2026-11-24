@@ -283,5 +283,45 @@
     "istilah": "tanggungan",
     "arti": "Orang yang biaya hidupnya bergantung pada penghasilanmu, seperti anak atau orang tua.",
     "contohRupiah": "Pekerja yang menanggung biaya makan dan sekolah adiknya sebesar Rp1.500.000 per bulan."
+  },
+  {
+    "istilah": "penghasilan tidak tetap",
+    "arti": "Pemasukan yang jumlah atau waktu masuknya berubah-ubah setiap bulan, seperti hasil proyek atau komisi.",
+    "contohRupiah": "Bulan ini masuk Rp3.500.000, bulan depan masuk Rp1.500.000."
+  },
+  {
+    "istilah": "freelance",
+    "arti": "Pekerjaan lepas berdasarkan proyek atau jasa tertentu tanpa terikat gaji bulanan tetap dari satu kantor.",
+    "contohRupiah": "Mengerjakan proyek desain dengan bayaran Rp1.200.000."
+  },
+  {
+    "istilah": "bantalan masa sepi",
+    "arti": "Simpanan khusus bagi pekerja berpenghasilan tidak tetap untuk menutup kebutuhan saat proyek sedang turun.",
+    "contohRupiah": "Menyisihkan Rp500.000 saat bulan ramai untuk persiapan bulan sepi."
+  },
+  {
+    "istilah": "invoice",
+    "arti": "Dokumen tagihan resmi yang dikirim kepada klien berisi rincian pekerjaan dan jumlah yang harus dibayar.",
+    "contohRupiah": "Mengirim invoice sebesar Rp2.000.000 setelah proyek selesai."
+  },
+  {
+    "istilah": "pajak penghasilan",
+    "arti": "Kontribusi wajib kepada negara atas penghasilan yang diterima sesuai peraturan yang berlaku.",
+    "contohRupiah": "Potongan pajak dari gaji bulanan sesuai ketentuan resmi."
+  },
+  {
+    "istilah": "NPWP",
+    "arti": "Nomor Pokok Wajib Pajak, yaitu nomor identitas yang digunakan dalam administrasi perpajakan.",
+    "contohRupiah": "Mencantumkan NPWP saat melamar kerja dan melapor pajak tahunan."
+  },
+  {
+    "istilah": "PTKP",
+    "arti": "Penghasilan Tidak Kena Pajak, yaitu batas penghasilan tahunan yang tidak dikenai pajak sesuai aturan resmi.",
+    "contohRupiah": "Penghasilan setahun di bawah batas PTKP umumnya tidak dikenai pajak penghasilan."
+  },
+  {
+    "istilah": "SPT Tahunan",
+    "arti": "Surat Pemberitahuan Tahunan yang berisi laporan penghasilan, pajak, harta, dan utang wajib pajak dalam setahun.",
+    "contohRupiah": "Melaporkan rekap penghasilan setahun Rp54.000.000 lewat layanan pajak resmi."
   }
 ]

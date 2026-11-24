@@ -1,0 +1,82 @@
+{
+  "id": "penghasilan_tambahan_8_3",
+  "modulId": "penghasilan_tambahan",
+  "judul": "Menyisihkan untuk Masa Sepi dan Pajak",
+  "durasiMenit": 6,
+  "status": "draf",
+  "catatanReviewer": "TODO-VERIFIKASI. Prinsip menyisihkan sebagian penghasilan tidak tetap untuk dana cadangan masa sepi dan kewajiban pajak bersifat umum; tidak menyebut tarif pajak spesifik.",
+  "pemantik": "Pekerja bergaji tetap biasanya pajaknya sudah dipotong kantor. Pekerja lepas perlu menyiapkannya sendiri sebelum waktunya tiba.",
+  "kartu": [
+    {
+      "judul": "Siapkan bantalan masa sepi",
+      "isi": "Selain dana darurat, pekerja dengan penghasilan tidak tetap terbantu oleh {{bantalan masa sepi}}. Ini simpanan khusus untuk menambal kekurangan saat proyek sedang turun, sehingga kamu tidak perlu panik atau berutang."
+    },
+    {
+      "judul": "Sisihkan bagian pajak sejak awal",
+      "isi": "Penghasilan dari pekerjaan lepas bisa memiliki kewajiban pajak sesuai aturan yang berlaku. Menyisihkan sebagian kecil setiap kali bayaran masuk membuatmu tidak kaget saat waktunya melapor. Di Funda, kamu bisa menandainya lewat kantong khusus."
+    },
+    {
+      "judul": "Simpan bukti bayaran dan kontrak",
+      "isi": "Biasakan menyimpan {{invoice}}, bukti transfer klien, dan catatan biaya kerja. Dokumen sederhana ini berguna saat kamu merekap penghasilan tahunan maupun saat ada perbedaan hitungan dengan klien."
+    }
+  ],
+  "contohAngka": {
+    "judul": "Ilustrasi membagi bayaran proyek Rp2.000.000",
+    "baris": [
+      {
+        "label": "Masuk ke kebutuhan harian",
+        "jumlah": 1200000
+      },
+      {
+        "label": "Ditandai untuk bantalan masa sepi dan tabungan",
+        "jumlah": 600000
+      },
+      {
+        "label": "Ditandai di kantong cadangan pajak (ilustrasi)",
+        "jumlah": 200000
+      }
+    ],
+    "kesimpulan": "Membagi bayaran sejak hari pertama masuk membuat kewajiban dan masa sepi sudah punya tempatnya sendiri."
+  },
+  "cekPaham": [
+    {
+      "tanya": "Apa fungsi bantalan masa sepi bagi pekerja lepas?",
+      "pilihan": [
+        "Menambal kebutuhan rutin saat proyek sedang turun tanpa berutang",
+        "Membeli barang mewah saat proyek ramai",
+        "Menggantikan catatan transaksi"
+      ],
+      "benar": 0,
+      "penjelasan": "Bantalan masa sepi menjaga kestabilan arus kas ketika pemasukan sedang rendah."
+    },
+    {
+      "tanya": "Mengapa menyisihkan cadangan pajak sejak bayaran masuk itu berguna?",
+      "pilihan": [
+        "Agar tidak kaget saat waktunya memenuhi kewajiban pajak",
+        "Supaya tidak perlu mencatat pemasukan",
+        "Supaya bayaran proyek otomatis naik"
+      ],
+      "benar": 0,
+      "penjelasan": "Menyisihkan sedikit demi sedikit terasa jauh lebih ringan daripada mencari uang sekaligus di akhir tahun."
+    },
+    {
+      "tanya": "Dokumen apa yang baik disimpan oleh pekerja lepas?",
+      "pilihan": [
+        "Invoice, bukti transfer, dan catatan biaya kerja",
+        "Hanya tangkapan layar media sosial",
+        "Tidak perlu menyimpan apa pun"
+      ],
+      "benar": 0,
+      "penjelasan": "Bukti transaksi memudahkan rekap tahunan dan pelaporan."
+    }
+  ],
+  "misi": {
+    "tipe": "refleksi",
+    "minimalKarakter": 10,
+    "judul": "Rencana menghadapi bulan sepi",
+    "instruksi": "Tulis satu langkah sederhana yang akan kamu lakukan saat mendapat pemasukan tambahan atau proyek. Catatan ini privat di HP-mu.",
+    "pertanyaan": "Berapa bagian atau nominal yang ingin kamu sisihkan setiap kali menerima penghasilan tambahan?",
+    "petunjukInput": "Contoh: Setiap dapat bayaran proyek, aku langsung sisihkan 20 persen ke kantong masa sepi."
+  },
+  "tindakLanjut": "Buat satu kantong khusus di Funda untuk menandai cadangan masa sepi atau cadangan kewajiban tahunanmu."
+}

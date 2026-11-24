@@ -1,0 +1,103 @@
+{
+  "id": "pajak_dasar_9_1",
+  "modulId": "pajak_dasar",
+  "judul": "Mengenal Pajak Penghasilan dan NPWP",
+  "durasiMenit": 5,
+  "status": "draf",
+  "catatanReviewer": "TODO-VERIFIKASI. Penjelasan umum konsep pajak penghasilan dan NPWP di Indonesia (termasuk integrasi NIK sebagai NPWP terkini); periksa redaksi terhadap aturan resmi terbaru.",
+  "pemantik": "Baru terima gaji pertama, lalu bagian personalia menanyakan nomor pajakmu. Rasanya bikin bingung, padahal konsep dasarnya sederhana.",
+  "kartu": [
+    {
+      "judul": "Apa itu pajak penghasilan?",
+      "isi": "{{Pajak penghasilan}} adalah kontribusi wajib warga negara atas penghasilan yang diterima, sesuai aturan yang berlaku. Tidak semua orang yang punya penghasilan langsung membayar pajak, karena ada batas penghasilan tertentu yang ditetapkan pemerintah."
+    },
+    {
+      "judul": "Apa fungsi NPWP?",
+      "isi": "{{NPWP}} adalah nomor identitas yang dipakai untuk urusan administrasi perpajakan. Memiliki identitas pajak yang rapi memudahkanmu saat melamar kerja, mengurus dokumen perbankan, hingga melaporkan penghasilan tahunan."
+    },
+    {
+      "judul": "Pahami aturan resminya",
+      "isi": "Aturan perpajakan bisa berubah dari waktu ke waktu. Karena itu, Funda hanya membahas konsep dasarnya agar kamu tidak bingung dengan istilahnya. Untuk angka batas, tarif, dan prosedur terbaru, selalu periksa lewat saluran resmi lembaga pajak."
+    }
+  ],
+  "contohAngka": {
+    "judul": "Ilustrasi slip gaji sederhana (angka fiktif)",
+    "baris": [
+      {
+        "label": "Gaji kotor bulanan",
+        "jumlah": 5000000
+      },
+      {
+        "label": "Potongan iuran dan pajak (ilustrasi)",
+        "jumlah": -250000
+      },
+      {
+        "label": "Gaji bersih yang diterima di rekening",
+        "jumlah": 4750000,
+        "ringkasan": true
+      }
+    ],
+    "kesimpulan": "Memahami bedanya gaji kotor dan gaji bersih membantumu menyusun anggaran dari uang yang benar-benar masuk ke dompetmu."
+  },
+  "cekPaham": [
+    {
+      "tanya": "Apakah setiap orang yang menerima penghasilan pasti langsung membayar pajak penghasilan?",
+      "pilihan": [
+        "Tidak selalu, bergantung pada batas dan ketentuan resmi yang berlaku",
+        "Ya, semua orang termasuk anak kecil langsung bayar",
+        "Tidak ada seorang pun yang membayar pajak"
+      ],
+      "benar": 0,
+      "penjelasan": "Ada ketentuan batas penghasilan tidak kena pajak yang diatur secara resmi oleh pemerintah."
+    },
+    {
+      "tanya": "Apa fungsi utama NPWP?",
+      "pilihan": [
+        "Identitas administrasi untuk urusan perpajakan",
+        "Kartu diskon belanja",
+        "Nomor rekening tabungan"
+      ],
+      "benar": 0,
+      "penjelasan": "NPWP digunakan untuk mengenali wajib pajak dalam administrasi dan pelaporan."
+    },
+    {
+      "tanya": "Di mana tempat terbaik mengecek tarif dan aturan pajak terbaru?",
+      "pilihan": [
+        "Saluran resmi lembaga pajak",
+        "Rumor di grup obrolan",
+        "Tebakan pribadi"
+      ],
+      "benar": 0,
+      "penjelasan": "Aturan pajak dapat diperbarui, sehingga sumber resmi adalah rujukan paling akurat."
+    }
+  ],
+  "misi": {
+    "tipe": "keputusan",
+    "judul": "Menanggapi slip gaji pertama",
+    "instruksi": "Pilih langkah yang paling tepat saat menerima gaji pertama.",
+    "skenario": {
+      "pemantik": "Kamu baru bekerja dan menerima gaji pertamamu. Di slip gaji tertulis gaji kotor Rp5.000.000 dan gaji bersih Rp4.750.000 setelah potongan.",
+      "opsi": [
+        {
+          "id": "a",
+          "teks": "Susun anggaran bulanan berdasarkan gaji bersih Rp4.750.000 dan simpan slip gajinya",
+          "aman": true,
+          "umpanBalik": "Tepat. Anggaran mengikuti uang yang benar-benar kamu terima, dan slip gaji berguna sebagai arsip pajak."
+        },
+        {
+          "id": "b",
+          "teks": "Susun anggaran dari Rp5.000.000 lalu bingung kenapa uang selalu kurang",
+          "aman": false,
+          "umpanBalik": "Memakai angka kotor membuat anggaranmu meleset Rp250.000 setiap bulan. Coba pilihan lain."
+        },
+        {
+          "id": "c",
+          "teks": "Langsung buang slip gaji karena tidak penting",
+          "aman": false,
+          "umpanBalik": "Slip gaji dan bukti potong sangat berguna saat waktunya pelaporan pajak tahunan. Coba pilihan lain."
+        }
+      ]
+    }
+  },
+  "tindakLanjut": "Biasakan menyimpan slip gaji bulanan dalam satu folder rapi di HP atau komputermu."
+}

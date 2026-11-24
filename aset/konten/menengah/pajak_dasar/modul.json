@@ -1,20 +1,146 @@
 {
-    "kuis":  {
-                 "jumlahSoal":  0,
-                 "bankSoal":  [
-
-                              ]
-             },
-    "id":  "pajak_dasar",
-    "tersedia":  false,
-    "urutan":  9,
-    "gerbang":  [
-
-                ],
-    "deskripsiSingkat":  "Mengenal NPWP, kewajiban pelaporan, dan dasar pemotongan pajak penghasilan.",
-    "daftarPelajaran":  [
-
-                        ],
-    "tingkat":  "menengah",
-    "judul":  "Pajak Dasar"
+  "id": "pajak_dasar",
+  "judul": "Pajak Dasar",
+  "tingkat": "menengah",
+  "urutan": 9,
+  "deskripsiSingkat": "Mengenal NPWP, kewajiban pelaporan, dan dasar pemotongan pajak penghasilan.",
+  "tersedia": true,
+  "gerbang": [
+    {
+      "tipe": "ada_data",
+      "objek": "pemasukan",
+      "min": 1,
+      "pesan": "Catat minimal 1 pemasukan dulu supaya kamu punya gambaran nyata saat belajar pajak dasar."
+    }
+  ],
+  "daftarPelajaran": [
+    "pajak_dasar_9_1",
+    "pajak_dasar_9_2",
+    "pajak_dasar_9_3"
+  ],
+  "kuis": {
+    "jumlahSoal": 5,
+    "bankSoal": [
+      {
+        "id": "soal_9_1",
+        "pelajaranId": "pajak_dasar_9_1",
+        "tanya": "Apa itu pajak penghasilan?",
+        "pilihan": [
+          "Kontribusi wajib atas penghasilan yang diterima sesuai aturan berlaku",
+          "Biaya langganan aplikasi",
+          "Bunga pinjaman bank"
+        ],
+        "benar": 0,
+        "penjelasan": "Pajak penghasilan diatur oleh pemerintah berdasarkan ketentuan yang berlaku."
+      },
+      {
+        "id": "soal_9_2",
+        "pelajaranId": "pajak_dasar_9_1",
+        "tanya": "Apa fungsi NPWP?",
+        "pilihan": [
+          "Nomor identitas untuk urusan administrasi perpajakan",
+          "Nomor rekening dompet digital",
+          "Kode promo belanja"
+        ],
+        "benar": 0,
+        "penjelasan": "NPWP dipakai sebagai identitas resmi wajib pajak."
+      },
+      {
+        "id": "soal_9_3",
+        "pelajaranId": "pajak_dasar_9_1",
+        "tanya": "Anggaran bulanan karyawan sebaiknya disusun berdasarkan angka yang mana?",
+        "pilihan": [
+          "Gaji bersih yang benar-benar diterima",
+          "Gaji kotor sebelum potongan",
+          "Angka perkiraan tanpa melihat slip"
+        ],
+        "benar": 0,
+        "penjelasan": "Gaji bersih adalah uang nyata yang masuk ke tanganmu untuk dikelola."
+      },
+      {
+        "id": "soal_9_4",
+        "pelajaranId": "pajak_dasar_9_1",
+        "tanya": "Di mana kamu harus mengecek tarif dan aturan pajak terbaru?",
+        "pilihan": [
+          "Saluran resmi lembaga pajak",
+          "Komentar media sosial",
+          "Tebakan teman"
+        ],
+        "benar": 0,
+        "penjelasan": "Sumber resmi memastikan kamu mengikuti peraturan terkini."
+      },
+      {
+        "id": "soal_9_5",
+        "pelajaranId": "pajak_dasar_9_2",
+        "tanya": "Apa arti PTKP?",
+        "pilihan": [
+          "Batas penghasilan tahunan yang tidak dikenai pajak",
+          "Potongan tunjangan karyawan bulanan",
+          "Pajak transaksi kartu kredit"
+        ],
+        "benar": 0,
+        "penjelasan": "Penghasilan di bawah batas PTKP umumnya tidak dikenai pajak penghasilan."
+      },
+      {
+        "id": "soal_9_6",
+        "pelajaranId": "pajak_dasar_9_2",
+        "tanya": "Bagaimana cara pekerja lepas menyiapkan data penghasilan untuk pajak?",
+        "pilihan": [
+          "Merekap pemasukan dan bukti bayaran sendiri secara rutin",
+          "Menunggu potongan dari kantor yang tidak ada",
+          "Tidak perlu mencatat apa pun"
+        ],
+        "benar": 0,
+        "penjelasan": "Pencatatan rutin sepanjang tahun memudahkan rekap di akhir tahun."
+      },
+      {
+        "id": "soal_9_7",
+        "pelajaranId": "pajak_dasar_9_2",
+        "tanya": "Apa manfaat mencatat semua pemasukan di Funda sejak Januari?",
+        "pilihan": [
+          "Rekap penghasilan tahunan sudah siap saat dibutuhkan",
+          "Pajak otomatis dibayarkan aplikasi",
+          "Saldo otomatis bertambah"
+        ],
+        "benar": 0,
+        "penjelasan": "Catatan rapi menghemat waktu saat menyiapkan pelaporan."
+      },
+      {
+        "id": "soal_9_8",
+        "pelajaranId": "pajak_dasar_9_3",
+        "tanya": "Apa itu SPT Tahunan?",
+        "pilihan": [
+          "Laporan tahunan wajib pajak tentang penghasilan, pajak, harta, dan utang",
+          "Surat perjanjian sewa kos",
+          "Bukti transfer belanja online"
+        ],
+        "benar": 0,
+        "penjelasan": "SPT Tahunan disampaikan sekali setahun melalui saluran resmi."
+      },
+      {
+        "id": "soal_9_9",
+        "pelajaranId": "pajak_dasar_9_3",
+        "tanya": "Dokumen apa yang biasanya disiapkan karyawan sebelum melapor SPT Tahunan?",
+        "pilihan": [
+          "Bukti potong dari pemberi kerja serta ringkasan saldo dan utang",
+          "Daftar lagu favorit",
+          "Riwayat pencarian internet"
+        ],
+        "benar": 0,
+        "penjelasan": "Bukti potong dan ringkasan posisi keuangan memudahkan pengisian laporan."
+      },
+      {
+        "id": "soal_9_10",
+        "pelajaranId": "pajak_dasar_9_3",
+        "tanya": "Jika kamu punya pertanyaan pajak yang rumit, langkah terbaik adalah?",
+        "pilihan": [
+          "Bertanya ke layanan resmi lembaga pajak atau konsultan pajak berizin",
+          "Mengabaikan pelaporan",
+          "Menebak sendiri tanpa memeriksa"
+        ],
+        "benar": 0,
+        "penjelasan": "Sumber resmi atau konsultan berizin memberi panduan yang tepat sesuai aturan."
+      }
+    ]
+  }
 }

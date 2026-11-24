@@ -156,6 +156,7 @@ Berikut adalah daftar objek resmi yang valid untuk syarat `gerbang` (modul/pelaj
 - **`utang`**: Jumlah catatan utang/piutang aktif (tipe `ada_data`).
 - **`arus_kas`**: Komposit pemasukan >= min DAN pengeluaran >= min (tipe `aturan_data` atau `ada_data`).
 - **`profil`**: Profil keuangan pengguna sudah diisi (bukan dilewati, bukan kosong; tipe `ada_data`).
+- **`sumber_pemasukan`**: Jumlah kategori unik pada transaksi jenis pemasukan yang tercatat (`COUNT(DISTINCT kategori_id)` pada transaksi jenis masuk) (tipe `ada_data`).
 
 ### 4.2 Skema Baru Tahap 6: `contohAngka` & Penanda `aturanPraktis`
 1. **`contohAngka`**: Objek berstruktur dengan properti:
@@ -561,6 +562,26 @@ Berkas ini adalah sumber kebenaran teks (*single source of truth*) untuk antarmu
    - Menghubungkan pengeluaran wajib bulanan (kebutuhan pokok + utang) dengan akumulasi dana darurat yang sudah terkumpul.
    - Memberikan perspektif edukasi bahwa musibah kesehatan mendadak atau risiko besar bisa melampaui dana darurat sehingga proteksi dasar membantu melindungi rencana keuangan.
    - Jika belum ada catatan pengeluaran kebutuhan, mengarahkan pengguna mencatat pengeluaran terlebih dahulu.
+
+---
+
+## 13. Objek Gerbang, Kunci Pernyataan & Umpan Balik Baru Tahap 10A (Modul 8 & 9)
+
+### 13.1 Objek Gerbang & Kunci Pernyataan
+1. **`sumber_pemasukan`**:
+   - Dihitung dari `COUNT(DISTINCT kategori_id)` pada transaksi bertipe `masuk`.
+   - Digunakan pada gerbang Modul 8: `ada_data sumber_pemasukan min 2`.
+2. **Kunci Pernyataan (`atauPernyataan`):**
+   - Nilai resmi: `baru_satu_sumber` (tersimpan di `tabel_pernyataan`).
+   - Digunakan oleh pengguna yang baru memiliki satu sumber penghasilan agar tetap dapat membuka Modul 8 tanpa dipaksa mencatat data palsu.
+
+### 13.2 Kunci Umpan Balik Misi Belajar Baru (`umpanBalik`)
+1. **`ringkasan_pemasukan_tambahan`**:
+   - Merangkum total pemasukan bulan berjalan, jumlah kategori/sumber pemasukan unik, 2 kategori pemasukan terbesar beserta nominal Rupiahnya, dan pengingat pemisahan pos ke bantalan masa sepi, dana darurat, atau tabungan.
+2. **`ringkasan_penghasilan_tahunan`**:
+   - Merangkum total akumulasi pemasukan sepanjang tahun berjalan dan jumlah bulan kalender yang memiliki catatan pemasukan.
+   - Dilengkapi penegasan eksplisit bahwa ringkasan ini adalah edukasi umum dan bukan nasihat pajak berlisensi.
+
 
 
 

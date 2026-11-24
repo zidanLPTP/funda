@@ -36,6 +36,7 @@ class FotoDataPengguna {
   final int jumlahPengeluaranKebutuhan;
   final int jumlahTujuanDanaDarurat;
   final int jumlahIsiDanaDarurat;
+  final int jumlahSumberPemasukan;
 
   const FotoDataPengguna({
     required this.jumlahDompetAktif,
@@ -60,6 +61,7 @@ class FotoDataPengguna {
     this.jumlahPengeluaranKebutuhan = 0,
     this.jumlahTujuanDanaDarurat = 0,
     this.jumlahIsiDanaDarurat = 0,
+    this.jumlahSumberPemasukan = 0,
   });
 
   factory FotoDataPengguna.kosong() {
@@ -86,6 +88,7 @@ class FotoDataPengguna {
       jumlahPengeluaranKebutuhan: 0,
       jumlahTujuanDanaDarurat: 0,
       jumlahIsiDanaDarurat: 0,
+      jumlahSumberPemasukan: 0,
     );
   }
 
@@ -112,6 +115,7 @@ class FotoDataPengguna {
     int? jumlahPengeluaranKebutuhan,
     int? jumlahTujuanDanaDarurat,
     int? jumlahIsiDanaDarurat,
+    int? jumlahSumberPemasukan,
   }) {
     return FotoDataPengguna(
       jumlahDompetAktif: jumlahDompetAktif ?? this.jumlahDompetAktif,
@@ -144,6 +148,8 @@ class FotoDataPengguna {
       jumlahTujuanDanaDarurat:
           jumlahTujuanDanaDarurat ?? this.jumlahTujuanDanaDarurat,
       jumlahIsiDanaDarurat: jumlahIsiDanaDarurat ?? this.jumlahIsiDanaDarurat,
+      jumlahSumberPemasukan:
+          jumlahSumberPemasukan ?? this.jumlahSumberPemasukan,
     );
   }
 }
@@ -825,6 +831,7 @@ String? ambilRutePengisianObjek(String? objek) {
     case 'pengeluaran':
     case 'transaksi':
     case 'arus_kas':
+    case 'sumber_pemasukan':
       return '/catatan';
     case 'anggaran':
       return '/anggaran';
@@ -962,6 +969,8 @@ int _hitungJumlahObjek(String? objek, FotoDataPengguna fotoData) {
       return fotoData.jumlahUtangAktif;
     case 'kategori':
       return fotoData.kategoriKeluarTerpakai.length;
+    case 'sumber_pemasukan':
+      return fotoData.jumlahSumberPemasukan;
     case 'profil':
       return fotoData.profilTerisi ? 1 : 0;
     default:

@@ -5,6 +5,41 @@ Format penulisan mengacu pada standar Keep a Changelog dan penamaan commit Funda
 
 ---
 
+## [0.16.0] - 2026-11-24 — Tahap 10A: Modul 8 "Penghasilan Tambahan & Freelance" & Modul 9 "Pajak Dasar"
+
+Tahap 10A melanjutkan kurikulum tingkat menengah Funda dengan menghadirkan Modul 8 dan Modul 9, objek gerbang baru, opsi pernyataan, serta dua fungsi umpan balik baru:
+- **Objek Gerbang Baru & Opsi Pernyataan (`lib/perhitungan/perhitungan_belajar.dart`, `lib/data/repositori/foto_data_repositori.dart`, `lib/fitur/belajar/tampilan/layar_belajar.dart`):**
+  - Objek gerbang `sumber_pemasukan`: menghitung jumlah kategori unik transaksi pemasukan (`COUNT(DISTINCT kategori_id)` pada transaksi jenis `masuk`) via 1 subkueri SQL agregasi performan di `FotoDataRepositori.ambilFotoData()`.
+  - Mendaftarkan `'sumber_pemasukan'` ke whitelist `PembacaKonten.objekGerbangValid`.
+  - Gerbang Modul 8: `ada_data sumber_pemasukan min 2` dengan `atauPernyataan: "baru_satu_sumber"`.
+  - Banner informasi dan tombol pencabutan pernyataan `baru_satu_sumber` di kartu Modul 8 pada `LayarBelajar`.
+- **Dua Kunci Umpan Balik Baru (`lib/perhitungan/perhitungan_umpan_balik_belajar.dart`, `lib/fitur/belajar/model/registri_misi.dart`, `lib/fitur/belajar/kontroler/penyedia_belajar.dart`):**
+  - `ringkasan_pemasukan_tambahan` (Modul 8.2): fungsi murni integer deterministik tanpa `double` (`formatRingkasanPemasukanTambahan`) yang merangkum total pemasukan bulan berjalan, jumlah sumber kategori masuk, 2 kategori masuk terbesar beserta nominal Rupiahnya, dan pengingat pemisahan pos ke bantalan masa sepi, dana darurat, atau tabungan.
+  - `ringkasan_penghasilan_tahunan` (Modul 9.2): fungsi murni integer deterministik tanpa `double` (`formatRingkasanPenghasilanTahunan`) yang merangkum akumulasi pemasukan sepanjang tahun berjalan dan jumlah bulan kalender yang tercatat, dilengkapi penegasan edukasi umum tanpa nasihat pajak berlisensi.
+  - TDD unit test lengkap V1-V4 untuk Modul 8.2 dan V1-V3 untuk Modul 9.2 serta uji kesetaraan SQL vs logika murni di `test/perhitungan/perhitungan_umpan_balik_tahap_10a_test.dart` (8 tests passed).
+- **Konten Edukasi Resmi Modul 8 "Penghasilan Tambahan & Freelance" (`aset/konten/menengah/penghasilan_tambahan/`):**
+  - `modul.json`: Tingkat `menengah`, urutan 8, gerbang `sumber_pemasukan min 2` (atau pernyataan `baru_satu_sumber`), bankSoal kuis 10 butir dengan sebaran 4/3/3 (8.1: 4 butir, 8.2: 3 butir, 8.3: 3 butir).
+  - `penghasilan_tambahan_8_1.json`: "Menimbang Waktu dan Tenaga", durasi 6 menit, contohAngka "Menghitung tarif per jam kerja lepas", misi `keputusan` "Pilih Tawaran Proyek Tambahan".
+  - `penghasilan_tambahan_8_2.json`: "Memisahkan Catatan: Rutin vs Tambahan", durasi 6 menit, contohAngka "Pemisahan pos gaji rutin dan penghasilan lepas", misi `lihat_hitungan` kunci `ringkasan_pemasukan_tambahan`.
+  - `penghasilan_tambahan_8_3.json`: "Mengelola Pemasukan Tidak Tetap", durasi 6 menit, contohAngka "Simulasi pengeluaran saat bulan sepi proyek", misi `keputusan` "Menghadapi Bulan Sepi".
+- **Konten Edukasi Resmi Modul 9 "Pajak Dasar" (`aset/konten/menengah/pajak_dasar/`):**
+  - `modul.json`: Tingkat `menengah`, urutan 9, gerbang `pemasukan min 1`, bankSoal kuis 10 butir dengan sebaran 4/3/3 (9.1: 4 butir, 9.2: 3 butir, 9.3: 3 butir).
+  - `pajak_dasar_9_1.json`: "Mengenal Pajak Penghasilan, NPWP & PTKP", durasi 6 menit, contohAngka "Simulasi penghasilan di bawah vs di atas PTKP", misi `keputusan` "Cek Kewajiban NPWP", `catatanReviewer` TODO-VERIFIKASI.
+  - `pajak_dasar_9_2.json`: "Karyawan vs Pekerja Lepas: Beda Cara Catat", durasi 6 menit, contohAngka "Bukti potong kantor vs rekap mandiri setahun", misi `lihat_hitungan` kunci `ringkasan_penghasilan_tahunan`, `catatanReviewer` TODO-VERIFIKASI.
+  - `pajak_dasar_9_3.json`: "Menyiapkan SPT Tahunan Lebih Awal", durasi 5 menit, contohAngka "Tiga kelompok data sebelum buka formulir SPT", misi `daftar_periksa` dengan disclaimer "Daftar siap lapor tahunan", `catatanReviewer` TODO-VERIFIKASI.
+- **Ekstensi Kamus Keuangan (`aset/konten/kamus.json`):**
+  - Menambahkan 8 entri istilah baru persis kata per kata sesuai lampiran resmi: `penghasilan tidak tetap`, `freelance`, `bantalan masa sepi`, `invoice`, `pajak penghasilan`, `NPWP`, `PTKP`, `SPT Tahunan` (total 65 istilah tanpa duplikasi).
+- **Pengujian & Validasi (`test/`, `integration_test/`):**
+  - Pengujian widget komprehensif `belajar_tahap_10a_widget_test.dart` (6 uji: tombol dan banner `baru_satu_sumber`, umpan balik 8.2, umpan balik 9.2, daftar periksa + disclaimer 9.3, kuis 8 & 9, serta aksesibilitas skala font 2.0).
+  - Pengujian kesesuaian lampiran materi kata-per-kata di `test/konten/kesesuaian_lampiran_test.dart` (46 tests passed).
+  - Pengujian pemeriksa semua konten di `test/konten/pemeriksa_semua_konten_test.dart` (19 modul dan 36 pelajaran valid).
+  - Skenario pengujian integrasi emulator di `integration_test/tahap_10a_emulator_test.dart` dan skrip runner `tool/jalankan_test_dan_tangkapan_layar_tahap_10a.ps1`.
+- **Dokumentasi & Spesifikasi:**
+  - `docs/spec.md` bagian 17: memecah Tahap 10 menjadi 10A (Modul 8 & 9) dan 10B (Modul 12).
+  - `docs/format_konten.md`, `docs/kamus_penamaan.md`, dan `README.md` diperbarui mencakup Tahap 10A.
+
+---
+
 ## [0.15.1] - 2026-11-24 — Tahap 9B-R: Penyelarasan Umpan Balik Proteksi & Verifikasi Tahap 9B
 
 Tahap 9B-R melakukan verifikasi ketat dan penyelarasan implementasi umpan balik proteksi terhadap Prompt 9B Butir 2:

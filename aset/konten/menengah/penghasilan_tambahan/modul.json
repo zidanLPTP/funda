@@ -1,20 +1,147 @@
 {
-    "kuis":  {
-                 "jumlahSoal":  0,
-                 "bankSoal":  [
-
-                              ]
-             },
-    "id":  "penghasilan_tambahan",
-    "tersedia":  false,
-    "urutan":  8,
-    "gerbang":  [
-
-                ],
-    "deskripsiSingkat":  "Mengelola penghasilan tidak tetap dan menyisihkan dana untuk masa sepi proyek.",
-    "daftarPelajaran":  [
-
-                        ],
-    "tingkat":  "menengah",
-    "judul":  "Penghasilan Tambahan \u0026 Freelance"
+  "id": "penghasilan_tambahan",
+  "judul": "Penghasilan Tambahan & Freelance",
+  "tingkat": "menengah",
+  "urutan": 8,
+  "deskripsiSingkat": "Mengelola penghasilan tidak tetap dan menyisihkan dana untuk masa sepi proyek.",
+  "tersedia": true,
+  "gerbang": [
+    {
+      "tipe": "ada_data",
+      "objek": "sumber_pemasukan",
+      "min": 2,
+      "atauPernyataan": "baru_satu_sumber",
+      "pesan": "Catat pemasukan dari minimal 2 kategori berbeda dulu. Kalau saat ini kamu baru punya satu sumber penghasilan, pilih Aku tidak punya ini."
+    }
+  ],
+  "daftarPelajaran": [
+    "penghasilan_tambahan_8_1",
+    "penghasilan_tambahan_8_2",
+    "penghasilan_tambahan_8_3"
+  ],
+  "kuis": {
+    "jumlahSoal": 5,
+    "bankSoal": [
+      {
+        "id": "soal_8_1",
+        "pelajaranId": "penghasilan_tambahan_8_1",
+        "tanya": "Apa ciri utama penghasilan tidak tetap?",
+        "pilihan": [
+          "Jumlah atau waktu masuknya berubah-ubah tiap bulan",
+          "Selalu sama persis tiap tanggal 1",
+          "Tidak pernah perlu dicatat"
+        ],
+        "benar": 0,
+        "penjelasan": "Penghasilan tidak tetap naik turun mengikuti proyek, komisi, atau penjualan."
+      },
+      {
+        "id": "soal_8_2",
+        "pelajaranId": "penghasilan_tambahan_8_1",
+        "tanya": "Patokan paling aman untuk pengeluaran rutin pekerja lepas adalah?",
+        "pilihan": [
+          "Angka kebutuhan pokok atau rata-rata bulan sepi",
+          "Angka bulan paling ramai sepanjang tahun",
+          "Angka tebakan tanpa catatan"
+        ],
+        "benar": 0,
+        "penjelasan": "Patokan yang konservatif menjaga arus kas tetap aman saat proyek sedang sepi."
+      },
+      {
+        "id": "soal_8_3",
+        "pelajaranId": "penghasilan_tambahan_8_1",
+        "tanya": "Mengapa biaya operasional kerja sampingan perlu dicatat terpisah?",
+        "pilihan": [
+          "Agar mengetahui hasil bersih yang benar-benar diterima",
+          "Agar pengeluaran terlihat lebih kecil",
+          "Agar tidak perlu membuat invoice"
+        ],
+        "benar": 0,
+        "penjelasan": "Pendapatan kotor dikurangi biaya kerja menunjukkan penghasilan bersihmu."
+      },
+      {
+        "id": "soal_8_4",
+        "pelajaranId": "penghasilan_tambahan_8_1",
+        "tanya": "Pemasukan 3 bulan Rp2.000.000, Rp4.000.000, dan Rp3.000.000. Berapa rata-ratanya?",
+        "pilihan": [
+          "Rp3.000.000",
+          "Rp4.000.000",
+          "Rp2.000.000"
+        ],
+        "benar": 0,
+        "penjelasan": "Total Rp9.000.000 dibagi 3 bulan menghasilkan Rp3.000.000."
+      },
+      {
+        "id": "soal_8_5",
+        "pelajaranId": "penghasilan_tambahan_8_2",
+        "tanya": "Mengapa tiap sumber penghasilan sebaiknya dicatat di kategori terpisah?",
+        "pilihan": [
+          "Agar mudah melihat kontribusi penghasilan rutin dan tambahan",
+          "Agar saldo dompet otomatis bertambah",
+          "Agar tidak perlu menabung"
+        ],
+        "benar": 0,
+        "penjelasan": "Catatan terpisah memberi gambaran jernih dari mana uangmu berasal."
+      },
+      {
+        "id": "soal_8_6",
+        "pelajaranId": "penghasilan_tambahan_8_2",
+        "tanya": "Bagaimana cara pekerja lepas menjaga ritme pengeluaran tetap stabil?",
+        "pilihan": [
+          "Memberi diri sendiri jatah bulanan tetap dari dompet penampung",
+          "Menghabiskan seluruh bayaran di hari yang sama",
+          "Mengandalkan paylater di bulan sepi"
+        ],
+        "benar": 0,
+        "penjelasan": "Jatah bulanan yang konsisten membantu meredam naik turunnya pemasukan."
+      },
+      {
+        "id": "soal_8_7",
+        "pelajaranId": "penghasilan_tambahan_8_2",
+        "tanya": "Apakah penghasilan tambahan yang belum pasti cocok dipakai untuk mengambil cicilan rutin baru?",
+        "pilihan": [
+          "Kurang aman, lebih baik diarahkan ke tabungan atau bantalan",
+          "Sangat cocok tanpa perlu dihitung",
+          "Wajib dipakai untuk cicilan"
+        ],
+        "benar": 0,
+        "penjelasan": "Cicilan bersifat pasti tiap bulan, sedangkan penghasilan tambahan bisa berubah."
+      },
+      {
+        "id": "soal_8_8",
+        "pelajaranId": "penghasilan_tambahan_8_3",
+        "tanya": "Apa kegunaan bantalan masa sepi?",
+        "pilihan": [
+          "Menjaga kebutuhan pokok tetap aman saat proyek sedang turun",
+          "Membayar diskon mendadak",
+          "Menghapus kewajiban mencatat"
+        ],
+        "benar": 0,
+        "penjelasan": "Bantalan masa sepi memberi ruang bernapas ketika pemasukan sedang rendah."
+      },
+      {
+        "id": "soal_8_9",
+        "pelajaranId": "penghasilan_tambahan_8_3",
+        "tanya": "Kapan waktu terbaik menyisihkan cadangan pajak bagi pekerja lepas?",
+        "pilihan": [
+          "Sedikit demi sedikit setiap kali bayaran masuk",
+          "Hanya setelah terlambat melapor",
+          "Tidak perlu disiapkan sama sekali"
+        ],
+        "benar": 0,
+        "penjelasan": "Menyisihkan sejak awal jauh lebih ringan daripada menyiapkan sekaligus."
+      },
+      {
+        "id": "soal_8_10",
+        "pelajaranId": "penghasilan_tambahan_8_3",
+        "tanya": "Mengapa menyimpan invoice dan bukti transfer klien itu penting?",
+        "pilihan": [
+          "Memudahkan rekap penghasilan tahunan dan mencegah salah hitung",
+          "Hanya untuk koleksi",
+          "Supaya klien tidak perlu membayar"
+        ],
+        "benar": 0,
+        "penjelasan": "Dokumen rapi adalah bekal penting untuk pencatatan dan pelaporan."
+      }
+    ]
+  }
 }

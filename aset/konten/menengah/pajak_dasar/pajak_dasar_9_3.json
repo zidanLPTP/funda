@@ -1,0 +1,103 @@
+{
+  "id": "pajak_dasar_9_3",
+  "modulId": "pajak_dasar",
+  "judul": "Mengenal SPT Tahunan dan Kapan Melapor",
+  "durasiMenit": 5,
+  "status": "draf",
+  "catatanReviewer": "TODO-VERIFIKASI. Gambaran umum SPT Tahunan orang pribadi dan persiapan dokumennya; tidak menyebut batas tanggal atau alamat situs spesifik agar tetap aman bila aturan berubah.",
+  "pemantik": "Setiap awal tahun, ramai orang membicarakan lapor SPT. Sebenarnya apa yang dilaporkan dan dokumen apa yang perlu disiapkan?",
+  "kartu": [
+    {
+      "judul": "Apa itu SPT Tahunan?",
+      "isi": "{{SPT Tahunan}} adalah laporan yang disampaikan wajib pajak sekali setahun mengenai penghasilan, pajak yang sudah dipotong atau dibayar, serta daftar harta dan utang. Melapor tepat waktu menghindarkanmu dari denda administrasi."
+    },
+    {
+      "judul": "Siapkan dokumen sebelum melapor",
+      "isi": "Sebelum mengisi laporan tahunan lewat layanan resmi, siapkan beberapa hal: bukti potong dari pemberi kerja (jika karyawan), rekap penghasilan tambahan, serta ringkasan saldo tabungan dan sisa utang di akhir tahun."
+    },
+    {
+      "judul": "Funda membantu merapikan datamu",
+      "isi": "Ringkasan kekayaan bersih di Funda bisa membantumu mengingat daftar saldo dompet dan sisa utangmu. Namun ingat, pelaporan pajak tetap dilakukan langsung lewat kanal resmi lembaga pajak, dan bila kondisimu rumit, konsultasikan ke pihak resmi atau konsultan pajak berizin."
+    }
+  ],
+  "contohAngka": {
+    "judul": "Tiga hal yang biasa disiapkan untuk rekap tahunan",
+    "baris": [
+      {
+        "label": "Jumlah bukti potong atau rekap penghasilan",
+        "jumlah": 1
+      },
+      {
+        "label": "Jumlah daftar saldo dompet dan tabungan",
+        "jumlah": 1
+      },
+      {
+        "label": "Jumlah daftar sisa utang akhir tahun",
+        "jumlah": 1
+      }
+    ],
+    "kesimpulan": "Menyiapkan tiga kelompok data ini lebih awal membuat proses pelaporan jauh lebih singkat dan tenang."
+  },
+  "cekPaham": [
+    {
+      "tanya": "Apa isi utama dari SPT Tahunan orang pribadi?",
+      "pilihan": [
+        "Laporan penghasilan, pajak yang sudah dipotong atau dibayar, serta ringkasan harta dan utang",
+        "Daftar belanja harian di warung",
+        "Daftar film yang ditonton setahun"
+      ],
+      "benar": 0,
+      "penjelasan": "SPT Tahunan merangkum posisi penghasilan, pajak, harta, dan kewajibanmu dalam setahun."
+    },
+    {
+      "tanya": "Mengapa melapor SPT Tahunan tepat waktu itu penting?",
+      "pilihan": [
+        "Memenuhi kewajiban administrasi dan menghindari denda keterlambatan",
+        "Supaya gaji langsung naik",
+        "Supaya utang bank lunas otomatis"
+      ],
+      "benar": 0,
+      "penjelasan": "Keterlambatan melapor dapat dikenai sanksi administrasi sesuai ketentuan yang berlaku."
+    },
+    {
+      "tanya": "Bagaimana peran Funda dalam pelaporan pajak?",
+      "pilihan": [
+        "Membantu merapikan catatan pemasukan, saldo, dan utang, bukan tempat melapor pajak",
+        "Melaporkan pajak otomatis ke pemerintah",
+        "Memberi nasihat pajak berlisensi"
+      ],
+      "benar": 0,
+      "penjelasan": "Pelaporan resmi selalu dilakukan langsung melalui layanan resmi lembaga pajak."
+    }
+  ],
+  "misi": {
+    "tipe": "daftar_periksa",
+    "disclaimer": true,
+    "minimalDicentang": 3,
+    "judul": "Daftar siap lapor tahunan",
+    "instruksi": "Baca catatan di atas, lalu centang langkah persiapan pajak dasar yang sudah kamu pahami atau siapkan. Minimal tiga langkah.",
+    "langkah": [
+      {
+        "id": "l1",
+        "teks": "Aku tahu status identitas perpajakanku (NPWP) dan menyimpannya dengan aman."
+      },
+      {
+        "id": "l2",
+        "teks": "Aku menyimpan slip gaji atau catatan pemasukan lepas sepanjang tahun."
+      },
+      {
+        "id": "l3",
+        "teks": "Aku tahu bahwa pelaporan SPT Tahunan dilakukan lewat saluran resmi lembaga pajak."
+      },
+      {
+        "id": "l4",
+        "teks": "Aku mengecek ringkasan saldo dan sisa utangku di akhir tahun sebagai bahan rekap."
+      },
+      {
+        "id": "l5",
+        "teks": "Aku tahu bahwa untuk kasus pajak yang rumit, aku perlu bertanya ke layanan resmi atau konsultan berizin."
+      }
+    ]
+  },
+  "tindakLanjut": "Buat satu folder khusus di HP atau komputermu bernama \"Arsip Pajak\" untuk menyimpan slip gaji dan bukti potong tahun ini."
+}

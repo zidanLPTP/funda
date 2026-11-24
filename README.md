@@ -105,6 +105,8 @@ funda/
 
 ## 📸 Tangkapan Layar Aplikasi
 Tangkapan layar otomatis yang dihasilkan dari pengujian dan emulator tersimpan pada:
+- **Tahap 10A (Modul 8 "Penghasilan Tambahan & Freelance" & Modul 9 "Pajak Dasar"):** [docs/tangkapan_layar/](docs/tangkapan_layar/)
+  - Menghadirkan materi pengelolaan penghasilan tambahan / kerja lepas, persiapan pajak dasar (NPWP, PTKP, SPT Tahunan), objek gerbang `sumber_pemasukan`, serta umpan balik `ringkasan_pemasukan_tambahan` dan `ringkasan_penghasilan_tahunan`.
 - **Tahap 9B (Modul 7 "Paylater, Kredit & Skor Kredit" & Modul 10 "Proteksi"):** [docs/tangkapan_layar/](docs/tangkapan_layar/)
   - Menghadirkan materi pembelajaran paylater, reputasi kredit, dan proteksi dasar beserta umpan balik `ringkasan_proteksi_dasar`.
 - **Tahap 9A (Mesin Sandbox & Modul 11 "Investasi Dasar"):** [docs/tangkapan_layar/](docs/tangkapan_layar/)

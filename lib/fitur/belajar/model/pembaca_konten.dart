@@ -72,6 +72,7 @@ class PembacaKonten {
     'pengeluaran_kebutuhan',
     'tujuan_dana_darurat',
     'isi_dana_darurat',
+    'sumber_pemasukan',
   };
   static const Set<String> umpanBalikMisiValid = {
     'catatan_pengeluaran_terbaru',
@@ -90,6 +91,8 @@ class PembacaKonten {
     'urutan_pelunasan',
     'ringkasan_langganan_dan_keinginan',
     'ringkasan_proteksi_dasar',
+    'ringkasan_pemasukan_tambahan',
+    'ringkasan_penghasilan_tahunan',
   };
 
   /// Mengurai string JSON kamus menjadi daftar istilah terindeks.

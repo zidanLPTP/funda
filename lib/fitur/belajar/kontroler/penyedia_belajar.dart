@@ -942,6 +942,63 @@ final penyediaTeksUmpanBalikMisi = FutureProvider.autoDispose.family<String, Str
         danaDaruratTerkumpul: danaDaruratTerkumpul,
       );
 
+    case 'ringkasan_pemasukan_tambahan':
+      final db = ref.read(penyediaBasisData);
+      final waktuSekarang = DateTime.now();
+      final awalBulan = DateTime(waktuSekarang.year, waktuSekarang.month, 1);
+      final akhirBulan = DateTime(waktuSekarang.year, waktuSekarang.month + 1, 1);
+
+      final txMasukBulanIni = await (db.select(db.tabelTransaksi)
+            ..where((t) =>
+                t.jenis.equals('masuk') &
+                t.waktuTransaksi.isBiggerOrEqualValue(awalBulan) &
+                t.waktuTransaksi.isSmallerThanValue(akhirBulan)))
+          .get();
+
+      final semuaKategori = await db.select(db.tabelKategori).get();
+      final petaNamaKategori = {for (final k in semuaKategori) k.id: k.nama};
+
+      final petaPemasukan = <String, int>{};
+      for (final tx in txMasukBulanIni) {
+        final namaKat = (tx.kategoriId != null ? petaNamaKategori[tx.kategoriId] : null) ?? 'Lainnya';
+        petaPemasukan[namaKat] = (petaPemasukan[namaKat] ?? 0) + tx.jumlahRupiah;
+      }
+
+      final pernyataan = await (db.select(db.tabelPernyataan)
+            ..where((p) => p.kunci.equals('baru_satu_sumber')))
+          .getSingleOrNull();
+      final baruSatuSumber = pernyataan != null && pernyataan.nilai == 'true';
+
+      return formatRingkasanPemasukanTambahan(
+        petaPemasukanPerKategori: petaPemasukan,
+        baruSatuSumber: baruSatuSumber,
+      );
+
+    case 'ringkasan_penghasilan_tahunan':
+      final db = ref.read(penyediaBasisData);
+      final waktuSekarang = DateTime.now();
+      final awalTahun = DateTime(waktuSekarang.year, 1, 1);
+      final akhirTahun = DateTime(waktuSekarang.year + 1, 1, 1);
+
+      final txMasukTahunIni = await (db.select(db.tabelTransaksi)
+            ..where((t) =>
+                t.jenis.equals('masuk') &
+                t.waktuTransaksi.isBiggerOrEqualValue(awalTahun) &
+                t.waktuTransaksi.isSmallerThanValue(akhirTahun)))
+          .get();
+
+      var totalTahunIni = 0;
+      final bulanSet = <int>{};
+      for (final tx in txMasukTahunIni) {
+        totalTahunIni += tx.jumlahRupiah;
+        bulanSet.add(tx.waktuTransaksi.month);
+      }
+
+      return formatRingkasanPenghasilanTahunan(
+        totalPemasukanTahunIni: totalTahunIni,
+        jumlahBulanTercatat: bulanSet.length,
+      );
+
     case 'arus_kas_bulan_ini':
     default:
       final arusKas = ref.watch(penyediaArusKasBulanIni);

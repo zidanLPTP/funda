@@ -51,7 +51,8 @@ class FotoDataRepositori {
         (SELECT COUNT(*) FROM tabel_alokasi_kantong a JOIN tabel_kantong k ON a.kantong_id = k.id JOIN tabel_tujuan t ON k.tujuan_id = t.id WHERE a.jenis = 'isi' AND t.jenis = 'tabungan') as jml_isi_tujuan_tabungan,
         (SELECT COUNT(*) FROM tabel_transaksi t JOIN tabel_kategori k ON t.kategori_id = k.id WHERE t.jenis = 'keluar' AND k.sifat = 'kebutuhan') as jml_pengeluaran_kebutuhan,
         (SELECT COUNT(*) FROM tabel_tujuan WHERE jenis = 'dana_darurat' AND status IN ('aktif', 'tercapai')) as jml_tujuan_dana_darurat,
-        (SELECT COUNT(*) FROM tabel_alokasi_kantong a JOIN tabel_kantong k ON a.kantong_id = k.id JOIN tabel_tujuan t ON k.tujuan_id = t.id WHERE a.jenis = 'isi' AND t.jenis = 'dana_darurat') as jml_isi_dana_darurat
+        (SELECT COUNT(*) FROM tabel_alokasi_kantong a JOIN tabel_kantong k ON a.kantong_id = k.id JOIN tabel_tujuan t ON k.tujuan_id = t.id WHERE a.jenis = 'isi' AND t.jenis = 'dana_darurat') as jml_isi_dana_darurat,
+        (SELECT COUNT(DISTINCT kategori_id) FROM tabel_transaksi WHERE jenis = 'masuk') as jml_sumber_pemasukan
       ''',
     ).getSingle();
 
@@ -72,6 +73,7 @@ class FotoDataRepositori {
     final jmlPengeluaranKebutuhan = barisRingkasan.read<int>('jml_pengeluaran_kebutuhan');
     final jmlTujuanDanaDarurat = barisRingkasan.read<int>('jml_tujuan_dana_darurat');
     final jmlIsiDanaDarurat = barisRingkasan.read<int>('jml_isi_dana_darurat');
+    final jmlSumberPemasukan = barisRingkasan.read<int>('jml_sumber_pemasukan');
 
     // 2. Kategori keluar aktif yang pernah dipakai transaksi beserta sifatnya
     final barisKategori = await _db.customSelect(
@@ -157,6 +159,7 @@ class FotoDataRepositori {
       jumlahPengeluaranKebutuhan: jmlPengeluaranKebutuhan,
       jumlahTujuanDanaDarurat: jmlTujuanDanaDarurat,
       jumlahIsiDanaDarurat: jmlIsiDanaDarurat,
+      jumlahSumberPemasukan: jmlSumberPemasukan,
     );
   }
 }

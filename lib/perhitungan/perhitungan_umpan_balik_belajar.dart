@@ -939,4 +939,82 @@ String formatRingkasanProteksiDasar({
       'Ini gambaran umum, bukan rekomendasi produk.';
 }
 
+/// Menghasilkan umpan balik untuk misi 8.2: ringkasan_pemasukan_tambahan
+///
+/// Masukan:
+/// - [petaPemasukanPerKategori]: `Map<String, int>` total pemasukan bulan berjalan per nama kategori (hanya yang > 0).
+/// - [baruSatuSumber]: bool dari pernyataan 'baru_satu_sumber'.
+String formatRingkasanPemasukanTambahan({
+  required Map<String, int> petaPemasukanPerKategori,
+  required bool baruSatuSumber,
+}) {
+  final entriPositif = petaPemasukanPerKategori.entries
+      .where((e) => e.value > 0)
+      .toList();
+
+  if (entriPositif.isEmpty) {
+    if (baruSatuSumber) {
+      return 'Kamu menyatakan baru punya satu sumber penghasilan. '
+          'Saat nanti ada pemasukan tambahan, catat dengan kategori terpisah agar alirannya mudah dipantau.';
+    }
+    return 'Belum ada pemasukan yang tercatat bulan ini. '
+        'Catat pemasukanmu agar pembagian sumbernya terlihat.';
+  }
+
+  if (entriPositif.length == 1) {
+    final e = entriPositif.first;
+    final jumlahStr = formatRupiahRapat(e.value);
+    return 'Bulan ini pemasukanmu berasal dari 1 sumber: ${e.key} ($jumlahStr). '
+        'Mencatat per sumber memudahkanmu melihat perkembangan jika nanti ada penghasilan tambahan.';
+  }
+
+  // Urut nominal menurun (descending), lalu nama menaik (ascending)
+  entriPositif.sort((a, b) {
+    final bandingNominal = b.value.compareTo(a.value);
+    if (bandingNominal != 0) return bandingNominal;
+    return a.key.compareTo(b.key);
+  });
+
+  var total = 0;
+  for (final e in entriPositif) {
+    total += e.value;
+  }
+  final n = entriPositif.length;
+  final totalStr = formatRupiahRapat(total);
+  final e1 = entriPositif[0];
+  final e2 = entriPositif[1];
+  final nama1 = e1.key;
+  final jumlah1 = formatRupiahRapat(e1.value);
+  final nama2 = e2.key;
+  final jumlah2 = formatRupiahRapat(e2.value);
+
+  return 'Bulan ini pemasukanmu datang dari $n sumber dengan total $totalStr. '
+      'Terbesar: $nama1 ($jumlah1), diikuti $nama2 ($jumlah2). '
+      'Memisahkan catatan per sumber membantumu mengatur porsi untuk kebutuhan dan masa sepi.';
+}
+
+/// Menghasilkan umpan balik untuk misi 9.2: ringkasan_penghasilan_tahunan
+///
+/// Masukan:
+/// - [totalPemasukanTahunIni]: seluruh transaksi masuk pada tahun kalender berjalan menurut zona waktu lokal.
+/// - [jumlahBulanTercatat]: jumlah bulan kalender berbeda di tahun berjalan yang memiliki transaksi masuk.
+String formatRingkasanPenghasilanTahunan({
+  required int totalPemasukanTahunIni,
+  required int jumlahBulanTercatat,
+}) {
+  if (totalPemasukanTahunIni <= 0 || jumlahBulanTercatat <= 0) {
+    return 'Belum ada pemasukan yang tercatat di tahun ini. '
+        'Catat pemasukanmu secara rutin agar rekap tahunanmu mudah dilihat saat waktunya lapor pajak.';
+  }
+
+  final rataRata = totalPemasukanTahunIni ~/ jumlahBulanTercatat;
+  final totalStr = formatRupiahRapat(totalPemasukanTahunIni);
+  final rataStr = formatRupiahRapat(rataRata);
+
+  return 'Total pemasukanmu yang tercatat tahun ini: $totalStr (dari $jumlahBulanTercatat bulan yang tercatat). '
+      'Rata-rata sekitar $rataStr per bulan. '
+      'Catatan yang rapi memudahkanmu saat menyiapkan pelaporan pajak. '
+      'Ini edukasi umum, bukan nasihat pajak.';
+}
+
 

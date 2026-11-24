@@ -437,6 +437,7 @@ void main() {
       await db1.customStatement("INSERT INTO tabel_dompet (id, nama, jenis, ikon, warna, saldo_awal_rupiah, urutan, diarsipkan, dibuat_pada) VALUES ('d-3', 'Dompet 3', 'tunai', 'wallet', 'tintHijau', 0, 0, 0, '${t.toIso8601String()}');");
       await db1.customStatement("INSERT INTO tabel_dompet (id, nama, jenis, ikon, warna, saldo_awal_rupiah, urutan, diarsipkan, dibuat_pada) VALUES ('d-1', 'Dompet 1', 'tunai', 'wallet', 'tintHijau', 0, 0, 0, '${t.toIso8601String()}');");
       await db1.customStatement("INSERT INTO tabel_dompet (id, nama, jenis, ikon, warna, saldo_awal_rupiah, urutan, diarsipkan, dibuat_pada) VALUES ('d-2', 'Dompet 2', 'tunai', 'wallet', 'tintHijau', 0, 0, 0, '${t.toIso8601String()}');");
+      await db1.customStatement("UPDATE tabel_pengaturan SET diubah_pada = '${t.toIso8601String()}';");
 
       // Buat database 2 dengan insert urutan berbeda [id-1, id-2, id-3]
       final db2 = BasisDataFunda(NativeDatabase.memory());
@@ -445,6 +446,7 @@ void main() {
       await db2.customStatement("INSERT INTO tabel_dompet (id, nama, jenis, ikon, warna, saldo_awal_rupiah, urutan, diarsipkan, dibuat_pada) VALUES ('d-1', 'Dompet 1', 'tunai', 'wallet', 'tintHijau', 0, 0, 0, '${t.toIso8601String()}');");
       await db2.customStatement("INSERT INTO tabel_dompet (id, nama, jenis, ikon, warna, saldo_awal_rupiah, urutan, diarsipkan, dibuat_pada) VALUES ('d-2', 'Dompet 2', 'tunai', 'wallet', 'tintHijau', 0, 0, 0, '${t.toIso8601String()}');");
       await db2.customStatement("INSERT INTO tabel_dompet (id, nama, jenis, ikon, warna, saldo_awal_rupiah, urutan, diarsipkan, dibuat_pada) VALUES ('d-3', 'Dompet 3', 'tunai', 'wallet', 'tintHijau', 0, 0, 0, '${t.toIso8601String()}');");
+      await db2.customStatement("UPDATE tabel_pengaturan SET diubah_pada = '${t.toIso8601String()}';");
 
       final doc1 = await repo1.eksporCadangan(waktuDibuat: t);
       final doc2 = await repo2.eksporCadangan(waktuDibuat: t);

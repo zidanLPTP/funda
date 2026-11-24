@@ -1,0 +1,106 @@
+{
+  "id": "penghasilan_tambahan_8_1",
+  "modulId": "penghasilan_tambahan",
+  "judul": "Memahami Penghasilan Tidak Tetap",
+  "durasiMenit": 5,
+  "status": "draf",
+  "pemantik": "Bulan ini proyek freelance ramai dan dompet terasa longgar. Bulan depan sepi, tetapi biaya kos dan makan tetap harus dibayar.",
+  "kartu": [
+    {
+      "judul": "Naik turun itu wajar",
+      "isi": "{{Penghasilan tidak tetap}} adalah pemasukan yang jumlah atau waktunya berubah-ubah tiap bulan, seperti hasil {{freelance}}, komisi, atau usaha sampingan. Kuncinya bukan berharap selalu ramai, melainkan menyiapkan cara mengatur saat naik dan saat turun."
+    },
+    {
+      "judul": "Jangan anggap bulan ramai sebagai patokan",
+      "isi": "Kesalahan umum saat mendapat proyek besar adalah langsung menaikkan gaya hidup. Padahal, bulan ramai seharusnya menjadi penopang untuk bulan yang lebih sepi. Jadikan pengeluaran kebutuhan pokokmu sebagai patokan utama."
+    },
+    {
+      "judul": "Pisahkan uang kerja dan uang jajan",
+      "isi": "Bila pekerjaan sampinganmu butuh biaya seperti kuota, alat, atau transportasi, catat biayanya secara terpisah. Dengan begitu, kamu tahu berapa hasil bersih yang benar-benar kamu bawa pulang."
+    }
+  ],
+  "contohAngka": {
+    "judul": "Penghasilan freelance 3 bulan yang naik turun",
+    "baris": [
+      {
+        "label": "Bulan 1 (ramai)",
+        "jumlah": 4000000
+      },
+      {
+        "label": "Bulan 2 (sedang)",
+        "jumlah": 2000000
+      },
+      {
+        "label": "Bulan 3 (sepi)",
+        "jumlah": 1500000
+      },
+      {
+        "label": "Rata-rata per bulan",
+        "jumlah": 2500000,
+        "ringkasan": true
+      }
+    ],
+    "kesimpulan": "Walau bulan pertama Rp4.000.000, rata-ratanya Rp2.500.000. Menyusun anggaran dekat angka rata-rata atau bulan sepi jauh lebih aman."
+  },
+  "cekPaham": [
+    {
+      "tanya": "Apa risiko menjadikan pemasukan bulan paling ramai sebagai patokan pengeluaran?",
+      "pilihan": [
+        "Kesulitan menutup kebutuhan pokok saat bulan sepi datang",
+        "Tabungan otomatis penuh",
+        "Pengeluaran menjadi nol"
+      ],
+      "benar": 0,
+      "penjelasan": "Gaya hidup yang mengikuti bulan ramai akan terasa berat ketika proyek sedang turun."
+    },
+    {
+      "tanya": "Mengapa biaya kerja sampingan perlu dipisahkan dari uang pribadi?",
+      "pilihan": [
+        "Supaya tahu penghasilan bersih yang sebenarnya",
+        "Supaya tidak perlu mencatat pemasukan",
+        "Supaya biaya kerja hilang sendiri"
+      ],
+      "benar": 0,
+      "penjelasan": "Memisahkan biaya operasional menunjukkan seberapa besar hasil bersih usahamu."
+    },
+    {
+      "tanya": "Pemasukan 3 bulan berturut-turut Rp3.000.000, Rp2.000.000, dan Rp1.000.000. Berapa rata-ratanya?",
+      "pilihan": [
+        "Rp2.000.000",
+        "Rp3.000.000",
+        "Rp1.500.000"
+      ],
+      "benar": 0,
+      "penjelasan": "Total Rp6.000.000 dibagi 3 bulan menghasilkan rata-rata Rp2.000.000."
+    }
+  ],
+  "misi": {
+    "tipe": "keputusan",
+    "judul": "Mengatur uang di bulan ramai",
+    "instruksi": "Baca skenarionya, lalu pilih langkah yang paling tenang untuk arus kasmu.",
+    "skenario": {
+      "pemantik": "Bulan ini kamu mendapat bayaran freelance Rp3.500.000, lebih besar dari biasanya Rp1.500.000. Bulan depan belum ada proyek yang pasti masuk.",
+      "opsi": [
+        {
+          "id": "a",
+          "teks": "Langsung habiskan selisihnya untuk belanja barang incaran",
+          "aman": false,
+          "umpanBalik": "Kalau bulan depan sepi, kamu bisa kesulitan menutup kebutuhan rutin. Coba pilihan lain."
+        },
+        {
+          "id": "b",
+          "teks": "Sisihkan sebagian selisihnya untuk bantalan bulan sepi dan dana darurat, sisanya baru untuk keinginan",
+          "aman": true,
+          "umpanBalik": "Tepat. Bulan ramai membantu menjaga ketenanganmu saat proyek sedang sepi."
+        },
+        {
+          "id": "c",
+          "teks": "Jangan catat pemasukan ini supaya terasa seperti uang kaget",
+          "aman": false,
+          "umpanBalik": "Tidak mencatat membuat gambaran arus kas dan penghasilan tahunanmu tidak lengkap. Coba pilihan lain."
+        }
+      ]
+    }
+  },
+  "tindakLanjut": "Jika kamu punya penghasilan sampingan, buat kategori pemasukan khusus di Funda agar terpisah dari gaji atau uang saku."
+}
