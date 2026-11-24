@@ -170,10 +170,17 @@ class LayarLainnya extends StatelessWidget {
           ),
           const SizedBox(height: SpasiFunda.s),
           _ItemMenu(
+            ikon: LucideIcons.sparkles,
+            judul: 'Panduan Nilai Funda',
+            keterangan:
+                'Tiga pilar cara Funda memandang uang: Tenang, Kendali, dan Bertumbuh',
+            padaKetuk: () => context.push('/onboarding'),
+          ),
+          const SizedBox(height: SpasiFunda.s),
+          _ItemMenu(
             ikon: LucideIcons.info,
             judul: 'Tentang Funda',
-            keterangan:
-                'Versi 0.5.0 (Tahap 3C - Tagihan Berulang & Pengingat Lokal)',
+            keterangan: 'Versi 1.0.0 (Teman Mengelola Uang yang Nyaman & Aman)',
             padaKetuk: () => _tampilkanPesan(context, 'Tentang Funda'),
           ),
           const SizedBox(height: SpasiFunda.xl),

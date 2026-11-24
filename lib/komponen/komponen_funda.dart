@@ -5,3 +5,5 @@ export 'petak_bento.dart';
 export 'teks_funda.dart';
 export 'tombol_funda.dart';
 export 'disclaimer_langkah_dunia_nyata.dart';
+export 'animasi_funda.dart';
+export 'efek_perayaan.dart';

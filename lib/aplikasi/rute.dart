@@ -16,6 +16,7 @@ import '../fitur/kantong/tampilan/layar_daftar_kantong.dart';
 import '../fitur/kekayaan_bersih/tampilan/layar_kekayaan_bersih.dart';
 import '../fitur/lainnya/tampilan/layar_lainnya.dart';
 import '../fitur/laporan/tampilan/layar_laporan_bulanan.dart';
+import '../fitur/onboarding/tampilan/layar_onboarding.dart';
 import '../fitur/pengaturan/tampilan/layar_pengaturan.dart';
 import '../fitur/sandbox/tampilan/layar_sandbox.dart';
 import '../fitur/tagihan/tampilan/layar_form_tagihan.dart';
@@ -203,6 +204,11 @@ final ruteFunda = GoRouter(
       parentNavigatorKey: _kunciNavigatorAkar,
       path: '/cadangan',
       builder: (context, state) => const LayarCadangan(),
+    ),
+    GoRoute(
+      parentNavigatorKey: _kunciNavigatorAkar,
+      path: '/onboarding',
+      builder: (context, state) => const LayarOnboarding(),
     ),
 
     // Rute Fitur Tahap 9A: Mode Sandbox Edukasi Investasi

@@ -231,7 +231,9 @@ void main() {
           for (final entitas in dir.listSync(recursive: true)) {
             if (entitas is! File || !entitas.path.endsWith('.dart')) continue;
             final pathNormal = entitas.path.replaceAll('\\', '/');
-            if (pathNormal.endsWith('test/penjaga/aturan_pengujian_test.dart')) {
+            if (pathNormal.endsWith(
+              'test/penjaga/aturan_pengujian_test.dart',
+            )) {
               continue;
             }
 

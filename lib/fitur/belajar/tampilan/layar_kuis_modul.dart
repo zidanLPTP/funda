@@ -112,6 +112,9 @@ class _LayarKuisModulState extends ConsumerState<LayarKuisModul> {
         _lulus = lulus;
         _selesai = true;
       });
+      if (lulus) {
+        tampilkanEfekPerayaan(context);
+      }
     }
   }
 

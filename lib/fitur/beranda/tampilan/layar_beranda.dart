@@ -7,6 +7,7 @@ import '../../../data/penyedia_data.dart';
 import '../../../komponen/komponen_funda.dart';
 import '../../../komponen/pembantu_ikon.dart';
 import '../../../perhitungan/perhitungan_anggaran_tujuan.dart';
+import '../../../perhitungan/perhitungan_beranda.dart';
 import '../../../perhitungan/perhitungan_utang_dashboard.dart';
 import '../../../tema/token.dart';
 import '../../../util/format_rupiah.dart';
@@ -127,13 +128,31 @@ class LayarBeranda extends ConsumerWidget {
                 );
               },
             ),
+            const SizedBox(height: SpasiFunda.m),
+            Center(
+              child: TextButton.icon(
+                onPressed: () => context.push('/onboarding'),
+                icon: const Icon(LucideIcons.sparkles, size: 16),
+                label: const Text('Pelajari Nilai Dasar Funda'),
+              ),
+            ),
           ] else ...[
-            // Sapaan Header
-            const TeksFunda.judulLayar('Halo!'),
-            const SizedBox(height: SpasiFunda.xs),
-            const TeksFunda.isi(
-              'Mari rapikan uangmu pelan-pelan.',
-              warna: WarnaFunda.teksRedup,
+            // Sapaan Header Ramah & Kontekstual
+            Builder(
+              builder: (context) {
+                final sapaan = hitungSapaanKontekstual(DateTime.now());
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    TeksFunda.judulLayar(sapaan.sapaan),
+                    const SizedBox(height: SpasiFunda.xs),
+                    TeksFunda.isi(
+                      sapaan.pesanMotivasi,
+                      warna: WarnaFunda.teksRedup,
+                    ),
+                  ],
+                );
+              },
             ),
             const SizedBox(height: SpasiFunda.l),
 
@@ -253,11 +272,13 @@ class LayarBeranda extends ConsumerWidget {
                     ],
                   ),
                   const SizedBox(height: SpasiFunda.s),
-                  TeksFunda.angkaBesar(
-                    formatRupiah(arusKas.selisih),
-                    warna: arusKas.selisih < 0
-                        ? WarnaFunda.pengeluaran
-                        : WarnaFunda.teks,
+                  TeksAngkaAnimasi(
+                    nilai: arusKas.selisih,
+                    gaya: TipografiFunda.angkaBesar.copyWith(
+                      color: arusKas.selisih < 0
+                          ? WarnaFunda.pengeluaran
+                          : WarnaFunda.teks,
+                    ),
                   ),
                   const SizedBox(height: SpasiFunda.xs),
                   TeksFunda.catatan(
@@ -297,12 +318,13 @@ class LayarBeranda extends ConsumerWidget {
                     const SizedBox(height: SpasiFunda.m),
                     const TeksFunda.isiKecil('Total Saldo'),
                     const SizedBox(height: SpasiFunda.xs),
-                    TeksFunda.judulBagian(
-                      formatRupiah(totalSaldo),
-                      angkaTabular: true,
-                      warna: totalSaldo < 0
-                          ? WarnaFunda.pengeluaran
-                          : WarnaFunda.teks,
+                    TeksAngkaAnimasi(
+                      nilai: totalSaldo,
+                      gaya: TipografiFunda.judulBagian.copyWith(
+                        color: totalSaldo < 0
+                            ? WarnaFunda.pengeluaran
+                            : WarnaFunda.teks,
+                      ),
                     ),
                     const SizedBox(height: SpasiFunda.xs),
                     TeksFunda.catatan(
@@ -336,12 +358,13 @@ class LayarBeranda extends ConsumerWidget {
                     const SizedBox(height: SpasiFunda.m),
                     const TeksFunda.isiKecil('Kekayaan Bersih'),
                     const SizedBox(height: SpasiFunda.xs),
-                    TeksFunda.judulBagian(
-                      formatRupiah(kekayaanBersih),
-                      angkaTabular: true,
-                      warna: kekayaanBersih < 0
-                          ? WarnaFunda.pengeluaran
-                          : WarnaFunda.teks,
+                    TeksAngkaAnimasi(
+                      nilai: kekayaanBersih,
+                      gaya: TipografiFunda.judulBagian.copyWith(
+                        color: kekayaanBersih < 0
+                            ? WarnaFunda.pengeluaran
+                            : WarnaFunda.teks,
+                      ),
                     ),
                     const SizedBox(height: SpasiFunda.xs),
                     const TeksFunda.catatan('Aset dikurangi utang'),

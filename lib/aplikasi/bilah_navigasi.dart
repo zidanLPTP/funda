@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '../tema/token.dart';
+import '../util/haptic.dart';
 
 /// Pembungkus bilah navigasi bawah (Bottom Navigation Bar) Funda.
 class PembungkusBilahNavigasi extends StatelessWidget {
@@ -10,6 +11,9 @@ class PembungkusBilahNavigasi extends StatelessWidget {
   final StatefulNavigationShell cangkangNavigasi;
 
   void _padaPilihTab(int indeks) {
+    if (indeks != cangkangNavigasi.currentIndex) {
+      UtilHaptic.pilih();
+    }
     cangkangNavigasi.goBranch(
       indeks,
       initialLocation: indeks == cangkangNavigasi.currentIndex,

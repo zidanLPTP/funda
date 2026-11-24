@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../tema/token.dart';
+import '../util/haptic.dart';
 import 'indikator_memuat.dart';
 
 /// Jenis varian tampilan tombol Funda.
@@ -60,6 +61,14 @@ class TombolFunda extends StatelessWidget {
   final String? labelAkses;
 
   bool get _aktif => padaTekan != null && !memuat;
+
+  VoidCallback? get _padaTekanDenganHaptic {
+    if (!_aktif || padaTekan == null) return null;
+    return () {
+      UtilHaptic.ringan();
+      padaTekan!();
+    };
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -125,7 +134,7 @@ class TombolFunda extends StatelessWidget {
 
   Widget _bangunTombolPrimer(Widget isi) {
     return FilledButton(
-      onPressed: _aktif ? padaTekan : null,
+      onPressed: _aktif ? _padaTekanDenganHaptic : null,
       style: FilledButton.styleFrom(
         backgroundColor: WarnaFunda.utama,
         foregroundColor: WarnaFunda.teksPutih,
@@ -147,7 +156,7 @@ class TombolFunda extends StatelessWidget {
 
   Widget _bangunTombolSekunder(Widget isi) {
     return OutlinedButton(
-      onPressed: _aktif ? padaTekan : null,
+      onPressed: _aktif ? _padaTekanDenganHaptic : null,
       style: OutlinedButton.styleFrom(
         foregroundColor: WarnaFunda.utama,
         disabledForegroundColor: WarnaFunda.teksRedup,
@@ -170,7 +179,7 @@ class TombolFunda extends StatelessWidget {
 
   Widget _bangunTombolTeks(Widget isi) {
     return TextButton(
-      onPressed: _aktif ? padaTekan : null,
+      onPressed: _aktif ? _padaTekanDenganHaptic : null,
       style: TextButton.styleFrom(
         foregroundColor: WarnaFunda.utama,
         disabledForegroundColor: WarnaFunda.teksRedup,
