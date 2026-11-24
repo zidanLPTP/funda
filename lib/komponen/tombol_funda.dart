@@ -91,11 +91,7 @@ class TombolFunda extends StatelessWidget {
         VarianTombolFunda.teks => WarnaFunda.utama,
       };
 
-      return IndikatorMemuat(
-        ukuran: 20,
-        ketebalan: 2.5,
-        warna: warnaIndikator,
-      );
+      return IndikatorMemuat(ukuran: 20, ketebalan: 2.5, warna: warnaIndikator);
     }
 
     final warnaTeks = switch (varian) {

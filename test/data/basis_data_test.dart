@@ -303,7 +303,9 @@ void main() {
 
         // Uji insert pada tabel progres pelajaran
         final waktu = DateTime.now();
-        await basisData.into(basisData.tabelProgresPelajaran).insert(
+        await basisData
+            .into(basisData.tabelProgresPelajaran)
+            .insert(
               TabelProgresPelajaranCompanion.insert(
                 pelajaranId: 'anggaran_arus_kas_1_2',
                 modulId: 'anggaran_arus_kas',
@@ -314,9 +316,10 @@ void main() {
               ),
             );
 
-        final hasilProgres = await (basisData.select(basisData.tabelProgresPelajaran)
-              ..where((p) => p.pelajaranId.equals('anggaran_arus_kas_1_2')))
-            .getSingleOrNull();
+        final hasilProgres =
+            await (basisData.select(basisData.tabelProgresPelajaran)
+                  ..where((p) => p.pelajaranId.equals('anggaran_arus_kas_1_2')))
+                .getSingleOrNull();
         expect(hasilProgres, isNotNull);
         expect(hasilProgres!.status, equals('selesai'));
 
@@ -334,9 +337,11 @@ void main() {
         await basisData.migration.onUpgrade(migrator, 7, 8);
 
         // Cek bahwa indeks baru terbuat
-        final indexRes = await basisData.customSelect(
-          "SELECT name FROM sqlite_master WHERE type='index' AND name LIKE 'idx_transaksi_%';",
-        ).get();
+        final indexRes = await basisData
+            .customSelect(
+              "SELECT name FROM sqlite_master WHERE type='index' AND name LIKE 'idx_transaksi_%';",
+            )
+            .get();
         final daftarIndex = indexRes.map((r) => r.read<String>('name')).toSet();
         expect(daftarIndex.contains('idx_transaksi_jenis'), isTrue);
         expect(daftarIndex.contains('idx_transaksi_jenis_kategori'), isTrue);
@@ -354,9 +359,11 @@ void main() {
         final migrator = Migrator(basisData);
         await basisData.migration.onUpgrade(migrator, 8, 9);
 
-        final indexRes = await basisData.customSelect(
-          "SELECT name FROM sqlite_master WHERE type='index' AND name = 'idx_hasil_tes_awal_waktu';",
-        ).get();
+        final indexRes = await basisData
+            .customSelect(
+              "SELECT name FROM sqlite_master WHERE type='index' AND name = 'idx_hasil_tes_awal_waktu';",
+            )
+            .get();
         expect(indexRes.length, equals(1));
 
         // Jalankan lagi (idempoten)
@@ -369,7 +376,9 @@ void main() {
       () async {
         final migrator = Migrator(basisData);
         // Hapus tabel_profil_keuangan untuk simulasi tabel versi lama
-        await basisData.customStatement('DROP TABLE IF EXISTS tabel_profil_keuangan;');
+        await basisData.customStatement(
+          'DROP TABLE IF EXISTS tabel_profil_keuangan;',
+        );
 
         // Simulasikan tabel v9 dengan kolom lama (darurat, utang, rentang, tanggungan)
         await basisData.customStatement('''
@@ -407,17 +416,21 @@ void main() {
         await basisData.migration.onUpgrade(migrator, 9, 10);
 
         // Verifikasi skema baru: kolom darurat dipetakan ke dana_darurat, utang ke punya_utang
-        final hasil = await basisData.select(basisData.tabelProfilKeuangan).getSingle();
+        final hasil = await basisData
+            .select(basisData.tabelProfilKeuangan)
+            .getSingle();
         expect(hasil.punyaUtang, equals('ya'));
         expect(hasil.danaDarurat, equals('sedikit'));
         expect(hasil.punyaPenghasilan, equals('rutin'));
         expect(hasil.tujuanUtama, equals('Beli rumah'));
 
         // Pastikan kolom rentang dan tanggungan tidak ada lagi di tabel
-        final infoKolom = await basisData.customSelect(
-          "PRAGMA table_info('tabel_profil_keuangan');",
-        ).get();
-        final daftarKolom = infoKolom.map((r) => r.read<String>('name')).toSet();
+        final infoKolom = await basisData
+            .customSelect("PRAGMA table_info('tabel_profil_keuangan');")
+            .get();
+        final daftarKolom = infoKolom
+            .map((r) => r.read<String>('name'))
+            .toSet();
         expect(daftarKolom.contains('rentang'), isFalse);
         expect(daftarKolom.contains('tanggungan'), isFalse);
         expect(daftarKolom.contains('darurat'), isFalse);
@@ -434,26 +447,34 @@ void main() {
       () async {
         final migrator = Migrator(basisData);
         // Hapus tabel_sesi_sandbox untuk simulasi keadaan database di versi 10
-        await basisData.customStatement('DROP TABLE IF EXISTS tabel_sesi_sandbox;');
+        await basisData.customStatement(
+          'DROP TABLE IF EXISTS tabel_sesi_sandbox;',
+        );
 
-        var infoTabel = await basisData.customSelect(
-          "SELECT name FROM sqlite_master WHERE type='table' AND name='tabel_sesi_sandbox';",
-        ).get();
+        var infoTabel = await basisData
+            .customSelect(
+              "SELECT name FROM sqlite_master WHERE type='table' AND name='tabel_sesi_sandbox';",
+            )
+            .get();
         expect(infoTabel.isEmpty, isTrue);
 
         // Jalankan migrasi v10 -> v11
         await basisData.migration.onUpgrade(migrator, 10, 11);
 
-        infoTabel = await basisData.customSelect(
-          "SELECT name FROM sqlite_master WHERE type='table' AND name='tabel_sesi_sandbox';",
-        ).get();
+        infoTabel = await basisData
+            .customSelect(
+              "SELECT name FROM sqlite_master WHERE type='table' AND name='tabel_sesi_sandbox';",
+            )
+            .get();
         expect(infoTabel.length, equals(1));
 
         // Pastikan kolom-kolom skema sesuai
-        final kolomInfo = await basisData.customSelect(
-          "PRAGMA table_info('tabel_sesi_sandbox');",
-        ).get();
-        final daftarKolom = kolomInfo.map((r) => r.read<String>('name')).toSet();
+        final kolomInfo = await basisData
+            .customSelect("PRAGMA table_info('tabel_sesi_sandbox');")
+            .get();
+        final daftarKolom = kolomInfo
+            .map((r) => r.read<String>('name'))
+            .toSet();
         expect(daftarKolom.contains('id'), isTrue);
         expect(daftarKolom.contains('saldo_awal_rupiah'), isTrue);
         expect(daftarKolom.contains('alokasi_pasar_uang_persen'), isTrue);
@@ -478,9 +499,11 @@ void main() {
         await basisData.migration.onUpgrade(migrator, 1, 11);
 
         // Pastikan tabel_sesi_sandbox ada
-        final infoTabel = await basisData.customSelect(
-          "SELECT name FROM sqlite_master WHERE type='table' AND name='tabel_sesi_sandbox';",
-        ).get();
+        final infoTabel = await basisData
+            .customSelect(
+              "SELECT name FROM sqlite_master WHERE type='table' AND name='tabel_sesi_sandbox';",
+            )
+            .get();
         expect(infoTabel.length, equals(1));
       },
     );

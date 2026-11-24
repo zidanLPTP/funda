@@ -11,11 +11,7 @@ class TeksDenganIstilah extends ConsumerWidget {
   final String teks;
   final TextStyle? gaya;
 
-  const TeksDenganIstilah({
-    super.key,
-    required this.teks,
-    this.gaya,
-  });
+  const TeksDenganIstilah({super.key, required this.teks, this.gaya});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -47,9 +43,19 @@ class TeksDenganIstilah extends ConsumerWidget {
           recognizer: TapGestureRecognizer()
             ..onTap = () {
               if (istilahObj != null) {
-                _tampilkanDialogKamus(context, istilahObj.istilah, istilahObj.arti, istilahObj.contohRupiah);
+                _tampilkanDialogKamus(
+                  context,
+                  istilahObj.istilah,
+                  istilahObj.arti,
+                  istilahObj.contohRupiah,
+                );
               } else {
-                _tampilkanDialogKamus(context, istilahKunci, 'Istilah keuangan.', '');
+                _tampilkanDialogKamus(
+                  context,
+                  istilahKunci,
+                  'Istilah keuangan.',
+                  '',
+                );
               }
             },
         ),
@@ -65,7 +71,9 @@ class TeksDenganIstilah extends ConsumerWidget {
 
     return Text.rich(
       TextSpan(children: spans),
-      style: gaya ?? const TextStyle(fontSize: 16, height: 1.5, color: WarnaFunda.teks),
+      style:
+          gaya ??
+          const TextStyle(fontSize: 16, height: 1.5, color: WarnaFunda.teks),
     );
   }
 
@@ -81,7 +89,9 @@ class TeksDenganIstilah extends ConsumerWidget {
       spans.add(
         TextSpan(
           text: m.group(1),
-          style: (dasar ?? const TextStyle()).copyWith(fontWeight: FontWeight.bold),
+          style: (dasar ?? const TextStyle()).copyWith(
+            fontWeight: FontWeight.bold,
+          ),
         ),
       );
       idx = m.end;
@@ -114,12 +124,14 @@ class TeksDenganIstilah extends ConsumerWidget {
                   color: WarnaFunda.utamaTipis,
                   borderRadius: BorderRadius.circular(SudutFunda.kecil),
                 ),
-                child: const Icon(Icons.menu_book, color: WarnaFunda.utama, size: 20),
+                child: const Icon(
+                  Icons.menu_book,
+                  color: WarnaFunda.utama,
+                  size: 20,
+                ),
               ),
               const SizedBox(width: SpasiFunda.s),
-              Expanded(
-                child: TeksFunda.judulBagian(istilah),
-              ),
+              Expanded(child: TeksFunda.judulBagian(istilah)),
             ],
           ),
           content: Column(
@@ -138,7 +150,10 @@ class TeksDenganIstilah extends ConsumerWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const TeksFunda.catatan('Contoh konkret:', warna: WarnaFunda.teksRedup),
+                      const TeksFunda.catatan(
+                        'Contoh konkret:',
+                        warna: WarnaFunda.teksRedup,
+                      ),
                       const SizedBox(height: SpasiFunda.xs),
                       TeksFunda.isiKecil(contohRupiah),
                     ],

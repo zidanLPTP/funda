@@ -61,10 +61,7 @@ class _LayarSandboxState extends ConsumerState<LayarSandbox> {
               decoration: BoxDecoration(
                 color: WarnaFunda.tintAmber,
                 borderRadius: BorderRadius.circular(SudutFunda.kartu),
-                border: Border.all(
-                  color: WarnaFunda.aksen,
-                  width: 1.5,
-                ),
+                border: Border.all(color: WarnaFunda.aksen, width: 1.5),
               ),
               child: const Row(
                 children: [
@@ -173,8 +170,8 @@ class _LayarSandboxState extends ConsumerState<LayarSandbox> {
                         color: keadaan.selisihDariAwal > 0
                             ? WarnaFunda.sukses
                             : (keadaan.selisihDariAwal < 0
-                                ? WarnaFunda.bahaya
-                                : WarnaFunda.teksRedup),
+                                  ? WarnaFunda.bahaya
+                                  : WarnaFunda.teksRedup),
                       ),
                     ),
                   ],

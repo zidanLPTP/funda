@@ -45,17 +45,22 @@ final penyediaTotalCicilanBulananAktif = Provider<int>((ref) {
 
 /// Stream provider pemasukan bulanan rata-rata agregasi SQL efisien.
 final penyediaStreamPemasukanBulananRataRata =
-    StreamProvider.family<HasilPemasukanRataRata, DateTime>((ref, waktuSekarang) {
-  final repo = ref.watch(penyediaTransaksiRepositori);
-  return repo.pantauPemasukanRataRataSQL(waktuSekarang: waktuSekarang);
-});
+    StreamProvider.family<HasilPemasukanRataRata, DateTime>((
+      ref,
+      waktuSekarang,
+    ) {
+      final repo = ref.watch(penyediaTransaksiRepositori);
+      return repo.pantauPemasukanRataRataSQL(waktuSekarang: waktuSekarang);
+    });
 
 /// Provider pemasukan bulanan rata-rata pengguna via agregasi SQL (berdasarkan 3 bulan kalender terakhir atau bulan berjalan).
 final penyediaPemasukanBulananRataRata = Provider<HasilPemasukanRataRata>((
   ref,
 ) {
   final sekarang = DateTime.now();
-  final hasilAsync = ref.watch(penyediaStreamPemasukanBulananRataRata(sekarang));
+  final hasilAsync = ref.watch(
+    penyediaStreamPemasukanBulananRataRata(sekarang),
+  );
   return hasilAsync.value ??
       const HasilPemasukanRataRata(
         nilaiRupiah: 0,

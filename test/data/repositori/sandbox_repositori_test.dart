@@ -49,39 +49,42 @@ void main() {
       expect(sesi.riwayatJson, '[]');
     });
 
-    test('simpanSesi memperbarui baris sesi yang sama tanpa menambah baris baru', () async {
-      await repo.simpanSesi(
-        saldoAwalRupiah: 10000000,
-        alokasiPasarUangPersen: 40,
-        alokasiObligasiPersen: 30,
-        alokasiSahamPersen: 30,
-        bulanBerjalan: 0,
-        nilaiSaatIniRupiah: 10000000,
-        skenarioAktif: 'normal',
-        riwayatJson: '[]',
-      );
+    test(
+      'simpanSesi memperbarui baris sesi yang sama tanpa menambah baris baru',
+      () async {
+        await repo.simpanSesi(
+          saldoAwalRupiah: 10000000,
+          alokasiPasarUangPersen: 40,
+          alokasiObligasiPersen: 30,
+          alokasiSahamPersen: 30,
+          bulanBerjalan: 0,
+          nilaiSaatIniRupiah: 10000000,
+          skenarioAktif: 'normal',
+          riwayatJson: '[]',
+        );
 
-      // Majukan 1 tahun (12 bulan)
-      await repo.simpanSesi(
-        saldoAwalRupiah: 10000000,
-        alokasiPasarUangPersen: 50,
-        alokasiObligasiPersen: 30,
-        alokasiSahamPersen: 20,
-        bulanBerjalan: 12,
-        nilaiSaatIniRupiah: 10500000,
-        skenarioAktif: 'turun',
-        riwayatJson: '[{"tahun": 1, "nilai": 10500000}]',
-      );
+        // Majukan 1 tahun (12 bulan)
+        await repo.simpanSesi(
+          saldoAwalRupiah: 10000000,
+          alokasiPasarUangPersen: 50,
+          alokasiObligasiPersen: 30,
+          alokasiSahamPersen: 20,
+          bulanBerjalan: 12,
+          nilaiSaatIniRupiah: 10500000,
+          skenarioAktif: 'turun',
+          riwayatJson: '[{"tahun": 1, "nilai": 10500000}]',
+        );
 
-      final semuaSesi = await db.select(db.tabelSesiSandbox).get();
-      expect(semuaSesi.length, equals(1));
+        final semuaSesi = await db.select(db.tabelSesiSandbox).get();
+        expect(semuaSesi.length, equals(1));
 
-      final sesi = semuaSesi.first;
-      expect(sesi.bulanBerjalan, 12);
-      expect(sesi.alokasiPasarUangPersen, 50);
-      expect(sesi.nilaiSaatIniRupiah, 10500000);
-      expect(sesi.skenarioAktif, 'turun');
-    });
+        final sesi = semuaSesi.first;
+        expect(sesi.bulanBerjalan, 12);
+        expect(sesi.alokasiPasarUangPersen, 50);
+        expect(sesi.nilaiSaatIniRupiah, 10500000);
+        expect(sesi.skenarioAktif, 'turun');
+      },
+    );
 
     test('resetSesi menghapus seluruh baris sesi sandbox', () async {
       await repo.simpanSesi(
@@ -101,41 +104,44 @@ void main() {
       expect(sesi, isNull);
     });
 
-    test('ISOLASI TOTAL: operasi sandbox tidak menyentuh tabel keuangan asli pengguna', () async {
-      // 1. Pastikan tabel keuangan pengguna bersih
-      final txAwal = await db.select(db.tabelTransaksi).get();
-      final dompetAwal = await db.select(db.tabelDompet).get();
-      final utangAwal = await db.select(db.tabelUtang).get();
-      final tagihanAwal = await db.select(db.tabelTagihan).get();
+    test(
+      'ISOLASI TOTAL: operasi sandbox tidak menyentuh tabel keuangan asli pengguna',
+      () async {
+        // 1. Pastikan tabel keuangan pengguna bersih
+        final txAwal = await db.select(db.tabelTransaksi).get();
+        final dompetAwal = await db.select(db.tabelDompet).get();
+        final utangAwal = await db.select(db.tabelUtang).get();
+        final tagihanAwal = await db.select(db.tabelTagihan).get();
 
-      // 2. Simpan dan ubah-ubah sesi sandbox
-      await repo.simpanSesi(
-        saldoAwalRupiah: 10000000,
-        alokasiPasarUangPersen: 100,
-        alokasiObligasiPersen: 0,
-        alokasiSahamPersen: 0,
-        bulanBerjalan: 36,
-        nilaiSaatIniRupiah: 15000000,
-        skenarioAktif: 'naik',
-        riwayatJson: '[]',
-      );
+        // 2. Simpan dan ubah-ubah sesi sandbox
+        await repo.simpanSesi(
+          saldoAwalRupiah: 10000000,
+          alokasiPasarUangPersen: 100,
+          alokasiObligasiPersen: 0,
+          alokasiSahamPersen: 0,
+          bulanBerjalan: 36,
+          nilaiSaatIniRupiah: 15000000,
+          skenarioAktif: 'naik',
+          riwayatJson: '[]',
+        );
 
-      // 3. Verifikasi seluruh tabel keuangan pengguna tetap tidak berubah
-      final txAkhir = await db.select(db.tabelTransaksi).get();
-      final dompetAkhir = await db.select(db.tabelDompet).get();
-      final utangAkhir = await db.select(db.tabelUtang).get();
-      final tagihanAkhir = await db.select(db.tabelTagihan).get();
+        // 3. Verifikasi seluruh tabel keuangan pengguna tetap tidak berubah
+        final txAkhir = await db.select(db.tabelTransaksi).get();
+        final dompetAkhir = await db.select(db.tabelDompet).get();
+        final utangAkhir = await db.select(db.tabelUtang).get();
+        final tagihanAkhir = await db.select(db.tabelTagihan).get();
 
-      expect(txAkhir.length, equals(txAwal.length));
-      expect(dompetAkhir.length, equals(dompetAwal.length));
-      expect(utangAkhir.length, equals(utangAwal.length));
-      expect(tagihanAkhir.length, equals(tagihanAwal.length));
+        expect(txAkhir.length, equals(txAwal.length));
+        expect(dompetAkhir.length, equals(dompetAwal.length));
+        expect(utangAkhir.length, equals(utangAwal.length));
+        expect(tagihanAkhir.length, equals(tagihanAwal.length));
 
-      // 4. Verifikasi cadangan mengecualikan tabel sesi sandbox
-      final cadanganRepo = CadanganRepositori(db);
-      final jsonCadangan = await cadanganRepo.eksporCadanganKeJson();
-      expect(jsonCadangan.contains('tabel_sesi_sandbox'), isFalse);
-      expect(jsonCadangan.contains('15000000'), isFalse);
-    });
+        // 4. Verifikasi cadangan mengecualikan tabel sesi sandbox
+        final cadanganRepo = CadanganRepositori(db);
+        final jsonCadangan = await cadanganRepo.eksporCadanganKeJson();
+        expect(jsonCadangan.contains('tabel_sesi_sandbox'), isFalse);
+        expect(jsonCadangan.contains('15000000'), isFalse);
+      },
+    );
   });
 }

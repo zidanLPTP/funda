@@ -100,11 +100,15 @@ funda/
 - [docs/format_konten.md](docs/format_konten.md) — Spesifikasi skema JSON kurikulum edukasi, kamus istilah, template laporan, dan aturan penulisan kalimat <= 25 kata.
 - [docs/format_cadangan.md](docs/format_cadangan.md) — Spesifikasi format JSON v1 berkas cadangan, checksum SHA-256, dan mekanisme rollback transaksi atomik.
 - [docs/utang_teknis.md](docs/utang_teknis.md) — Catatan utang teknis, dependensi native SQLite, dan rencana refaktor.
+- [docs/daftar_tinjauan_konten.md](docs/daftar_tinjauan_konten.md) — Rekapitulasi tinjauan materi `catatanReviewer` / `TODO-VERIFIKASI` untuk pemilik proyek.
+- [docs/panduan_rilis.md](docs/panduan_rilis.md) — Panduan penandatanganan rilis APK/AAB Google Play Store, iOS Xcode, kebijakan privasi, dan checklist uji fisik.
 
 ---
 
 ## 📸 Tangkapan Layar Aplikasi
 Tangkapan layar otomatis yang dihasilkan dari pengujian dan emulator tersimpan pada:
+- **Tahap 12 (Polesan, Audit Akhir & Kesiapan Rilis v1.0):** [docs/tangkapan_layar/](docs/tangkapan_layar/)
+  - Pembersihan token UI, isolasi privasi log rilis, penghapusan jargon teknis umpan balik, verifikasi izin minimum manifest (offline-first), kompilasi APK release (v1.0.0+1), checklist tinjauan konten, dan panduan rilis publikasi Play Store / App Store.
 - **Tahap 11C (Modul 17 "Keuangan Usaha Kecil" & Modul 18 "Proteksi Keluarga & Warisan Dasar" — Penutupan Tingkat Lanjutan & Kurikulum 18 Modul):** [docs/tangkapan_layar/](docs/tangkapan_layar/)
   - Menghadirkan materi pemisahan uang usaha dan pribadi, laba bersih dan kas operasional, modal kerja dan cadangan kas usaha, komunikasi keuangan keluarga, inventaris dokumen penting, pemahaman warisan dasar dan wasiat, klausul pernyataan `belum_punya_usaha`, serta umpan balik on-demand `ringkasan_usaha_kecil`. Seluruh 18 modul kurikulum Funda (57 pelajaran) kini telah lengkap dan aktif penuh.
 - **Tahap 11B (Modul 15 "Pajak Lanjutan" & Modul 16 "Pensiun & Kebebasan Finansial" — Tingkat Lanjutan Bagian 2):** [docs/tangkapan_layar/](docs/tangkapan_layar/)

@@ -18,7 +18,10 @@ Future<void> pompaHingga(
   final batasWaktu = DateTime.now().add(batas);
   while (!kondisi()) {
     if (DateTime.now().isAfter(batasWaktu)) {
-      throw TestFailure(pesan ?? 'Batas waktu pompaHingga (${batas.inSeconds} detik) terlampaui.');
+      throw TestFailure(
+        pesan ??
+            'Batas waktu pompaHingga (${batas.inSeconds} detik) terlampaui.',
+      );
     }
     await tester.pump(langkah);
     if (!kondisi()) {
@@ -41,7 +44,8 @@ Future<void> pompaHinggaAda(
     () => pencari.evaluate().isNotEmpty,
     batas: batas,
     langkah: langkah,
-    pesan: 'Pencari "$pencari" tidak ditemukan dalam batas waktu ${batas.inSeconds} detik.',
+    pesan:
+        'Pencari "$pencari" tidak ditemukan dalam batas waktu ${batas.inSeconds} detik.',
   );
 }
 
@@ -57,7 +61,8 @@ Future<void> pompaHinggaHilang(
     () => pencari.evaluate().isEmpty,
     batas: batas,
     langkah: langkah,
-    pesan: 'Pencari "$pencari" masih ditemukan setelah batas waktu ${batas.inSeconds} detik.',
+    pesan:
+        'Pencari "$pencari" masih ditemukan setelah batas waktu ${batas.inSeconds} detik.',
   );
 }
 

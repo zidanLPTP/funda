@@ -310,13 +310,19 @@ class TagihanRepositori {
     if (idTransaksiTerkait.isEmpty) {
       petaJumlahTransaksi = const {};
     } else {
-      final barisTransaksi = await (_db.selectOnly(_db.tabelTransaksi)
-            ..addColumns([_db.tabelTransaksi.id, _db.tabelTransaksi.jumlahRupiah])
-            ..where(_db.tabelTransaksi.id.isIn(idTransaksiTerkait)))
-          .get();
+      final barisTransaksi =
+          await (_db.selectOnly(_db.tabelTransaksi)
+                ..addColumns([
+                  _db.tabelTransaksi.id,
+                  _db.tabelTransaksi.jumlahRupiah,
+                ])
+                ..where(_db.tabelTransaksi.id.isIn(idTransaksiTerkait)))
+              .get();
       petaJumlahTransaksi = {
         for (final b in barisTransaksi)
-          b.read(_db.tabelTransaksi.id)!: b.read(_db.tabelTransaksi.jumlahRupiah)!
+          b.read(_db.tabelTransaksi.id)!: b.read(
+            _db.tabelTransaksi.jumlahRupiah,
+          )!,
       };
     }
 

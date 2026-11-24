@@ -65,33 +65,39 @@ void main() {
       );
     });
 
-    test('hitungSimulasiSandbox melempar ArgumentError jika alokasi tidak 100%', () {
-      expect(
-        () => hitungSimulasiSandbox(
-          saldoAwal: 10000000,
-          persenPasarUang: 50,
-          persenObligasi: 20,
-          persenSaham: 20,
-          jumlahTahun: 1,
-          skenario: 'normal',
-        ),
-        throwsArgumentError,
-      );
-    });
+    test(
+      'hitungSimulasiSandbox melempar ArgumentError jika alokasi tidak 100%',
+      () {
+        expect(
+          () => hitungSimulasiSandbox(
+            saldoAwal: 10000000,
+            persenPasarUang: 50,
+            persenObligasi: 20,
+            persenSaham: 20,
+            jumlahTahun: 1,
+            skenario: 'normal',
+          ),
+          throwsArgumentError,
+        );
+      },
+    );
 
-    test('hitungSimulasiSandbox melempar ArgumentError jika skenario tidak valid', () {
-      expect(
-        () => hitungSimulasiSandbox(
-          saldoAwal: 10000000,
-          persenPasarUang: 50,
-          persenObligasi: 30,
-          persenSaham: 20,
-          jumlahTahun: 1,
-          skenario: 'tidak_dikenal',
-        ),
-        throwsArgumentError,
-      );
-    });
+    test(
+      'hitungSimulasiSandbox melempar ArgumentError jika skenario tidak valid',
+      () {
+        expect(
+          () => hitungSimulasiSandbox(
+            saldoAwal: 10000000,
+            persenPasarUang: 50,
+            persenObligasi: 30,
+            persenSaham: 20,
+            jumlahTahun: 1,
+            skenario: 'tidak_dikenal',
+          ),
+          throwsArgumentError,
+        );
+      },
+    );
   });
 
   group('Perhitungan Sandbox - Skenario Majemuk Integer', () {
@@ -181,88 +187,105 @@ void main() {
       expect(hasil.selisihRupiah, 3712816);
     });
 
-    test('diversifikasi meredam penurunan: 100% pasar uang vs 100% saham di skenario turun', () {
-      // 100% Saham pada skenario turun 1 tahun:
-      // Saldo 10jt -> Saham rugi 20% (-2000 bp) = 8.000.000 (turun 2jt)
-      final hasilSemuaSaham = hitungSimulasiSandbox(
-        saldoAwal: saldoAwal,
-        persenPasarUang: 0,
-        persenObligasi: 0,
-        persenSaham: 100,
-        jumlahTahun: 1,
-        skenario: 'turun',
-      );
-      expect(hasilSemuaSaham.nilaiAkhirTotal, 8000000);
-      expect(hasilSemuaSaham.selisihRupiah, -2000000);
+    test(
+      'diversifikasi meredam penurunan: 100% pasar uang vs 100% saham di skenario turun',
+      () {
+        // 100% Saham pada skenario turun 1 tahun:
+        // Saldo 10jt -> Saham rugi 20% (-2000 bp) = 8.000.000 (turun 2jt)
+        final hasilSemuaSaham = hitungSimulasiSandbox(
+          saldoAwal: saldoAwal,
+          persenPasarUang: 0,
+          persenObligasi: 0,
+          persenSaham: 100,
+          jumlahTahun: 1,
+          skenario: 'turun',
+        );
+        expect(hasilSemuaSaham.nilaiAkhirTotal, 8000000);
+        expect(hasilSemuaSaham.selisihRupiah, -2000000);
 
-      // Portofolio Campuran (50% Pasar Uang, 50% Saham):
-      // PU (+300 bp): 5.000.000 + 150.000 = 5.150.000
-      // SH (-2000 bp): 5.000.000 - 1.000.000 = 4.000.000
-      // Total = 9.150.000 (penurunan hanya -850.000, jauh lebih tenang daripada -2.000.000)
-      final hasilCampuran = hitungSimulasiSandbox(
-        saldoAwal: saldoAwal,
-        persenPasarUang: 50,
-        persenObligasi: 0,
-        persenSaham: 50,
-        jumlahTahun: 1,
-        skenario: 'turun',
-      );
-      expect(hasilCampuran.nilaiAkhirTotal, 9150000);
-      expect(hasilCampuran.selisihRupiah, -850000);
+        // Portofolio Campuran (50% Pasar Uang, 50% Saham):
+        // PU (+300 bp): 5.000.000 + 150.000 = 5.150.000
+        // SH (-2000 bp): 5.000.000 - 1.000.000 = 4.000.000
+        // Total = 9.150.000 (penurunan hanya -850.000, jauh lebih tenang daripada -2.000.000)
+        final hasilCampuran = hitungSimulasiSandbox(
+          saldoAwal: saldoAwal,
+          persenPasarUang: 50,
+          persenObligasi: 0,
+          persenSaham: 50,
+          jumlahTahun: 1,
+          skenario: 'turun',
+        );
+        expect(hasilCampuran.nilaiAkhirTotal, 9150000);
+        expect(hasilCampuran.selisihRupiah, -850000);
 
-      expect(hasilCampuran.nilaiAkhirTotal > hasilSemuaSaham.nilaiAkhirTotal, isTrue);
-    });
+        expect(
+          hasilCampuran.nilaiAkhirTotal > hasilSemuaSaham.nilaiAkhirTotal,
+          isTrue,
+        );
+      },
+    );
 
-    test('sisa pembagian integer alokasi: angka tidak habis dibagi 100 (1000001, 33/33/34)', () {
-      const nilaiAwal = 1000001;
-      const persenPU = 33;
-      const persenOB = 33;
-      const persenSH = 34;
+    test(
+      'sisa pembagian integer alokasi: angka tidak habis dibagi 100 (1000001, 33/33/34)',
+      () {
+        const nilaiAwal = 1000001;
+        const persenPU = 33;
+        const persenOB = 33;
+        const persenSH = 34;
 
-      final nominalPU = (nilaiAwal * persenPU) ~/ 100;
-      final nominalOB = (nilaiAwal * persenOB) ~/ 100;
-      final nominalSH = nilaiAwal - nominalPU - nominalOB;
+        final nominalPU = (nilaiAwal * persenPU) ~/ 100;
+        final nominalOB = (nilaiAwal * persenOB) ~/ 100;
+        final nominalSH = nilaiAwal - nominalPU - nominalOB;
 
-      // Buktikan nominalPasarUang + nominalObligasi + nominalSaham == nilaiAwalRupiah
-      expect(nominalPU + nominalOB + nominalSH, equals(nilaiAwal));
+        // Buktikan nominalPasarUang + nominalObligasi + nominalSaham == nilaiAwalRupiah
+        expect(nominalPU + nominalOB + nominalSH, equals(nilaiAwal));
 
-      // Jalankan 0 tahun untuk memverifikasi porsi awal hasil simulasi
-      final hasil0Tahun = hitungSimulasiSandbox(
-        saldoAwal: nilaiAwal,
-        persenPasarUang: persenPU,
-        persenObligasi: persenOB,
-        persenSaham: persenSH,
-        jumlahTahun: 0,
-        skenario: 'normal',
-      );
+        // Jalankan 0 tahun untuk memverifikasi porsi awal hasil simulasi
+        final hasil0Tahun = hitungSimulasiSandbox(
+          saldoAwal: nilaiAwal,
+          persenPasarUang: persenPU,
+          persenObligasi: persenOB,
+          persenSaham: persenSH,
+          jumlahTahun: 0,
+          skenario: 'normal',
+        );
 
-      expect(hasil0Tahun.nilaiPasarUang, equals(nominalPU));
-      expect(hasil0Tahun.nilaiObligasi, equals(nominalOB));
-      expect(hasil0Tahun.nilaiSaham, equals(nominalSH));
-      expect(hasil0Tahun.nilaiPasarUang + hasil0Tahun.nilaiObligasi + hasil0Tahun.nilaiSaham, equals(nilaiAwal));
-      expect(hasil0Tahun.nilaiAkhirTotal, equals(nilaiAwal));
-      expect(hasil0Tahun.selisihRupiah, equals(0));
-    });
+        expect(hasil0Tahun.nilaiPasarUang, equals(nominalPU));
+        expect(hasil0Tahun.nilaiObligasi, equals(nominalOB));
+        expect(hasil0Tahun.nilaiSaham, equals(nominalSH));
+        expect(
+          hasil0Tahun.nilaiPasarUang +
+              hasil0Tahun.nilaiObligasi +
+              hasil0Tahun.nilaiSaham,
+          equals(nilaiAwal),
+        );
+        expect(hasil0Tahun.nilaiAkhirTotal, equals(nilaiAwal));
+        expect(hasil0Tahun.selisihRupiah, equals(0));
+      },
+    );
   });
 
   group('Perhitungan Sandbox - Daya Beli Inflasi', () {
-    test('daya beli inflasi 400 bp (4%) selama 5 tahun dengan nilai awal 10.000.000', () {
-      // Tiap tahun: nilai = nilai * 10000 ~/ (10000 + inflasiBpPerTahun)
-      // Thn 1: 10.000.000 * 10.000 ~/ 10.400 = 9.615.384
-      // Thn 2: 9.615.384 * 10.000 ~/ 10.400 = 9.245.561
-      // Thn 3: 9.245.561 * 10.000 ~/ 10.400 = 8.889.962
-      // Thn 4: 8.889.962 * 10.000 ~/ 10.400 = 8.548.040
-      // Thn 5: 8.548.040 * 10.000 ~/ 10.400 = 8.219.271
-      final dayaBeli = hitungDayaBeliInflasi(
-        nilaiAwal: 10000000,
-        inflasiBpPerTahun: 400,
-        jumlahTahun: 5,
-      );
+    test(
+      'daya beli inflasi 400 bp (4%) selama 5 tahun dengan nilai awal 10.000.000',
+      () {
+        // Tiap tahun: nilai = nilai * 10000 ~/ (10000 + inflasiBpPerTahun)
+        // Thn 1: 10.000.000 * 10.000 ~/ 10.400 = 9.615.384
+        // Thn 2: 9.615.384 * 10.000 ~/ 10.400 = 9.245.561
+        // Thn 3: 9.245.561 * 10.000 ~/ 10.400 = 8.889.962
+        // Thn 4: 8.889.962 * 10.000 ~/ 10.400 = 8.548.040
+        // Thn 5: 8.548.040 * 10.000 ~/ 10.400 = 8.219.271
+        final dayaBeli = hitungDayaBeliInflasi(
+          nilaiAwal: 10000000,
+          inflasiBpPerTahun: 400,
+          jumlahTahun: 5,
+        );
 
-      expect(dayaBeli, 8219271);
-      final selisih = dayaBeli - 10000000;
-      expect(selisih, -1780729);
-    });
+        expect(dayaBeli, 8219271);
+        final selisih = dayaBeli - 10000000;
+        expect(selisih, -1780729);
+      },
+    );
 
     test('daya beli inflasi 0 tahun mengembalikan nilai awal', () {
       expect(

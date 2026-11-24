@@ -287,10 +287,12 @@ class BasisDataFunda extends _$BasisDataFunda {
           final kolomMap = {
             for (final r in tabelProfilInfo) r.read<String>('name'): true,
           };
-          final butuhRestrukturisasi = kolomMap.containsKey('darurat') ||
+          final butuhRestrukturisasi =
+              kolomMap.containsKey('darurat') ||
               kolomMap.containsKey('rentang') ||
               kolomMap.containsKey('tanggungan') ||
-              (kolomMap.containsKey('utang') && !kolomMap.containsKey('punya_utang'));
+              (kolomMap.containsKey('utang') &&
+                  !kolomMap.containsKey('punya_utang'));
 
           if (butuhRestrukturisasi) {
             await customStatement(
@@ -303,12 +305,19 @@ class BasisDataFunda extends _$BasisDataFunda {
             final danaDaruratExpr = kolomMap.containsKey('dana_darurat')
                 ? 'dana_darurat'
                 : (kolomMap.containsKey('darurat') ? 'darurat' : "'belum'");
-            final punyaPenghasilanExpr = kolomMap.containsKey('punya_penghasilan')
+            final punyaPenghasilanExpr =
+                kolomMap.containsKey('punya_penghasilan')
                 ? 'punya_penghasilan'
                 : (kolomMap.containsKey('sumber') ? 'sumber' : "'rutin'");
-            final menabungExpr = kolomMap.containsKey('menabung') ? 'menabung' : "'kadang'";
-            final investasiExpr = kolomMap.containsKey('investasi') ? 'investasi' : "'belum'";
-            final mencatatExpr = kolomMap.containsKey('mencatat_keuangan') ? 'mencatat_keuangan' : "'kadang'";
+            final menabungExpr = kolomMap.containsKey('menabung')
+                ? 'menabung'
+                : "'kadang'";
+            final investasiExpr = kolomMap.containsKey('investasi')
+                ? 'investasi'
+                : "'belum'";
+            final mencatatExpr = kolomMap.containsKey('mencatat_keuangan')
+                ? 'mencatat_keuangan'
+                : "'kadang'";
             final tujuanUtamaExpr = kolomMap.containsKey('tujuan_utama')
                 ? 'tujuan_utama'
                 : (kolomMap.containsKey('tujuan') ? 'tujuan' : 'NULL');

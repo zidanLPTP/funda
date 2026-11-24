@@ -18,7 +18,10 @@ void main() {
       ''';
       final kamus = PembacaKonten.uraiKamus(kamusValid);
       expect(kamus.containsKey('arus kas'), isTrue);
-      expect(kamus['arus kas']!.arti, equals('Selisih pemasukan dan pengeluaran.'));
+      expect(
+        kamus['arus kas']!.arti,
+        equals('Selisih pemasukan dan pengeluaran.'),
+      );
 
       // Format bukan array
       expect(
@@ -105,7 +108,10 @@ void main() {
       }
       ''';
       expect(
-        () => PembacaKonten.uraiPelajaran(pelajaran4Kartu, namaBerkas: 'uji.json'),
+        () => PembacaKonten.uraiPelajaran(
+          pelajaran4Kartu,
+          namaBerkas: 'uji.json',
+        ),
         throwsA(isA<GalatKonten>()),
       );
 
@@ -126,7 +132,10 @@ void main() {
       }
       ''';
       expect(
-        () => PembacaKonten.uraiPelajaran(pelajaranIdSalah, namaBerkas: 'uji.json'),
+        () => PembacaKonten.uraiPelajaran(
+          pelajaranIdSalah,
+          namaBerkas: 'uji.json',
+        ),
         throwsA(isA<GalatKonten>()),
       );
     });
@@ -158,68 +167,100 @@ void main() {
       );
     });
 
-    test('Pemeriksa bahasa: kata terlarang memicu galat, kalimat > 25 kata memicu peringatan', () {
-      expect(
-        () => PembacaKonten.periksaBahasaTeks('Kamu sangat boros sekali!', namaBerkas: 'uji.json'),
-        throwsA(isA<GalatKonten>()),
-      );
-      expect(
-        () => PembacaKonten.periksaBahasaTeks('Itu adalah perilaku salah.', namaBerkas: 'uji.json'),
-        throwsA(isA<GalatKonten>()),
-      );
+    test(
+      'Pemeriksa bahasa: kata terlarang memicu galat, kalimat > 25 kata memicu peringatan',
+      () {
+        expect(
+          () => PembacaKonten.periksaBahasaTeks(
+            'Kamu sangat boros sekali!',
+            namaBerkas: 'uji.json',
+          ),
+          throwsA(isA<GalatKonten>()),
+        );
+        expect(
+          () => PembacaKonten.periksaBahasaTeks(
+            'Itu adalah perilaku salah.',
+            namaBerkas: 'uji.json',
+          ),
+          throwsA(isA<GalatKonten>()),
+        );
 
-      final peringatan = <String>[];
-      final kalimatPanjang = '${List.generate(28, (i) => 'kata$i').join(' ')}.';
-      PembacaKonten.periksaBahasaTeks(kalimatPanjang, namaBerkas: 'uji.json', daftarPeringatan: peringatan);
-      expect(peringatan.length, equals(1));
-    });
+        final peringatan = <String>[];
+        final kalimatPanjang =
+            '${List.generate(28, (i) => 'kata$i').join(' ')}.';
+        PembacaKonten.periksaBahasaTeks(
+          kalimatPanjang,
+          namaBerkas: 'uji.json',
+          daftarPeringatan: peringatan,
+        );
+        expect(peringatan.length, equals(1));
+      },
+    );
   });
 
   group('Pemeriksa Konten Nyata di Repositori (aset/konten)', () {
-    test('Semua berkas kamus, modul, dan pelajaran di repo lolos validasi ketat', () {
-      final berkasKamus = File('aset/konten/kamus.json');
-      expect(berkasKamus.existsSync(), isTrue, reason: 'Berkas kamus.json wajib ada');
+    test(
+      'Semua berkas kamus, modul, dan pelajaran di repo lolos validasi ketat',
+      () {
+        final berkasKamus = File('aset/konten/kamus.json');
+        expect(
+          berkasKamus.existsSync(),
+          isTrue,
+          reason: 'Berkas kamus.json wajib ada',
+        );
 
-      final mapKamus = PembacaKonten.uraiKamus(berkasKamus.readAsStringSync());
-      expect(mapKamus.length, greaterThanOrEqualTo(8));
-      final daftarIstilahKamus = mapKamus.keys.toSet();
+        final mapKamus = PembacaKonten.uraiKamus(
+          berkasKamus.readAsStringSync(),
+        );
+        expect(mapKamus.length, greaterThanOrEqualTo(8));
+        final daftarIstilahKamus = mapKamus.keys.toSet();
 
-      final dirKonten = Directory('aset/konten');
-      final semuaBerkasJson = dirKonten
-          .listSync(recursive: true)
-          .whereType<File>()
-          .where((f) =>
-              f.path.endsWith('.json') &&
-              !f.path.endsWith('kamus.json') &&
-              !f.path.endsWith('rekomendasi.json') &&
-              !f.path.endsWith('tes_awal.json') &&
-              !f.path.endsWith('laporan.json') &&
-              !f.path.endsWith('disclaimer.json'))
-          .toList();
+        final dirKonten = Directory('aset/konten');
+        final semuaBerkasJson = dirKonten
+            .listSync(recursive: true)
+            .whereType<File>()
+            .where(
+              (f) =>
+                  f.path.endsWith('.json') &&
+                  !f.path.endsWith('kamus.json') &&
+                  !f.path.endsWith('rekomendasi.json') &&
+                  !f.path.endsWith('tes_awal.json') &&
+                  !f.path.endsWith('laporan.json') &&
+                  !f.path.endsWith('disclaimer.json'),
+            )
+            .toList();
 
-      expect(semuaBerkasJson.length, greaterThanOrEqualTo(19), reason: 'Minimal 19 modul (modul 0..18)');
+        expect(
+          semuaBerkasJson.length,
+          greaterThanOrEqualTo(19),
+          reason: 'Minimal 19 modul (modul 0..18)',
+        );
 
-      final daftarPeringatan = <String>[];
+        final daftarPeringatan = <String>[];
 
-      for (final berkas in semuaBerkasJson) {
-        final konten = berkas.readAsStringSync();
-        final namaBerkas = berkas.path;
+        for (final berkas in semuaBerkasJson) {
+          final konten = berkas.readAsStringSync();
+          final namaBerkas = berkas.path;
 
-        if (berkas.path.endsWith('modul.json')) {
-          final modul = PembacaKonten.uraiModul(konten, namaBerkas: namaBerkas);
-          expect(modul.id, isNotEmpty);
-        } else {
-          // Berkas pelajaran
-          final pelajaran = PembacaKonten.uraiPelajaran(
-            konten,
-            namaBerkas: namaBerkas,
-            daftarIstilahKamus: daftarIstilahKamus,
-            daftarPeringatan: daftarPeringatan,
-          );
-          expect(pelajaran.kartu.length, inInclusiveRange(1, 3));
-          expect(pelajaran.durasiMenit, inInclusiveRange(3, 8));
+          if (berkas.path.endsWith('modul.json')) {
+            final modul = PembacaKonten.uraiModul(
+              konten,
+              namaBerkas: namaBerkas,
+            );
+            expect(modul.id, isNotEmpty);
+          } else {
+            // Berkas pelajaran
+            final pelajaran = PembacaKonten.uraiPelajaran(
+              konten,
+              namaBerkas: namaBerkas,
+              daftarIstilahKamus: daftarIstilahKamus,
+              daftarPeringatan: daftarPeringatan,
+            );
+            expect(pelajaran.kartu.length, inInclusiveRange(1, 3));
+            expect(pelajaran.durasiMenit, inInclusiveRange(3, 8));
+          }
         }
-      }
-    });
+      },
+    );
   });
 }

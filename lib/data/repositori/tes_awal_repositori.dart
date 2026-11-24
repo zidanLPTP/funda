@@ -30,7 +30,9 @@ class TesAwalRepositori {
     required Map<String, int> skorPerModul,
     required int skorTotalPersen,
   }) async {
-    return _db.into(_db.tabelHasilTesAwal).insert(
+    return _db
+        .into(_db.tabelHasilTesAwal)
+        .insert(
           TabelHasilTesAwalCompanion.insert(
             waktu: DateTime.now(),
             jawabanJson: jsonEncode(jawaban),

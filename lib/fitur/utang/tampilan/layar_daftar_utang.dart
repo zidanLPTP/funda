@@ -212,7 +212,7 @@ class _KartuItemUtang extends ConsumerWidget {
         border: Border.all(color: WarnaFunda.garis),
       ),
       child: Material(
-        color: Colors.transparent,
+        color: WarnaFunda.transparan,
         child: InkWell(
           borderRadius: BorderRadius.circular(SudutFunda.kartu),
           onTap: () => context.push('/utang/${utang.id}'),

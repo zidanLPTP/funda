@@ -260,20 +260,17 @@ void main() {
           'Terapkan Filter',
         );
         expect(tombolTerapkan, findsOneWidget);
-        await pompaHingga(
-          tester,
-          () {
-            try {
-              final center = tester.getCenter(tombolTerapkan);
-              return center.dy >= 0 &&
-                  center.dy <=
-                      tester.view.physicalSize.height /
-                          tester.view.devicePixelRatio;
-            } catch (_) {
-              return false;
-            }
-          },
-        );
+        await pompaHingga(tester, () {
+          try {
+            final center = tester.getCenter(tombolTerapkan);
+            return center.dy >= 0 &&
+                center.dy <=
+                    tester.view.physicalSize.height /
+                        tester.view.devicePixelRatio;
+          } catch (_) {
+            return false;
+          }
+        });
         await tester.tap(tombolTerapkan);
         await pompaHinggaHilang(tester, find.text('Filter Catatan'));
 

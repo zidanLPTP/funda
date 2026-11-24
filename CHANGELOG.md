@@ -5,6 +5,30 @@ Format penulisan mengacu pada standar Keep a Changelog dan penamaan commit Funda
 
 ---
 
+## [1.0.0] - 2026-11-24 — Tahap 12: Polesan, Audit Akhir & Kesiapan Rilis v1.0 (Rilis Publik Perdana v1.0.0+1)
+
+Tahap 12 merupakan tahap penutup dari seluruh roadmap pengembangan Funda v1.0, mencakup audit menyeluruh kode, token UI, bahasa, privasi log rilis, keamanan izin, dan kompilasi APK rilis:
+- **Audit Token Warna & UI (`lib/tema/token.dart` & `lib/`):**
+  - Menghilangkan seluruh warna hard-coded di luar `lib/tema/` dan mengalihkan ke token `WarnaFunda` (`transparan`, `hitam`, `bayangan`, `tintLaporan`, `garisLaporan`, `teksLaporan`).
+  - `git grep -n "Color(0x\|Colors\." -- lib/ ':!lib/tema/*'` bersih total (0 temuan).
+- **Audit Presisi Matematika & Bebas Double (`lib/perhitungan/`):**
+  - Memastikan seluruh perhitungan uang, persen, bunga, dan alokasi murni menggunakan aritmetika integer tanpa tipe `double` (bebas galat pembulatan floating-point).
+- **Audit Bahasa & Penghapusan Jargon Umpan Balik:**
+  - Memastikan seluruh fungsi umpan balik di `lib/perhitungan/perhitungan_umpan_balik_belajar.dart` bersih dari jargon teknis akuntansi `surplus`/`defisit` dan menggunakan bahasa awam yang ramah ("uang masuk lebih besar"/"lebih kecil").
+- **Audit Privasi Log Rilis & Fitur Debug-Only:**
+  - Seluruh pemanggilan `debugPrint` (kuis, pencadangan, ekspor laporan) dibungkus ketat dalam `if (kDebugMode)` sehingga tidak mencetak data apa pun pada build rilis.
+  - Memverifikasi rute `/galeri`, banner galeri, tombol pengingat uji 2 menit, dan lencana `"Draf"` hanya aktif pada mode debug.
+- **Konfigurasi Rilis & Izin Sistem (Android & iOS):**
+  - Memastikan `AndroidManifest.xml` hanya meminta 3 izin esensial (`RECEIVE_BOOT_COMPLETED`, `POST_NOTIFICATIONS`, `VIBRATE`) tanpa izin internet, kontak, atau lokasi (prinsip offline-first murni).
+  - Nama aplikasi terverifikasi sebagai **Funda** di Android (`android:label`) dan iOS (`CFBundleDisplayName`).
+  - Menaikkan versi aplikasi di `pubspec.yaml` menjadi `1.0.0+1`.
+  - Berhasil mengompilasi rilis Android APK (`flutter build apk --release`).
+- **Dokumentasi Tinjauan Konten & Panduan Publikasi:**
+  - Membuat `docs/daftar_tinjauan_konten.md`: rangkuman komprehensif seluruh `catatanReviewer` / `TODO-VERIFIKASI` materi kurikulum untuk diverifikasi pemilik proyek sebelum mengubah status `"draf"` menjadi `"ditinjau"`.
+  - Membuat `docs/panduan_rilis.md`: panduan keystore signing Android AAB, build iOS Xcode, kebijakan privasi Play Store, dan checklist uji manual fisik.
+
+---
+
 ## [0.20.0] - 2026-11-24 — Tahap 11C: Modul 17 "Keuangan Usaha Kecil" & Modul 18 "Proteksi Keluarga & Warisan Dasar" (Penutupan Seluruh Tingkat Lanjutan & Kurikulum 18 Modul)
 
 Tahap 11C menutup secara paripurna seluruh Tingkat Lanjutan dan kurikulum 18 modul Funda (57 pelajaran total) dengan menghadirkan Modul 17 "Keuangan Usaha Kecil", Modul 18 "Proteksi Keluarga & Warisan Dasar", klausul pernyataan gerbang `belum_punya_usaha`, kunci umpan balik on-demand baru `ringkasan_usaha_kecil`, serta 8 entri kamus istilah baru (total kamus menjadi 93 entri):

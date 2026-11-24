@@ -42,8 +42,7 @@ class _LayarDetailDompetState extends ConsumerState<LayarDetailDompet> {
     );
 
     return daftarDompetAsync.when(
-      loading: () =>
-          const Scaffold(body: Center(child: IndikatorMemuat())),
+      loading: () => const Scaffold(body: Center(child: IndikatorMemuat())),
       error: (e, _) =>
           Scaffold(body: Center(child: Text('Terjadi kesalahan: $e'))),
       data: (daftar) {

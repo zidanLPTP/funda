@@ -23,71 +23,90 @@ void main() {
       expect(tentukanLulusKuis(benar: 0, total: 0), isFalse);
     });
 
-    test('Pengacak soal dan pilihan kuis deterministik dengan benih (seed)', () {
-      final bank = [
-        SoalKuis(
-          id: 's1',
-          pelajaranId: 'p1',
-          tanya: 'Soal 1',
-          pilihan: ['A1', 'B1', 'C1', 'D1'],
-          benar: 0,
-          penjelasan: 'Ket 1',
-        ),
-        SoalKuis(
-          id: 's2',
-          pelajaranId: 'p1',
-          tanya: 'Soal 2',
-          pilihan: ['A2', 'B2', 'C2', 'D2'],
-          benar: 1,
-          penjelasan: 'Ket 2',
-        ),
-        SoalKuis(
-          id: 's3',
-          pelajaranId: 'p1',
-          tanya: 'Soal 3',
-          pilihan: ['A3', 'B3', 'C3', 'D3'],
-          benar: 2,
-          penjelasan: 'Ket 3',
-        ),
-      ];
+    test(
+      'Pengacak soal dan pilihan kuis deterministik dengan benih (seed)',
+      () {
+        final bank = [
+          SoalKuis(
+            id: 's1',
+            pelajaranId: 'p1',
+            tanya: 'Soal 1',
+            pilihan: ['A1', 'B1', 'C1', 'D1'],
+            benar: 0,
+            penjelasan: 'Ket 1',
+          ),
+          SoalKuis(
+            id: 's2',
+            pelajaranId: 'p1',
+            tanya: 'Soal 2',
+            pilihan: ['A2', 'B2', 'C2', 'D2'],
+            benar: 1,
+            penjelasan: 'Ket 2',
+          ),
+          SoalKuis(
+            id: 's3',
+            pelajaranId: 'p1',
+            tanya: 'Soal 3',
+            pilihan: ['A3', 'B3', 'C3', 'D3'],
+            benar: 2,
+            penjelasan: 'Ket 3',
+          ),
+        ];
 
-      final hasilAcak1 = pilihDanAcakSoalKuis(bankSoal: bank, jumlahSoal: 2, benih: 42);
-      final hasilAcak2 = pilihDanAcakSoalKuis(bankSoal: bank, jumlahSoal: 2, benih: 42);
+        final hasilAcak1 = pilihDanAcakSoalKuis(
+          bankSoal: bank,
+          jumlahSoal: 2,
+          benih: 42,
+        );
+        final hasilAcak2 = pilihDanAcakSoalKuis(
+          bankSoal: bank,
+          jumlahSoal: 2,
+          benih: 42,
+        );
 
-      expect(hasilAcak1.length, equals(2));
-      expect(hasilAcak1.first.id, equals(hasilAcak2.first.id));
-      expect(hasilAcak1.first.pilihan, equals(hasilAcak2.first.pilihan));
-      expect(hasilAcak1.first.benar, equals(hasilAcak2.first.benar));
-      // Jawaban benar tetap menunjuk teks yang benar meskipun pilihan diacak
-      final teksAsliBenar = bank.firstWhere((s) => s.id == hasilAcak1.first.id).pilihan[bank.firstWhere((s) => s.id == hasilAcak1.first.id).benar];
-      expect(hasilAcak1.first.pilihan[hasilAcak1.first.benar], equals(teksAsliBenar));
-    });
+        expect(hasilAcak1.length, equals(2));
+        expect(hasilAcak1.first.id, equals(hasilAcak2.first.id));
+        expect(hasilAcak1.first.pilihan, equals(hasilAcak2.first.pilihan));
+        expect(hasilAcak1.first.benar, equals(hasilAcak2.first.benar));
+        // Jawaban benar tetap menunjuk teks yang benar meskipun pilihan diacak
+        final teksAsliBenar = bank
+            .firstWhere((s) => s.id == hasilAcak1.first.id)
+            .pilihan[bank.firstWhere((s) => s.id == hasilAcak1.first.id).benar];
+        expect(
+          hasilAcak1.first.pilihan[hasilAcak1.first.benar],
+          equals(teksAsliBenar),
+        );
+      },
+    );
 
-    test('Metode sisa terbesar hitungKomposisiSifat selalu menghasilkan total tepat 100', () {
-      // Kasus desimal berulang: 100 / 3
-      final hasil1 = hitungKomposisiSifat({
-        'kebutuhan': 100000,
-        'keinginan': 100000,
-        'tabungan': 100000,
-      });
-      final total1 = hasil1.values.fold<int>(0, (a, b) => a + b);
-      expect(total1, equals(100));
+    test(
+      'Metode sisa terbesar hitungKomposisiSifat selalu menghasilkan total tepat 100',
+      () {
+        // Kasus desimal berulang: 100 / 3
+        final hasil1 = hitungKomposisiSifat({
+          'kebutuhan': 100000,
+          'keinginan': 100000,
+          'tabungan': 100000,
+        });
+        final total1 = hasil1.values.fold<int>(0, (a, b) => a + b);
+        expect(total1, equals(100));
 
-      // Kasus angka nyata
-      final hasil2 = hitungKomposisiSifat({
-        'kebutuhan': 3540000,
-        'keinginan': 1420000,
-        'tabungan': 500000,
-        'utang': 750000,
-        'belum_dilabeli': 120000,
-      });
-      final total2 = hasil2.values.fold<int>(0, (a, b) => a + b);
-      expect(total2, equals(100));
+        // Kasus angka nyata
+        final hasil2 = hitungKomposisiSifat({
+          'kebutuhan': 3540000,
+          'keinginan': 1420000,
+          'tabungan': 500000,
+          'utang': 750000,
+          'belum_dilabeli': 120000,
+        });
+        final total2 = hasil2.values.fold<int>(0, (a, b) => a + b);
+        expect(total2, equals(100));
 
-      // Kasus pengeluaran 0: kembalikan Map kosong {} (tidak ada hasil)
-      final hasilKosong = hitungKomposisiSifat({});
-      expect(hasilKosong.isEmpty, isTrue);
-    });
+        // Kasus pengeluaran 0: kembalikan Map kosong {} (tidak ada hasil)
+        final hasilKosong = hitungKomposisiSifat({});
+        expect(hasilKosong.isEmpty, isTrue);
+      },
+    );
 
     test('Peta objek ke rute pengisian lengkap dan benar', () {
       expect(ambilRutePengisianObjek('dompet'), equals('/dompet'));
@@ -139,10 +158,7 @@ void main() {
 
     test('Evaluasi syarat: aturan_data semua_kategori_berlabel', () {
       final fotoBelum = FotoDataPengguna.kosong().copyWith(
-        kategoriKeluarTerpakai: {
-          'k1': 'kebutuhan',
-          'k2': 'belum_dilabeli',
-        },
+        kategoriKeluarTerpakai: {'k1': 'kebutuhan', 'k2': 'belum_dilabeli'},
       );
       final syaratAturan = SyaratGerbangData(
         tipe: 'aturan_data',
@@ -152,10 +168,7 @@ void main() {
       expect(evaluasiSyarat(syaratAturan, fotoBelum).terpenuhi, isFalse);
 
       final fotoSudah = FotoDataPengguna.kosong().copyWith(
-        kategoriKeluarTerpakai: {
-          'k1': 'kebutuhan',
-          'k2': 'keinginan',
-        },
+        kategoriKeluarTerpakai: {'k1': 'kebutuhan', 'k2': 'keinginan'},
       );
       expect(evaluasiSyarat(syaratAturan, fotoSudah).terpenuhi, isTrue);
     });
@@ -184,9 +197,7 @@ void main() {
     });
 
     test('Evaluasi syarat: logika ATAU dengan pernyataan (dan dicabut)', () {
-      final fotoAwal = FotoDataPengguna.kosong().copyWith(
-        jumlahUtangAktif: 0,
-      );
+      final fotoAwal = FotoDataPengguna.kosong().copyWith(jumlahUtangAktif: 0);
 
       final syaratUtang = SyaratGerbangData(
         tipe: 'ada_data',
@@ -212,126 +223,167 @@ void main() {
       expect(evaluasiSyarat(syaratUtang, fotoCabut).terpenuhi, isFalse);
     });
 
-    test('Status Pelajaran: Pelajaran yang sudah selesai TIDAK PERNAH terkunci ulang', () {
-      final fotoDataKosong = FotoDataPengguna.kosong().copyWith(
-        progresPelajaran: {'anggaran_arus_kas_1_2': 'selesai'},
-      );
+    test(
+      'Status Pelajaran: Pelajaran yang sudah selesai TIDAK PERNAH terkunci ulang',
+      () {
+        final fotoDataKosong = FotoDataPengguna.kosong().copyWith(
+          progresPelajaran: {'anggaran_arus_kas_1_2': 'selesai'},
+        );
 
-      final pelajaran = PelajaranKonten(
-        id: 'anggaran_arus_kas_1_2',
-        modulId: 'anggaran_arus_kas',
-        judul: 'Memetakan Arus Kas',
-        durasiMenit: 4,
-        status: 'draf',
-        gerbang: [
-          SyaratGerbangData(
+        final pelajaran = PelajaranKonten(
+          id: 'anggaran_arus_kas_1_2',
+          modulId: 'anggaran_arus_kas',
+          judul: 'Memetakan Arus Kas',
+          durasiMenit: 4,
+          status: 'draf',
+          gerbang: [
+            SyaratGerbangData(
+              tipe: 'ada_data',
+              objek: 'dompet',
+              min: 5, // Syarat tinggi yang tidak terpenuhi oleh data kosong
+              pesan: 'Butuh 5 dompet',
+            ),
+          ],
+          pemantik: 'Pemantik',
+          kartu: const [],
+          contohAngka: ContohAngkaKonten.kosong,
+          cekPaham: const [],
+          misi: MisiKonten(
             tipe: 'ada_data',
-            objek: 'dompet',
-            min: 5, // Syarat tinggi yang tidak terpenuhi oleh data kosong
-            pesan: 'Butuh 5 dompet',
+            objek: 'pemasukan',
+            min: 1,
+            judul: 'Misi',
+            deskripsi: 'Desc',
+            perkiraanMenit: 2,
           ),
-        ],
-        pemantik: 'Pemantik',
-        kartu: const [],
-        contohAngka: ContohAngkaKonten.kosong,
-        cekPaham: const [],
-        misi: MisiKonten(tipe: 'ada_data', objek: 'pemasukan', min: 1, judul: 'Misi', deskripsi: 'Desc', perkiraanMenit: 2),
-      );
+        );
 
-      final status = tentukanStatusPelajaran(
-        pelajaran: pelajaran,
-        posisiIndeks: 0,
-        daftarPelajaranModul: [pelajaran],
-        gerbangModul: const [],
-        fotoData: fotoDataKosong,
-      );
+        final status = tentukanStatusPelajaran(
+          pelajaran: pelajaran,
+          posisiIndeks: 0,
+          daftarPelajaranModul: [pelajaran],
+          gerbangModul: const [],
+          fotoData: fotoDataKosong,
+        );
 
-      expect(status.status, equals(StatusBelajar.selesai));
-      expect(status.apaYangKurang, isEmpty);
-    });
+        expect(status.status, equals(StatusBelajar.selesai));
+        expect(status.apaYangKurang, isEmpty);
+      },
+    );
 
-    test('Status Pelajaran: Pelajaran ke-2 baru terbuka bila pelajaran ke-1 selesai', () {
-      final p1 = PelajaranKonten(
-        id: 'p_1',
-        modulId: 'm_1',
-        judul: 'Pelajaran 1',
-        durasiMenit: 4,
-        status: 'draf',
-        gerbang: const [],
-        pemantik: '',
-        kartu: const [],
-        contohAngka: ContohAngkaKonten.kosong,
-        cekPaham: const [],
-        misi: MisiKonten(tipe: 'ada_data', objek: 'pemasukan', min: 1, judul: '', deskripsi: '', perkiraanMenit: 1),
-      );
-      final p2 = PelajaranKonten(
-        id: 'p_2',
-        modulId: 'm_1',
-        judul: 'Pelajaran 2',
-        durasiMenit: 4,
-        status: 'draf',
-        gerbang: const [],
-        pemantik: '',
-        kartu: const [],
-        contohAngka: ContohAngkaKonten.kosong,
-        cekPaham: const [],
-        misi: MisiKonten(tipe: 'ada_data', objek: 'pengeluaran', min: 1, judul: '', deskripsi: '', perkiraanMenit: 1),
-      );
+    test(
+      'Status Pelajaran: Pelajaran ke-2 baru terbuka bila pelajaran ke-1 selesai',
+      () {
+        final p1 = PelajaranKonten(
+          id: 'p_1',
+          modulId: 'm_1',
+          judul: 'Pelajaran 1',
+          durasiMenit: 4,
+          status: 'draf',
+          gerbang: const [],
+          pemantik: '',
+          kartu: const [],
+          contohAngka: ContohAngkaKonten.kosong,
+          cekPaham: const [],
+          misi: MisiKonten(
+            tipe: 'ada_data',
+            objek: 'pemasukan',
+            min: 1,
+            judul: '',
+            deskripsi: '',
+            perkiraanMenit: 1,
+          ),
+        );
+        final p2 = PelajaranKonten(
+          id: 'p_2',
+          modulId: 'm_1',
+          judul: 'Pelajaran 2',
+          durasiMenit: 4,
+          status: 'draf',
+          gerbang: const [],
+          pemantik: '',
+          kartu: const [],
+          contohAngka: ContohAngkaKonten.kosong,
+          cekPaham: const [],
+          misi: MisiKonten(
+            tipe: 'ada_data',
+            objek: 'pengeluaran',
+            min: 1,
+            judul: '',
+            deskripsi: '',
+            perkiraanMenit: 1,
+          ),
+        );
 
-      final daftar = [p1, p2];
+        final daftar = [p1, p2];
 
-      // Saat p1 belum selesai -> p2 terkunci
-      final statusP2Awal = tentukanStatusPelajaran(
-        pelajaran: p2,
-        posisiIndeks: 1,
-        daftarPelajaranModul: daftar,
-        gerbangModul: const [],
-        fotoData: FotoDataPengguna.kosong(),
-      );
-      expect(statusP2Awal.status, equals(StatusBelajar.terkunci));
-      expect(statusP2Awal.apaYangKurang.first, contains('Selesaikan pelajaran sebelumnya'));
+        // Saat p1 belum selesai -> p2 terkunci
+        final statusP2Awal = tentukanStatusPelajaran(
+          pelajaran: p2,
+          posisiIndeks: 1,
+          daftarPelajaranModul: daftar,
+          gerbangModul: const [],
+          fotoData: FotoDataPengguna.kosong(),
+        );
+        expect(statusP2Awal.status, equals(StatusBelajar.terkunci));
+        expect(
+          statusP2Awal.apaYangKurang.first,
+          contains('Selesaikan pelajaran sebelumnya'),
+        );
 
-      // Saat p1 selesai -> p2 terbuka
-      final fotoP1Selesai = FotoDataPengguna.kosong().copyWith(
-        progresPelajaran: {'p_1': 'selesai'},
-      );
-      final statusP2Buka = tentukanStatusPelajaran(
-        pelajaran: p2,
-        posisiIndeks: 1,
-        daftarPelajaranModul: daftar,
-        gerbangModul: const [],
-        fotoData: fotoP1Selesai,
-      );
-      expect(statusP2Buka.status, equals(StatusBelajar.terbuka));
-    });
+        // Saat p1 selesai -> p2 terbuka
+        final fotoP1Selesai = FotoDataPengguna.kosong().copyWith(
+          progresPelajaran: {'p_1': 'selesai'},
+        );
+        final statusP2Buka = tentukanStatusPelajaran(
+          pelajaran: p2,
+          posisiIndeks: 1,
+          daftarPelajaranModul: daftar,
+          gerbangModul: const [],
+          fotoData: fotoP1Selesai,
+        );
+        expect(statusP2Buka.status, equals(StatusBelajar.terbuka));
+      },
+    );
 
-    test('Status Modul: Modul selesai hanya jika semua pelajaran selesai dan kuis lulus', () {
-      final modul = ModulKonten(
-        id: 'modul_uji',
-        judul: 'Modul Uji',
-        tingkat: 'pemula',
-        urutan: 1,
-        deskripsiSingkat: 'Desc',
-        tersedia: true,
-        gerbang: const [],
-        daftarPelajaran: ['p1', 'p2'],
-        kuis: KuisKonten(jumlahSoal: 2, bankSoal: const []),
-      );
+    test(
+      'Status Modul: Modul selesai hanya jika semua pelajaran selesai dan kuis lulus',
+      () {
+        final modul = ModulKonten(
+          id: 'modul_uji',
+          judul: 'Modul Uji',
+          tingkat: 'pemula',
+          urutan: 1,
+          deskripsiSingkat: 'Desc',
+          tersedia: true,
+          gerbang: const [],
+          daftarPelajaran: ['p1', 'p2'],
+          kuis: KuisKonten(jumlahSoal: 2, bankSoal: const []),
+        );
 
-      // Pelajaran selesai tapi kuis belum lulus -> status sedang
-      final fotoBelumKuis = FotoDataPengguna.kosong().copyWith(
-        progresPelajaran: {'p1': 'selesai', 'p2': 'selesai'},
-      );
-      final status1 = tentukanStatusModul(modul: modul, fotoData: fotoBelumKuis);
-      expect(status1.status, equals(StatusBelajar.sedang));
-      expect(status1.apaYangKurang, contains('Lulus kuis akhir modul'));
+        // Pelajaran selesai tapi kuis belum lulus -> status sedang
+        final fotoBelumKuis = FotoDataPengguna.kosong().copyWith(
+          progresPelajaran: {'p1': 'selesai', 'p2': 'selesai'},
+        );
+        final status1 = tentukanStatusModul(
+          modul: modul,
+          fotoData: fotoBelumKuis,
+        );
+        expect(status1.status, equals(StatusBelajar.sedang));
+        expect(status1.apaYangKurang, contains('Lulus kuis akhir modul'));
 
-      // Pelajaran selesai dan kuis lulus -> status selesai!
-      final fotoLulusKuis = fotoBelumKuis.copyWith(
-        hasilKuisTerbaik: {'modul_uji': const HasilKuisSnapshot(skorPersen: 80, lulus: true)},
-      );
-      final status2 = tentukanStatusModul(modul: modul, fotoData: fotoLulusKuis);
-      expect(status2.status, equals(StatusBelajar.selesai));
-    });
+        // Pelajaran selesai dan kuis lulus -> status selesai!
+        final fotoLulusKuis = fotoBelumKuis.copyWith(
+          hasilKuisTerbaik: {
+            'modul_uji': const HasilKuisSnapshot(skorPersen: 80, lulus: true),
+          },
+        );
+        final status2 = tentukanStatusModul(
+          modul: modul,
+          fotoData: fotoLulusKuis,
+        );
+        expect(status2.status, equals(StatusBelajar.selesai));
+      },
+    );
   });
 }

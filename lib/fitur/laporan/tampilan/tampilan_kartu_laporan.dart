@@ -88,7 +88,10 @@ class TampilanKartuLaporan extends StatelessWidget {
                   ),
                   const SizedBox(height: 6),
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 4,
+                    ),
                     decoration: BoxDecoration(
                       color: WarnaFunda.permukaan,
                       borderRadius: BorderRadius.circular(6),
@@ -120,7 +123,10 @@ class TampilanKartuLaporan extends StatelessWidget {
                 ),
                 const SizedBox(width: 8),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 4,
+                  ),
                   decoration: BoxDecoration(
                     color: WarnaFunda.permukaan,
                     borderRadius: BorderRadius.circular(6),
@@ -141,10 +147,7 @@ class TampilanKartuLaporan extends StatelessWidget {
         const SizedBox(height: 2),
         const Text(
           'Laporan Edukasi Keuangan Pribadi',
-          style: TextStyle(
-            fontSize: 11,
-            color: WarnaFunda.teksRedup,
-          ),
+          style: TextStyle(fontSize: 11, color: WarnaFunda.teksRedup),
         ),
       ],
     );
@@ -154,9 +157,9 @@ class TampilanKartuLaporan extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: const Color(0xFFEBF6FA), // Tint biru lembut
+        color: WarnaFunda.tintLaporan, // Tint biru lembut
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: const Color(0xFFC7E5F0)),
+        border: Border.all(color: WarnaFunda.garisLaporan),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -166,15 +169,19 @@ class TampilanKartuLaporan extends StatelessWidget {
             style: TextStyle(
               fontSize: 11,
               fontWeight: FontWeight.bold,
-              color: Color(0xFF006684),
+              color: WarnaFunda.teksLaporan,
             ),
           ),
           const SizedBox(height: 3),
           Text(
             teks.teksTemuan,
-            style: const TextStyle(fontSize: 11, color: WarnaFunda.teks, height: 1.3),
+            style: const TextStyle(
+              fontSize: 11,
+              color: WarnaFunda.teks,
+              height: 1.3,
+            ),
           ),
-          const Divider(height: 14, color: Color(0xFFC7E5F0)),
+          const Divider(height: 14, color: WarnaFunda.garisLaporan),
           const Text(
             'Saran untuk Bulan Depan',
             style: TextStyle(
@@ -186,7 +193,11 @@ class TampilanKartuLaporan extends StatelessWidget {
           const SizedBox(height: 3),
           Text(
             teks.teksSaran,
-            style: const TextStyle(fontSize: 11, color: WarnaFunda.teks, height: 1.3),
+            style: const TextStyle(
+              fontSize: 11,
+              color: WarnaFunda.teks,
+              height: 1.3,
+            ),
           ),
         ],
       ),
@@ -206,7 +217,11 @@ class TampilanKartuLaporan extends StatelessWidget {
         children: [
           const Text(
             'Arus Kas Bulan Ini',
-            style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: WarnaFunda.utama),
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.bold,
+              color: WarnaFunda.utama,
+            ),
           ),
           const SizedBox(height: 8),
           LayoutBuilder(
@@ -216,20 +231,50 @@ class TampilanKartuLaporan extends StatelessWidget {
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _kolomArusKas(teks.labelUangMasuk, teks.nilaiUangMasuk, WarnaFunda.sukses),
+                    _kolomArusKas(
+                      teks.labelUangMasuk,
+                      teks.nilaiUangMasuk,
+                      WarnaFunda.sukses,
+                    ),
                     const SizedBox(height: 8),
-                    _kolomArusKas(teks.labelUangKeluar, teks.nilaiUangKeluar, WarnaFunda.pengeluaran),
+                    _kolomArusKas(
+                      teks.labelUangKeluar,
+                      teks.nilaiUangKeluar,
+                      WarnaFunda.pengeluaran,
+                    ),
                     const SizedBox(height: 8),
-                    _kolomArusKas(teks.labelSelisih, teks.nilaiSelisih, WarnaFunda.teks),
+                    _kolomArusKas(
+                      teks.labelSelisih,
+                      teks.nilaiSelisih,
+                      WarnaFunda.teks,
+                    ),
                   ],
                 );
               }
               return Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Expanded(child: _kolomArusKas(teks.labelUangMasuk, teks.nilaiUangMasuk, WarnaFunda.sukses)),
-                  Expanded(child: _kolomArusKas(teks.labelUangKeluar, teks.nilaiUangKeluar, WarnaFunda.pengeluaran)),
-                  Expanded(child: _kolomArusKas(teks.labelSelisih, teks.nilaiSelisih, WarnaFunda.teks)),
+                  Expanded(
+                    child: _kolomArusKas(
+                      teks.labelUangMasuk,
+                      teks.nilaiUangMasuk,
+                      WarnaFunda.sukses,
+                    ),
+                  ),
+                  Expanded(
+                    child: _kolomArusKas(
+                      teks.labelUangKeluar,
+                      teks.nilaiUangKeluar,
+                      WarnaFunda.pengeluaran,
+                    ),
+                  ),
+                  Expanded(
+                    child: _kolomArusKas(
+                      teks.labelSelisih,
+                      teks.nilaiSelisih,
+                      WarnaFunda.teks,
+                    ),
+                  ),
                 ],
               );
             },
@@ -238,7 +283,10 @@ class TampilanKartuLaporan extends StatelessWidget {
             const SizedBox(height: 6),
             Text(
               teks.teksArusKasSensor!,
-              style: const TextStyle(fontSize: 10.5, color: WarnaFunda.teksRedup),
+              style: const TextStyle(
+                fontSize: 10.5,
+                color: WarnaFunda.teksRedup,
+              ),
             ),
           ],
         ],
@@ -250,11 +298,18 @@ class TampilanKartuLaporan extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style: const TextStyle(fontSize: 10, color: WarnaFunda.teksRedup)),
+        Text(
+          label,
+          style: const TextStyle(fontSize: 10, color: WarnaFunda.teksRedup),
+        ),
         const SizedBox(height: 2),
         Text(
           nilai,
-          style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: warnaNilai),
+          style: TextStyle(
+            fontSize: 13,
+            fontWeight: FontWeight.bold,
+            color: warnaNilai,
+          ),
         ),
       ],
     );
@@ -273,7 +328,11 @@ class TampilanKartuLaporan extends StatelessWidget {
         children: [
           const Text(
             'Komposisi Pengeluaran',
-            style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: WarnaFunda.utama),
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.bold,
+              color: WarnaFunda.utama,
+            ),
           ),
           const SizedBox(height: 6),
           ...teks.komposisiPerSifat.values.map(
@@ -303,7 +362,11 @@ class TampilanKartuLaporan extends StatelessWidget {
         children: [
           const Text(
             'Realisasi Anggaran',
-            style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: WarnaFunda.utama),
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.bold,
+              color: WarnaFunda.utama,
+            ),
           ),
           const SizedBox(height: 4),
           Text(
@@ -325,7 +388,10 @@ class TampilanKartuLaporan extends StatelessWidget {
               const SizedBox(height: 3),
               Text(
                 teks.barisPosLain!,
-                style: const TextStyle(fontSize: 10.5, color: WarnaFunda.teksRedup),
+                style: const TextStyle(
+                  fontSize: 10.5,
+                  color: WarnaFunda.teksRedup,
+                ),
               ),
             ],
           ],
@@ -347,7 +413,11 @@ class TampilanKartuLaporan extends StatelessWidget {
         children: [
           const Text(
             'Tujuan dan Dana Darurat',
-            style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: WarnaFunda.utama),
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.bold,
+              color: WarnaFunda.utama,
+            ),
           ),
           const SizedBox(height: 4),
           if (teks.teksBelumAdaTujuan != null)
@@ -383,16 +453,30 @@ class TampilanKartuLaporan extends StatelessWidget {
         children: [
           const Text(
             'Kekayaan Bersih',
-            style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: WarnaFunda.utama),
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.bold,
+              color: WarnaFunda.utama,
+            ),
           ),
           const SizedBox(height: 6),
-          Text(teks.teksSaldoDompet, style: const TextStyle(fontSize: 10.5, color: WarnaFunda.teks)),
+          Text(
+            teks.teksSaldoDompet,
+            style: const TextStyle(fontSize: 10.5, color: WarnaFunda.teks),
+          ),
           const SizedBox(height: 3),
-          Text(teks.teksSisaUtang, style: const TextStyle(fontSize: 10.5, color: WarnaFunda.teks)),
+          Text(
+            teks.teksSisaUtang,
+            style: const TextStyle(fontSize: 10.5, color: WarnaFunda.teks),
+          ),
           const SizedBox(height: 4),
           Text(
             teks.teksKekayaanBersih,
-            style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: WarnaFunda.utama),
+            style: const TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.bold,
+              color: WarnaFunda.utama,
+            ),
           ),
         ],
       ),

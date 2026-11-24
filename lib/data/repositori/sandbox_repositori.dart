@@ -45,9 +45,9 @@ class SandboxRepositori {
     final sesiLama = await ambilSesiTerakhir();
 
     if (sesiLama != null) {
-      await (_db.update(_db.tabelSesiSandbox)
-            ..where((t) => t.id.equals(sesiLama.id)))
-          .write(
+      await (_db.update(
+        _db.tabelSesiSandbox,
+      )..where((t) => t.id.equals(sesiLama.id))).write(
         TabelSesiSandboxCompanion(
           saldoAwalRupiah: Value(saldoAwalRupiah),
           alokasiPasarUangPersen: Value(alokasiPasarUangPersen),
@@ -62,7 +62,9 @@ class SandboxRepositori {
       );
       return sesiLama.id;
     } else {
-      return _db.into(_db.tabelSesiSandbox).insert(
+      return _db
+          .into(_db.tabelSesiSandbox)
+          .insert(
             TabelSesiSandboxCompanion.insert(
               saldoAwalRupiah: Value(saldoAwalRupiah),
               alokasiPasarUangPersen: alokasiPasarUangPersen,

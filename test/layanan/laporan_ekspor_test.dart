@@ -24,18 +24,19 @@ void main() {
     final berkasKonten = File('aset/konten/laporan.json');
     konten = PembacaKonten.uraiLaporan(berkasKonten.readAsStringSync());
 
-    fontRegBytes = File('aset/font/PlusJakartaSans-Regular.ttf').readAsBytesSync();
-    fontBoldBytes = File('aset/font/PlusJakartaSans-Bold.ttf').readAsBytesSync();
+    fontRegBytes = File(
+      'aset/font/PlusJakartaSans-Regular.ttf',
+    ).readAsBytesSync();
+    fontBoldBytes = File(
+      'aset/font/PlusJakartaSans-Bold.ttf',
+    ).readAsBytesSync();
 
     final masukan = MasukanLaporanBulanan(
       bulan: DateTime(2026, 11, 1),
       waktuDibuat: DateTime(2026, 11, 18, 14, 0),
       uangMasukRupiah: 3000000,
       uangKeluarRupiah: 2450000,
-      pengeluaranPerSifat: {
-        'kebutuhan': 1900000,
-        'keinginan': 550000,
-      },
+      pengeluaranPerSifat: {'kebutuhan': 1900000, 'keinginan': 550000},
       daftarPosAnggaran: [
         const PosAnggaranLaporan(
           id: '1',
@@ -63,206 +64,281 @@ void main() {
   });
 
   group('Layanan Ekspor Laporan Bulanan (PNG, PDF, LayananBagikan)', () {
-    test('1. PDF berawalan %PDF, memuat halaman sah, dan mendukung mode normal & sensor', () async {
-      final pembuatPdf = PembuatPdfLaporan(
-        fontRegularBytes: fontRegBytes,
-        fontBoldBytes: fontBoldBytes,
-      );
+    test(
+      '1. PDF berawalan %PDF, memuat halaman sah, dan mendukung mode normal & sensor',
+      () async {
+        final pembuatPdf = PembuatPdfLaporan(
+          fontRegularBytes: fontRegBytes,
+          fontBoldBytes: fontBoldBytes,
+        );
 
-      // Normal PDF
-      final pdfNormalBytes = await pembuatPdf.buatPdf(
-        laporan: laporanContoh,
-        konten: konten,
-        sensor: false,
-      );
-      expect(pdfNormalBytes.isNotEmpty, isTrue);
-      // Simpan contoh ekspor PDF ke direktori sementara pengujian
-      final folderTemp = Directory.systemTemp.createTempSync('funda_uji_pdf_');
-      addTearDown(() {
-        if (folderTemp.existsSync()) folderTemp.deleteSync(recursive: true);
-      });
-      File('${folderTemp.path}/laporan.pdf').writeAsBytesSync(pdfNormalBytes);
+        // Normal PDF
+        final pdfNormalBytes = await pembuatPdf.buatPdf(
+          laporan: laporanContoh,
+          konten: konten,
+          sensor: false,
+        );
+        expect(pdfNormalBytes.isNotEmpty, isTrue);
+        // Simpan contoh ekspor PDF ke direktori sementara pengujian
+        final folderTemp = Directory.systemTemp.createTempSync(
+          'funda_uji_pdf_',
+        );
+        addTearDown(() {
+          if (folderTemp.existsSync()) folderTemp.deleteSync(recursive: true);
+        });
+        File('${folderTemp.path}/laporan.pdf').writeAsBytesSync(pdfNormalBytes);
 
-      // Validasi awalan %PDF
-      final headerStr = String.fromCharCodes(pdfNormalBytes.take(5));
-      expect(headerStr, equals('%PDF-'));
+        // Validasi awalan %PDF
+        final headerStr = String.fromCharCodes(pdfNormalBytes.take(5));
+        expect(headerStr, equals('%PDF-'));
 
-      // Sensor PDF
-      final pdfSensorBytes = await pembuatPdf.buatPdf(
-        laporan: laporanContoh,
-        konten: konten,
-        sensor: true,
-      );
-      expect(pdfSensorBytes.isNotEmpty, isTrue);
-      final headerSensor = String.fromCharCodes(pdfSensorBytes.take(5));
-      expect(headerSensor, equals('%PDF-'));
+        // Sensor PDF
+        final pdfSensorBytes = await pembuatPdf.buatPdf(
+          laporan: laporanContoh,
+          konten: konten,
+          sensor: true,
+        );
+        expect(pdfSensorBytes.isNotEmpty, isTrue);
+        final headerSensor = String.fromCharCodes(pdfSensorBytes.take(5));
+        expect(headerSensor, equals('%PDF-'));
 
-      // Mode sensor: teks "Rp" tidak boleh muncul dalam aliran teks PDF
-      final teksLaporanSensor = terapkanSensor(laporanContoh, konten, sensor: true);
-      for (final t in teksLaporanSensor.semuaTeks) {
-        expect(t.contains('Rp'), isFalse);
-      }
-    });
+        // Mode sensor: teks "Rp" tidak boleh muncul dalam aliran teks PDF
+        final teksLaporanSensor = terapkanSensor(
+          laporanContoh,
+          konten,
+          sensor: true,
+        );
+        for (final t in teksLaporanSensor.semuaTeks) {
+          expect(t.contains('Rp'), isFalse);
+        }
+      },
+    );
 
-    testWidgets('2. PNG berawalan signature PNG dan memiliki lebar tepat 1080 px', (tester) async {
-      final kunci = GlobalKey();
-      final teks = terapkanSensor(laporanContoh, konten, sensor: false);
+    testWidgets(
+      '2. PNG berawalan signature PNG dan memiliki lebar tepat 1080 px',
+      (tester) async {
+        final kunci = GlobalKey();
+        final teks = terapkanSensor(laporanContoh, konten, sensor: false);
 
-      await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: SingleChildScrollView(
-              child: Center(
-                child: PembuatGambarLaporan.bungkusWidgetLaporan(
-                  kunci: kunci,
-                  teks: teks,
-                  untukEkspor: true,
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Scaffold(
+              body: SingleChildScrollView(
+                child: Center(
+                  child: PembuatGambarLaporan.bungkusWidgetLaporan(
+                    kunci: kunci,
+                    teks: teks,
+                    untukEkspor: true,
+                  ),
                 ),
               ),
             ),
           ),
-        ),
-      );
-      await tester.pump();
+        );
+        await tester.pump();
 
-      Uint8List? pngBytes;
-      await tester.runAsync(() async {
-        pngBytes = await PembuatGambarLaporan.tangkapDariKunci(kunci, pixelRatio: 3.0);
-      });
-      expect(pngBytes, isNotNull);
-      expect(pngBytes!.isNotEmpty, isTrue);
+        Uint8List? pngBytes;
+        await tester.runAsync(() async {
+          pngBytes = await PembuatGambarLaporan.tangkapDariKunci(
+            kunci,
+            pixelRatio: 3.0,
+          );
+        });
+        expect(pngBytes, isNotNull);
+        expect(pngBytes!.isNotEmpty, isTrue);
 
-      // Signature PNG: 89 50 4E 47 0D 0A 1A 0A
-      const signaturePng = [0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A];
-      expect(pngBytes!.take(8).toList(), equals(signaturePng));
+        // Signature PNG: 89 50 4E 47 0D 0A 1A 0A
+        const signaturePng = [0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A];
+        expect(pngBytes!.take(8).toList(), equals(signaturePng));
 
-      // Dimensi IHDR: offset 16 sampai 19 (lebar 4 byte Big Endian)
-      final byteData = ByteData.sublistView(pngBytes!);
-      final lebar = byteData.getUint32(16, Endian.big);
-      expect(lebar, equals(1080), reason: 'Lebar gambar PNG harus tepat 1080 px (360 dp * 3.0)');
+        // Dimensi IHDR: offset 16 sampai 19 (lebar 4 byte Big Endian)
+        final byteData = ByteData.sublistView(pngBytes!);
+        final lebar = byteData.getUint32(16, Endian.big);
+        expect(
+          lebar,
+          equals(1080),
+          reason: 'Lebar gambar PNG harus tepat 1080 px (360 dp * 3.0)',
+        );
 
-      // Simpan contoh ekspor PNG ke direktori sementara pengujian
-      final folderTempPng = Directory.systemTemp.createTempSync('funda_uji_png_');
-      addTearDown(() {
-        if (folderTempPng.existsSync()) folderTempPng.deleteSync(recursive: true);
-      });
-      File('${folderTempPng.path}/laporan_normal.png').writeAsBytesSync(pngBytes!);
+        // Simpan contoh ekspor PNG ke direktori sementara pengujian
+        final folderTempPng = Directory.systemTemp.createTempSync(
+          'funda_uji_png_',
+        );
+        addTearDown(() {
+          if (folderTempPng.existsSync()) {
+            folderTempPng.deleteSync(recursive: true);
+          }
+        });
+        File(
+          '${folderTempPng.path}/laporan_normal.png',
+        ).writeAsBytesSync(pngBytes!);
 
-      // Mode Sensor PNG
-      final kunciSensor = GlobalKey();
-      final teksSensor = terapkanSensor(laporanContoh, konten, sensor: true);
-      await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: SingleChildScrollView(
-              child: Center(
-                child: PembuatGambarLaporan.bungkusWidgetLaporan(
-                  kunci: kunciSensor,
-                  teks: teksSensor,
-                  untukEkspor: true,
+        // Mode Sensor PNG
+        final kunciSensor = GlobalKey();
+        final teksSensor = terapkanSensor(laporanContoh, konten, sensor: true);
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Scaffold(
+              body: SingleChildScrollView(
+                child: Center(
+                  child: PembuatGambarLaporan.bungkusWidgetLaporan(
+                    kunci: kunciSensor,
+                    teks: teksSensor,
+                    untukEkspor: true,
+                  ),
                 ),
               ),
             ),
           ),
-        ),
-      );
-      await tester.pump();
+        );
+        await tester.pump();
 
-      Uint8List? pngSensorBytes;
-      await tester.runAsync(() async {
-        pngSensorBytes = await PembuatGambarLaporan.tangkapDariKunci(kunciSensor, pixelRatio: 3.0);
-      });
-      expect(pngSensorBytes, isNotNull);
-      File('${folderTempPng.path}/laporan_sensor.png').writeAsBytesSync(pngSensorBytes!);
-    });
+        Uint8List? pngSensorBytes;
+        await tester.runAsync(() async {
+          pngSensorBytes = await PembuatGambarLaporan.tangkapDariKunci(
+            kunciSensor,
+            pixelRatio: 3.0,
+          );
+        });
+        expect(pngSensorBytes, isNotNull);
+        File(
+          '${folderTempPng.path}/laporan_sensor.png',
+        ).writeAsBytesSync(pngSensorBytes!);
+      },
+    );
 
-    test('3. LayananBagikanPalsu: simpan, bagikan, format nama berkas benar, dan bersihkan cache > 24 jam', () async {
-      final dirTemp = Directory.systemTemp.createTempSync('funda_test_share_');
-      final layanan = LayananBagikanPalsu(direktoriUji: dirTemp);
+    test(
+      '3. LayananBagikanPalsu: simpan, bagikan, format nama berkas benar, dan bersihkan cache > 24 jam',
+      () async {
+        final dirTemp = Directory.systemTemp.createTempSync(
+          'funda_test_share_',
+        );
+        final layanan = LayananBagikanPalsu(direktoriUji: dirTemp);
 
-      final namaPng = 'funda_laporan_2026-11.png';
-      final namaPdf = 'funda_laporan_2026-11.pdf';
+        final namaPng = 'funda_laporan_2026-11.png';
+        final namaPdf = 'funda_laporan_2026-11.pdf';
 
-      expect(RegExp(r'^funda_laporan_\d{4}-\d{2}\.(png|pdf)$').hasMatch(namaPng), isTrue);
-      expect(RegExp(r'^funda_laporan_\d{4}-\d{2}\.(png|pdf)$').hasMatch(namaPdf), isTrue);
+        expect(
+          RegExp(r'^funda_laporan_\d{4}-\d{2}\.(png|pdf)$').hasMatch(namaPng),
+          isTrue,
+        );
+        expect(
+          RegExp(r'^funda_laporan_\d{4}-\d{2}\.(png|pdf)$').hasMatch(namaPdf),
+          isTrue,
+        );
 
-      final filePng = await layanan.simpanBerkas(namaBerkas: namaPng, bytes: [1, 2, 3]);
-      expect(filePng.existsSync(), isTrue);
-      expect(filePng.path.endsWith(namaPng), isTrue);
+        final filePng = await layanan.simpanBerkas(
+          namaBerkas: namaPng,
+          bytes: [1, 2, 3],
+        );
+        expect(filePng.existsSync(), isTrue);
+        expect(filePng.path.endsWith(namaPng), isTrue);
 
-      await layanan.bagikanBerkas(pathBerkas: filePng.path, judul: 'Laporan Bulanan');
-      expect(layanan.riwayatDibagikan.length, equals(1));
-      expect(layanan.riwayatDibagikan.first, contains('funda_laporan_2026-11.png'));
+        await layanan.bagikanBerkas(
+          pathBerkas: filePng.path,
+          judul: 'Laporan Bulanan',
+        );
+        expect(layanan.riwayatDibagikan.length, equals(1));
+        expect(
+          layanan.riwayatDibagikan.first,
+          contains('funda_laporan_2026-11.png'),
+        );
 
-      // Uji pembersihan berkas kedaluwarsa (> 24 jam)
-      // Buat berkas lama (ubah modified time ke 25 jam yang lalu)
-      final berkasLama = File('${dirTemp.path}/funda_laporan_2026-10.png');
-      berkasLama.writeAsBytesSync([0]);
-      berkasLama.setLastModifiedSync(DateTime.now().subtract(const Duration(hours: 25)));
+        // Uji pembersihan berkas kedaluwarsa (> 24 jam)
+        // Buat berkas lama (ubah modified time ke 25 jam yang lalu)
+        final berkasLama = File('${dirTemp.path}/funda_laporan_2026-10.png');
+        berkasLama.writeAsBytesSync([0]);
+        berkasLama.setLastModifiedSync(
+          DateTime.now().subtract(const Duration(hours: 25)),
+        );
 
-      final terhapus = await layanan.bersihkanCacheKedaluwarsa(batasUsia: const Duration(hours: 24));
-      expect(terhapus, equals(1));
-      expect(berkasLama.existsSync(), isFalse);
-      expect(filePng.existsSync(), isTrue); // Berkas baru tetap ada
+        final terhapus = await layanan.bersihkanCacheKedaluwarsa(
+          batasUsia: const Duration(hours: 24),
+        );
+        expect(terhapus, equals(1));
+        expect(berkasLama.existsSync(), isFalse);
+        expect(filePng.existsSync(), isTrue); // Berkas baru tetap ada
 
-      // Bersihkan direktori uji
-      dirTemp.deleteSync(recursive: true);
-    });
+        // Bersihkan direktori uji
+        dirTemp.deleteSync(recursive: true);
+      },
+    );
 
-    test('4. Ekstraksi teks byte PDF membuktikan PDF sensor bebas teks Rp dan mendukung nominal negatif U+2212', () async {
-      final pembuatPdf = PembuatPdfLaporan(
-        fontRegularBytes: fontRegBytes,
-        fontBoldBytes: fontBoldBytes,
-      );
+    test(
+      '4. Ekstraksi teks byte PDF membuktikan PDF sensor bebas teks Rp dan mendukung nominal negatif U+2212',
+      () async {
+        final pembuatPdf = PembuatPdfLaporan(
+          fontRegularBytes: fontRegBytes,
+          fontBoldBytes: fontBoldBytes,
+        );
 
-      // Skenario kekayaan bersih negatif (utang > dompet -> U+2212)
-      final masukanNegatif = MasukanLaporanBulanan(
-        bulan: DateTime(2026, 11, 1),
-        waktuDibuat: DateTime(2026, 11, 18, 14, 0),
-        uangMasukRupiah: 2000000,
-        uangKeluarRupiah: 1500000,
-        pengeluaranPerSifat: {'kebutuhan': 1500000},
-        daftarPosAnggaran: [],
-        daftarTujuanAktif: [],
-        saldoDompetAktifRupiah: 1000000,
-        sisaUtangAktifRupiah: 3000000, // Bersih: -2.000.000 (mengandung U+2212)
-      );
-      final laporanNegatif = susunLaporanBulanan(masukanNegatif, konten: konten);
+        // Skenario kekayaan bersih negatif (utang > dompet -> U+2212)
+        final masukanNegatif = MasukanLaporanBulanan(
+          bulan: DateTime(2026, 11, 1),
+          waktuDibuat: DateTime(2026, 11, 18, 14, 0),
+          uangMasukRupiah: 2000000,
+          uangKeluarRupiah: 1500000,
+          pengeluaranPerSifat: {'kebutuhan': 1500000},
+          daftarPosAnggaran: [],
+          daftarTujuanAktif: [],
+          saldoDompetAktifRupiah: 1000000,
+          sisaUtangAktifRupiah:
+              3000000, // Bersih: -2.000.000 (mengandung U+2212)
+        );
+        final laporanNegatif = susunLaporanBulanan(
+          masukanNegatif,
+          konten: konten,
+        );
 
-      // 1. Ekspor Normal PDF dengan U+2212
-      final pdfNormal = await pembuatPdf.buatPdf(
-        laporan: laporanNegatif,
-        konten: konten,
-        sensor: false,
-      );
-      expect(pdfNormal.isNotEmpty, isTrue);
+        // 1. Ekspor Normal PDF dengan U+2212
+        final pdfNormal = await pembuatPdf.buatPdf(
+          laporan: laporanNegatif,
+          konten: konten,
+          sensor: false,
+        );
+        expect(pdfNormal.isNotEmpty, isTrue);
 
-      // Ekstraksi teks dari PDF Normal
-      final teksNormalPdf = _ekstrakTeksDariBytePdf(pdfNormal);
-      expect(teksNormalPdf.contains('Rp'), isTrue, reason: 'PDF normal wajib memuat simbol Rp');
+        // Ekstraksi teks dari PDF Normal
+        final teksNormalPdf = _ekstrakTeksDariBytePdf(pdfNormal);
+        expect(
+          teksNormalPdf.contains('Rp'),
+          isTrue,
+          reason: 'PDF normal wajib memuat simbol Rp',
+        );
 
-      // 2. Ekspor Sensor PDF
-      final pdfSensor = await pembuatPdf.buatPdf(
-        laporan: laporanNegatif,
-        konten: konten,
-        sensor: true,
-      );
-      expect(pdfSensor.isNotEmpty, isTrue);
+        // 2. Ekspor Sensor PDF
+        final pdfSensor = await pembuatPdf.buatPdf(
+          laporan: laporanNegatif,
+          konten: konten,
+          sensor: true,
+        );
+        expect(pdfSensor.isNotEmpty, isTrue);
 
-      // Ekstraksi teks dari PDF Sensor
-      final teksSensorPdf = _ekstrakTeksDariBytePdf(pdfSensor);
-      expect(
-        teksSensorPdf.contains('Rp'),
-        isFalse,
-        reason: 'Aliran teks PDF mode sensor tidak boleh memuat kata "Rp"',
-      );
-    });
+        // Ekstraksi teks dari PDF Sensor
+        final teksSensorPdf = _ekstrakTeksDariBytePdf(pdfSensor);
+        expect(
+          teksSensorPdf.contains('Rp'),
+          isFalse,
+          reason: 'Aliran teks PDF mode sensor tidak boleh memuat kata "Rp"',
+        );
+      },
+    );
   });
 }
 
 String _ekstrakTeksDariBytePdf(Uint8List bytes) {
   final patternStream = [115, 116, 114, 101, 97, 109]; // 'stream'
-  final patternEnd = [101, 110, 100, 115, 116, 114, 101, 97, 109]; // 'endstream'
+  final patternEnd = [
+    101,
+    110,
+    100,
+    115,
+    116,
+    114,
+    101,
+    97,
+    109,
+  ]; // 'endstream'
 
   final List<Uint8List> decompressedStreams = [];
   int i = 0;

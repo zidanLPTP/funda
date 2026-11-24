@@ -13,8 +13,7 @@ class FotoDataRepositori {
     final offsetDetik = DateTime.now().timeZoneOffset.inSeconds;
 
     // 1. Agregasi jumlah objek dasar (O(1) kueri agregasi)
-    final barisRingkasan = await _db.customSelect(
-      '''
+    final barisRingkasan = await _db.customSelect('''
       SELECT 
         (SELECT COUNT(*) FROM tabel_dompet WHERE diarsipkan = 0) as jml_dompet,
         (SELECT COUNT(*) FROM tabel_transaksi WHERE jenis = 'masuk') as jml_masuk,
@@ -53,8 +52,7 @@ class FotoDataRepositori {
         (SELECT COUNT(*) FROM tabel_tujuan WHERE jenis = 'dana_darurat' AND status IN ('aktif', 'tercapai')) as jml_tujuan_dana_darurat,
         (SELECT COUNT(*) FROM tabel_alokasi_kantong a JOIN tabel_kantong k ON a.kantong_id = k.id JOIN tabel_tujuan t ON k.tujuan_id = t.id WHERE a.jenis = 'isi' AND t.jenis = 'dana_darurat') as jml_isi_dana_darurat,
         (SELECT COUNT(DISTINCT kategori_id) FROM tabel_transaksi WHERE jenis = 'masuk') as jml_sumber_pemasukan
-      ''',
-    ).getSingle();
+      ''').getSingle();
 
     final jmlDompet = barisRingkasan.read<int>('jml_dompet');
     final jmlMasuk = barisRingkasan.read<int>('jml_masuk');
@@ -69,21 +67,25 @@ class FotoDataRepositori {
     final saldoDarurat = barisRingkasan.read<int>('saldo_darurat');
     final sisaUtang = barisRingkasan.read<int>('sisa_utang');
     final jmlTujuanTabungan = barisRingkasan.read<int>('jml_tujuan_tabungan');
-    final jmlIsiTujuanTabungan = barisRingkasan.read<int>('jml_isi_tujuan_tabungan');
-    final jmlPengeluaranKebutuhan = barisRingkasan.read<int>('jml_pengeluaran_kebutuhan');
-    final jmlTujuanDanaDarurat = barisRingkasan.read<int>('jml_tujuan_dana_darurat');
+    final jmlIsiTujuanTabungan = barisRingkasan.read<int>(
+      'jml_isi_tujuan_tabungan',
+    );
+    final jmlPengeluaranKebutuhan = barisRingkasan.read<int>(
+      'jml_pengeluaran_kebutuhan',
+    );
+    final jmlTujuanDanaDarurat = barisRingkasan.read<int>(
+      'jml_tujuan_dana_darurat',
+    );
     final jmlIsiDanaDarurat = barisRingkasan.read<int>('jml_isi_dana_darurat');
     final jmlSumberPemasukan = barisRingkasan.read<int>('jml_sumber_pemasukan');
 
     // 2. Kategori keluar aktif yang pernah dipakai transaksi beserta sifatnya
-    final barisKategori = await _db.customSelect(
-      '''
+    final barisKategori = await _db.customSelect('''
       SELECT DISTINCT k.id, k.sifat 
       FROM tabel_transaksi t 
       JOIN tabel_kategori k ON t.kategori_id = k.id 
       WHERE t.jenis = 'keluar'
-      ''',
-    ).get();
+      ''').get();
 
     final mapKategoriKeluar = <String, String>{};
     for (final b in barisKategori) {
@@ -101,13 +103,11 @@ class FotoDataRepositori {
     final mapProgres = {for (final p in daftarProgres) p.pelajaranId: p.status};
 
     // 5. Hasil kuis terbaik per modul
-    final barisKuis = await _db.customSelect(
-      '''
+    final barisKuis = await _db.customSelect('''
       SELECT modul_id, MAX(skor_persen) as skor, MAX(lulus) as lls
       FROM tabel_hasil_kuis
       GROUP BY modul_id
-      ''',
-    ).get();
+      ''').get();
 
     final mapKuis = <String, HasilKuisSnapshot>{};
     for (final b in barisKuis) {
@@ -118,16 +118,14 @@ class FotoDataRepositori {
     }
 
     // 6. Komposisi sifat pengeluaran bulan berjalan
-    final barisSifat = await _db.customSelect(
-      '''
+    final barisSifat = await _db.customSelect('''
       SELECT k.sifat, COALESCE(SUM(t.jumlah_rupiah), 0) as total
       FROM tabel_transaksi t
       JOIN tabel_kategori k ON t.kategori_id = k.id
       WHERE t.jenis = 'keluar' 
         AND strftime('%Y-%m', datetime(t.waktu_transaksi + $offsetDetik, 'unixepoch')) = strftime('%Y-%m', datetime('now', '+$offsetDetik seconds'))
       GROUP BY k.sifat
-      ''',
-    ).get();
+      ''').get();
 
     final mapKomposisiSifat = <String, int>{};
     for (final b in barisSifat) {

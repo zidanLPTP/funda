@@ -105,9 +105,7 @@ class _LayarDetailUtangState extends ConsumerState<LayarDetailUtang> {
       future: repo.ambilUtangBerdasarkanId(widget.utangId),
       builder: (context, snapshot) {
         if (!snapshot.hasData || snapshot.data == null) {
-          return const Scaffold(
-            body: Center(child: IndikatorMemuat()),
-          );
+          return const Scaffold(body: Center(child: IndikatorMemuat()));
         }
 
         final utang = snapshot.data!;

@@ -14,7 +14,8 @@ class HasilMisiRepositori {
 
   /// Mengambil hasil misi spesifik berdasarkan misiId.
   Future<EntitasHasilMisi?> ambilHasilMisi(String misiId) {
-    final kueri = _db.select(_db.tabelHasilMisi)..where((m) => m.misiId.equals(misiId));
+    final kueri = _db.select(_db.tabelHasilMisi)
+      ..where((m) => m.misiId.equals(misiId));
     return kueri.getSingleOrNull();
   }
 
@@ -26,7 +27,9 @@ class HasilMisiRepositori {
     required String status,
     String? muatanJson,
   }) async {
-    await _db.into(_db.tabelHasilMisi).insertOnConflictUpdate(
+    await _db
+        .into(_db.tabelHasilMisi)
+        .insertOnConflictUpdate(
           TabelHasilMisiCompanion.insert(
             misiId: misiId,
             pelajaranId: pelajaranId,

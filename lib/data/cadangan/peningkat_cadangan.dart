@@ -1,7 +1,8 @@
 /// Definisi fungsi peningkat skema cadangan antar versi.
-typedef FungsiPeningkatTabel = Map<String, List<Map<String, dynamic>>> Function(
-  Map<String, List<Map<String, dynamic>>> tabel,
-);
+typedef FungsiPeningkatTabel =
+    Map<String, List<Map<String, dynamic>>> Function(
+      Map<String, List<Map<String, dynamic>>> tabel,
+    );
 
 /// Registri fungsi peningkatan skema data cadangan Funda untuk menjaga kompatibilitas masa depan.
 class RegistriPeningkatCadangan {

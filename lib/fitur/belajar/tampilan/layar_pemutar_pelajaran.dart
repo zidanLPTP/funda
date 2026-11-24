@@ -30,7 +30,8 @@ class LayarPemutarPelajaran extends ConsumerStatefulWidget {
   });
 
   @override
-  ConsumerState<LayarPemutarPelajaran> createState() => _LayarPemutarPelajaranState();
+  ConsumerState<LayarPemutarPelajaran> createState() =>
+      _LayarPemutarPelajaranState();
 }
 
 class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
@@ -119,15 +120,19 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
 
       // Ambil hasil misi tersimpan bila ada
       final hasilMisiRepo = ref.read(penyediaHasilMisiRepositori);
-      final hasilMisiLama = await hasilMisiRepo.ambilHasilMisi(widget.pelajaranId);
+      final hasilMisiLama = await hasilMisiRepo.ambilHasilMisi(
+        widget.pelajaranId,
+      );
       if (hasilMisiLama != null) {
         if (hasilMisiLama.status == 'dilewati') {
           _misiDilewati = true;
         } else if (hasilMisiLama.status == 'selesai') {
           _misiTerverifikasi = true;
-          if (hasilMisiLama.muatanJson != null && hasilMisiLama.muatanJson!.isNotEmpty) {
+          if (hasilMisiLama.muatanJson != null &&
+              hasilMisiLama.muatanJson!.isNotEmpty) {
             try {
-              final muatan = jsonDecode(hasilMisiLama.muatanJson!) as Map<String, dynamic>;
+              final muatan =
+                  jsonDecode(hasilMisiLama.muatanJson!) as Map<String, dynamic>;
               if (muatan.containsKey('opsiDipilih')) {
                 final list = muatan['opsiDipilih'] as List<dynamic>;
                 _riwayatOpsiDipilih.clear();
@@ -158,7 +163,9 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
 
       // Ambil progres langkah terakhir yang tersimpan
       final progresRepo = ref.read(penyediaProgresRepositori);
-      final progresLama = await progresRepo.ambilProgresPelajaran(widget.pelajaranId);
+      final progresLama = await progresRepo.ambilProgresPelajaran(
+        widget.pelajaranId,
+      );
 
       var langkahAwal = 0;
       if (progresLama != null && progresLama.status != 'selesai') {
@@ -206,7 +213,8 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
     total += 1; // Cek Paham
     total += 1; // Misi
     total += 1; // Umpan Balik
-    if (_pelajaran!.tindakLanjut != null && _pelajaran!.tindakLanjut!.isNotEmpty) {
+    if (_pelajaran!.tindakLanjut != null &&
+        _pelajaran!.tindakLanjut!.isNotEmpty) {
       total += 1; // Tindak Lanjut
     }
     return total;
@@ -225,10 +233,16 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
         if (pel.misi.tipe == 'ada_data' ||
             pel.misi.tipe == 'aturan_data' ||
             pel.misi.tipe == 'lihat_hitungan') {
-          final fotoData = ref.read(penyediaFotoData).value ?? FotoDataPengguna.kosong();
-          final eval = RegistriMisi.evaluasi(misi: pel.misi, fotoData: fotoData);
+          final fotoData =
+              ref.read(penyediaFotoData).value ?? FotoDataPengguna.kosong();
+          final eval = RegistriMisi.evaluasi(
+            misi: pel.misi,
+            fotoData: fotoData,
+          );
           if (eval.selesai || _misiTerverifikasi) {
-            await ref.read(penyediaHasilMisiRepositori).simpanHasilMisi(
+            await ref
+                .read(penyediaHasilMisiRepositori)
+                .simpanHasilMisi(
                   misiId: widget.pelajaranId,
                   pelajaranId: widget.pelajaranId,
                   tipe: pel.misi.tipe,
@@ -244,7 +258,8 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
 
     if (!mounted) return;
     if (langkahBerikutnya < total) {
-      final kurangiGerakan = MediaQuery.of(context).disableAnimations ||
+      final kurangiGerakan =
+          MediaQuery.of(context).disableAnimations ||
           WidgetsBinding.instance.runtimeType.toString().contains('Test') ||
           (!kIsWeb && Platform.environment.containsKey('FLUTTER_TEST'));
       if (kurangiGerakan) {
@@ -261,7 +276,9 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
       });
 
       // Simpan progres langkah
-      await ref.read(penyediaProgresRepositori).simpanProgresLangkah(
+      await ref
+          .read(penyediaProgresRepositori)
+          .simpanProgresLangkah(
             pelajaranId: widget.pelajaranId,
             modulId: widget.modulId,
             indeksLangkah: langkahBerikutnya,
@@ -269,7 +286,9 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
       ref.invalidate(penyediaFotoData);
     } else {
       // Pelajaran Selesai!
-      await ref.read(penyediaProgresRepositori).tandaiPelajaranSelesai(
+      await ref
+          .read(penyediaProgresRepositori)
+          .tandaiPelajaranSelesai(
             pelajaranId: widget.pelajaranId,
             modulId: widget.modulId,
           );
@@ -279,7 +298,10 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
           const SnackBar(
             duration: Duration(milliseconds: 1500),
             backgroundColor: WarnaFunda.pemasukan,
-            content: TeksFunda.label('Pelajaran selesai! Kamu selangkah lebih dekat menguasai uangmu.', warna: Colors.white),
+            content: TeksFunda.label(
+              'Pelajaran selesai! Kamu selangkah lebih dekat menguasai uangmu.',
+              warna: WarnaFunda.putih,
+            ),
           ),
         );
         if (Navigator.canPop(context)) {
@@ -306,7 +328,7 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
       return Scaffold(
         backgroundColor: WarnaFunda.latar,
         appBar: AppBar(
-          backgroundColor: Colors.transparent,
+          backgroundColor: WarnaFunda.transparan,
           elevation: 0,
           leading: IconButton(
             icon: const Icon(LucideIcons.arrowLeft, color: WarnaFunda.teks),
@@ -330,7 +352,8 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
 
     final pel = _pelajaran!;
     final totalLangkah = _hitungTotalLangkah();
-    final fotoData = ref.watch(penyediaFotoData).value ?? FotoDataPengguna.kosong();
+    final fotoData =
+        ref.watch(penyediaFotoData).value ?? FotoDataPengguna.kosong();
 
     return Scaffold(
       backgroundColor: WarnaFunda.latar,
@@ -346,7 +369,10 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
               child: Row(
                 children: [
                   IconButton(
-                    icon: const Icon(LucideIcons.arrowLeft, color: WarnaFunda.teks),
+                    icon: const Icon(
+                      LucideIcons.arrowLeft,
+                      color: WarnaFunda.teks,
+                    ),
                     onPressed: () => Navigator.pop(context),
                     tooltip: 'Kembali',
                   ),
@@ -355,7 +381,9 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(SudutFunda.pil),
                       child: IndikatorMemuat.garis(
-                        nilai: (totalLangkah > 0) ? (_indeksLangkah + 1) / totalLangkah : 0.0,
+                        nilai: (totalLangkah > 0)
+                            ? (_indeksLangkah + 1) / totalLangkah
+                            : 0.0,
                         warnaLatar: WarnaFunda.garis,
                         warna: WarnaFunda.utama,
                         tinggi: 8,
@@ -370,12 +398,18 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
                   if (kDebugMode && pel.status == 'draf') ...[
                     const SizedBox(width: SpasiFunda.s),
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 6,
+                        vertical: 2,
+                      ),
                       decoration: BoxDecoration(
                         color: WarnaFunda.tintAmber,
                         borderRadius: BorderRadius.circular(SudutFunda.pil),
                       ),
-                      child: const TeksFunda.catatan('Draf', warna: WarnaFunda.peringatan),
+                      child: const TeksFunda.catatan(
+                        'Draf',
+                        warna: WarnaFunda.peringatan,
+                      ),
                     ),
                   ],
                 ],
@@ -386,7 +420,8 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
             Expanded(
               child: PageView(
                 controller: _pageController,
-                physics: const NeverScrollableScrollPhysics(), // Wajib tombol lanjut
+                physics:
+                    const NeverScrollableScrollPhysics(), // Wajib tombol lanjut
                 children: _bangunDaftarKartu(pel, fotoData),
               ),
             ),
@@ -398,9 +433,13 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
                 width: double.infinity,
                 child: TombolFunda(
                   key: const Key('tombol_lanjut'),
-                  teks: _indeksLangkah == totalLangkah - 1 ? 'Selesai Belajar' : 'Lanjut',
+                  teks: _indeksLangkah == totalLangkah - 1
+                      ? 'Selesai Belajar'
+                      : 'Lanjut',
                   lebarPenuh: true,
-                  padaTekan: _cekApakahBisaLanjut(pel, fotoData) ? _lanjutkanKeLangkahBerikutnya : null,
+                  padaTekan: _cekApakahBisaLanjut(pel, fotoData)
+                      ? _lanjutkanKeLangkahBerikutnya
+                      : null,
                 ),
               ),
             ),
@@ -427,14 +466,20 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
           pel.misi.tipe == 'sandbox') {
         return _misiTerverifikasi;
       }
-      final evalMisi = RegistriMisi.evaluasi(misi: pel.misi, fotoData: fotoData);
+      final evalMisi = RegistriMisi.evaluasi(
+        misi: pel.misi,
+        fotoData: fotoData,
+      );
       return evalMisi.selesai || _misiTerverifikasi;
     }
 
     return true;
   }
 
-  List<Widget> _bangunDaftarKartu(PelajaranKonten pel, FotoDataPengguna fotoData) {
+  List<Widget> _bangunDaftarKartu(
+    PelajaranKonten pel,
+    FotoDataPengguna fotoData,
+  ) {
     final kartuWidgets = <Widget>[];
 
     // 1. Pemantik
@@ -454,11 +499,13 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Icon(LucideIcons.sparkles, color: WarnaFunda.utama, size: 24),
-                  const SizedBox(width: SpasiFunda.m),
-                  Expanded(
-                    child: TeksFunda.isi(pel.pemantik),
+                  const Icon(
+                    LucideIcons.sparkles,
+                    color: WarnaFunda.utama,
+                    size: 24,
                   ),
+                  const SizedBox(width: SpasiFunda.m),
+                  Expanded(child: TeksFunda.isi(pel.pemantik)),
                 ],
               ),
             ),
@@ -481,9 +528,7 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
           judul: k.judul,
           isi: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              TeksDenganIstilah(teks: k.isi),
-            ],
+            children: [TeksDenganIstilah(teks: k.isi)],
           ),
         ),
       );
@@ -491,7 +536,8 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
 
     // 3. Contoh Angka Konkret
     final contoh = pel.contohAngka;
-    if (contoh != null && (contoh.baris.isNotEmpty || contoh.judul.isNotEmpty)) {
+    if (contoh != null &&
+        (contoh.baris.isNotEmpty || contoh.judul.isNotEmpty)) {
       kartuWidgets.add(
         _pembungkusKartu(
           tag: 'Contoh Nyata',
@@ -522,29 +568,42 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
                           decoration: isTebal
                               ? const BoxDecoration(
                                   border: Border(
-                                    top: BorderSide(color: WarnaFunda.garis, width: 1.5),
+                                    top: BorderSide(
+                                      color: WarnaFunda.garis,
+                                      width: 1.5,
+                                    ),
                                   ),
                                 )
                               : null,
                           children: [
                             Padding(
-                              padding: const EdgeInsets.symmetric(vertical: SpasiFunda.xs),
+                              padding: const EdgeInsets.symmetric(
+                                vertical: SpasiFunda.xs,
+                              ),
                               child: Text(
                                 b.label,
                                 style: TextStyle(
-                                  fontWeight: isTebal ? FontWeight.bold : FontWeight.normal,
+                                  fontWeight: isTebal
+                                      ? FontWeight.bold
+                                      : FontWeight.normal,
                                   fontSize: 13,
-                                  color: isTebal ? WarnaFunda.teks : WarnaFunda.teksRedup,
+                                  color: isTebal
+                                      ? WarnaFunda.teks
+                                      : WarnaFunda.teksRedup,
                                 ),
                               ),
                             ),
                             Padding(
-                              padding: const EdgeInsets.symmetric(vertical: SpasiFunda.xs),
+                              padding: const EdgeInsets.symmetric(
+                                vertical: SpasiFunda.xs,
+                              ),
                               child: Text(
                                 formatJumlah,
                                 textAlign: TextAlign.right,
                                 style: TextStyle(
-                                  fontWeight: isTebal ? FontWeight.bold : FontWeight.w500,
+                                  fontWeight: isTebal
+                                      ? FontWeight.bold
+                                      : FontWeight.w500,
                                   fontSize: 13,
                                   color: WarnaFunda.teks,
                                 ),
@@ -627,18 +686,27 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
                               },
                         child: Container(
                           margin: const EdgeInsets.only(bottom: SpasiFunda.s),
-                          padding: const EdgeInsets.symmetric(horizontal: SpasiFunda.m, vertical: SpasiFunda.s),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: SpasiFunda.m,
+                            vertical: SpasiFunda.s,
+                          ),
                           decoration: BoxDecoration(
                             color: latarPilihan,
-                            borderRadius: BorderRadius.circular(SudutFunda.kecil),
+                            borderRadius: BorderRadius.circular(
+                              SudutFunda.kecil,
+                            ),
                             border: Border.all(color: borderPilihan),
                           ),
                           child: Row(
                             children: [
                               Icon(
-                                isSelected ? LucideIcons.checkCircle2 : LucideIcons.circle,
+                                isSelected
+                                    ? LucideIcons.checkCircle2
+                                    : LucideIcons.circle,
                                 size: 18,
-                                color: isSelected ? WarnaFunda.utama : WarnaFunda.teksRedup,
+                                color: isSelected
+                                    ? WarnaFunda.utama
+                                    : WarnaFunda.teksRedup,
                               ),
                               const SizedBox(width: SpasiFunda.s),
                               Expanded(child: TeksFunda.isiKecil(teksPilihan)),
@@ -652,7 +720,9 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
                       Container(
                         padding: const EdgeInsets.all(SpasiFunda.s),
                         decoration: BoxDecoration(
-                          color: jawabanDipilih == soal.benar ? WarnaFunda.tintHijau : WarnaFunda.tintAmber,
+                          color: jawabanDipilih == soal.benar
+                              ? WarnaFunda.tintHijau
+                              : WarnaFunda.tintAmber,
                           borderRadius: BorderRadius.circular(SudutFunda.kecil),
                         ),
                         child: TeksFunda.catatan(soal.penjelasan),
@@ -691,7 +761,11 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Icon(LucideIcons.lightbulb, color: WarnaFunda.utama, size: 24),
+                    const Icon(
+                      LucideIcons.lightbulb,
+                      color: WarnaFunda.utama,
+                      size: 24,
+                    ),
                     const SizedBox(width: SpasiFunda.m),
                     Expanded(child: TeksFunda.isi(pel.tindakLanjut!)),
                   ],
@@ -733,10 +807,17 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
           const SizedBox(height: SpasiFunda.m),
           Row(
             children: [
-              const Icon(LucideIcons.timer, size: 16, color: WarnaFunda.teksRedup),
+              const Icon(
+                LucideIcons.timer,
+                size: 16,
+                color: WarnaFunda.teksRedup,
+              ),
               const SizedBox(width: SpasiFunda.xs),
               Expanded(
-                child: TeksFunda.catatan('Perkiraan waktu: ${misi.perkiraanMenit} menit', warna: WarnaFunda.teksRedup),
+                child: TeksFunda.catatan(
+                  'Perkiraan waktu: ${misi.perkiraanMenit} menit',
+                  warna: WarnaFunda.teksRedup,
+                ),
               ),
             ],
           ),
@@ -746,20 +827,36 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
           Container(
             padding: const EdgeInsets.all(SpasiFunda.m),
             decoration: BoxDecoration(
-              color: sudahSelesai ? WarnaFunda.tintHijau : (_misiDilewati ? WarnaFunda.tintNetral : WarnaFunda.tintAmber),
+              color: sudahSelesai
+                  ? WarnaFunda.tintHijau
+                  : (_misiDilewati
+                        ? WarnaFunda.tintNetral
+                        : WarnaFunda.tintAmber),
               borderRadius: BorderRadius.circular(SudutFunda.kartu),
             ),
             child: Row(
               children: [
                 Icon(
-                  sudahSelesai ? LucideIcons.checkCircle : (_misiDilewati ? LucideIcons.forward : LucideIcons.alertCircle),
-                  color: sudahSelesai ? WarnaFunda.pemasukan : (_misiDilewati ? WarnaFunda.teksRedup : WarnaFunda.peringatan),
+                  sudahSelesai
+                      ? LucideIcons.checkCircle
+                      : (_misiDilewati
+                            ? LucideIcons.forward
+                            : LucideIcons.alertCircle),
+                  color: sudahSelesai
+                      ? WarnaFunda.pemasukan
+                      : (_misiDilewati
+                            ? WarnaFunda.teksRedup
+                            : WarnaFunda.peringatan),
                 ),
                 const SizedBox(width: SpasiFunda.s),
                 Expanded(
                   child: TeksFunda.label(
-                    _misiDilewati ? 'Misi ini kamu lewati.' : evalMisi.statusTeks,
-                    warna: sudahSelesai ? WarnaFunda.pemasukan : WarnaFunda.teks,
+                    _misiDilewati
+                        ? 'Misi ini kamu lewati.'
+                        : evalMisi.statusTeks,
+                    warna: sudahSelesai
+                        ? WarnaFunda.pemasukan
+                        : WarnaFunda.teks,
                   ),
                 ),
               ],
@@ -786,7 +883,9 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
                 style: OutlinedButton.styleFrom(
                   minimumSize: const Size(48, 48),
                   side: const BorderSide(color: WarnaFunda.garis),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(SudutFunda.pil)),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(SudutFunda.pil),
+                  ),
                 ),
                 onPressed: () async {
                   ref.invalidate(penyediaFotoData);
@@ -794,7 +893,9 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
                     setState(() {
                       _misiTerverifikasi = true;
                     });
-                    await ref.read(penyediaHasilMisiRepositori).simpanHasilMisi(
+                    await ref
+                        .read(penyediaHasilMisiRepositori)
+                        .simpanHasilMisi(
                           misiId: widget.pelajaranId,
                           pelajaranId: widget.pelajaranId,
                           tipe: misi.tipe,
@@ -815,14 +916,19 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
                   setState(() {
                     _misiDilewati = true;
                   });
-                  await ref.read(penyediaHasilMisiRepositori).simpanHasilMisi(
+                  await ref
+                      .read(penyediaHasilMisiRepositori)
+                      .simpanHasilMisi(
                         misiId: widget.pelajaranId,
                         pelajaranId: widget.pelajaranId,
                         tipe: misi.tipe,
                         status: 'dilewati',
                       );
                 },
-                child: const TeksFunda.catatan('Belum relevan buat aku', warna: WarnaFunda.teksRedup),
+                child: const TeksFunda.catatan(
+                  'Belum relevan buat aku',
+                  warna: WarnaFunda.teksRedup,
+                ),
               ),
             ),
           ] else if (sudahSelesai) ...[
@@ -837,7 +943,10 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
                   Icon(LucideIcons.check, color: WarnaFunda.pemasukan),
                   SizedBox(width: SpasiFunda.s),
                   Expanded(
-                    child: TeksFunda.label('Luar biasa! Misi berhasil diselesaikan.', warna: WarnaFunda.pemasukan),
+                    child: TeksFunda.label(
+                      'Luar biasa! Misi berhasil diselesaikan.',
+                      warna: WarnaFunda.pemasukan,
+                    ),
                   ),
                 ],
               ),
@@ -859,14 +968,23 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
       isi: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          TeksFunda.isi(misi.instruksi.isNotEmpty ? misi.instruksi : misi.deskripsi),
+          TeksFunda.isi(
+            misi.instruksi.isNotEmpty ? misi.instruksi : misi.deskripsi,
+          ),
           const SizedBox(height: SpasiFunda.m),
           Row(
             children: [
-              const Icon(LucideIcons.timer, size: 16, color: WarnaFunda.teksRedup),
+              const Icon(
+                LucideIcons.timer,
+                size: 16,
+                color: WarnaFunda.teksRedup,
+              ),
               const SizedBox(width: SpasiFunda.xs),
               Expanded(
-                child: TeksFunda.catatan('Perkiraan waktu: ${misi.perkiraanMenit} menit', warna: WarnaFunda.teksRedup),
+                child: TeksFunda.catatan(
+                  'Perkiraan waktu: ${misi.perkiraanMenit} menit',
+                  warna: WarnaFunda.teksRedup,
+                ),
               ),
             ],
           ),
@@ -886,7 +1004,11 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
               children: [
                 const Row(
                   children: [
-                    Icon(LucideIcons.helpCircle, size: 18, color: WarnaFunda.utama),
+                    Icon(
+                      LucideIcons.helpCircle,
+                      size: 18,
+                      color: WarnaFunda.utama,
+                    ),
                     SizedBox(width: SpasiFunda.xs),
                     TeksFunda.label('Skenario', warna: WarnaFunda.utama),
                   ],
@@ -911,7 +1033,10 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
                   Icon(LucideIcons.forward, color: WarnaFunda.teksRedup),
                   SizedBox(width: SpasiFunda.s),
                   Expanded(
-                    child: TeksFunda.label('Misi ini kamu lewati.', warna: WarnaFunda.teks),
+                    child: TeksFunda.label(
+                      'Misi ini kamu lewati.',
+                      warna: WarnaFunda.teks,
+                    ),
                   ),
                 ],
               ),
@@ -929,78 +1054,112 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
                 children: [
                   const Row(
                     children: [
-                      Icon(LucideIcons.checkCircle, color: WarnaFunda.pemasukan),
+                      Icon(
+                        LucideIcons.checkCircle,
+                        color: WarnaFunda.pemasukan,
+                      ),
                       SizedBox(width: SpasiFunda.s),
                       Expanded(
-                        child: TeksFunda.label('Pilihan Aman Terverifikasi!', warna: WarnaFunda.pemasukan),
+                        child: TeksFunda.label(
+                          'Pilihan Aman Terverifikasi!',
+                          warna: WarnaFunda.pemasukan,
+                        ),
                       ),
                     ],
                   ),
                   if (_opsiKeputusanTerpilih != null) ...[
                     const SizedBox(height: SpasiFunda.s),
-                    Builder(builder: (context) {
-                      final opt = opsiList.firstWhere(
-                        (o) => o.id == _opsiKeputusanTerpilih,
-                        orElse: () => const OpsiKeputusanMisi(id: '', teks: '', aman: true, umpanBalik: ''),
-                      );
-                      return TeksFunda.isi(opt.umpanBalik);
-                    }),
+                    Builder(
+                      builder: (context) {
+                        final opt = opsiList.firstWhere(
+                          (o) => o.id == _opsiKeputusanTerpilih,
+                          orElse: () => const OpsiKeputusanMisi(
+                            id: '',
+                            teks: '',
+                            aman: true,
+                            umpanBalik: '',
+                          ),
+                        );
+                        return TeksFunda.isi(opt.umpanBalik);
+                      },
+                    ),
                   ],
                 ],
               ),
             ),
-          ] else if (_tampilkanUmpanBalikKeputusan && _opsiKeputusanTerpilih != null) ...[
+          ] else if (_tampilkanUmpanBalikKeputusan &&
+              _opsiKeputusanTerpilih != null) ...[
             // Opsi tidak aman dipilih -> Tampilkan umpan balik & tombol Coba pilihan lain
-            Builder(builder: (context) {
-              final opt = opsiList.firstWhere(
-                (o) => o.id == _opsiKeputusanTerpilih,
-                orElse: () => const OpsiKeputusanMisi(id: '', teks: '', aman: false, umpanBalik: ''),
-              );
-              return Container(
-                padding: const EdgeInsets.all(SpasiFunda.m),
-                decoration: BoxDecoration(
-                  color: WarnaFunda.tintAmber,
-                  borderRadius: BorderRadius.circular(SudutFunda.kartu),
-                  border: Border.all(color: WarnaFunda.garis),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Row(
-                      children: [
-                        Icon(LucideIcons.alertCircle, color: WarnaFunda.peringatan),
-                        SizedBox(width: SpasiFunda.s),
-                        Expanded(
-                          child: TeksFunda.label('Umpan Balik Pilihan', warna: WarnaFunda.peringatan),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: SpasiFunda.s),
-                    TeksFunda.isi(opt.umpanBalik),
-                    const SizedBox(height: SpasiFunda.m),
-                    SizedBox(
-                      width: double.infinity,
-                      child: OutlinedButton(
-                        key: const Key('tombol_coba_pilihan_lain'),
-                        style: OutlinedButton.styleFrom(
-                          minimumSize: const Size(48, 48),
-                          side: const BorderSide(color: WarnaFunda.garis),
-                          backgroundColor: WarnaFunda.permukaan,
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(SudutFunda.pil)),
-                        ),
-                        onPressed: () {
-                          setState(() {
-                            _tampilkanUmpanBalikKeputusan = false;
-                            _opsiKeputusanTerpilih = null;
-                          });
-                        },
-                        child: const TeksFunda.label('Coba pilihan lain', warna: WarnaFunda.utama),
+            Builder(
+              builder: (context) {
+                final opt = opsiList.firstWhere(
+                  (o) => o.id == _opsiKeputusanTerpilih,
+                  orElse: () => const OpsiKeputusanMisi(
+                    id: '',
+                    teks: '',
+                    aman: false,
+                    umpanBalik: '',
+                  ),
+                );
+                return Container(
+                  padding: const EdgeInsets.all(SpasiFunda.m),
+                  decoration: BoxDecoration(
+                    color: WarnaFunda.tintAmber,
+                    borderRadius: BorderRadius.circular(SudutFunda.kartu),
+                    border: Border.all(color: WarnaFunda.garis),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Row(
+                        children: [
+                          Icon(
+                            LucideIcons.alertCircle,
+                            color: WarnaFunda.peringatan,
+                          ),
+                          SizedBox(width: SpasiFunda.s),
+                          Expanded(
+                            child: TeksFunda.label(
+                              'Umpan Balik Pilihan',
+                              warna: WarnaFunda.peringatan,
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                  ],
-                ),
-              );
-            }),
+                      const SizedBox(height: SpasiFunda.s),
+                      TeksFunda.isi(opt.umpanBalik),
+                      const SizedBox(height: SpasiFunda.m),
+                      SizedBox(
+                        width: double.infinity,
+                        child: OutlinedButton(
+                          key: const Key('tombol_coba_pilihan_lain'),
+                          style: OutlinedButton.styleFrom(
+                            minimumSize: const Size(48, 48),
+                            side: const BorderSide(color: WarnaFunda.garis),
+                            backgroundColor: WarnaFunda.permukaan,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(
+                                SudutFunda.pil,
+                              ),
+                            ),
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              _tampilkanUmpanBalikKeputusan = false;
+                              _opsiKeputusanTerpilih = null;
+                            });
+                          },
+                          child: const TeksFunda.label(
+                            'Coba pilihan lain',
+                            warna: WarnaFunda.utama,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
             const SizedBox(height: SpasiFunda.s),
             Center(
               child: TextButton(
@@ -1010,14 +1169,19 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
                   setState(() {
                     _misiDilewati = true;
                   });
-                  await ref.read(penyediaHasilMisiRepositori).simpanHasilMisi(
+                  await ref
+                      .read(penyediaHasilMisiRepositori)
+                      .simpanHasilMisi(
                         misiId: widget.pelajaranId,
                         pelajaranId: widget.pelajaranId,
                         tipe: misi.tipe,
                         status: 'dilewati',
                       );
                 },
-                child: const TeksFunda.catatan('Belum relevan buat aku', warna: WarnaFunda.teksRedup),
+                child: const TeksFunda.catatan(
+                  'Belum relevan buat aku',
+                  warna: WarnaFunda.teksRedup,
+                ),
               ),
             ),
           ] else ...[
@@ -1031,9 +1195,14 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
                     key: Key('opsi_keputusan_${opsi.id}'),
                     style: OutlinedButton.styleFrom(
                       minimumSize: const Size(48, 48),
-                      padding: const EdgeInsets.symmetric(horizontal: SpasiFunda.m, vertical: SpasiFunda.m),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: SpasiFunda.m,
+                        vertical: SpasiFunda.m,
+                      ),
                       side: const BorderSide(color: WarnaFunda.garis),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(SudutFunda.kartu)),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(SudutFunda.kartu),
+                      ),
                       alignment: Alignment.centerLeft,
                     ),
                     onPressed: () async {
@@ -1042,12 +1211,16 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
                       _tampilkanUmpanBalikKeputusan = true;
                       if (opsi.aman) {
                         _misiTerverifikasi = true;
-                        await ref.read(penyediaHasilMisiRepositori).simpanHasilMisi(
+                        await ref
+                            .read(penyediaHasilMisiRepositori)
+                            .simpanHasilMisi(
                               misiId: widget.pelajaranId,
                               pelajaranId: widget.pelajaranId,
                               tipe: misi.tipe,
                               status: 'selesai',
-                              muatanJson: jsonEncode({'opsiDipilih': _riwayatOpsiDipilih}),
+                              muatanJson: jsonEncode({
+                                'opsiDipilih': _riwayatOpsiDipilih,
+                              }),
                             );
                       }
                       setState(() {});
@@ -1066,14 +1239,19 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
                   setState(() {
                     _misiDilewati = true;
                   });
-                  await ref.read(penyediaHasilMisiRepositori).simpanHasilMisi(
+                  await ref
+                      .read(penyediaHasilMisiRepositori)
+                      .simpanHasilMisi(
                         misiId: widget.pelajaranId,
                         pelajaranId: widget.pelajaranId,
                         tipe: misi.tipe,
                         status: 'dilewati',
                       );
                 },
-                child: const TeksFunda.catatan('Belum relevan buat aku', warna: WarnaFunda.teksRedup),
+                child: const TeksFunda.catatan(
+                  'Belum relevan buat aku',
+                  warna: WarnaFunda.teksRedup,
+                ),
               ),
             ),
           ],
@@ -1094,14 +1272,23 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
       isi: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          TeksFunda.isi(misi.instruksi.isNotEmpty ? misi.instruksi : misi.deskripsi),
+          TeksFunda.isi(
+            misi.instruksi.isNotEmpty ? misi.instruksi : misi.deskripsi,
+          ),
           const SizedBox(height: SpasiFunda.m),
           Row(
             children: [
-              const Icon(LucideIcons.timer, size: 16, color: WarnaFunda.teksRedup),
+              const Icon(
+                LucideIcons.timer,
+                size: 16,
+                color: WarnaFunda.teksRedup,
+              ),
               const SizedBox(width: SpasiFunda.xs),
               Expanded(
-                child: TeksFunda.catatan('Perkiraan waktu: ${misi.perkiraanMenit} menit', warna: WarnaFunda.teksRedup),
+                child: TeksFunda.catatan(
+                  'Perkiraan waktu: ${misi.perkiraanMenit} menit',
+                  warna: WarnaFunda.teksRedup,
+                ),
               ),
             ],
           ),
@@ -1141,19 +1328,24 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
                         },
                   child: Container(
                     constraints: const BoxConstraints(minHeight: 48),
-                    padding: const EdgeInsets.symmetric(vertical: SpasiFunda.s, horizontal: SpasiFunda.xs),
+                    padding: const EdgeInsets.symmetric(
+                      vertical: SpasiFunda.s,
+                      horizontal: SpasiFunda.xs,
+                    ),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Icon(
-                          _langkahDicentang.contains(langkah.id) ? LucideIcons.checkSquare : LucideIcons.square,
-                          color: _langkahDicentang.contains(langkah.id) ? WarnaFunda.utama : WarnaFunda.teksRedup,
+                          _langkahDicentang.contains(langkah.id)
+                              ? LucideIcons.checkSquare
+                              : LucideIcons.square,
+                          color: _langkahDicentang.contains(langkah.id)
+                              ? WarnaFunda.utama
+                              : WarnaFunda.teksRedup,
                           size: 22,
                         ),
                         const SizedBox(width: SpasiFunda.s),
-                        Expanded(
-                          child: TeksFunda.isi(langkah.teks),
-                        ),
+                        Expanded(child: TeksFunda.isi(langkah.teks)),
                       ],
                     ),
                   ),
@@ -1165,9 +1357,14 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
 
           // Penghitung "n dari minimal m"
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: SpasiFunda.m, vertical: SpasiFunda.s),
+            padding: const EdgeInsets.symmetric(
+              horizontal: SpasiFunda.m,
+              vertical: SpasiFunda.s,
+            ),
             decoration: BoxDecoration(
-              color: memenuhiSyarat ? WarnaFunda.tintHijau : WarnaFunda.permukaan,
+              color: memenuhiSyarat
+                  ? WarnaFunda.tintHijau
+                  : WarnaFunda.permukaan,
               borderRadius: BorderRadius.circular(SudutFunda.kartu),
               border: Border.all(color: WarnaFunda.garis),
             ),
@@ -1176,13 +1373,17 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
                 Icon(
                   memenuhiSyarat ? LucideIcons.check : LucideIcons.listTodo,
                   size: 18,
-                  color: memenuhiSyarat ? WarnaFunda.pemasukan : WarnaFunda.teksRedup,
+                  color: memenuhiSyarat
+                      ? WarnaFunda.pemasukan
+                      : WarnaFunda.teksRedup,
                 ),
                 const SizedBox(width: SpasiFunda.s),
                 Expanded(
                   child: TeksFunda.label(
                     '$jumlahDicentang dari minimal $minDicentang langkah dicentang',
-                    warna: memenuhiSyarat ? WarnaFunda.pemasukan : WarnaFunda.teks,
+                    warna: memenuhiSyarat
+                        ? WarnaFunda.pemasukan
+                        : WarnaFunda.teks,
                   ),
                 ),
               ],
@@ -1203,7 +1404,10 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
                   Icon(LucideIcons.forward, color: WarnaFunda.teksRedup),
                   SizedBox(width: SpasiFunda.s),
                   Expanded(
-                    child: TeksFunda.label('Misi ini kamu lewati.', warna: WarnaFunda.teks),
+                    child: TeksFunda.label(
+                      'Misi ini kamu lewati.',
+                      warna: WarnaFunda.teks,
+                    ),
                   ),
                 ],
               ),
@@ -1220,7 +1424,10 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
                   Icon(LucideIcons.check, color: WarnaFunda.pemasukan),
                   SizedBox(width: SpasiFunda.s),
                   Expanded(
-                    child: TeksFunda.label('Luar biasa! Misi berhasil diselesaikan.', warna: WarnaFunda.pemasukan),
+                    child: TeksFunda.label(
+                      'Luar biasa! Misi berhasil diselesaikan.',
+                      warna: WarnaFunda.pemasukan,
+                    ),
                   ),
                 ],
               ),
@@ -1235,12 +1442,16 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
                       setState(() {
                         _misiTerverifikasi = true;
                       });
-                      await ref.read(penyediaHasilMisiRepositori).simpanHasilMisi(
+                      await ref
+                          .read(penyediaHasilMisiRepositori)
+                          .simpanHasilMisi(
                             misiId: widget.pelajaranId,
                             pelajaranId: widget.pelajaranId,
                             tipe: misi.tipe,
                             status: 'selesai',
-                            muatanJson: jsonEncode({'dicentang': _langkahDicentang.toList()}),
+                            muatanJson: jsonEncode({
+                              'dicentang': _langkahDicentang.toList(),
+                            }),
                           );
                     }
                   : null,
@@ -1254,14 +1465,19 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
                   setState(() {
                     _misiDilewati = true;
                   });
-                  await ref.read(penyediaHasilMisiRepositori).simpanHasilMisi(
+                  await ref
+                      .read(penyediaHasilMisiRepositori)
+                      .simpanHasilMisi(
                         misiId: widget.pelajaranId,
                         pelajaranId: widget.pelajaranId,
                         tipe: misi.tipe,
                         status: 'dilewati',
                       );
                 },
-                child: const TeksFunda.catatan('Belum relevan buat aku', warna: WarnaFunda.teksRedup),
+                child: const TeksFunda.catatan(
+                  'Belum relevan buat aku',
+                  warna: WarnaFunda.teksRedup,
+                ),
               ),
             ),
           ],
@@ -1285,10 +1501,17 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
           const SizedBox(height: SpasiFunda.m),
           Row(
             children: [
-              const Icon(LucideIcons.timer, size: 16, color: WarnaFunda.teksRedup),
+              const Icon(
+                LucideIcons.timer,
+                size: 16,
+                color: WarnaFunda.teksRedup,
+              ),
               const SizedBox(width: SpasiFunda.xs),
               Expanded(
-                child: TeksFunda.catatan('Perkiraan waktu: ${misi.perkiraanMenit} menit', warna: WarnaFunda.teksRedup),
+                child: TeksFunda.catatan(
+                  'Perkiraan waktu: ${misi.perkiraanMenit} menit',
+                  warna: WarnaFunda.teksRedup,
+                ),
               ),
             ],
           ),
@@ -1371,12 +1594,16 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
                     setState(() {
                       _misiTerverifikasi = true;
                     });
-                    await ref.read(penyediaHasilMisiRepositori).simpanHasilMisi(
+                    await ref
+                        .read(penyediaHasilMisiRepositori)
+                        .simpanHasilMisi(
                           misiId: widget.pelajaranId,
                           pelajaranId: widget.pelajaranId,
                           tipe: misi.tipe,
                           status: 'selesai',
-                          muatanJson: jsonEncode({'jawaban': _teksRefleksi.trim()}),
+                          muatanJson: jsonEncode({
+                            'jawaban': _teksRefleksi.trim(),
+                          }),
                         );
                   }
                 : null,
@@ -1392,7 +1619,11 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
               ),
               child: const Row(
                 children: [
-                  Icon(LucideIcons.checkCircle2, size: 20, color: WarnaFunda.sukses),
+                  Icon(
+                    LucideIcons.checkCircle2,
+                    size: 20,
+                    color: WarnaFunda.sukses,
+                  ),
                   SizedBox(width: SpasiFunda.s),
                   Expanded(
                     child: TeksFunda.catatan(
@@ -1414,14 +1645,19 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
                 setState(() {
                   _misiDilewati = true;
                 });
-                await ref.read(penyediaHasilMisiRepositori).simpanHasilMisi(
+                await ref
+                    .read(penyediaHasilMisiRepositori)
+                    .simpanHasilMisi(
                       misiId: widget.pelajaranId,
                       pelajaranId: widget.pelajaranId,
                       tipe: misi.tipe,
                       status: 'dilewati',
                     );
               },
-              child: const TeksFunda.catatan('Belum relevan buat aku', warna: WarnaFunda.teksRedup),
+              child: const TeksFunda.catatan(
+                'Belum relevan buat aku',
+                warna: WarnaFunda.teksRedup,
+              ),
             ),
           ),
         ],
@@ -1438,14 +1674,23 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
       isi: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          TeksFunda.isi(misi.instruksi.isNotEmpty ? misi.instruksi : misi.deskripsi),
+          TeksFunda.isi(
+            misi.instruksi.isNotEmpty ? misi.instruksi : misi.deskripsi,
+          ),
           const SizedBox(height: SpasiFunda.m),
           Row(
             children: [
-              const Icon(LucideIcons.timer, size: 16, color: WarnaFunda.teksRedup),
+              const Icon(
+                LucideIcons.timer,
+                size: 16,
+                color: WarnaFunda.teksRedup,
+              ),
               const SizedBox(width: SpasiFunda.xs),
               Expanded(
-                child: TeksFunda.catatan('Perkiraan waktu: ${misi.perkiraanMenit} menit', warna: WarnaFunda.teksRedup),
+                child: TeksFunda.catatan(
+                  'Perkiraan waktu: ${misi.perkiraanMenit} menit',
+                  warna: WarnaFunda.teksRedup,
+                ),
               ),
             ],
           ),
@@ -1469,7 +1714,9 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
             decoration: BoxDecoration(
               color: sudahSelesai
                   ? WarnaFunda.tintHijau
-                  : (_misiDilewati ? WarnaFunda.tintNetral : WarnaFunda.tintAmber),
+                  : (_misiDilewati
+                        ? WarnaFunda.tintNetral
+                        : WarnaFunda.tintAmber),
               borderRadius: BorderRadius.circular(SudutFunda.kartu),
             ),
             child: Row(
@@ -1477,10 +1724,14 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
                 Icon(
                   sudahSelesai
                       ? LucideIcons.checkCircle
-                      : (_misiDilewati ? LucideIcons.forward : LucideIcons.flaskConical),
+                      : (_misiDilewati
+                            ? LucideIcons.forward
+                            : LucideIcons.flaskConical),
                   color: sudahSelesai
                       ? WarnaFunda.pemasukan
-                      : (_misiDilewati ? WarnaFunda.teksRedup : const Color(0xFFD97706)),
+                      : (_misiDilewati
+                            ? WarnaFunda.teksRedup
+                            : WarnaFunda.peringatan),
                 ),
                 const SizedBox(width: SpasiFunda.s),
                 Expanded(
@@ -1488,11 +1739,13 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
                     _misiDilewati
                         ? 'Misi ini kamu lewati.'
                         : (sudahSelesai
-                            ? (_ringkasanSandbox.isNotEmpty
-                                ? 'Simulasi selesai! $_ringkasanSandbox'
-                                : 'Syarat misi terpenuhi. Simulasi sandbox sudah kamu jalankan.')
-                            : 'Buka Mode Sandbox, atur alokasi, lalu jalankan minimal 1 tahun simulasi.'),
-                    warna: sudahSelesai ? WarnaFunda.pemasukan : WarnaFunda.teks,
+                              ? (_ringkasanSandbox.isNotEmpty
+                                    ? 'Simulasi selesai! $_ringkasanSandbox'
+                                    : 'Syarat misi terpenuhi. Simulasi sandbox sudah kamu jalankan.')
+                              : 'Buka Mode Sandbox, atur alokasi, lalu jalankan minimal 1 tahun simulasi.'),
+                    warna: sudahSelesai
+                        ? WarnaFunda.pemasukan
+                        : WarnaFunda.teks,
                   ),
                 ),
               ],
@@ -1527,7 +1780,7 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
                 style: ElevatedButton.styleFrom(
                   minimumSize: const Size(double.infinity, 48),
                   backgroundColor: WarnaFunda.utama,
-                  foregroundColor: Colors.white,
+                  foregroundColor: WarnaFunda.putih,
                 ),
                 onPressed: () async {
                   final repo = ref.read(penyediaSandboxRepositori);
@@ -1545,7 +1798,9 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
                       _misiTerverifikasi = true;
                       _ringkasanSandbox = ringkasan;
                     });
-                    await ref.read(penyediaHasilMisiRepositori).simpanHasilMisi(
+                    await ref
+                        .read(penyediaHasilMisiRepositori)
+                        .simpanHasilMisi(
                           misiId: widget.pelajaranId,
                           pelajaranId: widget.pelajaranId,
                           tipe: 'sandbox',
@@ -1576,7 +1831,9 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
                   setState(() {
                     _misiDilewati = true;
                   });
-                  await ref.read(penyediaHasilMisiRepositori).simpanHasilMisi(
+                  await ref
+                      .read(penyediaHasilMisiRepositori)
+                      .simpanHasilMisi(
                         misiId: widget.pelajaranId,
                         pelajaranId: widget.pelajaranId,
                         tipe: misi.tipe,
@@ -1624,7 +1881,11 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
                         color: WarnaFunda.utamaTipis,
                         shape: BoxShape.circle,
                       ),
-                      child: const Icon(LucideIcons.barChart2, color: WarnaFunda.utama, size: 20),
+                      child: const Icon(
+                        LucideIcons.barChart2,
+                        color: WarnaFunda.utama,
+                        size: 20,
+                      ),
                     ),
                     const SizedBox(width: SpasiFunda.s),
                     const Expanded(
@@ -1666,7 +1927,10 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: SpasiFunda.s, vertical: SpasiFunda.xs),
+              padding: const EdgeInsets.symmetric(
+                horizontal: SpasiFunda.s,
+                vertical: SpasiFunda.xs,
+              ),
               decoration: BoxDecoration(
                 color: WarnaFunda.utamaTipis,
                 borderRadius: BorderRadius.circular(SudutFunda.pil),

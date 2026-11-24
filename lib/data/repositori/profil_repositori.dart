@@ -32,9 +32,9 @@ class ProfilRepositori {
 
     if (profilLama != null) {
       // Perbarui profil yang ada
-      await (_db.update(_db.tabelProfilKeuangan)
-            ..where((t) => t.id.equals(profilLama.id)))
-          .write(
+      await (_db.update(
+        _db.tabelProfilKeuangan,
+      )..where((t) => t.id.equals(profilLama.id))).write(
         TabelProfilKeuanganCompanion(
           punyaPenghasilan: Value(punyaPenghasilan),
           punyaUtang: Value(punyaUtang),
@@ -48,7 +48,9 @@ class ProfilRepositori {
       );
     } else {
       // Masukkan profil baru
-      await _db.into(_db.tabelProfilKeuangan).insert(
+      await _db
+          .into(_db.tabelProfilKeuangan)
+          .insert(
             TabelProfilKeuanganCompanion.insert(
               punyaPenghasilan: punyaPenghasilan,
               punyaUtang: punyaUtang,

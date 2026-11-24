@@ -780,7 +780,7 @@ class _ItemSegmen extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: SpasiFunda.m),
           decoration: BoxDecoration(
-            color: terpilih ? warnaAktif : Colors.transparent,
+            color: terpilih ? warnaAktif : WarnaFunda.transparan,
             borderRadius: BorderRadius.circular(SudutFunda.pil),
           ),
           child: Text(

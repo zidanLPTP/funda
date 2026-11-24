@@ -5,12 +5,7 @@ import 'dart:math';
 const int ambangLulusKuis = 70;
 
 /// Status proses belajar pelajaran maupun modul.
-enum StatusBelajar {
-  terkunci,
-  terbuka,
-  sedang,
-  selesai,
-}
+enum StatusBelajar { terkunci, terbuka, sedang, selesai }
 
 /// Representasi data snapshot pengguna untuk evaluasi gerbang data sekali ambil via SQL.
 class FotoDataPengguna {
@@ -24,7 +19,8 @@ class FotoDataPengguna {
   final int hariTransaksiBerbeda;
   final int bulanTransaksiBerbeda;
   final Map<String, String> pernyataan; // kunci -> nilai ('true')
-  final Map<String, String> progresPelajaran; // pelajaranId -> 'sedang' | 'selesai'
+  final Map<String, String>
+  progresPelajaran; // pelajaranId -> 'sedang' | 'selesai'
   final Map<String, HasilKuisSnapshot> hasilKuisTerbaik; // modulId -> snapshot
   final bool profilTerisi;
   final bool tujuanDanaDaruratAktif;
@@ -159,16 +155,15 @@ class HasilKuisSnapshot {
   final int skorPersen;
   final bool lulus;
 
-  const HasilKuisSnapshot({
-    required this.skorPersen,
-    required this.lulus,
-  });
+  const HasilKuisSnapshot({required this.skorPersen, required this.lulus});
 }
 
 /// Spesifikasi syarat gerbang data.
 class SyaratGerbangData {
-  final String tipe; // ada_data | aturan_data | periode_data | pernyataan | kuis_lulus | modul_selesai
-  final String? objek; // dompet | pemasukan | pengeluaran | transaksi | anggaran | tujuan | utang | kategori
+  final String
+  tipe; // ada_data | aturan_data | periode_data | pernyataan | kuis_lulus | modul_selesai
+  final String?
+  objek; // dompet | pemasukan | pengeluaran | transaksi | anggaran | tujuan | utang | kategori
   final String? aturan; // semua_kategori_berlabel
   final String? satuan; // hari_berbeda | bulan_berbeda
   final int min;
@@ -204,16 +199,16 @@ class SyaratGerbangData {
   }
 
   Map<String, dynamic> toJson() => {
-        'tipe': tipe,
-        if (objek != null) 'objek': objek,
-        if (aturan != null) 'aturan': aturan,
-        if (satuan != null) 'satuan': satuan,
-        'min': min,
-        if (kunci != null) 'kunci': kunci,
-        if (modulId != null) 'modulId': modulId,
-        'pesan': pesan,
-        if (atauPernyataan != null) 'atauPernyataan': atauPernyataan,
-      };
+    'tipe': tipe,
+    if (objek != null) 'objek': objek,
+    if (aturan != null) 'aturan': aturan,
+    if (satuan != null) 'satuan': satuan,
+    'min': min,
+    if (kunci != null) 'kunci': kunci,
+    if (modulId != null) 'modulId': modulId,
+    'pesan': pesan,
+    if (atauPernyataan != null) 'atauPernyataan': atauPernyataan,
+  };
 }
 
 /// Hasil evaluasi satu syarat gerbang data.
@@ -277,7 +272,11 @@ class CekPahamKonten {
   factory CekPahamKonten.fromJson(Map<String, dynamic> json) {
     return CekPahamKonten(
       tanya: json['tanya'] as String? ?? '',
-      pilihan: (json['pilihan'] as List<dynamic>?)?.map((e) => e.toString()).toList() ?? [],
+      pilihan:
+          (json['pilihan'] as List<dynamic>?)
+              ?.map((e) => e.toString())
+              .toList() ??
+          [],
       benar: (json['benar'] as num?)?.toInt() ?? 0,
       penjelasan: json['penjelasan'] as String? ?? '',
     );
@@ -307,46 +306,43 @@ class OpsiKeputusanMisi {
   }
 
   Map<String, dynamic> toJson() => {
-        'id': id,
-        'teks': teks,
-        'aman': aman,
-        'umpanBalik': umpanBalik,
-      };
+    'id': id,
+    'teks': teks,
+    'aman': aman,
+    'umpanBalik': umpanBalik,
+  };
 }
 
 class SkenarioKeputusanMisi {
   final String pemantik;
   final List<OpsiKeputusanMisi> opsi;
 
-  const SkenarioKeputusanMisi({
-    required this.pemantik,
-    required this.opsi,
-  });
+  const SkenarioKeputusanMisi({required this.pemantik, required this.opsi});
 
   factory SkenarioKeputusanMisi.fromJson(Map<String, dynamic> json) {
     return SkenarioKeputusanMisi(
       pemantik: json['pemantik'] as String? ?? '',
-      opsi: (json['opsi'] as List<dynamic>?)
-              ?.map((e) => OpsiKeputusanMisi.fromJson(e as Map<String, dynamic>))
+      opsi:
+          (json['opsi'] as List<dynamic>?)
+              ?.map(
+                (e) => OpsiKeputusanMisi.fromJson(e as Map<String, dynamic>),
+              )
               .toList() ??
           [],
     );
   }
 
   Map<String, dynamic> toJson() => {
-        'pemantik': pemantik,
-        'opsi': opsi.map((e) => e.toJson()).toList(),
-      };
+    'pemantik': pemantik,
+    'opsi': opsi.map((e) => e.toJson()).toList(),
+  };
 }
 
 class LangkahDaftarPeriksa {
   final String id;
   final String teks;
 
-  const LangkahDaftarPeriksa({
-    required this.id,
-    required this.teks,
-  });
+  const LangkahDaftarPeriksa({required this.id, required this.teks});
 
   factory LangkahDaftarPeriksa.fromJson(Map<String, dynamic> json) {
     return LangkahDaftarPeriksa(
@@ -355,10 +351,7 @@ class LangkahDaftarPeriksa {
     );
   }
 
-  Map<String, dynamic> toJson() => {
-        'id': id,
-        'teks': teks,
-      };
+  Map<String, dynamic> toJson() => {'id': id, 'teks': teks};
 }
 
 class MisiKonten {
@@ -401,7 +394,8 @@ class MisiKonten {
   });
 
   factory MisiKonten.fromJson(Map<String, dynamic> json) {
-    final instruksi = json['instruksi'] as String? ?? json['deskripsi'] as String? ?? '';
+    final instruksi =
+        json['instruksi'] as String? ?? json['deskripsi'] as String? ?? '';
     return MisiKonten(
       tipe: json['tipe'] as String? ?? 'ada_data',
       objek: json['objek'] as String?,
@@ -413,7 +407,9 @@ class MisiKonten {
       perkiraanMenit: (json['perkiraanMenit'] as num?)?.toInt() ?? 2,
       umpanBalik: json['umpanBalik'] as String?,
       skenario: json['skenario'] != null
-          ? SkenarioKeputusanMisi.fromJson(json['skenario'] as Map<String, dynamic>)
+          ? SkenarioKeputusanMisi.fromJson(
+              json['skenario'] as Map<String, dynamic>,
+            )
           : null,
       disclaimer: json['disclaimer'] as bool?,
       minimalDicentang: (json['minimalDicentang'] as num?)?.toInt(),
@@ -423,7 +419,8 @@ class MisiKonten {
       pertanyaan: json['pertanyaan'] as String?,
       petunjukInput: json['petunjukInput'] as String?,
       minimalKarakter: (json['minimalKarakter'] as num?)?.toInt() ?? 10,
-      minimalSimulasi: (json['minimalSimulasi'] as num?)?.toInt() ??
+      minimalSimulasi:
+          (json['minimalSimulasi'] as num?)?.toInt() ??
           (json['tipe'] == 'sandbox' ? 1 : null),
     );
   }
@@ -449,10 +446,10 @@ class BarisContohAngka {
   }
 
   Map<String, dynamic> toJson() => {
-        'label': label,
-        'jumlah': jumlah,
-        if (ringkasan) 'ringkasan': ringkasan,
-      };
+    'label': label,
+    'jumlah': jumlah,
+    if (ringkasan) 'ringkasan': ringkasan,
+  };
 }
 
 class ContohAngkaKonten {
@@ -487,13 +484,29 @@ class ContohAngkaKonten {
       } else {
         // Mendukung bentuk lama {masuk, keluar, hasil}
         if (raw.containsKey('masuk')) {
-          barisList.add(BarisContohAngka(label: 'Uang Masuk', jumlah: (raw['masuk'] as num?)?.toInt() ?? 0));
+          barisList.add(
+            BarisContohAngka(
+              label: 'Uang Masuk',
+              jumlah: (raw['masuk'] as num?)?.toInt() ?? 0,
+            ),
+          );
         }
         if (raw.containsKey('keluar')) {
-          barisList.add(BarisContohAngka(label: 'Uang Keluar', jumlah: -((raw['keluar'] as num?)?.toInt() ?? 0)));
+          barisList.add(
+            BarisContohAngka(
+              label: 'Uang Keluar',
+              jumlah: -((raw['keluar'] as num?)?.toInt() ?? 0),
+            ),
+          );
         }
         if (raw.containsKey('hasil')) {
-          barisList.add(BarisContohAngka(label: 'Hasil', jumlah: (raw['hasil'] as num?)?.toInt() ?? 0, ringkasan: true));
+          barisList.add(
+            BarisContohAngka(
+              label: 'Hasil',
+              jumlah: (raw['hasil'] as num?)?.toInt() ?? 0,
+              ringkasan: true,
+            ),
+          );
         }
       }
 
@@ -547,7 +560,10 @@ class PelajaranKonten {
     this.catatanReviewer,
   });
 
-  factory PelajaranKonten.fromJson(Map<String, dynamic> json, {String? fallbackModulId}) {
+  factory PelajaranKonten.fromJson(
+    Map<String, dynamic> json, {
+    String? fallbackModulId,
+  }) {
     final modul = (json['modul'] as String?) ?? fallbackModulId ?? '';
     return PelajaranKonten(
       id: json['id'] as String? ?? '',
@@ -555,17 +571,26 @@ class PelajaranKonten {
       judul: json['judul'] as String? ?? '',
       durasiMenit: (json['durasiMenit'] as num?)?.toInt() ?? 4,
       status: json['status'] as String? ?? 'draf',
-      gerbang: (json['gerbang'] as List<dynamic>?)
-              ?.map((e) => SyaratGerbangData.fromJson(e as Map<String, dynamic>))
+      gerbang:
+          (json['gerbang'] as List<dynamic>?)
+              ?.map(
+                (e) => SyaratGerbangData.fromJson(e as Map<String, dynamic>),
+              )
               .toList() ??
           [],
       pemantik: json['pemantik'] as String? ?? '',
-      kartu: (json['kartu'] as List<dynamic>?)
-              ?.map((e) => KartuPelajaranKonten.fromJson(e as Map<String, dynamic>))
+      kartu:
+          (json['kartu'] as List<dynamic>?)
+              ?.map(
+                (e) => KartuPelajaranKonten.fromJson(e as Map<String, dynamic>),
+              )
               .toList() ??
           [],
-      contohAngka: json['contohAngka'] != null ? ContohAngkaKonten.fromJson(json['contohAngka']) : null,
-      cekPaham: (json['cekPaham'] as List<dynamic>?)
+      contohAngka: json['contohAngka'] != null
+          ? ContohAngkaKonten.fromJson(json['contohAngka'])
+          : null,
+      cekPaham:
+          (json['cekPaham'] as List<dynamic>?)
               ?.map((e) => CekPahamKonten.fromJson(e as Map<String, dynamic>))
               .toList() ??
           [],
@@ -603,7 +628,11 @@ class SoalKuis {
       id: json['id'] as String? ?? '',
       pelajaranId: json['pelajaranId'] as String? ?? '',
       tanya: json['tanya'] as String? ?? '',
-      pilihan: (json['pilihan'] as List<dynamic>?)?.map((e) => e.toString()).toList() ?? [],
+      pilihan:
+          (json['pilihan'] as List<dynamic>?)
+              ?.map((e) => e.toString())
+              .toList() ??
+          [],
       benar: (json['benar'] as num?)?.toInt() ?? 0,
       penjelasan: json['penjelasan'] as String? ?? '',
       aturanPraktis: json['aturanPraktis'] as bool? ?? false,
@@ -621,7 +650,8 @@ class KuisKonten {
   factory KuisKonten.fromJson(Map<String, dynamic> json) {
     return KuisKonten(
       jumlahSoal: (json['jumlahSoal'] as num?)?.toInt() ?? 0,
-      bankSoal: (json['bankSoal'] as List<dynamic>?)
+      bankSoal:
+          (json['bankSoal'] as List<dynamic>?)
               ?.map((e) => SoalKuis.fromJson(e as Map<String, dynamic>))
               .toList() ??
           [],
@@ -660,11 +690,18 @@ class ModulKonten {
       urutan: (json['urutan'] as num?)?.toInt() ?? 0,
       deskripsiSingkat: json['deskripsiSingkat'] as String? ?? '',
       tersedia: json['tersedia'] as bool? ?? false,
-      gerbang: (json['gerbang'] as List<dynamic>?)
-              ?.map((e) => SyaratGerbangData.fromJson(e as Map<String, dynamic>))
+      gerbang:
+          (json['gerbang'] as List<dynamic>?)
+              ?.map(
+                (e) => SyaratGerbangData.fromJson(e as Map<String, dynamic>),
+              )
               .toList() ??
           [],
-      daftarPelajaran: (json['daftarPelajaran'] as List<dynamic>?)?.map((e) => e.toString()).toList() ?? [],
+      daftarPelajaran:
+          (json['daftarPelajaran'] as List<dynamic>?)
+              ?.map((e) => e.toString())
+              .toList() ??
+          [],
       kuis: KuisKonten.fromJson(json['kuis'] as Map<String, dynamic>? ?? {}),
     );
   }
@@ -889,7 +926,9 @@ HasilEvaluasiSyarat evaluasiSyarat(
         if (kategoriKeluar.isEmpty) {
           terpenuhi = false;
         } else {
-          final adaYangBelum = kategoriKeluar.values.any((sifat) => sifat == 'belum_dilabeli');
+          final adaYangBelum = kategoriKeluar.values.any(
+            (sifat) => sifat == 'belum_dilabeli',
+          );
           terpenuhi = !adaYangBelum;
         }
       } else {
@@ -950,7 +989,9 @@ int _hitungJumlahObjek(String? objek, FotoDataPengguna fotoData) {
     case 'transaksi':
       return fotoData.jumlahPemasukan + fotoData.jumlahPengeluaran;
     case 'arus_kas':
-      return (fotoData.jumlahPemasukan >= 1 && fotoData.jumlahPengeluaran >= 1) ? 1 : 0;
+      return (fotoData.jumlahPemasukan >= 1 && fotoData.jumlahPengeluaran >= 1)
+          ? 1
+          : 0;
     case 'anggaran':
       return fotoData.jumlahAnggaran;
     case 'tujuan':
@@ -1004,7 +1045,9 @@ HasilStatusBelajar tentukanStatusPelajaran({
     final pelajaranSebelumnya = daftarPelajaranModul[posisiIndeks - 1];
     final statusSebelumnya = fotoData.progresPelajaran[pelajaranSebelumnya.id];
     if (statusSebelumnya != 'selesai') {
-      apaYangKurang.add('Selesaikan pelajaran sebelumnya: "${pelajaranSebelumnya.judul}"');
+      apaYangKurang.add(
+        'Selesaikan pelajaran sebelumnya: "${pelajaranSebelumnya.judul}"',
+      );
     }
   }
 
@@ -1129,7 +1172,9 @@ HasilStatusBelajar tentukanStatusModul({
   }
 
   if (!semuaPelajaranSelesai) {
-    final adaYangDimulai = modul.daftarPelajaran.any((id) => fotoData.progresPelajaran.containsKey(id));
+    final adaYangDimulai = modul.daftarPelajaran.any(
+      (id) => fotoData.progresPelajaran.containsKey(id),
+    );
     return HasilStatusBelajar(
       status: adaYangDimulai ? StatusBelajar.sedang : StatusBelajar.terbuka,
       apaYangKurang: ['Selesaikan seluruh pelajaran di modul ini'],

@@ -1,4 +1,4 @@
-﻿import 'package:flutter_test/flutter_test.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:funda/fitur/belajar/model/pembaca_konten.dart';
 
 void main() {
@@ -6,26 +6,52 @@ void main() {
     // 1. kamus.json bukan format array
     test('1. kamus.json: format bukan array', () {
       expect(
-        () => PembacaKonten.uraiKamus('{"bukan": "array"}', namaBerkas: 'kamus.json'),
-        throwsA(predicate((e) => e is GalatKonten && e.berkas == 'kamus.json' && e.pesan.contains('array'))),
+        () => PembacaKonten.uraiKamus(
+          '{"bukan": "array"}',
+          namaBerkas: 'kamus.json',
+        ),
+        throwsA(
+          predicate(
+            (e) =>
+                e is GalatKonten &&
+                e.berkas == 'kamus.json' &&
+                e.pesan.contains('array'),
+          ),
+        ),
       );
     });
 
     // 2. kamus.json: istilah kosong
     test('2. kamus.json: kolom istilah kosong', () {
-      const jsonStr = '[{"istilah": "", "arti": "Definisi", "contohRupiah": "Rp100"}]';
+      const jsonStr =
+          '[{"istilah": "", "arti": "Definisi", "contohRupiah": "Rp100"}]';
       expect(
         () => PembacaKonten.uraiKamus(jsonStr, namaBerkas: 'kamus.json'),
-        throwsA(predicate((e) => e is GalatKonten && e.berkas == 'kamus.json' && e.kolom == 'istilah')),
+        throwsA(
+          predicate(
+            (e) =>
+                e is GalatKonten &&
+                e.berkas == 'kamus.json' &&
+                e.kolom == 'istilah',
+          ),
+        ),
       );
     });
 
     // 3. kamus.json: arti kosong
     test('3. kamus.json: kolom arti kosong', () {
-      const jsonStr = '[{"istilah": "Arus Kas", "arti": "  ", "contohRupiah": "Rp100"}]';
+      const jsonStr =
+          '[{"istilah": "Arus Kas", "arti": "  ", "contohRupiah": "Rp100"}]';
       expect(
         () => PembacaKonten.uraiKamus(jsonStr, namaBerkas: 'kamus.json'),
-        throwsA(predicate((e) => e is GalatKonten && e.berkas == 'kamus.json' && e.kolom == 'arti')),
+        throwsA(
+          predicate(
+            (e) =>
+                e is GalatKonten &&
+                e.berkas == 'kamus.json' &&
+                e.kolom == 'arti',
+          ),
+        ),
       );
     });
 
@@ -34,14 +60,24 @@ void main() {
       const jsonStr = '[{"istilah": "Arus Kas", "arti": "Definisi"}]';
       expect(
         () => PembacaKonten.uraiKamus(jsonStr, namaBerkas: 'kamus.json'),
-        throwsA(predicate((e) => e is GalatKonten && e.berkas == 'kamus.json' && e.kolom == 'contohRupiah')),
+        throwsA(
+          predicate(
+            (e) =>
+                e is GalatKonten &&
+                e.berkas == 'kamus.json' &&
+                e.kolom == 'contohRupiah',
+          ),
+        ),
       );
     });
 
     // 5. modul.json: bukan objek JSON
     test('5. modul.json: format bukan objek', () {
       expect(
-        () => PembacaKonten.uraiModul('["bukan", "objek"]', namaBerkas: 'modul.json'),
+        () => PembacaKonten.uraiModul(
+          '["bukan", "objek"]',
+          namaBerkas: 'modul.json',
+        ),
         throwsA(predicate((e) => e is GalatKonten && e.berkas == 'modul.json')),
       );
     });
@@ -51,7 +87,12 @@ void main() {
       const jsonStr = '{"id": "", "judul": "Judul", "tingkat": "pemula"}';
       expect(
         () => PembacaKonten.uraiModul(jsonStr, namaBerkas: 'modul.json'),
-        throwsA(predicate((e) => e is GalatKonten && e.berkas == 'modul.json' && e.kolom == 'id')),
+        throwsA(
+          predicate(
+            (e) =>
+                e is GalatKonten && e.berkas == 'modul.json' && e.kolom == 'id',
+          ),
+        ),
       );
     });
 
@@ -60,7 +101,14 @@ void main() {
       const jsonStr = '{"id": "modul_1", "judul": "", "tingkat": "pemula"}';
       expect(
         () => PembacaKonten.uraiModul(jsonStr, namaBerkas: 'modul.json'),
-        throwsA(predicate((e) => e is GalatKonten && e.berkas == 'modul.json' && e.kolom == 'judul')),
+        throwsA(
+          predicate(
+            (e) =>
+                e is GalatKonten &&
+                e.berkas == 'modul.json' &&
+                e.kolom == 'judul',
+          ),
+        ),
       );
     });
 
@@ -69,7 +117,14 @@ void main() {
       const jsonStr = '{"id": "modul_1", "judul": "Judul", "tingkat": "ahli"}';
       expect(
         () => PembacaKonten.uraiModul(jsonStr, namaBerkas: 'modul.json'),
-        throwsA(predicate((e) => e is GalatKonten && e.berkas == 'modul.json' && e.kolom == 'tingkat')),
+        throwsA(
+          predicate(
+            (e) =>
+                e is GalatKonten &&
+                e.berkas == 'modul.json' &&
+                e.kolom == 'tingkat',
+          ),
+        ),
       );
     });
 
@@ -89,7 +144,14 @@ void main() {
       ''';
       expect(
         () => PembacaKonten.uraiModul(jsonStr, namaBerkas: 'modul.json'),
-        throwsA(predicate((e) => e is GalatKonten && e.berkas == 'modul.json' && e.kolom == 'kuis.jumlahSoal')),
+        throwsA(
+          predicate(
+            (e) =>
+                e is GalatKonten &&
+                e.berkas == 'modul.json' &&
+                e.kolom == 'kuis.jumlahSoal',
+          ),
+        ),
       );
     });
 
@@ -109,7 +171,15 @@ void main() {
       ''';
       expect(
         () => PembacaKonten.uraiModul(jsonStr, namaBerkas: 'modul.json'),
-        throwsA(predicate((e) => e is GalatKonten && e.berkas == 'modul.json' && e.kolom == 'daftarPelajaran' && e.pesan.contains('duplikat'))),
+        throwsA(
+          predicate(
+            (e) =>
+                e is GalatKonten &&
+                e.berkas == 'modul.json' &&
+                e.kolom == 'daftarPelajaran' &&
+                e.pesan.contains('duplikat'),
+          ),
+        ),
       );
     });
 
@@ -135,13 +205,22 @@ void main() {
       ''';
       expect(
         () => PembacaKonten.uraiModul(jsonStr, namaBerkas: 'modul.json'),
-        throwsA(predicate((e) => e is GalatKonten && e.berkas == 'modul.json' && e.pesan.contains('duplikat'))),
+        throwsA(
+          predicate(
+            (e) =>
+                e is GalatKonten &&
+                e.berkas == 'modul.json' &&
+                e.pesan.contains('duplikat'),
+          ),
+        ),
       );
     });
 
     // 12. modul.json: soal kuis mereferensikan pelajaranId yang tidak ada
-    test('12. modul.json: referensi pelajaranId soal kuis tidak ada di daftarPelajaran', () {
-      const jsonStr = '''
+    test(
+      '12. modul.json: referensi pelajaranId soal kuis tidak ada di daftarPelajaran',
+      () {
+        const jsonStr = '''
       {
         "id": "anggaran_arus_kas",
         "judul": "Anggaran & Arus Kas",
@@ -158,11 +237,19 @@ void main() {
         }
       }
       ''';
-      expect(
-        () => PembacaKonten.uraiModul(jsonStr, namaBerkas: 'modul.json'),
-        throwsA(predicate((e) => e is GalatKonten && e.berkas == 'modul.json' && e.pesan.contains('tidak terdaftar'))),
-      );
-    });
+        expect(
+          () => PembacaKonten.uraiModul(jsonStr, namaBerkas: 'modul.json'),
+          throwsA(
+            predicate(
+              (e) =>
+                  e is GalatKonten &&
+                  e.berkas == 'modul.json' &&
+                  e.pesan.contains('tidak terdaftar'),
+            ),
+          ),
+        );
+      },
+    );
 
     // 13. modul.json: objek gerbang tidak dikenal
     test('13. modul.json: referensi objek gerbang data tidak dikenal', () {
@@ -181,7 +268,14 @@ void main() {
       ''';
       expect(
         () => PembacaKonten.uraiModul(jsonStr, namaBerkas: 'modul.json'),
-        throwsA(predicate((e) => e is GalatKonten && e.berkas == 'modul.json' && e.kolom == 'gerbang[0].objek')),
+        throwsA(
+          predicate(
+            (e) =>
+                e is GalatKonten &&
+                e.berkas == 'modul.json' &&
+                e.kolom == 'gerbang[0].objek',
+          ),
+        ),
       );
     });
 
@@ -203,14 +297,25 @@ void main() {
       }
       ''';
       expect(
-        () => PembacaKonten.uraiPelajaran(jsonStr, namaBerkas: 'pelajaran.json'),
-        throwsA(predicate((e) => e is GalatKonten && e.berkas == 'pelajaran.json' && e.kolom == 'id' && e.pesan.contains('stabil'))),
+        () =>
+            PembacaKonten.uraiPelajaran(jsonStr, namaBerkas: 'pelajaran.json'),
+        throwsA(
+          predicate(
+            (e) =>
+                e is GalatKonten &&
+                e.berkas == 'pelajaran.json' &&
+                e.kolom == 'id' &&
+                e.pesan.contains('stabil'),
+          ),
+        ),
       );
     });
 
     // 15. pelajaran.json: durasi di luar 3 sampai 8 menit
-    test('15. pelajaran.json: durasi di luar rentang 3 sampai 8 menit (< 3 atau > 8)', () {
-      const jsonKurang = '''
+    test(
+      '15. pelajaran.json: durasi di luar rentang 3 sampai 8 menit (< 3 atau > 8)',
+      () {
+        const jsonKurang = '''
       {
         "id": "anggaran_arus_kas_1_2",
         "modulId": "anggaran_arus_kas",
@@ -225,12 +330,22 @@ void main() {
         "misi": {"tipe": "ada_data", "objek": "transaksi", "min": 1, "judul": "M", "deskripsi": "D", "perkiraanMenit": 2}
       }
       ''';
-      expect(
-        () => PembacaKonten.uraiPelajaran(jsonKurang, namaBerkas: 'pelajaran.json'),
-        throwsA(predicate((e) => e is GalatKonten && e.berkas == 'pelajaran.json' && e.kolom == 'durasiMenit')),
-      );
+        expect(
+          () => PembacaKonten.uraiPelajaran(
+            jsonKurang,
+            namaBerkas: 'pelajaran.json',
+          ),
+          throwsA(
+            predicate(
+              (e) =>
+                  e is GalatKonten &&
+                  e.berkas == 'pelajaran.json' &&
+                  e.kolom == 'durasiMenit',
+            ),
+          ),
+        );
 
-      const jsonLebih = '''
+        const jsonLebih = '''
       {
         "id": "anggaran_arus_kas_1_2",
         "modulId": "anggaran_arus_kas",
@@ -245,11 +360,22 @@ void main() {
         "misi": {"tipe": "ada_data", "objek": "transaksi", "min": 1, "judul": "M", "deskripsi": "D", "perkiraanMenit": 2}
       }
       ''';
-      expect(
-        () => PembacaKonten.uraiPelajaran(jsonLebih, namaBerkas: 'pelajaran.json'),
-        throwsA(predicate((e) => e is GalatKonten && e.berkas == 'pelajaran.json' && e.kolom == 'durasiMenit')),
-      );
-    });
+        expect(
+          () => PembacaKonten.uraiPelajaran(
+            jsonLebih,
+            namaBerkas: 'pelajaran.json',
+          ),
+          throwsA(
+            predicate(
+              (e) =>
+                  e is GalatKonten &&
+                  e.berkas == 'pelajaran.json' &&
+                  e.kolom == 'durasiMenit',
+            ),
+          ),
+        );
+      },
+    );
 
     // 16. pelajaran.json: kartu > 3
     test('16. pelajaran.json: kartu lebih dari 3 kartu konsep', () {
@@ -274,14 +400,24 @@ void main() {
       }
       ''';
       expect(
-        () => PembacaKonten.uraiPelajaran(jsonStr, namaBerkas: 'pelajaran.json'),
-        throwsA(predicate((e) => e is GalatKonten && e.berkas == 'pelajaran.json' && e.kolom == 'kartu')),
+        () =>
+            PembacaKonten.uraiPelajaran(jsonStr, namaBerkas: 'pelajaran.json'),
+        throwsA(
+          predicate(
+            (e) =>
+                e is GalatKonten &&
+                e.berkas == 'pelajaran.json' &&
+                e.kolom == 'kartu',
+          ),
+        ),
       );
     });
 
     // 17. pelajaran.json: istilah {{...}} tidak ada di kamus
-    test('17. pelajaran.json: istilah {{istilah_asing}} tidak terdaftar di kamus.json', () {
-      const jsonStr = '''
+    test(
+      '17. pelajaran.json: istilah {{istilah_asing}} tidak terdaftar di kamus.json',
+      () {
+        const jsonStr = '''
       {
         "id": "anggaran_arus_kas_1_2",
         "modulId": "anggaran_arus_kas",
@@ -296,11 +432,23 @@ void main() {
         "misi": {"tipe": "ada_data", "objek": "transaksi", "min": 1, "judul": "M", "deskripsi": "D", "perkiraanMenit": 2}
       }
       ''';
-      expect(
-        () => PembacaKonten.uraiPelajaran(jsonStr, namaBerkas: 'pelajaran.json', daftarIstilahKamus: {'arus kas', 'kebutuhan'}),
-        throwsA(predicate((e) => e is GalatKonten && e.berkas == 'pelajaran.json' && e.pesan.contains('tidak ditemukan di kamus.json'))),
-      );
-    });
+        expect(
+          () => PembacaKonten.uraiPelajaran(
+            jsonStr,
+            namaBerkas: 'pelajaran.json',
+            daftarIstilahKamus: {'arus kas', 'kebutuhan'},
+          ),
+          throwsA(
+            predicate(
+              (e) =>
+                  e is GalatKonten &&
+                  e.berkas == 'pelajaran.json' &&
+                  e.pesan.contains('tidak ditemukan di kamus.json'),
+            ),
+          ),
+        );
+      },
+    );
 
     // 18. pelajaran.json: jenis misi yang belum didukung (misal: simulasi_investasi)
     test('18. pelajaran.json: jenis misi yang belum didukung ditolak', () {
@@ -320,14 +468,25 @@ void main() {
       }
       ''';
       expect(
-        () => PembacaKonten.uraiPelajaran(jsonStr, namaBerkas: 'pelajaran.json'),
-        throwsA(predicate((e) => e is GalatKonten && e.berkas == 'pelajaran.json' && e.kolom == 'misi.tipe' && e.pesan.contains('belum didukung'))),
+        () =>
+            PembacaKonten.uraiPelajaran(jsonStr, namaBerkas: 'pelajaran.json'),
+        throwsA(
+          predicate(
+            (e) =>
+                e is GalatKonten &&
+                e.berkas == 'pelajaran.json' &&
+                e.kolom == 'misi.tipe' &&
+                e.pesan.contains('belum didukung'),
+          ),
+        ),
       );
     });
 
     // 19. pelajaran.json: umpan balik misi tidak dikenal
-    test('19. pelajaran.json: referensi umpanBalik misi tidak terdaftar di registri', () {
-      const jsonStr = '''
+    test(
+      '19. pelajaran.json: referensi umpanBalik misi tidak terdaftar di registri',
+      () {
+        const jsonStr = '''
       {
         "id": "anggaran_arus_kas_1_2",
         "modulId": "anggaran_arus_kas",
@@ -350,141 +509,243 @@ void main() {
         }
       }
       ''';
-      expect(
-        () => PembacaKonten.uraiPelajaran(jsonStr, namaBerkas: 'pelajaran.json'),
-        throwsA(predicate((e) => e is GalatKonten && e.berkas == 'pelajaran.json' && e.kolom == 'misi.umpanBalik')),
-      );
-    });
+        expect(
+          () => PembacaKonten.uraiPelajaran(
+            jsonStr,
+            namaBerkas: 'pelajaran.json',
+          ),
+          throwsA(
+            predicate(
+              (e) =>
+                  e is GalatKonten &&
+                  e.berkas == 'pelajaran.json' &&
+                  e.kolom == 'misi.umpanBalik',
+            ),
+          ),
+        );
+      },
+    );
 
     // 20. Pemeriksa Bahasa: Uji Positif Kata Terlarang (boros, bodoh, malas, dll)
-    test('20. Pemeriksa bahasa: konten sintetis berisi kata terlarang harus GAGAL', () {
-      const teksBoros = 'Jangan boros saat berbelanja bulanan.';
-      expect(
-        () => PembacaKonten.periksaBahasaTeks(teksBoros, namaBerkas: 'uji_bahasa.json'),
-        throwsA(predicate((e) => e is GalatKonten && e.pesan.contains('boros'))),
-      );
+    test(
+      '20. Pemeriksa bahasa: konten sintetis berisi kata terlarang harus GAGAL',
+      () {
+        const teksBoros = 'Jangan boros saat berbelanja bulanan.';
+        expect(
+          () => PembacaKonten.periksaBahasaTeks(
+            teksBoros,
+            namaBerkas: 'uji_bahasa.json',
+          ),
+          throwsA(
+            predicate((e) => e is GalatKonten && e.pesan.contains('boros')),
+          ),
+        );
 
-      const teksMenghakimi = 'Cara yang kamu lakukan ini salah dan merugikan.';
-      expect(
-        () => PembacaKonten.periksaBahasaTeks(teksMenghakimi, namaBerkas: 'uji_bahasa.json'),
-        throwsA(predicate((e) => e is GalatKonten && e.pesan.contains('salah'))),
-      );
-    });
+        const teksMenghakimi =
+            'Cara yang kamu lakukan ini salah dan merugikan.';
+        expect(
+          () => PembacaKonten.periksaBahasaTeks(
+            teksMenghakimi,
+            namaBerkas: 'uji_bahasa.json',
+          ),
+          throwsA(
+            predicate((e) => e is GalatKonten && e.pesan.contains('salah')),
+          ),
+        );
+      },
+    );
 
     // 21. Pemeriksa Bahasa: Uji Positif Istilah Teknis Polos tanpa {{ }} (defisit/surplus)
-    test('21. Pemeriksa bahasa: istilah teknis polos tanpa {{ }} (misal versi lama 1_3 "defisit") harus GAGAL', () {
-      // Kalimat persis baris 44 versi lama anggaran_arus_kas_1_3.json
-      const kalimatLamaBaris44 = 'Saat arus kas bulananmu mulai terasa sesak atau defisit';
-      expect(
-        () => PembacaKonten.periksaBahasaTeks(kalimatLamaBaris44, namaBerkas: 'anggaran_arus_kas_1_3.json'),
-        throwsA(predicate((e) => e is GalatKonten && e.pesan.contains('defisit') && e.pesan.contains('tooltip'))),
-      );
+    test(
+      '21. Pemeriksa bahasa: istilah teknis polos tanpa {{ }} (misal versi lama 1_3 "defisit") harus GAGAL',
+      () {
+        // Kalimat persis baris 44 versi lama anggaran_arus_kas_1_3.json
+        const kalimatLamaBaris44 =
+            'Saat arus kas bulananmu mulai terasa sesak atau defisit';
+        expect(
+          () => PembacaKonten.periksaBahasaTeks(
+            kalimatLamaBaris44,
+            namaBerkas: 'anggaran_arus_kas_1_3.json',
+          ),
+          throwsA(
+            predicate(
+              (e) =>
+                  e is GalatKonten &&
+                  e.pesan.contains('defisit') &&
+                  e.pesan.contains('tooltip'),
+            ),
+          ),
+        );
 
-      // Kalimat yang sudah diperbaiki dengan {{defisit}} harus LOLOS
-      const kalimatBaruBaris44 = 'Saat arus kas bulananmu mulai terasa sesak atau {{defisit}}';
-      expect(
-        () => PembacaKonten.periksaBahasaTeks(kalimatBaruBaris44, namaBerkas: 'anggaran_arus_kas_1_3.json'),
-        returnsNormally,
-      );
-    });
+        // Kalimat yang sudah diperbaiki dengan {{defisit}} harus LOLOS
+        const kalimatBaruBaris44 =
+            'Saat arus kas bulananmu mulai terasa sesak atau {{defisit}}';
+        expect(
+          () => PembacaKonten.periksaBahasaTeks(
+            kalimatBaruBaris44,
+            namaBerkas: 'anggaran_arus_kas_1_3.json',
+          ),
+          returnsNormally,
+        );
+      },
+    );
 
     // 22. Pemeriksa Bahasa: Kalimat > 25 kata menghasilkan peringatan
-    test('22. Pemeriksa bahasa: kalimat > 25 kata menghasilkan peringatan terdaftar', () {
-      const kalimatPanjang = 'Setiap rupiah yang masuk ke dalam dompetmu adalah hasil dari kerja kerasmu sendiri dan kamu berhak mengalokasikannya dengan penuh rasa bangga dan bahagia untuk masa depan yang cerah.';
-      final daftarPeringatan = <String>[];
-      PembacaKonten.periksaBahasaTeks(kalimatPanjang, namaBerkas: 'uji_panjang.json', daftarPeringatan: daftarPeringatan);
-      expect(daftarPeringatan.length, 1);
-      expect(daftarPeringatan.first, contains('Kalimat panjang'));
-    });
+    test(
+      '22. Pemeriksa bahasa: kalimat > 25 kata menghasilkan peringatan terdaftar',
+      () {
+        const kalimatPanjang =
+            'Setiap rupiah yang masuk ke dalam dompetmu adalah hasil dari kerja kerasmu sendiri dan kamu berhak mengalokasikannya dengan penuh rasa bangga dan bahagia untuk masa depan yang cerah.';
+        final daftarPeringatan = <String>[];
+        PembacaKonten.periksaBahasaTeks(
+          kalimatPanjang,
+          namaBerkas: 'uji_panjang.json',
+          daftarPeringatan: daftarPeringatan,
+        );
+        expect(daftarPeringatan.length, 1);
+        expect(daftarPeringatan.first, contains('Kalimat panjang'));
+      },
+    );
 
     // 23. Pemeriksa Konten: Misi otomatis terpenuhi oleh gerbang pelajaran sendiri GAGAL
-    test('23. Pemeriksa konten: misi ada_data otomatis terpenuhi oleh gerbang pelajaran sendiri harus GAGAL', () {
-      final pelajaranRusak = {
-        'id': 'modul_uji_1_1',
-        'judul': 'Uji Pelajaran',
-        'durasiMenit': 4,
-        'status': 'draf',
-        'gerbang': [
-          {'tipe': 'ada_data', 'objek': 'pemasukan', 'min': 1, 'pesan': 'Catat 1 pemasukan'}
-        ],
-        'pemantik': 'Pemantik singkat.',
-        'kartu': [
-          {'judul': 'Kartu 1', 'isi': 'Isi kartu konsep.'}
-        ],
-        'contohAngka': 100000,
-        'cekPaham': [
-          {'tanya': 'Tanya 1', 'pilihan': ['A', 'B'], 'benar': 0, 'penjelasan': 'P1'},
-          {'tanya': 'Tanya 2', 'pilihan': ['A', 'B'], 'benar': 1, 'penjelasan': 'P2'}
-        ],
-        'misi': {
-          'tipe': 'ada_data',
-          'objek': 'pemasukan',
-          'min': 1,
-          'judul': 'Misi Sama',
-          'deskripsi': 'Deskripsi',
-          'perkiraanMenit': 2,
-          'umpanBalik': 'arus_kas_bulan_ini'
-        }
-      };
-
-      expect(
-        () => PembacaKonten.validasiKontenPelajaran(pelajaranRusak, namaBerkas: 'pelajaran_rusak.json'),
-        throwsA(predicate((e) => e is GalatKonten && e.pesan.contains('otomatis terpenuhi oleh gerbang'))),
-      );
-    });
-
-    // 24. Pemeriksa Konten: Misi bertipe lihat_hitungan atau beda objek LOLOS (uji positif)
-    test('24. Pemeriksa konten: misi lihat_hitungan atau objek beda dengan gerbang harus LOLOS', () {
-      final pelajaranValid = {
-        'id': 'modul_uji_1_2',
-        'judul': 'Uji Pelajaran Valid',
-        'durasiMenit': 4,
-        'status': 'draf',
-        'gerbang': [
-          {'tipe': 'ada_data', 'objek': 'dompet', 'min': 1, 'pesan': 'Buat 1 dompet'}
-        ],
-        'pemantik': 'Pemantik singkat.',
-        'kartu': [
-          {'judul': 'Kartu 1', 'isi': 'Isi kartu konsep.'}
-        ],
-        'contohAngka': 100000,
-        'cekPaham': [
-          {'tanya': 'Tanya 1', 'pilihan': ['A', 'B'], 'benar': 0, 'penjelasan': 'P1'},
-          {'tanya': 'Tanya 2', 'pilihan': ['A', 'B'], 'benar': 1, 'penjelasan': 'P2'}
-        ],
-        'misi': {
-          'tipe': 'ada_data',
-          'objek': 'arus_kas',
-          'min': 1,
-          'judul': 'Misi Arus Kas',
-          'deskripsi': 'Deskripsi',
-          'perkiraanMenit': 2,
-          'umpanBalik': 'arus_kas_bulan_ini'
-        }
-      };
-
-      expect(
-        () => PembacaKonten.validasiKontenPelajaran(pelajaranValid, namaBerkas: 'pelajaran_valid.json'),
-        returnsNormally,
-      );
-
-      final pelajaranLihatHitungan = Map<String, dynamic>.from(pelajaranValid)
-        ..['id'] = 'modul_uji_1_3'
-        ..['gerbang'] = [
-          {'tipe': 'ada_data', 'objek': 'pemasukan', 'min': 1}
-        ]
-        ..['misi'] = {
-          'tipe': 'lihat_hitungan',
-          'judul': 'Misi Lihat Hitungan',
-          'deskripsi': 'Deskripsi',
-          'perkiraanMenit': 1,
+    test(
+      '23. Pemeriksa konten: misi ada_data otomatis terpenuhi oleh gerbang pelajaran sendiri harus GAGAL',
+      () {
+        final pelajaranRusak = {
+          'id': 'modul_uji_1_1',
+          'judul': 'Uji Pelajaran',
+          'durasiMenit': 4,
+          'status': 'draf',
+          'gerbang': [
+            {
+              'tipe': 'ada_data',
+              'objek': 'pemasukan',
+              'min': 1,
+              'pesan': 'Catat 1 pemasukan',
+            },
+          ],
+          'pemantik': 'Pemantik singkat.',
+          'kartu': [
+            {'judul': 'Kartu 1', 'isi': 'Isi kartu konsep.'},
+          ],
+          'contohAngka': 100000,
+          'cekPaham': [
+            {
+              'tanya': 'Tanya 1',
+              'pilihan': ['A', 'B'],
+              'benar': 0,
+              'penjelasan': 'P1',
+            },
+            {
+              'tanya': 'Tanya 2',
+              'pilihan': ['A', 'B'],
+              'benar': 1,
+              'penjelasan': 'P2',
+            },
+          ],
+          'misi': {
+            'tipe': 'ada_data',
+            'objek': 'pemasukan',
+            'min': 1,
+            'judul': 'Misi Sama',
+            'deskripsi': 'Deskripsi',
+            'perkiraanMenit': 2,
+            'umpanBalik': 'arus_kas_bulan_ini',
+          },
         };
 
-      expect(
-        () => PembacaKonten.validasiKontenPelajaran(pelajaranLihatHitungan, namaBerkas: 'pelajaran_lihat.json'),
-        returnsNormally,
-      );
-    });
+        expect(
+          () => PembacaKonten.validasiKontenPelajaran(
+            pelajaranRusak,
+            namaBerkas: 'pelajaran_rusak.json',
+          ),
+          throwsA(
+            predicate(
+              (e) =>
+                  e is GalatKonten &&
+                  e.pesan.contains('otomatis terpenuhi oleh gerbang'),
+            ),
+          ),
+        );
+      },
+    );
+
+    // 24. Pemeriksa Konten: Misi bertipe lihat_hitungan atau beda objek LOLOS (uji positif)
+    test(
+      '24. Pemeriksa konten: misi lihat_hitungan atau objek beda dengan gerbang harus LOLOS',
+      () {
+        final pelajaranValid = {
+          'id': 'modul_uji_1_2',
+          'judul': 'Uji Pelajaran Valid',
+          'durasiMenit': 4,
+          'status': 'draf',
+          'gerbang': [
+            {
+              'tipe': 'ada_data',
+              'objek': 'dompet',
+              'min': 1,
+              'pesan': 'Buat 1 dompet',
+            },
+          ],
+          'pemantik': 'Pemantik singkat.',
+          'kartu': [
+            {'judul': 'Kartu 1', 'isi': 'Isi kartu konsep.'},
+          ],
+          'contohAngka': 100000,
+          'cekPaham': [
+            {
+              'tanya': 'Tanya 1',
+              'pilihan': ['A', 'B'],
+              'benar': 0,
+              'penjelasan': 'P1',
+            },
+            {
+              'tanya': 'Tanya 2',
+              'pilihan': ['A', 'B'],
+              'benar': 1,
+              'penjelasan': 'P2',
+            },
+          ],
+          'misi': {
+            'tipe': 'ada_data',
+            'objek': 'arus_kas',
+            'min': 1,
+            'judul': 'Misi Arus Kas',
+            'deskripsi': 'Deskripsi',
+            'perkiraanMenit': 2,
+            'umpanBalik': 'arus_kas_bulan_ini',
+          },
+        };
+
+        expect(
+          () => PembacaKonten.validasiKontenPelajaran(
+            pelajaranValid,
+            namaBerkas: 'pelajaran_valid.json',
+          ),
+          returnsNormally,
+        );
+
+        final pelajaranLihatHitungan = Map<String, dynamic>.from(pelajaranValid)
+          ..['id'] = 'modul_uji_1_3'
+          ..['gerbang'] = [
+            {'tipe': 'ada_data', 'objek': 'pemasukan', 'min': 1},
+          ]
+          ..['misi'] = {
+            'tipe': 'lihat_hitungan',
+            'judul': 'Misi Lihat Hitungan',
+            'deskripsi': 'Deskripsi',
+            'perkiraanMenit': 1,
+          };
+
+        expect(
+          () => PembacaKonten.validasiKontenPelajaran(
+            pelajaranLihatHitungan,
+            namaBerkas: 'pelajaran_lihat.json',
+          ),
+          returnsNormally,
+        );
+      },
+    );
 
     // -------------------------------------------------------------------------
     // Pengujian Validasi Konten Tes Awal (tes_awal.json) Rusak (Tahap 5)
@@ -492,8 +753,13 @@ void main() {
     group('Pengujian Validasi Konten Tes Awal (tes_awal.json) Rusak', () {
       test('1. tes_awal.json bukan objek JSON', () {
         expect(
-          () => PembacaKonten.uraiTesAwal('["bukan", "objek"]', namaBerkas: 'tes_awal.json'),
-          throwsA(predicate((e) => e is GalatKonten && e.berkas == 'tes_awal.json')),
+          () => PembacaKonten.uraiTesAwal(
+            '["bukan", "objek"]',
+            namaBerkas: 'tes_awal.json',
+          ),
+          throwsA(
+            predicate((e) => e is GalatKonten && e.berkas == 'tes_awal.json'),
+          ),
         );
       });
 
@@ -511,7 +777,9 @@ void main() {
         ''';
         expect(
           () => PembacaKonten.uraiTesAwal(jsonStr, namaBerkas: 'tes_awal.json'),
-          throwsA(predicate((e) => e is GalatKonten && e.kolom == 'pertanyaanProfil')),
+          throwsA(
+            predicate((e) => e is GalatKonten && e.kolom == 'pertanyaanProfil'),
+          ),
         );
       });
 
@@ -534,7 +802,11 @@ void main() {
         ''';
         expect(
           () => PembacaKonten.uraiTesAwal(jsonStr, namaBerkas: 'tes_awal.json'),
-          throwsA(predicate((e) => e is GalatKonten && e.kolom?.contains('kunci') == true)),
+          throwsA(
+            predicate(
+              (e) => e is GalatKonten && e.kolom?.contains('kunci') == true,
+            ),
+          ),
         );
       });
 
@@ -561,13 +833,22 @@ void main() {
         ''';
         expect(
           () => PembacaKonten.uraiTesAwal(jsonStr, namaBerkas: 'tes_awal.json'),
-          throwsA(predicate((e) => e is GalatKonten && e.kolom == 'soalTesAwal')),
+          throwsA(
+            predicate((e) => e is GalatKonten && e.kolom == 'soalTesAwal'),
+          ),
         );
       });
 
       test('5. tes_awal.json opsi ke-4 bukan "Belum tahu, nggak apa-apa"', () {
         // Buat 12 soal tetapi soal pertama opsi ke-4 nya bukan standar
-        final modulList = ['anggaran_arus_kas', 'tabungan', 'dana_darurat', 'utang_cicilan', 'waspada_penipuan', 'psikologi_uang'];
+        final modulList = [
+          'anggaran_arus_kas',
+          'tabungan',
+          'dana_darurat',
+          'utang_cicilan',
+          'waspada_penipuan',
+          'psikologi_uang',
+        ];
         final daftarSoal = <Map<String, dynamic>>[];
         var idCounter = 1;
         for (final m in modulList) {
@@ -577,7 +858,14 @@ void main() {
               'id': 's_$nomor',
               'modulId': m,
               'tanya': 'Pertanyaan soal?',
-              'pilihan': ['A', 'B', 'C', nomor == 1 ? 'Pilihan Sembarangan' : 'Belum tahu, nggak apa-apa'],
+              'pilihan': [
+                'A',
+                'B',
+                'C',
+                nomor == 1
+                    ? 'Pilihan Sembarangan'
+                    : 'Belum tahu, nggak apa-apa',
+              ],
               'benar': 0,
               'penjelasan': 'Penjelasan jawaban.',
             });
@@ -588,25 +876,86 @@ void main() {
           'judul': 'Tes Awal',
           'deskripsi': 'Deskripsi',
           'pertanyaanProfil': [
-            {'kunci': 'punya_penghasilan', 'tanya': 'Tanya?', 'pilihan': [{'nilai': 'rutin', 'teks': 'A'}, {'nilai': 'belum', 'teks': 'B'}]},
-            {'kunci': 'punya_utang', 'tanya': 'Tanya?', 'pilihan': [{'nilai': 'ya', 'teks': 'A'}, {'nilai': 'tidak', 'teks': 'B'}]},
-            {'kunci': 'dana_darurat', 'tanya': 'Tanya?', 'pilihan': [{'nilai': 'belum', 'teks': 'A'}, {'nilai': 'sudah', 'teks': 'B'}]},
-            {'kunci': 'menabung', 'tanya': 'Tanya?', 'pilihan': [{'nilai': 'kadang', 'teks': 'A'}, {'nilai': 'rutin', 'teks': 'B'}]},
-            {'kunci': 'investasi', 'tanya': 'Tanya?', 'pilihan': [{'nilai': 'belum', 'teks': 'A'}, {'nilai': 'aktif', 'teks': 'B'}]},
-            {'kunci': 'mencatat_keuangan', 'tanya': 'Tanya?', 'pilihan': [{'nilai': 'belum', 'teks': 'A'}, {'nilai': 'rutin', 'teks': 'B'}]}
+            {
+              'kunci': 'punya_penghasilan',
+              'tanya': 'Tanya?',
+              'pilihan': [
+                {'nilai': 'rutin', 'teks': 'A'},
+                {'nilai': 'belum', 'teks': 'B'},
+              ],
+            },
+            {
+              'kunci': 'punya_utang',
+              'tanya': 'Tanya?',
+              'pilihan': [
+                {'nilai': 'ya', 'teks': 'A'},
+                {'nilai': 'tidak', 'teks': 'B'},
+              ],
+            },
+            {
+              'kunci': 'dana_darurat',
+              'tanya': 'Tanya?',
+              'pilihan': [
+                {'nilai': 'belum', 'teks': 'A'},
+                {'nilai': 'sudah', 'teks': 'B'},
+              ],
+            },
+            {
+              'kunci': 'menabung',
+              'tanya': 'Tanya?',
+              'pilihan': [
+                {'nilai': 'kadang', 'teks': 'A'},
+                {'nilai': 'rutin', 'teks': 'B'},
+              ],
+            },
+            {
+              'kunci': 'investasi',
+              'tanya': 'Tanya?',
+              'pilihan': [
+                {'nilai': 'belum', 'teks': 'A'},
+                {'nilai': 'aktif', 'teks': 'B'},
+              ],
+            },
+            {
+              'kunci': 'mencatat_keuangan',
+              'tanya': 'Tanya?',
+              'pilihan': [
+                {'nilai': 'belum', 'teks': 'A'},
+                {'nilai': 'rutin', 'teks': 'B'},
+              ],
+            },
           ],
-          'tujuanUtama': {'tanya': 'Tanya?', 'petunjuk': 'P', 'maksimalKarakter': 100},
+          'tujuanUtama': {
+            'tanya': 'Tanya?',
+            'petunjuk': 'P',
+            'maksimalKarakter': 100,
+          },
           'soalTesAwal': daftarSoal,
         };
 
         expect(
-          () => PembacaKonten.validasiKontenTesAwal(data, namaBerkas: 'tes_awal.json'),
-          throwsA(predicate((e) => e is GalatKonten && e.kolom?.contains('pilihan[3]') == true)),
+          () => PembacaKonten.validasiKontenTesAwal(
+            data,
+            namaBerkas: 'tes_awal.json',
+          ),
+          throwsA(
+            predicate(
+              (e) =>
+                  e is GalatKonten && e.kolom?.contains('pilihan[3]') == true,
+            ),
+          ),
         );
       });
 
       test('6. tes_awal.json soal mereferensikan modulId tidak valid', () {
-        final modulList = ['anggaran_arus_kas', 'tabungan', 'dana_darurat', 'utang_cicilan', 'waspada_penipuan', 'modul_salah_tidak_ada'];
+        final modulList = [
+          'anggaran_arus_kas',
+          'tabungan',
+          'dana_darurat',
+          'utang_cicilan',
+          'waspada_penipuan',
+          'modul_salah_tidak_ada',
+        ];
         final daftarSoal = <Map<String, dynamic>>[];
         var idCounter = 1;
         for (final m in modulList) {
@@ -627,83 +976,259 @@ void main() {
           'judul': 'Tes Awal',
           'deskripsi': 'Deskripsi',
           'pertanyaanProfil': [
-            {'kunci': 'punya_penghasilan', 'tanya': 'Tanya?', 'pilihan': [{'nilai': 'rutin', 'teks': 'A'}, {'nilai': 'belum', 'teks': 'B'}]},
-            {'kunci': 'punya_utang', 'tanya': 'Tanya?', 'pilihan': [{'nilai': 'ya', 'teks': 'A'}, {'nilai': 'tidak', 'teks': 'B'}]},
-            {'kunci': 'dana_darurat', 'tanya': 'Tanya?', 'pilihan': [{'nilai': 'belum', 'teks': 'A'}, {'nilai': 'sudah', 'teks': 'B'}]},
-            {'kunci': 'menabung', 'tanya': 'Tanya?', 'pilihan': [{'nilai': 'kadang', 'teks': 'A'}, {'nilai': 'rutin', 'teks': 'B'}]},
-            {'kunci': 'investasi', 'tanya': 'Tanya?', 'pilihan': [{'nilai': 'belum', 'teks': 'A'}, {'nilai': 'aktif', 'teks': 'B'}]},
-            {'kunci': 'mencatat_keuangan', 'tanya': 'Tanya?', 'pilihan': [{'nilai': 'belum', 'teks': 'A'}, {'nilai': 'rutin', 'teks': 'B'}]}
+            {
+              'kunci': 'punya_penghasilan',
+              'tanya': 'Tanya?',
+              'pilihan': [
+                {'nilai': 'rutin', 'teks': 'A'},
+                {'nilai': 'belum', 'teks': 'B'},
+              ],
+            },
+            {
+              'kunci': 'punya_utang',
+              'tanya': 'Tanya?',
+              'pilihan': [
+                {'nilai': 'ya', 'teks': 'A'},
+                {'nilai': 'tidak', 'teks': 'B'},
+              ],
+            },
+            {
+              'kunci': 'dana_darurat',
+              'tanya': 'Tanya?',
+              'pilihan': [
+                {'nilai': 'belum', 'teks': 'A'},
+                {'nilai': 'sudah', 'teks': 'B'},
+              ],
+            },
+            {
+              'kunci': 'menabung',
+              'tanya': 'Tanya?',
+              'pilihan': [
+                {'nilai': 'kadang', 'teks': 'A'},
+                {'nilai': 'rutin', 'teks': 'B'},
+              ],
+            },
+            {
+              'kunci': 'investasi',
+              'tanya': 'Tanya?',
+              'pilihan': [
+                {'nilai': 'belum', 'teks': 'A'},
+                {'nilai': 'aktif', 'teks': 'B'},
+              ],
+            },
+            {
+              'kunci': 'mencatat_keuangan',
+              'tanya': 'Tanya?',
+              'pilihan': [
+                {'nilai': 'belum', 'teks': 'A'},
+                {'nilai': 'rutin', 'teks': 'B'},
+              ],
+            },
           ],
-          'tujuanUtama': {'tanya': 'Tanya?', 'petunjuk': 'P', 'maksimalKarakter': 100},
+          'tujuanUtama': {
+            'tanya': 'Tanya?',
+            'petunjuk': 'P',
+            'maksimalKarakter': 100,
+          },
           'soalTesAwal': daftarSoal,
         };
 
         expect(
-          () => PembacaKonten.validasiKontenTesAwal(data, namaBerkas: 'tes_awal.json'),
-          throwsA(predicate((e) => e is GalatKonten && e.kolom?.contains('modulId') == true)),
+          () => PembacaKonten.validasiKontenTesAwal(
+            data,
+            namaBerkas: 'tes_awal.json',
+          ),
+          throwsA(
+            predicate(
+              (e) => e is GalatKonten && e.kolom?.contains('modulId') == true,
+            ),
+          ),
         );
       });
 
-      test('7. tes_awal.json nilai pilihan profil tidak cocok dengan skema database', () {
-        final data = {
-          'judul': 'Tes Awal',
-          'deskripsi': 'Deskripsi',
-          'pertanyaanProfil': [
-            {'kunci': 'punya_penghasilan', 'tanya': 'Tanya?', 'pilihan': [{'nilai': 'nilai_ilegal', 'teks': 'A'}, {'nilai': 'rutin', 'teks': 'B'}]},
-            {'kunci': 'punya_utang', 'tanya': 'Tanya?', 'pilihan': [{'nilai': 'ya', 'teks': 'A'}, {'nilai': 'tidak', 'teks': 'B'}]},
-            {'kunci': 'dana_darurat', 'tanya': 'Tanya?', 'pilihan': [{'nilai': 'belum', 'teks': 'A'}, {'nilai': 'sudah', 'teks': 'B'}]},
-            {'kunci': 'menabung', 'tanya': 'Tanya?', 'pilihan': [{'nilai': 'kadang', 'teks': 'A'}, {'nilai': 'rutin', 'teks': 'B'}]},
-            {'kunci': 'investasi', 'tanya': 'Tanya?', 'pilihan': [{'nilai': 'belum', 'teks': 'A'}, {'nilai': 'aktif', 'teks': 'B'}]},
-            {'kunci': 'mencatat_keuangan', 'tanya': 'Tanya?', 'pilihan': [{'nilai': 'belum', 'teks': 'A'}, {'nilai': 'rutin', 'teks': 'B'}]}
-          ],
-          'tujuanUtama': {'tanya': 'Tanya?', 'petunjuk': 'P', 'maksimalKarakter': 100},
-          'soalTesAwal': [],
-        };
+      test(
+        '7. tes_awal.json nilai pilihan profil tidak cocok dengan skema database',
+        () {
+          final data = {
+            'judul': 'Tes Awal',
+            'deskripsi': 'Deskripsi',
+            'pertanyaanProfil': [
+              {
+                'kunci': 'punya_penghasilan',
+                'tanya': 'Tanya?',
+                'pilihan': [
+                  {'nilai': 'nilai_ilegal', 'teks': 'A'},
+                  {'nilai': 'rutin', 'teks': 'B'},
+                ],
+              },
+              {
+                'kunci': 'punya_utang',
+                'tanya': 'Tanya?',
+                'pilihan': [
+                  {'nilai': 'ya', 'teks': 'A'},
+                  {'nilai': 'tidak', 'teks': 'B'},
+                ],
+              },
+              {
+                'kunci': 'dana_darurat',
+                'tanya': 'Tanya?',
+                'pilihan': [
+                  {'nilai': 'belum', 'teks': 'A'},
+                  {'nilai': 'sudah', 'teks': 'B'},
+                ],
+              },
+              {
+                'kunci': 'menabung',
+                'tanya': 'Tanya?',
+                'pilihan': [
+                  {'nilai': 'kadang', 'teks': 'A'},
+                  {'nilai': 'rutin', 'teks': 'B'},
+                ],
+              },
+              {
+                'kunci': 'investasi',
+                'tanya': 'Tanya?',
+                'pilihan': [
+                  {'nilai': 'belum', 'teks': 'A'},
+                  {'nilai': 'aktif', 'teks': 'B'},
+                ],
+              },
+              {
+                'kunci': 'mencatat_keuangan',
+                'tanya': 'Tanya?',
+                'pilihan': [
+                  {'nilai': 'belum', 'teks': 'A'},
+                  {'nilai': 'rutin', 'teks': 'B'},
+                ],
+              },
+            ],
+            'tujuanUtama': {
+              'tanya': 'Tanya?',
+              'petunjuk': 'P',
+              'maksimalKarakter': 100,
+            },
+            'soalTesAwal': [],
+          };
 
-        expect(
-          () => PembacaKonten.validasiKontenTesAwal(data, namaBerkas: 'tes_awal.json'),
-          throwsA(predicate((e) => e is GalatKonten && e.kolom?.contains('pilihan') == true)),
-        );
-      });
+          expect(
+            () => PembacaKonten.validasiKontenTesAwal(
+              data,
+              namaBerkas: 'tes_awal.json',
+            ),
+            throwsA(
+              predicate(
+                (e) => e is GalatKonten && e.kolom?.contains('pilihan') == true,
+              ),
+            ),
+          );
+        },
+      );
 
-      test('8. tes_awal.json soal memuat angka aturan praktis (50/30/20) ditolak', () {
-        final modulList = ['anggaran_arus_kas', 'tabungan', 'dana_darurat', 'utang_cicilan', 'waspada_penipuan', 'psikologi_uang'];
-        final daftarSoal = <Map<String, dynamic>>[];
-        var idCounter = 1;
-        for (final m in modulList) {
-          for (var i = 1; i <= 2; i++) {
-            final nomor = idCounter++;
-            daftarSoal.add({
-              'id': 's_$nomor',
-              'modulId': m,
-              'tanya': nomor == 1 ? 'Bagaimana rumus 50/30/20 membagi gaji?' : 'Pertanyaan normal?',
-              'pilihan': ['A', 'B', 'C', 'Belum tahu, nggak apa-apa'],
-              'benar': 0,
-              'penjelasan': 'Penjelasan jawaban.',
-            });
+      test(
+        '8. tes_awal.json soal memuat angka aturan praktis (50/30/20) ditolak',
+        () {
+          final modulList = [
+            'anggaran_arus_kas',
+            'tabungan',
+            'dana_darurat',
+            'utang_cicilan',
+            'waspada_penipuan',
+            'psikologi_uang',
+          ];
+          final daftarSoal = <Map<String, dynamic>>[];
+          var idCounter = 1;
+          for (final m in modulList) {
+            for (var i = 1; i <= 2; i++) {
+              final nomor = idCounter++;
+              daftarSoal.add({
+                'id': 's_$nomor',
+                'modulId': m,
+                'tanya': nomor == 1
+                    ? 'Bagaimana rumus 50/30/20 membagi gaji?'
+                    : 'Pertanyaan normal?',
+                'pilihan': ['A', 'B', 'C', 'Belum tahu, nggak apa-apa'],
+                'benar': 0,
+                'penjelasan': 'Penjelasan jawaban.',
+              });
+            }
           }
-        }
 
-        final data = {
-          'judul': 'Tes Awal',
-          'deskripsi': 'Deskripsi',
-          'pertanyaanProfil': [
-            {'kunci': 'punya_penghasilan', 'tanya': 'Tanya?', 'pilihan': [{'nilai': 'rutin', 'teks': 'A'}, {'nilai': 'belum', 'teks': 'B'}]},
-            {'kunci': 'punya_utang', 'tanya': 'Tanya?', 'pilihan': [{'nilai': 'ya', 'teks': 'A'}, {'nilai': 'tidak', 'teks': 'B'}]},
-            {'kunci': 'dana_darurat', 'tanya': 'Tanya?', 'pilihan': [{'nilai': 'belum', 'teks': 'A'}, {'nilai': 'sudah', 'teks': 'B'}]},
-            {'kunci': 'menabung', 'tanya': 'Tanya?', 'pilihan': [{'nilai': 'kadang', 'teks': 'A'}, {'nilai': 'rutin', 'teks': 'B'}]},
-            {'kunci': 'investasi', 'tanya': 'Tanya?', 'pilihan': [{'nilai': 'belum', 'teks': 'A'}, {'nilai': 'aktif', 'teks': 'B'}]},
-            {'kunci': 'mencatat_keuangan', 'tanya': 'Tanya?', 'pilihan': [{'nilai': 'belum', 'teks': 'A'}, {'nilai': 'rutin', 'teks': 'B'}]}
-          ],
-          'tujuanUtama': {'tanya': 'Tanya?', 'petunjuk': 'P', 'maksimalKarakter': 100},
-          'soalTesAwal': daftarSoal,
-        };
+          final data = {
+            'judul': 'Tes Awal',
+            'deskripsi': 'Deskripsi',
+            'pertanyaanProfil': [
+              {
+                'kunci': 'punya_penghasilan',
+                'tanya': 'Tanya?',
+                'pilihan': [
+                  {'nilai': 'rutin', 'teks': 'A'},
+                  {'nilai': 'belum', 'teks': 'B'},
+                ],
+              },
+              {
+                'kunci': 'punya_utang',
+                'tanya': 'Tanya?',
+                'pilihan': [
+                  {'nilai': 'ya', 'teks': 'A'},
+                  {'nilai': 'tidak', 'teks': 'B'},
+                ],
+              },
+              {
+                'kunci': 'dana_darurat',
+                'tanya': 'Tanya?',
+                'pilihan': [
+                  {'nilai': 'belum', 'teks': 'A'},
+                  {'nilai': 'sudah', 'teks': 'B'},
+                ],
+              },
+              {
+                'kunci': 'menabung',
+                'tanya': 'Tanya?',
+                'pilihan': [
+                  {'nilai': 'kadang', 'teks': 'A'},
+                  {'nilai': 'rutin', 'teks': 'B'},
+                ],
+              },
+              {
+                'kunci': 'investasi',
+                'tanya': 'Tanya?',
+                'pilihan': [
+                  {'nilai': 'belum', 'teks': 'A'},
+                  {'nilai': 'aktif', 'teks': 'B'},
+                ],
+              },
+              {
+                'kunci': 'mencatat_keuangan',
+                'tanya': 'Tanya?',
+                'pilihan': [
+                  {'nilai': 'belum', 'teks': 'A'},
+                  {'nilai': 'rutin', 'teks': 'B'},
+                ],
+              },
+            ],
+            'tujuanUtama': {
+              'tanya': 'Tanya?',
+              'petunjuk': 'P',
+              'maksimalKarakter': 100,
+            },
+            'soalTesAwal': daftarSoal,
+          };
 
-        expect(
-          () => PembacaKonten.validasiKontenTesAwal(data, namaBerkas: 'tes_awal.json'),
-          throwsA(predicate((e) => e is GalatKonten && e.kolom?.contains('soalTesAwal') == true)),
-        );
-      });
+          expect(
+            () => PembacaKonten.validasiKontenTesAwal(
+              data,
+              namaBerkas: 'tes_awal.json',
+            ),
+            throwsA(
+              predicate(
+                (e) =>
+                    e is GalatKonten &&
+                    e.kolom?.contains('soalTesAwal') == true,
+              ),
+            ),
+          );
+        },
+      );
 
       test('9. tes_awal.json memuat kata terlarang (malas) ditolak', () {
         final data = {
@@ -715,38 +1240,61 @@ void main() {
         };
 
         expect(
-          () => PembacaKonten.validasiKontenTesAwal(data, namaBerkas: 'tes_awal.json'),
-          throwsA(predicate((e) => e is GalatKonten && e.berkas == 'tes_awal.json')),
+          () => PembacaKonten.validasiKontenTesAwal(
+            data,
+            namaBerkas: 'tes_awal.json',
+          ),
+          throwsA(
+            predicate((e) => e is GalatKonten && e.berkas == 'tes_awal.json'),
+          ),
         );
       });
 
       test('10. rekomendasi.json bukan objek JSON atau alasan kosong', () {
         expect(
-          () => PembacaKonten.uraiRekomendasi('["bukan", "objek"]', namaBerkas: 'rekomendasi.json'),
-          throwsA(predicate((e) => e is GalatKonten && e.berkas == 'rekomendasi.json')),
+          () => PembacaKonten.uraiRekomendasi(
+            '["bukan", "objek"]',
+            namaBerkas: 'rekomendasi.json',
+          ),
+          throwsA(
+            predicate(
+              (e) => e is GalatKonten && e.berkas == 'rekomendasi.json',
+            ),
+          ),
         );
         expect(
-          () => PembacaKonten.uraiRekomendasi('{"alasan": {}}', namaBerkas: 'rekomendasi.json'),
+          () => PembacaKonten.uraiRekomendasi(
+            '{"alasan": {}}',
+            namaBerkas: 'rekomendasi.json',
+          ),
           throwsA(predicate((e) => e is GalatKonten && e.kolom == 'alasan')),
         );
       });
 
-      test('11. rekomendasi.json kehilangan kode alasan resmi yang wajib ada', () {
-        const jsonKurang = '''
+      test(
+        '11. rekomendasi.json kehilangan kode alasan resmi yang wajib ada',
+        () {
+          const jsonKurang = '''
         {
           "alasan": {
             "skor_tes_rendah": {"judul": "A", "deskripsi": "B"}
           }
         }
         ''';
-        expect(
-          () => PembacaKonten.uraiRekomendasi(jsonKurang, namaBerkas: 'rekomendasi.json'),
-          throwsA(predicate((e) => e is GalatKonten && e.kolom == 'alasan')),
-        );
-      });
+          expect(
+            () => PembacaKonten.uraiRekomendasi(
+              jsonKurang,
+              namaBerkas: 'rekomendasi.json',
+            ),
+            throwsA(predicate((e) => e is GalatKonten && e.kolom == 'alasan')),
+          );
+        },
+      );
 
-      test('12. rekomendasi.json memuat kode alasan asing yang tidak dikenal kode', () {
-        const jsonAsing = '''
+      test(
+        '12. rekomendasi.json memuat kode alasan asing yang tidak dikenal kode',
+        () {
+          const jsonAsing = '''
         {
           "alasan": {
             "skor_tes_rendah": {"judul": "A", "deskripsi": "B"},
@@ -758,11 +1306,21 @@ void main() {
           }
         }
         ''';
-        expect(
-          () => PembacaKonten.uraiRekomendasi(jsonAsing, namaBerkas: 'rekomendasi.json'),
-          throwsA(predicate((e) => e is GalatKonten && e.kolom?.contains('alasan.alasan_aneh_asing') == true)),
-        );
-      });
+          expect(
+            () => PembacaKonten.uraiRekomendasi(
+              jsonAsing,
+              namaBerkas: 'rekomendasi.json',
+            ),
+            throwsA(
+              predicate(
+                (e) =>
+                    e is GalatKonten &&
+                    e.kolom?.contains('alasan.alasan_aneh_asing') == true,
+              ),
+            ),
+          );
+        },
+      );
 
       test('13. rekomendasi.json memuat klaim keuangan menghakimi ditolak', () {
         const jsonKlaim = '''
@@ -777,13 +1335,24 @@ void main() {
         }
         ''';
         expect(
-          () => PembacaKonten.uraiRekomendasi(jsonKlaim, namaBerkas: 'rekomendasi.json'),
-          throwsA(predicate((e) => e is GalatKonten && e.kolom?.contains('skor_tes_rendah') == true)),
+          () => PembacaKonten.uraiRekomendasi(
+            jsonKlaim,
+            namaBerkas: 'rekomendasi.json',
+          ),
+          throwsA(
+            predicate(
+              (e) =>
+                  e is GalatKonten &&
+                  e.kolom?.contains('skor_tes_rendah') == true,
+            ),
+          ),
         );
       });
 
-      test('14. Uji Positif: konten sintetis berkata terlarang (bodoh) pada rekomendasi GAGAL', () {
-        const jsonBodoh = '''
+      test(
+        '14. Uji Positif: konten sintetis berkata terlarang (bodoh) pada rekomendasi GAGAL',
+        () {
+          const jsonBodoh = '''
         {
           "alasan": {
             "skor_tes_rendah": {"judul": "Jangan bodoh", "deskripsi": "B"},
@@ -794,11 +1363,19 @@ void main() {
           }
         }
         ''';
-        expect(
-          () => PembacaKonten.uraiRekomendasi(jsonBodoh, namaBerkas: 'rekomendasi.json'),
-          throwsA(predicate((e) => e is GalatKonten && e.berkas == 'rekomendasi.json')),
-        );
-      });
+          expect(
+            () => PembacaKonten.uraiRekomendasi(
+              jsonBodoh,
+              namaBerkas: 'rekomendasi.json',
+            ),
+            throwsA(
+              predicate(
+                (e) => e is GalatKonten && e.berkas == 'rekomendasi.json',
+              ),
+            ),
+          );
+        },
+      );
     });
 
     // =========================================================================
@@ -828,8 +1405,15 @@ void main() {
         }
         ''';
         expect(
-          () => PembacaKonten.uraiPelajaran(jsonStr, namaBerkas: 'pelajaran_rusak.json'),
-          throwsA(predicate((e) => e is GalatKonten && e.kolom == 'contohAngka.judul')),
+          () => PembacaKonten.uraiPelajaran(
+            jsonStr,
+            namaBerkas: 'pelajaran_rusak.json',
+          ),
+          throwsA(
+            predicate(
+              (e) => e is GalatKonten && e.kolom == 'contohAngka.judul',
+            ),
+          ),
         );
       });
 
@@ -855,14 +1439,23 @@ void main() {
         }
         ''';
         expect(
-          () => PembacaKonten.uraiPelajaran(jsonStr, namaBerkas: 'pelajaran_rusak.json'),
-          throwsA(predicate((e) => e is GalatKonten && e.kolom == 'contohAngka.baris')),
+          () => PembacaKonten.uraiPelajaran(
+            jsonStr,
+            namaBerkas: 'pelajaran_rusak.json',
+          ),
+          throwsA(
+            predicate(
+              (e) => e is GalatKonten && e.kolom == 'contohAngka.baris',
+            ),
+          ),
         );
       });
 
       // 2. aturanPraktis tanpa catatanReviewer
-      test('2. aturanPraktis: true tanpa catatanReviewer TODO-VERIFIKASI ditolak', () {
-        const jsonStr = '''
+      test(
+        '2. aturanPraktis: true tanpa catatanReviewer TODO-VERIFIKASI ditolak',
+        () {
+          const jsonStr = '''
         {
           "id": "anggaran_arus_kas_1_4",
           "modul": "anggaran_arus_kas",
@@ -878,15 +1471,25 @@ void main() {
           "misi": {"tipe": "ada_data", "objek": "anggaran", "min": 3, "judul": "M", "umpanBalik": "perbandingan_pola_anggaran"}
         }
         ''';
-        expect(
-          () => PembacaKonten.uraiPelajaran(jsonStr, namaBerkas: 'pelajaran_rusak.json'),
-          throwsA(predicate((e) => e is GalatKonten && e.kolom == 'catatanReviewer')),
-        );
-      });
+          expect(
+            () => PembacaKonten.uraiPelajaran(
+              jsonStr,
+              namaBerkas: 'pelajaran_rusak.json',
+            ),
+            throwsA(
+              predicate(
+                (e) => e is GalatKonten && e.kolom == 'catatanReviewer',
+              ),
+            ),
+          );
+        },
+      );
 
       // 3. angka 50/30/20 tanpa penanda aturanPraktis
-      test('3. teks memuat angka aturan praktis 50/30/20 tanpa penanda aturanPraktis ditolak', () {
-        const jsonStr = '''
+      test(
+        '3. teks memuat angka aturan praktis 50/30/20 tanpa penanda aturanPraktis ditolak',
+        () {
+          const jsonStr = '''
         {
           "id": "anggaran_arus_kas_1_4",
           "modul": "anggaran_arus_kas",
@@ -901,11 +1504,19 @@ void main() {
           "misi": {"tipe": "ada_data", "objek": "anggaran", "min": 3, "judul": "M", "umpanBalik": "perbandingan_pola_anggaran"}
         }
         ''';
-        expect(
-          () => PembacaKonten.uraiPelajaran(jsonStr, namaBerkas: 'pelajaran_rusak.json'),
-          throwsA(predicate((e) => e is GalatKonten && e.pesan.contains('aturan praktis'))),
-        );
-      });
+          expect(
+            () => PembacaKonten.uraiPelajaran(
+              jsonStr,
+              namaBerkas: 'pelajaran_rusak.json',
+            ),
+            throwsA(
+              predicate(
+                (e) => e is GalatKonten && e.pesan.contains('aturan praktis'),
+              ),
+            ),
+          );
+        },
+      );
 
       // 4. umpanBalik tidak ada di registri
       test('4. umpanBalik misi tidak terdaftar di registri ditolak', () {
@@ -931,14 +1542,21 @@ void main() {
         }
         ''';
         expect(
-          () => PembacaKonten.uraiPelajaran(jsonStr, namaBerkas: 'pelajaran_rusak.json'),
-          throwsA(predicate((e) => e is GalatKonten && e.kolom == 'misi.umpanBalik')),
+          () => PembacaKonten.uraiPelajaran(
+            jsonStr,
+            namaBerkas: 'pelajaran_rusak.json',
+          ),
+          throwsA(
+            predicate((e) => e is GalatKonten && e.kolom == 'misi.umpanBalik'),
+          ),
         );
       });
 
       // 5. pelajaranId kuis tidak ada / tidak valid
-      test('5. pelajaranId kuis tidak ada di daftarPelajaran modul ditolak', () {
-        const jsonModulStr = '''
+      test(
+        '5. pelajaranId kuis tidak ada di daftarPelajaran modul ditolak',
+        () {
+          const jsonModulStr = '''
         {
           "id": "anggaran_arus_kas",
           "judul": "Anggaran & Arus Kas",
@@ -969,11 +1587,21 @@ void main() {
           }
         }
         ''';
-        expect(
-          () => PembacaKonten.uraiModul(jsonModulStr, namaBerkas: 'modul_rusak.json'),
-          throwsA(predicate((e) => e is GalatKonten && e.kolom?.contains('pelajaranId') == true)),
-        );
-      });
+          expect(
+            () => PembacaKonten.uraiModul(
+              jsonModulStr,
+              namaBerkas: 'modul_rusak.json',
+            ),
+            throwsA(
+              predicate(
+                (e) =>
+                    e is GalatKonten &&
+                    e.kolom?.contains('pelajaranId') == true,
+              ),
+            ),
+          );
+        },
+      );
 
       // 6. jumlah bankSoal < jumlahSoal
       test('6. jumlah bankSoal < jumlahSoal di modul.json ditolak', () {
@@ -1001,8 +1629,13 @@ void main() {
         }
         ''';
         expect(
-          () => PembacaKonten.uraiModul(jsonModulStr, namaBerkas: 'modul_rusak.json'),
-          throwsA(predicate((e) => e is GalatKonten && e.kolom == 'kuis.bankSoal')),
+          () => PembacaKonten.uraiModul(
+            jsonModulStr,
+            namaBerkas: 'modul_rusak.json',
+          ),
+          throwsA(
+            predicate((e) => e is GalatKonten && e.kolom == 'kuis.bankSoal'),
+          ),
         );
       });
     });
@@ -1112,24 +1745,57 @@ void main() {
 
       test('Kasus 1: format bukan objek JSON', () {
         expect(
-          () => PembacaKonten.uraiLaporan('["bukan", "objek"]', namaBerkas: 'laporan_rusak.json'),
-          throwsA(predicate((e) => e is GalatKonten && e.berkas == 'laporan_rusak.json')),
+          () => PembacaKonten.uraiLaporan(
+            '["bukan", "objek"]',
+            namaBerkas: 'laporan_rusak.json',
+          ),
+          throwsA(
+            predicate(
+              (e) => e is GalatKonten && e.berkas == 'laporan_rusak.json',
+            ),
+          ),
         );
       });
 
       test('Kasus 2: judulBagian hilang atau kosong', () {
-        final rusak = templateValid.replaceAll('"arusKas": "Arus kas bulan ini",', '');
+        final rusak = templateValid.replaceAll(
+          '"arusKas": "Arus kas bulan ini",',
+          '',
+        );
         expect(
-          () => PembacaKonten.uraiLaporan(rusak, namaBerkas: 'laporan_rusak.json'),
-          throwsA(predicate((e) => e is GalatKonten && e.berkas == 'laporan_rusak.json' && e.kolom == 'judulBagian.arusKas')),
+          () => PembacaKonten.uraiLaporan(
+            rusak,
+            namaBerkas: 'laporan_rusak.json',
+          ),
+          throwsA(
+            predicate(
+              (e) =>
+                  e is GalatKonten &&
+                  e.berkas == 'laporan_rusak.json' &&
+                  e.kolom == 'judulBagian.arusKas',
+            ),
+          ),
         );
       });
 
       test('Kasus 3: placeholder tidak dikenal pada baris', () {
-        final rusak = templateValid.replaceAll('{nama}: {terpakai}', '{nama_pos}: {terpakai}');
+        final rusak = templateValid.replaceAll(
+          '{nama}: {terpakai}',
+          '{nama_pos}: {terpakai}',
+        );
         expect(
-          () => PembacaKonten.uraiLaporan(rusak, namaBerkas: 'laporan_rusak.json'),
-          throwsA(predicate((e) => e is GalatKonten && e.berkas == 'laporan_rusak.json' && e.kolom == 'baris.posAnggaran.normal')),
+          () => PembacaKonten.uraiLaporan(
+            rusak,
+            namaBerkas: 'laporan_rusak.json',
+          ),
+          throwsA(
+            predicate(
+              (e) =>
+                  e is GalatKonten &&
+                  e.berkas == 'laporan_rusak.json' &&
+                  e.kolom == 'baris.posAnggaran.normal',
+            ),
+          ),
         );
       });
 
@@ -1139,16 +1805,33 @@ void main() {
           'Kamu boros di pos {nama} sebesar {jumlah}.',
         );
         expect(
-          () => PembacaKonten.uraiLaporan(rusak, namaBerkas: 'laporan_rusak.json'),
-          throwsA(predicate((e) => e is GalatKonten && e.berkas == 'laporan_rusak.json')),
+          () => PembacaKonten.uraiLaporan(
+            rusak,
+            namaBerkas: 'laporan_rusak.json',
+          ),
+          throwsA(
+            predicate(
+              (e) => e is GalatKonten && e.berkas == 'laporan_rusak.json',
+            ),
+          ),
         );
       });
 
       test('Kasus 5: kode temuan resmi hilang', () {
         final rusak = templateValid.replaceAll('"pos_melewati"', '"pos_lain"');
         expect(
-          () => PembacaKonten.uraiLaporan(rusak, namaBerkas: 'laporan_rusak.json'),
-          throwsA(predicate((e) => e is GalatKonten && e.berkas == 'laporan_rusak.json' && e.kolom!.contains('temuan'))),
+          () => PembacaKonten.uraiLaporan(
+            rusak,
+            namaBerkas: 'laporan_rusak.json',
+          ),
+          throwsA(
+            predicate(
+              (e) =>
+                  e is GalatKonten &&
+                  e.berkas == 'laporan_rusak.json' &&
+                  e.kolom!.contains('temuan'),
+            ),
+          ),
         );
       });
 
@@ -1158,8 +1841,18 @@ void main() {
           'Pasti untung jika berinvestasi di modul ini.',
         );
         expect(
-          () => PembacaKonten.uraiLaporan(rusak, namaBerkas: 'laporan_rusak.json'),
-          throwsA(predicate((e) => e is GalatKonten && e.berkas == 'laporan_rusak.json' && e.kolom == 'saran.buatAnggaran.teks')),
+          () => PembacaKonten.uraiLaporan(
+            rusak,
+            namaBerkas: 'laporan_rusak.json',
+          ),
+          throwsA(
+            predicate(
+              (e) =>
+                  e is GalatKonten &&
+                  e.berkas == 'laporan_rusak.json' &&
+                  e.kolom == 'saran.buatAnggaran.teks',
+            ),
+          ),
         );
       });
     });
@@ -1218,8 +1911,13 @@ void main() {
           '"gerbang": [{"tipe": "ada_data", "objek": "tujuan_tabungan_salah", "min": 1}]',
         );
         expect(
-          () => PembacaKonten.uraiPelajaran(jsonRusak, namaBerkas: 'tabungan_rusak.json'),
-          throwsA(predicate((e) => e is GalatKonten && e.kolom == 'gerbang[0].objek')),
+          () => PembacaKonten.uraiPelajaran(
+            jsonRusak,
+            namaBerkas: 'tabungan_rusak.json',
+          ),
+          throwsA(
+            predicate((e) => e is GalatKonten && e.kolom == 'gerbang[0].objek'),
+          ),
         );
       });
 
@@ -1229,8 +1927,13 @@ void main() {
           '"gerbang": [{"tipe": "ada_data", "objek": "tujuan_dana_darurat_palsu", "min": 1}]',
         );
         expect(
-          () => PembacaKonten.uraiPelajaran(jsonRusak, namaBerkas: 'dana_darurat_rusak.json'),
-          throwsA(predicate((e) => e is GalatKonten && e.kolom == 'gerbang[0].objek')),
+          () => PembacaKonten.uraiPelajaran(
+            jsonRusak,
+            namaBerkas: 'dana_darurat_rusak.json',
+          ),
+          throwsA(
+            predicate((e) => e is GalatKonten && e.kolom == 'gerbang[0].objek'),
+          ),
         );
       });
 
@@ -1240,8 +1943,13 @@ void main() {
           '"objek": "isi_tujuan_tabungan_palsu"',
         );
         expect(
-          () => PembacaKonten.uraiPelajaran(jsonRusak, namaBerkas: 'tabungan_rusak.json'),
-          throwsA(predicate((e) => e is GalatKonten && e.kolom == 'misi.objek')),
+          () => PembacaKonten.uraiPelajaran(
+            jsonRusak,
+            namaBerkas: 'tabungan_rusak.json',
+          ),
+          throwsA(
+            predicate((e) => e is GalatKonten && e.kolom == 'misi.objek'),
+          ),
         );
       });
 
@@ -1251,21 +1959,36 @@ void main() {
           '"objek": "pengeluaran_kebutuhan_typo"',
         );
         expect(
-          () => PembacaKonten.uraiPelajaran(jsonRusak, namaBerkas: 'dana_darurat_rusak.json'),
-          throwsA(predicate((e) => e is GalatKonten && e.kolom == 'misi.objek')),
+          () => PembacaKonten.uraiPelajaran(
+            jsonRusak,
+            namaBerkas: 'dana_darurat_rusak.json',
+          ),
+          throwsA(
+            predicate((e) => e is GalatKonten && e.kolom == 'misi.objek'),
+          ),
         );
       });
 
-      test('Kasus 5: kunci umpan balik ringkasan_tujuan_tabungan_rusak ditolak', () {
-        final jsonRusak = templatePelajaranValid.replaceAll(
-          '"umpanBalik": "ringkasan_tujuan_tabungan"',
-          '"umpanBalik": "ringkasan_tujuan_tabungan_rusak"',
-        );
-        expect(
-          () => PembacaKonten.uraiPelajaran(jsonRusak, namaBerkas: 'tabungan_rusak.json'),
-          throwsA(predicate((e) => e is GalatKonten && e.kolom == 'misi.umpanBalik')),
-        );
-      });
+      test(
+        'Kasus 5: kunci umpan balik ringkasan_tujuan_tabungan_rusak ditolak',
+        () {
+          final jsonRusak = templatePelajaranValid.replaceAll(
+            '"umpanBalik": "ringkasan_tujuan_tabungan"',
+            '"umpanBalik": "ringkasan_tujuan_tabungan_rusak"',
+          );
+          expect(
+            () => PembacaKonten.uraiPelajaran(
+              jsonRusak,
+              namaBerkas: 'tabungan_rusak.json',
+            ),
+            throwsA(
+              predicate(
+                (e) => e is GalatKonten && e.kolom == 'misi.umpanBalik',
+              ),
+            ),
+          );
+        },
+      );
 
       test('Kasus 6: kunci umpan balik estimasi_tabungan_salah ditolak', () {
         final jsonRusak = templatePelajaranValid.replaceAll(
@@ -1273,79 +1996,124 @@ void main() {
           '"umpanBalik": "estimasi_tabungan_salah"',
         );
         expect(
-          () => PembacaKonten.uraiPelajaran(jsonRusak, namaBerkas: 'tabungan_rusak.json'),
-          throwsA(predicate((e) => e is GalatKonten && e.kolom == 'misi.umpanBalik')),
+          () => PembacaKonten.uraiPelajaran(
+            jsonRusak,
+            namaBerkas: 'tabungan_rusak.json',
+          ),
+          throwsA(
+            predicate((e) => e is GalatKonten && e.kolom == 'misi.umpanBalik'),
+          ),
         );
       });
 
-      test('Kasus 7 (pembuktian positif): 5 objek baru dan 5 kunci umpan balik baru valid', () {
-        const objekBaru = [
-          'tujuan_tabungan',
-          'isi_tujuan_tabungan',
-          'pengeluaran_kebutuhan',
-          'tujuan_dana_darurat',
-          'isi_dana_darurat',
-        ];
-        const umpanBalikBaru = [
-          'ringkasan_tujuan_tabungan',
-          'estimasi_tabungan',
-          'pengeluaran_wajib_bulanan',
-          'target_dana_darurat',
-          'progres_dana_darurat',
-        ];
-        for (var i = 0; i < 5; i++) {
-          final jsonUji = templatePelajaranValid
-              .replaceAll('"tujuan_tabungan"', '"${objekBaru[i]}"')
-              .replaceAll('"ringkasan_tujuan_tabungan"', '"${umpanBalikBaru[i]}"');
+      test(
+        'Kasus 7 (pembuktian positif): 5 objek baru dan 5 kunci umpan balik baru valid',
+        () {
+          const objekBaru = [
+            'tujuan_tabungan',
+            'isi_tujuan_tabungan',
+            'pengeluaran_kebutuhan',
+            'tujuan_dana_darurat',
+            'isi_dana_darurat',
+          ];
+          const umpanBalikBaru = [
+            'ringkasan_tujuan_tabungan',
+            'estimasi_tabungan',
+            'pengeluaran_wajib_bulanan',
+            'target_dana_darurat',
+            'progres_dana_darurat',
+          ];
+          for (var i = 0; i < 5; i++) {
+            final jsonUji = templatePelajaranValid
+                .replaceAll('"tujuan_tabungan"', '"${objekBaru[i]}"')
+                .replaceAll(
+                  '"ringkasan_tujuan_tabungan"',
+                  '"${umpanBalikBaru[i]}"',
+                );
+            expect(
+              () => PembacaKonten.uraiPelajaran(
+                jsonUji,
+                namaBerkas: 'uji_valid_$i.json',
+              ),
+              returnsNormally,
+            );
+          }
+        },
+      );
+
+      test(
+        'Kasus 8: penolakan status selain "draf" dan "ditinjau" (status "rilis", "aktif", kosong ditolak)',
+        () {
+          final statusIlegal = ['rilis', 'aktif', 'publikasi', 'selesai', ''];
+          for (final st in statusIlegal) {
+            final jsonRusak = templatePelajaranValid.replaceAll(
+              '"status": "draf"',
+              '"status": "$st"',
+            );
+            expect(
+              () => PembacaKonten.uraiPelajaran(
+                jsonRusak,
+                namaBerkas: 'tabungan_status_rusak.json',
+              ),
+              throwsA(
+                predicate(
+                  (e) =>
+                      e is GalatKonten &&
+                      e.kolom == 'status' &&
+                      e.pesan.contains('draf') &&
+                      e.pesan.contains('ditinjau'),
+                ),
+              ),
+              reason: 'Status "$st" harus ditolak oleh pemeriksa konten',
+            );
+          }
+
+          // Uji status null / hilang
+          final jsonTanpaStatus = templatePelajaranValid.replaceAll(
+            '"status": "draf",',
+            '',
+          );
           expect(
-            () => PembacaKonten.uraiPelajaran(jsonUji, namaBerkas: 'uji_valid_$i.json'),
+            () => PembacaKonten.uraiPelajaran(
+              jsonTanpaStatus,
+              namaBerkas: 'tabungan_tanpa_status.json',
+            ),
+            throwsA(predicate((e) => e is GalatKonten && e.kolom == 'status')),
+          );
+        },
+      );
+
+      test(
+        'Kasus 9 (pembuktian positif): status "draf" dan "ditinjau" keduanya diterima',
+        () {
+          final jsonDraf = templatePelajaranValid;
+          expect(
+            () => PembacaKonten.uraiPelajaran(
+              jsonDraf,
+              namaBerkas: 'tabungan_draf.json',
+            ),
             returnsNormally,
           );
-        }
-      });
 
-      test('Kasus 8: penolakan status selain "draf" dan "ditinjau" (status "rilis", "aktif", kosong ditolak)', () {
-        final statusIlegal = ['rilis', 'aktif', 'publikasi', 'selesai', ''];
-        for (final st in statusIlegal) {
-          final jsonRusak = templatePelajaranValid.replaceAll(
+          final jsonDitinjau = templatePelajaranValid.replaceAll(
             '"status": "draf"',
-            '"status": "$st"',
+            '"status": "ditinjau"',
           );
           expect(
-            () => PembacaKonten.uraiPelajaran(jsonRusak, namaBerkas: 'tabungan_status_rusak.json'),
-            throwsA(predicate((e) => e is GalatKonten && e.kolom == 'status' && e.pesan.contains('draf') && e.pesan.contains('ditinjau'))),
-            reason: 'Status "$st" harus ditolak oleh pemeriksa konten',
+            () => PembacaKonten.uraiPelajaran(
+              jsonDitinjau,
+              namaBerkas: 'tabungan_ditinjau.json',
+            ),
+            returnsNormally,
           );
-        }
-
-        // Uji status null / hilang
-        final jsonTanpaStatus = templatePelajaranValid.replaceAll('"status": "draf",', '');
-        expect(
-          () => PembacaKonten.uraiPelajaran(jsonTanpaStatus, namaBerkas: 'tabungan_tanpa_status.json'),
-          throwsA(predicate((e) => e is GalatKonten && e.kolom == 'status')),
-        );
-      });
-
-      test('Kasus 9 (pembuktian positif): status "draf" dan "ditinjau" keduanya diterima', () {
-        final jsonDraf = templatePelajaranValid;
-        expect(
-          () => PembacaKonten.uraiPelajaran(jsonDraf, namaBerkas: 'tabungan_draf.json'),
-          returnsNormally,
-        );
-
-        final jsonDitinjau = templatePelajaranValid.replaceAll(
-          '"status": "draf"',
-          '"status": "ditinjau"',
-        );
-        expect(
-          () => PembacaKonten.uraiPelajaran(jsonDitinjau, namaBerkas: 'tabungan_ditinjau.json'),
-          returnsNormally,
-        );
-      });
+        },
+      );
     });
 
-    group('Tahap 8B: Validasi Kunci Umpan Balik dan Gerbang atauPernyataan Modul 4 (Minimal 6 Kasus)', () {
-      const templatePelajaranUtangValid = '''
+    group(
+      'Tahap 8B: Validasi Kunci Umpan Balik dan Gerbang atauPernyataan Modul 4 (Minimal 6 Kasus)',
+      () {
+        const templatePelajaranUtangValid = '''
       {
         "id": "utang_cicilan_4_1",
         "modul": "utang_cicilan",
@@ -1382,7 +2150,7 @@ void main() {
       }
       ''';
 
-      const templateModulUtangValid = '''
+        const templateModulUtangValid = '''
       {
         "id": "utang_cicilan",
         "judul": "Utang & Cicilan",
@@ -1423,93 +2191,169 @@ void main() {
       }
       ''';
 
-      test('Kasus 1: kunci umpan balik ringkasan_utang_rusak ditolak', () {
-        final jsonRusak = templatePelajaranUtangValid.replaceAll(
-          '"umpanBalik": "ringkasan_utang"',
-          '"umpanBalik": "ringkasan_utang_rusak"',
-        );
-        expect(
-          () => PembacaKonten.uraiPelajaran(jsonRusak, namaBerkas: 'utang_rusak_1.json'),
-          throwsA(predicate((e) => e is GalatKonten && e.kolom == 'misi.umpanBalik' && e.berkas == 'utang_rusak_1.json')),
-        );
-      });
-
-      test('Kasus 2: kunci umpan balik biaya_pinjaman_rusak ditolak', () {
-        final jsonRusak = templatePelajaranUtangValid.replaceAll(
-          '"umpanBalik": "ringkasan_utang"',
-          '"umpanBalik": "biaya_pinjaman_rusak"',
-        );
-        expect(
-          () => PembacaKonten.uraiPelajaran(jsonRusak, namaBerkas: 'utang_rusak_2.json'),
-          throwsA(predicate((e) => e is GalatKonten && e.kolom == 'misi.umpanBalik' && e.berkas == 'utang_rusak_2.json')),
-        );
-      });
-
-      test('Kasus 3: kunci umpan balik rasio_cicilan_rusak ditolak', () {
-        final jsonRusak = templatePelajaranUtangValid.replaceAll(
-          '"umpanBalik": "ringkasan_utang"',
-          '"umpanBalik": "rasio_cicilan_rusak"',
-        );
-        expect(
-          () => PembacaKonten.uraiPelajaran(jsonRusak, namaBerkas: 'utang_rusak_3.json'),
-          throwsA(predicate((e) => e is GalatKonten && e.kolom == 'misi.umpanBalik' && e.berkas == 'utang_rusak_3.json')),
-        );
-      });
-
-      test('Kasus 4: kunci umpan balik urutan_pelunasan_rusak ditolak', () {
-        final jsonRusak = templatePelajaranUtangValid.replaceAll(
-          '"umpanBalik": "ringkasan_utang"',
-          '"umpanBalik": "urutan_pelunasan_rusak"',
-        );
-        expect(
-          () => PembacaKonten.uraiPelajaran(jsonRusak, namaBerkas: 'utang_rusak_4.json'),
-          throwsA(predicate((e) => e is GalatKonten && e.kolom == 'misi.umpanBalik' && e.berkas == 'utang_rusak_4.json')),
-        );
-      });
-
-      test('Kasus 5: gerbang modul atauPernyataan kosong ditolak', () {
-        final jsonRusak = templateModulUtangValid.replaceAll(
-          '"atauPernyataan": "tidak_punya_utang"',
-          '"atauPernyataan": "   "',
-        );
-        expect(
-          () => PembacaKonten.uraiModul(jsonRusak, namaBerkas: 'modul_utang_rusak.json'),
-          throwsA(predicate((e) => e is GalatKonten && e.kolom == 'gerbang[1].atauPernyataan' && e.berkas == 'modul_utang_rusak.json')),
-        );
-      });
-
-      test('Kasus 6: aturanPraktis: true tanpa catatanReviewer TODO-VERIFIKASI ditolak', () {
-        final jsonRusak = templatePelajaranUtangValid.replaceAll(
-          '"status": "draf",',
-          '"status": "draf", "aturanPraktis": true,',
-        );
-        expect(
-          () => PembacaKonten.uraiPelajaran(jsonRusak, namaBerkas: 'utang_4_3_rusak.json'),
-          throwsA(predicate((e) => e is GalatKonten && e.kolom == 'catatanReviewer' && e.berkas == 'utang_4_3_rusak.json')),
-        );
-      });
-
-      test('Kasus 7 (pembuktian positif): 4 kunci umpan balik baru dan gerbang atauPernyataan valid', () {
-        const umpanBalikBaru = [
-          'ringkasan_utang',
-          'biaya_pinjaman_tercatat',
-          'rasio_cicilan_bulan_ini',
-          'urutan_pelunasan',
-        ];
-        for (final ub in umpanBalikBaru) {
-          final jsonUji = templatePelajaranUtangValid.replaceAll('"ringkasan_utang"', '"$ub"');
-          expect(
-            () => PembacaKonten.uraiPelajaran(jsonUji, namaBerkas: 'uji_${ub}_valid.json'),
-            returnsNormally,
+        test('Kasus 1: kunci umpan balik ringkasan_utang_rusak ditolak', () {
+          final jsonRusak = templatePelajaranUtangValid.replaceAll(
+            '"umpanBalik": "ringkasan_utang"',
+            '"umpanBalik": "ringkasan_utang_rusak"',
           );
-        }
+          expect(
+            () => PembacaKonten.uraiPelajaran(
+              jsonRusak,
+              namaBerkas: 'utang_rusak_1.json',
+            ),
+            throwsA(
+              predicate(
+                (e) =>
+                    e is GalatKonten &&
+                    e.kolom == 'misi.umpanBalik' &&
+                    e.berkas == 'utang_rusak_1.json',
+              ),
+            ),
+          );
+        });
 
-        expect(
-          () => PembacaKonten.uraiModul(templateModulUtangValid, namaBerkas: 'modul_utang_valid.json'),
-          returnsNormally,
+        test('Kasus 2: kunci umpan balik biaya_pinjaman_rusak ditolak', () {
+          final jsonRusak = templatePelajaranUtangValid.replaceAll(
+            '"umpanBalik": "ringkasan_utang"',
+            '"umpanBalik": "biaya_pinjaman_rusak"',
+          );
+          expect(
+            () => PembacaKonten.uraiPelajaran(
+              jsonRusak,
+              namaBerkas: 'utang_rusak_2.json',
+            ),
+            throwsA(
+              predicate(
+                (e) =>
+                    e is GalatKonten &&
+                    e.kolom == 'misi.umpanBalik' &&
+                    e.berkas == 'utang_rusak_2.json',
+              ),
+            ),
+          );
+        });
+
+        test('Kasus 3: kunci umpan balik rasio_cicilan_rusak ditolak', () {
+          final jsonRusak = templatePelajaranUtangValid.replaceAll(
+            '"umpanBalik": "ringkasan_utang"',
+            '"umpanBalik": "rasio_cicilan_rusak"',
+          );
+          expect(
+            () => PembacaKonten.uraiPelajaran(
+              jsonRusak,
+              namaBerkas: 'utang_rusak_3.json',
+            ),
+            throwsA(
+              predicate(
+                (e) =>
+                    e is GalatKonten &&
+                    e.kolom == 'misi.umpanBalik' &&
+                    e.berkas == 'utang_rusak_3.json',
+              ),
+            ),
+          );
+        });
+
+        test('Kasus 4: kunci umpan balik urutan_pelunasan_rusak ditolak', () {
+          final jsonRusak = templatePelajaranUtangValid.replaceAll(
+            '"umpanBalik": "ringkasan_utang"',
+            '"umpanBalik": "urutan_pelunasan_rusak"',
+          );
+          expect(
+            () => PembacaKonten.uraiPelajaran(
+              jsonRusak,
+              namaBerkas: 'utang_rusak_4.json',
+            ),
+            throwsA(
+              predicate(
+                (e) =>
+                    e is GalatKonten &&
+                    e.kolom == 'misi.umpanBalik' &&
+                    e.berkas == 'utang_rusak_4.json',
+              ),
+            ),
+          );
+        });
+
+        test('Kasus 5: gerbang modul atauPernyataan kosong ditolak', () {
+          final jsonRusak = templateModulUtangValid.replaceAll(
+            '"atauPernyataan": "tidak_punya_utang"',
+            '"atauPernyataan": "   "',
+          );
+          expect(
+            () => PembacaKonten.uraiModul(
+              jsonRusak,
+              namaBerkas: 'modul_utang_rusak.json',
+            ),
+            throwsA(
+              predicate(
+                (e) =>
+                    e is GalatKonten &&
+                    e.kolom == 'gerbang[1].atauPernyataan' &&
+                    e.berkas == 'modul_utang_rusak.json',
+              ),
+            ),
+          );
+        });
+
+        test(
+          'Kasus 6: aturanPraktis: true tanpa catatanReviewer TODO-VERIFIKASI ditolak',
+          () {
+            final jsonRusak = templatePelajaranUtangValid.replaceAll(
+              '"status": "draf",',
+              '"status": "draf", "aturanPraktis": true,',
+            );
+            expect(
+              () => PembacaKonten.uraiPelajaran(
+                jsonRusak,
+                namaBerkas: 'utang_4_3_rusak.json',
+              ),
+              throwsA(
+                predicate(
+                  (e) =>
+                      e is GalatKonten &&
+                      e.kolom == 'catatanReviewer' &&
+                      e.berkas == 'utang_4_3_rusak.json',
+                ),
+              ),
+            );
+          },
         );
-      });
-    });
+
+        test(
+          'Kasus 7 (pembuktian positif): 4 kunci umpan balik baru dan gerbang atauPernyataan valid',
+          () {
+            const umpanBalikBaru = [
+              'ringkasan_utang',
+              'biaya_pinjaman_tercatat',
+              'rasio_cicilan_bulan_ini',
+              'urutan_pelunasan',
+            ];
+            for (final ub in umpanBalikBaru) {
+              final jsonUji = templatePelajaranUtangValid.replaceAll(
+                '"ringkasan_utang"',
+                '"$ub"',
+              );
+              expect(
+                () => PembacaKonten.uraiPelajaran(
+                  jsonUji,
+                  namaBerkas: 'uji_${ub}_valid.json',
+                ),
+                returnsNormally,
+              );
+            }
+
+            expect(
+              () => PembacaKonten.uraiModul(
+                templateModulUtangValid,
+                namaBerkas: 'modul_utang_valid.json',
+              ),
+              returnsNormally,
+            );
+          },
+        );
+      },
+    );
   });
 
   group('Pemeriksa Konten Rusak Tahap 8C (Tipe Misi Baru & Sensitif Modul 5)', () {
@@ -1532,7 +2376,10 @@ void main() {
         'gerbang': ?gerbang,
         'pemantik': pemantik,
         'kartu': [
-          {'judul': 'Kartu Satu', 'isi': 'Isi kartu edukasi yang baik dan memberdayakan.'},
+          {
+            'judul': 'Kartu Satu',
+            'isi': 'Isi kartu edukasi yang baik dan memberdayakan.',
+          },
         ],
         'cekPaham': [
           {
@@ -1548,16 +2395,28 @@ void main() {
             'penjelasan': 'Penjelasan jawaban yang jelas.',
           },
         ],
-        'misi': misi ??
+        'misi':
+            misi ??
             {
               'tipe': 'keputusan',
               'judul': 'Keputusan Bijak',
               'instruksi': 'Tentukan pilihanmu pada skenario berikut.',
               'skenario': {
-                'pemantik': 'Ada tawaran menggiurkan yang meminta transfer cepat.',
+                'pemantik':
+                    'Ada tawaran menggiurkan yang meminta transfer cepat.',
                 'opsi': [
-                  {'id': 'a', 'teks': 'Langsung kirim.', 'aman': false, 'umpanBalik': 'Jangan terburu-buru.'},
-                  {'id': 'b', 'teks': 'Tunda dan periksa.', 'aman': true, 'umpanBalik': 'Pilihan tepat.'},
+                  {
+                    'id': 'a',
+                    'teks': 'Langsung kirim.',
+                    'aman': false,
+                    'umpanBalik': 'Jangan terburu-buru.',
+                  },
+                  {
+                    'id': 'b',
+                    'teks': 'Tunda dan periksa.',
+                    'aman': true,
+                    'umpanBalik': 'Pilihan tepat.',
+                  },
                 ],
               },
             },
@@ -1574,14 +2433,28 @@ void main() {
           'skenario': {
             'pemantik': 'Skenario ada tawaran.',
             'opsi': [
-              {'id': 'a', 'teks': 'Hanya satu opsi', 'aman': true, 'umpanBalik': 'Cukup'},
+              {
+                'id': 'a',
+                'teks': 'Hanya satu opsi',
+                'aman': true,
+                'umpanBalik': 'Cukup',
+              },
             ],
           },
         },
       );
       expect(
-        () => PembacaKonten.validasiKontenPelajaran(data, namaBerkas: 'waspada_penipuan_5_1.json'),
-        throwsA(isA<GalatKonten>().having((e) => e.kolom, 'kolom', 'misi.skenario.opsi')),
+        () => PembacaKonten.validasiKontenPelajaran(
+          data,
+          namaBerkas: 'waspada_penipuan_5_1.json',
+        ),
+        throwsA(
+          isA<GalatKonten>().having(
+            (e) => e.kolom,
+            'kolom',
+            'misi.skenario.opsi',
+          ),
+        ),
       );
     });
 
@@ -1595,60 +2468,113 @@ void main() {
           'skenario': {
             'pemantik': 'Skenario ada tawaran.',
             'opsi': [
-              {'id': 'a', 'teks': 'Opsi bahaya 1', 'aman': false, 'umpanBalik': 'Jangan'},
-              {'id': 'b', 'teks': 'Opsi bahaya 2', 'aman': false, 'umpanBalik': 'Hindari'},
+              {
+                'id': 'a',
+                'teks': 'Opsi bahaya 1',
+                'aman': false,
+                'umpanBalik': 'Jangan',
+              },
+              {
+                'id': 'b',
+                'teks': 'Opsi bahaya 2',
+                'aman': false,
+                'umpanBalik': 'Hindari',
+              },
             ],
           },
         },
       );
       expect(
-        () => PembacaKonten.validasiKontenPelajaran(data, namaBerkas: 'waspada_penipuan_5_1.json'),
-        throwsA(isA<GalatKonten>().having((e) => e.kolom, 'kolom', 'misi.skenario.opsi')),
+        () => PembacaKonten.validasiKontenPelajaran(
+          data,
+          namaBerkas: 'waspada_penipuan_5_1.json',
+        ),
+        throwsA(
+          isA<GalatKonten>().having(
+            (e) => e.kolom,
+            'kolom',
+            'misi.skenario.opsi',
+          ),
+        ),
       );
     });
 
     // 3. Kasus Keputusan: Opsi tanpa umpanBalik
-    test('3. Kasus Rusak: Misi keputusan dengan opsi tanpa umpanBalik ditolak', () {
-      final data = buatPelajaranDasar(
-        misi: {
-          'tipe': 'keputusan',
-          'judul': 'Keputusan Tanpa Umpan Balik',
-          'instruksi': 'Pilih opsi',
-          'skenario': {
-            'pemantik': 'Skenario ada tawaran.',
-            'opsi': [
-              {'id': 'a', 'teks': 'Opsi bahaya', 'aman': false, 'umpanBalik': ''},
-              {'id': 'b', 'teks': 'Opsi aman', 'aman': true, 'umpanBalik': 'Bagus'},
-            ],
+    test(
+      '3. Kasus Rusak: Misi keputusan dengan opsi tanpa umpanBalik ditolak',
+      () {
+        final data = buatPelajaranDasar(
+          misi: {
+            'tipe': 'keputusan',
+            'judul': 'Keputusan Tanpa Umpan Balik',
+            'instruksi': 'Pilih opsi',
+            'skenario': {
+              'pemantik': 'Skenario ada tawaran.',
+              'opsi': [
+                {
+                  'id': 'a',
+                  'teks': 'Opsi bahaya',
+                  'aman': false,
+                  'umpanBalik': '',
+                },
+                {
+                  'id': 'b',
+                  'teks': 'Opsi aman',
+                  'aman': true,
+                  'umpanBalik': 'Bagus',
+                },
+              ],
+            },
           },
-        },
-      );
-      expect(
-        () => PembacaKonten.validasiKontenPelajaran(data, namaBerkas: 'waspada_penipuan_5_1.json'),
-        throwsA(isA<GalatKonten>().having((e) => e.kolom, 'kolom', 'misi.skenario.opsi[0].umpanBalik')),
-      );
-    });
+        );
+        expect(
+          () => PembacaKonten.validasiKontenPelajaran(
+            data,
+            namaBerkas: 'waspada_penipuan_5_1.json',
+          ),
+          throwsA(
+            isA<GalatKonten>().having(
+              (e) => e.kolom,
+              'kolom',
+              'misi.skenario.opsi[0].umpanBalik',
+            ),
+          ),
+        );
+      },
+    );
 
     // 4. Kasus Daftar Periksa: Tanpa disclaimer: true
-    test('4. Kasus Rusak: Misi daftar_periksa tanpa disclaimer: true ditolak', () {
-      final data = buatPelajaranDasar(
-        misi: {
-          'tipe': 'daftar_periksa',
-          'judul': 'Daftar Periksa Tanpa Disclaimer',
-          'instruksi': 'Centang langkah berikut',
-          'minimalDicentang': 3,
-          'langkah': [
-            {'id': 'l1', 'teks': 'Langkah 1'},
-            {'id': 'l2', 'teks': 'Langkah 2'},
-            {'id': 'l3', 'teks': 'Langkah 3'},
-          ],
-        },
-      );
-      expect(
-        () => PembacaKonten.validasiKontenPelajaran(data, namaBerkas: 'waspada_penipuan_5_2.json'),
-        throwsA(isA<GalatKonten>().having((e) => e.kolom, 'kolom', 'misi.disclaimer')),
-      );
-    });
+    test(
+      '4. Kasus Rusak: Misi daftar_periksa tanpa disclaimer: true ditolak',
+      () {
+        final data = buatPelajaranDasar(
+          misi: {
+            'tipe': 'daftar_periksa',
+            'judul': 'Daftar Periksa Tanpa Disclaimer',
+            'instruksi': 'Centang langkah berikut',
+            'minimalDicentang': 3,
+            'langkah': [
+              {'id': 'l1', 'teks': 'Langkah 1'},
+              {'id': 'l2', 'teks': 'Langkah 2'},
+              {'id': 'l3', 'teks': 'Langkah 3'},
+            ],
+          },
+        );
+        expect(
+          () => PembacaKonten.validasiKontenPelajaran(
+            data,
+            namaBerkas: 'waspada_penipuan_5_2.json',
+          ),
+          throwsA(
+            isA<GalatKonten>().having(
+              (e) => e.kolom,
+              'kolom',
+              'misi.disclaimer',
+            ),
+          ),
+        );
+      },
+    );
 
     // 5. Kasus Daftar Periksa: Langkah < 3
     test('5. Kasus Rusak: Misi daftar_periksa dengan langkah < 3 ditolak', () {
@@ -1666,76 +2592,113 @@ void main() {
         },
       );
       expect(
-        () => PembacaKonten.validasiKontenPelajaran(data, namaBerkas: 'waspada_penipuan_5_2.json'),
-        throwsA(isA<GalatKonten>().having((e) => e.kolom, 'kolom', 'misi.langkah')),
+        () => PembacaKonten.validasiKontenPelajaran(
+          data,
+          namaBerkas: 'waspada_penipuan_5_2.json',
+        ),
+        throwsA(
+          isA<GalatKonten>().having((e) => e.kolom, 'kolom', 'misi.langkah'),
+        ),
       );
     });
 
     // 6. Kasus Daftar Periksa: minimalDicentang di luar batas
-    test('6. Kasus Rusak: Misi daftar_periksa dengan minimalDicentang > jumlah langkah ditolak', () {
-      final data = buatPelajaranDasar(
-        misi: {
-          'tipe': 'daftar_periksa',
-          'judul': 'Daftar Periksa Minimal Berlebih',
-          'instruksi': 'Centang langkah berikut',
-          'disclaimer': true,
-          'minimalDicentang': 4,
-          'langkah': [
-            {'id': 'l1', 'teks': 'Langkah 1'},
-            {'id': 'l2', 'teks': 'Langkah 2'},
-            {'id': 'l3', 'teks': 'Langkah 3'},
-          ],
-        },
-      );
-      expect(
-        () => PembacaKonten.validasiKontenPelajaran(data, namaBerkas: 'waspada_penipuan_5_2.json'),
-        throwsA(isA<GalatKonten>().having((e) => e.kolom, 'kolom', 'misi.minimalDicentang')),
-      );
-    });
+    test(
+      '6. Kasus Rusak: Misi daftar_periksa dengan minimalDicentang > jumlah langkah ditolak',
+      () {
+        final data = buatPelajaranDasar(
+          misi: {
+            'tipe': 'daftar_periksa',
+            'judul': 'Daftar Periksa Minimal Berlebih',
+            'instruksi': 'Centang langkah berikut',
+            'disclaimer': true,
+            'minimalDicentang': 4,
+            'langkah': [
+              {'id': 'l1', 'teks': 'Langkah 1'},
+              {'id': 'l2', 'teks': 'Langkah 2'},
+              {'id': 'l3', 'teks': 'Langkah 3'},
+            ],
+          },
+        );
+        expect(
+          () => PembacaKonten.validasiKontenPelajaran(
+            data,
+            namaBerkas: 'waspada_penipuan_5_2.json',
+          ),
+          throwsA(
+            isA<GalatKonten>().having(
+              (e) => e.kolom,
+              'kolom',
+              'misi.minimalDicentang',
+            ),
+          ),
+        );
+      },
+    );
 
     // 7. Kasus Daftar Periksa: Tanpa TODO-VERIFIKASI pada catatanReviewer
-    test('7. Kasus Rusak: Pelajaran daftar_periksa tanpa TODO-VERIFIKASI pada catatanReviewer ditolak', () {
-      final data = buatPelajaranDasar(
-        catatanReviewer: 'Catatan biasa tanpa penanda khusus.',
-        misi: {
-          'tipe': 'daftar_periksa',
-          'judul': 'Daftar Periksa',
-          'instruksi': 'Centang langkah berikut',
-          'disclaimer': true,
-          'minimalDicentang': 2,
-          'langkah': [
-            {'id': 'l1', 'teks': 'Langkah 1'},
-            {'id': 'l2', 'teks': 'Langkah 2'},
-            {'id': 'l3', 'teks': 'Langkah 3'},
-          ],
-        },
-      );
-      expect(
-        () => PembacaKonten.validasiKontenPelajaran(data, namaBerkas: 'waspada_penipuan_5_2.json'),
-        throwsA(isA<GalatKonten>().having((e) => e.kolom, 'kolom', 'catatanReviewer')),
-      );
-    });
+    test(
+      '7. Kasus Rusak: Pelajaran daftar_periksa tanpa TODO-VERIFIKASI pada catatanReviewer ditolak',
+      () {
+        final data = buatPelajaranDasar(
+          catatanReviewer: 'Catatan biasa tanpa penanda khusus.',
+          misi: {
+            'tipe': 'daftar_periksa',
+            'judul': 'Daftar Periksa',
+            'instruksi': 'Centang langkah berikut',
+            'disclaimer': true,
+            'minimalDicentang': 2,
+            'langkah': [
+              {'id': 'l1', 'teks': 'Langkah 1'},
+              {'id': 'l2', 'teks': 'Langkah 2'},
+              {'id': 'l3', 'teks': 'Langkah 3'},
+            ],
+          },
+        );
+        expect(
+          () => PembacaKonten.validasiKontenPelajaran(
+            data,
+            namaBerkas: 'waspada_penipuan_5_2.json',
+          ),
+          throwsA(
+            isA<GalatKonten>().having(
+              (e) => e.kolom,
+              'kolom',
+              'catatanReviewer',
+            ),
+          ),
+        );
+      },
+    );
 
     // 8. Sensitif Modul 5: Judul memuat label "aman" atau "bahaya"
-    test('8. Kasus Rusak: Judul pelajaran Modul 5 memuat kata "aman" ditolak', () {
-      final data = buatPelajaranDasar(
-        judul: 'Cara Aman Memilih Pinjaman',
-      );
-      expect(
-        () => PembacaKonten.validasiKontenPelajaran(data, namaBerkas: 'waspada_penipuan_5_1.json'),
-        throwsA(isA<GalatKonten>().having((e) => e.kolom, 'kolom', 'judul')),
-      );
-    });
+    test(
+      '8. Kasus Rusak: Judul pelajaran Modul 5 memuat kata "aman" ditolak',
+      () {
+        final data = buatPelajaranDasar(judul: 'Cara Aman Memilih Pinjaman');
+        expect(
+          () => PembacaKonten.validasiKontenPelajaran(
+            data,
+            namaBerkas: 'waspada_penipuan_5_1.json',
+          ),
+          throwsA(isA<GalatKonten>().having((e) => e.kolom, 'kolom', 'judul')),
+        );
+      },
+    );
 
-    test('8b. Kasus Rusak: Judul pelajaran Modul 5 memuat kata "bahaya" ditolak', () {
-      final data = buatPelajaranDasar(
-        judul: 'Waspada Bahaya Pinjol',
-      );
-      expect(
-        () => PembacaKonten.validasiKontenPelajaran(data, namaBerkas: 'waspada_penipuan_5_1.json'),
-        throwsA(isA<GalatKonten>().having((e) => e.kolom, 'kolom', 'judul')),
-      );
-    });
+    test(
+      '8b. Kasus Rusak: Judul pelajaran Modul 5 memuat kata "bahaya" ditolak',
+      () {
+        final data = buatPelajaranDasar(judul: 'Waspada Bahaya Pinjol');
+        expect(
+          () => PembacaKonten.validasiKontenPelajaran(
+            data,
+            namaBerkas: 'waspada_penipuan_5_1.json',
+          ),
+          throwsA(isA<GalatKonten>().having((e) => e.kolom, 'kolom', 'judul')),
+        );
+      },
+    );
 
     // 9. Sensitif Modul 5: Tautan "http"
     test('9. Kasus Rusak: Teks Modul 5 memuat "http" ditolak', () {
@@ -1743,7 +2706,10 @@ void main() {
         pemantik: 'Buka tautan http://cek-pinjol.com untuk melihat daftar.',
       );
       expect(
-        () => PembacaKonten.validasiKontenPelajaran(data, namaBerkas: 'waspada_penipuan_5_1.json'),
+        () => PembacaKonten.validasiKontenPelajaran(
+          data,
+          namaBerkas: 'waspada_penipuan_5_1.json',
+        ),
         throwsA(isA<GalatKonten>().having((e) => e.kolom, 'kolom', 'pemantik')),
       );
     });
@@ -1754,7 +2720,10 @@ void main() {
         pemantik: 'Kunjungi situs www.resmi.go.id untuk memeriksa perizinan.',
       );
       expect(
-        () => PembacaKonten.validasiKontenPelajaran(data, namaBerkas: 'waspada_penipuan_5_1.json'),
+        () => PembacaKonten.validasiKontenPelajaran(
+          data,
+          namaBerkas: 'waspada_penipuan_5_1.json',
+        ),
         throwsA(isA<GalatKonten>().having((e) => e.kolom, 'kolom', 'pemantik')),
       );
     });
@@ -1765,7 +2734,10 @@ void main() {
         pemantik: 'Kirimkan laporanmu ke halo@funda.id segera.',
       );
       expect(
-        () => PembacaKonten.validasiKontenPelajaran(data, namaBerkas: 'waspada_penipuan_5_1.json'),
+        () => PembacaKonten.validasiKontenPelajaran(
+          data,
+          namaBerkas: 'waspada_penipuan_5_1.json',
+        ),
         throwsA(isA<GalatKonten>().having((e) => e.kolom, 'kolom', 'pemantik')),
       );
     });
@@ -1776,7 +2748,10 @@ void main() {
         pemantik: 'Pastikan penyedia berizin resmi di OJK sebelum meminjam.',
       );
       expect(
-        () => PembacaKonten.validasiKontenPelajaran(data, namaBerkas: 'waspada_penipuan_5_1.json'),
+        () => PembacaKonten.validasiKontenPelajaran(
+          data,
+          namaBerkas: 'waspada_penipuan_5_1.json',
+        ),
         throwsA(isA<GalatKonten>().having((e) => e.kolom, 'kolom', 'pemantik')),
       );
     });
@@ -1787,39 +2762,74 @@ void main() {
         pemantik: 'Ikuti pedoman keamanan data dari BSSN.',
       );
       expect(
-        () => PembacaKonten.validasiKontenPelajaran(data, namaBerkas: 'waspada_penipuan_5_1.json'),
+        () => PembacaKonten.validasiKontenPelajaran(
+          data,
+          namaBerkas: 'waspada_penipuan_5_1.json',
+        ),
         throwsA(isA<GalatKonten>().having((e) => e.kolom, 'kolom', 'pemantik')),
       );
     });
 
     // 14. Sensitif Modul 5: Urutan digit >= 8 tanpa titik (nomor telepon)
-    test('14. Kasus Rusak: Teks Modul 5 memuat digit >= 8 tanpa titik (nomor telepon) ditolak', () {
-      final data = buatPelajaranDasar(
-        pemantik: 'Hubungi pengaduan lewat nomor 08123456789 ini.',
-      );
-      expect(
-        () => PembacaKonten.validasiKontenPelajaran(data, namaBerkas: 'waspada_penipuan_5_1.json'),
-        throwsA(isA<GalatKonten>().having((e) => e.kolom, 'kolom', 'pemantik')),
-      );
-    });
+    test(
+      '14. Kasus Rusak: Teks Modul 5 memuat digit >= 8 tanpa titik (nomor telepon) ditolak',
+      () {
+        final data = buatPelajaranDasar(
+          pemantik: 'Hubungi pengaduan lewat nomor 08123456789 ini.',
+        );
+        expect(
+          () => PembacaKonten.validasiKontenPelajaran(
+            data,
+            namaBerkas: 'waspada_penipuan_5_1.json',
+          ),
+          throwsA(
+            isA<GalatKonten>().having((e) => e.kolom, 'kolom', 'pemantik'),
+          ),
+        );
+      },
+    );
 
     // 15. Kasus Disclaimer: Kunci tidak ada atau teks tidak sesuai lampiran
-    test('15. Kasus Rusak: Berkas disclaimer.json tanpa langkahDuniaNyata ditolak', () {
-      expect(
-        () => PembacaKonten.validasiBerkasDisclaimer({}, namaBerkas: 'disclaimer.json'),
-        throwsA(isA<GalatKonten>().having((e) => e.kolom, 'kolom', 'langkahDuniaNyata')),
-      );
-    });
+    test(
+      '15. Kasus Rusak: Berkas disclaimer.json tanpa langkahDuniaNyata ditolak',
+      () {
+        expect(
+          () => PembacaKonten.validasiBerkasDisclaimer(
+            {},
+            namaBerkas: 'disclaimer.json',
+          ),
+          throwsA(
+            isA<GalatKonten>().having(
+              (e) => e.kolom,
+              'kolom',
+              'langkahDuniaNyata',
+            ),
+          ),
+        );
+      },
+    );
 
-    test('15b. Kasus Rusak: Berkas disclaimer.json dengan teks yang diubah ditolak', () {
-      final data = {
-        'langkahDuniaNyata': 'Funda hanya memberi saran umum saja.',
-      };
-      expect(
-        () => PembacaKonten.validasiBerkasDisclaimer(data, namaBerkas: 'disclaimer.json'),
-        throwsA(isA<GalatKonten>().having((e) => e.kolom, 'kolom', 'langkahDuniaNyata')),
-      );
-    });
+    test(
+      '15b. Kasus Rusak: Berkas disclaimer.json dengan teks yang diubah ditolak',
+      () {
+        final data = {
+          'langkahDuniaNyata': 'Funda hanya memberi saran umum saja.',
+        };
+        expect(
+          () => PembacaKonten.validasiBerkasDisclaimer(
+            data,
+            namaBerkas: 'disclaimer.json',
+          ),
+          throwsA(
+            isA<GalatKonten>().having(
+              (e) => e.kolom,
+              'kolom',
+              'langkahDuniaNyata',
+            ),
+          ),
+        );
+      },
+    );
 
     // =========================================================================
     // TAHAP 8D: Tipe Misi Refleksi & Kunci Umpan Balik Baru
@@ -1836,10 +2846,15 @@ void main() {
         },
       );
       expect(
-        () => PembacaKonten.validasiKontenPelajaran(data, namaBerkas: 'psikologi_uang_6_1.json'),
-        throwsA(isA<GalatKonten>()
-            .having((e) => e.berkas, 'berkas', 'psikologi_uang_6_1.json')
-            .having((e) => e.kolom, 'kolom', 'misi.pertanyaan')),
+        () => PembacaKonten.validasiKontenPelajaran(
+          data,
+          namaBerkas: 'psikologi_uang_6_1.json',
+        ),
+        throwsA(
+          isA<GalatKonten>()
+              .having((e) => e.berkas, 'berkas', 'psikologi_uang_6_1.json')
+              .having((e) => e.kolom, 'kolom', 'misi.pertanyaan'),
+        ),
       );
     });
 
@@ -1856,10 +2871,15 @@ void main() {
         },
       );
       expect(
-        () => PembacaKonten.validasiKontenPelajaran(data, namaBerkas: 'psikologi_uang_6_1.json'),
-        throwsA(isA<GalatKonten>()
-            .having((e) => e.berkas, 'berkas', 'psikologi_uang_6_1.json')
-            .having((e) => e.kolom, 'kolom', 'misi.pertanyaan')),
+        () => PembacaKonten.validasiKontenPelajaran(
+          data,
+          namaBerkas: 'psikologi_uang_6_1.json',
+        ),
+        throwsA(
+          isA<GalatKonten>()
+              .having((e) => e.berkas, 'berkas', 'psikologi_uang_6_1.json')
+              .having((e) => e.kolom, 'kolom', 'misi.pertanyaan'),
+        ),
       );
     });
 
@@ -1875,72 +2895,101 @@ void main() {
         },
       );
       expect(
-        () => PembacaKonten.validasiKontenPelajaran(data, namaBerkas: 'psikologi_uang_6_1.json'),
-        throwsA(isA<GalatKonten>()
-            .having((e) => e.berkas, 'berkas', 'psikologi_uang_6_1.json')
-            .having((e) => e.kolom, 'kolom', 'misi.instruksi')),
+        () => PembacaKonten.validasiKontenPelajaran(
+          data,
+          namaBerkas: 'psikologi_uang_6_1.json',
+        ),
+        throwsA(
+          isA<GalatKonten>()
+              .having((e) => e.berkas, 'berkas', 'psikologi_uang_6_1.json')
+              .having((e) => e.kolom, 'kolom', 'misi.instruksi'),
+        ),
       );
     });
 
     // 19. Misi Refleksi: minimalKarakter < 5 ditolak
-    test('19. Kasus Rusak: Misi refleksi dengan minimalKarakter < 5 ditolak', () {
-      final data = buatPelajaranDasar(
-        id: 'psikologi_uang_6_1',
-        misi: {
-          'tipe': 'refleksi',
-          'judul': 'Kenali pemicu belanjamu',
-          'instruksi': 'Tulis satu situasi belanjamu.',
-          'pertanyaan': 'Kapan kamu belanja tanpa rencana?',
-          'minimalKarakter': 4,
-        },
-      );
-      expect(
-        () => PembacaKonten.validasiKontenPelajaran(data, namaBerkas: 'psikologi_uang_6_1.json'),
-        throwsA(isA<GalatKonten>()
-            .having((e) => e.berkas, 'berkas', 'psikologi_uang_6_1.json')
-            .having((e) => e.kolom, 'kolom', 'misi.minimalKarakter')),
-      );
-    });
+    test(
+      '19. Kasus Rusak: Misi refleksi dengan minimalKarakter < 5 ditolak',
+      () {
+        final data = buatPelajaranDasar(
+          id: 'psikologi_uang_6_1',
+          misi: {
+            'tipe': 'refleksi',
+            'judul': 'Kenali pemicu belanjamu',
+            'instruksi': 'Tulis satu situasi belanjamu.',
+            'pertanyaan': 'Kapan kamu belanja tanpa rencana?',
+            'minimalKarakter': 4,
+          },
+        );
+        expect(
+          () => PembacaKonten.validasiKontenPelajaran(
+            data,
+            namaBerkas: 'psikologi_uang_6_1.json',
+          ),
+          throwsA(
+            isA<GalatKonten>()
+                .having((e) => e.berkas, 'berkas', 'psikologi_uang_6_1.json')
+                .having((e) => e.kolom, 'kolom', 'misi.minimalKarakter'),
+          ),
+        );
+      },
+    );
 
     // 20. Misi Refleksi: minimalKarakter > 200 ditolak
-    test('20. Kasus Rusak: Misi refleksi dengan minimalKarakter > 200 ditolak', () {
-      final data = buatPelajaranDasar(
-        id: 'psikologi_uang_6_1',
-        misi: {
-          'tipe': 'refleksi',
-          'judul': 'Kenali pemicu belanjamu',
-          'instruksi': 'Tulis satu situasi belanjamu.',
-          'pertanyaan': 'Kapan kamu belanja tanpa rencana?',
-          'minimalKarakter': 201,
-        },
-      );
-      expect(
-        () => PembacaKonten.validasiKontenPelajaran(data, namaBerkas: 'psikologi_uang_6_1.json'),
-        throwsA(isA<GalatKonten>()
-            .having((e) => e.berkas, 'berkas', 'psikologi_uang_6_1.json')
-            .having((e) => e.kolom, 'kolom', 'misi.minimalKarakter')),
-      );
-    });
+    test(
+      '20. Kasus Rusak: Misi refleksi dengan minimalKarakter > 200 ditolak',
+      () {
+        final data = buatPelajaranDasar(
+          id: 'psikologi_uang_6_1',
+          misi: {
+            'tipe': 'refleksi',
+            'judul': 'Kenali pemicu belanjamu',
+            'instruksi': 'Tulis satu situasi belanjamu.',
+            'pertanyaan': 'Kapan kamu belanja tanpa rencana?',
+            'minimalKarakter': 201,
+          },
+        );
+        expect(
+          () => PembacaKonten.validasiKontenPelajaran(
+            data,
+            namaBerkas: 'psikologi_uang_6_1.json',
+          ),
+          throwsA(
+            isA<GalatKonten>()
+                .having((e) => e.berkas, 'berkas', 'psikologi_uang_6_1.json')
+                .having((e) => e.kolom, 'kolom', 'misi.minimalKarakter'),
+          ),
+        );
+      },
+    );
 
     // 21. Misi Refleksi: minimalKarakter bukan integer ditolak
-    test('21. Kasus Rusak: Misi refleksi dengan minimalKarakter bukan integer ditolak', () {
-      final data = buatPelajaranDasar(
-        id: 'psikologi_uang_6_1',
-        misi: {
-          'tipe': 'refleksi',
-          'judul': 'Kenali pemicu belanjamu',
-          'instruksi': 'Tulis satu situasi belanjamu.',
-          'pertanyaan': 'Kapan kamu belanja tanpa rencana?',
-          'minimalKarakter': 'sepuluh',
-        },
-      );
-      expect(
-        () => PembacaKonten.validasiKontenPelajaran(data, namaBerkas: 'psikologi_uang_6_1.json'),
-        throwsA(isA<GalatKonten>()
-            .having((e) => e.berkas, 'berkas', 'psikologi_uang_6_1.json')
-            .having((e) => e.kolom, 'kolom', 'misi.minimalKarakter')),
-      );
-    });
+    test(
+      '21. Kasus Rusak: Misi refleksi dengan minimalKarakter bukan integer ditolak',
+      () {
+        final data = buatPelajaranDasar(
+          id: 'psikologi_uang_6_1',
+          misi: {
+            'tipe': 'refleksi',
+            'judul': 'Kenali pemicu belanjamu',
+            'instruksi': 'Tulis satu situasi belanjamu.',
+            'pertanyaan': 'Kapan kamu belanja tanpa rencana?',
+            'minimalKarakter': 'sepuluh',
+          },
+        );
+        expect(
+          () => PembacaKonten.validasiKontenPelajaran(
+            data,
+            namaBerkas: 'psikologi_uang_6_1.json',
+          ),
+          throwsA(
+            isA<GalatKonten>()
+                .having((e) => e.berkas, 'berkas', 'psikologi_uang_6_1.json')
+                .having((e) => e.kolom, 'kolom', 'misi.minimalKarakter'),
+          ),
+        );
+      },
+    );
 
     // 22. Umpan Balik: Kunci umpan balik tidak dikenal ditolak
     test('22. Kasus Rusak: Kunci umpan balik tidak terdaftar ditolak', () {
@@ -1954,57 +3003,89 @@ void main() {
         },
       );
       expect(
-        () => PembacaKonten.validasiKontenPelajaran(data, namaBerkas: 'psikologi_uang_6_2.json'),
-        throwsA(isA<GalatKonten>()
-            .having((e) => e.berkas, 'berkas', 'psikologi_uang_6_2.json')
-            .having((e) => e.kolom, 'kolom', 'misi.umpanBalik')),
+        () => PembacaKonten.validasiKontenPelajaran(
+          data,
+          namaBerkas: 'psikologi_uang_6_2.json',
+        ),
+        throwsA(
+          isA<GalatKonten>()
+              .having((e) => e.berkas, 'berkas', 'psikologi_uang_6_2.json')
+              .having((e) => e.kolom, 'kolom', 'misi.umpanBalik'),
+        ),
       );
     });
 
     // 23. Tipe misi komitmen tetap ditolak
-    test('23. Kasus Rusak: Jenis misi komitmen tetap ditolak pada Tahap 8D', () {
-      final data = buatPelajaranDasar(
-        id: 'psikologi_uang_6_1',
-        misi: {
-          'tipe': 'komitmen',
-          'judul': 'Komitmen Finansial',
-          'instruksi': 'Tulis komitmenmu.',
-        },
-      );
-      expect(
-        () => PembacaKonten.validasiKontenPelajaran(data, namaBerkas: 'psikologi_uang_6_1.json'),
-        throwsA(isA<GalatKonten>()
-            .having((e) => e.berkas, 'berkas', 'psikologi_uang_6_1.json')
-            .having((e) => e.kolom, 'kolom', 'misi.tipe')),
-      );
-    });
+    test(
+      '23. Kasus Rusak: Jenis misi komitmen tetap ditolak pada Tahap 8D',
+      () {
+        final data = buatPelajaranDasar(
+          id: 'psikologi_uang_6_1',
+          misi: {
+            'tipe': 'komitmen',
+            'judul': 'Komitmen Finansial',
+            'instruksi': 'Tulis komitmenmu.',
+          },
+        );
+        expect(
+          () => PembacaKonten.validasiKontenPelajaran(
+            data,
+            namaBerkas: 'psikologi_uang_6_1.json',
+          ),
+          throwsA(
+            isA<GalatKonten>()
+                .having((e) => e.berkas, 'berkas', 'psikologi_uang_6_1.json')
+                .having((e) => e.kolom, 'kolom', 'misi.tipe'),
+          ),
+        );
+      },
+    );
 
     // 24. Validasi Sukses: Pelajaran dengan misi refleksi dan umpan balik baru lolos
-    test('24. Validasi Sukses: Misi refleksi valid dan kunci umpan balik ringkasan_langganan_dan_keinginan diterima', () {
-      final dataRefleksi = buatPelajaranDasar(
-        id: 'psikologi_uang_6_1',
-        misi: {
-          'tipe': 'refleksi',
-          'judul': 'Kenali pemicu belanjamu',
-          'instruksi': 'Tulis satu situasi atau perasaan yang paling sering membuatmu belanja tanpa rencana. Catatan ini privat di HP-mu.',
-          'pertanyaan': 'Kapan atau dalam keadaan apa kamu paling sering membeli sesuatu tanpa rencana?',
-          'petunjukInput': 'Contoh: Saat capek pulang kuliah dan buka aplikasi belanja malam-malam.',
-          'minimalKarakter': 10,
-        },
-      );
-      expect(() => PembacaKonten.validasiKontenPelajaran(dataRefleksi, namaBerkas: 'psikologi_uang_6_1.json'), returnsNormally);
+    test(
+      '24. Validasi Sukses: Misi refleksi valid dan kunci umpan balik ringkasan_langganan_dan_keinginan diterima',
+      () {
+        final dataRefleksi = buatPelajaranDasar(
+          id: 'psikologi_uang_6_1',
+          misi: {
+            'tipe': 'refleksi',
+            'judul': 'Kenali pemicu belanjamu',
+            'instruksi':
+                'Tulis satu situasi atau perasaan yang paling sering membuatmu belanja tanpa rencana. Catatan ini privat di HP-mu.',
+            'pertanyaan':
+                'Kapan atau dalam keadaan apa kamu paling sering membeli sesuatu tanpa rencana?',
+            'petunjukInput':
+                'Contoh: Saat capek pulang kuliah dan buka aplikasi belanja malam-malam.',
+            'minimalKarakter': 10,
+          },
+        );
+        expect(
+          () => PembacaKonten.validasiKontenPelajaran(
+            dataRefleksi,
+            namaBerkas: 'psikologi_uang_6_1.json',
+          ),
+          returnsNormally,
+        );
 
-      final dataHitungan = buatPelajaranDasar(
-        id: 'psikologi_uang_6_2',
-        misi: {
-          'tipe': 'lihat_hitungan',
-          'judul': 'Lihat langganan dan keinginanmu',
-          'instruksi': 'Buka ringkasan langganan aktif dan pengeluaran keinginan bulan ini, baca isinya, lalu tekan Mengerti.',
-          'umpanBalik': 'ringkasan_langganan_dan_keinginan',
-        },
-      );
-      expect(() => PembacaKonten.validasiKontenPelajaran(dataHitungan, namaBerkas: 'psikologi_uang_6_2.json'), returnsNormally);
-    });
+        final dataHitungan = buatPelajaranDasar(
+          id: 'psikologi_uang_6_2',
+          misi: {
+            'tipe': 'lihat_hitungan',
+            'judul': 'Lihat langganan dan keinginanmu',
+            'instruksi':
+                'Buka ringkasan langganan aktif dan pengeluaran keinginan bulan ini, baca isinya, lalu tekan Mengerti.',
+            'umpanBalik': 'ringkasan_langganan_dan_keinginan',
+          },
+        );
+        expect(
+          () => PembacaKonten.validasiKontenPelajaran(
+            dataHitungan,
+            namaBerkas: 'psikologi_uang_6_2.json',
+          ),
+          returnsNormally,
+        );
+      },
+    );
 
     // 25. Validasi Misi Sandbox (Tahap 9A)
     test('25.1. Misi sandbox valid lolos validasi', () {
@@ -2013,12 +3094,19 @@ void main() {
         misi: {
           'tipe': 'sandbox',
           'judul': 'Coba Mode Sandbox investasi',
-          'instruksi': 'Buka Mode Sandbox, atur alokasi portofolio sesukamu, lalu majukan simulasi minimal 1 tahun untuk melihat hasilnya.',
+          'instruksi':
+              'Buka Mode Sandbox, atur alokasi portofolio sesukamu, lalu majukan simulasi minimal 1 tahun untuk melihat hasilnya.',
           'disclaimer': true,
           'minimalSimulasi': 1,
         },
       );
-      expect(() => PembacaKonten.validasiKontenPelajaran(data, namaBerkas: 'investasi_dasar_11_3.json'), returnsNormally);
+      expect(
+        () => PembacaKonten.validasiKontenPelajaran(
+          data,
+          namaBerkas: 'investasi_dasar_11_3.json',
+        ),
+        returnsNormally,
+      );
     });
 
     test('25.2. Misi sandbox tanpa disclaimer: true ditolak', () {
@@ -2032,10 +3120,15 @@ void main() {
         },
       );
       expect(
-        () => PembacaKonten.validasiKontenPelajaran(data, namaBerkas: 'investasi_dasar_11_3.json'),
-        throwsA(isA<GalatKonten>()
-            .having((e) => e.berkas, 'berkas', 'investasi_dasar_11_3.json')
-            .having((e) => e.kolom, 'kolom', 'misi.disclaimer')),
+        () => PembacaKonten.validasiKontenPelajaran(
+          data,
+          namaBerkas: 'investasi_dasar_11_3.json',
+        ),
+        throwsA(
+          isA<GalatKonten>()
+              .having((e) => e.berkas, 'berkas', 'investasi_dasar_11_3.json')
+              .having((e) => e.kolom, 'kolom', 'misi.disclaimer'),
+        ),
       );
 
       final dataFalse = buatPelajaranDasar(
@@ -2049,10 +3142,15 @@ void main() {
         },
       );
       expect(
-        () => PembacaKonten.validasiKontenPelajaran(dataFalse, namaBerkas: 'investasi_dasar_11_3.json'),
-        throwsA(isA<GalatKonten>()
-            .having((e) => e.berkas, 'berkas', 'investasi_dasar_11_3.json')
-            .having((e) => e.kolom, 'kolom', 'misi.disclaimer')),
+        () => PembacaKonten.validasiKontenPelajaran(
+          dataFalse,
+          namaBerkas: 'investasi_dasar_11_3.json',
+        ),
+        throwsA(
+          isA<GalatKonten>()
+              .having((e) => e.berkas, 'berkas', 'investasi_dasar_11_3.json')
+              .having((e) => e.kolom, 'kolom', 'misi.disclaimer'),
+        ),
       );
     });
 
@@ -2068,10 +3166,15 @@ void main() {
         },
       );
       expect(
-        () => PembacaKonten.validasiKontenPelajaran(data, namaBerkas: 'investasi_dasar_11_3.json'),
-        throwsA(isA<GalatKonten>()
-            .having((e) => e.berkas, 'berkas', 'investasi_dasar_11_3.json')
-            .having((e) => e.kolom, 'kolom', 'misi.minimalSimulasi')),
+        () => PembacaKonten.validasiKontenPelajaran(
+          data,
+          namaBerkas: 'investasi_dasar_11_3.json',
+        ),
+        throwsA(
+          isA<GalatKonten>()
+              .having((e) => e.berkas, 'berkas', 'investasi_dasar_11_3.json')
+              .having((e) => e.kolom, 'kolom', 'misi.minimalSimulasi'),
+        ),
       );
     });
 
@@ -2086,42 +3189,67 @@ void main() {
         },
       );
       expect(
-        () => PembacaKonten.validasiKontenPelajaran(data, namaBerkas: 'investasi_dasar_11_3.json'),
-        throwsA(isA<GalatKonten>()
-            .having((e) => e.berkas, 'berkas', 'investasi_dasar_11_3.json')
-            .having((e) => e.kolom, 'kolom', 'misi.instruksi')),
+        () => PembacaKonten.validasiKontenPelajaran(
+          data,
+          namaBerkas: 'investasi_dasar_11_3.json',
+        ),
+        throwsA(
+          isA<GalatKonten>()
+              .having((e) => e.berkas, 'berkas', 'investasi_dasar_11_3.json')
+              .having((e) => e.kolom, 'kolom', 'misi.instruksi'),
+        ),
       );
     });
 
-    test('25.5. Misi sandbox dikecualikan dari perbandingan misi vs gerbang', () {
-      final data = buatPelajaranDasar(
-        id: 'investasi_dasar_11_3',
-        gerbang: [
-          {'tipe': 'ada_data', 'objek': 'transaksi', 'min': 5},
-        ],
-        misi: {
-          'tipe': 'sandbox',
-          'judul': 'Coba Mode Sandbox investasi',
-          'instruksi': 'Buka Mode Sandbox, atur alokasi, jalankan minimal 1 simulasi.',
-          'disclaimer': true,
-          'minimalSimulasi': 1,
-        },
-      );
-      expect(() => PembacaKonten.validasiKontenPelajaran(data, namaBerkas: 'investasi_dasar_11_3.json'), returnsNormally);
-    });
+    test(
+      '25.5. Misi sandbox dikecualikan dari perbandingan misi vs gerbang',
+      () {
+        final data = buatPelajaranDasar(
+          id: 'investasi_dasar_11_3',
+          gerbang: [
+            {'tipe': 'ada_data', 'objek': 'transaksi', 'min': 5},
+          ],
+          misi: {
+            'tipe': 'sandbox',
+            'judul': 'Coba Mode Sandbox investasi',
+            'instruksi':
+                'Buka Mode Sandbox, atur alokasi, jalankan minimal 1 simulasi.',
+            'disclaimer': true,
+            'minimalSimulasi': 1,
+          },
+        );
+        expect(
+          () => PembacaKonten.validasiKontenPelajaran(
+            data,
+            namaBerkas: 'investasi_dasar_11_3.json',
+          ),
+          returnsNormally,
+        );
+      },
+    );
 
     // 26. Validasi Kunci Umpan Balik ringkasan_proteksi_dasar (Tahap 9B)
-    test('26. Validasi Sukses: Misi lihat_hitungan dengan kunci ringkasan_proteksi_dasar lolos validasi', () {
-      final data = buatPelajaranDasar(
-        id: 'proteksi_dasar_10_3',
-        misi: {
-          'tipe': 'lihat_hitungan',
-          'judul': 'Lihat gambaran beban wajib dan dana daruratmu',
-          'instruksi': 'Buka ringkasan pengeluaran wajib dan dana daruratmu saat ini, baca isinya, lalu tekan Mengerti.',
-          'umpanBalik': 'ringkasan_proteksi_dasar',
-        },
-      );
-      expect(() => PembacaKonten.validasiKontenPelajaran(data, namaBerkas: 'proteksi_dasar_10_3.json'), returnsNormally);
-    });
+    test(
+      '26. Validasi Sukses: Misi lihat_hitungan dengan kunci ringkasan_proteksi_dasar lolos validasi',
+      () {
+        final data = buatPelajaranDasar(
+          id: 'proteksi_dasar_10_3',
+          misi: {
+            'tipe': 'lihat_hitungan',
+            'judul': 'Lihat gambaran beban wajib dan dana daruratmu',
+            'instruksi':
+                'Buka ringkasan pengeluaran wajib dan dana daruratmu saat ini, baca isinya, lalu tekan Mengerti.',
+            'umpanBalik': 'ringkasan_proteksi_dasar',
+          },
+        );
+        expect(
+          () => PembacaKonten.validasiKontenPelajaran(
+            data,
+            namaBerkas: 'proteksi_dasar_10_3.json',
+          ),
+          returnsNormally,
+        );
+      },
+    );
   });
 }

@@ -38,6 +38,14 @@ abstract final class WarnaFunda {
   static const tintAmber = Color(0xFFFEF3E2);
   static const tintNetral = Color(0xFFF1F5F4);
   static const tintMawar = Color(0xFFFCE7F3);
+
+  // Utilitas & Kartu Khusus
+  static const transparan = Colors.transparent;
+  static const hitam = Color(0xFF000000);
+  static const bayangan = Color(0x0A000000);
+  static const tintLaporan = Color(0xFFEBF6FA);
+  static const garisLaporan = Color(0xFFC7E5F0);
+  static const teksLaporan = Color(0xFF006684);
 }
 
 /// Token spasi Funda berbasis grid 4dp.

@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
@@ -51,7 +52,9 @@ class _LayarCadanganState extends ConsumerState<LayarCadangan> {
         ),
       );
     } catch (e, s) {
-      debugPrint('GALAT DI _BUATCADANGAN: $e\n$s');
+      if (kDebugMode) {
+        debugPrint('GALAT DI _BUATCADANGAN: $e\n$s');
+      }
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -74,9 +77,14 @@ class _LayarCadanganState extends ConsumerState<LayarCadangan> {
     try {
       final validasi = await repo.validasiDanBuatPratinjau(jsonStr);
       if (!mounted) return;
-      await _tampilkanDialogPratinjauPemulihan(validasi.dokumen, validasi.pratinjau);
+      await _tampilkanDialogPratinjauPemulihan(
+        validasi.dokumen,
+        validasi.pratinjau,
+      );
     } catch (e, s) {
-      debugPrint('GALAT DI _BUATCADANGAN: $e\n$s');
+      if (kDebugMode) {
+        debugPrint('GALAT DI _BUATCADANGAN: $e\n$s');
+      }
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -94,34 +102,70 @@ class _LayarCadanganState extends ConsumerState<LayarCadangan> {
     final konfirmasiPertama = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Pratinjau Data Cadangan', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+        title: const Text(
+          'Pratinjau Data Cadangan',
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+        ),
         content: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text('Dibuat pada: ${formatBulanTahunIndonesia(pratinjau.dibuatPada)} (${pratinjau.dibuatPada.day} ${_namaBulan(pratinjau.dibuatPada.month)} ${pratinjau.dibuatPada.year})', style: const TextStyle(fontSize: 12)),
-              Text('Versi Aplikasi: ${pratinjau.versiAplikasi} (Skema ${pratinjau.versiSkema})', style: const TextStyle(fontSize: 12)),
+              Text(
+                'Dibuat pada: ${formatBulanTahunIndonesia(pratinjau.dibuatPada)} (${pratinjau.dibuatPada.day} ${_namaBulan(pratinjau.dibuatPada.month)} ${pratinjau.dibuatPada.year})',
+                style: const TextStyle(fontSize: 12),
+              ),
+              Text(
+                'Versi Aplikasi: ${pratinjau.versiAplikasi} (Skema ${pratinjau.versiSkema})',
+                style: const TextStyle(fontSize: 12),
+              ),
               const Divider(height: 16),
-              const Text('Rincian Data Tersimpan:', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
+              const Text(
+                'Rincian Data Tersimpan:',
+                style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+              ),
               const SizedBox(height: 4),
-              Text('• Dompet: ${pratinjau.jumlahDompet}', style: const TextStyle(fontSize: 12)),
-              Text('• Transaksi: ${pratinjau.jumlahTransaksi}', style: const TextStyle(fontSize: 12)),
-              Text('• Pos Anggaran: ${pratinjau.jumlahAnggaran}', style: const TextStyle(fontSize: 12)),
-              Text('• Tujuan Keuangan: ${pratinjau.jumlahTujuan}', style: const TextStyle(fontSize: 12)),
-              Text('• Utang & Cicilan: ${pratinjau.jumlahUtang}', style: const TextStyle(fontSize: 12)),
-              Text('• Jadwal Tagihan: ${pratinjau.jumlahTagihan}', style: const TextStyle(fontSize: 12)),
+              Text(
+                '• Dompet: ${pratinjau.jumlahDompet}',
+                style: const TextStyle(fontSize: 12),
+              ),
+              Text(
+                '• Transaksi: ${pratinjau.jumlahTransaksi}',
+                style: const TextStyle(fontSize: 12),
+              ),
+              Text(
+                '• Pos Anggaran: ${pratinjau.jumlahAnggaran}',
+                style: const TextStyle(fontSize: 12),
+              ),
+              Text(
+                '• Tujuan Keuangan: ${pratinjau.jumlahTujuan}',
+                style: const TextStyle(fontSize: 12),
+              ),
+              Text(
+                '• Utang & Cicilan: ${pratinjau.jumlahUtang}',
+                style: const TextStyle(fontSize: 12),
+              ),
+              Text(
+                '• Jadwal Tagihan: ${pratinjau.jumlahTagihan}',
+                style: const TextStyle(fontSize: 12),
+              ),
               const SizedBox(height: 12),
               Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
                   color: WarnaFunda.bahaya.withValues(alpha: 0.08),
                   borderRadius: BorderRadius.circular(8),
-                  border: Border.all(color: WarnaFunda.bahaya.withValues(alpha: 0.3)),
+                  border: Border.all(
+                    color: WarnaFunda.bahaya.withValues(alpha: 0.3),
+                  ),
                 ),
                 child: const Text(
                   'Peringatan: Memulihkan cadangan akan MENGGANTI semua data yang ada sekarang.',
-                  style: TextStyle(fontSize: 11, color: WarnaFunda.bahaya, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                    fontSize: 11,
+                    color: WarnaFunda.bahaya,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
             ],
@@ -135,7 +179,10 @@ class _LayarCadanganState extends ConsumerState<LayarCadangan> {
           ElevatedButton(
             style: ElevatedButton.styleFrom(backgroundColor: WarnaFunda.bahaya),
             onPressed: () => Navigator.pop(ctx, true),
-            child: const Text('Lanjut Pulihkan', style: TextStyle(color: Colors.white)),
+            child: const Text(
+              'Lanjut Pulihkan',
+              style: TextStyle(color: WarnaFunda.putih),
+            ),
           ),
         ],
       ),
@@ -147,7 +194,10 @@ class _LayarCadanganState extends ConsumerState<LayarCadangan> {
     final konfirmasiKedua = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Konfirmasi Penggantian Data', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+        title: const Text(
+          'Konfirmasi Penggantian Data',
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+        ),
         content: const Text(
           'Yakin ingin menimpa seluruh data saat ini? Data lama akan disimpan otomatis di cadangan keselamatan.',
           style: TextStyle(fontSize: 13),
@@ -160,7 +210,10 @@ class _LayarCadanganState extends ConsumerState<LayarCadangan> {
           ElevatedButton(
             style: ElevatedButton.styleFrom(backgroundColor: WarnaFunda.bahaya),
             onPressed: () => Navigator.pop(ctx, true),
-            child: const Text('Ya, Pulihkan Sekarang', style: TextStyle(color: Colors.white)),
+            child: const Text(
+              'Ya, Pulihkan Sekarang',
+              style: TextStyle(color: WarnaFunda.putih),
+            ),
           ),
         ],
       ),
@@ -184,7 +237,9 @@ class _LayarCadanganState extends ConsumerState<LayarCadangan> {
         ),
       );
     } catch (e, s) {
-      debugPrint('GALAT DI _BUATCADANGAN: $e\n$s');
+      if (kDebugMode) {
+        debugPrint('GALAT DI _BUATCADANGAN: $e\n$s');
+      }
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -201,7 +256,10 @@ class _LayarCadanganState extends ConsumerState<LayarCadangan> {
     final konfirmasi = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Kembalikan Data Sebelumnya?', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+        title: const Text(
+          'Kembalikan Data Sebelumnya?',
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+        ),
         content: const Text(
           'Aplikasi akan memulihkan data yang tersimpan sesaat sebelum pemulihan terakhir kali dijalankan.',
           style: TextStyle(fontSize: 13),
@@ -230,12 +288,16 @@ class _LayarCadanganState extends ConsumerState<LayarCadangan> {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Data sebelum pemulihan terakhir berhasil dikembalikan.'),
+          content: Text(
+            'Data sebelum pemulihan terakhir berhasil dikembalikan.',
+          ),
           behavior: SnackBarBehavior.floating,
         ),
       );
     } catch (e, s) {
-      debugPrint('GALAT DI _BUATCADANGAN: $e\n$s');
+      if (kDebugMode) {
+        debugPrint('GALAT DI _BUATCADANGAN: $e\n$s');
+      }
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -249,7 +311,21 @@ class _LayarCadanganState extends ConsumerState<LayarCadangan> {
   }
 
   static String _namaBulan(int b) {
-    const bulan = ['', 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+    const bulan = [
+      '',
+      'Januari',
+      'Februari',
+      'Maret',
+      'April',
+      'Mei',
+      'Juni',
+      'Juli',
+      'Agustus',
+      'September',
+      'Oktober',
+      'November',
+      'Desember',
+    ];
     return bulan[b];
   }
 
@@ -260,7 +336,10 @@ class _LayarCadanganState extends ConsumerState<LayarCadangan> {
     return Scaffold(
       backgroundColor: WarnaFunda.latar,
       appBar: AppBar(
-        title: const Text('Cadangan & Pemulihan', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+        title: const Text(
+          'Cadangan & Pemulihan',
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+        ),
         backgroundColor: WarnaFunda.latar,
         elevation: 0,
         foregroundColor: WarnaFunda.teks,
@@ -291,12 +370,18 @@ class _LayarCadanganState extends ConsumerState<LayarCadangan> {
                       Container(
                         padding: const EdgeInsets.all(10),
                         decoration: BoxDecoration(
-                          color: status.terakhirDicadangkan != null ? WarnaFunda.sukses.withValues(alpha: 0.12) : WarnaFunda.garis,
+                          color: status.terakhirDicadangkan != null
+                              ? WarnaFunda.sukses.withValues(alpha: 0.12)
+                              : WarnaFunda.garis,
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: Icon(
-                          status.terakhirDicadangkan != null ? LucideIcons.checkCircle2 : LucideIcons.clock,
-                          color: status.terakhirDicadangkan != null ? WarnaFunda.sukses : WarnaFunda.teksRedup,
+                          status.terakhirDicadangkan != null
+                              ? LucideIcons.checkCircle2
+                              : LucideIcons.clock,
+                          color: status.terakhirDicadangkan != null
+                              ? WarnaFunda.sukses
+                              : WarnaFunda.teksRedup,
                           size: 24,
                         ),
                       ),
@@ -305,11 +390,21 @@ class _LayarCadanganState extends ConsumerState<LayarCadangan> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text('Status Cadangan Data', style: TextStyle(fontSize: 12, color: WarnaFunda.teksRedup)),
+                            const Text(
+                              'Status Cadangan Data',
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: WarnaFunda.teksRedup,
+                              ),
+                            ),
                             const SizedBox(height: 3),
                             Text(
                               teksStatus,
-                              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: WarnaFunda.teks),
+                              style: const TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                                color: WarnaFunda.teks,
+                              ),
                             ),
                           ],
                         ),
@@ -343,7 +438,9 @@ class _LayarCadanganState extends ConsumerState<LayarCadangan> {
                     teks: 'Kembalikan Data Sebelum Pemulihan Terakhir',
                     ikon: const Icon(LucideIcons.undo2, size: 18),
                     memuat: _sedangMemproses,
-                    padaTekan: _sedangMemproses ? null : _kembalikanSebelumPemulihan,
+                    padaTekan: _sedangMemproses
+                        ? null
+                        : _kembalikanSebelumPemulihan,
                     lebarPenuh: true,
                   ),
                 ],
@@ -360,12 +457,20 @@ class _LayarCadanganState extends ConsumerState<LayarCadangan> {
                   child: const Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Icon(LucideIcons.shieldAlert, size: 20, color: WarnaFunda.teksRedup),
+                      Icon(
+                        LucideIcons.shieldAlert,
+                        size: 20,
+                        color: WarnaFunda.teksRedup,
+                      ),
                       SizedBox(width: 12),
                       Expanded(
                         child: Text(
                           'Berkas cadangan berisi seluruh data keuanganmu dan tidak dienkripsi. Simpan hanya di tempat yang aman.',
-                          style: TextStyle(fontSize: 11.5, color: WarnaFunda.teksRedup, height: 1.4),
+                          style: TextStyle(
+                            fontSize: 11.5,
+                            color: WarnaFunda.teksRedup,
+                            height: 1.4,
+                          ),
                         ),
                       ),
                     ],

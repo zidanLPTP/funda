@@ -23,7 +23,10 @@ void main() {
   setUp(() async {
     tempDir = await Directory.systemTemp.createTemp('funda_bench_');
     basisData = BasisDataFunda(NativeDatabase.memory());
-    cadanganRepo = CadanganRepositori(basisData, direktoriPenyimpananUji: tempDir);
+    cadanganRepo = CadanganRepositori(
+      basisData,
+      direktoriPenyimpananUji: tempDir,
+    );
     transaksiRepo = TransaksiRepositori(basisData);
   });
 
@@ -37,7 +40,9 @@ void main() {
   test('Uji Tolok Ukur Beban Nyata: 20.000 Transaksi, 20 Utang, 20 Tagihan', () async {
     // 1. Seed 3 Dompet
     for (int i = 1; i <= 3; i++) {
-      await basisData.into(basisData.tabelDompet).insert(
+      await basisData
+          .into(basisData.tabelDompet)
+          .insert(
             TabelDompetCompanion.insert(
               id: 'dmp_$i',
               nama: 'Dompet Rekening $i',
@@ -50,7 +55,9 @@ void main() {
     }
 
     // 2. Seed 2 Kategori
-    await basisData.into(basisData.tabelKategori).insert(
+    await basisData
+        .into(basisData.tabelKategori)
+        .insert(
           TabelKategoriCompanion.insert(
             id: 'kat_makan',
             nama: 'Makan & Minum',
@@ -59,7 +66,9 @@ void main() {
             ikon: 'utensils',
           ),
         );
-    await basisData.into(basisData.tabelKategori).insert(
+    await basisData
+        .into(basisData.tabelKategori)
+        .insert(
           TabelKategoriCompanion.insert(
             id: 'kat_gaji',
             nama: 'Gaji Pokok',
@@ -71,7 +80,9 @@ void main() {
 
     // 3. Seed 20 Utang
     for (int i = 1; i <= 20; i++) {
-      await basisData.into(basisData.tabelUtang).insert(
+      await basisData
+          .into(basisData.tabelUtang)
+          .insert(
             TabelUtangCompanion.insert(
               id: 'utg_$i',
               nama: 'Utang Elektronik $i',
@@ -89,7 +100,9 @@ void main() {
 
     // 4. Seed 20 Tagihan
     for (int i = 1; i <= 20; i++) {
-      await basisData.into(basisData.tabelTagihan).insert(
+      await basisData
+          .into(basisData.tabelTagihan)
+          .insert(
             TabelTagihanCompanion.insert(
               id: 'tgh_$i',
               nama: 'Tagihan Rutin $i',
@@ -128,7 +141,9 @@ void main() {
       batch.insertAll(basisData.tabelTransaksi, daftarTx);
     });
 
-    final totalTx = await basisData.customSelect('SELECT COUNT(*) AS total FROM tabel_transaksi;').getSingle();
+    final totalTx = await basisData
+        .customSelect('SELECT COUNT(*) AS total FROM tabel_transaksi;')
+        .getSingle();
     expect(totalTx.read<int>('total'), equals(20000));
 
     // A. UKUR EKSPOR CADANGAN
@@ -141,16 +156,23 @@ void main() {
     final ukuranJsonMB = ukuranJsonKB / 1024.0;
 
     // ignore: avoid_print
-    print('=== TOLOK UKUR CADANGAN DATA (20.000 TRANSAKSI + 20 UTANG + 20 TAGIHAN) ===');
+    print(
+      '=== TOLOK UKUR CADANGAN DATA (20.000 TRANSAKSI + 20 UTANG + 20 TAGIHAN) ===',
+    );
     // ignore: avoid_print
     print('Waktu Ekspor Cadangan: ${waktuEksporMs}ms');
     // ignore: avoid_print
-    print('Ukuran Berkas Cadangan: $ukuranJsonBytes bytes (${ukuranJsonKB.toStringAsFixed(1)} KB / ${ukuranJsonMB.toStringAsFixed(2)} MB)');
+    print(
+      'Ukuran Berkas Cadangan: $ukuranJsonBytes bytes (${ukuranJsonKB.toStringAsFixed(1)} KB / ${ukuranJsonMB.toStringAsFixed(2)} MB)',
+    );
 
     // B. UKUR PEMULIHAN CADANGAN
     final validasi = await cadanganRepo.validasiDanBuatPratinjau(jsonCadangan);
     final swPulih = Stopwatch()..start();
-    await cadanganRepo.pulihkanCadangan(validasi.dokumen, simpanKeselamatanOtomatis: false);
+    await cadanganRepo.pulihkanCadangan(
+      validasi.dokumen,
+      simpanKeselamatanOtomatis: false,
+    );
     swPulih.stop();
     final waktuPulihMs = swPulih.elapsedMilliseconds;
 
@@ -158,7 +180,9 @@ void main() {
     print('Waktu Pemulihan Cadangan: ${waktuPulihMs}ms');
 
     // Verifikasi data setelah pulih
-    final totalTxSetelahPulih = await basisData.customSelect('SELECT COUNT(*) AS total FROM tabel_transaksi;').getSingle();
+    final totalTxSetelahPulih = await basisData
+        .customSelect('SELECT COUNT(*) AS total FROM tabel_transaksi;')
+        .getSingle();
     expect(totalTxSetelahPulih.read<int>('total'), equals(20000));
 
     // C. UKUR PERFORMA BUKA / PENYUSUNAN LAPORAN BULANAN (Warm-up + 10 Iterasi)
@@ -168,7 +192,10 @@ void main() {
     final kontenLaporan = PembacaKonten.uraiLaporan(jsonKonten);
 
     Future<LaporanBulanan> jalankanKueriLaporan() async {
-      final arusKas = await transaksiRepo.hitungArusKasSQL(mulai: awalBulan, selesai: akhirBulan);
+      final arusKas = await transaksiRepo.hitungArusKasSQL(
+        mulai: awalBulan,
+        selesai: akhirBulan,
+      );
 
       const sqlKomposisi = '''
         SELECT 
@@ -180,13 +207,15 @@ void main() {
         WHERE t.waktu_transaksi >= ? AND t.waktu_transaksi <= ? AND t.jenis = 'keluar'
         GROUP BY COALESCE(k.sifat, 'belum_dilabeli'), COALESCE(k.nama, 'Tanpa Kategori');
       ''';
-      final rowsKomposisi = await basisData.customSelect(
-        sqlKomposisi,
-        variables: [
-          drift.Variable.withDateTime(awalBulan),
-          drift.Variable.withDateTime(akhirBulan),
-        ],
-      ).get();
+      final rowsKomposisi = await basisData
+          .customSelect(
+            sqlKomposisi,
+            variables: [
+              drift.Variable.withDateTime(awalBulan),
+              drift.Variable.withDateTime(akhirBulan),
+            ],
+          )
+          .get();
 
       final perSifat = <String, int>{
         'kebutuhan': 0,
@@ -199,11 +228,15 @@ void main() {
       for (final r in rowsKomposisi) {
         final sifat = r.read<String>('sifat');
         final total = r.read<int>('total');
-        final sifatNormal = perSifat.containsKey(sifat) ? sifat : 'belum_dilabeli';
+        final sifatNormal = perSifat.containsKey(sifat)
+            ? sifat
+            : 'belum_dilabeli';
         perSifat[sifatNormal] = (perSifat[sifatNormal] ?? 0) + total;
       }
 
-      final dompetAktif = await (basisData.select(basisData.tabelDompet)..where((t) => t.diarsipkan.equals(false))).get();
+      final dompetAktif = await (basisData.select(
+        basisData.tabelDompet,
+      )..where((t) => t.diarsipkan.equals(false))).get();
       var totalSaldoDompet = 0;
       for (final d in dompetAktif) {
         totalSaldoDompet += await transaksiRepo.hitungSaldoDompetSQL(
@@ -240,25 +273,34 @@ void main() {
       durasiList.add(sw.elapsedMilliseconds);
     }
 
-    final rataRataKueriMs = durasiList.reduce((a, b) => a + b) / durasiList.length;
+    final rataRataKueriMs =
+        durasiList.reduce((a, b) => a + b) / durasiList.length;
     // ignore: avoid_print
     print('=== TOLOK UKUR WAKTU SUSUN LAPORAN (20.000 TRANSAKSI) ===');
     // ignore: avoid_print
     print('Waktu Susun Laporan (10 iterasi): $durasiList');
     // ignore: avoid_print
-    print('Rata-rata Waktu Susun Laporan: ${rataRataKueriMs.toStringAsFixed(1)}ms');
+    print(
+      'Rata-rata Waktu Susun Laporan: ${rataRataKueriMs.toStringAsFixed(1)}ms',
+    );
 
     // D. UKUR EKSPOR PDF
     final pembuatPdf = await PembuatPdfLaporan.muatDariAset();
     final swPdf = Stopwatch()..start();
-    final bytesPdf = await pembuatPdf.buatPdf(laporan: laporanContoh, konten: kontenLaporan, sensor: false);
+    final bytesPdf = await pembuatPdf.buatPdf(
+      laporan: laporanContoh,
+      konten: kontenLaporan,
+      sensor: false,
+    );
     swPdf.stop();
     final waktuPdfMs = swPdf.elapsedMilliseconds;
 
     // ignore: avoid_print
     print('=== TOLOK UKUR EKSPOR DOKUMEN LAPORAN ===');
     // ignore: avoid_print
-    print('Waktu Render PDF: ${waktuPdfMs}ms (Ukuran: ${bytesPdf.length} bytes / ${(bytesPdf.length / 1024).toStringAsFixed(1)} KB)');
+    print(
+      'Waktu Render PDF: ${waktuPdfMs}ms (Ukuran: ${bytesPdf.length} bytes / ${(bytesPdf.length / 1024).toStringAsFixed(1)} KB)',
+    );
 
     expect(waktuEksporMs, lessThan(3000));
     expect(waktuPulihMs, lessThan(3000));
@@ -266,103 +308,116 @@ void main() {
     expect(bytesPdf.isNotEmpty, isTrue);
   });
 
-  test('Uji Kesetaraan Agregasi SQL vs Fungsi Murni Dart pada Komposisi dan Saldo Dompet', () async {
-    final awal = DateTime(2026, 11, 1);
-    final akhir = DateTime(2026, 11, 30, 23, 59, 59, 999);
+  test(
+    'Uji Kesetaraan Agregasi SQL vs Fungsi Murni Dart pada Komposisi dan Saldo Dompet',
+    () async {
+      final awal = DateTime(2026, 11, 1);
+      final akhir = DateTime(2026, 11, 30, 23, 59, 59, 999);
 
-    // Siapkan data dompet, kategori, dan transaksi uji
-    await basisData.into(basisData.tabelDompet).insert(
-          TabelDompetCompanion.insert(
-            id: 'd1',
-            nama: 'Dompet 1',
-            jenis: 'tunai',
-            ikon: 'wallet',
-            warna: '#006C4C',
-            saldoAwalRupiah: const drift.Value(200000),
-          ),
-        );
+      // Siapkan data dompet, kategori, dan transaksi uji
+      await basisData
+          .into(basisData.tabelDompet)
+          .insert(
+            TabelDompetCompanion.insert(
+              id: 'd1',
+              nama: 'Dompet 1',
+              jenis: 'tunai',
+              ikon: 'wallet',
+              warna: '#006C4C',
+              saldoAwalRupiah: const drift.Value(200000),
+            ),
+          );
 
-    await basisData.into(basisData.tabelKategori).insert(
-          TabelKategoriCompanion.insert(
-            id: 'k_butuh',
-            nama: 'Kebutuhan',
-            arus: 'keluar',
-            sifat: 'kebutuhan',
-            ikon: 'coffee',
-          ),
-        );
-    await basisData.into(basisData.tabelKategori).insert(
-          TabelKategoriCompanion.insert(
-            id: 'k_ingin',
-            nama: 'Keinginan',
-            arus: 'keluar',
-            sifat: 'keinginan',
-            ikon: 'gamepad',
-          ),
-        );
+      await basisData
+          .into(basisData.tabelKategori)
+          .insert(
+            TabelKategoriCompanion.insert(
+              id: 'k_butuh',
+              nama: 'Kebutuhan',
+              arus: 'keluar',
+              sifat: 'kebutuhan',
+              ikon: 'coffee',
+            ),
+          );
+      await basisData
+          .into(basisData.tabelKategori)
+          .insert(
+            TabelKategoriCompanion.insert(
+              id: 'k_ingin',
+              nama: 'Keinginan',
+              arus: 'keluar',
+              sifat: 'keinginan',
+              ikon: 'gamepad',
+            ),
+          );
 
-    // 10 transaksi masuk dan keluar
-    await basisData.into(basisData.tabelTransaksi).insert(
-          TabelTransaksiCompanion.insert(
-            id: 't1',
-            dompetId: 'd1',
-            jumlahRupiah: 100000,
-            jenis: 'masuk',
-            waktuTransaksi: DateTime(2026, 11, 5),
-          ),
-        );
-    await basisData.into(basisData.tabelTransaksi).insert(
-          TabelTransaksiCompanion.insert(
-            id: 't2',
-            dompetId: 'd1',
-            kategoriId: const drift.Value('k_butuh'),
-            jumlahRupiah: 40000,
-            jenis: 'keluar',
-            waktuTransaksi: DateTime(2026, 11, 10),
-          ),
-        );
-    await basisData.into(basisData.tabelTransaksi).insert(
-          TabelTransaksiCompanion.insert(
-            id: 't3',
-            dompetId: 'd1',
-            kategoriId: const drift.Value('k_ingin'),
-            jumlahRupiah: 25000,
-            jenis: 'keluar',
-            waktuTransaksi: DateTime(2026, 11, 15),
-          ),
-        );
+      // 10 transaksi masuk dan keluar
+      await basisData
+          .into(basisData.tabelTransaksi)
+          .insert(
+            TabelTransaksiCompanion.insert(
+              id: 't1',
+              dompetId: 'd1',
+              jumlahRupiah: 100000,
+              jenis: 'masuk',
+              waktuTransaksi: DateTime(2026, 11, 5),
+            ),
+          );
+      await basisData
+          .into(basisData.tabelTransaksi)
+          .insert(
+            TabelTransaksiCompanion.insert(
+              id: 't2',
+              dompetId: 'd1',
+              kategoriId: const drift.Value('k_butuh'),
+              jumlahRupiah: 40000,
+              jenis: 'keluar',
+              waktuTransaksi: DateTime(2026, 11, 10),
+            ),
+          );
+      await basisData
+          .into(basisData.tabelTransaksi)
+          .insert(
+            TabelTransaksiCompanion.insert(
+              id: 't3',
+              dompetId: 'd1',
+              kategoriId: const drift.Value('k_ingin'),
+              jumlahRupiah: 25000,
+              jenis: 'keluar',
+              waktuTransaksi: DateTime(2026, 11, 15),
+            ),
+          );
 
-    // 1. Uji kesetaraan Saldo Dompet: SQL vs Dart
-    final semuaTx = await basisData.select(basisData.tabelTransaksi).get();
-    final saldoDart = hitungSaldoDompet(
-      dompetId: 'd1',
-      saldoAwalRupiah: 200000,
-      daftarTransaksi: semuaTx,
-    );
-    final saldoSql = await transaksiRepo.hitungSaldoDompetSQL(
-      dompetId: 'd1',
-      saldoAwalRupiah: 200000,
-    );
-    expect(saldoSql, equals(saldoDart));
-    expect(saldoSql, equals(200000 + 100000 - 40000 - 25000));
+      // 1. Uji kesetaraan Saldo Dompet: SQL vs Dart
+      final semuaTx = await basisData.select(basisData.tabelTransaksi).get();
+      final saldoDart = hitungSaldoDompet(
+        dompetId: 'd1',
+        saldoAwalRupiah: 200000,
+        daftarTransaksi: semuaTx,
+      );
+      final saldoSql = await transaksiRepo.hitungSaldoDompetSQL(
+        dompetId: 'd1',
+        saldoAwalRupiah: 200000,
+      );
+      expect(saldoSql, equals(saldoDart));
+      expect(saldoSql, equals(200000 + 100000 - 40000 - 25000));
 
-    // 2. Uji kesetaraan Komposisi Per Sifat: SQL vs Dart
-    final perSifatDart = <String, int>{
-      'kebutuhan': 0,
-      'keinginan': 0,
-    };
-    final semuaKat = await basisData.select(basisData.tabelKategori).get();
-    final petaKat = {for (final k in semuaKat) k.id: k};
-    for (final tx in semuaTx) {
-      if (tx.jenis == 'keluar') {
-        final sifat = tx.kategoriId != null ? petaKat[tx.kategoriId]?.sifat : null;
-        if (sifat != null && perSifatDart.containsKey(sifat)) {
-          perSifatDart[sifat] = perSifatDart[sifat]! + tx.jumlahRupiah;
+      // 2. Uji kesetaraan Komposisi Per Sifat: SQL vs Dart
+      final perSifatDart = <String, int>{'kebutuhan': 0, 'keinginan': 0};
+      final semuaKat = await basisData.select(basisData.tabelKategori).get();
+      final petaKat = {for (final k in semuaKat) k.id: k};
+      for (final tx in semuaTx) {
+        if (tx.jenis == 'keluar') {
+          final sifat = tx.kategoriId != null
+              ? petaKat[tx.kategoriId]?.sifat
+              : null;
+          if (sifat != null && perSifatDart.containsKey(sifat)) {
+            perSifatDart[sifat] = perSifatDart[sifat]! + tx.jumlahRupiah;
+          }
         }
       }
-    }
 
-    const sqlKomposisi = '''
+      const sqlKomposisi = '''
       SELECT 
         COALESCE(k.sifat, 'belum_dilabeli') AS sifat,
         COALESCE(SUM(t.jumlah_rupiah), 0) AS total
@@ -371,19 +426,22 @@ void main() {
       WHERE t.waktu_transaksi >= ? AND t.waktu_transaksi <= ? AND t.jenis = 'keluar'
       GROUP BY COALESCE(k.sifat, 'belum_dilabeli');
     ''';
-    final rowsSql = await basisData.customSelect(
-      sqlKomposisi,
-      variables: [
-        drift.Variable.withDateTime(awal),
-        drift.Variable.withDateTime(akhir),
-      ],
-    ).get();
-    final perSifatSql = <String, int>{};
-    for (final r in rowsSql) {
-      perSifatSql[r.read<String>('sifat')] = r.read<int>('total');
-    }
+      final rowsSql = await basisData
+          .customSelect(
+            sqlKomposisi,
+            variables: [
+              drift.Variable.withDateTime(awal),
+              drift.Variable.withDateTime(akhir),
+            ],
+          )
+          .get();
+      final perSifatSql = <String, int>{};
+      for (final r in rowsSql) {
+        perSifatSql[r.read<String>('sifat')] = r.read<int>('total');
+      }
 
-    expect(perSifatSql['kebutuhan'], equals(perSifatDart['kebutuhan']));
-    expect(perSifatSql['keinginan'], equals(perSifatDart['keinginan']));
-  });
+      expect(perSifatSql['kebutuhan'], equals(perSifatDart['kebutuhan']));
+      expect(perSifatSql['keinginan'], equals(perSifatDart['keinginan']));
+    },
+  );
 }

@@ -317,7 +317,7 @@ Kamu mengirim **prompt per tahap** ke agent → agent kerja dan menulis laporan 
 | 11A | **Tingkat Lanjutan Bagian 1:** Modul 13 "Investasi Lanjutan" & Modul 14 "KPR & Kredit Besar" | Pembelajaran investasi lanjutan & KPR selesai, umpan balik uji kemampuan KPR aktif |
 | 11B | **Tingkat Lanjutan Bagian 2:** Modul 15 "Pajak Lanjutan" & Modul 16 "Pensiun & Kebebasan Finansial" | Pembelajaran pajak lanjutan & pensiun selesai, umpan balik proyeksi kebebasan finansial aktif |
 | 11C | **Tingkat Lanjutan Bagian 3:** Modul 17 "Keuangan Usaha Kecil" & Modul 18 "Proteksi Keluarga & Warisan Dasar" | Pembelajaran usaha kecil & warisan selesai, seluruh kurikulum 18 modul tuntas (Tahap 11 selesai) |
-| 12 | **Polesan, aksesibilitas, uji pengguna, tinjauan konten, rilis** | v1.0 |
+| 12 | **Polesan, aksesibilitas, uji pengguna, tinjauan konten, rilis:** audit token UI, privasi log rilis, penghapusan jargon, panduan rilis Play Store/iOS, checklist tinjauan konten | v1.0 siap rilis (Tahap 12 selesai) |
 
 **MVP = tahap 1–7.** Bangun satu modul tuntas (belajar → gerbang → misi → umpan balik) sebelum menambah modul.
 

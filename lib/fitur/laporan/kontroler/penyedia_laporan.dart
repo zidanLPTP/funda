@@ -35,9 +35,9 @@ class SensorNominalNotifier extends Notifier<bool> {
 
   Future<void> _muatPengaturan() async {
     final db = ref.read(penyediaBasisData);
-    final row = await (db.select(db.tabelPengaturan)
-          ..where((t) => t.kunci.equals('sensor_nominal')))
-        .getSingleOrNull();
+    final row = await (db.select(
+      db.tabelPengaturan,
+    )..where((t) => t.kunci.equals('sensor_nominal'))).getSingleOrNull();
     if (row != null) {
       state = row.nilai == 'true';
     }
@@ -46,7 +46,9 @@ class SensorNominalNotifier extends Notifier<bool> {
   Future<void> setelSensor(bool aktif) async {
     state = aktif;
     final db = ref.read(penyediaBasisData);
-    await db.into(db.tabelPengaturan).insertOnConflictUpdate(
+    await db
+        .into(db.tabelPengaturan)
+        .insertOnConflictUpdate(
           TabelPengaturanCompanion.insert(
             kunci: 'sensor_nominal',
             nilai: aktif ? 'true' : 'false',
@@ -68,10 +70,16 @@ final penyediaKontenLaporan = FutureProvider<KontenLaporan>((ref) async {
 /// Provider daftar bulan kalender yang tersedia (dari transaksi pertama sampai bulan berjalan).
 final penyediaDaftarBulanTersedia = FutureProvider<List<DateTime>>((ref) async {
   final db = ref.watch(penyediaBasisData);
-  final row = await (db.select(db.tabelTransaksi)
-        ..orderBy([(t) => OrderingTerm(expression: t.waktuTransaksi, mode: OrderingMode.asc)])
-        ..limit(1))
-      .getSingleOrNull();
+  final row =
+      await (db.select(db.tabelTransaksi)
+            ..orderBy([
+              (t) => OrderingTerm(
+                expression: t.waktuTransaksi,
+                mode: OrderingMode.asc,
+              ),
+            ])
+            ..limit(1))
+          .getSingleOrNull();
 
   final sekarang = DateTime.now();
   final bulanSekarang = DateTime(sekarang.year, sekarang.month, 1);
@@ -102,10 +110,21 @@ final penyediaDataLaporanBulanan = FutureProvider<LaporanBulanan>((ref) async {
   final repoAnggaran = ref.watch(penyediaAnggaranRepositori);
 
   final awalBulan = DateTime(bulanDipilih.year, bulanDipilih.month, 1);
-  final akhirBulan = DateTime(bulanDipilih.year, bulanDipilih.month + 1, 0, 23, 59, 59, 999);
+  final akhirBulan = DateTime(
+    bulanDipilih.year,
+    bulanDipilih.month + 1,
+    0,
+    23,
+    59,
+    59,
+    999,
+  );
 
   // 1. Arus kas bulan terpilih
-  final arusKas = await repoTransaksi.hitungArusKasSQL(mulai: awalBulan, selesai: akhirBulan);
+  final arusKas = await repoTransaksi.hitungArusKasSQL(
+    mulai: awalBulan,
+    selesai: akhirBulan,
+  );
 
   // 2. Komposisi pengeluaran per sifat dan kategori belum dilabeli via agregasi SQL
   const sqlKomposisi = '''
@@ -118,13 +137,15 @@ final penyediaDataLaporanBulanan = FutureProvider<LaporanBulanan>((ref) async {
     WHERE t.waktu_transaksi >= ? AND t.waktu_transaksi <= ? AND t.jenis = 'keluar'
     GROUP BY COALESCE(k.sifat, 'belum_dilabeli'), COALESCE(k.nama, 'Tanpa Kategori');
   ''';
-  final rowsKomposisi = await db.customSelect(
-    sqlKomposisi,
-    variables: [
-      Variable.withDateTime(awalBulan),
-      Variable.withDateTime(akhirBulan),
-    ],
-  ).get();
+  final rowsKomposisi = await db
+      .customSelect(
+        sqlKomposisi,
+        variables: [
+          Variable.withDateTime(awalBulan),
+          Variable.withDateTime(akhirBulan),
+        ],
+      )
+      .get();
 
   final perSifat = <String, int>{
     'kebutuhan': 0,
@@ -154,21 +175,29 @@ final penyediaDataLaporanBulanan = FutureProvider<LaporanBulanan>((ref) async {
     tahun: bulanDipilih.year,
     bulan: bulanDipilih.month,
   );
-  final daftarPosAnggaran = daftarItemAnggaran.map(PosAnggaranLaporan.dariItem).toList();
+  final daftarPosAnggaran = daftarItemAnggaran
+      .map(PosAnggaranLaporan.dariItem)
+      .toList();
 
   // 4. Tujuan Aktif (maksimal 3)
-  final daftarTujuanAktif = await (db.select(db.tabelTujuan)
-        ..where((t) => t.status.isNotValue('diarsipkan'))
-        ..limit(3))
-      .get();
+  final daftarTujuanAktif =
+      await (db.select(db.tabelTujuan)
+            ..where((t) => t.status.isNotValue('diarsipkan'))
+            ..limit(3))
+          .get();
   final daftarTujuanLaporan = <TujuanLaporan>[];
   for (final t in daftarTujuanAktif) {
-    final rowAlokasi = await db.customSelect(
-      'SELECT COALESCE(SUM(jumlah_rupiah), 0) as total FROM tabel_alokasi_dana WHERE tujuan_id = ?;',
-      variables: [Variable.withString(t.id)],
-    ).getSingle();
+    final rowAlokasi = await db
+        .customSelect(
+          'SELECT COALESCE(SUM(jumlah_rupiah), 0) as total FROM tabel_alokasi_dana WHERE tujuan_id = ?;',
+          variables: [Variable.withString(t.id)],
+        )
+        .getSingle();
     final dana = rowAlokasi.read<int>('total');
-    final persen = hitungProgresTujuan(danaRupiah: dana, targetRupiah: t.targetRupiah);
+    final persen = hitungProgresTujuan(
+      danaRupiah: dana,
+      targetRupiah: t.targetRupiah,
+    );
     daftarTujuanLaporan.add(
       TujuanLaporan(
         id: t.id,
@@ -181,7 +210,9 @@ final penyediaDataLaporanBulanan = FutureProvider<LaporanBulanan>((ref) async {
   }
 
   // 5. Snapshot Saldo Dompet & Utang per saat ini via agregasi SQL (bebas N+1)
-  final dompetAktif = await (db.select(db.tabelDompet)..where((t) => t.diarsipkan.equals(false))).get();
+  final dompetAktif = await (db.select(
+    db.tabelDompet,
+  )..where((t) => t.diarsipkan.equals(false))).get();
   var totalSaldoDompet = 0;
   for (final d in dompetAktif) {
     totalSaldoDompet += await repoTransaksi.hitungSaldoDompetSQL(

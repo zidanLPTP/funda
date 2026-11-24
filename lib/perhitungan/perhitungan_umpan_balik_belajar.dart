@@ -99,7 +99,8 @@ int hitungRataRataSetoranTabungan({
 
   var totalIsi = 0;
   var totalAmbil = 0;
-  int? jarakTertua; // jarak bulan paling lampau yang memiliki data alokasi (0..2)
+  int?
+  jarakTertua; // jarak bulan paling lampau yang memiliki data alokasi (0..2)
 
   for (final a in daftarAlokasi) {
     final lokal = a.waktu.toLocal();
@@ -139,11 +140,7 @@ class ItemPengeluaranWajib {
 }
 
 /// Dasar perhitungan pengeluaran wajib bulanan.
-enum DasarPengeluaranWajib {
-  tigaBulanTerakhir,
-  bulanBerjalan,
-  belumAda,
-}
+enum DasarPengeluaranWajib { tigaBulanTerakhir, bulanBerjalan, belumAda }
 
 /// Hasil perhitungan pengeluaran wajib bulanan.
 class HasilPengeluaranWajib {
@@ -185,7 +182,9 @@ HasilPengeluaranWajib hitungPengeluaranWajibBulanan({
       kursorBulan = 12;
       kursorTahun--;
     }
-    tigaBulanSelesai.add('$kursorTahun-${kursorBulan.toString().padLeft(2, '0')}');
+    tigaBulanSelesai.add(
+      '$kursorTahun-${kursorBulan.toString().padLeft(2, '0')}',
+    );
   }
 
   final kunciBulanBerjalan =
@@ -198,11 +197,14 @@ HasilPengeluaranWajib hitungPengeluaranWajibBulanan({
   for (final item in daftarPengeluaran) {
     if (item.sifat != 'kebutuhan' && item.sifat != 'utang') continue;
     final waktuLokal = item.waktu.toLocal();
-    final kunci = '${waktuLokal.year}-${waktuLokal.month.toString().padLeft(2, '0')}';
+    final kunci =
+        '${waktuLokal.year}-${waktuLokal.month.toString().padLeft(2, '0')}';
     if (item.sifat == 'kebutuhan') {
-      petaKebutuhanPerBulan[kunci] = (petaKebutuhanPerBulan[kunci] ?? 0) + item.jumlahRupiah;
+      petaKebutuhanPerBulan[kunci] =
+          (petaKebutuhanPerBulan[kunci] ?? 0) + item.jumlahRupiah;
     } else if (item.sifat == 'utang') {
-      petaUtangPerBulan[kunci] = (petaUtangPerBulan[kunci] ?? 0) + item.jumlahRupiah;
+      petaUtangPerBulan[kunci] =
+          (petaUtangPerBulan[kunci] ?? 0) + item.jumlahRupiah;
     }
   }
 
@@ -511,7 +513,9 @@ String formatPerbandinganPolaAnggaran({
   final aStr = formatRupiahRapat(kebutuhan);
   final bStr = formatRupiahRapat(keinginan);
   final cStr = formatRupiahRapat(tabunganDanUtang);
-  final dStr = belumDilabeli > 0 ? ', belum dilabeli ${formatRupiahRapat(belumDilabeli)}' : '';
+  final dStr = belumDilabeli > 0
+      ? ', belum dilabeli ${formatRupiahRapat(belumDilabeli)}'
+      : '';
 
   return 'Pemasukanmu bulan ini: ${formatRupiahRapat(pemasukan)}. '
       'Anggaran buatanmu: kebutuhan $aStr, keinginan $bStr, tabungan dan utang $cStr$dStr. '
@@ -587,14 +591,20 @@ String formatRealisasiAnggaranBulanIni(List<PosAnggaranEvaluasi> daftarPos) {
   }
 
   final sb = StringBuffer();
-  sb.write('Dari ${daftarPos.length} pos anggaran: $aman masih aman, $mendekati mendekati batas, $melewati melewati batas.');
+  sb.write(
+    'Dari ${daftarPos.length} pos anggaran: $aman masih aman, $mendekati mendekati batas, $melewati melewati batas.',
+  );
 
   if (posSisaTerbanyak != null) {
-    sb.write(' Pos dengan sisa terbanyak: ${posSisaTerbanyak.nama} (sisa ${formatRupiahRapat(posSisaTerbanyak.sisa)}).');
+    sb.write(
+      ' Pos dengan sisa terbanyak: ${posSisaTerbanyak.nama} (sisa ${formatRupiahRapat(posSisaTerbanyak.sisa)}).',
+    );
   }
 
   if (melewati > 0 && posMelewatiTerjauh != null) {
-    sb.write(' Pos yang melewati batas paling jauh: ${posMelewatiTerjauh.nama} (lebih ${formatRupiahRapat(posMelewatiTerjauh.lebih)}).');
+    sb.write(
+      ' Pos yang melewati batas paling jauh: ${posMelewatiTerjauh.nama} (lebih ${formatRupiahRapat(posMelewatiTerjauh.lebih)}).',
+    );
   }
 
   sb.write(' Ini bahan belajar, bukan penilaian.');
@@ -667,10 +677,14 @@ String formatRingkasanUtang({
   }
 
   final sb = StringBuffer();
-  sb.write('Kamu punya $n utang aktif dengan sisa total ${formatRupiahRapat(totalSisa)}. Cicilan per bulan: ${formatRupiahRapat(totalCicilan)}.');
+  sb.write(
+    'Kamu punya $n utang aktif dengan sisa total ${formatRupiahRapat(totalSisa)}. Cicilan per bulan: ${formatRupiahRapat(totalCicilan)}.',
+  );
 
   if (totalCicilan > 0) {
-    if (pemasukan != null && pemasukan.dasar != DasarPemasukanRataRata.belumAda && pemasukan.nilaiRupiah > 0) {
+    if (pemasukan != null &&
+        pemasukan.dasar != DasarPemasukanRataRata.belumAda &&
+        pemasukan.nilaiRupiah > 0) {
       final persen = (totalCicilan * 100) ~/ pemasukan.nilaiRupiah;
       final teksDasar = pemasukan.dasar == DasarPemasukanRataRata.rataRata3Bulan
           ? 'rata-rata 3 bulan terakhir'
@@ -701,7 +715,10 @@ String formatBiayaPinjamanTercatat({
   // Utang layak: pokok_awal > 0, tenor_bulan > 0, cicilan > 0
   final utangLayak = <({ItemUtangUmpanBalik utang, int total, int biaya})>[];
   for (final u in utangAktif) {
-    if (u.pokokAwalRupiah > 0 && u.tenorBulan != null && u.tenorBulan! > 0 && u.cicilanBulananRupiah > 0) {
+    if (u.pokokAwalRupiah > 0 &&
+        u.tenorBulan != null &&
+        u.tenorBulan! > 0 &&
+        u.cicilanBulananRupiah > 0) {
       final total = u.cicilanBulananRupiah * u.tenorBulan!;
       final selisih = total - u.pokokAwalRupiah;
       final biaya = selisih < 0 ? 0 : selisih;
@@ -725,7 +742,9 @@ String formatBiayaPinjamanTercatat({
   for (var i = 0; i < batas; i++) {
     final item = utangLayak[i];
     if (i > 0) sb.write(' ');
-    sb.write('${item.utang.nama}: pokok ${formatRupiahRapat(item.utang.pokokAwalRupiah)}, cicilan ${formatRupiahRapat(item.utang.cicilanBulananRupiah)} x ${item.utang.tenorBulan} bulan = total ${formatRupiahRapat(item.total)}. Biaya pinjaman: ${formatRupiahRapat(item.biaya)}.');
+    sb.write(
+      '${item.utang.nama}: pokok ${formatRupiahRapat(item.utang.pokokAwalRupiah)}, cicilan ${formatRupiahRapat(item.utang.cicilanBulananRupiah)} x ${item.utang.tenorBulan} bulan = total ${formatRupiahRapat(item.total)}. Biaya pinjaman: ${formatRupiahRapat(item.biaya)}.',
+    );
   }
 
   if (utangLayak.length > 3) {
@@ -733,7 +752,9 @@ String formatBiayaPinjamanTercatat({
     sb.write(' Dan $sisa utang lain.');
   }
 
-  sb.write(' Hitungan ini memakai cicilan x tenor yang kamu catat dan belum memasukkan denda.');
+  sb.write(
+    ' Hitungan ini memakai cicilan x tenor yang kamu catat dan belum memasukkan denda.',
+  );
   return sb.toString();
 }
 
@@ -742,7 +763,9 @@ String formatRasioCicilanBulanIni({
   required int totalCicilanBulanan,
   required HasilPemasukanRataRata? pemasukan,
 }) {
-  if (pemasukan == null || pemasukan.dasar == DasarPemasukanRataRata.belumAda || pemasukan.nilaiRupiah <= 0) {
+  if (pemasukan == null ||
+      pemasukan.dasar == DasarPemasukanRataRata.belumAda ||
+      pemasukan.nilaiRupiah <= 0) {
     return 'Belum ada pemasukan yang tercatat, jadi rasio cicilan belum bisa dihitung. Catat pemasukanmu dulu.';
   }
 
@@ -752,7 +775,9 @@ String formatRasioCicilanBulanIni({
 
   final persen = (totalCicilanBulanan * 100) ~/ pemasukan.nilaiRupiah;
   final pemasukan2 = (pemasukan.nilaiRupiah * 75) ~/ 100;
-  final persen2 = pemasukan2 <= 0 ? 0 : (totalCicilanBulanan * 100) ~/ pemasukan2;
+  final persen2 = pemasukan2 <= 0
+      ? 0
+      : (totalCicilanBulanan * 100) ~/ pemasukan2;
   final teksDasar = pemasukan.dasar == DasarPemasukanRataRata.rataRata3Bulan
       ? 'rata-rata 3 bulan terakhir'
       : 'bulan ini';
@@ -765,7 +790,9 @@ String formatUrutanPelunasan({
   required List<ItemUtangUmpanBalik> daftarUtang,
   required bool tidakPunyaUtang,
 }) {
-  final utangAktifBersisa = daftarUtang.where((u) => u.status == 'aktif' && u.sisaRupiah > 0).toList();
+  final utangAktifBersisa = daftarUtang
+      .where((u) => u.status == 'aktif' && u.sisaRupiah > 0)
+      .toList();
 
   if (utangAktifBersisa.isEmpty) {
     if (tidakPunyaUtang) {
@@ -786,13 +813,19 @@ String formatUrutanPelunasan({
     if (bandingSisa != 0) return bandingSisa;
     return a.nama.compareTo(b.nama);
   });
-  final daftarBolaSalju = bolaSalju.map((u) => '${u.nama} (${formatRupiahRapat(u.sisaRupiah)})').join(', lalu ');
+  final daftarBolaSalju = bolaSalju
+      .map((u) => '${u.nama} (${formatRupiahRapat(u.sisaRupiah)})')
+      .join(', lalu ');
 
   // Longsor:
   // Kelompok 1: bungaBasisPoinPerTahun > 0 -> bp menurun, sisa menaik, nama menaik
-  final kelompokBunga = utangAktifBersisa.where((u) => u.bungaBasisPoinPerTahun > 0).toList();
+  final kelompokBunga = utangAktifBersisa
+      .where((u) => u.bungaBasisPoinPerTahun > 0)
+      .toList();
   kelompokBunga.sort((a, b) {
-    final bandingBp = b.bungaBasisPoinPerTahun.compareTo(a.bungaBasisPoinPerTahun);
+    final bandingBp = b.bungaBasisPoinPerTahun.compareTo(
+      a.bungaBasisPoinPerTahun,
+    );
     if (bandingBp != 0) return bandingBp;
     final bandingSisa = a.sisaRupiah.compareTo(b.sisaRupiah);
     if (bandingSisa != 0) return bandingSisa;
@@ -800,7 +833,9 @@ String formatUrutanPelunasan({
   });
 
   // Kelompok 2: bungaBasisPoinPerTahun <= 0
-  final kelompokTanpaBunga = utangAktifBersisa.where((u) => u.bungaBasisPoinPerTahun <= 0).toList();
+  final kelompokTanpaBunga = utangAktifBersisa
+      .where((u) => u.bungaBasisPoinPerTahun <= 0)
+      .toList();
   kelompokTanpaBunga.sort((a, b) {
     final bandingSisa = a.sisaRupiah.compareTo(b.sisaRupiah);
     if (bandingSisa != 0) return bandingSisa;
@@ -809,10 +844,14 @@ String formatUrutanPelunasan({
 
   final daftarLongsorItem = <String>[];
   for (final u in kelompokBunga) {
-    daftarLongsorItem.add('${u.nama} (${formatBungaPersen(u.bungaBasisPoinPerTahun)} persen per tahun)');
+    daftarLongsorItem.add(
+      '${u.nama} (${formatBungaPersen(u.bungaBasisPoinPerTahun)} persen per tahun)',
+    );
   }
   for (final u in kelompokTanpaBunga) {
-    final label = u.jenisBunga == 'tanpa_bunga' ? 'tanpa bunga' : 'bunga belum dicatat';
+    final label = u.jenisBunga == 'tanpa_bunga'
+        ? 'tanpa bunga'
+        : 'bunga belum dicatat';
     daftarLongsorItem.add('${u.nama} ($label)');
   }
   final daftarLongsor = daftarLongsorItem.join(', lalu ');
@@ -852,10 +891,14 @@ String formatRingkasanLanggananDanKeinginan({
       .toList();
 
   final denganPerkiraan = langgananAktif
-      .where((t) => t.jumlahPerkiraanRupiah != null && t.jumlahPerkiraanRupiah! > 0)
+      .where(
+        (t) => t.jumlahPerkiraanRupiah != null && t.jumlahPerkiraanRupiah! > 0,
+      )
       .toList();
   final tanpaPerkiraan = langgananAktif
-      .where((t) => t.jumlahPerkiraanRupiah == null || t.jumlahPerkiraanRupiah! <= 0)
+      .where(
+        (t) => t.jumlahPerkiraanRupiah == null || t.jumlahPerkiraanRupiah! <= 0,
+      )
       .toList();
 
   final n = denganPerkiraan.length;
@@ -1040,7 +1083,8 @@ class DataTujuanBesarUmpanBalik {
 
 /// Menghitung selisih bulan dari waktu sekarang menuju tenggat (minimal 1 bulan).
 int hitungBulanTersisa(DateTime tenggat, DateTime waktuSekarang) {
-  final selisih = (tenggat.year - waktuSekarang.year) * 12 +
+  final selisih =
+      (tenggat.year - waktuSekarang.year) * 12 +
       (tenggat.month - waktuSekarang.month);
   return selisih <= 0 ? 1 : selisih;
 }
@@ -1060,8 +1104,9 @@ DataTujuanBesarUmpanBalik? pilihTujuanBesarUmpanBalik(
   final valid = daftar.where((d) => d.jenis != 'dana_darurat').toList();
   if (valid.isEmpty) return null;
 
-  final daftarTujuanBesar =
-      valid.where((d) => d.jenis == 'tujuan_besar').toList();
+  final daftarTujuanBesar = valid
+      .where((d) => d.jenis == 'tujuan_besar')
+      .toList();
 
   if (daftarTujuanBesar.isNotEmpty) {
     final bertenggat = daftarTujuanBesar
@@ -1111,7 +1156,8 @@ String formatRingkasanTujuanBesar({
 
   final targetStr = formatRupiahRapat(tujuan.targetRupiah);
   final danaStr = formatRupiahRapat(tujuan.danaTerkumpulRupiah);
-  final k1 = 'Tujuan besarmu: ${tujuan.nama} (target $targetStr, terkumpul $danaStr).';
+  final k1 =
+      'Tujuan besarmu: ${tujuan.nama} (target $targetStr, terkumpul $danaStr).';
 
   String k2;
   if (tujuan.danaTerkumpulRupiah >= tujuan.targetRupiah) {
@@ -1123,13 +1169,16 @@ String formatRingkasanTujuanBesar({
     if (bulan != null && bulan > 0) {
       final setoran = (sisa + bulan - 1) ~/ bulan;
       final setoranStr = formatRupiahRapat(setoran);
-      k2 = 'Sisa $sisaStr dalam $bulan bulan berarti kamu perlu menyisihkan sekitar $setoranStr per bulan.';
+      k2 =
+          'Sisa $sisaStr dalam $bulan bulan berarti kamu perlu menyisihkan sekitar $setoranStr per bulan.';
     } else {
-      k2 = 'Sisa $sisaStr. Tambahkan tenggat agar setoran bulanannya bisa dihitung.';
+      k2 =
+          'Sisa $sisaStr. Tambahkan tenggat agar setoran bulanannya bisa dihitung.';
     }
   }
 
-  const k3 = 'Fokus pada satu atau dua tujuan utama lebih mudah dijalankan daripada mengejar semuanya sekaligus.';
+  const k3 =
+      'Fokus pada satu atau dua tujuan utama lebih mudah dijalankan daripada mengejar semuanya sekaligus.';
 
   return '$k1 $k2 $k3';
 }
@@ -1160,7 +1209,8 @@ String formatUjiKemampuanKpr({
   }
 
   final pemasukan = pemasukanRataRata.nilaiRupiah;
-  final dasarStr = deskripsiDasarOverride ??
+  final dasarStr =
+      deskripsiDasarOverride ??
       (pemasukanRataRata.dasar == DasarPemasukanRataRata.bulanBerjalan
           ? 'bulan ini'
           : 'rata-rata 3 bulan terakhir');
@@ -1204,7 +1254,7 @@ String formatUjiKemampuanKpr({
 // ============================================================================
 
 /// Pengali aturan praktis pensiun (populer 25x pengeluaran tahunan / aturan 4%).
-/// 
+///
 /// TODO-VERIFIKASI: aturan praktis populer 25x pengeluaran tahunan (aturan 4 persen)
 const int pengaliAturanPraktisPensiun = 25;
 
@@ -1300,8 +1350,3 @@ String formatRingkasanUsahaKecil({
 
   return '$bagianDompet $bagianArusKas $penutup';
 }
-
-
-
-
-

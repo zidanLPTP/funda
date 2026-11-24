@@ -68,12 +68,7 @@ class LayananBagikanNyata implements LayananBagikan {
   }) async {
     final xFile = XFile(pathBerkas);
     await SharePlus.instance.share(
-      ShareParams(
-        files: [xFile],
-        text: teks,
-        subject: judul,
-        title: judul,
-      ),
+      ShareParams(files: [xFile], text: teks, subject: judul, title: judul),
     );
   }
 
@@ -117,7 +112,9 @@ class LayananBagikanPalsu implements LayananBagikan {
     required String namaBerkas,
     required List<int> bytes,
   }) async {
-    final dir = direktoriUji ?? Directory.systemTemp.createTempSync('funda_uji_ekspor_');
+    final dir =
+        direktoriUji ??
+        Directory.systemTemp.createTempSync('funda_uji_ekspor_');
     final file = File(p.join(dir.path, namaBerkas));
     file.writeAsBytesSync(bytes, flush: true);
     riwayatDisimpan.add(file);

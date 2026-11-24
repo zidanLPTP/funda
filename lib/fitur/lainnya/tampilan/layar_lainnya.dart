@@ -136,7 +136,8 @@ class LayarLainnya extends StatelessWidget {
           _ItemMenu(
             ikon: LucideIcons.flaskConical,
             judul: 'Mode Sandbox',
-            keterangan: 'Simulasi portofolio investasi fiktif terisolasi dari data riil',
+            keterangan:
+                'Simulasi portofolio investasi fiktif terisolasi dari data riil',
             padaKetuk: () => context.push('/sandbox'),
           ),
           const SizedBox(height: SpasiFunda.l),

@@ -38,9 +38,9 @@ final penyediaStatusCadangan = FutureProvider<StatusFiturCadangan>((ref) async {
   final repo = ref.watch(penyediaCadanganRepositori);
 
   // 1. Ambil waktu terakhir cadangan dari tabel_pengaturan
-  final rowCadangan = await (db.select(db.tabelPengaturan)
-        ..where((t) => t.kunci.equals('terakhir_cadangan')))
-      .getSingleOrNull();
+  final rowCadangan = await (db.select(
+    db.tabelPengaturan,
+  )..where((t) => t.kunci.equals('terakhir_cadangan'))).getSingleOrNull();
 
   DateTime? terakhir;
   if (rowCadangan != null && rowCadangan.nilai.isNotEmpty) {
@@ -50,9 +50,10 @@ final penyediaStatusCadangan = FutureProvider<StatusFiturCadangan>((ref) async {
   }
 
   // 2. Ambil penundaan pengingat jika ada
-  final rowTunda = await (db.select(db.tabelPengaturan)
-        ..where((t) => t.kunci.equals('pengingat_cadangan_ditunda_sampai')))
-      .getSingleOrNull();
+  final rowTunda =
+      await (db.select(db.tabelPengaturan)
+            ..where((t) => t.kunci.equals('pengingat_cadangan_ditunda_sampai')))
+          .getSingleOrNull();
 
   DateTime? ditundaSampai;
   if (rowTunda != null && rowTunda.nilai.isNotEmpty) {
@@ -62,14 +63,22 @@ final penyediaStatusCadangan = FutureProvider<StatusFiturCadangan>((ref) async {
   }
 
   // 3. Hitung jumlah transaksi dan hari sejak transaksi pertama
-  final countRow = await db.customSelect('SELECT count(*) as total FROM tabel_transaksi;').getSingle();
+  final countRow = await db
+      .customSelect('SELECT count(*) as total FROM tabel_transaksi;')
+      .getSingle();
   final jumlahTx = countRow.read<int>('total');
 
   var hariSejakDataPertama = 0;
-  final firstRow = await (db.select(db.tabelTransaksi)
-        ..orderBy([(t) => OrderingTerm(expression: t.waktuTransaksi, mode: OrderingMode.asc)])
-        ..limit(1))
-      .getSingleOrNull();
+  final firstRow =
+      await (db.select(db.tabelTransaksi)
+            ..orderBy([
+              (t) => OrderingTerm(
+                expression: t.waktuTransaksi,
+                mode: OrderingMode.asc,
+              ),
+            ])
+            ..limit(1))
+          .getSingleOrNull();
 
   final sekarang = DateTime.now();
   if (firstRow != null) {
@@ -79,9 +88,13 @@ final penyediaStatusCadangan = FutureProvider<StatusFiturCadangan>((ref) async {
   // 4. Periksa apakah ada transaksi baru sejak pencadangan terakhir
   var adaTransaksiBaru = true;
   if (terakhir != null) {
-    final countBaruRow = await (db.select(db.tabelTransaksi)
-          ..where((t) => t.waktuTransaksi.isBiggerThan(Variable.withDateTime(terakhir!))))
-        .get();
+    final countBaruRow =
+        await (db.select(db.tabelTransaksi)..where(
+              (t) => t.waktuTransaksi.isBiggerThan(
+                Variable.withDateTime(terakhir!),
+              ),
+            ))
+            .get();
     adaTransaksiBaru = countBaruRow.isNotEmpty;
   }
 
@@ -109,11 +122,16 @@ final penyediaStatusCadangan = FutureProvider<StatusFiturCadangan>((ref) async {
 });
 
 /// Aksi untuk menunda pengingat cadangan selama [durasiHari] (default: 14 hari).
-Future<void> tundaPengingatCadangan(WidgetRef ref, {int durasiHari = 14}) async {
+Future<void> tundaPengingatCadangan(
+  WidgetRef ref, {
+  int durasiHari = 14,
+}) async {
   final db = ref.read(penyediaBasisData);
   final tundaSampai = DateTime.now().add(Duration(days: durasiHari));
 
-  await db.into(db.tabelPengaturan).insertOnConflictUpdate(
+  await db
+      .into(db.tabelPengaturan)
+      .insertOnConflictUpdate(
         TabelPengaturanCompanion.insert(
           kunci: 'pengingat_cadangan_ditunda_sampai',
           nilai: tundaSampai.toIso8601String(),
@@ -131,7 +149,8 @@ Future<void> buatDanBagikanCadangan(WidgetRef ref) async {
   final sekarang = DateTime.now();
   final jsonString = await repo.eksporCadanganKeJson(waktuDibuat: sekarang);
 
-  final namaBerkas = 'funda_cadangan_${sekarang.year}-${sekarang.month.toString().padLeft(2, '0')}-${sekarang.day.toString().padLeft(2, '0')}.json';
+  final namaBerkas =
+      'funda_cadangan_${sekarang.year}-${sekarang.month.toString().padLeft(2, '0')}-${sekarang.day.toString().padLeft(2, '0')}.json';
   final berkas = await layanan.simpanBerkas(
     namaBerkas: namaBerkas,
     bytes: utf8.encode(jsonString),
@@ -139,7 +158,9 @@ Future<void> buatDanBagikanCadangan(WidgetRef ref) async {
 
   // Catat tanggal cadangan di tabel_pengaturan
   final db = ref.read(penyediaBasisData);
-  await db.into(db.tabelPengaturan).insertOnConflictUpdate(
+  await db
+      .into(db.tabelPengaturan)
+      .insertOnConflictUpdate(
         TabelPengaturanCompanion.insert(
           kunci: 'terakhir_cadangan',
           nilai: sekarang.toIso8601String(),

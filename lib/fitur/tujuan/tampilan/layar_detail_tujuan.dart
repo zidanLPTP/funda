@@ -65,8 +65,7 @@ class LayarDetailTujuan extends ConsumerWidget {
     final repoTujuan = ref.watch(penyediaTujuanRepositori);
 
     return tujuanAsync.when(
-      loading: () =>
-          const Scaffold(body: Center(child: IndikatorMemuat())),
+      loading: () => const Scaffold(body: Center(child: IndikatorMemuat())),
       error: (e, _) =>
           Scaffold(body: Center(child: Text('Terjadi kesalahan: $e'))),
       data: (tujuan) {
@@ -396,8 +395,7 @@ class LayarDetailTujuan extends ConsumerWidget {
                 ),
                 const SizedBox(height: SpasiFunda.s),
                 daftarKantongAsync.when(
-                  loading: () =>
-                      const Center(child: IndikatorMemuat()),
+                  loading: () => const Center(child: IndikatorMemuat()),
                   error: (e, _) => Center(child: Text('Terjadi kesalahan: $e')),
                   data: (daftarKantong) {
                     if (daftarKantong.isEmpty) {
@@ -470,8 +468,7 @@ class LayarDetailTujuan extends ConsumerWidget {
                 const TeksFunda.judulBagian('Riwayat Alokasi Tujuan'),
                 const SizedBox(height: SpasiFunda.s),
                 riwayatAlokasiAsync.when(
-                  loading: () =>
-                      const Center(child: IndikatorMemuat()),
+                  loading: () => const Center(child: IndikatorMemuat()),
                   error: (e, _) => Center(child: Text('Terjadi kesalahan: $e')),
                   data: (daftarAlokasi) {
                     if (daftarAlokasi.isEmpty) {

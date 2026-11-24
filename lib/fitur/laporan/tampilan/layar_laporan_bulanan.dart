@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
@@ -15,7 +16,8 @@ class LayarLaporanBulanan extends ConsumerStatefulWidget {
   const LayarLaporanBulanan({super.key});
 
   @override
-  ConsumerState<LayarLaporanBulanan> createState() => _LayarLaporanBulananState();
+  ConsumerState<LayarLaporanBulanan> createState() =>
+      _LayarLaporanBulananState();
 }
 
 class _LayarLaporanBulananState extends ConsumerState<LayarLaporanBulanan> {
@@ -23,22 +25,34 @@ class _LayarLaporanBulananState extends ConsumerState<LayarLaporanBulanan> {
   bool _sedangMengekspor = false;
 
   Future<void> _bagikanGambar(LaporanBulanan laporan, bool sensor) async {
-    debugPrint('--> _bagikanGambar MULAI DIPANGGIL');
+    if (kDebugMode) {
+      debugPrint('--> _bagikanGambar MULAI DIPANGGIL');
+    }
     setState(() => _sedangMengekspor = true);
     try {
-      final pngBytes = await PembuatGambarLaporan.tangkapDariKunci(_kunciKartuLaporan, pixelRatio: 3.0);
-      final namaBerkas = 'funda_laporan_${laporan.bulan.year}-${laporan.bulan.month.toString().padLeft(2, '0')}.png';
+      final pngBytes = await PembuatGambarLaporan.tangkapDariKunci(
+        _kunciKartuLaporan,
+        pixelRatio: 3.0,
+      );
+      final namaBerkas =
+          'funda_laporan_${laporan.bulan.year}-${laporan.bulan.month.toString().padLeft(2, '0')}.png';
 
       final layanan = ref.read(penyediaLayananBagikan);
-      final berkas = await layanan.simpanBerkas(namaBerkas: namaBerkas, bytes: pngBytes);
+      final berkas = await layanan.simpanBerkas(
+        namaBerkas: namaBerkas,
+        bytes: pngBytes,
+      );
 
       await layanan.bagikanBerkas(
         pathBerkas: berkas.path,
-        judul: 'Laporan Bulanan Funda - ${formatBulanTahunIndonesia(laporan.bulan)}',
+        judul:
+            'Laporan Bulanan Funda - ${formatBulanTahunIndonesia(laporan.bulan)}',
         teks: 'Berikut laporan edukasi keuangan pribadi dari aplikasi Funda.',
       );
     } catch (e) {
-      debugPrint('GALAT DI _BAGIKANGAMBAR: $e');
+      if (kDebugMode) {
+        debugPrint('GALAT DI _BAGIKANGAMBAR: $e');
+      }
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -63,17 +77,25 @@ class _LayarLaporanBulananState extends ConsumerState<LayarLaporanBulanan> {
         sensor: sensor,
       );
 
-      final namaBerkas = 'funda_laporan_${laporan.bulan.year}-${laporan.bulan.month.toString().padLeft(2, '0')}.pdf';
+      final namaBerkas =
+          'funda_laporan_${laporan.bulan.year}-${laporan.bulan.month.toString().padLeft(2, '0')}.pdf';
       final layanan = ref.read(penyediaLayananBagikan);
-      final berkas = await layanan.simpanBerkas(namaBerkas: namaBerkas, bytes: pdfBytes);
+      final berkas = await layanan.simpanBerkas(
+        namaBerkas: namaBerkas,
+        bytes: pdfBytes,
+      );
 
       await layanan.bagikanBerkas(
         pathBerkas: berkas.path,
-        judul: 'Laporan Bulanan Funda - ${formatBulanTahunIndonesia(laporan.bulan)}',
-        teks: 'Berikut laporan edukasi keuangan pribadi (format PDF) dari aplikasi Funda.',
+        judul:
+            'Laporan Bulanan Funda - ${formatBulanTahunIndonesia(laporan.bulan)}',
+        teks:
+            'Berikut laporan edukasi keuangan pribadi (format PDF) dari aplikasi Funda.',
       );
     } catch (e) {
-      debugPrint('GALAT DI _BAGIKANGAMBAR: $e');
+      if (kDebugMode) {
+        debugPrint('GALAT DI _BAGIKANGAMBAR: $e');
+      }
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -97,7 +119,10 @@ class _LayarLaporanBulananState extends ConsumerState<LayarLaporanBulanan> {
     return Scaffold(
       backgroundColor: WarnaFunda.latar,
       appBar: AppBar(
-        title: const Text('Laporan Bulanan', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+        title: const Text(
+          'Laporan Bulanan',
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+        ),
         backgroundColor: WarnaFunda.latar,
         elevation: 0,
         foregroundColor: WarnaFunda.teks,
@@ -110,7 +135,11 @@ class _LayarLaporanBulananState extends ConsumerState<LayarLaporanBulanan> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Icon(LucideIcons.alertTriangle, color: WarnaFunda.bahaya, size: 40),
+                const Icon(
+                  LucideIcons.alertTriangle,
+                  color: WarnaFunda.bahaya,
+                  size: 40,
+                ),
                 const SizedBox(height: 12),
                 Text(
                   'Terjadi kendala saat menyusun laporan: $err',
@@ -136,7 +165,10 @@ class _LayarLaporanBulananState extends ConsumerState<LayarLaporanBulanan> {
               children: [
                 // 1. Baris Kontrol: Pemilih Bulan & Saklar Sensor
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 14,
+                    vertical: 10,
+                  ),
                   decoration: BoxDecoration(
                     color: WarnaFunda.permukaan,
                     borderRadius: BorderRadius.circular(12),
@@ -150,32 +182,52 @@ class _LayarLaporanBulananState extends ConsumerState<LayarLaporanBulanan> {
                         children: [
                           const Row(
                             children: [
-                              Icon(LucideIcons.calendar, size: 18, color: WarnaFunda.utama),
+                              Icon(
+                                LucideIcons.calendar,
+                                size: 18,
+                                color: WarnaFunda.utama,
+                              ),
                               SizedBox(width: 8),
-                              Text('Pilih Bulan', style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: WarnaFunda.teks)),
+                              Text(
+                                'Pilih Bulan',
+                                style: TextStyle(
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.bold,
+                                  color: WarnaFunda.teks,
+                                ),
+                              ),
                             ],
                           ),
                           asyncDaftarBulan.when(
                             data: (daftarBulan) => DropdownButton<DateTime>(
                               value: bulanDipilih,
                               underline: const SizedBox(),
-                              icon: const Icon(LucideIcons.chevronDown, size: 16),
+                              icon: const Icon(
+                                LucideIcons.chevronDown,
+                                size: 16,
+                              ),
                               items: daftarBulan.map((b) {
                                 return DropdownMenuItem<DateTime>(
                                   value: b,
                                   child: Text(
                                     formatBulanTahunIndonesia(b),
-                                    style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
+                                    style: const TextStyle(
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w600,
+                                    ),
                                   ),
                                 );
                               }).toList(),
                               onChanged: (baru) {
                                 if (baru != null) {
-                                  ref.read(penyediaBulanDipilih.notifier).pilihBulan(baru);
+                                  ref
+                                      .read(penyediaBulanDipilih.notifier)
+                                      .pilihBulan(baru);
                                 }
                               },
                             ),
-                            loading: () => const IndikatorMemuat(ukuran: 16, ketebalan: 2),
+                            loading: () =>
+                                const IndikatorMemuat(ukuran: 16, ketebalan: 2),
                             error: (e, s) => const SizedBox(),
                           ),
                         ],
@@ -183,17 +235,25 @@ class _LayarLaporanBulananState extends ConsumerState<LayarLaporanBulanan> {
                       const Divider(height: 16, color: WarnaFunda.garis),
                       // Saklar Sembunyikan Nominal (Sensor)
                       Semantics(
-                        label: 'Saklar sembunyikan nominal angka Rupiah pada laporan',
+                        label:
+                            'Saklar sembunyikan nominal angka Rupiah pada laporan',
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             const Row(
                               children: [
-                                Icon(LucideIcons.eyeOff, size: 18, color: WarnaFunda.teksRedup),
+                                Icon(
+                                  LucideIcons.eyeOff,
+                                  size: 18,
+                                  color: WarnaFunda.teksRedup,
+                                ),
                                 SizedBox(width: 8),
                                 Text(
                                   'Sembunyikan nominal',
-                                  style: TextStyle(fontSize: 13, color: WarnaFunda.teks),
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                    color: WarnaFunda.teks,
+                                  ),
                                 ),
                               ],
                             ),
@@ -201,7 +261,9 @@ class _LayarLaporanBulananState extends ConsumerState<LayarLaporanBulanan> {
                               value: sensorAktif,
                               activeThumbColor: WarnaFunda.utama,
                               onChanged: (val) {
-                                ref.read(penyediaSensorNominal.notifier).setelSensor(val);
+                                ref
+                                    .read(penyediaSensorNominal.notifier)
+                                    .setelSensor(val);
                               },
                             ),
                           ],
@@ -215,7 +277,8 @@ class _LayarLaporanBulananState extends ConsumerState<LayarLaporanBulanan> {
                 // 2. Tombol Aksi Ekspor (Bagikan PNG & PDF)
                 Builder(
                   builder: (context) {
-                    final teksBesar = MediaQuery.textScalerOf(context).scale(14) > 18;
+                    final teksBesar =
+                        MediaQuery.textScalerOf(context).scale(14) > 18;
                     if (teksBesar) {
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -224,7 +287,8 @@ class _LayarLaporanBulananState extends ConsumerState<LayarLaporanBulanan> {
                             teks: 'Bagikan Gambar',
                             ikon: const Icon(LucideIcons.image, size: 18),
                             memuat: _sedangMengekspor,
-                            padaTekan: () => _bagikanGambar(laporan, sensorAktif),
+                            padaTekan: () =>
+                                _bagikanGambar(laporan, sensorAktif),
                             lebarPenuh: true,
                           ),
                           const SizedBox(height: 10),
@@ -245,7 +309,8 @@ class _LayarLaporanBulananState extends ConsumerState<LayarLaporanBulanan> {
                             teks: 'Bagikan Gambar',
                             ikon: const Icon(LucideIcons.image, size: 18),
                             memuat: _sedangMengekspor,
-                            padaTekan: () => _bagikanGambar(laporan, sensorAktif),
+                            padaTekan: () =>
+                                _bagikanGambar(laporan, sensorAktif),
                           ),
                         ),
                         const SizedBox(width: 10),
@@ -272,11 +337,11 @@ class _LayarLaporanBulananState extends ConsumerState<LayarLaporanBulanan> {
                         color: WarnaFunda.latar,
                         borderRadius: BorderRadius.circular(16),
                         border: Border.all(color: WarnaFunda.garis),
-                        boxShadow: [
+                        boxShadow: const [
                           BoxShadow(
-                            color: Colors.black.withValues(alpha: 0.04),
+                            color: WarnaFunda.bayangan,
                             blurRadius: 10,
-                            offset: const Offset(0, 4),
+                            offset: Offset(0, 4),
                           ),
                         ],
                       ),

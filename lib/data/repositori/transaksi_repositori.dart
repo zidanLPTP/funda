@@ -554,11 +554,23 @@ class TransaksiRepositori {
       bulanTigaLalu.add((tahun: kursorTahun, bulan: kursorBulan));
     }
 
-    final awalRentangLokal = DateTime(bulanTigaLalu.last.tahun, bulanTigaLalu.last.bulan, 1);
-    final akhirRentangLokal = DateTime(waktuLokal.year, waktuLokal.month + 1, 0, 23, 59, 59);
+    final awalRentangLokal = DateTime(
+      bulanTigaLalu.last.tahun,
+      bulanTigaLalu.last.bulan,
+      1,
+    );
+    final akhirRentangLokal = DateTime(
+      waktuLokal.year,
+      waktuLokal.month + 1,
+      0,
+      23,
+      59,
+      59,
+    );
 
     final mulaiUnix = awalRentangLokal.toUtc().millisecondsSinceEpoch ~/ 1000;
-    final selesaiUnix = akhirRentangLokal.toUtc().millisecondsSinceEpoch ~/ 1000;
+    final selesaiUnix =
+        akhirRentangLokal.toUtc().millisecondsSinceEpoch ~/ 1000;
 
     const sql = '''
       SELECT 
@@ -569,16 +581,18 @@ class TransaksiRepositori {
       GROUP BY strftime('%Y_%m', datetime(waktu_transaksi + ?, 'unixepoch'));
     ''';
 
-    final baris = await _db.customSelect(
-      sql,
-      variables: [
-        Variable.withInt(offsetDetik),
-        Variable.withInt(mulaiUnix),
-        Variable.withInt(selesaiUnix),
-        Variable.withInt(offsetDetik),
-      ],
-      readsFrom: {_db.tabelTransaksi},
-    ).get();
+    final baris = await _db
+        .customSelect(
+          sql,
+          variables: [
+            Variable.withInt(offsetDetik),
+            Variable.withInt(mulaiUnix),
+            Variable.withInt(selesaiUnix),
+            Variable.withInt(offsetDetik),
+          ],
+          readsFrom: {_db.tabelTransaksi},
+        )
+        .get();
 
     final petaPemasukan = <String, int>{};
     for (final b in baris) {
@@ -644,11 +658,23 @@ class TransaksiRepositori {
       bulanTigaLalu.add((tahun: kursorTahun, bulan: kursorBulan));
     }
 
-    final awalRentangLokal = DateTime(bulanTigaLalu.last.tahun, bulanTigaLalu.last.bulan, 1);
-    final akhirRentangLokal = DateTime(waktuLokal.year, waktuLokal.month + 1, 0, 23, 59, 59);
+    final awalRentangLokal = DateTime(
+      bulanTigaLalu.last.tahun,
+      bulanTigaLalu.last.bulan,
+      1,
+    );
+    final akhirRentangLokal = DateTime(
+      waktuLokal.year,
+      waktuLokal.month + 1,
+      0,
+      23,
+      59,
+      59,
+    );
 
     final mulaiUnix = awalRentangLokal.toUtc().millisecondsSinceEpoch ~/ 1000;
-    final selesaiUnix = akhirRentangLokal.toUtc().millisecondsSinceEpoch ~/ 1000;
+    final selesaiUnix =
+        akhirRentangLokal.toUtc().millisecondsSinceEpoch ~/ 1000;
 
     const sql = '''
       SELECT 
@@ -659,59 +685,62 @@ class TransaksiRepositori {
       GROUP BY strftime('%Y_%m', datetime(waktu_transaksi + ?, 'unixepoch'));
     ''';
 
-    return _db.customSelect(
-      sql,
-      variables: [
-        Variable.withInt(offsetDetik),
-        Variable.withInt(mulaiUnix),
-        Variable.withInt(selesaiUnix),
-        Variable.withInt(offsetDetik),
-      ],
-      readsFrom: {_db.tabelTransaksi},
-    ).watch().map((baris) {
-      final petaPemasukan = <String, int>{};
-      for (final b in baris) {
-        final p = b.read<String>('periode');
-        final tot = b.read<int>('total');
-        petaPemasukan[p] = tot;
-      }
+    return _db
+        .customSelect(
+          sql,
+          variables: [
+            Variable.withInt(offsetDetik),
+            Variable.withInt(mulaiUnix),
+            Variable.withInt(selesaiUnix),
+            Variable.withInt(offsetDetik),
+          ],
+          readsFrom: {_db.tabelTransaksi},
+        )
+        .watch()
+        .map((baris) {
+          final petaPemasukan = <String, int>{};
+          for (final b in baris) {
+            final p = b.read<String>('periode');
+            final tot = b.read<int>('total');
+            petaPemasukan[p] = tot;
+          }
 
-      var total3Bulan = 0;
-      var adaData3Bulan = false;
+          var total3Bulan = 0;
+          var adaData3Bulan = false;
 
-      for (final periode in bulanTigaLalu) {
-        final bulanStr = periode.bulan.toString().padLeft(2, '0');
-        final kunci = '${periode.tahun}_$bulanStr';
-        final nominal = petaPemasukan[kunci] ?? 0;
-        if (nominal > 0) {
-          adaData3Bulan = true;
-        }
-        total3Bulan += nominal;
-      }
+          for (final periode in bulanTigaLalu) {
+            final bulanStr = periode.bulan.toString().padLeft(2, '0');
+            final kunci = '${periode.tahun}_$bulanStr';
+            final nominal = petaPemasukan[kunci] ?? 0;
+            if (nominal > 0) {
+              adaData3Bulan = true;
+            }
+            total3Bulan += nominal;
+          }
 
-      if (adaData3Bulan) {
-        return HasilPemasukanRataRata(
-          nilaiRupiah: total3Bulan ~/ 3,
-          dasar: DasarPemasukanRataRata.rataRata3Bulan,
-        );
-      }
+          if (adaData3Bulan) {
+            return HasilPemasukanRataRata(
+              nilaiRupiah: total3Bulan ~/ 3,
+              dasar: DasarPemasukanRataRata.rataRata3Bulan,
+            );
+          }
 
-      final bulanBerjalanStr = waktuLokal.month.toString().padLeft(2, '0');
-      final kunciBerjalan = '${waktuLokal.year}_$bulanBerjalanStr';
-      final pemasukanBulanBerjalan = petaPemasukan[kunciBerjalan] ?? 0;
+          final bulanBerjalanStr = waktuLokal.month.toString().padLeft(2, '0');
+          final kunciBerjalan = '${waktuLokal.year}_$bulanBerjalanStr';
+          final pemasukanBulanBerjalan = petaPemasukan[kunciBerjalan] ?? 0;
 
-      if (pemasukanBulanBerjalan > 0) {
-        return HasilPemasukanRataRata(
-          nilaiRupiah: pemasukanBulanBerjalan,
-          dasar: DasarPemasukanRataRata.bulanBerjalan,
-        );
-      }
+          if (pemasukanBulanBerjalan > 0) {
+            return HasilPemasukanRataRata(
+              nilaiRupiah: pemasukanBulanBerjalan,
+              dasar: DasarPemasukanRataRata.bulanBerjalan,
+            );
+          }
 
-      return const HasilPemasukanRataRata(
-        nilaiRupiah: 0,
-        dasar: DasarPemasukanRataRata.belumAda,
-      );
-    });
+          return const HasilPemasukanRataRata(
+            nilaiRupiah: 0,
+            dasar: DasarPemasukanRataRata.belumAda,
+          );
+        });
   }
 
   /// Menghitung total pengeluaran per sifat kategori untuk bulan berjalan (agregasi SQL).
@@ -727,25 +756,28 @@ class TransaksiRepositori {
       GROUP BY COALESCE(k.sifat, 'belum_dilabeli');
     ''';
 
-    return _db.customSelect(
-      sql,
-      variables: [Variable.withInt(mulaiUnix)],
-      readsFrom: {_db.tabelTransaksi, _db.tabelKategori},
-    ).watch().map((baris) {
-      final peta = <String, int>{
-        'kebutuhan': 0,
-        'keinginan': 0,
-        'tabungan': 0,
-        'utang': 0,
-        'belum_dilabeli': 0,
-      };
-      for (final b in baris) {
-        final s = b.read<String>('sifat');
-        final tot = b.read<int>('total');
-        peta[s] = tot;
-      }
-      return peta;
-    });
+    return _db
+        .customSelect(
+          sql,
+          variables: [Variable.withInt(mulaiUnix)],
+          readsFrom: {_db.tabelTransaksi, _db.tabelKategori},
+        )
+        .watch()
+        .map((baris) {
+          final peta = <String, int>{
+            'kebutuhan': 0,
+            'keinginan': 0,
+            'tabungan': 0,
+            'utang': 0,
+            'belum_dilabeli': 0,
+          };
+          for (final b in baris) {
+            final s = b.read<String>('sifat');
+            final tot = b.read<int>('total');
+            peta[s] = tot;
+          }
+          return peta;
+        });
   }
 
   /// Memantau jumlah transaksi secara reaktif dan ringan (O(1)) tanpa memuat baris ke memori Dart.

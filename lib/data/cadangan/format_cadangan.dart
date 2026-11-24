@@ -135,12 +135,30 @@ class PratinjauCadangan {
       dibuatPada: doc.dibuatPada,
       versiSkema: doc.versiSkema,
       versiAplikasi: doc.versiAplikasi,
-      jumlahDompet: doc.jumlahBaris['tabel_dompet'] ?? doc.tabel['tabel_dompet']?.length ?? 0,
-      jumlahTransaksi: doc.jumlahBaris['tabel_transaksi'] ?? doc.tabel['tabel_transaksi']?.length ?? 0,
-      jumlahAnggaran: doc.jumlahBaris['tabel_anggaran'] ?? doc.tabel['tabel_anggaran']?.length ?? 0,
-      jumlahTujuan: doc.jumlahBaris['tabel_tujuan'] ?? doc.tabel['tabel_tujuan']?.length ?? 0,
-      jumlahUtang: doc.jumlahBaris['tabel_utang'] ?? doc.tabel['tabel_utang']?.length ?? 0,
-      jumlahTagihan: doc.jumlahBaris['tabel_tagihan'] ?? doc.tabel['tabel_tagihan']?.length ?? 0,
+      jumlahDompet:
+          doc.jumlahBaris['tabel_dompet'] ??
+          doc.tabel['tabel_dompet']?.length ??
+          0,
+      jumlahTransaksi:
+          doc.jumlahBaris['tabel_transaksi'] ??
+          doc.tabel['tabel_transaksi']?.length ??
+          0,
+      jumlahAnggaran:
+          doc.jumlahBaris['tabel_anggaran'] ??
+          doc.tabel['tabel_anggaran']?.length ??
+          0,
+      jumlahTujuan:
+          doc.jumlahBaris['tabel_tujuan'] ??
+          doc.tabel['tabel_tujuan']?.length ??
+          0,
+      jumlahUtang:
+          doc.jumlahBaris['tabel_utang'] ??
+          doc.tabel['tabel_utang']?.length ??
+          0,
+      jumlahTagihan:
+          doc.jumlahBaris['tabel_tagihan'] ??
+          doc.tabel['tabel_tagihan']?.length ??
+          0,
     );
   }
 }

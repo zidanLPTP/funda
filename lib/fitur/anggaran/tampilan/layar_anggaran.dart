@@ -147,7 +147,10 @@ class LayarAnggaran extends ConsumerWidget {
                   ClipRRect(
                     borderRadius: BorderRadius.circular(SudutFunda.pil),
                     child: IndikatorMemuat.garis(
-                      nilai: (ringkasan.persentaseTerpakai / 100).clamp(0.0, 1.0),
+                      nilai: (ringkasan.persentaseTerpakai / 100).clamp(
+                        0.0,
+                        1.0,
+                      ),
                       tinggi: 8,
                       warnaLatar: WarnaFunda.garis,
                       warna: ringkasan.persentaseTerpakai > 100

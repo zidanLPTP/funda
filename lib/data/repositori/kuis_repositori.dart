@@ -29,7 +29,9 @@ class KuisRepositori {
     required int skorPersen,
     required bool lulus,
   }) {
-    return _db.into(_db.tabelHasilKuis).insert(
+    return _db
+        .into(_db.tabelHasilKuis)
+        .insert(
           TabelHasilKuisCompanion.insert(
             modulId: modulId,
             benar: benar,

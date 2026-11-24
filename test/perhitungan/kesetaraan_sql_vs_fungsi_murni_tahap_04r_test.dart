@@ -21,7 +21,9 @@ void main() {
       repoFotoData = FotoDataRepositori(db);
 
       // Siapkan dompet & kategori
-      await db.into(db.tabelDompet).insert(
+      await db
+          .into(db.tabelDompet)
+          .insert(
             TabelDompetCompanion.insert(
               id: 'dmp_test',
               nama: 'Dompet Utama',
@@ -32,7 +34,9 @@ void main() {
             ),
           );
 
-      await db.into(db.tabelKategori).insert(
+      await db
+          .into(db.tabelKategori)
+          .insert(
             TabelKategoriCompanion.insert(
               id: 'kat_makan',
               nama: 'Makan',
@@ -42,7 +46,9 @@ void main() {
             ),
           );
 
-      await db.into(db.tabelKategori).insert(
+      await db
+          .into(db.tabelKategori)
+          .insert(
             TabelKategoriCompanion.insert(
               id: 'kat_gaji',
               nama: 'Gaji',
@@ -57,173 +63,196 @@ void main() {
       await db.close();
     });
 
-    test('1. Kesetaraan Arus Kas: hitungArusKas (murni) vs hitungArusKasSQL (SQL)', () async {
-      final rng = Random(42);
-      final waktuMulai = DateTime(2026, 3, 1, 0, 0, 0);
-      final waktuSelesai = DateTime(2026, 3, 31, 23, 59, 59);
+    test(
+      '1. Kesetaraan Arus Kas: hitungArusKas (murni) vs hitungArusKasSQL (SQL)',
+      () async {
+        final rng = Random(42);
+        final waktuMulai = DateTime(2026, 3, 1, 0, 0, 0);
+        final waktuSelesai = DateTime(2026, 3, 31, 23, 59, 59);
 
-      final daftarEntitas = <EntitasTransaksi>[];
+        final daftarEntitas = <EntitasTransaksi>[];
 
-      // Masukkan 200 transaksi acak
-      for (var i = 0; i < 200; i++) {
-        final isMasuk = rng.nextBool();
-        final nominal = (rng.nextInt(50) + 1) * 10000;
-        final tglHari = rng.nextInt(30) + 1;
-        final jam = rng.nextInt(24);
-        final menit = rng.nextInt(60);
-        final waktu = DateTime(2026, 3, tglHari, jam, menit);
+        // Masukkan 200 transaksi acak
+        for (var i = 0; i < 200; i++) {
+          final isMasuk = rng.nextBool();
+          final nominal = (rng.nextInt(50) + 1) * 10000;
+          final tglHari = rng.nextInt(30) + 1;
+          final jam = rng.nextInt(24);
+          final menit = rng.nextInt(60);
+          final waktu = DateTime(2026, 3, tglHari, jam, menit);
 
-        final id = 'tx_arus_$i';
-        await db.into(db.tabelTransaksi).insert(
-              TabelTransaksiCompanion.insert(
-                id: id,
-                jenis: isMasuk ? 'masuk' : 'keluar',
-                jumlahRupiah: nominal,
-                dompetId: 'dmp_test',
-                kategoriId: Value(isMasuk ? 'kat_gaji' : 'kat_makan'),
-                waktuTransaksi: waktu,
-                dibuatPada: Value(waktu),
-              ),
-            );
+          final id = 'tx_arus_$i';
+          await db
+              .into(db.tabelTransaksi)
+              .insert(
+                TabelTransaksiCompanion.insert(
+                  id: id,
+                  jenis: isMasuk ? 'masuk' : 'keluar',
+                  jumlahRupiah: nominal,
+                  dompetId: 'dmp_test',
+                  kategoriId: Value(isMasuk ? 'kat_gaji' : 'kat_makan'),
+                  waktuTransaksi: waktu,
+                  dibuatPada: Value(waktu),
+                ),
+              );
 
-        daftarEntitas.add(
-          EntitasTransaksi(
-            id: id,
-            jenis: isMasuk ? 'masuk' : 'keluar',
-            jumlahRupiah: nominal,
-            dompetId: 'dmp_test',
-            kategoriId: isMasuk ? 'kat_gaji' : 'kat_makan',
-            biayaAdminRupiah: 0,
-            waktuTransaksi: waktu,
-            dibuatPada: waktu,
-            diubahPada: waktu,
-          ),
+          daftarEntitas.add(
+            EntitasTransaksi(
+              id: id,
+              jenis: isMasuk ? 'masuk' : 'keluar',
+              jumlahRupiah: nominal,
+              dompetId: 'dmp_test',
+              kategoriId: isMasuk ? 'kat_gaji' : 'kat_makan',
+              biayaAdminRupiah: 0,
+              waktuTransaksi: waktu,
+              dibuatPada: waktu,
+              diubahPada: waktu,
+            ),
+          );
+        }
+
+        // Hitung via fungsi murni Dart
+        final hasilMurni = hitungArusKas(
+          daftarTransaksi: daftarEntitas,
+          mulai: waktuMulai,
+          selesai: waktuSelesai,
         );
-      }
 
-      // Hitung via fungsi murni Dart
-      final hasilMurni = hitungArusKas(
-        daftarTransaksi: daftarEntitas,
-        mulai: waktuMulai,
-        selesai: waktuSelesai,
-      );
-
-      // Hitung via agregasi SQL
-      final hasilSQL = await repoTransaksi.hitungArusKasSQL(
-        mulai: waktuMulai,
-        selesai: waktuSelesai,
-      );
-
-      expect(hasilSQL.totalMasuk, equals(hasilMurni.totalMasuk));
-      expect(hasilSQL.totalKeluar, equals(hasilMurni.totalKeluar));
-      expect(hasilSQL.selisih, equals(hasilMurni.selisih));
-    });
-
-    test('2. Kesetaraan Pemasukan Rata-rata: hitungPemasukanBulananRataRata (murni) vs hitungPemasukanRataRataSQL (SQL)', () async {
-      final rng = Random(123);
-      final waktuSekarang = DateTime(2026, 4, 15, 12, 0); // April 2026
-
-      final daftarEntitas = <EntitasTransaksi>[];
-
-      // Masukkan transaksi acak dari Jan s.d. Apr 2026
-      for (var i = 0; i < 300; i++) {
-        final isMasuk = rng.nextInt(3) == 0; // 33% masuk
-        final nominal = (rng.nextInt(20) + 1) * 50000;
-        final bulan = rng.nextInt(4) + 1; // 1 to 4
-        final hari = rng.nextInt(28) + 1;
-        final jam = rng.nextInt(24);
-        final waktu = DateTime(2026, bulan, hari, jam);
-
-        final id = 'tx_rata_$i';
-        await db.into(db.tabelTransaksi).insert(
-              TabelTransaksiCompanion.insert(
-                id: id,
-                jenis: isMasuk ? 'masuk' : 'keluar',
-                jumlahRupiah: nominal,
-                dompetId: 'dmp_test',
-                kategoriId: Value(isMasuk ? 'kat_gaji' : 'kat_makan'),
-                waktuTransaksi: waktu,
-                dibuatPada: Value(waktu),
-              ),
-            );
-
-        daftarEntitas.add(
-          EntitasTransaksi(
-            id: id,
-            jenis: isMasuk ? 'masuk' : 'keluar',
-            jumlahRupiah: nominal,
-            dompetId: 'dmp_test',
-            kategoriId: isMasuk ? 'kat_gaji' : 'kat_makan',
-            biayaAdminRupiah: 0,
-            waktuTransaksi: waktu,
-            dibuatPada: waktu,
-            diubahPada: waktu,
-          ),
+        // Hitung via agregasi SQL
+        final hasilSQL = await repoTransaksi.hitungArusKasSQL(
+          mulai: waktuMulai,
+          selesai: waktuSelesai,
         );
-      }
 
-      // Hitung via fungsi murni
-      final hasilMurni = hitungPemasukanBulananRataRata(
-        daftarTransaksi: daftarEntitas,
-        waktuSekarang: waktuSekarang,
-      );
+        expect(hasilSQL.totalMasuk, equals(hasilMurni.totalMasuk));
+        expect(hasilSQL.totalKeluar, equals(hasilMurni.totalKeluar));
+        expect(hasilSQL.selisih, equals(hasilMurni.selisih));
+      },
+    );
 
-      // Hitung via agregasi SQL
-      final hasilSQL = await repoTransaksi.hitungPemasukanRataRataSQL(
-        waktuSekarang: waktuSekarang,
-      );
+    test(
+      '2. Kesetaraan Pemasukan Rata-rata: hitungPemasukanBulananRataRata (murni) vs hitungPemasukanRataRataSQL (SQL)',
+      () async {
+        final rng = Random(123);
+        final waktuSekarang = DateTime(2026, 4, 15, 12, 0); // April 2026
 
-      expect(hasilSQL.nilaiRupiah, equals(hasilMurni.nilaiRupiah));
-      expect(hasilSQL.dasar, equals(hasilMurni.dasar));
-    });
+        final daftarEntitas = <EntitasTransaksi>[];
 
-    test('3. Kesetaraan Hari & Bulan Berbeda: Fungsi Murni vs Kueri Agregasi SQL (termasuk batas 23:30 WIB di batas bulan)', () async {
-      final daftarWaktu = <DateTime>[];
+        // Masukkan transaksi acak dari Jan s.d. Apr 2026
+        for (var i = 0; i < 300; i++) {
+          final isMasuk = rng.nextInt(3) == 0; // 33% masuk
+          final nominal = (rng.nextInt(20) + 1) * 50000;
+          final bulan = rng.nextInt(4) + 1; // 1 to 4
+          final hari = rng.nextInt(28) + 1;
+          final jam = rng.nextInt(24);
+          final waktu = DateTime(2026, bulan, hari, jam);
 
-      // Kasus Batas Bulan Ekstrem:
-      // Transaksi A: 31 Januari 2026 23:30:00 WIB (UTC = 31 Jan 16:30 -> Bulan Januari)
-      final tA = DateTime(2026, 1, 31, 23, 30);
-      // Transaksi B: 1 Februari 2026 00:30:00 WIB (UTC = 31 Jan 17:30 -> Di UTC masih 31 Jan, tapi di lokal sudah Februari!)
-      final tB = DateTime(2026, 2, 1, 0, 30);
-      // Transaksi C: 10 Maret 2026 23:30:00 WIB (Bulan Maret)
-      final t1 = DateTime(2026, 3, 10, 23, 30);
-      // Transaksi D: 10 Maret 2026 01:15:00 WIB (Hari yang sama dengan C)
-      final t2 = DateTime(2026, 3, 10, 1, 15);
-      // Transaksi E: 11 Maret 2026 00:05:00 WIB (Beda hari di bulan Maret)
-      final t3 = DateTime(2026, 3, 11, 0, 5);
-      // Transaksi F: 15 April 2026 14:00:00 WIB (Bulan April)
-      final t4 = DateTime(2026, 4, 15, 14, 0);
+          final id = 'tx_rata_$i';
+          await db
+              .into(db.tabelTransaksi)
+              .insert(
+                TabelTransaksiCompanion.insert(
+                  id: id,
+                  jenis: isMasuk ? 'masuk' : 'keluar',
+                  jumlahRupiah: nominal,
+                  dompetId: 'dmp_test',
+                  kategoriId: Value(isMasuk ? 'kat_gaji' : 'kat_makan'),
+                  waktuTransaksi: waktu,
+                  dibuatPada: Value(waktu),
+                ),
+              );
 
-      final daftar = [tA, tB, t1, t2, t3, t4];
+          daftarEntitas.add(
+            EntitasTransaksi(
+              id: id,
+              jenis: isMasuk ? 'masuk' : 'keluar',
+              jumlahRupiah: nominal,
+              dompetId: 'dmp_test',
+              kategoriId: isMasuk ? 'kat_gaji' : 'kat_makan',
+              biayaAdminRupiah: 0,
+              waktuTransaksi: waktu,
+              dibuatPada: waktu,
+              diubahPada: waktu,
+            ),
+          );
+        }
 
-      for (var i = 0; i < daftar.length; i++) {
-        final w = daftar[i];
-        daftarWaktu.add(w);
-        await db.into(db.tabelTransaksi).insert(
-              TabelTransaksiCompanion.insert(
-                id: 'tx_tgl_$i',
-                jenis: 'keluar',
-                jumlahRupiah: 10000,
-                dompetId: 'dmp_test',
-                kategoriId: const Value('kat_makan'),
-                waktuTransaksi: w,
-                dibuatPada: Value(w),
-              ),
-            );
-      }
+        // Hitung via fungsi murni
+        final hasilMurni = hitungPemasukanBulananRataRata(
+          daftarTransaksi: daftarEntitas,
+          waktuSekarang: waktuSekarang,
+        );
 
-      // Hitung murni
-      final hariMurni = hitungHariKalenderBerbeda(daftarWaktu);
-      final bulanMurni = hitungBulanKalenderBerbeda(daftarWaktu);
+        // Hitung via agregasi SQL
+        final hasilSQL = await repoTransaksi.hitungPemasukanRataRataSQL(
+          waktuSekarang: waktuSekarang,
+        );
 
-      expect(hariMurni, equals(5), reason: '31 Jan, 1 Feb, 10 Mar, 11 Mar, 15 Apr -> 5 hari berbeda');
-      expect(bulanMurni, equals(4), reason: 'Januari, Februari, Maret, April -> 4 bulan berbeda');
+        expect(hasilSQL.nilaiRupiah, equals(hasilMurni.nilaiRupiah));
+        expect(hasilSQL.dasar, equals(hasilMurni.dasar));
+      },
+    );
 
-      // Hitung via SQL FotoData
-      final fotoData = await repoFotoData.ambilFotoData();
+    test(
+      '3. Kesetaraan Hari & Bulan Berbeda: Fungsi Murni vs Kueri Agregasi SQL (termasuk batas 23:30 WIB di batas bulan)',
+      () async {
+        final daftarWaktu = <DateTime>[];
 
-      expect(fotoData.hariTransaksiBerbeda, equals(hariMurni));
-      expect(fotoData.bulanTransaksiBerbeda, equals(bulanMurni));
-    });
+        // Kasus Batas Bulan Ekstrem:
+        // Transaksi A: 31 Januari 2026 23:30:00 WIB (UTC = 31 Jan 16:30 -> Bulan Januari)
+        final tA = DateTime(2026, 1, 31, 23, 30);
+        // Transaksi B: 1 Februari 2026 00:30:00 WIB (UTC = 31 Jan 17:30 -> Di UTC masih 31 Jan, tapi di lokal sudah Februari!)
+        final tB = DateTime(2026, 2, 1, 0, 30);
+        // Transaksi C: 10 Maret 2026 23:30:00 WIB (Bulan Maret)
+        final t1 = DateTime(2026, 3, 10, 23, 30);
+        // Transaksi D: 10 Maret 2026 01:15:00 WIB (Hari yang sama dengan C)
+        final t2 = DateTime(2026, 3, 10, 1, 15);
+        // Transaksi E: 11 Maret 2026 00:05:00 WIB (Beda hari di bulan Maret)
+        final t3 = DateTime(2026, 3, 11, 0, 5);
+        // Transaksi F: 15 April 2026 14:00:00 WIB (Bulan April)
+        final t4 = DateTime(2026, 4, 15, 14, 0);
+
+        final daftar = [tA, tB, t1, t2, t3, t4];
+
+        for (var i = 0; i < daftar.length; i++) {
+          final w = daftar[i];
+          daftarWaktu.add(w);
+          await db
+              .into(db.tabelTransaksi)
+              .insert(
+                TabelTransaksiCompanion.insert(
+                  id: 'tx_tgl_$i',
+                  jenis: 'keluar',
+                  jumlahRupiah: 10000,
+                  dompetId: 'dmp_test',
+                  kategoriId: const Value('kat_makan'),
+                  waktuTransaksi: w,
+                  dibuatPada: Value(w),
+                ),
+              );
+        }
+
+        // Hitung murni
+        final hariMurni = hitungHariKalenderBerbeda(daftarWaktu);
+        final bulanMurni = hitungBulanKalenderBerbeda(daftarWaktu);
+
+        expect(
+          hariMurni,
+          equals(5),
+          reason: '31 Jan, 1 Feb, 10 Mar, 11 Mar, 15 Apr -> 5 hari berbeda',
+        );
+        expect(
+          bulanMurni,
+          equals(4),
+          reason: 'Januari, Februari, Maret, April -> 4 bulan berbeda',
+        );
+
+        // Hitung via SQL FotoData
+        final fotoData = await repoFotoData.ambilFotoData();
+
+        expect(fotoData.hariTransaksiBerbeda, equals(hariMurni));
+        expect(fotoData.bulanTransaksiBerbeda, equals(bulanMurni));
+      },
+    );
   });
 }

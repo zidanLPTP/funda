@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
@@ -11,11 +12,7 @@ class LayarKuisModul extends ConsumerStatefulWidget {
   final String modulId;
   final int? benih;
 
-  const LayarKuisModul({
-    super.key,
-    required this.modulId,
-    this.benih,
-  });
+  const LayarKuisModul({super.key, required this.modulId, this.benih});
 
   @override
   ConsumerState<LayarKuisModul> createState() => _LayarKuisModulState();
@@ -34,7 +31,10 @@ class _LayarKuisModulState extends ConsumerState<LayarKuisModul> {
   bool _lulus = false;
 
   @visibleForTesting
-  int get indeksJawabanBenarSaatIni => _soalKuis.isNotEmpty && _indeksSoal < _soalKuis.length ? _soalKuis[_indeksSoal].benar : 0;
+  int get indeksJawabanBenarSaatIni =>
+      _soalKuis.isNotEmpty && _indeksSoal < _soalKuis.length
+      ? _soalKuis[_indeksSoal].benar
+      : 0;
 
   @override
   void initState() {
@@ -69,7 +69,9 @@ class _LayarKuisModulState extends ConsumerState<LayarKuisModul> {
         });
       }
     } catch (e, s) {
-      debugPrint('GALAT KUIS: $e\n$s');
+      if (kDebugMode) {
+        debugPrint('GALAT KUIS: $e\n$s');
+      }
       if (mounted) {
         setState(() {
           _galat = e.toString();
@@ -92,7 +94,9 @@ class _LayarKuisModulState extends ConsumerState<LayarKuisModul> {
     final lulus = tentukanLulusKuis(benar: benar, total: total);
 
     // Simpan ke database
-    await ref.read(penyediaKuisRepositori).simpanHasilKuis(
+    await ref
+        .read(penyediaKuisRepositori)
+        .simpanHasilKuis(
           modulId: widget.modulId,
           benar: benar,
           total: total,
@@ -124,7 +128,7 @@ class _LayarKuisModulState extends ConsumerState<LayarKuisModul> {
       return Scaffold(
         backgroundColor: WarnaFunda.latar,
         appBar: AppBar(
-          backgroundColor: Colors.transparent,
+          backgroundColor: WarnaFunda.transparan,
           elevation: 0,
           leading: IconButton(
             icon: const Icon(LucideIcons.arrowLeft, color: WarnaFunda.teks),
@@ -169,7 +173,10 @@ class _LayarKuisModulState extends ConsumerState<LayarKuisModul> {
               child: Row(
                 children: [
                   IconButton(
-                    icon: const Icon(LucideIcons.arrowLeft, color: WarnaFunda.teks),
+                    icon: const Icon(
+                      LucideIcons.arrowLeft,
+                      color: WarnaFunda.teks,
+                    ),
                     onPressed: () => Navigator.pop(context),
                   ),
                   const SizedBox(width: SpasiFunda.xs),
@@ -185,7 +192,10 @@ class _LayarKuisModulState extends ConsumerState<LayarKuisModul> {
                     ),
                   ),
                   const SizedBox(width: SpasiFunda.m),
-                  TeksFunda.catatan('Soal ${_indeksSoal + 1}/$totalSoal', warna: WarnaFunda.teksRedup),
+                  TeksFunda.catatan(
+                    'Soal ${_indeksSoal + 1}/$totalSoal',
+                    warna: WarnaFunda.teksRedup,
+                  ),
                 ],
               ),
             ),
@@ -198,12 +208,18 @@ class _LayarKuisModulState extends ConsumerState<LayarKuisModul> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: SpasiFunda.s, vertical: SpasiFunda.xs),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: SpasiFunda.s,
+                        vertical: SpasiFunda.xs,
+                      ),
                       decoration: BoxDecoration(
                         color: WarnaFunda.utamaTipis,
                         borderRadius: BorderRadius.circular(SudutFunda.pil),
                       ),
-                      child: TeksFunda.catatan('Kuis: ${_modul!.judul}', warna: WarnaFunda.utama),
+                      child: TeksFunda.catatan(
+                        'Kuis: ${_modul!.judul}',
+                        warna: WarnaFunda.utama,
+                      ),
                     ),
                     const SizedBox(height: SpasiFunda.l),
                     TeksFunda.judulBagian(
@@ -245,20 +261,27 @@ class _LayarKuisModulState extends ConsumerState<LayarKuisModul> {
                           padding: const EdgeInsets.all(SpasiFunda.m),
                           decoration: BoxDecoration(
                             color: latar,
-                            borderRadius: BorderRadius.circular(SudutFunda.kartu),
-                            border: Border.all(color: border, width: isSelected ? 1.5 : 1.0),
+                            borderRadius: BorderRadius.circular(
+                              SudutFunda.kartu,
+                            ),
+                            border: Border.all(
+                              color: border,
+                              width: isSelected ? 1.5 : 1.0,
+                            ),
                           ),
                           child: Row(
                             children: [
                               Icon(
-                                isSelected ? LucideIcons.checkCircle2 : LucideIcons.circle,
+                                isSelected
+                                    ? LucideIcons.checkCircle2
+                                    : LucideIcons.circle,
                                 size: 20,
-                                color: isSelected ? WarnaFunda.utama : WarnaFunda.teksRedup,
+                                color: isSelected
+                                    ? WarnaFunda.utama
+                                    : WarnaFunda.teksRedup,
                               ),
                               const SizedBox(width: SpasiFunda.m),
-                              Expanded(
-                                child: TeksFunda.isi(teks),
-                              ),
+                              Expanded(child: TeksFunda.isi(teks)),
                             ],
                           ),
                         ),
@@ -271,19 +294,27 @@ class _LayarKuisModulState extends ConsumerState<LayarKuisModul> {
                       Container(
                         padding: const EdgeInsets.all(SpasiFunda.m),
                         decoration: BoxDecoration(
-                          color: pilihanTerpilih == soal.benar ? WarnaFunda.tintHijau : WarnaFunda.tintAmber,
+                          color: pilihanTerpilih == soal.benar
+                              ? WarnaFunda.tintHijau
+                              : WarnaFunda.tintAmber,
                           borderRadius: BorderRadius.circular(SudutFunda.kartu),
                         ),
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Icon(
-                              pilihanTerpilih == soal.benar ? LucideIcons.check : LucideIcons.info,
-                              color: pilihanTerpilih == soal.benar ? WarnaFunda.pemasukan : WarnaFunda.peringatan,
+                              pilihanTerpilih == soal.benar
+                                  ? LucideIcons.check
+                                  : LucideIcons.info,
+                              color: pilihanTerpilih == soal.benar
+                                  ? WarnaFunda.pemasukan
+                                  : WarnaFunda.peringatan,
                               size: 20,
                             ),
                             const SizedBox(width: SpasiFunda.s),
-                            Expanded(child: TeksFunda.isiKecil(soal.penjelasan)),
+                            Expanded(
+                              child: TeksFunda.isiKecil(soal.penjelasan),
+                            ),
                           ],
                         ),
                       ),
@@ -299,7 +330,9 @@ class _LayarKuisModulState extends ConsumerState<LayarKuisModul> {
               child: SizedBox(
                 width: double.infinity,
                 child: TombolFunda(
-                  teks: _indeksSoal == totalSoal - 1 ? 'Lihat Hasil Kuis' : 'Soal Berikutnya',
+                  teks: _indeksSoal == totalSoal - 1
+                      ? 'Lihat Hasil Kuis'
+                      : 'Soal Berikutnya',
                   lebarPenuh: true,
                   padaTekan: sudahDijawab
                       ? () {
@@ -346,7 +379,9 @@ class _LayarKuisModulState extends ConsumerState<LayarKuisModul> {
                 ),
               ),
               const SizedBox(height: SpasiFunda.l),
-              TeksFunda.judulLayar(_lulus ? 'Selamat, Kamu Lulus!' : 'Mari Coba Lagi'),
+              TeksFunda.judulLayar(
+                _lulus ? 'Selamat, Kamu Lulus!' : 'Mari Coba Lagi',
+              ),
               const SizedBox(height: SpasiFunda.s),
               TeksFunda.isi(
                 _lulus
@@ -359,7 +394,10 @@ class _LayarKuisModulState extends ConsumerState<LayarKuisModul> {
 
               // Kartu Skor
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: SpasiFunda.xl, vertical: SpasiFunda.l),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: SpasiFunda.xl,
+                  vertical: SpasiFunda.l,
+                ),
                 decoration: BoxDecoration(
                   color: WarnaFunda.permukaan,
                   borderRadius: BorderRadius.circular(SudutFunda.petak),
@@ -367,13 +405,18 @@ class _LayarKuisModulState extends ConsumerState<LayarKuisModul> {
                 ),
                 child: Column(
                   children: [
-                    const TeksFunda.catatan('Skor Kuis Kamu', warna: WarnaFunda.teksRedup),
+                    const TeksFunda.catatan(
+                      'Skor Kuis Kamu',
+                      warna: WarnaFunda.teksRedup,
+                    ),
                     const SizedBox(height: SpasiFunda.xs),
                     TeksFunda.judulLayar('$_skorAkhir%'),
                     const SizedBox(height: SpasiFunda.xs),
                     TeksFunda.catatan(
                       'Syarat kelulusan: minimal 70%',
-                      warna: _lulus ? WarnaFunda.pemasukan : WarnaFunda.peringatan,
+                      warna: _lulus
+                          ? WarnaFunda.pemasukan
+                          : WarnaFunda.peringatan,
                     ),
                   ],
                 ),
@@ -393,7 +436,9 @@ class _LayarKuisModulState extends ConsumerState<LayarKuisModul> {
                   style: OutlinedButton.styleFrom(
                     minimumSize: const Size(48, 48),
                     side: const BorderSide(color: WarnaFunda.garis),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(SudutFunda.pil)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(SudutFunda.pil),
+                    ),
                   ),
                   onPressed: () => Navigator.pop(context),
                   child: const TeksFunda.label('Kembali ke Peta Belajar'),

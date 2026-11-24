@@ -193,7 +193,9 @@ void main() {
           await basisData.migration.onUpgrade(migrator, 6, 7);
 
           final waktuV7 = DateTime(2026, 4, 1, 9, 0);
-          await basisData.into(basisData.tabelProgresPelajaran).insert(
+          await basisData
+              .into(basisData.tabelProgresPelajaran)
+              .insert(
                 TabelProgresPelajaranCompanion.insert(
                   pelajaranId: 'anggaran_arus_kas_1_2',
                   modulId: 'anggaran_arus_kas',
@@ -204,7 +206,9 @@ void main() {
                 ),
               );
 
-          await basisData.into(basisData.tabelHasilMisi).insert(
+          await basisData
+              .into(basisData.tabelHasilMisi)
+              .insert(
                 TabelHasilMisiCompanion.insert(
                   misiId: 'anggaran_arus_kas_1_2',
                   pelajaranId: 'anggaran_arus_kas_1_2',
@@ -214,7 +218,9 @@ void main() {
                 ),
               );
 
-          await basisData.into(basisData.tabelHasilKuis).insert(
+          await basisData
+              .into(basisData.tabelHasilKuis)
+              .insert(
                 TabelHasilKuisCompanion.insert(
                   modulId: 'anggaran_arus_kas',
                   benar: 4,
@@ -225,7 +231,9 @@ void main() {
                 ),
               );
 
-          await basisData.into(basisData.tabelPernyataan).insert(
+          await basisData
+              .into(basisData.tabelPernyataan)
+              .insert(
                 TabelPernyataanCompanion.insert(
                   kunci: 'tidak_punya_utang',
                   nilai: 'true',
@@ -239,10 +247,14 @@ void main() {
           await basisData.migration.onUpgrade(migrator, 7, 8);
 
           // Verifikasi indeks baru v8 berhasil terbuat
-          final indexRes = await basisData.customSelect(
-            "SELECT name FROM sqlite_master WHERE type='index' AND name LIKE 'idx_transaksi_%';",
-          ).get();
-          final daftarIndex = indexRes.map((r) => r.read<String>('name')).toSet();
+          final indexRes = await basisData
+              .customSelect(
+                "SELECT name FROM sqlite_master WHERE type='index' AND name LIKE 'idx_transaksi_%';",
+              )
+              .get();
+          final daftarIndex = indexRes
+              .map((r) => r.read<String>('name'))
+              .toSet();
           expect(daftarIndex.contains('idx_transaksi_jenis'), isTrue);
           expect(daftarIndex.contains('idx_transaksi_jenis_kategori'), isTrue);
           expect(daftarIndex.contains('idx_transaksi_waktu_id'), isTrue);
@@ -255,7 +267,9 @@ void main() {
 
           // Isi data v9
           final waktuV9 = DateTime(2026, 3, 15, 14, 0);
-          await basisData.into(basisData.tabelProfilKeuangan).insert(
+          await basisData
+              .into(basisData.tabelProfilKeuangan)
+              .insert(
                 TabelProfilKeuanganCompanion.insert(
                   punyaPenghasilan: 'rutin',
                   punyaUtang: 'ya',
@@ -269,7 +283,9 @@ void main() {
                 ),
               );
 
-          await basisData.into(basisData.tabelHasilTesAwal).insert(
+          await basisData
+              .into(basisData.tabelHasilTesAwal)
+              .insert(
                 TabelHasilTesAwalCompanion.insert(
                   waktu: waktuV9,
                   jawabanJson: '{"soal_1": 1}',
@@ -279,9 +295,11 @@ void main() {
               );
 
           // Verifikasi indeks baru v9
-          final indexTesAwalRes = await basisData.customSelect(
-            "SELECT name FROM sqlite_master WHERE type='index' AND name = 'idx_hasil_tes_awal_waktu';",
-          ).get();
+          final indexTesAwalRes = await basisData
+              .customSelect(
+                "SELECT name FROM sqlite_master WHERE type='index' AND name = 'idx_hasil_tes_awal_waktu';",
+              )
+              .get();
           expect(indexTesAwalRes.length, equals(1));
 
           // -------------------------------------------------------------
@@ -356,29 +374,33 @@ void main() {
           expect(tagihanV6.berakhirPada, equals(batasAkhirV6));
 
           // 7. Data v7 (progres pelajaran, misi, kuis, pernyataan) tersimpan utuh
-          final progres = await (basisData.select(basisData.tabelProgresPelajaran)
-                ..where((p) => p.pelajaranId.equals('anggaran_arus_kas_1_2')))
-              .getSingleOrNull();
+          final progres =
+              await (basisData.select(basisData.tabelProgresPelajaran)..where(
+                    (p) => p.pelajaranId.equals('anggaran_arus_kas_1_2'),
+                  ))
+                  .getSingleOrNull();
           expect(progres, isNotNull);
           expect(progres!.status, equals('selesai'));
           expect(progres.indeksLangkah, equals(3));
 
-          final misi = await (basisData.select(basisData.tabelHasilMisi)
-                ..where((m) => m.misiId.equals('anggaran_arus_kas_1_2')))
-              .getSingleOrNull();
+          final misi =
+              await (basisData.select(basisData.tabelHasilMisi)
+                    ..where((m) => m.misiId.equals('anggaran_arus_kas_1_2')))
+                  .getSingleOrNull();
           expect(misi, isNotNull);
           expect(misi!.status, equals('selesai'));
 
-          final kuisList = await (basisData.select(basisData.tabelHasilKuis)
-                ..where((k) => k.modulId.equals('anggaran_arus_kas')))
-              .get();
+          final kuisList = await (basisData.select(
+            basisData.tabelHasilKuis,
+          )..where((k) => k.modulId.equals('anggaran_arus_kas'))).get();
           expect(kuisList.length, equals(1));
           expect(kuisList.first.skorPersen, equals(80));
           expect(kuisList.first.lulus, isTrue);
 
-          final pernyataan = await (basisData.select(basisData.tabelPernyataan)
-                ..where((p) => p.kunci.equals('tidak_punya_utang')))
-              .getSingleOrNull();
+          final pernyataan =
+              await (basisData.select(basisData.tabelPernyataan)
+                    ..where((p) => p.kunci.equals('tidak_punya_utang')))
+                  .getSingleOrNull();
           expect(pernyataan, isNotNull);
           expect(pernyataan!.nilai, equals('true'));
 

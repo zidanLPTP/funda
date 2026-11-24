@@ -30,62 +30,81 @@ void main() {
   });
 
   group('Pengujian Widget Komponen Teks Istilah & Dialog Kamus', () {
-    testWidgets('TeksDenganIstilah menampilkan dialog kamus saat istilah diklik', (tester) async {
-      final mapKamus = {
-        'arus kas': const IstilahKamus(
-          istilah: 'Arus Kas',
-          arti: 'Aliran uang masuk dan uang keluar dalam kurun waktu tertentu.',
-          contohRupiah: 'Gaji Rp5.000.000 masuk, belanja Rp3.500.000 keluar.',
-        ),
-      };
+    testWidgets(
+      'TeksDenganIstilah menampilkan dialog kamus saat istilah diklik',
+      (tester) async {
+        final mapKamus = {
+          'arus kas': const IstilahKamus(
+            istilah: 'Arus Kas',
+            arti:
+                'Aliran uang masuk dan uang keluar dalam kurun waktu tertentu.',
+            contohRupiah: 'Gaji Rp5.000.000 masuk, belanja Rp3.500.000 keluar.',
+          ),
+        };
 
-      await tester.pumpWidget(
-        ProviderScope(
-          overrides: [
-            penyediaKamus.overrideWith((ref) => Future.value(mapKamus)),
-          ],
-          child: MaterialApp(
-            theme: TemaFunda.temaTerang,
-            home: const Scaffold(
-              body: TeksDenganIstilah(
-                teks: 'Pahami bagaimana {{arus kas}} bekerja setiap bulannya.',
+        await tester.pumpWidget(
+          ProviderScope(
+            overrides: [
+              penyediaKamus.overrideWith((ref) => Future.value(mapKamus)),
+            ],
+            child: MaterialApp(
+              theme: TemaFunda.temaTerang,
+              home: const Scaffold(
+                body: TeksDenganIstilah(
+                  teks:
+                      'Pahami bagaimana {{arus kas}} bekerja setiap bulannya.',
+                ),
               ),
             ),
           ),
-        ),
-      );
-      await tester.pump();
+        );
+        await tester.pump();
 
-      // Memastikan teks dan istilah terurai dalam RichText
-      expect(find.textContaining('Pahami bagaimana'), findsOneWidget);
-      expect(find.textContaining('arus kas'), findsOneWidget);
+        // Memastikan teks dan istilah terurai dalam RichText
+        expect(find.textContaining('Pahami bagaimana'), findsOneWidget);
+        expect(find.textContaining('arus kas'), findsOneWidget);
 
-      // Picu aksi ketuk pada recognizer istilah 'arus kas'
-      final richText = tester.widget<RichText>(find.byType(RichText).first);
-      final span = richText.text as TextSpan;
-      var ditemukan = false;
-      span.visitChildren((child) {
-        if (child is TextSpan && (child.text?.toLowerCase().contains('arus kas') ?? false)) {
-          final tapRec = child.recognizer as TapGestureRecognizer?;
-          tapRec?.onTap?.call();
-          ditemukan = true;
-          return false;
-        }
-        return true;
-      });
-      expect(ditemukan, isTrue, reason: 'Span istilah harus ditemukan');
-      await tester.pump();
+        // Picu aksi ketuk pada recognizer istilah 'arus kas'
+        final richText = tester.widget<RichText>(find.byType(RichText).first);
+        final span = richText.text as TextSpan;
+        var ditemukan = false;
+        span.visitChildren((child) {
+          if (child is TextSpan &&
+              (child.text?.toLowerCase().contains('arus kas') ?? false)) {
+            final tapRec = child.recognizer as TapGestureRecognizer?;
+            tapRec?.onTap?.call();
+            ditemukan = true;
+            return false;
+          }
+          return true;
+        });
+        expect(ditemukan, isTrue, reason: 'Span istilah harus ditemukan');
+        await tester.pump();
 
-      // Dialog kamus terbuka
-      expect(find.text('Arus Kas'), findsOneWidget);
-      expect(find.text('Aliran uang masuk dan uang keluar dalam kurun waktu tertentu.'), findsOneWidget);
-      expect(find.text('Gaji Rp5.000.000 masuk, belanja Rp3.500.000 keluar.'), findsOneWidget);
+        // Dialog kamus terbuka
+        expect(find.text('Arus Kas'), findsOneWidget);
+        expect(
+          find.text(
+            'Aliran uang masuk dan uang keluar dalam kurun waktu tertentu.',
+          ),
+          findsOneWidget,
+        );
+        expect(
+          find.text('Gaji Rp5.000.000 masuk, belanja Rp3.500.000 keluar.'),
+          findsOneWidget,
+        );
 
-      // Tutup dialog
-      await tester.tap(find.text('Mengerti'));
-      await tester.pump();
-      expect(find.text('Aliran uang masuk dan uang keluar dalam kurun waktu tertentu.'), findsNothing);
-    });
+        // Tutup dialog
+        await tester.tap(find.text('Mengerti'));
+        await tester.pump();
+        expect(
+          find.text(
+            'Aliran uang masuk dan uang keluar dalam kurun waktu tertentu.',
+          ),
+          findsNothing,
+        );
+      },
+    );
   });
 
   group('Pengujian Widget Tab Belajar (Peta Belajar)', () {
@@ -99,152 +118,155 @@ void main() {
       await db.close();
     });
 
-    testWidgets('LayarBelajar menampilkan modul tersedia, segera hadir, dan pelajaran terkunci', (tester) async {
-      final modulAktif = ModulKonten(
-        id: 'anggaran_arus_kas',
-        judul: 'Anggaran & Arus Kas',
-        tingkat: 'pemula',
-        urutan: 1,
-        deskripsiSingkat: 'Fondasi penting arus kas.',
-        tersedia: true,
-        gerbang: const [],
-        daftarPelajaran: const ['anggaran_arus_kas_1_2'],
-        kuis: const KuisKonten(
-          jumlahSoal: 2,
-          bankSoal: [
-            SoalKuis(
-              id: 'q1',
-              pelajaranId: 'anggaran_arus_kas_1_2',
-              tanya: 'Apa itu arus kas?',
-              pilihan: ['A', 'B'],
-              benar: 0,
-              penjelasan: 'Penjelasan A',
-            ),
-            SoalKuis(
-              id: 'q2',
-              pelajaranId: 'anggaran_arus_kas_1_2',
-              tanya: 'Apa itu kebutuhan?',
-              pilihan: ['X', 'Y'],
-              benar: 0,
-              penjelasan: 'Penjelasan X',
+    testWidgets(
+      'LayarBelajar menampilkan modul tersedia, segera hadir, dan pelajaran terkunci',
+      (tester) async {
+        final modulAktif = ModulKonten(
+          id: 'anggaran_arus_kas',
+          judul: 'Anggaran & Arus Kas',
+          tingkat: 'pemula',
+          urutan: 1,
+          deskripsiSingkat: 'Fondasi penting arus kas.',
+          tersedia: true,
+          gerbang: const [],
+          daftarPelajaran: const ['anggaran_arus_kas_1_2'],
+          kuis: const KuisKonten(
+            jumlahSoal: 2,
+            bankSoal: [
+              SoalKuis(
+                id: 'q1',
+                pelajaranId: 'anggaran_arus_kas_1_2',
+                tanya: 'Apa itu arus kas?',
+                pilihan: ['A', 'B'],
+                benar: 0,
+                penjelasan: 'Penjelasan A',
+              ),
+              SoalKuis(
+                id: 'q2',
+                pelajaranId: 'anggaran_arus_kas_1_2',
+                tanya: 'Apa itu kebutuhan?',
+                pilihan: ['X', 'Y'],
+                benar: 0,
+                penjelasan: 'Penjelasan X',
+              ),
+            ],
+          ),
+        );
+
+        final modulSegeraHadir = ModulKonten(
+          id: 'investasi_pemula',
+          judul: 'Investasi Pemula',
+          tingkat: 'pemula',
+          urutan: 2,
+          deskripsiSingkat: 'Mengenal reksa dana.',
+          tersedia: false,
+          gerbang: const [],
+          daftarPelajaran: const [],
+          kuis: const KuisKonten(jumlahSoal: 0, bankSoal: []),
+        );
+
+        final pel1 = PelajaranKonten(
+          id: 'anggaran_arus_kas_1_2',
+          modulId: 'anggaran_arus_kas',
+          judul: 'Memetakan Arus Kas',
+          durasiMenit: 3,
+          status: 'draf',
+          gerbang: const [
+            SyaratGerbangData(
+              tipe: 'ada_data',
+              objek: 'transaksi',
+              min: 3,
+              pesan: 'Catat minimal 3 transaksi nyata.',
+              atauPernyataan: 'tidak_punya_transaksi',
             ),
           ],
-        ),
-      );
-
-      final modulSegeraHadir = ModulKonten(
-        id: 'investasi_pemula',
-        judul: 'Investasi Pemula',
-        tingkat: 'pemula',
-        urutan: 2,
-        deskripsiSingkat: 'Mengenal reksa dana.',
-        tersedia: false,
-        gerbang: const [],
-        daftarPelajaran: const [],
-        kuis: const KuisKonten(jumlahSoal: 0, bankSoal: []),
-      );
-
-      final pel1 = PelajaranKonten(
-        id: 'anggaran_arus_kas_1_2',
-        modulId: 'anggaran_arus_kas',
-        judul: 'Memetakan Arus Kas',
-        durasiMenit: 3,
-        status: 'draf',
-        gerbang: const [
-          SyaratGerbangData(
+          pemantik: 'Pemantik cerita',
+          kartu: const [KartuPelajaranKonten(judul: 'Konsep', isi: 'Isi')],
+          contohAngka: ContohAngkaKonten.kosong,
+          cekPaham: const [],
+          misi: const MisiKonten(
             tipe: 'ada_data',
             objek: 'transaksi',
-            min: 3,
-            pesan: 'Catat minimal 3 transaksi nyata.',
-            atauPernyataan: 'tidak_punya_transaksi',
+            min: 1,
+            judul: 'Misi',
+            deskripsi: 'Deskripsi',
+            perkiraanMenit: 2,
+            umpanBalik: 'arus_kas_bulan_ini',
           ),
-        ],
-        pemantik: 'Pemantik cerita',
-        kartu: const [KartuPelajaranKonten(judul: 'Konsep', isi: 'Isi')],
-        contohAngka: ContohAngkaKonten.kosong,
-        cekPaham: const [],
-        misi: const MisiKonten(
-          tipe: 'ada_data',
-          objek: 'transaksi',
-          min: 1,
-          judul: 'Misi',
-          deskripsi: 'Deskripsi',
-          perkiraanMenit: 2,
-          umpanBalik: 'arus_kas_bulan_ini',
-        ),
-      );
+        );
 
-      final itemModul1 = ItemPetaModul(
-        modul: modulAktif,
-        statusModul: const HasilStatusBelajar(
-          status: StatusBelajar.sedang,
-          apaYangKurang: [],
-        ),
-        daftarPelajaran: [
-          (
-            pel1,
-            const HasilStatusBelajar(
-              status: StatusBelajar.terkunci,
-              apaYangKurang: ['Catat minimal 3 transaksi nyata.'],
-              ruteAksi: '/catatan',
-              daftarAtauPernyataan: ['tidak_punya_transaksi'],
-            )
+        final itemModul1 = ItemPetaModul(
+          modul: modulAktif,
+          statusModul: const HasilStatusBelajar(
+            status: StatusBelajar.sedang,
+            apaYangKurang: [],
           ),
-        ],
-      );
-
-      final itemModul2 = ItemPetaModul(
-        modul: modulSegeraHadir,
-        statusModul: const HasilStatusBelajar(
-          status: StatusBelajar.terkunci,
-          apaYangKurang: [],
-        ),
-        daftarPelajaran: const [],
-      );
-
-      await tester.pumpWidget(
-        ProviderScope(
-          overrides: [
-            penyediaBasisData.overrideWithValue(db),
-            penyediaPetaBelajar.overrideWith(
-              (ref) => Future.value([itemModul1, itemModul2]),
+          daftarPelajaran: [
+            (
+              pel1,
+              const HasilStatusBelajar(
+                status: StatusBelajar.terkunci,
+                apaYangKurang: ['Catat minimal 3 transaksi nyata.'],
+                ruteAksi: '/catatan',
+                daftarAtauPernyataan: ['tidak_punya_transaksi'],
+              ),
             ),
           ],
-          child: MaterialApp(
-            theme: TemaFunda.temaTerang,
-            home: const LayarBelajar(),
+        );
+
+        final itemModul2 = ItemPetaModul(
+          modul: modulSegeraHadir,
+          statusModul: const HasilStatusBelajar(
+            status: StatusBelajar.terkunci,
+            apaYangKurang: [],
           ),
-        ),
-      );
-      await tester.pump();
+          daftarPelajaran: const [],
+        );
 
-      // Cek judul layar dan bagian
-      expect(find.text('Belajar Finansial'), findsOneWidget);
-      expect(find.text('Tingkat Pemula'), findsOneWidget);
-      expect(find.text('Anggaran & Arus Kas'), findsOneWidget);
-      expect(find.text('Investasi Pemula'), findsOneWidget);
-      expect(find.text('Segera Hadir'), findsOneWidget);
+        await tester.pumpWidget(
+          ProviderScope(
+            overrides: [
+              penyediaBasisData.overrideWithValue(db),
+              penyediaPetaBelajar.overrideWith(
+                (ref) => Future.value([itemModul1, itemModul2]),
+              ),
+            ],
+            child: MaterialApp(
+              theme: TemaFunda.temaTerang,
+              home: const LayarBelajar(),
+            ),
+          ),
+        );
+        await tester.pump();
 
-      // Cek pelajaran terkunci dan tombol pernyataan
-      expect(find.text('Memetakan Arus Kas'), findsOneWidget);
-      expect(find.text('Catat minimal 3 transaksi nyata.'), findsOneWidget);
-      expect(find.text('Aku tidak punya ini'), findsOneWidget);
-      expect(find.text('Lengkapi Data Sekarang'), findsOneWidget);
+        // Cek judul layar dan bagian
+        expect(find.text('Belajar Finansial'), findsOneWidget);
+        expect(find.text('Tingkat Pemula'), findsOneWidget);
+        expect(find.text('Anggaran & Arus Kas'), findsOneWidget);
+        expect(find.text('Investasi Pemula'), findsOneWidget);
+        expect(find.text('Segera Hadir'), findsOneWidget);
 
-      // Ketuk tombol "Aku tidak punya ini"
-      await tester.ensureVisible(find.text('Aku tidak punya ini'));
-      await tester.pump();
-      await tester.tap(find.text('Aku tidak punya ini'));
-      await tester.pump();
+        // Cek pelajaran terkunci dan tombol pernyataan
+        expect(find.text('Memetakan Arus Kas'), findsOneWidget);
+        expect(find.text('Catat minimal 3 transaksi nyata.'), findsOneWidget);
+        expect(find.text('Aku tidak punya ini'), findsOneWidget);
+        expect(find.text('Lengkapi Data Sekarang'), findsOneWidget);
 
-      // Verifikasi di DB bahwa pernyataan tersimpan
-      final repo = PernyataanRepositori(db);
-      final pernyataan = await repo.ambilSemuaPernyataan();
-      expect(pernyataan['tidak_punya_transaksi'], equals('true'));
+        // Ketuk tombol "Aku tidak punya ini"
+        await tester.ensureVisible(find.text('Aku tidak punya ini'));
+        await tester.pump();
+        await tester.tap(find.text('Aku tidak punya ini'));
+        await tester.pump();
 
-      // Bersihkan pohon widget
-      await bongkarWidget(tester);
-    });
+        // Verifikasi di DB bahwa pernyataan tersimpan
+        final repo = PernyataanRepositori(db);
+        final pernyataan = await repo.ambilSemuaPernyataan();
+        expect(pernyataan['tidak_punya_transaksi'], equals('true'));
+
+        // Bersihkan pohon widget
+        await bongkarWidget(tester);
+      },
+    );
   });
 
   group('Pengujian Widget Kuis Modul', () {
@@ -258,7 +280,9 @@ void main() {
       await db.close();
     });
 
-    testWidgets('LayarKuisModul alur pengerjaan dan hasil kelulusan', (tester) async {
+    testWidgets('LayarKuisModul alur pengerjaan dan hasil kelulusan', (
+      tester,
+    ) async {
       final modulKuis = ModulKonten(
         id: 'modul_uji',
         judul: 'Modul Uji',
@@ -311,9 +335,14 @@ void main() {
       await tester.pump();
       // Soal 1 tampil (diacak)
       expect(find.text('Soal 1/2'), findsOneWidget);
-      final isSoalTambah = find.text('Berapa satu tambah satu?').evaluate().isNotEmpty;
+      final isSoalTambah = find
+          .text('Berapa satu tambah satu?')
+          .evaluate()
+          .isNotEmpty;
       final jawaban1 = isSoalTambah ? 'Dua' : 'Biru';
-      final penjelasan1 = isSoalTambah ? 'Satu tambah satu adalah dua.' : 'Langit cerah berwarna biru.';
+      final penjelasan1 = isSoalTambah
+          ? 'Satu tambah satu adalah dua.'
+          : 'Langit cerah berwarna biru.';
 
       // Pilih jawaban benar soal 1
       await tester.tap(find.text(jawaban1));
@@ -329,7 +358,9 @@ void main() {
       // Soal 2 tampil
       expect(find.text('Soal 2/2'), findsOneWidget);
       final jawaban2 = isSoalTambah ? 'Biru' : 'Dua';
-      final penjelasan2 = isSoalTambah ? 'Langit cerah berwarna biru.' : 'Satu tambah satu adalah dua.';
+      final penjelasan2 = isSoalTambah
+          ? 'Langit cerah berwarna biru.'
+          : 'Satu tambah satu adalah dua.';
 
       // Pilih jawaban benar soal 2
       await tester.tap(find.text(jawaban2));
@@ -366,109 +397,127 @@ void main() {
       await db.close();
     });
 
-    testWidgets('LayarPemutarPelajaran menyajikan kartu bertahap dan memproses cek paham & misi', (tester) async {
-      await tester.pumpWidget(
-        ProviderScope(
-          overrides: [
-            penyediaBasisData.overrideWithValue(db),
-            penyediaFotoData.overrideWith((ref) => Future.value(FotoDataPengguna.kosong())),
-          ],
-          child: MaterialApp(
-            theme: TemaFunda.temaTerang,
-            home: const LayarPemutarPelajaran(
-              modulId: 'anggaran_arus_kas',
-              pelajaranId: 'anggaran_arus_kas_1_2',
+    testWidgets(
+      'LayarPemutarPelajaran menyajikan kartu bertahap dan memproses cek paham & misi',
+      (tester) async {
+        await tester.pumpWidget(
+          ProviderScope(
+            overrides: [
+              penyediaBasisData.overrideWithValue(db),
+              penyediaFotoData.overrideWith(
+                (ref) => Future.value(FotoDataPengguna.kosong()),
+              ),
+            ],
+            child: MaterialApp(
+              theme: TemaFunda.temaTerang,
+              home: const LayarPemutarPelajaran(
+                modulId: 'anggaran_arus_kas',
+                pelajaranId: 'anggaran_arus_kas_1_2',
+              ),
             ),
           ),
-        ),
-      );
-      await tester.pump();
-      await tester.pump();
-      await tester.pump();
+        );
+        await tester.pump();
+        await tester.pump();
+        await tester.pump();
 
-      // Langkah 1: Pemantik
-      expect(find.text('Pemantik'), findsOneWidget);
-      expect(find.textContaining('Temanmu bertanya, "Uangmu bulan ini cukup?"'), findsOneWidget);
-      expect(find.text('Lanjut'), findsOneWidget);
+        // Langkah 1: Pemantik
+        expect(find.text('Pemantik'), findsOneWidget);
+        expect(
+          find.textContaining('Temanmu bertanya, "Uangmu bulan ini cukup?"'),
+          findsOneWidget,
+        );
+        expect(find.text('Lanjut'), findsOneWidget);
 
-      // Ketuk Lanjut -> Langkah 2: Kartu Konsep 1/3
-      await tester.tap(find.text('Lanjut'));
-      await tester.pump();
-      expect(find.text('Arus kas: uang masuk dikurangi uang keluar'), findsOneWidget);
+        // Ketuk Lanjut -> Langkah 2: Kartu Konsep 1/3
+        await tester.tap(find.text('Lanjut'));
+        await tester.pump();
+        expect(
+          find.text('Arus kas: uang masuk dikurangi uang keluar'),
+          findsOneWidget,
+        );
 
-      // Ketuk Lanjut -> Langkah 3: Kartu Konsep 2/3
-      await tester.tap(find.text('Lanjut'));
-      await tester.pump();
-      expect(find.text('Petakan dari mana dan ke mana'), findsOneWidget);
+        // Ketuk Lanjut -> Langkah 3: Kartu Konsep 2/3
+        await tester.tap(find.text('Lanjut'));
+        await tester.pump();
+        expect(find.text('Petakan dari mana dan ke mana'), findsOneWidget);
 
-      // Ketuk Lanjut -> Langkah 4: Kartu Konsep 3/3
-      await tester.tap(find.text('Lanjut'));
-      await tester.pump();
-      expect(find.text('Membaca hasilnya dengan tenang'), findsOneWidget);
+        // Ketuk Lanjut -> Langkah 4: Kartu Konsep 3/3
+        await tester.tap(find.text('Lanjut'));
+        await tester.pump();
+        expect(find.text('Membaca hasilnya dengan tenang'), findsOneWidget);
 
-      // Ketuk Lanjut -> Langkah 5: Contoh Angka
-      await tester.tap(find.text('Lanjut'));
-      await tester.pump();
-      expect(find.text('Contoh arus kas satu bulan'), findsOneWidget);
-      expect(find.text('Uang saku dan gaji paruh waktu'), findsOneWidget);
+        // Ketuk Lanjut -> Langkah 5: Contoh Angka
+        await tester.tap(find.text('Lanjut'));
+        await tester.pump();
+        expect(find.text('Contoh arus kas satu bulan'), findsOneWidget);
+        expect(find.text('Uang saku dan gaji paruh waktu'), findsOneWidget);
 
-      // Ketuk Lanjut -> Langkah 6: Cek Paham
-      await tester.tap(find.text('Lanjut'));
-      await tester.pump();
-      expect(find.text('Uji Pemahaman Singkat'), findsOneWidget);
-      expect(find.textContaining('Pemasukan Rp3.000.000 dan pengeluaran Rp3.200.000'), findsOneWidget);
+        // Ketuk Lanjut -> Langkah 6: Cek Paham
+        await tester.tap(find.text('Lanjut'));
+        await tester.pump();
+        expect(find.text('Uji Pemahaman Singkat'), findsOneWidget);
+        expect(
+          find.textContaining(
+            'Pemasukan Rp3.000.000 dan pengeluaran Rp3.200.000',
+          ),
+          findsOneWidget,
+        );
 
-      // Jawab ketiga soal cek paham
-      await tester.tap(find.text('Minus Rp200.000, uang keluar lebih besar'));
-      await tester.pump();
+        // Jawab ketiga soal cek paham
+        await tester.tap(find.text('Minus Rp200.000, uang keluar lebih besar'));
+        await tester.pump();
 
-      final soal2 = find.text('Biaya kos bulanan');
-      await tester.ensureVisible(soal2);
-      await tester.pump();
-      await tester.tap(soal2);
-      await tester.pump();
+        final soal2 = find.text('Biaya kos bulanan');
+        await tester.ensureVisible(soal2);
+        await tester.pump();
+        await tester.tap(soal2);
+        await tester.pump();
 
-      final soal3 = find.text('Cari bagian pengeluaran terbesar dan lihat mana yang bisa disesuaikan');
-      await tester.ensureVisible(soal3);
-      await tester.pump();
-      await tester.tap(soal3);
-      await tester.pump();
+        final soal3 = find.text(
+          'Cari bagian pengeluaran terbesar dan lihat mana yang bisa disesuaikan',
+        );
+        await tester.ensureVisible(soal3);
+        await tester.pump();
+        await tester.tap(soal3);
+        await tester.pump();
 
-      // Sekarang tombol Lanjut aktif -> Langkah 7: Misi Praktik
-      await tester.tap(find.text('Lanjut'));
-      await tester.pump();
-      expect(find.text('Petakan uang masuk dan keluar'), findsOneWidget);
-      expect(find.text('Belum relevan buat aku'), findsOneWidget);
+        // Sekarang tombol Lanjut aktif -> Langkah 7: Misi Praktik
+        await tester.tap(find.text('Lanjut'));
+        await tester.pump();
+        expect(find.text('Petakan uang masuk dan keluar'), findsOneWidget);
+        expect(find.text('Belum relevan buat aku'), findsOneWidget);
 
-      // Pengguna memilih lewati misi
-      await tester.tap(find.text('Belum relevan buat aku'));
-      await tester.pump();
-      expect(find.text('Misi ini kamu lewati.'), findsOneWidget);
+        // Pengguna memilih lewati misi
+        await tester.tap(find.text('Belum relevan buat aku'));
+        await tester.pump();
+        expect(find.text('Misi ini kamu lewati.'), findsOneWidget);
 
-      // Ketuk Lanjut -> Langkah 8: Umpan Balik
-      await tester.tap(find.text('Lanjut'));
-      await tester.pump();
-      expect(find.text('Hasil dari Datamu'), findsOneWidget);
+        // Ketuk Lanjut -> Langkah 8: Umpan Balik
+        await tester.tap(find.text('Lanjut'));
+        await tester.pump();
+        expect(find.text('Hasil dari Datamu'), findsOneWidget);
 
-      // Ketuk Lanjut -> Langkah 9: Tindak Lanjut
-      await tester.tap(find.text('Lanjut'));
-      await tester.pump();
-      expect(find.text('Langkah Kecil Berikutnya'), findsOneWidget);
-      expect(find.text('Selesai Belajar'), findsOneWidget);
+        // Ketuk Lanjut -> Langkah 9: Tindak Lanjut
+        await tester.tap(find.text('Lanjut'));
+        await tester.pump();
+        expect(find.text('Langkah Kecil Berikutnya'), findsOneWidget);
+        expect(find.text('Selesai Belajar'), findsOneWidget);
 
-      // Selesaikan pelajaran
-      await tester.tap(find.text('Selesai Belajar'));
-      await tester.pump();
-      await tester.pump();
+        // Selesaikan pelajaran
+        await tester.tap(find.text('Selesai Belajar'));
+        await tester.pump();
+        await tester.pump();
 
-      // Pastikan status pelajaran tersimpan 'selesai' di DB
-      final progres = await db.select(db.tabelProgresPelajaran).get();
-      expect(progres.length, equals(1));
-      expect(progres.first.status, equals('selesai'));
+        // Pastikan status pelajaran tersimpan 'selesai' di DB
+        final progres = await db.select(db.tabelProgresPelajaran).get();
+        expect(progres.length, equals(1));
+        expect(progres.first.status, equals('selesai'));
 
-      // Unmount widget sebelum database ditutup agar timer dibersihkan
-      await bongkarWidget(tester);
-    });
+        // Unmount widget sebelum database ditutup agar timer dibersihkan
+        await bongkarWidget(tester);
+      },
+    );
   });
 
   group('Pengujian Widget Aksesibilitas Skala Teks 2.0x Bebas Overflow', () {
@@ -482,7 +531,9 @@ void main() {
       await db.close();
     });
 
-    testWidgets('LayarKuisModul pada TextScaler 2.0 tidak mengalami overflow', (tester) async {
+    testWidgets('LayarKuisModul pada TextScaler 2.0 tidak mengalami overflow', (
+      tester,
+    ) async {
       final modulKuis = ModulKonten(
         id: 'modul_uji_skala',
         judul: 'Uji Skala',
@@ -498,10 +549,15 @@ void main() {
             SoalKuis(
               id: 's1',
               pelajaranId: 'pel_skala',
-              tanya: 'Pertanyaan panjang untuk menguji teks membesar pada layar mobile?',
-              pilihan: ['Pilihan A dengan teks panjang', 'Pilihan B dengan teks panjang'],
+              tanya:
+                  'Pertanyaan panjang untuk menguji teks membesar pada layar mobile?',
+              pilihan: [
+                'Pilihan A dengan teks panjang',
+                'Pilihan B dengan teks panjang',
+              ],
               benar: 0,
-              penjelasan: 'Penjelasan panjang tentang prinsip pengelolaan uang.',
+              penjelasan:
+                  'Penjelasan panjang tentang prinsip pengelolaan uang.',
             ),
           ],
         ),
@@ -541,8 +597,14 @@ void main() {
 
       FlutterError.onError = previousOnError;
 
-      final overflowErrors = errors.where((e) => e.toString().contains('overflowed')).toList();
-      expect(overflowErrors, isEmpty, reason: 'Tidak boleh ada overflow pada skala teks 2.0x');
+      final overflowErrors = errors
+          .where((e) => e.toString().contains('overflowed'))
+          .toList();
+      expect(
+        overflowErrors,
+        isEmpty,
+        reason: 'Tidak boleh ada overflow pada skala teks 2.0x',
+      );
 
       await bongkarWidget(tester);
     });

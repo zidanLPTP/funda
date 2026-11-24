@@ -38,8 +38,14 @@ void main() {
         kunci: 'punya_penghasilan',
         tanya: 'Bagaimana kondisi penghasilanmu?',
         pilihan: [
-          PilihanProfilKonten(nilai: 'rutin', teks: 'Punya penghasilan rutin bulanan'),
-          PilihanProfilKonten(nilai: 'tidak_rutin', teks: 'Penghasilan tidak menentu'),
+          PilihanProfilKonten(
+            nilai: 'rutin',
+            teks: 'Punya penghasilan rutin bulanan',
+          ),
+          PilihanProfilKonten(
+            nilai: 'tidak_rutin',
+            teks: 'Penghasilan tidak menentu',
+          ),
           PilihanProfilKonten(nilai: 'belum', teks: 'Belum berpenghasilan'),
         ],
       ),
@@ -189,110 +195,130 @@ void main() {
     ],
   );
 
-  testWidgets('Pengguna dapat melewati tes awal dan profil_dilewati tersimpan', (tester) async {
-    await tester.pumpWidget(
-      ProviderScope(
-        overrides: [
-          penyediaBasisData.overrideWithValue(db),
-          penyediaKontenTesAwal.overrideWith((ref) => Future.value(kontenTesUji)),
-        ],
-        child: MaterialApp(
-          theme: TemaFunda.temaTerang,
-          home: const LayarTesAwal(),
+  testWidgets(
+    'Pengguna dapat melewati tes awal dan profil_dilewati tersimpan',
+    (tester) async {
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            penyediaBasisData.overrideWithValue(db),
+            penyediaKontenTesAwal.overrideWith(
+              (ref) => Future.value(kontenTesUji),
+            ),
+          ],
+          child: MaterialApp(
+            theme: TemaFunda.temaTerang,
+            home: const LayarTesAwal(),
+          ),
         ),
-      ),
-    );
-    await tester.pump();
-
-    expect(find.text('Mulai & Tes Awal'), findsOneWidget);
-    expect(find.text('Lewati'), findsOneWidget);
-
-    await tester.tap(find.text('Lewati'));
-    await tester.pump();
-
-    // Verifikasi pernyataan profil_dilewati tersimpan di DB
-    final pernyataan = await (db.select(db.tabelPernyataan)
-          ..where((t) => t.kunci.equals('profil_dilewati')))
-        .getSingleOrNull();
-    expect(pernyataan, isNotNull);
-    expect(pernyataan!.nilai, equals('true'));
-
-    await bongkarWidget(tester);
-  });
-
-  testWidgets('Pengguna mengisi tes awal lengkap dan melihat rekomendasi personalisasi', (tester) async {
-    await tester.pumpWidget(
-      ProviderScope(
-        overrides: [
-          penyediaBasisData.overrideWithValue(db),
-          penyediaKontenTesAwal.overrideWith((ref) => Future.value(kontenTesUji)),
-        ],
-        child: MaterialApp(
-          theme: TemaFunda.temaTerang,
-          home: const LayarTesAwal(),
-        ),
-      ),
-    );
-    await tester.pump();
-
-    // Isi tujuan utama di tahap pembuka
-    await tester.enterText(find.byType(TextField), 'Bebas utang dan punya tabungan');
-    await tester.pump();
-
-    // Ketuk Mulai Sekarang -> masuk ke Tahap Profil
-    await tester.tap(find.text('Mulai Sekarang'));
-    await tester.pump();
-
-    // Jawab 6 pertanyaan profil
-    for (var i = 0; i < 6; i++) {
-      expect(find.textContaining('Profil (${i + 1}/6)'), findsOneWidget);
-
-      // Pilih opsi pertama
-      final pilihanPertama = find.byType(InkWell).first;
-      await tester.tap(pilihanPertama);
+      );
       await tester.pump();
 
-      if (i < 5) {
-        await tester.tap(find.text('Pertanyaan Berikutnya'));
-        await tester.pump();
-      } else {
-        await tester.tap(find.text('Lanjut ke Tes Pemahaman'));
-        await tester.pump();
-      }
-    }
+      expect(find.text('Mulai & Tes Awal'), findsOneWidget);
+      expect(find.text('Lewati'), findsOneWidget);
 
-    // Jawab 12 pertanyaan soal tes awal
-    for (var i = 0; i < 12; i++) {
-      expect(find.textContaining('Tes Awal (${i + 1}/12)'), findsOneWidget);
-
-      // Pilih opsi kedua ('B') untuk semua soal
-      final opsiJawaban = find.text('B');
-      await tester.tap(opsiJawaban);
+      await tester.tap(find.text('Lewati'));
       await tester.pump();
 
-      if (i < 11) {
-        await tester.tap(find.text('Soal Berikutnya'));
+      // Verifikasi pernyataan profil_dilewati tersimpan di DB
+      final pernyataan = await (db.select(
+        db.tabelPernyataan,
+      )..where((t) => t.kunci.equals('profil_dilewati'))).getSingleOrNull();
+      expect(pernyataan, isNotNull);
+      expect(pernyataan!.nilai, equals('true'));
+
+      await bongkarWidget(tester);
+    },
+  );
+
+  testWidgets(
+    'Pengguna mengisi tes awal lengkap dan melihat rekomendasi personalisasi',
+    (tester) async {
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            penyediaBasisData.overrideWithValue(db),
+            penyediaKontenTesAwal.overrideWith(
+              (ref) => Future.value(kontenTesUji),
+            ),
+          ],
+          child: MaterialApp(
+            theme: TemaFunda.temaTerang,
+            home: const LayarTesAwal(),
+          ),
+        ),
+      );
+      await tester.pump();
+
+      // Isi tujuan utama di tahap pembuka
+      await tester.enterText(
+        find.byType(TextField),
+        'Bebas utang dan punya tabungan',
+      );
+      await tester.pump();
+
+      // Ketuk Mulai Sekarang -> masuk ke Tahap Profil
+      await tester.tap(find.text('Mulai Sekarang'));
+      await tester.pump();
+
+      // Jawab 6 pertanyaan profil
+      for (var i = 0; i < 6; i++) {
+        expect(find.textContaining('Profil (${i + 1}/6)'), findsOneWidget);
+
+        // Pilih opsi pertama
+        final pilihanPertama = find.byType(InkWell).first;
+        await tester.tap(pilihanPertama);
         await tester.pump();
-      } else {
-        await tester.tap(find.text('Lihat Hasil'));
-        await tester.pump();
+
+        if (i < 5) {
+          await tester.tap(find.text('Pertanyaan Berikutnya'));
+          await tester.pump();
+        } else {
+          await tester.tap(find.text('Lanjut ke Tes Pemahaman'));
+          await tester.pump();
+        }
       }
-    }
 
-    // Tahap Hasil
-    expect(find.text('Hasil Tes Awal'), findsOneWidget);
-    expect(find.text('Profil Berhasil Dibentuk'), findsOneWidget);
-    expect(find.textContaining('Skor pemahaman awalmu:'), findsOneWidget);
+      // Jawab 12 pertanyaan soal tes awal
+      for (var i = 0; i < 12; i++) {
+        expect(find.textContaining('Tes Awal (${i + 1}/12)'), findsOneWidget);
 
-    // Verifikasi data tersimpan di basis data SQLite
-    final profilTersimpan = await db.select(db.tabelProfilKeuangan).getSingleOrNull();
-    expect(profilTersimpan, isNotNull);
-    expect(profilTersimpan!.tujuanUtama, equals('Bebas utang dan punya tabungan'));
+        // Pilih opsi kedua ('B') untuk semua soal
+        final opsiJawaban = find.text('B');
+        await tester.tap(opsiJawaban);
+        await tester.pump();
 
-    final hasilTersimpan = await db.select(db.tabelHasilTesAwal).getSingleOrNull();
-    expect(hasilTersimpan, isNotNull);
-    expect(hasilTersimpan!.skorTotalPersen, inInclusiveRange(0, 100));
+        if (i < 11) {
+          await tester.tap(find.text('Soal Berikutnya'));
+          await tester.pump();
+        } else {
+          await tester.tap(find.text('Lihat Hasil'));
+          await tester.pump();
+        }
+      }
 
-    await bongkarWidget(tester);
-  });
+      // Tahap Hasil
+      expect(find.text('Hasil Tes Awal'), findsOneWidget);
+      expect(find.text('Profil Berhasil Dibentuk'), findsOneWidget);
+      expect(find.textContaining('Skor pemahaman awalmu:'), findsOneWidget);
+
+      // Verifikasi data tersimpan di basis data SQLite
+      final profilTersimpan = await db
+          .select(db.tabelProfilKeuangan)
+          .getSingleOrNull();
+      expect(profilTersimpan, isNotNull);
+      expect(
+        profilTersimpan!.tujuanUtama,
+        equals('Bebas utang dan punya tabungan'),
+      );
+
+      final hasilTersimpan = await db
+          .select(db.tabelHasilTesAwal)
+          .getSingleOrNull();
+      expect(hasilTersimpan, isNotNull);
+      expect(hasilTersimpan!.skorTotalPersen, inInclusiveRange(0, 100));
+
+      await bongkarWidget(tester);
+    },
+  );
 }

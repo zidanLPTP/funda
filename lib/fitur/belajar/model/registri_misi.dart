@@ -50,18 +50,17 @@ class RegistriMisi {
           final cukup = adaMasuk && adaKeluar;
           String statusTeks;
           if (cukup) {
-            statusTeks = 'Syarat misi terpenuhi (pemasukan dan pengeluaran sudah tercatat).';
+            statusTeks =
+                'Syarat misi terpenuhi (pemasukan dan pengeluaran sudah tercatat).';
           } else if (!adaMasuk && !adaKeluar) {
             statusTeks = 'Catat minimal 1 pemasukan dan 1 pengeluaran.';
           } else if (!adaMasuk) {
             statusTeks = 'Catat minimal 1 pemasukan untuk melengkapi arus kas.';
           } else {
-            statusTeks = 'Catat minimal 1 pengeluaran untuk melengkapi arus kas.';
+            statusTeks =
+                'Catat minimal 1 pengeluaran untuk melengkapi arus kas.';
           }
-          return HasilEvaluasiMisi(
-            selesai: cukup,
-            statusTeks: statusTeks,
-          );
+          return HasilEvaluasiMisi(selesai: cukup, statusTeks: statusTeks);
         }
         final jumlah = _hitungJumlah(misi.objek, fotoData);
         final cukup = jumlah >= misi.min;
@@ -81,7 +80,9 @@ class RegistriMisi {
               statusTeks: 'Belum ada transaksi pengeluaran untuk dilabeli.',
             );
           }
-          final adaYangBelum = kategoriKeluar.values.any((s) => s == 'belum_dilabeli');
+          final adaYangBelum = kategoriKeluar.values.any(
+            (s) => s == 'belum_dilabeli',
+          );
           return HasilEvaluasiMisi(
             selesai: !adaYangBelum,
             statusTeks: !adaYangBelum
@@ -145,7 +146,10 @@ class RegistriMisi {
       case 'transaksi':
         return fotoData.jumlahPemasukan + fotoData.jumlahPengeluaran;
       case 'arus_kas':
-        return (fotoData.jumlahPemasukan >= 1 && fotoData.jumlahPengeluaran >= 1) ? 1 : 0;
+        return (fotoData.jumlahPemasukan >= 1 &&
+                fotoData.jumlahPengeluaran >= 1)
+            ? 1
+            : 0;
       case 'anggaran':
         return fotoData.jumlahAnggaran;
       case 'tujuan':
@@ -236,9 +240,7 @@ class RegistriMisi {
   static String formatRingkasanTujuanBesarMisi({
     required DataTujuanBesarUmpanBalik? tujuan,
   }) {
-    return formatRingkasanTujuanBesar(
-      tujuan: tujuan,
-    );
+    return formatRingkasanTujuanBesar(tujuan: tujuan);
   }
 
   /// Menghasilkan umpan balik uji kemampuan KPR dari data pemasukan dan cicilan aktif.
@@ -355,7 +357,9 @@ class RegistriUmpanBalik {
   }
 
   /// Menghasilkan umpan balik realisasi anggaran bulan ini.
-  static String formatRealisasiAnggaranBulanIniMisi(List<PosAnggaranEvaluasi> daftarPos) {
+  static String formatRealisasiAnggaranBulanIniMisi(
+    List<PosAnggaranEvaluasi> daftarPos,
+  ) {
     return formatRealisasiAnggaranBulanIni(daftarPos);
   }
 
@@ -500,9 +504,7 @@ class RegistriUmpanBalik {
   static String formatRingkasanTujuanBesarMisi({
     required DataTujuanBesarUmpanBalik? tujuan,
   }) {
-    return formatRingkasanTujuanBesar(
-      tujuan: tujuan,
-    );
+    return formatRingkasanTujuanBesar(tujuan: tujuan);
   }
 
   /// Menghasilkan umpan balik uji kemampuan KPR dari data pemasukan dan cicilan aktif.

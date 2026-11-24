@@ -14,8 +14,9 @@ void main() {
       expect(hasil, equals(ekspetasi));
 
       // Verifikasi delegasi RegistriMisi
-      final hasilMisi =
-          RegistriMisi.formatRingkasanTujuanBesarMisi(tujuan: null);
+      final hasilMisi = RegistriMisi.formatRingkasanTujuanBesarMisi(
+        tujuan: null,
+      );
       expect(hasilMisi, equals(ekspetasi));
     });
 
@@ -58,43 +59,46 @@ void main() {
       );
     });
 
-    test('V3: Target belum tercapai dan ada tenggat waktu (pembagian bulat ke atas)', () {
-      // Kasus A: Pembagian habis
-      final tujuanA = DataTujuanBesarUmpanBalik(
-        nama: 'Biaya Kuliah',
-        targetRupiah: 36000000,
-        danaTerkumpulRupiah: 0,
-        bulanTersisa: 24,
-        jenis: 'tujuan_besar',
-        dibuatPada: DateTime(2026, 1, 1),
-      );
+    test(
+      'V3: Target belum tercapai dan ada tenggat waktu (pembagian bulat ke atas)',
+      () {
+        // Kasus A: Pembagian habis
+        final tujuanA = DataTujuanBesarUmpanBalik(
+          nama: 'Biaya Kuliah',
+          targetRupiah: 36000000,
+          danaTerkumpulRupiah: 0,
+          bulanTersisa: 24,
+          jenis: 'tujuan_besar',
+          dibuatPada: DateTime(2026, 1, 1),
+        );
 
-      final hasilA = formatRingkasanTujuanBesar(tujuan: tujuanA);
-      const ekspetasiA =
-          'Tujuan besarmu: Biaya Kuliah (target Rp36.000.000, terkumpul Rp0). '
-          'Sisa Rp36.000.000 dalam 24 bulan berarti kamu perlu menyisihkan sekitar Rp1.500.000 per bulan. '
-          'Fokus pada satu atau dua tujuan utama lebih mudah dijalankan daripada mengejar semuanya sekaligus.';
-      expect(hasilA, equals(ekspetasiA));
+        final hasilA = formatRingkasanTujuanBesar(tujuan: tujuanA);
+        const ekspetasiA =
+            'Tujuan besarmu: Biaya Kuliah (target Rp36.000.000, terkumpul Rp0). '
+            'Sisa Rp36.000.000 dalam 24 bulan berarti kamu perlu menyisihkan sekitar Rp1.500.000 per bulan. '
+            'Fokus pada satu atau dua tujuan utama lebih mudah dijalankan daripada mengejar semuanya sekaligus.';
+        expect(hasilA, equals(ekspetasiA));
 
-      // Kasus B: Pembagian dengan sisa (harus bulat ke atas)
-      // Sisa: 48.000.000 - 10.000.000 = 38.000.000
-      // 38.000.000 / 36 = 1.055.555,55... -> bulat ke atas: 1.055.556
-      final tujuanB = DataTujuanBesarUmpanBalik(
-        nama: 'Dana Nikah',
-        targetRupiah: 48000000,
-        danaTerkumpulRupiah: 10000000,
-        bulanTersisa: 36,
-        jenis: 'tujuan_besar',
-        dibuatPada: DateTime(2026, 1, 1),
-      );
+        // Kasus B: Pembagian dengan sisa (harus bulat ke atas)
+        // Sisa: 48.000.000 - 10.000.000 = 38.000.000
+        // 38.000.000 / 36 = 1.055.555,55... -> bulat ke atas: 1.055.556
+        final tujuanB = DataTujuanBesarUmpanBalik(
+          nama: 'Dana Nikah',
+          targetRupiah: 48000000,
+          danaTerkumpulRupiah: 10000000,
+          bulanTersisa: 36,
+          jenis: 'tujuan_besar',
+          dibuatPada: DateTime(2026, 1, 1),
+        );
 
-      final hasilB = formatRingkasanTujuanBesar(tujuan: tujuanB);
-      const ekspetasiB =
-          'Tujuan besarmu: Dana Nikah (target Rp48.000.000, terkumpul Rp10.000.000). '
-          'Sisa Rp38.000.000 dalam 36 bulan berarti kamu perlu menyisihkan sekitar Rp1.055.556 per bulan. '
-          'Fokus pada satu atau dua tujuan utama lebih mudah dijalankan daripada mengejar semuanya sekaligus.';
-      expect(hasilB, equals(ekspetasiB));
-    });
+        final hasilB = formatRingkasanTujuanBesar(tujuan: tujuanB);
+        const ekspetasiB =
+            'Tujuan besarmu: Dana Nikah (target Rp48.000.000, terkumpul Rp10.000.000). '
+            'Sisa Rp38.000.000 dalam 36 bulan berarti kamu perlu menyisihkan sekitar Rp1.055.556 per bulan. '
+            'Fokus pada satu atau dua tujuan utama lebih mudah dijalankan daripada mengejar semuanya sekaligus.';
+        expect(hasilB, equals(ekspetasiB));
+      },
+    );
 
     test('V4: Target belum tercapai tapi tanpa tenggat', () {
       final tujuan = DataTujuanBesarUmpanBalik(
@@ -115,71 +119,74 @@ void main() {
       expect(hasil, equals(ekspetasi));
     });
 
-    test('Seleksi Tujuan: Filter dana_darurat dan prioritas jenis tujuan_besar', () {
-      final tDarurat = DataTujuanBesarUmpanBalik(
-        nama: 'Dana Darurat Utama',
-        targetRupiah: 100000000,
-        danaTerkumpulRupiah: 10000000,
-        bulanTersisa: 6,
-        jenis: 'dana_darurat',
-        dibuatPada: DateTime(2026, 1, 1),
-      );
+    test(
+      'Seleksi Tujuan: Filter dana_darurat dan prioritas jenis tujuan_besar',
+      () {
+        final tDarurat = DataTujuanBesarUmpanBalik(
+          nama: 'Dana Darurat Utama',
+          targetRupiah: 100000000,
+          danaTerkumpulRupiah: 10000000,
+          bulanTersisa: 6,
+          jenis: 'dana_darurat',
+          dibuatPada: DateTime(2026, 1, 1),
+        );
 
-      final tBesar1 = DataTujuanBesarUmpanBalik(
-        nama: 'Uang Muka Rumah',
-        targetRupiah: 50000000,
-        danaTerkumpulRupiah: 5000000,
-        bulanTersisa: 20,
-        jenis: 'tujuan_besar',
-        dibuatPada: DateTime(2026, 1, 1),
-      );
+        final tBesar1 = DataTujuanBesarUmpanBalik(
+          nama: 'Uang Muka Rumah',
+          targetRupiah: 50000000,
+          danaTerkumpulRupiah: 5000000,
+          bulanTersisa: 20,
+          jenis: 'tujuan_besar',
+          dibuatPada: DateTime(2026, 1, 1),
+        );
 
-      final tBesar2 = DataTujuanBesarUmpanBalik(
-        nama: 'Pendidikan Anak',
-        targetRupiah: 30000000,
-        danaTerkumpulRupiah: 2000000,
-        bulanTersisa: 10, // tenggat lebih dekat
-        jenis: 'tujuan_besar',
-        dibuatPada: DateTime(2026, 2, 1),
-      );
+        final tBesar2 = DataTujuanBesarUmpanBalik(
+          nama: 'Pendidikan Anak',
+          targetRupiah: 30000000,
+          danaTerkumpulRupiah: 2000000,
+          bulanTersisa: 10, // tenggat lebih dekat
+          jenis: 'tujuan_besar',
+          dibuatPada: DateTime(2026, 2, 1),
+        );
 
-      final tTabungan = DataTujuanBesarUmpanBalik(
-        nama: 'Beli Laptop',
-        targetRupiah: 80000000, // target lebih besar dari tujuan_besar
-        danaTerkumpulRupiah: 1000000,
-        bulanTersisa: 5,
-        jenis: 'tabungan',
-        dibuatPada: DateTime(2026, 3, 1),
-      );
-
-      // Memilih tujuan_besar dengan tenggat paling dekat (Pendidikan Anak)
-      final terpilih1 = pilihTujuanBesarUmpanBalik([
-        tDarurat,
-        tBesar1,
-        tBesar2,
-        tTabungan,
-      ]);
-      expect(terpilih1?.nama, equals('Pendidikan Anak'));
-
-      // Jika hanya ada tujuan tabungan / non-tujuan_besar, pilih target terbesar
-      final terpilih2 = pilihTujuanBesarUmpanBalik([
-        tDarurat,
-        tTabungan,
-        DataTujuanBesarUmpanBalik(
-          nama: 'Liburan',
-          targetRupiah: 15000000,
-          danaTerkumpulRupiah: 500000,
-          bulanTersisa: 4,
+        final tTabungan = DataTujuanBesarUmpanBalik(
+          nama: 'Beli Laptop',
+          targetRupiah: 80000000, // target lebih besar dari tujuan_besar
+          danaTerkumpulRupiah: 1000000,
+          bulanTersisa: 5,
           jenis: 'tabungan',
-          dibuatPada: DateTime(2026, 4, 1),
-        ),
-      ]);
-      expect(terpilih2?.nama, equals('Beli Laptop'));
+          dibuatPada: DateTime(2026, 3, 1),
+        );
 
-      // Jika hanya ada dana_darurat, kembalikan null
-      final terpilihNull = pilihTujuanBesarUmpanBalik([tDarurat]);
-      expect(terpilihNull, isNull);
-    });
+        // Memilih tujuan_besar dengan tenggat paling dekat (Pendidikan Anak)
+        final terpilih1 = pilihTujuanBesarUmpanBalik([
+          tDarurat,
+          tBesar1,
+          tBesar2,
+          tTabungan,
+        ]);
+        expect(terpilih1?.nama, equals('Pendidikan Anak'));
+
+        // Jika hanya ada tujuan tabungan / non-tujuan_besar, pilih target terbesar
+        final terpilih2 = pilihTujuanBesarUmpanBalik([
+          tDarurat,
+          tTabungan,
+          DataTujuanBesarUmpanBalik(
+            nama: 'Liburan',
+            targetRupiah: 15000000,
+            danaTerkumpulRupiah: 500000,
+            bulanTersisa: 4,
+            jenis: 'tabungan',
+            dibuatPada: DateTime(2026, 4, 1),
+          ),
+        ]);
+        expect(terpilih2?.nama, equals('Beli Laptop'));
+
+        // Jika hanya ada dana_darurat, kembalikan null
+        final terpilihNull = pilihTujuanBesarUmpanBalik([tDarurat]);
+        expect(terpilihNull, isNull);
+      },
+    );
 
     test('Hitung bulan tersisa minimal 1', () {
       final sekarang = DateTime(2026, 11, 24);

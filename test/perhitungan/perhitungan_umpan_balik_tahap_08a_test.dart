@@ -38,32 +38,41 @@ void main() {
       });
     });
 
-    group('2. hitungEstimasiBulan (pembulatan ceiling integer & pembedaan null vs 0)', () {
-      test('sisa <= 0 menghasilkan 0', () {
-        expect(hitungEstimasiBulan(0, 500000), equals(0));
-        expect(hitungEstimasiBulan(-100000, 500000), equals(0));
-      });
+    group(
+      '2. hitungEstimasiBulan (pembulatan ceiling integer & pembedaan null vs 0)',
+      () {
+        test('sisa <= 0 menghasilkan 0', () {
+          expect(hitungEstimasiBulan(0, 500000), equals(0));
+          expect(hitungEstimasiBulan(-100000, 500000), equals(0));
+        });
 
-      test('setoran <= 0 menghasilkan null (tidak ada hasil, dibedakan dari 0 bulan)', () {
-        expect(hitungEstimasiBulan(1000000, 0), isNull);
-        expect(hitungEstimasiBulan(1000000, -50000), isNull);
-      });
+        test(
+          'setoran <= 0 menghasilkan null (tidak ada hasil, dibedakan dari 0 bulan)',
+          () {
+            expect(hitungEstimasiBulan(1000000, 0), isNull);
+            expect(hitungEstimasiBulan(1000000, -50000), isNull);
+          },
+        );
 
-      test('vektor materi lampiran (pembulatan ke atas / integer ceiling)', () {
-        // Rp3.000.000 / Rp250.000 = 12 bulan tepat
-        expect(hitungEstimasiBulan(3000000, 250000), equals(12));
-        // Rp3.000.000 / Rp300.000 = 10 bulan tepat
-        expect(hitungEstimasiBulan(3000000, 300000), equals(10));
-        // Rp4.000.000 / Rp400.000 = 10 bulan
-        expect(hitungEstimasiBulan(4000000, 400000), equals(10));
-        // Rp4.000.000 / Rp450.000 = 8.88... -> 9 bulan
-        expect(hitungEstimasiBulan(4000000, 450000), equals(9));
-        // Rp1.000.000 / Rp300.000 = 3.33... -> 4 bulan
-        expect(hitungEstimasiBulan(1000000, 300000), equals(4));
-        // Rp2.500.000 / Rp500.000 = 5 bulan
-        expect(hitungEstimasiBulan(2500000, 500000), equals(5));
-      });
-    });
+        test(
+          'vektor materi lampiran (pembulatan ke atas / integer ceiling)',
+          () {
+            // Rp3.000.000 / Rp250.000 = 12 bulan tepat
+            expect(hitungEstimasiBulan(3000000, 250000), equals(12));
+            // Rp3.000.000 / Rp300.000 = 10 bulan tepat
+            expect(hitungEstimasiBulan(3000000, 300000), equals(10));
+            // Rp4.000.000 / Rp400.000 = 10 bulan
+            expect(hitungEstimasiBulan(4000000, 400000), equals(10));
+            // Rp4.000.000 / Rp450.000 = 8.88... -> 9 bulan
+            expect(hitungEstimasiBulan(4000000, 450000), equals(9));
+            // Rp1.000.000 / Rp300.000 = 3.33... -> 4 bulan
+            expect(hitungEstimasiBulan(1000000, 300000), equals(4));
+            // Rp2.500.000 / Rp500.000 = 5 bulan
+            expect(hitungEstimasiBulan(2500000, 500000), equals(5));
+          },
+        );
+      },
+    );
 
     group('3. hitungRataRataSetoranTabungan (vektor lengkap prompt Tahap 8A)', () {
       final now = DateTime(2026, 11, 15);
@@ -84,48 +93,63 @@ void main() {
           ),
         ];
         expect(
-          hitungRataRataSetoranTabungan(daftarAlokasi: alokasi, waktuSekarang: now),
+          hitungRataRataSetoranTabungan(
+            daftarAlokasi: alokasi,
+            waktuSekarang: now,
+          ),
           equals(300000),
         );
       });
 
-      test('isi 200.000 bulan lalu + 400.000 bulan ini -> 300.000 (600.000 / 2)', () {
-        final alokasi = [
-          EntitasAlokasiSimpel(
-            jenis: 'isi',
-            jumlahRupiah: 200000,
-            waktu: DateTime(2026, 10, 15),
-          ),
-          EntitasAlokasiSimpel(
-            jenis: 'isi',
-            jumlahRupiah: 400000,
-            waktu: DateTime(2026, 11, 10),
-          ),
-        ];
-        expect(
-          hitungRataRataSetoranTabungan(daftarAlokasi: alokasi, waktuSekarang: now),
-          equals(300000),
-        );
-      });
+      test(
+        'isi 200.000 bulan lalu + 400.000 bulan ini -> 300.000 (600.000 / 2)',
+        () {
+          final alokasi = [
+            EntitasAlokasiSimpel(
+              jenis: 'isi',
+              jumlahRupiah: 200000,
+              waktu: DateTime(2026, 10, 15),
+            ),
+            EntitasAlokasiSimpel(
+              jenis: 'isi',
+              jumlahRupiah: 400000,
+              waktu: DateTime(2026, 11, 10),
+            ),
+          ];
+          expect(
+            hitungRataRataSetoranTabungan(
+              daftarAlokasi: alokasi,
+              waktuSekarang: now,
+            ),
+            equals(300000),
+          );
+        },
+      );
 
-      test('isi 100.000 dua bulan lalu, tidak ada bulan lalu, 200.000 bulan ini -> 100.000 (300.000 / 3)', () {
-        final alokasi = [
-          EntitasAlokasiSimpel(
-            jenis: 'isi',
-            jumlahRupiah: 100000,
-            waktu: DateTime(2026, 9, 20),
-          ),
-          EntitasAlokasiSimpel(
-            jenis: 'isi',
-            jumlahRupiah: 200000,
-            waktu: DateTime(2026, 11, 5),
-          ),
-        ];
-        expect(
-          hitungRataRataSetoranTabungan(daftarAlokasi: alokasi, waktuSekarang: now),
-          equals(100000),
-        );
-      });
+      test(
+        'isi 100.000 dua bulan lalu, tidak ada bulan lalu, 200.000 bulan ini -> 100.000 (300.000 / 3)',
+        () {
+          final alokasi = [
+            EntitasAlokasiSimpel(
+              jenis: 'isi',
+              jumlahRupiah: 100000,
+              waktu: DateTime(2026, 9, 20),
+            ),
+            EntitasAlokasiSimpel(
+              jenis: 'isi',
+              jumlahRupiah: 200000,
+              waktu: DateTime(2026, 11, 5),
+            ),
+          ];
+          expect(
+            hitungRataRataSetoranTabungan(
+              daftarAlokasi: alokasi,
+              waktuSekarang: now,
+            ),
+            equals(100000),
+          );
+        },
+      );
 
       test('ada ambil -> dikurangkan', () {
         final alokasi = [
@@ -142,7 +166,10 @@ void main() {
         ];
         // net = 300.000 ~/ 1 = 300.000
         expect(
-          hitungRataRataSetoranTabungan(daftarAlokasi: alokasi, waktuSekarang: now),
+          hitungRataRataSetoranTabungan(
+            daftarAlokasi: alokasi,
+            waktuSekarang: now,
+          ),
           equals(300000),
         );
       });
@@ -161,36 +188,45 @@ void main() {
           ),
         ];
         expect(
-          hitungRataRataSetoranTabungan(daftarAlokasi: alokasi, waktuSekarang: now),
+          hitungRataRataSetoranTabungan(
+            daftarAlokasi: alokasi,
+            waktuSekarang: now,
+          ),
           equals(0),
         );
       });
 
-      test('pergantian tahun (misal Januari 2027: alokasi di November dan Desember 2026)', () {
-        final janNow = DateTime(2027, 1, 15);
-        final alokasi = [
-          EntitasAlokasiSimpel(
-            jenis: 'isi',
-            jumlahRupiah: 150000,
-            waktu: DateTime(2026, 11, 20),
-          ),
-          EntitasAlokasiSimpel(
-            jenis: 'isi',
-            jumlahRupiah: 150000,
-            waktu: DateTime(2026, 12, 10),
-          ),
-          EntitasAlokasiSimpel(
-            jenis: 'isi',
-            jumlahRupiah: 300000,
-            waktu: DateTime(2027, 1, 5),
-          ),
-        ];
-        // Jarak tertua = November (jarak 2 -> bulanAktif = 3), net = 600.000 ~/ 3 = 200.000
-        expect(
-          hitungRataRataSetoranTabungan(daftarAlokasi: alokasi, waktuSekarang: janNow),
-          equals(200000),
-        );
-      });
+      test(
+        'pergantian tahun (misal Januari 2027: alokasi di November dan Desember 2026)',
+        () {
+          final janNow = DateTime(2027, 1, 15);
+          final alokasi = [
+            EntitasAlokasiSimpel(
+              jenis: 'isi',
+              jumlahRupiah: 150000,
+              waktu: DateTime(2026, 11, 20),
+            ),
+            EntitasAlokasiSimpel(
+              jenis: 'isi',
+              jumlahRupiah: 150000,
+              waktu: DateTime(2026, 12, 10),
+            ),
+            EntitasAlokasiSimpel(
+              jenis: 'isi',
+              jumlahRupiah: 300000,
+              waktu: DateTime(2027, 1, 5),
+            ),
+          ];
+          // Jarak tertua = November (jarak 2 -> bulanAktif = 3), net = 600.000 ~/ 3 = 200.000
+          expect(
+            hitungRataRataSetoranTabungan(
+              daftarAlokasi: alokasi,
+              waktuSekarang: janNow,
+            ),
+            equals(200000),
+          );
+        },
+      );
 
       test('alokasi 23:30 WIB di hari terakhir bulan', () {
         final alokasi = [
@@ -207,7 +243,10 @@ void main() {
         ];
         // Oktober dan November -> bulanAktif = 2, total = 600.000 ~/ 2 = 300.000
         expect(
-          hitungRataRataSetoranTabungan(daftarAlokasi: alokasi, waktuSekarang: now),
+          hitungRataRataSetoranTabungan(
+            daftarAlokasi: alokasi,
+            waktuSekarang: now,
+          ),
           equals(300000),
         );
       });
@@ -228,55 +267,58 @@ void main() {
         expect(hasil.jumlahBulan, equals(0));
       });
 
-      test('vektor 3 bulan lalu kebutuhan/utang 1.700.000/200.000, 1.600.000/200.000, 1.800.000/200.000', () {
-        final daftar = [
-          // M-1 (Oktober 2026)
-          ItemPengeluaranWajib(
-            jumlahRupiah: 1700000,
-            sifat: 'kebutuhan',
-            waktu: DateTime(2026, 10, 5),
-          ),
-          ItemPengeluaranWajib(
-            jumlahRupiah: 200000,
-            sifat: 'utang',
-            waktu: DateTime(2026, 10, 10),
-          ),
-          // M-2 (September 2026)
-          ItemPengeluaranWajib(
-            jumlahRupiah: 1600000,
-            sifat: 'kebutuhan',
-            waktu: DateTime(2026, 9, 12),
-          ),
-          ItemPengeluaranWajib(
-            jumlahRupiah: 200000,
-            sifat: 'utang',
-            waktu: DateTime(2026, 9, 25),
-          ),
-          // M-3 (Agustus 2026)
-          ItemPengeluaranWajib(
-            jumlahRupiah: 1800000,
-            sifat: 'kebutuhan',
-            waktu: DateTime(2026, 8, 14),
-          ),
-          ItemPengeluaranWajib(
-            jumlahRupiah: 200000,
-            sifat: 'utang',
-            waktu: DateTime(2026, 8, 20),
-          ),
-        ];
-        final hasil = hitungPengeluaranWajibBulanan(
-          daftarPengeluaran: daftar,
-          waktuSekarang: now,
-        );
-        expect(hasil.dasar, equals(DasarPengeluaranWajib.tigaBulanTerakhir));
-        // total: 1900000 + 1800000 + 2000000 = 5700000 ~/ 3 = 1900000
-        expect(hasil.total, equals(1900000));
-        // keb: 1700000 + 1600000 + 1800000 = 5100000 ~/ 3 = 1700000
-        expect(hasil.bagianKebutuhan, equals(1700000));
-        // utang: 1900000 - 1700000 = 200000
-        expect(hasil.bagianUtang, equals(200000));
-        expect(hasil.jumlahBulan, equals(3));
-      });
+      test(
+        'vektor 3 bulan lalu kebutuhan/utang 1.700.000/200.000, 1.600.000/200.000, 1.800.000/200.000',
+        () {
+          final daftar = [
+            // M-1 (Oktober 2026)
+            ItemPengeluaranWajib(
+              jumlahRupiah: 1700000,
+              sifat: 'kebutuhan',
+              waktu: DateTime(2026, 10, 5),
+            ),
+            ItemPengeluaranWajib(
+              jumlahRupiah: 200000,
+              sifat: 'utang',
+              waktu: DateTime(2026, 10, 10),
+            ),
+            // M-2 (September 2026)
+            ItemPengeluaranWajib(
+              jumlahRupiah: 1600000,
+              sifat: 'kebutuhan',
+              waktu: DateTime(2026, 9, 12),
+            ),
+            ItemPengeluaranWajib(
+              jumlahRupiah: 200000,
+              sifat: 'utang',
+              waktu: DateTime(2026, 9, 25),
+            ),
+            // M-3 (Agustus 2026)
+            ItemPengeluaranWajib(
+              jumlahRupiah: 1800000,
+              sifat: 'kebutuhan',
+              waktu: DateTime(2026, 8, 14),
+            ),
+            ItemPengeluaranWajib(
+              jumlahRupiah: 200000,
+              sifat: 'utang',
+              waktu: DateTime(2026, 8, 20),
+            ),
+          ];
+          final hasil = hitungPengeluaranWajibBulanan(
+            daftarPengeluaran: daftar,
+            waktuSekarang: now,
+          );
+          expect(hasil.dasar, equals(DasarPengeluaranWajib.tigaBulanTerakhir));
+          // total: 1900000 + 1800000 + 2000000 = 5700000 ~/ 3 = 1900000
+          expect(hasil.total, equals(1900000));
+          // keb: 1700000 + 1600000 + 1800000 = 5100000 ~/ 3 = 1700000
+          expect(hasil.bagianKebutuhan, equals(1700000));
+          // utang: 1900000 - 1700000 = 200000
+          expect(hasil.bagianUtang, equals(200000));
+          expect(hasil.jumlahBulan, equals(3));
+        },
+      );
     });
 
     group('5. formatRingkasanTujuanTabungan (assertion pada STRING LENGKAP)', () {
@@ -299,7 +341,9 @@ void main() {
         );
         expect(
           formatRingkasanTujuanTabungan(tujuan: t, waktuSekarang: now),
-          equals('Tujuan tabunganmu: Laptop Skripsi. Dana terkumpul: Rp0 dari Rp6.000.000 (0 persen). Untuk sampai di target sebelum tenggat, kamu perlu menyisihkan sekitar Rp500.000 per bulan.'),
+          equals(
+            'Tujuan tabunganmu: Laptop Skripsi. Dana terkumpul: Rp0 dari Rp6.000.000 (0 persen). Untuk sampai di target sebelum tenggat, kamu perlu menyisihkan sekitar Rp500.000 per bulan.',
+          ),
         );
       });
 
@@ -313,7 +357,9 @@ void main() {
         );
         expect(
           formatRingkasanTujuanTabungan(tujuan: t, waktuSekarang: now),
-          equals('Tujuan tabunganmu: Laptop Skripsi. Dana terkumpul: Rp1.000.000 dari Rp5.000.000 (20 persen). Untuk sampai di target sebelum tenggat, kamu perlu menyisihkan sekitar Rp500.000 per bulan.'),
+          equals(
+            'Tujuan tabunganmu: Laptop Skripsi. Dana terkumpul: Rp1.000.000 dari Rp5.000.000 (20 persen). Untuk sampai di target sebelum tenggat, kamu perlu menyisihkan sekitar Rp500.000 per bulan.',
+          ),
         );
       });
 
@@ -327,7 +373,9 @@ void main() {
         );
         expect(
           formatRingkasanTujuanTabungan(tujuan: t, waktuSekarang: now),
-          equals('Tujuan tabunganmu: Laptop Skripsi. Dana terkumpul: Rp1.000.000 dari Rp5.000.000 (20 persen). Belum ada tenggat. Menambahkan tenggat membantu menghitung berapa yang perlu disisihkan tiap bulan.'),
+          equals(
+            'Tujuan tabunganmu: Laptop Skripsi. Dana terkumpul: Rp1.000.000 dari Rp5.000.000 (20 persen). Belum ada tenggat. Menambahkan tenggat membantu menghitung berapa yang perlu disisihkan tiap bulan.',
+          ),
         );
       });
 
@@ -341,7 +389,9 @@ void main() {
         );
         expect(
           formatRingkasanTujuanTabungan(tujuan: t, waktuSekarang: now),
-          equals('Tujuan tabunganmu: Laptop Skripsi. Dana terkumpul: Rp5.000.000 dari Rp5.000.000 (100 persen). Targetmu sudah tercapai.'),
+          equals(
+            'Tujuan tabunganmu: Laptop Skripsi. Dana terkumpul: Rp5.000.000 dari Rp5.000.000 (100 persen). Targetmu sudah tercapai.',
+          ),
         );
       });
     });
@@ -374,32 +424,47 @@ void main() {
         );
       });
 
-      test('setoran 0: memakai kalimat "Belum ada setoran yang tercatat, ..."', () {
-        expect(
-          formatEstimasiTabungan(tujuan: t, setoranRataRata: 0),
-          equals('Sisa yang perlu dikumpulkan untuk Laptop Skripsi: Rp3.000.000. Belum ada setoran yang tercatat, jadi waktu tercapainya belum bisa dihitung. Mulai dari nominal kecil yang masuk akal untukmu.'),
-        );
-      });
+      test(
+        'setoran 0: memakai kalimat "Belum ada setoran yang tercatat, ..."',
+        () {
+          expect(
+            formatEstimasiTabungan(tujuan: t, setoranRataRata: 0),
+            equals(
+              'Sisa yang perlu dikumpulkan untuk Laptop Skripsi: Rp3.000.000. Belum ada setoran yang tercatat, jadi waktu tercapainya belum bisa dihitung. Mulai dari nominal kecil yang masuk akal untukmu.',
+            ),
+          );
+        },
+      );
 
-      test('sisa 3.000.000 setoran 250.000 -> n 12, n2 10 ("2 bulan lebih cepat")', () {
-        expect(
-          formatEstimasiTabungan(tujuan: t, setoranRataRata: 250000),
-          equals('Sisa yang perlu dikumpulkan untuk Laptop Skripsi: Rp3.000.000. Dengan setoran sekitar Rp250.000 per bulan seperti sekarang, targetmu tercapai sekitar 12 bulan lagi. Kalau kamu menambah Rp50.000 per bulan, jadinya sekitar 10 bulan lagi, 2 bulan lebih cepat. Ini hitungan sederhana. Sesuaikan dengan kondisimu.'),
-        );
-      });
+      test(
+        'sisa 3.000.000 setoran 250.000 -> n 12, n2 10 ("2 bulan lebih cepat")',
+        () {
+          expect(
+            formatEstimasiTabungan(tujuan: t, setoranRataRata: 250000),
+            equals(
+              'Sisa yang perlu dikumpulkan untuk Laptop Skripsi: Rp3.000.000. Dengan setoran sekitar Rp250.000 per bulan seperti sekarang, targetmu tercapai sekitar 12 bulan lagi. Kalau kamu menambah Rp50.000 per bulan, jadinya sekitar 10 bulan lagi, 2 bulan lebih cepat. Ini hitungan sederhana. Sesuaikan dengan kondisimu.',
+            ),
+          );
+        },
+      );
 
-      test('sisa 4.000.000 setoran 400.000 -> 10 dan 9 ("1 bulan lebih cepat")', () {
-        final t4 = DataTujuanTabunganUmpanBalik(
-          nama: 'Laptop Skripsi',
-          danaTerkumpul: 2000000,
-          targetRupiah: 6000000, // sisa 4.000.000
-          dibuatPada: DateTime(2026, 1, 1),
-        );
-        expect(
-          formatEstimasiTabungan(tujuan: t4, setoranRataRata: 400000),
-          equals('Sisa yang perlu dikumpulkan untuk Laptop Skripsi: Rp4.000.000. Dengan setoran sekitar Rp400.000 per bulan seperti sekarang, targetmu tercapai sekitar 10 bulan lagi. Kalau kamu menambah Rp50.000 per bulan, jadinya sekitar 9 bulan lagi, 1 bulan lebih cepat. Ini hitungan sederhana. Sesuaikan dengan kondisimu.'),
-        );
-      });
+      test(
+        'sisa 4.000.000 setoran 400.000 -> 10 dan 9 ("1 bulan lebih cepat")',
+        () {
+          final t4 = DataTujuanTabunganUmpanBalik(
+            nama: 'Laptop Skripsi',
+            danaTerkumpul: 2000000,
+            targetRupiah: 6000000, // sisa 4.000.000
+            dibuatPada: DateTime(2026, 1, 1),
+          );
+          expect(
+            formatEstimasiTabungan(tujuan: t4, setoranRataRata: 400000),
+            equals(
+              'Sisa yang perlu dikumpulkan untuk Laptop Skripsi: Rp4.000.000. Dengan setoran sekitar Rp400.000 per bulan seperti sekarang, targetmu tercapai sekitar 10 bulan lagi. Kalau kamu menambah Rp50.000 per bulan, jadinya sekitar 9 bulan lagi, 1 bulan lebih cepat. Ini hitungan sederhana. Sesuaikan dengan kondisimu.',
+            ),
+          );
+        },
+      );
 
       test('sisa 100.000 setoran 100.000 -> 1 dan 1 (kalimat "tetap")', () {
         final t1 = DataTujuanTabunganUmpanBalik(
@@ -410,7 +475,9 @@ void main() {
         );
         expect(
           formatEstimasiTabungan(tujuan: t1, setoranRataRata: 100000),
-          equals('Sisa yang perlu dikumpulkan untuk Laptop Skripsi: Rp100.000. Dengan setoran sekitar Rp100.000 per bulan seperti sekarang, targetmu tercapai sekitar 1 bulan lagi. Kalau kamu menambah Rp50.000 per bulan, waktunya tetap sekitar 1 bulan lagi. Ini hitungan sederhana. Sesuaikan dengan kondisimu.'),
+          equals(
+            'Sisa yang perlu dikumpulkan untuk Laptop Skripsi: Rp100.000. Dengan setoran sekitar Rp100.000 per bulan seperti sekarang, targetmu tercapai sekitar 1 bulan lagi. Kalau kamu menambah Rp50.000 per bulan, waktunya tetap sekitar 1 bulan lagi. Ini hitungan sederhana. Sesuaikan dengan kondisimu.',
+          ),
         );
       });
     });
@@ -426,23 +493,30 @@ void main() {
         );
         expect(
           formatTeksPengeluaranWajibBulanan(hasil),
-          equals('Belum ada pengeluaran kebutuhan yang bisa dihitung. Catat dulu beberapa pengeluaran kebutuhan.'),
+          equals(
+            'Belum ada pengeluaran kebutuhan yang bisa dihitung. Catat dulu beberapa pengeluaran kebutuhan.',
+          ),
         );
       });
 
-      test('tiga bulan kalender terakhir: total 1.900.000, kebutuhan 1.700.000, utang 200.000', () {
-        const hasil = HasilPengeluaranWajib(
-          total: 1900000,
-          bagianKebutuhan: 1700000,
-          bagianUtang: 200000,
-          jumlahBulan: 3,
-          dasar: DasarPengeluaranWajib.tigaBulanTerakhir,
-        );
-        expect(
-          formatTeksPengeluaranWajibBulanan(hasil),
-          equals('Pengeluaran wajibmu rata-rata Rp1.900.000 per bulan (dari 3 bulan terakhir). Rinciannya: kebutuhan Rp1.700.000, cicilan dan utang Rp200.000.'),
-        );
-      });
+      test(
+        'tiga bulan kalender terakhir: total 1.900.000, kebutuhan 1.700.000, utang 200.000',
+        () {
+          const hasil = HasilPengeluaranWajib(
+            total: 1900000,
+            bagianKebutuhan: 1700000,
+            bagianUtang: 200000,
+            jumlahBulan: 3,
+            dasar: DasarPengeluaranWajib.tigaBulanTerakhir,
+          );
+          expect(
+            formatTeksPengeluaranWajibBulanan(hasil),
+            equals(
+              'Pengeluaran wajibmu rata-rata Rp1.900.000 per bulan (dari 3 bulan terakhir). Rinciannya: kebutuhan Rp1.700.000, cicilan dan utang Rp200.000.',
+            ),
+          );
+        },
+      );
 
       test('dua bulan data (tanpa cicilan dan utang)', () {
         const hasil = HasilPengeluaranWajib(
@@ -454,7 +528,9 @@ void main() {
         );
         expect(
           formatTeksPengeluaranWajibBulanan(hasil),
-          equals('Pengeluaran wajibmu rata-rata Rp1.500.000 per bulan (dari 2 bulan terakhir). Rinciannya: kebutuhan Rp1.500.000.'),
+          equals(
+            'Pengeluaran wajibmu rata-rata Rp1.500.000 per bulan (dari 2 bulan terakhir). Rinciannya: kebutuhan Rp1.500.000.',
+          ),
         );
       });
 
@@ -468,25 +544,32 @@ void main() {
         );
         expect(
           formatTeksPengeluaranWajibBulanan(hasil),
-          equals('Pengeluaran wajibmu bulan ini sejauh ini Rp900.000 (belum satu bulan penuh). Rinciannya: kebutuhan Rp900.000.'),
+          equals(
+            'Pengeluaran wajibmu bulan ini sejauh ini Rp900.000 (belum satu bulan penuh). Rinciannya: kebutuhan Rp900.000.',
+          ),
         );
       });
     });
 
     group('8. formatTargetDanaDarurat (assertion pada STRING LENGKAP)', () {
-      test('W = 0: "Catat dulu pengeluaran kebutuhanmu agar target bisa dihitung."', () {
-        const hasil = HasilPengeluaranWajib(
-          total: 0,
-          bagianKebutuhan: 0,
-          bagianUtang: 0,
-          jumlahBulan: 0,
-          dasar: DasarPengeluaranWajib.belumAda,
-        );
-        expect(
-          formatTargetDanaDarurat(pengeluaranWajib: hasil),
-          equals('Catat dulu pengeluaran kebutuhanmu agar target bisa dihitung.'),
-        );
-      });
+      test(
+        'W = 0: "Catat dulu pengeluaran kebutuhanmu agar target bisa dihitung."',
+        () {
+          const hasil = HasilPengeluaranWajib(
+            total: 0,
+            bagianKebutuhan: 0,
+            bagianUtang: 0,
+            jumlahBulan: 0,
+            dasar: DasarPengeluaranWajib.belumAda,
+          );
+          expect(
+            formatTargetDanaDarurat(pengeluaranWajib: hasil),
+            equals(
+              'Catat dulu pengeluaran kebutuhanmu agar target bisa dihitung.',
+            ),
+          );
+        },
+      );
 
       test('W 1.900.000 (3 bulan kalender)', () {
         const hasil = HasilPengeluaranWajib(
@@ -498,7 +581,9 @@ void main() {
         );
         expect(
           formatTargetDanaDarurat(pengeluaranWajib: hasil),
-          equals('Dengan pengeluaran wajib sekitar Rp1.900.000 per bulan, sebagai aturan praktis dana darurat berada di kisaran 3 sampai 6 kali itu: Rp5.700.000 sampai Rp11.400.000. Titik awal yang masuk akal: Rp5.700.000. Sesuaikan dengan kondisimu.'),
+          equals(
+            'Dengan pengeluaran wajib sekitar Rp1.900.000 per bulan, sebagai aturan praktis dana darurat berada di kisaran 3 sampai 6 kali itu: Rp5.700.000 sampai Rp11.400.000. Titik awal yang masuk akal: Rp5.700.000. Sesuaikan dengan kondisimu.',
+          ),
         );
       });
 
@@ -512,7 +597,9 @@ void main() {
         );
         expect(
           formatTargetDanaDarurat(pengeluaranWajib: hasil),
-          equals('Dengan pengeluaran wajib sekitar Rp2.000.000 per bulan, sebagai aturan praktis dana darurat berada di kisaran 3 sampai 6 kali itu: Rp6.000.000 sampai Rp12.000.000. Titik awal yang masuk akal: Rp6.000.000. Sesuaikan dengan kondisimu.'),
+          equals(
+            'Dengan pengeluaran wajib sekitar Rp2.000.000 per bulan, sebagai aturan praktis dana darurat berada di kisaran 3 sampai 6 kali itu: Rp6.000.000 sampai Rp12.000.000. Titik awal yang masuk akal: Rp6.000.000. Sesuaikan dengan kondisimu.',
+          ),
         );
       });
 
@@ -526,7 +613,9 @@ void main() {
         );
         expect(
           formatTargetDanaDarurat(pengeluaranWajib: hasil),
-          equals('Dengan pengeluaran wajib sekitar Rp2.000.000 per bulan, sebagai aturan praktis dana darurat berada di kisaran 3 sampai 6 kali itu: Rp6.000.000 sampai Rp12.000.000. Titik awal yang masuk akal: Rp6.000.000. Sesuaikan dengan kondisimu. Angka ini masih perkiraan awal karena datamu baru bulan ini.'),
+          equals(
+            'Dengan pengeluaran wajib sekitar Rp2.000.000 per bulan, sebagai aturan praktis dana darurat berada di kisaran 3 sampai 6 kali itu: Rp6.000.000 sampai Rp12.000.000. Titik awal yang masuk akal: Rp6.000.000. Sesuaikan dengan kondisimu. Angka ini masih perkiraan awal karena datamu baru bulan ini.',
+          ),
         );
       });
     });
@@ -534,7 +623,10 @@ void main() {
     group('9. formatProgresDanaDarurat (assertion pada STRING LENGKAP)', () {
       test('tanpa tujuan: "Belum ada tujuan dana darurat."', () {
         expect(
-          formatProgresDanaDarurat(tujuan: null, pengeluaranWajibPerBulan: 1900000),
+          formatProgresDanaDarurat(
+            tujuan: null,
+            pengeluaranWajibPerBulan: 1900000,
+          ),
           equals('Belum ada tujuan dana darurat.'),
         );
       });
@@ -545,8 +637,13 @@ void main() {
           targetRupiah: 5700000,
         );
         expect(
-          formatProgresDanaDarurat(tujuan: t, pengeluaranWajibPerBulan: 1900000),
-          equals('Dana daruratmu: Rp2.850.000 dari target Rp5.700.000 (50 persen). Itu setara sekitar 1,5 bulan pengeluaran wajibmu.'),
+          formatProgresDanaDarurat(
+            tujuan: t,
+            pengeluaranWajibPerBulan: 1900000,
+          ),
+          equals(
+            'Dana daruratmu: Rp2.850.000 dari target Rp5.700.000 (50 persen). Itu setara sekitar 1,5 bulan pengeluaran wajibmu.',
+          ),
         );
       });
 
@@ -556,8 +653,13 @@ void main() {
           targetRupiah: 5700000,
         );
         expect(
-          formatProgresDanaDarurat(tujuan: t, pengeluaranWajibPerBulan: 1900000),
-          equals('Dana daruratmu: Rp5.700.000 dari target Rp5.700.000 (100 persen). Itu setara sekitar 3 bulan pengeluaran wajibmu. Targetmu sudah tercapai.'),
+          formatProgresDanaDarurat(
+            tujuan: t,
+            pengeluaranWajibPerBulan: 1900000,
+          ),
+          equals(
+            'Dana daruratmu: Rp5.700.000 dari target Rp5.700.000 (100 persen). Itu setara sekitar 3 bulan pengeluaran wajibmu. Targetmu sudah tercapai.',
+          ),
         );
       });
 
@@ -568,7 +670,9 @@ void main() {
         );
         expect(
           formatProgresDanaDarurat(tujuan: t, pengeluaranWajibPerBulan: null),
-          equals('Dana daruratmu: Rp2.850.000 dari target Rp5.700.000 (50 persen).'),
+          equals(
+            'Dana daruratmu: Rp2.850.000 dari target Rp5.700.000 (50 persen).',
+          ),
         );
       });
 
@@ -578,8 +682,13 @@ void main() {
           targetRupiah: 5700000,
         );
         expect(
-          formatProgresDanaDarurat(tujuan: t, pengeluaranWajibPerBulan: 1900000),
-          equals('Dana daruratmu: Rp0 dari target Rp5.700.000 (0 persen). Itu setara sekitar 0 bulan pengeluaran wajibmu.'),
+          formatProgresDanaDarurat(
+            tujuan: t,
+            pengeluaranWajibPerBulan: 1900000,
+          ),
+          equals(
+            'Dana daruratmu: Rp0 dari target Rp5.700.000 (0 persen). Itu setara sekitar 0 bulan pengeluaran wajibmu.',
+          ),
         );
       });
     });

@@ -19,9 +19,8 @@ class LayarBelajar extends ConsumerWidget {
       backgroundColor: WarnaFunda.latar,
       body: SafeArea(
         child: petaAsync.when(
-          loading: () => const Center(
-            child: IndikatorMemuat(warna: WarnaFunda.utama),
-          ),
+          loading: () =>
+              const Center(child: IndikatorMemuat(warna: WarnaFunda.utama)),
           error: (err, stack) => Center(
             child: Padding(
               padding: const EdgeInsets.all(SpasiFunda.m),
@@ -35,9 +34,15 @@ class LayarBelajar extends ConsumerWidget {
             ),
           ),
           data: (daftarItemModul) {
-            final modulPemula = daftarItemModul.where((m) => m.modul.tingkat == 'pemula').toList();
-            final modulMenengah = daftarItemModul.where((m) => m.modul.tingkat == 'menengah').toList();
-            final modulLanjutan = daftarItemModul.where((m) => m.modul.tingkat == 'lanjutan').toList();
+            final modulPemula = daftarItemModul
+                .where((m) => m.modul.tingkat == 'pemula')
+                .toList();
+            final modulMenengah = daftarItemModul
+                .where((m) => m.modul.tingkat == 'menengah')
+                .toList();
+            final modulLanjutan = daftarItemModul
+                .where((m) => m.modul.tingkat == 'lanjutan')
+                .toList();
 
             return SingleChildScrollView(
               padding: const EdgeInsets.all(SpasiFunda.marginLayar),
@@ -60,7 +65,8 @@ class LayarBelajar extends ConsumerWidget {
                     context,
                     ref,
                     judul: 'Tingkat Pemula',
-                    keterangan: 'Fondasi penting arus kas, tabungan, dan dana darurat.',
+                    keterangan:
+                        'Fondasi penting arus kas, tabungan, dan dana darurat.',
                     daftarModul: modulPemula,
                   ),
 
@@ -71,7 +77,8 @@ class LayarBelajar extends ConsumerWidget {
                     context,
                     ref,
                     judul: 'Tingkat Menengah',
-                    keterangan: 'Perlindungan aset, manajemen kredit, dan investasi dasar.',
+                    keterangan:
+                        'Perlindungan aset, manajemen kredit, dan investasi dasar.',
                     daftarModul: modulMenengah,
                   ),
 
@@ -82,7 +89,8 @@ class LayarBelajar extends ConsumerWidget {
                     context,
                     ref,
                     judul: 'Tingkat Lanjutan',
-                    keterangan: 'Perencanaan jangka panjang, KPR, dan kebebasan finansial.',
+                    keterangan:
+                        'Perencanaan jangka panjang, KPR, dan kebebasan finansial.',
                     daftarModul: modulLanjutan,
                   ),
 
@@ -128,7 +136,11 @@ class LayarBelajar extends ConsumerWidget {
     );
   }
 
-  Widget _bangunKartuModul(BuildContext context, WidgetRef ref, ItemPetaModul item) {
+  Widget _bangunKartuModul(
+    BuildContext context,
+    WidgetRef ref,
+    ItemPetaModul item,
+  ) {
     final modul = item.modul;
     final statusModul = item.statusModul;
     final isTersedia = modul.tersedia;
@@ -169,120 +181,180 @@ class LayarBelajar extends ConsumerWidget {
             ],
           ),
           const SizedBox(height: SpasiFunda.s),
-          TeksFunda.isiKecil(modul.deskripsiSingkat, warna: WarnaFunda.teksRedup),
+          TeksFunda.isiKecil(
+            modul.deskripsiSingkat,
+            warna: WarnaFunda.teksRedup,
+          ),
 
           if (modul.id == 'utang_cicilan') ...[
-            ref.watch(penyediaStreamPernyataan).when(
-              data: (pernyataan) {
-                if (pernyataan['tidak_punya_utang'] == 'true') {
-                  return Container(
-                    margin: const EdgeInsets.only(top: SpasiFunda.s),
-                    padding: const EdgeInsets.symmetric(horizontal: SpasiFunda.m, vertical: SpasiFunda.s),
-                    decoration: BoxDecoration(
-                      color: WarnaFunda.tintBiru,
-                      borderRadius: BorderRadius.circular(SudutFunda.kecil),
-                    ),
-                    child: Row(
-                      children: [
-                        const Icon(LucideIcons.info, size: 16, color: WarnaFunda.utama),
-                        const SizedBox(width: SpasiFunda.s),
-                        const Expanded(
-                          child: TeksFunda.catatan('Kamu menyatakan tidak punya utang.', warna: WarnaFunda.teks),
+            ref
+                .watch(penyediaStreamPernyataan)
+                .when(
+                  data: (pernyataan) {
+                    if (pernyataan['tidak_punya_utang'] == 'true') {
+                      return Container(
+                        margin: const EdgeInsets.only(top: SpasiFunda.s),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: SpasiFunda.m,
+                          vertical: SpasiFunda.s,
                         ),
-                        TextButton(
-                          style: TextButton.styleFrom(minimumSize: const Size(48, 36)),
-                          onPressed: () async {
-                            final repo = ref.read(penyediaPernyataanRepositori);
-                            await repo.hapusPernyataan('tidak_punya_utang');
-                            ref.invalidate(penyediaFotoData);
-                          },
-                          child: const TeksFunda.catatan('Cabut pernyataan', warna: WarnaFunda.utama),
+                        decoration: BoxDecoration(
+                          color: WarnaFunda.tintBiru,
+                          borderRadius: BorderRadius.circular(SudutFunda.kecil),
                         ),
-                      ],
-                    ),
-                  );
-                }
-                return const SizedBox.shrink();
-              },
-              loading: () => const SizedBox.shrink(),
-              error: (err, stack) => const SizedBox.shrink(),
-            ),
+                        child: Row(
+                          children: [
+                            const Icon(
+                              LucideIcons.info,
+                              size: 16,
+                              color: WarnaFunda.utama,
+                            ),
+                            const SizedBox(width: SpasiFunda.s),
+                            const Expanded(
+                              child: TeksFunda.catatan(
+                                'Kamu menyatakan tidak punya utang.',
+                                warna: WarnaFunda.teks,
+                              ),
+                            ),
+                            TextButton(
+                              style: TextButton.styleFrom(
+                                minimumSize: const Size(48, 36),
+                              ),
+                              onPressed: () async {
+                                final repo = ref.read(
+                                  penyediaPernyataanRepositori,
+                                );
+                                await repo.hapusPernyataan('tidak_punya_utang');
+                                ref.invalidate(penyediaFotoData);
+                              },
+                              child: const TeksFunda.catatan(
+                                'Cabut pernyataan',
+                                warna: WarnaFunda.utama,
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    }
+                    return const SizedBox.shrink();
+                  },
+                  loading: () => const SizedBox.shrink(),
+                  error: (err, stack) => const SizedBox.shrink(),
+                ),
           ],
 
           if (modul.id == 'penghasilan_tambahan') ...[
-            ref.watch(penyediaStreamPernyataan).when(
-              data: (pernyataan) {
-                if (pernyataan['baru_satu_sumber'] == 'true') {
-                  return Container(
-                    margin: const EdgeInsets.only(top: SpasiFunda.s),
-                    padding: const EdgeInsets.symmetric(horizontal: SpasiFunda.m, vertical: SpasiFunda.s),
-                    decoration: BoxDecoration(
-                      color: WarnaFunda.tintBiru,
-                      borderRadius: BorderRadius.circular(SudutFunda.kecil),
-                    ),
-                    child: Row(
-                      children: [
-                        const Icon(LucideIcons.info, size: 16, color: WarnaFunda.utama),
-                        const SizedBox(width: SpasiFunda.s),
-                        const Expanded(
-                          child: TeksFunda.catatan('Kamu menyatakan baru punya satu sumber penghasilan.', warna: WarnaFunda.teks),
+            ref
+                .watch(penyediaStreamPernyataan)
+                .when(
+                  data: (pernyataan) {
+                    if (pernyataan['baru_satu_sumber'] == 'true') {
+                      return Container(
+                        margin: const EdgeInsets.only(top: SpasiFunda.s),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: SpasiFunda.m,
+                          vertical: SpasiFunda.s,
                         ),
-                        TextButton(
-                          style: TextButton.styleFrom(minimumSize: const Size(48, 36)),
-                          onPressed: () async {
-                            final repo = ref.read(penyediaPernyataanRepositori);
-                            await repo.hapusPernyataan('baru_satu_sumber');
-                            ref.invalidate(penyediaFotoData);
-                          },
-                          child: const TeksFunda.catatan('Cabut pernyataan', warna: WarnaFunda.utama),
+                        decoration: BoxDecoration(
+                          color: WarnaFunda.tintBiru,
+                          borderRadius: BorderRadius.circular(SudutFunda.kecil),
                         ),
-                      ],
-                    ),
-                  );
-                }
-                return const SizedBox.shrink();
-              },
-              loading: () => const SizedBox.shrink(),
-              error: (err, stack) => const SizedBox.shrink(),
-            ),
+                        child: Row(
+                          children: [
+                            const Icon(
+                              LucideIcons.info,
+                              size: 16,
+                              color: WarnaFunda.utama,
+                            ),
+                            const SizedBox(width: SpasiFunda.s),
+                            const Expanded(
+                              child: TeksFunda.catatan(
+                                'Kamu menyatakan baru punya satu sumber penghasilan.',
+                                warna: WarnaFunda.teks,
+                              ),
+                            ),
+                            TextButton(
+                              style: TextButton.styleFrom(
+                                minimumSize: const Size(48, 36),
+                              ),
+                              onPressed: () async {
+                                final repo = ref.read(
+                                  penyediaPernyataanRepositori,
+                                );
+                                await repo.hapusPernyataan('baru_satu_sumber');
+                                ref.invalidate(penyediaFotoData);
+                              },
+                              child: const TeksFunda.catatan(
+                                'Cabut pernyataan',
+                                warna: WarnaFunda.utama,
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    }
+                    return const SizedBox.shrink();
+                  },
+                  loading: () => const SizedBox.shrink(),
+                  error: (err, stack) => const SizedBox.shrink(),
+                ),
           ],
 
           if (modul.id == 'keuangan_usaha_kecil') ...[
-            ref.watch(penyediaStreamPernyataan).when(
-              data: (pernyataan) {
-                if (pernyataan['belum_punya_usaha'] == 'true') {
-                  return Container(
-                    margin: const EdgeInsets.only(top: SpasiFunda.s),
-                    padding: const EdgeInsets.symmetric(horizontal: SpasiFunda.m, vertical: SpasiFunda.s),
-                    decoration: BoxDecoration(
-                      color: WarnaFunda.tintBiru,
-                      borderRadius: BorderRadius.circular(SudutFunda.kecil),
-                    ),
-                    child: Row(
-                      children: [
-                        const Icon(LucideIcons.info, size: 16, color: WarnaFunda.utama),
-                        const SizedBox(width: SpasiFunda.s),
-                        const Expanded(
-                          child: TeksFunda.catatan('Kamu menyatakan belum punya usaha saat ini.', warna: WarnaFunda.teks),
+            ref
+                .watch(penyediaStreamPernyataan)
+                .when(
+                  data: (pernyataan) {
+                    if (pernyataan['belum_punya_usaha'] == 'true') {
+                      return Container(
+                        margin: const EdgeInsets.only(top: SpasiFunda.s),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: SpasiFunda.m,
+                          vertical: SpasiFunda.s,
                         ),
-                        TextButton(
-                          style: TextButton.styleFrom(minimumSize: const Size(48, 36)),
-                          onPressed: () async {
-                            final repo = ref.read(penyediaPernyataanRepositori);
-                            await repo.hapusPernyataan('belum_punya_usaha');
-                            ref.invalidate(penyediaFotoData);
-                          },
-                          child: const TeksFunda.catatan('Cabut pernyataan', warna: WarnaFunda.utama),
+                        decoration: BoxDecoration(
+                          color: WarnaFunda.tintBiru,
+                          borderRadius: BorderRadius.circular(SudutFunda.kecil),
                         ),
-                      ],
-                    ),
-                  );
-                }
-                return const SizedBox.shrink();
-              },
-              loading: () => const SizedBox.shrink(),
-              error: (err, stack) => const SizedBox.shrink(),
-            ),
+                        child: Row(
+                          children: [
+                            const Icon(
+                              LucideIcons.info,
+                              size: 16,
+                              color: WarnaFunda.utama,
+                            ),
+                            const SizedBox(width: SpasiFunda.s),
+                            const Expanded(
+                              child: TeksFunda.catatan(
+                                'Kamu menyatakan belum punya usaha saat ini.',
+                                warna: WarnaFunda.teks,
+                              ),
+                            ),
+                            TextButton(
+                              style: TextButton.styleFrom(
+                                minimumSize: const Size(48, 36),
+                              ),
+                              onPressed: () async {
+                                final repo = ref.read(
+                                  penyediaPernyataanRepositori,
+                                );
+                                await repo.hapusPernyataan('belum_punya_usaha');
+                                ref.invalidate(penyediaFotoData);
+                              },
+                              child: const TeksFunda.catatan(
+                                'Cabut pernyataan',
+                                warna: WarnaFunda.utama,
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    }
+                    return const SizedBox.shrink();
+                  },
+                  loading: () => const SizedBox.shrink(),
+                  error: (err, stack) => const SizedBox.shrink(),
+                ),
           ],
 
           if (modul.id == 'mulai_tes_awal') ...[
@@ -295,17 +367,27 @@ class LayarBelajar extends ConsumerWidget {
           ] else if (!isTersedia) ...[
             const SizedBox(height: SpasiFunda.m),
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: SpasiFunda.m, vertical: SpasiFunda.s),
+              padding: const EdgeInsets.symmetric(
+                horizontal: SpasiFunda.m,
+                vertical: SpasiFunda.s,
+              ),
               decoration: BoxDecoration(
                 color: WarnaFunda.tintNetral,
                 borderRadius: BorderRadius.circular(SudutFunda.kecil),
               ),
               child: const Row(
                 children: [
-                  Icon(LucideIcons.clock, size: 16, color: WarnaFunda.teksRedup),
+                  Icon(
+                    LucideIcons.clock,
+                    size: 16,
+                    color: WarnaFunda.teksRedup,
+                  ),
                   SizedBox(width: SpasiFunda.s),
                   Expanded(
-                    child: TeksFunda.catatan('Segera hadir di kurikulum mendatang.', warna: WarnaFunda.teksRedup),
+                    child: TeksFunda.catatan(
+                      'Segera hadir di kurikulum mendatang.',
+                      warna: WarnaFunda.teksRedup,
+                    ),
                   ),
                 ],
               ),
@@ -318,7 +400,13 @@ class LayarBelajar extends ConsumerWidget {
             ...item.daftarPelajaran.asMap().entries.map((entry) {
               final idx = entry.key;
               final (pel, statusPel) = entry.value;
-              return _bangunBarisPelajaran(context, ref, pel, statusPel, idx + 1);
+              return _bangunBarisPelajaran(
+                context,
+                ref,
+                pel,
+                statusPel,
+                idx + 1,
+              );
             }),
 
             // Tombol Kuis Akhir Modul
@@ -333,12 +421,18 @@ class LayarBelajar extends ConsumerWidget {
   Widget _bangunBadgeStatusModul(bool tersedia, StatusBelajar status) {
     if (!tersedia) {
       return Container(
-        padding: const EdgeInsets.symmetric(horizontal: SpasiFunda.s, vertical: 2),
+        padding: const EdgeInsets.symmetric(
+          horizontal: SpasiFunda.s,
+          vertical: 2,
+        ),
         decoration: BoxDecoration(
           color: WarnaFunda.tintNetral,
           borderRadius: BorderRadius.circular(SudutFunda.pil),
         ),
-        child: const TeksFunda.catatan('Segera Hadir', warna: WarnaFunda.teksRedup),
+        child: const TeksFunda.catatan(
+          'Segera Hadir',
+          warna: WarnaFunda.teksRedup,
+        ),
       );
     }
 
@@ -370,7 +464,10 @@ class LayarBelajar extends ConsumerWidget {
     }
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: SpasiFunda.s, vertical: 2),
+      padding: const EdgeInsets.symmetric(
+        horizontal: SpasiFunda.s,
+        vertical: 2,
+      ),
       decoration: BoxDecoration(
         color: warnaLatar,
         borderRadius: BorderRadius.circular(SudutFunda.pil),
@@ -396,7 +493,9 @@ class LayarBelajar extends ConsumerWidget {
         color: isTerkunci ? WarnaFunda.tintNetral : WarnaFunda.permukaan,
         borderRadius: BorderRadius.circular(SudutFunda.kartu),
         border: Border.all(
-          color: status == StatusBelajar.sedang ? WarnaFunda.utama : WarnaFunda.garis,
+          color: status == StatusBelajar.sedang
+              ? WarnaFunda.utama
+              : WarnaFunda.garis,
           width: status == StatusBelajar.sedang ? 1.5 : 1.0,
         ),
       ),
@@ -447,7 +546,11 @@ class LayarBelajar extends ConsumerWidget {
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Icon(LucideIcons.lock, size: 16, color: WarnaFunda.peringatan),
+                      const Icon(
+                        LucideIcons.lock,
+                        size: 16,
+                        color: WarnaFunda.peringatan,
+                      ),
                       const SizedBox(width: SpasiFunda.s),
                       Expanded(
                         child: Column(
@@ -456,7 +559,10 @@ class LayarBelajar extends ConsumerWidget {
                             ...statusPel.apaYangKurang.map(
                               (pesan) => Padding(
                                 padding: const EdgeInsets.only(bottom: 2),
-                                child: TeksFunda.catatan(pesan, warna: WarnaFunda.teks),
+                                child: TeksFunda.catatan(
+                                  pesan,
+                                  warna: WarnaFunda.teks,
+                                ),
                               ),
                             ),
                           ],
@@ -472,11 +578,20 @@ class LayarBelajar extends ConsumerWidget {
                         style: OutlinedButton.styleFrom(
                           minimumSize: const Size(48, 48),
                           side: const BorderSide(color: WarnaFunda.utama),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(SudutFunda.pil)),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(SudutFunda.pil),
+                          ),
                         ),
                         onPressed: () => context.push(statusPel.ruteAksi!),
-                        icon: const Icon(LucideIcons.arrowRight, size: 16, color: WarnaFunda.utama),
-                        label: const TeksFunda.label('Lengkapi Data Sekarang', warna: WarnaFunda.utama),
+                        icon: const Icon(
+                          LucideIcons.arrowRight,
+                          size: 16,
+                          color: WarnaFunda.utama,
+                        ),
+                        label: const TeksFunda.label(
+                          'Lengkapi Data Sekarang',
+                          warna: WarnaFunda.utama,
+                        ),
                       ),
                     ),
                   ],
@@ -501,7 +616,10 @@ class LayarBelajar extends ConsumerWidget {
                           }
                           ref.invalidate(penyediaFotoData);
                         },
-                        child: const TeksFunda.catatan('Aku tidak punya ini', warna: WarnaFunda.teksRedup),
+                        child: const TeksFunda.catatan(
+                          'Aku tidak punya ini',
+                          warna: WarnaFunda.teksRedup,
+                        ),
                       ),
                     ),
                   ],
@@ -523,7 +641,11 @@ class LayarBelajar extends ConsumerWidget {
             color: WarnaFunda.tintHijau,
             shape: BoxShape.circle,
           ),
-          child: const Icon(LucideIcons.check, size: 16, color: WarnaFunda.pemasukan),
+          child: const Icon(
+            LucideIcons.check,
+            size: 16,
+            color: WarnaFunda.pemasukan,
+          ),
         );
       case StatusBelajar.sedang:
         return Container(
@@ -532,7 +654,11 @@ class LayarBelajar extends ConsumerWidget {
             color: WarnaFunda.tintBiru,
             shape: BoxShape.circle,
           ),
-          child: const Icon(LucideIcons.play, size: 16, color: WarnaFunda.utama),
+          child: const Icon(
+            LucideIcons.play,
+            size: 16,
+            color: WarnaFunda.utama,
+          ),
         );
       case StatusBelajar.terbuka:
         return Container(
@@ -541,7 +667,11 @@ class LayarBelajar extends ConsumerWidget {
             color: WarnaFunda.tintBiru,
             shape: BoxShape.circle,
           ),
-          child: const Icon(LucideIcons.bookOpen, size: 16, color: WarnaFunda.utama),
+          child: const Icon(
+            LucideIcons.bookOpen,
+            size: 16,
+            color: WarnaFunda.utama,
+          ),
         );
       case StatusBelajar.terkunci:
         return Container(
@@ -550,14 +680,20 @@ class LayarBelajar extends ConsumerWidget {
             color: WarnaFunda.tintNetral,
             shape: BoxShape.circle,
           ),
-          child: const Icon(LucideIcons.lock, size: 16, color: WarnaFunda.teksRedup),
+          child: const Icon(
+            LucideIcons.lock,
+            size: 16,
+            color: WarnaFunda.teksRedup,
+          ),
         );
     }
   }
 
   Widget _bangunTombolKuisModul(BuildContext context, ItemPetaModul item) {
     final modul = item.modul;
-    final semuaPelajaranSelesai = item.daftarPelajaran.every((p) => p.$2.status == StatusBelajar.selesai);
+    final semuaPelajaranSelesai = item.daftarPelajaran.every(
+      (p) => p.$2.status == StatusBelajar.selesai,
+    );
     final kuis = modul.kuis;
     if (kuis.jumlahSoal <= 0) return const SizedBox.shrink();
 
@@ -565,7 +701,9 @@ class LayarBelajar extends ConsumerWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(SpasiFunda.m),
       decoration: BoxDecoration(
-        color: semuaPelajaranSelesai ? WarnaFunda.utamaTipis : WarnaFunda.tintNetral,
+        color: semuaPelajaranSelesai
+            ? WarnaFunda.utamaTipis
+            : WarnaFunda.tintNetral,
         borderRadius: BorderRadius.circular(SudutFunda.kartu),
         border: Border.all(
           color: semuaPelajaranSelesai ? WarnaFunda.utama : WarnaFunda.garis,
@@ -575,7 +713,9 @@ class LayarBelajar extends ConsumerWidget {
         children: [
           Icon(
             LucideIcons.helpCircle,
-            color: semuaPelajaranSelesai ? WarnaFunda.utama : WarnaFunda.teksRedup,
+            color: semuaPelajaranSelesai
+                ? WarnaFunda.utama
+                : WarnaFunda.teksRedup,
           ),
           const SizedBox(width: SpasiFunda.m),
           Expanded(
@@ -584,7 +724,9 @@ class LayarBelajar extends ConsumerWidget {
               children: [
                 TeksFunda.label(
                   'Kuis Akhir Modul (${kuis.jumlahSoal} Soal)',
-                  warna: semuaPelajaranSelesai ? WarnaFunda.utama : WarnaFunda.teksRedup,
+                  warna: semuaPelajaranSelesai
+                      ? WarnaFunda.utama
+                      : WarnaFunda.teksRedup,
                 ),
                 const SizedBox(height: 2),
                 TeksFunda.catatan(
@@ -628,15 +770,19 @@ class LayarBelajar extends ConsumerWidget {
               color: WarnaFunda.utamaTipis,
               borderRadius: BorderRadius.circular(SudutFunda.petak),
               border: Border.all(
-                  color: WarnaFunda.utama.withValues(alpha: 0.2)),
+                color: WarnaFunda.utama.withValues(alpha: 0.2),
+              ),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Row(
                   children: [
-                    Icon(LucideIcons.sparkles,
-                        color: WarnaFunda.utama, size: 20),
+                    Icon(
+                      LucideIcons.sparkles,
+                      color: WarnaFunda.utama,
+                      size: 20,
+                    ),
                     SizedBox(width: SpasiFunda.s),
                     Text(
                       'Saran Belajar Sesuai Kondisimu',
@@ -678,7 +824,8 @@ class LayarBelajar extends ConsumerWidget {
                     color: WarnaFunda.permukaan,
                     borderRadius: BorderRadius.circular(SudutFunda.petak),
                     border: Border.all(
-                        color: WarnaFunda.utama.withValues(alpha: 0.3)),
+                      color: WarnaFunda.utama.withValues(alpha: 0.3),
+                    ),
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -687,19 +834,28 @@ class LayarBelajar extends ConsumerWidget {
                         children: [
                           Container(
                             padding: const EdgeInsets.symmetric(
-                                horizontal: SpasiFunda.s, vertical: 2),
+                              horizontal: SpasiFunda.s,
+                              vertical: 2,
+                            ),
                             decoration: BoxDecoration(
                               color: WarnaFunda.utamaTipis,
-                              borderRadius: BorderRadius.circular(SudutFunda.pil),
+                              borderRadius: BorderRadius.circular(
+                                SudutFunda.pil,
+                              ),
                             ),
                             child: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                const Icon(LucideIcons.sparkles,
-                                    size: 14, color: WarnaFunda.utama),
+                                const Icon(
+                                  LucideIcons.sparkles,
+                                  size: 14,
+                                  color: WarnaFunda.utama,
+                                ),
                                 const SizedBox(width: SpasiFunda.xs),
                                 TeksFunda.catatan(
-                                  isTersedia ? 'Saran untuk kamu' : 'Saran untuk kamu (segera hadir)',
+                                  isTersedia
+                                      ? 'Saran untuk kamu'
+                                      : 'Saran untuk kamu (segera hadir)',
                                   warna: WarnaFunda.utama,
                                 ),
                               ],
@@ -708,16 +864,20 @@ class LayarBelajar extends ConsumerWidget {
                           const Spacer(),
                           TextButton(
                             onPressed: () => context.push('/belajar/tes-awal'),
-                            child: const Text('Profilku',
-                                style: TextStyle(fontSize: 12)),
+                            child: const Text(
+                              'Profilku',
+                              style: TextStyle(fontSize: 12),
+                            ),
                           ),
                         ],
                       ),
                       const SizedBox(height: SpasiFunda.s),
                       TeksFunda.judulBagian(rek.modul.judul),
                       const SizedBox(height: SpasiFunda.xs),
-                      TeksFunda.isiKecil(rek.deskripsiAlasan,
-                          warna: WarnaFunda.teksRedup),
+                      TeksFunda.isiKecil(
+                        rek.deskripsiAlasan,
+                        warna: WarnaFunda.teksRedup,
+                      ),
                       const SizedBox(height: SpasiFunda.m),
                       TombolFunda(
                         teks: isTersedia ? 'Buka Modul Ini' : 'Segera Hadir',

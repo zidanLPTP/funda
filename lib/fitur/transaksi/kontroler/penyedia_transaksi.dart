@@ -92,12 +92,15 @@ final penyediaLimaTransaksiTerakhir = StreamProvider<List<EntitasTransaksi>>((
 
 /// Stream provider reaktif hasil agregasi arus kas via SQL.
 final penyediaStreamArusKasBulanIni =
-    StreamProvider.family<HasilArusKas, ({DateTime awalBulan, DateTime akhirBulan})>((
-      ref,
-      param,
-    ) {
+    StreamProvider.family<
+      HasilArusKas,
+      ({DateTime awalBulan, DateTime akhirBulan})
+    >((ref, param) {
       final repo = ref.watch(penyediaTransaksiRepositori);
-      return repo.pantauArusKasSQL(mulai: param.awalBulan, selesai: param.akhirBulan);
+      return repo.pantauArusKasSQL(
+        mulai: param.awalBulan,
+        selesai: param.akhirBulan,
+      );
     });
 
 /// Stream provider agregasi pengeluaran per sifat kategori untuk bulan berjalan (bebas N+1, O(1) baris).
@@ -113,7 +116,10 @@ final penyediaArusKasBulanIni = Provider<HasilArusKas>((ref) {
   final akhirBulan = DateTime(sekarang.year, sekarang.month + 1, 0, 23, 59, 59);
 
   final arusKasAsync = ref.watch(
-    penyediaStreamArusKasBulanIni((awalBulan: awalBulan, akhirBulan: akhirBulan)),
+    penyediaStreamArusKasBulanIni((
+      awalBulan: awalBulan,
+      akhirBulan: akhirBulan,
+    )),
   );
   return arusKasAsync.value ??
       const HasilArusKas(totalMasuk: 0, totalKeluar: 0, selisih: 0);

@@ -106,29 +106,35 @@ ProfilKeuanganSnapshot bangunProfil({
   const himpunanInvestasi = {'belum', 'pernah', 'aktif'};
   const himpunanMencatat = {'belum', 'kadang', 'rutin'};
 
-  final rawPenghasilan =
-      jawabanProfil['punya_penghasilan']?.trim().toLowerCase();
-  final penghasilan =
-      himpunanPenghasilan.contains(rawPenghasilan) ? rawPenghasilan! : 'belum';
+  final rawPenghasilan = jawabanProfil['punya_penghasilan']
+      ?.trim()
+      .toLowerCase();
+  final penghasilan = himpunanPenghasilan.contains(rawPenghasilan)
+      ? rawPenghasilan!
+      : 'belum';
 
   final rawUtang = jawabanProfil['punya_utang']?.trim().toLowerCase();
   final utang = himpunanUtang.contains(rawUtang) ? rawUtang! : 'tidak_yakin';
 
   final rawDarurat = jawabanProfil['dana_darurat']?.trim().toLowerCase();
-  final darurat =
-      himpunanDanaDarurat.contains(rawDarurat) ? rawDarurat! : 'belum';
+  final darurat = himpunanDanaDarurat.contains(rawDarurat)
+      ? rawDarurat!
+      : 'belum';
 
   final rawMenabung = jawabanProfil['menabung']?.trim().toLowerCase();
-  final menabung =
-      himpunanMenabung.contains(rawMenabung) ? rawMenabung! : 'belum';
+  final menabung = himpunanMenabung.contains(rawMenabung)
+      ? rawMenabung!
+      : 'belum';
 
   final rawInvestasi = jawabanProfil['investasi']?.trim().toLowerCase();
-  final investasi =
-      himpunanInvestasi.contains(rawInvestasi) ? rawInvestasi! : 'belum';
+  final investasi = himpunanInvestasi.contains(rawInvestasi)
+      ? rawInvestasi!
+      : 'belum';
 
   final rawMencatat = jawabanProfil['mencatat_keuangan']?.trim().toLowerCase();
-  final mencatat =
-      himpunanMencatat.contains(rawMencatat) ? rawMencatat! : 'belum';
+  final mencatat = himpunanMencatat.contains(rawMencatat)
+      ? rawMencatat!
+      : 'belum';
 
   String? tujuanSanitasi;
   if (tujuanUtama != null && tujuanUtama.trim().isNotEmpty) {
@@ -207,14 +213,16 @@ List<ModulRekomendasi> rekomendasiModul({
 
   // Aturan 2: Ada utang aktif dengan sisa > 0 -> modul utang_cicilan, alasan punya_utang_tercatat
   final adaUtangAktif =
-      fotoData.sisaUtangAktif > 0 || (profil != null && profil.punyaUtang == 'ya');
+      fotoData.sisaUtangAktif > 0 ||
+      (profil != null && profil.punyaUtang == 'ya');
   if (adaUtangAktif) {
     tambahAlasan('utang_cicilan', alasanPunyaUtangTercatat);
   }
 
   // Aturan 3: Tidak ada tujuan dana_darurat aktif, atau dana terkumpulnya 0 -> modul dana_darurat, alasan dana_darurat_kosong
   final danaDaruratKosong =
-      (!fotoData.tujuanDanaDaruratAktif || fotoData.saldoTerkumpulDanaDarurat <= 0) ||
+      (!fotoData.tujuanDanaDaruratAktif ||
+          fotoData.saldoTerkumpulDanaDarurat <= 0) ||
       (profil != null && profil.danaDarurat == 'belum');
   if (danaDaruratKosong) {
     tambahAlasan('dana_darurat', alasanDanaDaruratKosong);

@@ -140,7 +140,10 @@ class LayarBeranda extends ConsumerWidget {
             // Banner Pengingat Cadangan 2x1 (bahasa santai, ajakan ramah)
             Consumer(
               builder: (context, ref, _) {
-                final statusCadangan = ref.watch(penyediaStatusCadangan).asData?.value;
+                final statusCadangan = ref
+                    .watch(penyediaStatusCadangan)
+                    .asData
+                    ?.value;
                 if (statusCadangan == null || !statusCadangan.perluPengingat) {
                   return const SizedBox.shrink();
                 }
@@ -153,10 +156,16 @@ class LayarBeranda extends ConsumerWidget {
                       children: [
                         const Row(
                           children: [
-                            Icon(LucideIcons.shieldCheck, size: 20, color: WarnaFunda.utama),
+                            Icon(
+                              LucideIcons.shieldCheck,
+                              size: 20,
+                              color: WarnaFunda.utama,
+                            ),
                             SizedBox(width: SpasiFunda.s),
                             Expanded(
-                              child: TeksFunda.label('Yuk, amankan catatan keuanganmu'),
+                              child: TeksFunda.label(
+                                'Yuk, amankan catatan keuanganmu',
+                              ),
                             ),
                           ],
                         ),
@@ -169,14 +178,15 @@ class LayarBeranda extends ConsumerWidget {
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
                             TextButton(
-                              onPressed: () => tundaPengingatCadangan(ref, durasiHari: 14),
+                              onPressed: () =>
+                                  tundaPengingatCadangan(ref, durasiHari: 14),
                               child: const Text('Nanti'),
                             ),
                             const SizedBox(width: SpasiFunda.s),
                             ElevatedButton(
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: WarnaFunda.utama,
-                                foregroundColor: Colors.white,
+                                foregroundColor: WarnaFunda.putih,
                               ),
                               onPressed: () => context.push('/cadangan'),
                               child: const Text('Cadangkan sekarang'),
@@ -352,8 +362,7 @@ class LayarBeranda extends ConsumerWidget {
                 padaKetuk: () => context.push('/anggaran'),
                 labelAkses: 'Sisa anggaran bulan ini',
                 anak: sisaAnggaranAsync.when(
-                  loading: () =>
-                      const Center(child: IndikatorMemuat()),
+                  loading: () => const Center(child: IndikatorMemuat()),
                   error: (_, _) => const Center(child: Text('Gagal')),
                   data: (sisa) {
                     return Column(
@@ -587,11 +596,14 @@ class LayarBeranda extends ConsumerWidget {
             const SizedBox(height: SpasiFunda.jarakPetak),
 
             // 8. Bento 2x1: Lanjut Belajar (Data Nyata dari Penyedia Belajar)
-            ref.watch(penyediaLanjutBelajarBeranda).when(
+            ref
+                .watch(penyediaLanjutBelajarBeranda)
+                .when(
                   data: (info) => PetakBento.ukuran2x1(
                     tint: TintPetakBento.ungu,
                     padaKetuk: () => context.push(info.rute),
-                    labelAkses: 'Pelajaran keuangan: ${info.labelAksi} ${info.judul}',
+                    labelAkses:
+                        'Pelajaran keuangan: ${info.labelAksi} ${info.judul}',
                     anak: Row(
                       children: [
                         Expanded(
@@ -604,8 +616,12 @@ class LayarBeranda extends ConsumerWidget {
                                   vertical: SpasiFunda.xs,
                                 ),
                                 decoration: BoxDecoration(
-                                  color: WarnaFunda.sifatKeinginan.withAlpha(25),
-                                  borderRadius: BorderRadius.circular(SudutFunda.pil),
+                                  color: WarnaFunda.sifatKeinginan.withAlpha(
+                                    25,
+                                  ),
+                                  borderRadius: BorderRadius.circular(
+                                    SudutFunda.pil,
+                                  ),
                                 ),
                                 child: TeksFunda.catatan(
                                   info.labelAksi,
@@ -849,8 +865,7 @@ class LayarBeranda extends ConsumerWidget {
                   ),
                   const SizedBox(height: SpasiFunda.s),
                   limaTransaksiAsync.when(
-                    loading: () =>
-                        const Center(child: IndikatorMemuat()),
+                    loading: () => const Center(child: IndikatorMemuat()),
                     error: (_, _) =>
                         const TeksFunda.catatan('Gagal memuat transaksi.'),
                     data: (daftar) {

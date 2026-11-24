@@ -16,8 +16,12 @@ class PembuatPdfLaporan {
 
   /// Memuat font TTF dari aset bundle aplikasi.
   static Future<PembuatPdfLaporan> muatDariAset() async {
-    final regData = await rootBundle.load('aset/font/PlusJakartaSans-Regular.ttf');
-    final boldData = await rootBundle.load('aset/font/PlusJakartaSans-Bold.ttf');
+    final regData = await rootBundle.load(
+      'aset/font/PlusJakartaSans-Regular.ttf',
+    );
+    final boldData = await rootBundle.load(
+      'aset/font/PlusJakartaSans-Bold.ttf',
+    );
     return PembuatPdfLaporan(
       fontRegularBytes: regData.buffer.asUint8List(),
       fontBoldBytes: boldData.buffer.asUint8List(),
@@ -44,7 +48,10 @@ class PembuatPdfLaporan {
     const warnaPrimer = PdfColor.fromInt(0xFF006C4C);
     const warnaAksenTemuan = PdfColor.fromInt(0xFF006684);
 
-    pw.Widget buildKartu({required pw.Widget child, PdfColor latar = warnaKartu}) {
+    pw.Widget buildKartu({
+      required pw.Widget child,
+      PdfColor latar = warnaKartu,
+    }) {
       return pw.Container(
         margin: const pw.EdgeInsets.only(bottom: 8),
         padding: const pw.EdgeInsets.all(10),
@@ -62,11 +69,7 @@ class PembuatPdfLaporan {
         padding: const pw.EdgeInsets.only(bottom: 4),
         child: pw.Text(
           judul,
-          style: pw.TextStyle(
-            font: fontBold,
-            fontSize: 10,
-            color: warnaPrimer,
-          ),
+          style: pw.TextStyle(font: fontBold, fontSize: 10, color: warnaPrimer),
         ),
       );
     }
@@ -133,7 +136,11 @@ class PembuatPdfLaporan {
                   pw.SizedBox(height: 3),
                   pw.Text(
                     teks.teksTemuan,
-                    style: pw.TextStyle(font: fontReg, fontSize: 9, color: warnaTeksUtama),
+                    style: pw.TextStyle(
+                      font: fontReg,
+                      fontSize: 9,
+                      color: warnaTeksUtama,
+                    ),
                   ),
                   pw.SizedBox(height: 6),
                   pw.Text(
@@ -147,7 +154,11 @@ class PembuatPdfLaporan {
                   pw.SizedBox(height: 3),
                   pw.Text(
                     teks.teksSaran,
-                    style: pw.TextStyle(font: fontReg, fontSize: 9, color: warnaTeksUtama),
+                    style: pw.TextStyle(
+                      font: fontReg,
+                      fontSize: 9,
+                      color: warnaTeksUtama,
+                    ),
                   ),
                 ],
               ),
@@ -158,7 +169,9 @@ class PembuatPdfLaporan {
               child: pw.Column(
                 crossAxisAlignment: pw.CrossAxisAlignment.start,
                 children: [
-                  buildJudulBagian(konten.judulBagian['arusKas'] ?? 'Arus kas bulan ini'),
+                  buildJudulBagian(
+                    konten.judulBagian['arusKas'] ?? 'Arus kas bulan ini',
+                  ),
                   pw.SizedBox(height: 4),
                   pw.Row(
                     mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
@@ -166,25 +179,67 @@ class PembuatPdfLaporan {
                       pw.Column(
                         crossAxisAlignment: pw.CrossAxisAlignment.start,
                         children: [
-                          pw.Text(teks.labelUangMasuk, style: pw.TextStyle(font: fontReg, fontSize: 8, color: warnaTeksSekunder)),
+                          pw.Text(
+                            teks.labelUangMasuk,
+                            style: pw.TextStyle(
+                              font: fontReg,
+                              fontSize: 8,
+                              color: warnaTeksSekunder,
+                            ),
+                          ),
                           pw.SizedBox(height: 2),
-                          pw.Text(teks.nilaiUangMasuk, style: pw.TextStyle(font: fontBold, fontSize: 11, color: warnaPrimer)),
+                          pw.Text(
+                            teks.nilaiUangMasuk,
+                            style: pw.TextStyle(
+                              font: fontBold,
+                              fontSize: 11,
+                              color: warnaPrimer,
+                            ),
+                          ),
                         ],
                       ),
                       pw.Column(
                         crossAxisAlignment: pw.CrossAxisAlignment.start,
                         children: [
-                          pw.Text(teks.labelUangKeluar, style: pw.TextStyle(font: fontReg, fontSize: 8, color: warnaTeksSekunder)),
+                          pw.Text(
+                            teks.labelUangKeluar,
+                            style: pw.TextStyle(
+                              font: fontReg,
+                              fontSize: 8,
+                              color: warnaTeksSekunder,
+                            ),
+                          ),
                           pw.SizedBox(height: 2),
-                          pw.Text(teks.nilaiUangKeluar, style: pw.TextStyle(font: fontBold, fontSize: 11, color: const PdfColor.fromInt(0xFFBA1A1A))),
+                          pw.Text(
+                            teks.nilaiUangKeluar,
+                            style: pw.TextStyle(
+                              font: fontBold,
+                              fontSize: 11,
+                              color: const PdfColor.fromInt(0xFFBA1A1A),
+                            ),
+                          ),
                         ],
                       ),
                       pw.Column(
                         crossAxisAlignment: pw.CrossAxisAlignment.start,
                         children: [
-                          pw.Text(teks.labelSelisih, style: pw.TextStyle(font: fontReg, fontSize: 8, color: warnaTeksSekunder)),
+                          pw.Text(
+                            teks.labelSelisih,
+                            style: pw.TextStyle(
+                              font: fontReg,
+                              fontSize: 8,
+                              color: warnaTeksSekunder,
+                            ),
+                          ),
                           pw.SizedBox(height: 2),
-                          pw.Text(teks.nilaiSelisih, style: pw.TextStyle(font: fontBold, fontSize: 11, color: warnaTeksUtama)),
+                          pw.Text(
+                            teks.nilaiSelisih,
+                            style: pw.TextStyle(
+                              font: fontBold,
+                              fontSize: 11,
+                              color: warnaTeksUtama,
+                            ),
+                          ),
                         ],
                       ),
                     ],
@@ -193,7 +248,11 @@ class PembuatPdfLaporan {
                     pw.SizedBox(height: 6),
                     pw.Text(
                       teks.teksArusKasSensor!,
-                      style: pw.TextStyle(font: fontReg, fontSize: 8, color: warnaTeksSekunder),
+                      style: pw.TextStyle(
+                        font: fontReg,
+                        fontSize: 8,
+                        color: warnaTeksSekunder,
+                      ),
                     ),
                   ],
                 ],
@@ -205,14 +264,20 @@ class PembuatPdfLaporan {
               child: pw.Column(
                 crossAxisAlignment: pw.CrossAxisAlignment.start,
                 children: [
-                  buildJudulBagian(konten.judulBagian['komposisi'] ?? 'Komposisi pengeluaran'),
+                  buildJudulBagian(
+                    konten.judulBagian['komposisi'] ?? 'Komposisi pengeluaran',
+                  ),
                   pw.SizedBox(height: 4),
                   ...teks.komposisiPerSifat.values.map(
                     (baris) => pw.Padding(
                       padding: const pw.EdgeInsets.symmetric(vertical: 2),
                       child: pw.Text(
                         baris,
-                        style: pw.TextStyle(font: fontReg, fontSize: 8.5, color: warnaTeksUtama),
+                        style: pw.TextStyle(
+                          font: fontReg,
+                          fontSize: 8.5,
+                          color: warnaTeksUtama,
+                        ),
                       ),
                     ),
                   ),
@@ -225,11 +290,17 @@ class PembuatPdfLaporan {
               child: pw.Column(
                 crossAxisAlignment: pw.CrossAxisAlignment.start,
                 children: [
-                  buildJudulBagian(konten.judulBagian['anggaran'] ?? 'Realisasi anggaran'),
+                  buildJudulBagian(
+                    konten.judulBagian['anggaran'] ?? 'Realisasi anggaran',
+                  ),
                   pw.SizedBox(height: 2),
                   pw.Text(
                     teks.ringkasanAnggaran,
-                    style: pw.TextStyle(font: fontReg, fontSize: 8.5, color: warnaTeksSekunder),
+                    style: pw.TextStyle(
+                      font: fontReg,
+                      fontSize: 8.5,
+                      color: warnaTeksSekunder,
+                    ),
                   ),
                   if (teks.daftarPosAnggaran.isNotEmpty) ...[
                     pw.SizedBox(height: 4),
@@ -238,7 +309,11 @@ class PembuatPdfLaporan {
                         padding: const pw.EdgeInsets.symmetric(vertical: 1.5),
                         child: pw.Text(
                           pos.teks,
-                          style: pw.TextStyle(font: fontReg, fontSize: 8.5, color: warnaTeksUtama),
+                          style: pw.TextStyle(
+                            font: fontReg,
+                            fontSize: 8.5,
+                            color: warnaTeksUtama,
+                          ),
                         ),
                       ),
                     ),
@@ -246,7 +321,11 @@ class PembuatPdfLaporan {
                       pw.SizedBox(height: 2),
                       pw.Text(
                         teks.barisPosLain!,
-                        style: pw.TextStyle(font: fontReg, fontSize: 8, color: warnaTeksSekunder),
+                        style: pw.TextStyle(
+                          font: fontReg,
+                          fontSize: 8,
+                          color: warnaTeksSekunder,
+                        ),
                       ),
                     ],
                   ],
@@ -259,12 +338,18 @@ class PembuatPdfLaporan {
               child: pw.Column(
                 crossAxisAlignment: pw.CrossAxisAlignment.start,
                 children: [
-                  buildJudulBagian(konten.judulBagian['tujuan'] ?? 'Tujuan dan dana darurat'),
+                  buildJudulBagian(
+                    konten.judulBagian['tujuan'] ?? 'Tujuan dan dana darurat',
+                  ),
                   pw.SizedBox(height: 2),
                   if (teks.teksBelumAdaTujuan != null)
                     pw.Text(
                       teks.teksBelumAdaTujuan!,
-                      style: pw.TextStyle(font: fontReg, fontSize: 8.5, color: warnaTeksSekunder),
+                      style: pw.TextStyle(
+                        font: fontReg,
+                        fontSize: 8.5,
+                        color: warnaTeksSekunder,
+                      ),
                     )
                   else
                     ...teks.daftarTujuan.map(
@@ -272,7 +357,11 @@ class PembuatPdfLaporan {
                         padding: const pw.EdgeInsets.symmetric(vertical: 1.5),
                         child: pw.Text(
                           tuj.teks,
-                          style: pw.TextStyle(font: fontReg, fontSize: 8.5, color: warnaTeksUtama),
+                          style: pw.TextStyle(
+                            font: fontReg,
+                            fontSize: 8.5,
+                            color: warnaTeksUtama,
+                          ),
                         ),
                       ),
                     ),
@@ -285,19 +374,39 @@ class PembuatPdfLaporan {
               child: pw.Column(
                 crossAxisAlignment: pw.CrossAxisAlignment.start,
                 children: [
-                  buildJudulBagian(konten.judulBagian['kekayaan'] ?? 'Kekayaan bersih'),
+                  buildJudulBagian(
+                    konten.judulBagian['kekayaan'] ?? 'Kekayaan bersih',
+                  ),
                   pw.SizedBox(height: 4),
                   pw.Row(
                     mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                     children: [
-                      pw.Text(teks.teksSaldoDompet, style: pw.TextStyle(font: fontReg, fontSize: 8.5, color: warnaTeksUtama)),
-                      pw.Text(teks.teksSisaUtang, style: pw.TextStyle(font: fontReg, fontSize: 8.5, color: warnaTeksUtama)),
+                      pw.Text(
+                        teks.teksSaldoDompet,
+                        style: pw.TextStyle(
+                          font: fontReg,
+                          fontSize: 8.5,
+                          color: warnaTeksUtama,
+                        ),
+                      ),
+                      pw.Text(
+                        teks.teksSisaUtang,
+                        style: pw.TextStyle(
+                          font: fontReg,
+                          fontSize: 8.5,
+                          color: warnaTeksUtama,
+                        ),
+                      ),
                     ],
                   ),
                   pw.SizedBox(height: 3),
                   pw.Text(
                     teks.teksKekayaanBersih,
-                    style: pw.TextStyle(font: fontBold, fontSize: 9.5, color: warnaPrimer),
+                    style: pw.TextStyle(
+                      font: fontBold,
+                      fontSize: 9.5,
+                      color: warnaPrimer,
+                    ),
                   ),
                 ],
               ),
@@ -307,7 +416,11 @@ class PembuatPdfLaporan {
             pw.SizedBox(height: 10),
             pw.Text(
               teks.catatanKakiEkspor,
-              style: pw.TextStyle(font: fontReg, fontSize: 7.5, color: warnaTeksSekunder),
+              style: pw.TextStyle(
+                font: fontReg,
+                fontSize: 7.5,
+                color: warnaTeksSekunder,
+              ),
             ),
           ];
         },

@@ -25,14 +25,14 @@ class LangkahRiwayatSandbox {
   });
 
   Map<String, dynamic> toJson() => {
-        'tahun': tahun,
-        'nilaiTotal': nilaiTotal,
-        'nilaiPU': nilaiPU,
-        'nilaiOB': nilaiOB,
-        'nilaiSH': nilaiSH,
-        'selisihTahun': selisihTahun,
-        'skenario': skenario,
-      };
+    'tahun': tahun,
+    'nilaiTotal': nilaiTotal,
+    'nilaiPU': nilaiPU,
+    'nilaiOB': nilaiOB,
+    'nilaiSH': nilaiSH,
+    'selisihTahun': selisihTahun,
+    'skenario': skenario,
+  };
 
   factory LangkahRiwayatSandbox.fromJson(Map<String, dynamic> json) =>
       LangkahRiwayatSandbox(
@@ -135,15 +135,19 @@ class NotifierSandbox extends Notifier<KeadaanSandbox> {
       try {
         final decoded = jsonDecode(entitas.riwayatJson) as List<dynamic>;
         daftarRiwayat = decoded
-            .map((e) => LangkahRiwayatSandbox.fromJson(e as Map<String, dynamic>))
+            .map(
+              (e) => LangkahRiwayatSandbox.fromJson(e as Map<String, dynamic>),
+            )
             .toList();
       } catch (_) {
         daftarRiwayat = [];
       }
 
       final thn = entitas.bulanBerjalan ~/ 12;
-      final pPU = entitas.nilaiSaatIniRupiah * entitas.alokasiPasarUangPersen ~/ 100;
-      final pOB = entitas.nilaiSaatIniRupiah * entitas.alokasiObligasiPersen ~/ 100;
+      final pPU =
+          entitas.nilaiSaatIniRupiah * entitas.alokasiPasarUangPersen ~/ 100;
+      final pOB =
+          entitas.nilaiSaatIniRupiah * entitas.alokasiObligasiPersen ~/ 100;
       final pSH = entitas.nilaiSaatIniRupiah - pPU - pOB;
 
       state = KeadaanSandbox(
@@ -274,5 +278,6 @@ class NotifierSandbox extends Notifier<KeadaanSandbox> {
 }
 
 /// Provider Notifier untuk Mode Sandbox.
-final penyediaSandbox =
-    NotifierProvider<NotifierSandbox, KeadaanSandbox>(NotifierSandbox.new);
+final penyediaSandbox = NotifierProvider<NotifierSandbox, KeadaanSandbox>(
+  NotifierSandbox.new,
+);

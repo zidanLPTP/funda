@@ -289,6 +289,20 @@ Berdasarkan hasil pengujian terisolasi pada 10 iterasi bersih di emulator Pixel 
   3. **Peningkat Cadangan:** Skema dinaikkan ke v11 dengan menyertakan peningkat skema v10 -> v11 di `RegistriPeningkatCadangan` agar backward compatibility pemulihan cadangan versi lama tetap terjaga 100%.
   4. **Pemisahan UI:** Banner penanda warna `tintAmber` bertuliskan *"Mode Sandbox — Uang Fiktif (Simulasi, bukan prediksi)"* dan komponen disclaimer langkah dunia nyata dipasang permanen untuk mencegah salah tafsir pengguna.
 
+---
+
+## 23. Kesiapan Rilis v1.0, Status Konten Draf & Audit Pasca-v1.0 (Tahap 12)
+
+- **Status Konten Kurikulum ("draf"):**
+  Seluruh 18 modul kurikulum (57 pelajaran) saat ini berstatus `"draf"`. Berdasarkan arsitektur Funda, status `"draf"` tidak boleh diubah menjadi `"ditinjau"` secara sepihak oleh kode agen, melainkan menunggu verifikasi materi oleh Pemilik Proyek bersama ahli terkait (perencana keuangan, konsultan pajak, dan ahli hukum perdata). Daftar poin yang perlu diverifikasi telah dirangkum lengkap di `docs/daftar_tinjauan_konten.md`.
+- **Privasi Log Rilis & Audit Debug-Only:**
+  Semua pemanggilan `debugPrint` pada penanganan galat kuis, pencadangan, dan ekspor laporan bulanan telah dibungkus dalam blok `if (kDebugMode)`. Fitur debug seperti rute `/galeri`, banner galeri bento, tombol pengingat uji 2 menit, dan lencana `"Draf"` dipastikan hanya aktif pada mode pengembangan.
+- **Audit Token Warna & Aritmetika Integer Murni:**
+  Tidak ada warna hard-coded yang lolos di luar `lib/tema/` (seluruhnya diarahkan ke token `WarnaFunda`). Seluruh komputasi keuangan, bunga, rasio cicilan, patokan dana pensiun, dan alokasi tabungan beroperasi menggunakan bilangan bulat integer murni (Rupiah & basis poin) tanpa tipe `double` untuk mencegah galat presisi pecahan.
+- **Kepatuhan Izin & Offline-First:**
+  `AndroidManifest.xml` hanya meminta izin `RECEIVE_BOOT_COMPLETED`, `POST_NOTIFICATIONS`, dan `VIBRATE`. Tidak ada izin `INTERNET`, kontak, maupun lokasi pada berkas manifest utama.
+
+
 
 
 

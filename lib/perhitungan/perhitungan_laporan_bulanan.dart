@@ -66,10 +66,7 @@ class TemuanLaporan {
   final String kode;
   final Map<String, dynamic> parameter;
 
-  const TemuanLaporan({
-    required this.kode,
-    required this.parameter,
-  });
+  const TemuanLaporan({required this.kode, required this.parameter});
 }
 
 /// Parameter saran laporan bulanan.
@@ -77,10 +74,7 @@ class SaranLaporan {
   final String kode;
   final Map<String, dynamic> parameter;
 
-  const SaranLaporan({
-    required this.kode,
-    required this.parameter,
-  });
+  const SaranLaporan({required this.kode, required this.parameter});
 }
 
 /// Data snapshot kekayaan pada tanggal laporan dibuat.
@@ -150,7 +144,8 @@ class MasukanLaporanBulanan {
   final List<TujuanLaporan> daftarTujuanAktif;
   final int saldoDompetAktifRupiah;
   final int sisaUtangAktifRupiah;
-  final List<({String nama, int pengeluaranRupiah})> kategoriBelumDilabeliTerpakai;
+  final List<({String nama, int pengeluaranRupiah})>
+  kategoriBelumDilabeliTerpakai;
 
   const MasukanLaporanBulanan({
     required this.bulan,
@@ -200,7 +195,9 @@ TemuanLaporan tentukanTemuan({
   required KontenLaporan? konten,
 }) {
   // 1. pos_melewati: ada pos melewati batas; ambil yang paling jauh (terpakai - batas terbesar)
-  final posMelewati = daftarPosAnggaran.where((p) => p.status == StatusAnggaran.melewati).toList();
+  final posMelewati = daftarPosAnggaran
+      .where((p) => p.status == StatusAnggaran.melewati)
+      .toList();
   if (posMelewati.isNotEmpty) {
     posMelewati.sort((a, b) {
       final diff = b.selisihMelewati.compareTo(a.selisihMelewati);
@@ -208,7 +205,9 @@ TemuanLaporan tentukanTemuan({
       return a.nama.compareTo(b.nama);
     });
     final posTerjauh = posMelewati.first;
-    final persenPos = persenTerdekat(posTerjauh.terpakaiRupiah, posTerjauh.batasRupiah) ?? posTerjauh.persenTerpakai;
+    final persenPos =
+        persenTerdekat(posTerjauh.terpakaiRupiah, posTerjauh.batasRupiah) ??
+        posTerjauh.persenTerpakai;
     return TemuanLaporan(
       kode: 'pos_melewati',
       parameter: {
@@ -221,10 +220,7 @@ TemuanLaporan tentukanTemuan({
 
   // 2. arus_kas_tanpa_pemasukan: pemasukan 0 dan pengeluaran > 0
   if (uangMasukRupiah == 0 && uangKeluarRupiah > 0) {
-    return const TemuanLaporan(
-      kode: 'arus_kas_tanpa_pemasukan',
-      parameter: {},
-    );
+    return const TemuanLaporan(kode: 'arus_kas_tanpa_pemasukan', parameter: {});
   }
 
   // 3. arus_kas_negatif: pengeluaran > pemasukan > 0
@@ -233,10 +229,7 @@ TemuanLaporan tentukanTemuan({
     final persen = persenTerdekat(uangKeluarRupiah, uangMasukRupiah) ?? 0;
     return TemuanLaporan(
       kode: 'arus_kas_negatif',
-      parameter: {
-        'jumlah': formatRupiahRapat(selisih),
-        'persen': persen,
-      },
+      parameter: {'jumlah': formatRupiahRapat(selisih), 'persen': persen},
     );
   }
 
@@ -262,13 +255,12 @@ TemuanLaporan tentukanTemuan({
       final persenSifat = komposisiPersen[sifatMax] ?? 0;
       final frasa = konten != null
           ? konten.frasaUntukSifat(sifatMax)
-          : (sifatMax == 'belum_dilabeli' ? 'pengeluaran yang belum dilabeli' : sifatMax);
+          : (sifatMax == 'belum_dilabeli'
+                ? 'pengeluaran yang belum dilabeli'
+                : sifatMax);
       return TemuanLaporan(
         kode: 'sifat_terbesar',
-        parameter: {
-          'sifat': frasa,
-          'persen': persenSifat,
-        },
+        parameter: {'sifat': frasa, 'persen': persenSifat},
       );
     }
   }
@@ -279,35 +271,29 @@ TemuanLaporan tentukanTemuan({
     final persen = persenTerdekat(uangKeluarRupiah, uangMasukRupiah) ?? 0;
     return TemuanLaporan(
       kode: 'arus_kas_positif',
-      parameter: {
-        'jumlah': formatRupiahRapat(selisih),
-        'persen': persen,
-      },
+      parameter: {'jumlah': formatRupiahRapat(selisih), 'persen': persen},
     );
   }
 
   // 6. data_belum_cukup: selain itu
-  return const TemuanLaporan(
-    kode: 'data_belum_cukup',
-    parameter: {},
-  );
+  return const TemuanLaporan(kode: 'data_belum_cukup', parameter: {});
 }
 
 /// Menentukan saran tunggal berdasarkan aturan prioritas resmi 1 sampai 4.
 SaranLaporan tentukanSaran({
   required List<PosAnggaranLaporan> daftarPosAnggaran,
-  required List<({String nama, int pengeluaranRupiah})> kategoriBelumDilabeliTerpakai,
+  required List<({String nama, int pengeluaranRupiah})>
+  kategoriBelumDilabeliTerpakai,
 }) {
   // 1. buat_anggaran: tidak ada anggaran bulan ini
   if (daftarPosAnggaran.isEmpty) {
-    return const SaranLaporan(
-      kode: 'buat_anggaran',
-      parameter: {},
-    );
+    return const SaranLaporan(kode: 'buat_anggaran', parameter: {});
   }
 
   // 2. tinjau_pos: ada pos melewati; pos terjauh
-  final posMelewati = daftarPosAnggaran.where((p) => p.status == StatusAnggaran.melewati).toList();
+  final posMelewati = daftarPosAnggaran
+      .where((p) => p.status == StatusAnggaran.melewati)
+      .toList();
   if (posMelewati.isNotEmpty) {
     posMelewati.sort((a, b) {
       final diff = b.selisihMelewati.compareTo(a.selisihMelewati);
@@ -316,14 +302,14 @@ SaranLaporan tentukanSaran({
     });
     return SaranLaporan(
       kode: 'tinjau_pos',
-      parameter: {
-        'nama': posMelewati.first.nama,
-      },
+      parameter: {'nama': posMelewati.first.nama},
     );
   }
 
   // 3. beri_label: ada kategori belum dilabeli yang terpakai bulan ini; pengeluaran terbesar
-  final belumDilabeliAktif = kategoriBelumDilabeliTerpakai.where((k) => k.pengeluaranRupiah > 0).toList();
+  final belumDilabeliAktif = kategoriBelumDilabeliTerpakai
+      .where((k) => k.pengeluaranRupiah > 0)
+      .toList();
   if (belumDilabeliAktif.isNotEmpty) {
     belumDilabeliAktif.sort((a, b) {
       final diff = b.pengeluaranRupiah.compareTo(a.pengeluaranRupiah);
@@ -332,17 +318,12 @@ SaranLaporan tentukanSaran({
     });
     return SaranLaporan(
       kode: 'beri_label',
-      parameter: {
-        'nama': belumDilabeliAktif.first.nama,
-      },
+      parameter: {'nama': belumDilabeliAktif.first.nama},
     );
   }
 
   // 4. salin_anggaran: selain itu
-  return const SaranLaporan(
-    kode: 'salin_anggaran',
-    parameter: {},
-  );
+  return const SaranLaporan(kode: 'salin_anggaran', parameter: {});
 }
 
 /// Menyusun objek laporan bulanan lengkap dan immutable.
@@ -426,7 +407,8 @@ LaporanBulanan susunLaporanBulanan(
   final daftarTujuan = masukan.daftarTujuanAktif.take(3).toList();
 
   // Snapshot kekayaan
-  final kekayaanBersih = masukan.saldoDompetAktifRupiah - masukan.sisaUtangAktifRupiah;
+  final kekayaanBersih =
+      masukan.saldoDompetAktifRupiah - masukan.sisaUtangAktifRupiah;
   final snapshotKekayaan = SnapshotKekayaanLaporan(
     totalSaldoDompetRupiah: masukan.saldoDompetAktifRupiah,
     totalSisaUtangRupiah: masukan.sisaUtangAktifRupiah,
@@ -585,7 +567,7 @@ String _formatTanggalIndonesia(DateTime dt) {
     'September',
     'Oktober',
     'November',
-    'Desember'
+    'Desember',
   ];
   return '${dt.day} ${bulanIndo[dt.month]} ${dt.year}';
 }
@@ -605,7 +587,7 @@ String formatBulanTahunIndonesia(DateTime dt) {
     'September',
     'Oktober',
     'November',
-    'Desember'
+    'Desember',
   ];
   return '${bulanIndo[dt.month]} ${dt.year}';
 }
@@ -630,7 +612,8 @@ TampilanTeksLaporan terapkanSensor(
     {'tanggal': _formatTanggalIndonesia(laporan.tanggalDibuat)},
   );
 
-  final judulPeriode = 'Laporan Funda - ${formatBulanTahunIndonesia(laporan.bulan)}';
+  final judulPeriode =
+      'Laporan Funda - ${formatBulanTahunIndonesia(laporan.bulan)}';
 
   // Arus kas
   final String nilaiUangMasuk;
@@ -649,10 +632,9 @@ TampilanTeksLaporan terapkanSensor(
       laporan.arusKas.uangMasukRupiah,
     );
     if (persenArusKas != null) {
-      teksArusKasSensor = _gantiPlaceholder(
-        konten.baris.arusKasSensor,
-        {'persen': persenArusKas},
-      );
+      teksArusKasSensor = _gantiPlaceholder(konten.baris.arusKasSensor, {
+        'persen': persenArusKas,
+      });
     } else {
       teksArusKasSensor = null;
     }
@@ -665,7 +647,13 @@ TampilanTeksLaporan terapkanSensor(
 
   // Komposisi pengeluaran
   final komposisiMap = <String, String>{};
-  const urutanSifat = ['kebutuhan', 'keinginan', 'tabungan', 'utang', 'belum_dilabeli'];
+  const urutanSifat = [
+    'kebutuhan',
+    'keinginan',
+    'tabungan',
+    'utang',
+    'belum_dilabeli',
+  ];
   for (final sifat in urutanSifat) {
     final persen = laporan.komposisi.perSifatPersen[sifat] ?? 0;
     final nominal = laporan.komposisi.perSifatRupiah[sifat] ?? 0;
@@ -674,7 +662,8 @@ TampilanTeksLaporan terapkanSensor(
     if (sensor) {
       komposisiMap[sifat] = '$frasa: $persen persen';
     } else {
-      komposisiMap[sifat] = '$frasa: $persen persen (${formatRupiahRapat(nominal)})';
+      komposisiMap[sifat] =
+          '$frasa: $persen persen (${formatRupiahRapat(nominal)})';
     }
   }
 
@@ -683,38 +672,29 @@ TampilanTeksLaporan terapkanSensor(
   if (laporan.ringkasanAnggaran.totalPos == 0) {
     ringkasanAnggaran = konten.baris.belumAdaAnggaran;
   } else {
-    ringkasanAnggaran = _gantiPlaceholder(
-      konten.baris.ringkasanAnggaran,
-      {
-        'n': laporan.ringkasanAnggaran.totalPos,
-        'a': laporan.ringkasanAnggaran.posAman,
-        'b': laporan.ringkasanAnggaran.posMendekati,
-        'c': laporan.ringkasanAnggaran.posMelewati,
-      },
-    );
+    ringkasanAnggaran = _gantiPlaceholder(konten.baris.ringkasanAnggaran, {
+      'n': laporan.ringkasanAnggaran.totalPos,
+      'a': laporan.ringkasanAnggaran.posAman,
+      'b': laporan.ringkasanAnggaran.posMendekati,
+      'c': laporan.ringkasanAnggaran.posMelewati,
+    });
   }
 
   final daftarPos = <PosAnggaranTerformat>[];
   for (final pos in laporan.ringkasanAnggaran.daftarPosTampil) {
     final String teksPos;
     if (sensor) {
-      teksPos = _gantiPlaceholder(
-        konten.baris.posAnggaranSensor,
-        {
-          'nama': pos.nama,
-          'persen': pos.persenTerpakai,
-        },
-      );
+      teksPos = _gantiPlaceholder(konten.baris.posAnggaranSensor, {
+        'nama': pos.nama,
+        'persen': pos.persenTerpakai,
+      });
     } else {
-      teksPos = _gantiPlaceholder(
-        konten.baris.posAnggaranNormal,
-        {
-          'nama': pos.nama,
-          'terpakai': formatRupiahRapat(pos.terpakaiRupiah),
-          'batas': formatRupiahRapat(pos.batasRupiah),
-          'persen': pos.persenTerpakai,
-        },
-      );
+      teksPos = _gantiPlaceholder(konten.baris.posAnggaranNormal, {
+        'nama': pos.nama,
+        'terpakai': formatRupiahRapat(pos.terpakaiRupiah),
+        'batas': formatRupiahRapat(pos.batasRupiah),
+        'persen': pos.persenTerpakai,
+      });
     }
     daftarPos.add(
       PosAnggaranTerformat(
@@ -727,7 +707,9 @@ TampilanTeksLaporan terapkanSensor(
   }
 
   final barisPosLain = laporan.ringkasanAnggaran.jumlahPosLain > 0
-      ? _gantiPlaceholder(konten.baris.posLain, {'n': laporan.ringkasanAnggaran.jumlahPosLain})
+      ? _gantiPlaceholder(konten.baris.posLain, {
+          'n': laporan.ringkasanAnggaran.jumlahPosLain,
+        })
       : null;
 
   // Tujuan
@@ -735,23 +717,17 @@ TampilanTeksLaporan terapkanSensor(
   for (final tuj in laporan.daftarTujuan) {
     final String teksTujuan;
     if (sensor) {
-      teksTujuan = _gantiPlaceholder(
-        konten.baris.tujuanSensor,
-        {
-          'nama': tuj.nama,
-          'persen': tuj.persenProgres,
-        },
-      );
+      teksTujuan = _gantiPlaceholder(konten.baris.tujuanSensor, {
+        'nama': tuj.nama,
+        'persen': tuj.persenProgres,
+      });
     } else {
-      teksTujuan = _gantiPlaceholder(
-        konten.baris.tujuanNormal,
-        {
-          'nama': tuj.nama,
-          'dana': formatRupiahRapat(tuj.danaTerkumpulRupiah),
-          'target': formatRupiahRapat(tuj.targetRupiah),
-          'persen': tuj.persenProgres,
-        },
-      );
+      teksTujuan = _gantiPlaceholder(konten.baris.tujuanNormal, {
+        'nama': tuj.nama,
+        'dana': formatRupiahRapat(tuj.danaTerkumpulRupiah),
+        'target': formatRupiahRapat(tuj.targetRupiah),
+        'persen': tuj.persenProgres,
+      });
     }
     daftarTujuan.add(
       TujuanTerformat(
@@ -761,7 +737,9 @@ TampilanTeksLaporan terapkanSensor(
       ),
     );
   }
-  final teksBelumAdaTujuan = daftarTujuan.isEmpty ? konten.baris.belumAdaTujuan : null;
+  final teksBelumAdaTujuan = daftarTujuan.isEmpty
+      ? konten.baris.belumAdaTujuan
+      : null;
 
   // Snapshot kekayaan
   final String teksSaldoDompet;
@@ -770,22 +748,31 @@ TampilanTeksLaporan terapkanSensor(
 
   if (sensor) {
     final disembunyikan = konten.label['disembunyikan'] ?? 'Disembunyikan';
-    teksSaldoDompet = _gantiPlaceholder(konten.baris.saldoDompet, {'jumlah': disembunyikan});
-    teksSisaUtang = _gantiPlaceholder(konten.baris.sisaUtang, {'jumlah': disembunyikan});
-    teksKekayaanBersih = _gantiPlaceholder(konten.baris.kekayaanBersih, {'jumlah': disembunyikan});
+    teksSaldoDompet = _gantiPlaceholder(konten.baris.saldoDompet, {
+      'jumlah': disembunyikan,
+    });
+    teksSisaUtang = _gantiPlaceholder(konten.baris.sisaUtang, {
+      'jumlah': disembunyikan,
+    });
+    teksKekayaanBersih = _gantiPlaceholder(konten.baris.kekayaanBersih, {
+      'jumlah': disembunyikan,
+    });
   } else {
-    teksSaldoDompet = _gantiPlaceholder(
-      konten.baris.saldoDompet,
-      {'jumlah': formatRupiahRapat(laporan.snapshotKekayaan.totalSaldoDompetRupiah)},
-    );
-    teksSisaUtang = _gantiPlaceholder(
-      konten.baris.sisaUtang,
-      {'jumlah': formatRupiahRapat(laporan.snapshotKekayaan.totalSisaUtangRupiah)},
-    );
-    teksKekayaanBersih = _gantiPlaceholder(
-      konten.baris.kekayaanBersih,
-      {'jumlah': formatRupiahRapat(laporan.snapshotKekayaan.kekayaanBersihRupiah)},
-    );
+    teksSaldoDompet = _gantiPlaceholder(konten.baris.saldoDompet, {
+      'jumlah': formatRupiahRapat(
+        laporan.snapshotKekayaan.totalSaldoDompetRupiah,
+      ),
+    });
+    teksSisaUtang = _gantiPlaceholder(konten.baris.sisaUtang, {
+      'jumlah': formatRupiahRapat(
+        laporan.snapshotKekayaan.totalSisaUtangRupiah,
+      ),
+    });
+    teksKekayaanBersih = _gantiPlaceholder(konten.baris.kekayaanBersih, {
+      'jumlah': formatRupiahRapat(
+        laporan.snapshotKekayaan.kekayaanBersihRupiah,
+      ),
+    });
   }
 
   // Temuan
@@ -793,11 +780,16 @@ TampilanTeksLaporan terapkanSensor(
   final templateTemuan = itemTemuan != null
       ? (sensor ? itemTemuan.sensor : itemTemuan.normal)
       : 'Temuan tidak tersedia';
-  final teksTemuan = _gantiPlaceholder(templateTemuan, laporan.temuan.parameter);
+  final teksTemuan = _gantiPlaceholder(
+    templateTemuan,
+    laporan.temuan.parameter,
+  );
 
   // Saran
   final itemSaran = konten.saranUntukKode(laporan.saran.kode);
-  final templateSaran = itemSaran != null ? itemSaran.teks : 'Saran tidak tersedia';
+  final templateSaran = itemSaran != null
+      ? itemSaran.teks
+      : 'Saran tidak tersedia';
   final teksSaran = _gantiPlaceholder(templateSaran, laporan.saran.parameter);
 
   return TampilanTeksLaporan(

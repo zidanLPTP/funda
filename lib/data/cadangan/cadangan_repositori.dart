@@ -20,15 +20,10 @@ class CadanganRepositori {
   final BasisDataFunda basisData;
   final Directory? direktoriPenyimpananUji;
 
-  const CadanganRepositori(
-    this.basisData, {
-    this.direktoriPenyimpananUji,
-  });
+  const CadanganRepositori(this.basisData, {this.direktoriPenyimpananUji});
 
   /// Daftar tabel yang sengaja dikecualikan dari ekspor/impor cadangan (tabel sesi sandbox fiktif).
-  static const Set<String> tabelDikecualikan = {
-    'tabel_sesi_sandbox',
-  };
+  static const Set<String> tabelDikecualikan = {'tabel_sesi_sandbox'};
 
   Future<File> _dapatkanBerkasKeselamatan() async {
     Directory dir;
@@ -46,17 +41,23 @@ class CadanganRepositori {
 
   /// Mendapatkan daftar seluruh nama tabel pengguna pada skema basis data.
   Future<List<String>> dapatkanDaftarTabelSkema() async {
-    final rows = await basisData.customSelect(
-      "SELECT name FROM sqlite_master WHERE type = 'table' AND name NOT LIKE 'sqlite_%' AND name NOT LIKE 'android_%' ORDER BY name ASC;",
-    ).get();
+    final rows = await basisData
+        .customSelect(
+          "SELECT name FROM sqlite_master WHERE type = 'table' AND name NOT LIKE 'sqlite_%' AND name NOT LIKE 'android_%' ORDER BY name ASC;",
+        )
+        .get();
     final tabelDb = rows.map((r) => r.read<String>('name')).toSet();
-    final tabelDrift = basisData.allTables.map((t) => t.actualTableName).toSet();
+    final tabelDrift = basisData.allTables
+        .map((t) => t.actualTableName)
+        .toSet();
     return (tabelDb.union(tabelDrift)).toList()..sort();
   }
 
   /// Menemukan kolom kunci utama dari tabel tertentu untuk pengurutan kanonikal deterministik.
   Future<List<String>> _dapatkanKolomKunciUtama(String namaTabel) async {
-    final rows = await basisData.customSelect("PRAGMA table_info('$namaTabel');").get();
+    final rows = await basisData
+        .customSelect("PRAGMA table_info('$namaTabel');")
+        .get();
     final pkCols = <({int pk, String col})>[];
     for (final r in rows) {
       final pk = r.read<int>('pk');
@@ -71,7 +72,9 @@ class CadanganRepositori {
 
   /// Mendapatkan daftar kolom yang sah untuk suatu tabel.
   Future<Set<String>> _dapatkanKolomSah(String namaTabel) async {
-    final rows = await basisData.customSelect("PRAGMA table_info('$namaTabel');").get();
+    final rows = await basisData
+        .customSelect("PRAGMA table_info('$namaTabel');")
+        .get();
     return rows.map((r) => r.read<String>('name')).toSet();
   }
 
@@ -88,9 +91,13 @@ class CadanganRepositori {
       if (tabelDikecualikan.contains(namaTabel)) continue;
 
       final pkCols = await _dapatkanKolomKunciUtama(namaTabel);
-      final orderBy = pkCols.isNotEmpty ? 'ORDER BY ${pkCols.join(', ')}' : 'ORDER BY rowid';
+      final orderBy = pkCols.isNotEmpty
+          ? 'ORDER BY ${pkCols.join(', ')}'
+          : 'ORDER BY rowid';
 
-      final rows = await basisData.customSelect('SELECT * FROM $namaTabel $orderBy;').get();
+      final rows = await basisData
+          .customSelect('SELECT * FROM $namaTabel $orderBy;')
+          .get();
 
       final listBaris = <Map<String, dynamic>>[];
       for (final r in rows) {
@@ -126,12 +133,13 @@ class CadanganRepositori {
   }
 
   /// Memvalidasi string JSON berkas cadangan dan mengembalikan pratinjau data.
-  Future<({DokumenCadanganFunda dokumen, PratinjauCadangan pratinjau})> validasiDanBuatPratinjau(
-    String jsonString,
-  ) async {
+  Future<({DokumenCadanganFunda dokumen, PratinjauCadangan pratinjau})>
+  validasiDanBuatPratinjau(String jsonString) async {
     // 1. Batas ukuran berkas maksimum 50 MB
     if (jsonString.length > 50 * 1024 * 1024) {
-      throw const GalatCadangan('Ukuran berkas cadangan melebihi batas maksimum 50 MB.');
+      throw const GalatCadangan(
+        'Ukuran berkas cadangan melebihi batas maksimum 50 MB.',
+      );
     }
 
     // 2. Penguraian JSON
@@ -139,7 +147,9 @@ class CadanganRepositori {
     try {
       data = jsonDecode(jsonString);
     } catch (_) {
-      throw const GalatCadangan('Format berkas tidak valid atau bukan berkas JSON yang sah.');
+      throw const GalatCadangan(
+        'Format berkas tidak valid atau bukan berkas JSON yang sah.',
+      );
     }
 
     if (data is! Map<String, dynamic>) {
@@ -149,12 +159,16 @@ class CadanganRepositori {
     // 3. Format dan versi format
     final format = data['format'] as String?;
     if (format != 'funda_cadangan') {
-      throw const GalatCadangan('Berkas ini bukan berkas cadangan resmi aplikasi Funda.');
+      throw const GalatCadangan(
+        'Berkas ini bukan berkas cadangan resmi aplikasi Funda.',
+      );
     }
 
     final versiFormat = (data['versiFormat'] as num?)?.toInt() ?? 0;
     if (versiFormat != 1) {
-      throw GalatCadangan('Versi format cadangan ($versiFormat) tidak didukung.');
+      throw GalatCadangan(
+        'Versi format cadangan ($versiFormat) tidak didukung.',
+      );
     }
 
     // 4. Versi skema basis data
@@ -170,7 +184,9 @@ class CadanganRepositori {
     final doc = DokumenCadanganFunda.fromJson(data);
     final checksumAktual = hitungChecksumTabel(doc.tabel);
     if (checksumAktual != doc.checksum) {
-      throw const GalatCadangan('Integritas berkas cadangan rusak (checksum tidak cocok). Berkas mungkin terpotong atau telah diubah.');
+      throw const GalatCadangan(
+        'Integritas berkas cadangan rusak (checksum tidak cocok). Berkas mungkin terpotong atau telah diubah.',
+      );
     }
 
     final pratinjau = PratinjauCadangan.dariDokumen(doc);
@@ -195,7 +211,9 @@ class CadanganRepositori {
   Future<void> pulihkanDariCadanganKeselamatan() async {
     final file = await _dapatkanBerkasKeselamatan();
     if (!await file.exists()) {
-      throw const GalatCadangan('Tidak ada berkas cadangan keselamatan sebelum pemulihan terakhir.');
+      throw const GalatCadangan(
+        'Tidak ada berkas cadangan keselamatan sebelum pemulihan terakhir.',
+      );
     }
     final jsonStr = await file.readAsString();
     final validasi = await validasiDanBuatPratinjau(jsonStr);
@@ -264,13 +282,16 @@ class CadanganRepositori {
             final placeholders = List.filled(colNames.length, '?').join(', ');
             final values = colNames.map((c) => dataBersih[c]).toList();
 
-            final sql = 'INSERT INTO $namaTabel (${colNames.join(', ')}) VALUES ($placeholders);';
+            final sql =
+                'INSERT INTO $namaTabel (${colNames.join(', ')}) VALUES ($placeholders);';
             await basisData.customStatement(sql, values);
           }
         }
 
         // Periksa integritas Foreign Key sebelum transaksi selesai
-        final pelanggaran = await basisData.customSelect('PRAGMA foreign_key_check;').get();
+        final pelanggaran = await basisData
+            .customSelect('PRAGMA foreign_key_check;')
+            .get();
         if (pelanggaran.isNotEmpty) {
           throw const GalatCadangan(
             'Ditemukan pelanggaran integritas data (foreign key check gagal). Pemulihan dibatalkan.',

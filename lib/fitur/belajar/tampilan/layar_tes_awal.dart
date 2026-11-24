@@ -17,12 +17,7 @@ class LayarTesAwal extends ConsumerStatefulWidget {
   ConsumerState<LayarTesAwal> createState() => _LayarTesAwalState();
 }
 
-enum TahapTesAwal {
-  pembuka,
-  profil,
-  soal,
-  hasil,
-}
+enum TahapTesAwal { pembuka, profil, soal, hasil }
 
 class _LayarTesAwalState extends ConsumerState<LayarTesAwal> {
   TahapTesAwal _tahap = TahapTesAwal.pembuka;
@@ -85,7 +80,8 @@ class _LayarTesAwalState extends ConsumerState<LayarTesAwal> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text(
-              'Tes awal dilewati. Kamu bisa mengisinya kapan saja di Tab Belajar.'),
+            'Tes awal dilewati. Kamu bisa mengisinya kapan saja di Tab Belajar.',
+          ),
         ),
       );
       if (Navigator.of(context).canPop()) {
@@ -113,7 +109,9 @@ class _LayarTesAwalState extends ConsumerState<LayarTesAwal> {
     );
 
     // Simpan ke database
-    await ref.read(penyediaProfilRepositori).simpanProfil(
+    await ref
+        .read(penyediaProfilRepositori)
+        .simpanProfil(
           punyaPenghasilan: profil.punyaPenghasilan,
           punyaUtang: profil.punyaUtang,
           danaDarurat: profil.danaDarurat,
@@ -123,7 +121,9 @@ class _LayarTesAwalState extends ConsumerState<LayarTesAwal> {
           tujuanUtama: profil.tujuanUtama,
         );
 
-    await ref.read(penyediaTesAwalRepositori).simpanHasilTesAwal(
+    await ref
+        .read(penyediaTesAwalRepositori)
+        .simpanHasilTesAwal(
           jawaban: _jawabanSoal,
           skorPerModul: hasil.skorPerModul,
           skorTotalPersen: hasil.skorTotalPersen,
@@ -147,9 +147,7 @@ class _LayarTesAwalState extends ConsumerState<LayarTesAwal> {
   @override
   Widget build(BuildContext context) {
     if (_memuat) {
-      return const Scaffold(
-        body: Center(child: IndikatorMemuat()),
-      );
+      return const Scaffold(body: Center(child: IndikatorMemuat()));
     }
 
     if (_galat != null || _konten == null) {
@@ -161,8 +159,11 @@ class _LayarTesAwalState extends ConsumerState<LayarTesAwal> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Icon(LucideIcons.alertTriangle,
-                    size: 48, color: WarnaFunda.peringatan),
+                const Icon(
+                  LucideIcons.alertTriangle,
+                  size: 48,
+                  color: WarnaFunda.peringatan,
+                ),
                 const SizedBox(height: SpasiFunda.m),
                 TeksFunda.judulBagian('Gagal Memuat Tes Awal'),
                 const SizedBox(height: SpasiFunda.s),
@@ -202,10 +203,7 @@ class _LayarTesAwalState extends ConsumerState<LayarTesAwal> {
       appBar: AppBar(
         title: const Text('Mulai & Tes Awal'),
         actions: [
-          TextButton(
-            onPressed: _lewatiTesAwal,
-            child: const Text('Lewati'),
-          ),
+          TextButton(onPressed: _lewatiTesAwal, child: const Text('Lewati')),
         ],
       ),
       body: SafeArea(
@@ -227,8 +225,11 @@ class _LayarTesAwalState extends ConsumerState<LayarTesAwal> {
                         ),
                         child: const Row(
                           children: [
-                            Icon(LucideIcons.compass,
-                                color: WarnaFunda.utama, size: 28),
+                            Icon(
+                              LucideIcons.compass,
+                              color: WarnaFunda.utama,
+                              size: 28,
+                            ),
                             SizedBox(width: SpasiFunda.m),
                             Expanded(
                               child: Text(
@@ -249,9 +250,18 @@ class _LayarTesAwalState extends ConsumerState<LayarTesAwal> {
                       const SizedBox(height: SpasiFunda.l),
                       TeksFunda.label('Yang akan kita lakukan:'),
                       const SizedBox(height: SpasiFunda.s),
-                      _itemLangkah('1', '6 pertanyaan kondisi finansialmu saat ini'),
-                      _itemLangkah('2', '12 pertanyaan kuis ringkas pemahaman dasar'),
-                      _itemLangkah('3', 'Rekomendasi topik belajar yang paling relevan'),
+                      _itemLangkah(
+                        '1',
+                        '6 pertanyaan kondisi finansialmu saat ini',
+                      ),
+                      _itemLangkah(
+                        '2',
+                        '12 pertanyaan kuis ringkas pemahaman dasar',
+                      ),
+                      _itemLangkah(
+                        '3',
+                        'Rekomendasi topik belajar yang paling relevan',
+                      ),
                       const SizedBox(height: SpasiFunda.l),
                       TeksFunda.label(_konten!.tujuanUtama.tanya),
                       const SizedBox(height: SpasiFunda.xs),
@@ -263,8 +273,9 @@ class _LayarTesAwalState extends ConsumerState<LayarTesAwal> {
                         decoration: InputDecoration(
                           hintText: 'Tuliskan sasaran utamamu (opsional)...',
                           border: OutlineInputBorder(
-                            borderRadius:
-                                BorderRadius.circular(SudutFunda.kartu),
+                            borderRadius: BorderRadius.circular(
+                              SudutFunda.kartu,
+                            ),
                           ),
                           filled: true,
                           fillColor: WarnaFunda.permukaan,
@@ -308,11 +319,14 @@ class _LayarTesAwalState extends ConsumerState<LayarTesAwal> {
           CircleAvatar(
             radius: 12,
             backgroundColor: WarnaFunda.garis,
-            child: Text(nomor,
-                style: const TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.bold,
-                    color: WarnaFunda.teks)),
+            child: Text(
+              nomor,
+              style: const TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.bold,
+                color: WarnaFunda.teks,
+              ),
+            ),
           ),
           const SizedBox(width: SpasiFunda.s),
           Expanded(child: TeksFunda.isi(teks)),
@@ -329,7 +343,8 @@ class _LayarTesAwalState extends ConsumerState<LayarTesAwal> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-            'Profil (${_indeksPertanyaanProfil + 1}/${daftarPertanyaan.length})'),
+          'Profil (${_indeksPertanyaanProfil + 1}/${daftarPertanyaan.length})',
+        ),
         leading: IconButton(
           icon: const Icon(LucideIcons.arrowLeft),
           onPressed: () {
@@ -382,8 +397,7 @@ class _LayarTesAwalState extends ConsumerState<LayarTesAwal> {
                                 : WarnaFunda.garis,
                             width: terpilih ? 2 : 1,
                           ),
-                          borderRadius:
-                              BorderRadius.circular(SudutFunda.kartu),
+                          borderRadius: BorderRadius.circular(SudutFunda.kartu),
                         ),
                         child: Row(
                           children: [
@@ -488,19 +502,18 @@ class _LayarTesAwalState extends ConsumerState<LayarTesAwal> {
                         decoration: BoxDecoration(
                           color: terpilih
                               ? (apakahBelumTahu
-                                  ? WarnaFunda.tintNetral
-                                  : WarnaFunda.utamaTipis)
+                                    ? WarnaFunda.tintNetral
+                                    : WarnaFunda.utamaTipis)
                               : WarnaFunda.permukaan,
                           border: Border.all(
                             color: terpilih
                                 ? (apakahBelumTahu
-                                    ? WarnaFunda.teksRedup
-                                    : WarnaFunda.utama)
+                                      ? WarnaFunda.teksRedup
+                                      : WarnaFunda.utama)
                                 : WarnaFunda.garis,
                             width: terpilih ? 2 : 1,
                           ),
-                          borderRadius:
-                              BorderRadius.circular(SudutFunda.kartu),
+                          borderRadius: BorderRadius.circular(SudutFunda.kartu),
                         ),
                         child: Row(
                           children: [
@@ -510,8 +523,8 @@ class _LayarTesAwalState extends ConsumerState<LayarTesAwal> {
                                   : LucideIcons.circle,
                               color: terpilih
                                   ? (apakahBelumTahu
-                                      ? WarnaFunda.teksRedup
-                                      : WarnaFunda.utama)
+                                        ? WarnaFunda.teksRedup
+                                        : WarnaFunda.utama)
                                   : WarnaFunda.teksRedup,
                             ),
                             const SizedBox(width: SpasiFunda.m),
@@ -588,13 +601,17 @@ class _LayarTesAwalState extends ConsumerState<LayarTesAwal> {
                         ),
                         child: Column(
                           children: [
-                            const Icon(LucideIcons.checkCircle2,
-                                color: WarnaFunda.utama, size: 40),
+                            const Icon(
+                              LucideIcons.checkCircle2,
+                              color: WarnaFunda.utama,
+                              size: 40,
+                            ),
                             const SizedBox(height: SpasiFunda.s),
                             TeksFunda.judulBagian('Profil Berhasil Dibentuk'),
                             const SizedBox(height: SpasiFunda.xs),
                             TeksFunda.catatan(
-                                'Skor pemahaman awalmu: ${hasil.skorTotalPersen}% (${hasil.totalBenar}/${hasil.totalSoal} benar).'),
+                              'Skor pemahaman awalmu: ${hasil.skorTotalPersen}% (${hasil.totalBenar}/${hasil.totalSoal} benar).',
+                            ),
                           ],
                         ),
                       ),
@@ -610,12 +627,15 @@ class _LayarTesAwalState extends ConsumerState<LayarTesAwal> {
                             children: daftar.map((rek) {
                               return Card(
                                 margin: const EdgeInsets.only(
-                                    bottom: SpasiFunda.m),
+                                  bottom: SpasiFunda.m,
+                                ),
                                 shape: RoundedRectangleBorder(
-                                  borderRadius:
-                                      BorderRadius.circular(SudutFunda.kartu),
+                                  borderRadius: BorderRadius.circular(
+                                    SudutFunda.kartu,
+                                  ),
                                   side: const BorderSide(
-                                      color: WarnaFunda.garis),
+                                    color: WarnaFunda.garis,
+                                  ),
                                 ),
                                 child: Padding(
                                   padding: const EdgeInsets.all(SpasiFunda.m),
@@ -625,9 +645,11 @@ class _LayarTesAwalState extends ConsumerState<LayarTesAwal> {
                                     children: [
                                       Row(
                                         children: [
-                                          const Icon(LucideIcons.sparkles,
-                                              size: 18,
-                                              color: WarnaFunda.utama),
+                                          const Icon(
+                                            LucideIcons.sparkles,
+                                            size: 18,
+                                            color: WarnaFunda.utama,
+                                          ),
                                           const SizedBox(width: SpasiFunda.xs),
                                           TeksFunda.label(rek.judulAlasan),
                                         ],
@@ -662,15 +684,19 @@ class _LayarTesAwalState extends ConsumerState<LayarTesAwal> {
                       const SizedBox(height: SpasiFunda.s),
                       ...hasil.skorPerModul.entries.map((e) {
                         return Padding(
-                          padding:
-                              const EdgeInsets.symmetric(vertical: SpasiFunda.xs),
+                          padding: const EdgeInsets.symmetric(
+                            vertical: SpasiFunda.xs,
+                          ),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(e.key.replaceAll('_', ' ')),
-                              Text('${e.value}%',
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.bold)),
+                              Text(
+                                '${e.value}%',
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
                             ],
                           ),
                         );

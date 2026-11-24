@@ -12,17 +12,23 @@ void main() {
         expect(formatBungaPersen(500), equals('5'));
       });
 
-      test('sisa kelipatan 10 menghasilkan 1 angka di belakang koma tanpa nol gantung', () {
-        expect(formatBungaPersen(1850), equals('18,5'));
-        expect(formatBungaPersen(50), equals('0,5'));
-        expect(formatBungaPersen(250), equals('2,5'));
-      });
+      test(
+        'sisa kelipatan 10 menghasilkan 1 angka di belakang koma tanpa nol gantung',
+        () {
+          expect(formatBungaPersen(1850), equals('18,5'));
+          expect(formatBungaPersen(50), equals('0,5'));
+          expect(formatBungaPersen(250), equals('2,5'));
+        },
+      );
 
-      test('sisa bukan kelipatan 10 menghasilkan 2 angka di belakang koma lengkap', () {
-        expect(formatBungaPersen(1205), equals('12,05'));
-        expect(formatBungaPersen(5), equals('0,05'));
-        expect(formatBungaPersen(1875), equals('18,75'));
-      });
+      test(
+        'sisa bukan kelipatan 10 menghasilkan 2 angka di belakang koma lengkap',
+        () {
+          expect(formatBungaPersen(1205), equals('12,05'));
+          expect(formatBungaPersen(5), equals('0,05'));
+          expect(formatBungaPersen(1875), equals('18,75'));
+        },
+      );
     });
 
     group('2. formatRingkasanUtang (vektor V1 sampai V7)', () {
@@ -254,54 +260,57 @@ void main() {
         );
       });
 
-      test('V2: 4 utang layak -> 3 pertama diurut biaya menurun lalu nama + "Dan 1 utang lain."', () {
-        final utangList = [
-          const ItemUtangUmpanBalik(
-            nama: 'Paylater',
-            sisaRupiah: 800000,
-            pokokAwalRupiah: 900000,
-            cicilanBulananRupiah: 330000,
-            tenorBulan: 3,
-          ), // total 990k, biaya 90k
-          const ItemUtangUmpanBalik(
-            nama: 'Kredit HP',
-            sisaRupiah: 4000000,
-            pokokAwalRupiah: 6000000,
-            cicilanBulananRupiah: 550000,
-            tenorBulan: 12,
-          ), // total 6.6jt, biaya 600k
-          const ItemUtangUmpanBalik(
-            nama: 'Koperasi',
-            sisaRupiah: 4000000,
-            pokokAwalRupiah: 5000000,
-            cicilanBulananRupiah: 450000,
-            tenorBulan: 12,
-          ), // total 5.4jt, biaya 400k
-          const ItemUtangUmpanBalik(
-            nama: 'Pinjaman Teman',
-            sisaRupiah: 1000000,
-            pokokAwalRupiah: 1200000,
-            cicilanBulananRupiah: 100000,
-            tenorBulan: 12,
-          ), // total 1.2jt, biaya 0
-        ];
+      test(
+        'V2: 4 utang layak -> 3 pertama diurut biaya menurun lalu nama + "Dan 1 utang lain."',
+        () {
+          final utangList = [
+            const ItemUtangUmpanBalik(
+              nama: 'Paylater',
+              sisaRupiah: 800000,
+              pokokAwalRupiah: 900000,
+              cicilanBulananRupiah: 330000,
+              tenorBulan: 3,
+            ), // total 990k, biaya 90k
+            const ItemUtangUmpanBalik(
+              nama: 'Kredit HP',
+              sisaRupiah: 4000000,
+              pokokAwalRupiah: 6000000,
+              cicilanBulananRupiah: 550000,
+              tenorBulan: 12,
+            ), // total 6.6jt, biaya 600k
+            const ItemUtangUmpanBalik(
+              nama: 'Koperasi',
+              sisaRupiah: 4000000,
+              pokokAwalRupiah: 5000000,
+              cicilanBulananRupiah: 450000,
+              tenorBulan: 12,
+            ), // total 5.4jt, biaya 400k
+            const ItemUtangUmpanBalik(
+              nama: 'Pinjaman Teman',
+              sisaRupiah: 1000000,
+              pokokAwalRupiah: 1200000,
+              cicilanBulananRupiah: 100000,
+              tenorBulan: 12,
+            ), // total 1.2jt, biaya 0
+          ];
 
-        final hasil = formatBiayaPinjamanTercatat(
-          daftarUtang: utangList,
-          tidakPunyaUtang: false,
-        );
+          final hasil = formatBiayaPinjamanTercatat(
+            daftarUtang: utangList,
+            tidakPunyaUtang: false,
+          );
 
-        expect(
-          hasil,
-          equals(
-            'Kredit HP: pokok Rp6.000.000, cicilan Rp550.000 x 12 bulan = total Rp6.600.000. Biaya pinjaman: Rp600.000. '
-            'Koperasi: pokok Rp5.000.000, cicilan Rp450.000 x 12 bulan = total Rp5.400.000. Biaya pinjaman: Rp400.000. '
-            'Paylater: pokok Rp900.000, cicilan Rp330.000 x 3 bulan = total Rp990.000. Biaya pinjaman: Rp90.000. '
-            'Dan 1 utang lain. '
-            'Hitungan ini memakai cicilan x tenor yang kamu catat dan belum memasukkan denda.',
-          ),
-        );
-      });
+          expect(
+            hasil,
+            equals(
+              'Kredit HP: pokok Rp6.000.000, cicilan Rp550.000 x 12 bulan = total Rp6.600.000. Biaya pinjaman: Rp600.000. '
+              'Koperasi: pokok Rp5.000.000, cicilan Rp450.000 x 12 bulan = total Rp5.400.000. Biaya pinjaman: Rp400.000. '
+              'Paylater: pokok Rp900.000, cicilan Rp330.000 x 3 bulan = total Rp990.000. Biaya pinjaman: Rp90.000. '
+              'Dan 1 utang lain. '
+              'Hitungan ini memakai cicilan x tenor yang kamu catat dan belum memasukkan denda.',
+            ),
+          );
+        },
+      );
 
       test('V3: utang aktif ada tetapi tanpa tenor -> pesan lengkapi data', () {
         final utangList = [
@@ -379,49 +388,55 @@ void main() {
     });
 
     group('4. formatRasioCicilanBulanIni (vektor V1 sampai V6)', () {
-      test('V1: cicilan Rp900.000, pemasukan Rp3.000.000 (3 bulan) -> 30% dan 40%', () {
-        const pemasukan = HasilPemasukanRataRata(
-          nilaiRupiah: 3000000,
-          dasar: DasarPemasukanRataRata.rataRata3Bulan,
-        );
+      test(
+        'V1: cicilan Rp900.000, pemasukan Rp3.000.000 (3 bulan) -> 30% dan 40%',
+        () {
+          const pemasukan = HasilPemasukanRataRata(
+            nilaiRupiah: 3000000,
+            dasar: DasarPemasukanRataRata.rataRata3Bulan,
+          );
 
-        final hasil = formatRasioCicilanBulanIni(
-          totalCicilanBulanan: 900000,
-          pemasukan: pemasukan,
-        );
+          final hasil = formatRasioCicilanBulanIni(
+            totalCicilanBulanan: 900000,
+            pemasukan: pemasukan,
+          );
 
-        expect(
-          hasil,
-          equals(
-            'Total cicilanmu Rp900.000 per bulan, dibandingkan pemasukan Rp3.000.000 per bulan (rata-rata 3 bulan terakhir). '
-            'Rasio cicilanmu 30 persen. '
-            'Kalau pemasukanmu turun 25 persen, rasionya menjadi 40 persen. '
-            'Ini angka untuk kamu pahami, bukan nilai.',
-          ),
-        );
-      });
+          expect(
+            hasil,
+            equals(
+              'Total cicilanmu Rp900.000 per bulan, dibandingkan pemasukan Rp3.000.000 per bulan (rata-rata 3 bulan terakhir). '
+              'Rasio cicilanmu 30 persen. '
+              'Kalau pemasukanmu turun 25 persen, rasionya menjadi 40 persen. '
+              'Ini angka untuk kamu pahami, bukan nilai.',
+            ),
+          );
+        },
+      );
 
-      test('V2: cicilan Rp900.000, pemasukan Rp2.500.000 (bulan ini) -> 36% dan 48%', () {
-        const pemasukan = HasilPemasukanRataRata(
-          nilaiRupiah: 2500000,
-          dasar: DasarPemasukanRataRata.bulanBerjalan,
-        );
+      test(
+        'V2: cicilan Rp900.000, pemasukan Rp2.500.000 (bulan ini) -> 36% dan 48%',
+        () {
+          const pemasukan = HasilPemasukanRataRata(
+            nilaiRupiah: 2500000,
+            dasar: DasarPemasukanRataRata.bulanBerjalan,
+          );
 
-        final hasil = formatRasioCicilanBulanIni(
-          totalCicilanBulanan: 900000,
-          pemasukan: pemasukan,
-        );
+          final hasil = formatRasioCicilanBulanIni(
+            totalCicilanBulanan: 900000,
+            pemasukan: pemasukan,
+          );
 
-        expect(
-          hasil,
-          equals(
-            'Total cicilanmu Rp900.000 per bulan, dibandingkan pemasukan Rp2.500.000 per bulan (bulan ini). '
-            'Rasio cicilanmu 36 persen. '
-            'Kalau pemasukanmu turun 25 persen, rasionya menjadi 48 persen. '
-            'Ini angka untuk kamu pahami, bukan nilai.',
-          ),
-        );
-      });
+          expect(
+            hasil,
+            equals(
+              'Total cicilanmu Rp900.000 per bulan, dibandingkan pemasukan Rp2.500.000 per bulan (bulan ini). '
+              'Rasio cicilanmu 36 persen. '
+              'Kalau pemasukanmu turun 25 persen, rasionya menjadi 48 persen. '
+              'Ini angka untuk kamu pahami, bukan nilai.',
+            ),
+          );
+        },
+      );
 
       test('V3: cicilan Rp1.000.000, pemasukan Rp3.000.000 -> 33% dan 44%', () {
         const pemasukan = HasilPemasukanRataRata(
@@ -456,7 +471,12 @@ void main() {
           pemasukan: pemasukan,
         );
 
-        expect(hasil, equals('Cicilan bulananmu belum tercatat (Rp0), jadi rasio cicilanmu 0 persen.'));
+        expect(
+          hasil,
+          equals(
+            'Cicilan bulananmu belum tercatat (Rp0), jadi rasio cicilanmu 0 persen.',
+          ),
+        );
       });
 
       test('V5: pemasukan belumAda -> pesan belum bisa dihitung', () {
@@ -472,7 +492,9 @@ void main() {
 
         expect(
           hasil,
-          equals('Belum ada pemasukan yang tercatat, jadi rasio cicilan belum bisa dihitung. Catat pemasukanmu dulu.'),
+          equals(
+            'Belum ada pemasukan yang tercatat, jadi rasio cicilan belum bisa dihitung. Catat pemasukanmu dulu.',
+          ),
         );
       });
 
@@ -493,43 +515,46 @@ void main() {
     });
 
     group('5. formatUrutanPelunasan (vektor V1 sampai V8)', () {
-      test('V1: 3 utang (Paylater 800k bp 3600, Pinjaman Teman 1.5jt tanpa_bunga, Kredit HP 4jt flat bp 1800)', () {
-        final utangList = [
-          const ItemUtangUmpanBalik(
-            nama: 'Paylater',
-            sisaRupiah: 800000,
-            jenisBunga: 'efektif',
-            bungaBasisPoinPerTahun: 3600,
-          ),
-          const ItemUtangUmpanBalik(
-            nama: 'Pinjaman Teman',
-            sisaRupiah: 1500000,
-            jenisBunga: 'tanpa_bunga',
-            bungaBasisPoinPerTahun: 0,
-          ),
-          const ItemUtangUmpanBalik(
-            nama: 'Kredit HP',
-            sisaRupiah: 4000000,
-            jenisBunga: 'flat',
-            bungaBasisPoinPerTahun: 1800,
-          ),
-        ];
+      test(
+        'V1: 3 utang (Paylater 800k bp 3600, Pinjaman Teman 1.5jt tanpa_bunga, Kredit HP 4jt flat bp 1800)',
+        () {
+          final utangList = [
+            const ItemUtangUmpanBalik(
+              nama: 'Paylater',
+              sisaRupiah: 800000,
+              jenisBunga: 'efektif',
+              bungaBasisPoinPerTahun: 3600,
+            ),
+            const ItemUtangUmpanBalik(
+              nama: 'Pinjaman Teman',
+              sisaRupiah: 1500000,
+              jenisBunga: 'tanpa_bunga',
+              bungaBasisPoinPerTahun: 0,
+            ),
+            const ItemUtangUmpanBalik(
+              nama: 'Kredit HP',
+              sisaRupiah: 4000000,
+              jenisBunga: 'flat',
+              bungaBasisPoinPerTahun: 1800,
+            ),
+          ];
 
-        final hasil = formatUrutanPelunasan(
-          daftarUtang: utangList,
-          tidakPunyaUtang: false,
-        );
+          final hasil = formatUrutanPelunasan(
+            daftarUtang: utangList,
+            tidakPunyaUtang: false,
+          );
 
-        expect(
-          hasil,
-          equals(
-            'Urutan bola salju (sisa terkecil dulu): Paylater (Rp800.000), lalu Pinjaman Teman (Rp1.500.000), lalu Kredit HP (Rp4.000.000). '
-            'Urutan longsor (bunga tertinggi dulu): Paylater (36 persen per tahun), lalu Kredit HP (18 persen per tahun), lalu Pinjaman Teman (tanpa bunga). '
-            'Urutan longsor memakai persen bunga yang kamu catat. Kalau jenis bunganya berbeda, anggap sebagai perkiraan. '
-            'Pilih salah satu dan konsisten. Ini bahan belajar, bukan keharusan.',
-          ),
-        );
-      });
+          expect(
+            hasil,
+            equals(
+              'Urutan bola salju (sisa terkecil dulu): Paylater (Rp800.000), lalu Pinjaman Teman (Rp1.500.000), lalu Kredit HP (Rp4.000.000). '
+              'Urutan longsor (bunga tertinggi dulu): Paylater (36 persen per tahun), lalu Kredit HP (18 persen per tahun), lalu Pinjaman Teman (tanpa bunga). '
+              'Urutan longsor memakai persen bunga yang kamu catat. Kalau jenis bunganya berbeda, anggap sebagai perkiraan. '
+              'Pilih salah satu dan konsisten. Ini bahan belajar, bukan keharusan.',
+            ),
+          );
+        },
+      );
 
       test('V2: 4 utang dengan bunga belum dicatat (Kartu Lama 300k efektif bp 0)', () {
         final utangList = [
@@ -577,10 +602,7 @@ void main() {
 
       test('V3: hanya satu utang aktif', () {
         final utangList = [
-          const ItemUtangUmpanBalik(
-            nama: 'Paylater',
-            sisaRupiah: 800000,
-          ),
+          const ItemUtangUmpanBalik(nama: 'Paylater', sisaRupiah: 800000),
         ];
 
         final hasil = formatUrutanPelunasan(
@@ -588,7 +610,12 @@ void main() {
           tidakPunyaUtang: false,
         );
 
-        expect(hasil, equals('Kamu hanya punya satu utang aktif: Paylater (sisa Rp800.000). Fokuskan uang ekstra ke utang ini.'));
+        expect(
+          hasil,
+          equals(
+            'Kamu hanya punya satu utang aktif: Paylater (sisa Rp800.000). Fokuskan uang ekstra ke utang ini.',
+          ),
+        );
       });
 
       test('V4: dua utang aktif', () {
@@ -646,7 +673,9 @@ void main() {
 
         expect(
           hasil,
-          contains('Urutan longsor (bunga tertinggi dulu): Utang 1 (18,5 persen per tahun), lalu Utang 2 (12,05 persen per tahun).'),
+          contains(
+            'Urutan longsor (bunga tertinggi dulu): Utang 1 (18,5 persen per tahun), lalu Utang 2 (12,05 persen per tahun).',
+          ),
         );
       });
 
@@ -673,7 +702,9 @@ void main() {
 
         expect(
           hasil,
-          contains('Urutan bola salju (sisa terkecil dulu): Utang A (Rp1.000.000), lalu Utang Z (Rp1.000.000).'),
+          contains(
+            'Urutan bola salju (sisa terkecil dulu): Utang A (Rp1.000.000), lalu Utang Z (Rp1.000.000).',
+          ),
         );
       });
 
@@ -685,7 +716,9 @@ void main() {
 
         expect(
           hasil,
-          equals('Kamu menyatakan tidak punya utang, jadi belum ada yang perlu diurutkan. Pelajaran ini siap dipakai kalau nanti kamu berutang.'),
+          equals(
+            'Kamu menyatakan tidak punya utang, jadi belum ada yang perlu diurutkan. Pelajaran ini siap dipakai kalau nanti kamu berutang.',
+          ),
         );
       });
 

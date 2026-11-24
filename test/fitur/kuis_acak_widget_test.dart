@@ -82,132 +82,135 @@ void main() {
   );
 
   testWidgets(
-      'Kuis diacak secara default dengan benih berbeda: urutan beda namun jawaban benar tetap terverifikasi',
-      (tester) async {
-    // 1. Instance pertama dengan benih 42
-    await tester.pumpWidget(
-      ProviderScope(
-        overrides: [
-          penyediaBasisData.overrideWithValue(db),
-          penyediaDaftarSemuaModul.overrideWith(
-            (ref) => Future.value([modulUji]),
-          ),
-        ],
-        child: MaterialApp(
-          theme: TemaFunda.temaTerang,
-          home: const LayarKuisModul(
-            modulId: 'modul_uji_pengacakan',
-            benih: 42,
+    'Kuis diacak secara default dengan benih berbeda: urutan beda namun jawaban benar tetap terverifikasi',
+    (tester) async {
+      // 1. Instance pertama dengan benih 42
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            penyediaBasisData.overrideWithValue(db),
+            penyediaDaftarSemuaModul.overrideWith(
+              (ref) => Future.value([modulUji]),
+            ),
+          ],
+          child: MaterialApp(
+            theme: TemaFunda.temaTerang,
+            home: const LayarKuisModul(
+              modulId: 'modul_uji_pengacakan',
+              benih: 42,
+            ),
           ),
         ),
-      ),
-    );
-    await tester.pump();
+      );
+      await tester.pump();
 
-    // Catat urutan soal pada benih 1
-    final daftarSoalBenih1 = <String>[];
+      // Catat urutan soal pada benih 1
+      final daftarSoalBenih1 = <String>[];
 
-    // Jawab semua soal dengan memilih teks jawaban yang benar untuk setiap soal
-    for (var i = 0; i < 3; i++) {
-      final teksSoal =
-          tester.widget<TeksFunda>(find.byKey(const Key('teks_soal_kuis'))).teks;
-      daftarSoalBenih1.add(teksSoal);
+      // Jawab semua soal dengan memilih teks jawaban yang benar untuk setiap soal
+      for (var i = 0; i < 3; i++) {
+        final teksSoal = tester
+            .widget<TeksFunda>(find.byKey(const Key('teks_soal_kuis')))
+            .teks;
+        daftarSoalBenih1.add(teksSoal);
 
-      // Cari pilihan yang benar di layar sesuai nomor soal
-      Finder? finderJawabanBenar;
-      for (var k = 1; k <= 5; k++) {
-        final f = find.text('Jawaban Benar $k');
-        if (f.evaluate().isNotEmpty) {
-          finderJawabanBenar = f;
-          break;
+        // Cari pilihan yang benar di layar sesuai nomor soal
+        Finder? finderJawabanBenar;
+        for (var k = 1; k <= 5; k++) {
+          final f = find.text('Jawaban Benar $k');
+          if (f.evaluate().isNotEmpty) {
+            finderJawabanBenar = f;
+            break;
+          }
+        }
+
+        expect(finderJawabanBenar, isNotNull);
+        await tester.tap(finderJawabanBenar!);
+        await tester.pump();
+
+        if (i < 2) {
+          await tester.tap(find.text('Soal Berikutnya'));
+          await tester.pump();
+        } else {
+          await tester.tap(find.text('Lihat Hasil Kuis'));
+          await tester.pump();
         }
       }
 
-      expect(finderJawabanBenar, isNotNull);
-      await tester.tap(finderJawabanBenar!);
-      await tester.pump();
+      // Pastikan hasil kelulusan 100% lulus
+      expect(find.text('100%'), findsOneWidget);
+      expect(find.text('Selamat, Kamu Lulus!'), findsOneWidget);
 
-      if (i < 2) {
-        await tester.tap(find.text('Soal Berikutnya'));
-        await tester.pump();
-      } else {
-        await tester.tap(find.text('Lihat Hasil Kuis'));
-        await tester.pump();
-      }
-    }
+      // Bersihkan widget sebelum test kedua
+      await bongkarWidget(tester);
 
-    // Pastikan hasil kelulusan 100% lulus
-    expect(find.text('100%'), findsOneWidget);
-    expect(find.text('Selamat, Kamu Lulus!'), findsOneWidget);
-
-    // Bersihkan widget sebelum test kedua
-    await bongkarWidget(tester);
-
-    // 2. Instance kedua dengan benih 2
-    await tester.pumpWidget(
-      ProviderScope(
-        overrides: [
-          penyediaBasisData.overrideWithValue(db),
-          penyediaDaftarSemuaModul.overrideWith(
-            (ref) => Future.value([modulUji]),
-          ),
-        ],
-        child: MaterialApp(
-          theme: TemaFunda.temaTerang,
-          home: const LayarKuisModul(
-            modulId: 'modul_uji_pengacakan',
-            benih: 2,
+      // 2. Instance kedua dengan benih 2
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            penyediaBasisData.overrideWithValue(db),
+            penyediaDaftarSemuaModul.overrideWith(
+              (ref) => Future.value([modulUji]),
+            ),
+          ],
+          child: MaterialApp(
+            theme: TemaFunda.temaTerang,
+            home: const LayarKuisModul(
+              modulId: 'modul_uji_pengacakan',
+              benih: 2,
+            ),
           ),
         ),
-      ),
-    );
-    await tester.pump();
+      );
+      await tester.pump();
 
-    final daftarSoalBenih2 = <String>[];
+      final daftarSoalBenih2 = <String>[];
 
-    // Jawab semua soal dengan jawaban benar
-    for (var i = 0; i < 3; i++) {
-      final teksSoal =
-          tester.widget<TeksFunda>(find.byKey(const Key('teks_soal_kuis'))).teks;
-      daftarSoalBenih2.add(teksSoal);
+      // Jawab semua soal dengan jawaban benar
+      for (var i = 0; i < 3; i++) {
+        final teksSoal = tester
+            .widget<TeksFunda>(find.byKey(const Key('teks_soal_kuis')))
+            .teks;
+        daftarSoalBenih2.add(teksSoal);
 
-      Finder? finderJawabanBenar;
-      for (var k = 1; k <= 5; k++) {
-        final f = find.text('Jawaban Benar $k');
-        if (f.evaluate().isNotEmpty) {
-          finderJawabanBenar = f;
-          break;
+        Finder? finderJawabanBenar;
+        for (var k = 1; k <= 5; k++) {
+          final f = find.text('Jawaban Benar $k');
+          if (f.evaluate().isNotEmpty) {
+            finderJawabanBenar = f;
+            break;
+          }
+        }
+
+        expect(finderJawabanBenar, isNotNull);
+        await tester.tap(finderJawabanBenar!);
+        await tester.pump();
+
+        if (i < 2) {
+          await tester.tap(find.text('Soal Berikutnya'));
+          await tester.pump();
+        } else {
+          await tester.tap(find.text('Lihat Hasil Kuis'));
+          await tester.pump();
         }
       }
 
-      expect(finderJawabanBenar, isNotNull);
-      await tester.tap(finderJawabanBenar!);
-      await tester.pump();
+      // Pastikan urutan soal berbeda antara benih 1 dan benih 2
+      expect(
+        daftarSoalBenih1,
+        isNot(equals(daftarSoalBenih2)),
+        reason: 'Urutan soal terpilih/diacak harus berbeda antar benih',
+      );
 
-      if (i < 2) {
-        await tester.tap(find.text('Soal Berikutnya'));
-        await tester.pump();
-      } else {
-        await tester.tap(find.text('Lihat Hasil Kuis'));
-        await tester.pump();
-      }
-    }
+      // Tetap lulus 100% meskipun urutan berbeda
+      expect(find.text('100%'), findsOneWidget);
+      expect(find.text('Selamat, Kamu Lulus!'), findsOneWidget);
 
-    // Pastikan urutan soal berbeda antara benih 1 dan benih 2
-    expect(
-      daftarSoalBenih1,
-      isNot(equals(daftarSoalBenih2)),
-      reason: 'Urutan soal terpilih/diacak harus berbeda antar benih',
-    );
+      // Tetap lulus 100% meskipun urutan berbeda
+      expect(find.text('100%'), findsOneWidget);
+      expect(find.text('Selamat, Kamu Lulus!'), findsOneWidget);
 
-    // Tetap lulus 100% meskipun urutan berbeda
-    expect(find.text('100%'), findsOneWidget);
-    expect(find.text('Selamat, Kamu Lulus!'), findsOneWidget);
-
-    // Tetap lulus 100% meskipun urutan berbeda
-    expect(find.text('100%'), findsOneWidget);
-    expect(find.text('Selamat, Kamu Lulus!'), findsOneWidget);
-
-    await bongkarWidget(tester);
-  });
+      await bongkarWidget(tester);
+    },
+  );
 }

@@ -31,7 +31,9 @@ class ProgresRepositori {
     required int indeksLangkah,
   }) async {
     final sekarang = DateTime.now();
-    await _db.into(_db.tabelProgresPelajaran).insertOnConflictUpdate(
+    await _db
+        .into(_db.tabelProgresPelajaran)
+        .insertOnConflictUpdate(
           TabelProgresPelajaranCompanion(
             pelajaranId: Value(pelajaranId),
             modulId: Value(modulId),
@@ -48,7 +50,9 @@ class ProgresRepositori {
     required String modulId,
   }) async {
     final sekarang = DateTime.now();
-    await _db.into(_db.tabelProgresPelajaran).insertOnConflictUpdate(
+    await _db
+        .into(_db.tabelProgresPelajaran)
+        .insertOnConflictUpdate(
           TabelProgresPelajaranCompanion(
             pelajaranId: Value(pelajaranId),
             modulId: Value(modulId),

@@ -115,8 +115,9 @@ final penyediaStreamHasilKuis = StreamProvider((ref) {
 });
 
 /// Provider stream profil keuangan pengguna aktif.
-final penyediaStreamProfilKeuangan =
-    StreamProvider<EntitasProfilKeuangan?>((ref) {
+final penyediaStreamProfilKeuangan = StreamProvider<EntitasProfilKeuangan?>((
+  ref,
+) {
   return ref.watch(penyediaProfilRepositori).pantauProfil();
 });
 
@@ -131,8 +132,9 @@ final penyediaKontenTesAwal = FutureProvider<KontenTesAwal>((ref) async {
 });
 
 /// Provider konten rekomendasi dari aset JSON.
-final penyediaKontenRekomendasi =
-    FutureProvider<KontenRekomendasi>((ref) async {
+final penyediaKontenRekomendasi = FutureProvider<KontenRekomendasi>((
+  ref,
+) async {
   return PembacaKonten.muatRekomendasiDariAset(rootBundle);
 });
 
@@ -257,96 +259,104 @@ class InfoRekomendasiModul {
 /// Provider daftar modul rekomendasi personalisasi.
 final penyediaDaftarRekomendasiModul =
     FutureProvider<List<InfoRekomendasiModul>>((ref) async {
-  final entitasProfil = ref.watch(penyediaStreamProfilKeuangan).value;
-  final entitasTesAwal = ref.watch(penyediaStreamHasilTesAwal).value;
-  final kontenRekomendasi = await ref.watch(penyediaKontenRekomendasi.future);
-  final peta = await ref.watch(penyediaPetaBelajar.future);
-  final fotoData = await ref.watch(penyediaFotoData.future);
-
-  final profil = entitasProfil != null
-      ? bangunProfil(
-          jawabanProfil: {
-            'punya_penghasilan': entitasProfil.punyaPenghasilan,
-            'punya_utang': entitasProfil.punyaUtang,
-            'dana_darurat': entitasProfil.danaDarurat,
-            'menabung': entitasProfil.menabung,
-            'investasi': entitasProfil.investasi,
-            'mencatat_keuangan': entitasProfil.mencatatKeuangan,
-          },
-          tujuanUtama: entitasProfil.tujuanUtama,
-        )
-      : null;
-
-  HasilSkorTesAwal? hasilTes;
-  if (entitasTesAwal != null) {
-    try {
-      final decoded =
-          jsonDecode(entitasTesAwal.skorPerModulJson) as Map<String, dynamic>;
-      final skorPerModul =
-          decoded.map((k, v) => MapEntry(k, (v as num).toInt()));
-      hasilTes = HasilSkorTesAwal(
-        skorPerModul: skorPerModul,
-        skorTotalPersen: entitasTesAwal.skorTotalPersen,
-        totalBenar: 0,
-        totalSoal: 12,
+      final entitasProfil = ref.watch(penyediaStreamProfilKeuangan).value;
+      final entitasTesAwal = ref.watch(penyediaStreamHasilTesAwal).value;
+      final kontenRekomendasi = await ref.watch(
+        penyediaKontenRekomendasi.future,
       );
-    } catch (_) {}
-  }
+      final peta = await ref.watch(penyediaPetaBelajar.future);
+      final fotoData = await ref.watch(penyediaFotoData.future);
 
-  final daftarModul = peta.map((p) => p.modul).toList();
-  final statusModul = {for (final p in peta) p.modul.id: p.statusModul};
+      final profil = entitasProfil != null
+          ? bangunProfil(
+              jawabanProfil: {
+                'punya_penghasilan': entitasProfil.punyaPenghasilan,
+                'punya_utang': entitasProfil.punyaUtang,
+                'dana_darurat': entitasProfil.danaDarurat,
+                'menabung': entitasProfil.menabung,
+                'investasi': entitasProfil.investasi,
+                'mencatat_keuangan': entitasProfil.mencatatKeuangan,
+              },
+              tujuanUtama: entitasProfil.tujuanUtama,
+            )
+          : null;
 
-  final daftarRekomendasi = rekomendasiModul(
-    profil: profil,
-    hasilTes: hasilTes,
-    fotoData: fotoData,
-    daftarModul: daftarModul,
-    statusModul: statusModul,
-  );
+      HasilSkorTesAwal? hasilTes;
+      if (entitasTesAwal != null) {
+        try {
+          final decoded =
+              jsonDecode(entitasTesAwal.skorPerModulJson)
+                  as Map<String, dynamic>;
+          final skorPerModul = decoded.map(
+            (k, v) => MapEntry(k, (v as num).toInt()),
+          );
+          hasilTes = HasilSkorTesAwal(
+            skorPerModul: skorPerModul,
+            skorTotalPersen: entitasTesAwal.skorTotalPersen,
+            totalBenar: 0,
+            totalSoal: 12,
+          );
+        } catch (_) {}
+      }
 
-  final hasil = <InfoRekomendasiModul>[];
-  for (final rek in daftarRekomendasi) {
-    final itemPeta = peta.firstWhere(
-      (p) => p.modul.id == rek.modulId,
-      orElse: () => ItemPetaModul(
-        modul: ModulKonten(
-          id: rek.modulId,
-          judul: rek.modulId,
-          tingkat: 'pemula',
-          urutan: 0,
-          deskripsiSingkat: '',
-          tersedia: rek.tersedia,
-          gerbang: [],
-          daftarPelajaran: [],
-          kuis: const KuisKonten(jumlahSoal: 0, bankSoal: []),
-        ),
-        statusModul: HasilStatusBelajar(
-          status: rek.terbuka ? StatusBelajar.terbuka : StatusBelajar.terkunci,
-          apaYangKurang: rek.apaYangKurang,
-        ),
-        daftarPelajaran: [],
-      ),
-    );
+      final daftarModul = peta.map((p) => p.modul).toList();
+      final statusModul = {for (final p in peta) p.modul.id: p.statusModul};
 
-    final alasanKey = rek.kodeAlasanUtama;
-    final alasanInfo = kontenRekomendasi.alasan[alasanKey];
-    hasil.add(
-      InfoRekomendasiModul(
-        modul: itemPeta.modul,
-        judulAlasan: alasanInfo?.judul ?? 'Rekomendasi Untukmu',
-        deskripsiAlasan: alasanInfo?.deskripsi ??
-            'Bagus untuk mendukung langkah keuanganmu.',
-        statusModul: itemPeta.statusModul,
-      ),
-    );
-  }
+      final daftarRekomendasi = rekomendasiModul(
+        profil: profil,
+        hasilTes: hasilTes,
+        fotoData: fotoData,
+        daftarModul: daftarModul,
+        statusModul: statusModul,
+      );
 
-  return hasil;
-});
+      final hasil = <InfoRekomendasiModul>[];
+      for (final rek in daftarRekomendasi) {
+        final itemPeta = peta.firstWhere(
+          (p) => p.modul.id == rek.modulId,
+          orElse: () => ItemPetaModul(
+            modul: ModulKonten(
+              id: rek.modulId,
+              judul: rek.modulId,
+              tingkat: 'pemula',
+              urutan: 0,
+              deskripsiSingkat: '',
+              tersedia: rek.tersedia,
+              gerbang: [],
+              daftarPelajaran: [],
+              kuis: const KuisKonten(jumlahSoal: 0, bankSoal: []),
+            ),
+            statusModul: HasilStatusBelajar(
+              status: rek.terbuka
+                  ? StatusBelajar.terbuka
+                  : StatusBelajar.terkunci,
+              apaYangKurang: rek.apaYangKurang,
+            ),
+            daftarPelajaran: [],
+          ),
+        );
+
+        final alasanKey = rek.kodeAlasanUtama;
+        final alasanInfo = kontenRekomendasi.alasan[alasanKey];
+        hasil.add(
+          InfoRekomendasiModul(
+            modul: itemPeta.modul,
+            judulAlasan: alasanInfo?.judul ?? 'Rekomendasi Untukmu',
+            deskripsiAlasan:
+                alasanInfo?.deskripsi ??
+                'Bagus untuk mendukung langkah keuanganmu.',
+            statusModul: itemPeta.statusModul,
+          ),
+        );
+      }
+
+      return hasil;
+    });
 
 /// Provider dinamis petak "Lanjut Belajar" untuk Layar Beranda.
-final penyediaLanjutBelajarBeranda =
-    FutureProvider<InfoLanjutBelajar>((ref) async {
+final penyediaLanjutBelajarBeranda = FutureProvider<InfoLanjutBelajar>((
+  ref,
+) async {
   final peta = await ref.watch(penyediaPetaBelajar.future);
   final rekomendasi = await ref.watch(penyediaDaftarRekomendasiModul.future);
 
@@ -436,713 +446,844 @@ final penyediaLanjutBelajarBeranda =
 });
 
 /// Provider penghasil teks umpan balik dari data riil pengguna secara reaktif.
-final penyediaTeksUmpanBalikMisi = FutureProvider.autoDispose.family<String, String>((ref, kunci) async {
-  final db = ref.watch(penyediaBasisData);
-  final waktuSekarang = DateTime.now();
+final penyediaTeksUmpanBalikMisi = FutureProvider.autoDispose
+    .family<String, String>((ref, kunci) async {
+      final db = ref.watch(penyediaBasisData);
+      final waktuSekarang = DateTime.now();
 
-  switch (kunci) {
-    case 'catatan_pengeluaran_terbaru':
-      final daftarPengeluaran = await (db.select(db.tabelTransaksi)
-            ..where((t) => t.jenis.equals('keluar'))
-            ..orderBy([(t) => OrderingTerm.desc(t.waktuTransaksi), (t) => OrderingTerm.desc(t.id)]))
-          .get();
+      switch (kunci) {
+        case 'catatan_pengeluaran_terbaru':
+          final daftarPengeluaran =
+              await (db.select(db.tabelTransaksi)
+                    ..where((t) => t.jenis.equals('keluar'))
+                    ..orderBy([
+                      (t) => OrderingTerm.desc(t.waktuTransaksi),
+                      (t) => OrderingTerm.desc(t.id),
+                    ]))
+                  .get();
 
-      final total = daftarPengeluaran.length;
-      if (total == 0) {
-        return formatCatatanPengeluaranTerbaru(
-          jumlahTotal: 0,
-          kategori: 'Belum ada',
-          nominal: 0,
-        );
-      }
-      final terbaru = daftarPengeluaran.first;
-      var namaKategori = 'Pengeluaran';
-      if (terbaru.kategoriId != null) {
-        final kat = await (db.select(db.tabelKategori)
-              ..where((k) => k.id.equals(terbaru.kategoriId!)))
-            .getSingleOrNull();
-        if (kat != null) {
-          namaKategori = kat.nama;
-        }
-      }
-      return formatCatatanPengeluaranTerbaru(
-        jumlahTotal: total,
-        kategori: namaKategori,
-        nominal: terbaru.jumlahRupiah,
-      );
-
-    case 'perbandingan_pola_anggaran':
-      final arusKas = ref.watch(penyediaArusKasBulanIni);
-      final pemasukan = arusKas.totalMasuk;
-
-      final daftarAnggaran = await (db.select(db.tabelAnggaran)
-            ..where((a) => a.tahun.equals(waktuSekarang.year) & a.bulan.equals(waktuSekarang.month)))
-          .get();
-
-      var keb = 0;
-      var kei = 0;
-      var tabUtg = 0;
-      var belum = 0;
-
-      for (final a in daftarAnggaran) {
-        final kat = await (db.select(db.tabelKategori)
-              ..where((k) => k.id.equals(a.kategoriId)))
-            .getSingleOrNull();
-        final sifat = kat?.sifat ?? 'belum_dilabeli';
-        switch (sifat) {
-          case 'kebutuhan':
-            keb += a.batasRupiah;
-            break;
-          case 'keinginan':
-            kei += a.batasRupiah;
-            break;
-          case 'tabungan':
-          case 'utang':
-            tabUtg += a.batasRupiah;
-            break;
-          default:
-            belum += a.batasRupiah;
-            break;
-        }
-      }
-
-      return formatPerbandinganPolaAnggaran(
-        pemasukan: pemasukan,
-        kebutuhan: keb,
-        keinginan: kei,
-        tabunganDanUtang: tabUtg,
-        belumDilabeli: belum,
-      );
-
-    case 'realisasi_anggaran_bulan_ini':
-      final repoAnggaran = ref.watch(penyediaAnggaranRepositori);
-      final daftarRealisasi = await repoAnggaran.ambilRealisasiAnggaranBulan(
-        tahun: waktuSekarang.year,
-        bulan: waktuSekarang.month,
-      );
-
-      final daftarPos = daftarRealisasi.map((r) {
-        return PosAnggaranEvaluasi(
-          nama: r.namaKategori,
-          batas: r.batasRupiah,
-          terpakai: r.terpakaiRupiah,
-        );
-      }).toList();
-
-      return formatRealisasiAnggaranBulanIni(daftarPos);
-
-    case 'komposisi_sifat_bulan_ini':
-      final pengeluaranPerSifat = (await ref.watch(penyediaKomposisiSifatBulanIni.future));
-      final persenSifat = hitungKomposisiSifat(pengeluaranPerSifat);
-      return RegistriUmpanBalik.formatKomposisiSifat(persenSifat);
-
-    case 'ringkasan_tujuan_tabungan':
-      final semuaTujuan = await (db.select(db.tabelTujuan)
-            ..where((t) => t.status.equals('aktif') & t.jenis.equals('tabungan')))
-          .get();
-
-      if (semuaTujuan.isEmpty) {
-        return formatRingkasanTujuanTabungan(
-          tujuan: null,
-          waktuSekarang: waktuSekarang,
-        );
-      }
-
-      final daftarTujuan = <DataTujuanTabunganUmpanBalik>[];
-      for (final t in semuaTujuan) {
-        final kantongList = await (db.select(db.tabelKantong)
-              ..where((k) => k.tujuanId.equals(t.id) & k.diarsipkan.equals(false)))
-            .get();
-
-        var saldo = 0;
-        for (final k in kantongList) {
-          final alokasi = await (db.select(db.tabelAlokasiKantong)
-                ..where((a) => a.kantongId.equals(k.id)))
-              .get();
-          for (final a in alokasi) {
-            if (a.jenis == 'isi') {
-              saldo += a.jumlahRupiah;
-            } else if (a.jenis == 'ambil') {
-              saldo -= a.jumlahRupiah;
+          final total = daftarPengeluaran.length;
+          if (total == 0) {
+            return formatCatatanPengeluaranTerbaru(
+              jumlahTotal: 0,
+              kategori: 'Belum ada',
+              nominal: 0,
+            );
+          }
+          final terbaru = daftarPengeluaran.first;
+          var namaKategori = 'Pengeluaran';
+          if (terbaru.kategoriId != null) {
+            final kat =
+                await (db.select(db.tabelKategori)
+                      ..where((k) => k.id.equals(terbaru.kategoriId!)))
+                    .getSingleOrNull();
+            if (kat != null) {
+              namaKategori = kat.nama;
             }
           }
-        }
+          return formatCatatanPengeluaranTerbaru(
+            jumlahTotal: total,
+            kategori: namaKategori,
+            nominal: terbaru.jumlahRupiah,
+          );
 
-        daftarTujuan.add(DataTujuanTabunganUmpanBalik(
-          nama: t.nama,
-          danaTerkumpul: saldo,
-          targetRupiah: t.targetRupiah,
-          tenggat: t.tenggat,
-          dibuatPada: t.dibuatPada,
-        ));
-      }
+        case 'perbandingan_pola_anggaran':
+          final arusKas = ref.watch(penyediaArusKasBulanIni);
+          final pemasukan = arusKas.totalMasuk;
 
-      final tujuanTerpilih = pilihTujuanTabunganUmpanBalik(daftarTujuan);
-      return formatRingkasanTujuanTabungan(
-        tujuan: tujuanTerpilih,
-        waktuSekarang: waktuSekarang,
-      );
+          final daftarAnggaran =
+              await (db.select(db.tabelAnggaran)..where(
+                    (a) =>
+                        a.tahun.equals(waktuSekarang.year) &
+                        a.bulan.equals(waktuSekarang.month),
+                  ))
+                  .get();
 
-    case 'estimasi_tabungan':
-      final semuaTujuanEst = await (db.select(db.tabelTujuan)
-            ..where((t) => t.status.equals('aktif') & t.jenis.equals('tabungan')))
-          .get();
+          var keb = 0;
+          var kei = 0;
+          var tabUtg = 0;
+          var belum = 0;
 
-      if (semuaTujuanEst.isEmpty) {
-        return formatEstimasiTabungan(
-          tujuan: null,
-          setoranRataRata: 0,
-        );
-      }
-
-      final mapIdToData = <String, DataTujuanTabunganUmpanBalik>{};
-      for (final t in semuaTujuanEst) {
-        final kantongList = await (db.select(db.tabelKantong)
-              ..where((k) => k.tujuanId.equals(t.id) & k.diarsipkan.equals(false)))
-            .get();
-
-        var saldo = 0;
-        for (final k in kantongList) {
-          final alokasi = await (db.select(db.tabelAlokasiKantong)
-                ..where((a) => a.kantongId.equals(k.id)))
-              .get();
-          for (final a in alokasi) {
-            if (a.jenis == 'isi') {
-              saldo += a.jumlahRupiah;
-            } else if (a.jenis == 'ambil') {
-              saldo -= a.jumlahRupiah;
+          for (final a in daftarAnggaran) {
+            final kat = await (db.select(
+              db.tabelKategori,
+            )..where((k) => k.id.equals(a.kategoriId))).getSingleOrNull();
+            final sifat = kat?.sifat ?? 'belum_dilabeli';
+            switch (sifat) {
+              case 'kebutuhan':
+                keb += a.batasRupiah;
+                break;
+              case 'keinginan':
+                kei += a.batasRupiah;
+                break;
+              case 'tabungan':
+              case 'utang':
+                tabUtg += a.batasRupiah;
+                break;
+              default:
+                belum += a.batasRupiah;
+                break;
             }
           }
-        }
 
-        mapIdToData[t.id] = DataTujuanTabunganUmpanBalik(
-          nama: t.nama,
-          danaTerkumpul: saldo,
-          targetRupiah: t.targetRupiah,
-          tenggat: t.tenggat,
-          dibuatPada: t.dibuatPada,
-        );
-      }
+          return formatPerbandinganPolaAnggaran(
+            pemasukan: pemasukan,
+            kebutuhan: keb,
+            keinginan: kei,
+            tabunganDanUtang: tabUtg,
+            belumDilabeli: belum,
+          );
 
-      final terpilih = pilihTujuanTabunganUmpanBalik(mapIdToData.values.toList());
-      if (terpilih == null) {
-        return 'Belum ada tujuan tabungan.';
-      }
+        case 'realisasi_anggaran_bulan_ini':
+          final repoAnggaran = ref.watch(penyediaAnggaranRepositori);
+          final daftarRealisasi = await repoAnggaran
+              .ambilRealisasiAnggaranBulan(
+                tahun: waktuSekarang.year,
+                bulan: waktuSekarang.month,
+              );
 
-      final idTerpilih = mapIdToData.entries.firstWhere((e) => e.value.nama == terpilih.nama).key;
-      final kantongTerpilih = await (db.select(db.tabelKantong)
-            ..where((k) => k.tujuanId.equals(idTerpilih)))
-          .get();
+          final daftarPos = daftarRealisasi.map((r) {
+            return PosAnggaranEvaluasi(
+              nama: r.namaKategori,
+              batas: r.batasRupiah,
+              terpakai: r.terpakaiRupiah,
+            );
+          }).toList();
 
-      final alokasiList = <EntitasAlokasiSimpel>[];
-      for (final k in kantongTerpilih) {
-        final alokasi = await (db.select(db.tabelAlokasiKantong)
-              ..where((a) => a.kantongId.equals(k.id)))
-            .get();
-        for (final a in alokasi) {
-          alokasiList.add(EntitasAlokasiSimpel(
-            jenis: a.jenis,
-            jumlahRupiah: a.jumlahRupiah,
-            waktu: a.waktu,
+          return formatRealisasiAnggaranBulanIni(daftarPos);
+
+        case 'komposisi_sifat_bulan_ini':
+          final pengeluaranPerSifat = (await ref.watch(
+            penyediaKomposisiSifatBulanIni.future,
           ));
-        }
-      }
+          final persenSifat = hitungKomposisiSifat(pengeluaranPerSifat);
+          return RegistriUmpanBalik.formatKomposisiSifat(persenSifat);
 
-      final setoranRata = hitungRataRataSetoranTabungan(
-        daftarAlokasi: alokasiList,
-        waktuSekarang: waktuSekarang,
-      );
+        case 'ringkasan_tujuan_tabungan':
+          final semuaTujuan =
+              await (db.select(db.tabelTujuan)..where(
+                    (t) =>
+                        t.status.equals('aktif') & t.jenis.equals('tabungan'),
+                  ))
+                  .get();
 
-      return formatEstimasiTabungan(
-        tujuan: terpilih,
-        setoranRataRata: setoranRata,
-      );
-
-    case 'pengeluaran_wajib_bulanan':
-      final semuaTransaksiKeluar = await (db.select(db.tabelTransaksi)
-            ..where((t) => t.jenis.equals('keluar')))
-          .get();
-
-      final daftarWajib = <ItemPengeluaranWajib>[];
-      for (final t in semuaTransaksiKeluar) {
-        if (t.kategoriId != null) {
-          final kat = await (db.select(db.tabelKategori)
-                ..where((k) => k.id.equals(t.kategoriId!)))
-              .getSingleOrNull();
-          if (kat != null && (kat.sifat == 'kebutuhan' || kat.sifat == 'utang')) {
-            daftarWajib.add(ItemPengeluaranWajib(
-              jumlahRupiah: t.jumlahRupiah,
-              sifat: kat.sifat,
-              waktu: t.waktuTransaksi,
-            ));
+          if (semuaTujuan.isEmpty) {
+            return formatRingkasanTujuanTabungan(
+              tujuan: null,
+              waktuSekarang: waktuSekarang,
+            );
           }
-        }
-      }
 
-      final hasilWajib = hitungPengeluaranWajibBulanan(
-        daftarPengeluaran: daftarWajib,
-        waktuSekarang: waktuSekarang,
-      );
+          final daftarTujuan = <DataTujuanTabunganUmpanBalik>[];
+          for (final t in semuaTujuan) {
+            final kantongList =
+                await (db.select(db.tabelKantong)..where(
+                      (k) =>
+                          k.tujuanId.equals(t.id) & k.diarsipkan.equals(false),
+                    ))
+                    .get();
 
-      return formatTeksPengeluaranWajibBulanan(hasilWajib);
-
-    case 'target_dana_darurat':
-      final semuaTransaksiKeluarTarget = await (db.select(db.tabelTransaksi)
-            ..where((t) => t.jenis.equals('keluar')))
-          .get();
-
-      final daftarWajibTarget = <ItemPengeluaranWajib>[];
-      for (final t in semuaTransaksiKeluarTarget) {
-        if (t.kategoriId != null) {
-          final kat = await (db.select(db.tabelKategori)
-                ..where((k) => k.id.equals(t.kategoriId!)))
-              .getSingleOrNull();
-          if (kat != null && (kat.sifat == 'kebutuhan' || kat.sifat == 'utang')) {
-            daftarWajibTarget.add(ItemPengeluaranWajib(
-              jumlahRupiah: t.jumlahRupiah,
-              sifat: kat.sifat,
-              waktu: t.waktuTransaksi,
-            ));
-          }
-        }
-      }
-
-      final hasilWajibTarget = hitungPengeluaranWajibBulanan(
-        daftarPengeluaran: daftarWajibTarget,
-        waktuSekarang: waktuSekarang,
-      );
-
-      return formatTargetDanaDarurat(pengeluaranWajib: hasilWajibTarget);
-
-    case 'progres_dana_darurat':
-      final tujuanDaruratRow = await (db.select(db.tabelTujuan)
-            ..where((t) => t.status.equals('aktif') & t.jenis.equals('dana_darurat'))
-            ..limit(1))
-          .getSingleOrNull();
-
-      DataTujuanDanaDaruratUmpanBalik? tujuanDarurat;
-      if (tujuanDaruratRow != null) {
-        final kantongList = await (db.select(db.tabelKantong)
-              ..where((k) => k.tujuanId.equals(tujuanDaruratRow.id) & k.diarsipkan.equals(false)))
-            .get();
-
-        var saldo = 0;
-        for (final k in kantongList) {
-          final alokasi = await (db.select(db.tabelAlokasiKantong)
-                ..where((a) => a.kantongId.equals(k.id)))
-              .get();
-          for (final a in alokasi) {
-            if (a.jenis == 'isi') {
-              saldo += a.jumlahRupiah;
-            } else if (a.jenis == 'ambil') {
-              saldo -= a.jumlahRupiah;
+            var saldo = 0;
+            for (final k in kantongList) {
+              final alokasi = await (db.select(
+                db.tabelAlokasiKantong,
+              )..where((a) => a.kantongId.equals(k.id))).get();
+              for (final a in alokasi) {
+                if (a.jenis == 'isi') {
+                  saldo += a.jumlahRupiah;
+                } else if (a.jenis == 'ambil') {
+                  saldo -= a.jumlahRupiah;
+                }
+              }
             }
-          }
-        }
 
-        tujuanDarurat = DataTujuanDanaDaruratUmpanBalik(
-          danaTerkumpul: saldo,
-          targetRupiah: tujuanDaruratRow.targetRupiah,
-        );
-      }
-
-      final semuaTransaksiKeluarProgres = await (db.select(db.tabelTransaksi)
-            ..where((t) => t.jenis.equals('keluar')))
-          .get();
-
-      final daftarWajibProgres = <ItemPengeluaranWajib>[];
-      for (final t in semuaTransaksiKeluarProgres) {
-        if (t.kategoriId != null) {
-          final kat = await (db.select(db.tabelKategori)
-                ..where((k) => k.id.equals(t.kategoriId!)))
-              .getSingleOrNull();
-          if (kat != null && (kat.sifat == 'kebutuhan' || kat.sifat == 'utang')) {
-            daftarWajibProgres.add(ItemPengeluaranWajib(
-              jumlahRupiah: t.jumlahRupiah,
-              sifat: kat.sifat,
-              waktu: t.waktuTransaksi,
-            ));
-          }
-        }
-      }
-
-      final hasilWajibProgres = hitungPengeluaranWajibBulanan(
-        daftarPengeluaran: daftarWajibProgres,
-        waktuSekarang: waktuSekarang,
-      );
-
-      final w = hasilWajibProgres.total > 0 ? hasilWajibProgres.total : null;
-      return formatProgresDanaDarurat(
-        tujuan: tujuanDarurat,
-        pengeluaranWajibPerBulan: w,
-      );
-
-    case 'ringkasan_utang':
-      final repoUtang = ref.watch(penyediaUtangRepositori);
-      final daftarUtang = await repoUtang.ambilDaftarUtangUmpanBalik();
-      final pernyataan = await (db.select(db.tabelPernyataan)
-            ..where((p) => p.kunci.equals('tidak_punya_utang') & p.nilai.equals('true')))
-          .getSingleOrNull();
-      final semuaTx = await db.select(db.tabelTransaksi).get();
-      final pemasukan = hitungPemasukanBulananRataRata(
-        daftarTransaksi: semuaTx,
-        waktuSekarang: waktuSekarang,
-      );
-      return formatRingkasanUtang(
-        daftarUtang: daftarUtang,
-        pemasukan: pemasukan,
-        tidakPunyaUtang: pernyataan != null,
-      );
-
-    case 'biaya_pinjaman_tercatat':
-      final repoUtang = ref.watch(penyediaUtangRepositori);
-      final daftarUtang = await repoUtang.ambilDaftarUtangUmpanBalik();
-      final pernyataan = await (db.select(db.tabelPernyataan)
-            ..where((p) => p.kunci.equals('tidak_punya_utang') & p.nilai.equals('true')))
-          .getSingleOrNull();
-      return formatBiayaPinjamanTercatat(
-        daftarUtang: daftarUtang,
-        tidakPunyaUtang: pernyataan != null,
-      );
-
-    case 'rasio_cicilan_bulan_ini':
-      final repoUtang = ref.watch(penyediaUtangRepositori);
-      final daftarUtang = await repoUtang.ambilDaftarUtangUmpanBalik();
-      final totalCicilan = daftarUtang.fold<int>(0, (prev, u) => prev + u.cicilanBulananRupiah);
-      final semuaTx = await db.select(db.tabelTransaksi).get();
-      final pemasukan = hitungPemasukanBulananRataRata(
-        daftarTransaksi: semuaTx,
-        waktuSekarang: waktuSekarang,
-      );
-      return formatRasioCicilanBulanIni(
-        totalCicilanBulanan: totalCicilan,
-        pemasukan: pemasukan,
-      );
-
-    case 'urutan_pelunasan':
-      final repoUtang = ref.watch(penyediaUtangRepositori);
-      final daftarUtang = await repoUtang.ambilDaftarUtangUmpanBalik();
-      final pernyataan = await (db.select(db.tabelPernyataan)
-            ..where((p) => p.kunci.equals('tidak_punya_utang') & p.nilai.equals('true')))
-          .getSingleOrNull();
-      return formatUrutanPelunasan(
-        daftarUtang: daftarUtang,
-        tidakPunyaUtang: pernyataan != null,
-      );
-
-    case 'ringkasan_langganan_dan_keinginan':
-      final semuaTagihan = await db.select(db.tabelTagihan).get();
-      final daftarTagihan = semuaTagihan
-          .map((t) => ItemLanggananUmpanBalik(
+            daftarTujuan.add(
+              DataTujuanTabunganUmpanBalik(
                 nama: t.nama,
+                danaTerkumpul: saldo,
+                targetRupiah: t.targetRupiah,
+                tenggat: t.tenggat,
+                dibuatPada: t.dibuatPada,
+              ),
+            );
+          }
+
+          final tujuanTerpilih = pilihTujuanTabunganUmpanBalik(daftarTujuan);
+          return formatRingkasanTujuanTabungan(
+            tujuan: tujuanTerpilih,
+            waktuSekarang: waktuSekarang,
+          );
+
+        case 'estimasi_tabungan':
+          final semuaTujuanEst =
+              await (db.select(db.tabelTujuan)..where(
+                    (t) =>
+                        t.status.equals('aktif') & t.jenis.equals('tabungan'),
+                  ))
+                  .get();
+
+          if (semuaTujuanEst.isEmpty) {
+            return formatEstimasiTabungan(tujuan: null, setoranRataRata: 0);
+          }
+
+          final mapIdToData = <String, DataTujuanTabunganUmpanBalik>{};
+          for (final t in semuaTujuanEst) {
+            final kantongList =
+                await (db.select(db.tabelKantong)..where(
+                      (k) =>
+                          k.tujuanId.equals(t.id) & k.diarsipkan.equals(false),
+                    ))
+                    .get();
+
+            var saldo = 0;
+            for (final k in kantongList) {
+              final alokasi = await (db.select(
+                db.tabelAlokasiKantong,
+              )..where((a) => a.kantongId.equals(k.id))).get();
+              for (final a in alokasi) {
+                if (a.jenis == 'isi') {
+                  saldo += a.jumlahRupiah;
+                } else if (a.jenis == 'ambil') {
+                  saldo -= a.jumlahRupiah;
+                }
+              }
+            }
+
+            mapIdToData[t.id] = DataTujuanTabunganUmpanBalik(
+              nama: t.nama,
+              danaTerkumpul: saldo,
+              targetRupiah: t.targetRupiah,
+              tenggat: t.tenggat,
+              dibuatPada: t.dibuatPada,
+            );
+          }
+
+          final terpilih = pilihTujuanTabunganUmpanBalik(
+            mapIdToData.values.toList(),
+          );
+          if (terpilih == null) {
+            return 'Belum ada tujuan tabungan.';
+          }
+
+          final idTerpilih = mapIdToData.entries
+              .firstWhere((e) => e.value.nama == terpilih.nama)
+              .key;
+          final kantongTerpilih = await (db.select(
+            db.tabelKantong,
+          )..where((k) => k.tujuanId.equals(idTerpilih))).get();
+
+          final alokasiList = <EntitasAlokasiSimpel>[];
+          for (final k in kantongTerpilih) {
+            final alokasi = await (db.select(
+              db.tabelAlokasiKantong,
+            )..where((a) => a.kantongId.equals(k.id))).get();
+            for (final a in alokasi) {
+              alokasiList.add(
+                EntitasAlokasiSimpel(
+                  jenis: a.jenis,
+                  jumlahRupiah: a.jumlahRupiah,
+                  waktu: a.waktu,
+                ),
+              );
+            }
+          }
+
+          final setoranRata = hitungRataRataSetoranTabungan(
+            daftarAlokasi: alokasiList,
+            waktuSekarang: waktuSekarang,
+          );
+
+          return formatEstimasiTabungan(
+            tujuan: terpilih,
+            setoranRataRata: setoranRata,
+          );
+
+        case 'pengeluaran_wajib_bulanan':
+          final semuaTransaksiKeluar = await (db.select(
+            db.tabelTransaksi,
+          )..where((t) => t.jenis.equals('keluar'))).get();
+
+          final daftarWajib = <ItemPengeluaranWajib>[];
+          for (final t in semuaTransaksiKeluar) {
+            if (t.kategoriId != null) {
+              final kat = await (db.select(
+                db.tabelKategori,
+              )..where((k) => k.id.equals(t.kategoriId!))).getSingleOrNull();
+              if (kat != null &&
+                  (kat.sifat == 'kebutuhan' || kat.sifat == 'utang')) {
+                daftarWajib.add(
+                  ItemPengeluaranWajib(
+                    jumlahRupiah: t.jumlahRupiah,
+                    sifat: kat.sifat,
+                    waktu: t.waktuTransaksi,
+                  ),
+                );
+              }
+            }
+          }
+
+          final hasilWajib = hitungPengeluaranWajibBulanan(
+            daftarPengeluaran: daftarWajib,
+            waktuSekarang: waktuSekarang,
+          );
+
+          return formatTeksPengeluaranWajibBulanan(hasilWajib);
+
+        case 'target_dana_darurat':
+          final semuaTransaksiKeluarTarget = await (db.select(
+            db.tabelTransaksi,
+          )..where((t) => t.jenis.equals('keluar'))).get();
+
+          final daftarWajibTarget = <ItemPengeluaranWajib>[];
+          for (final t in semuaTransaksiKeluarTarget) {
+            if (t.kategoriId != null) {
+              final kat = await (db.select(
+                db.tabelKategori,
+              )..where((k) => k.id.equals(t.kategoriId!))).getSingleOrNull();
+              if (kat != null &&
+                  (kat.sifat == 'kebutuhan' || kat.sifat == 'utang')) {
+                daftarWajibTarget.add(
+                  ItemPengeluaranWajib(
+                    jumlahRupiah: t.jumlahRupiah,
+                    sifat: kat.sifat,
+                    waktu: t.waktuTransaksi,
+                  ),
+                );
+              }
+            }
+          }
+
+          final hasilWajibTarget = hitungPengeluaranWajibBulanan(
+            daftarPengeluaran: daftarWajibTarget,
+            waktuSekarang: waktuSekarang,
+          );
+
+          return formatTargetDanaDarurat(pengeluaranWajib: hasilWajibTarget);
+
+        case 'progres_dana_darurat':
+          final tujuanDaruratRow =
+              await (db.select(db.tabelTujuan)
+                    ..where(
+                      (t) =>
+                          t.status.equals('aktif') &
+                          t.jenis.equals('dana_darurat'),
+                    )
+                    ..limit(1))
+                  .getSingleOrNull();
+
+          DataTujuanDanaDaruratUmpanBalik? tujuanDarurat;
+          if (tujuanDaruratRow != null) {
+            final kantongList =
+                await (db.select(db.tabelKantong)..where(
+                      (k) =>
+                          k.tujuanId.equals(tujuanDaruratRow.id) &
+                          k.diarsipkan.equals(false),
+                    ))
+                    .get();
+
+            var saldo = 0;
+            for (final k in kantongList) {
+              final alokasi = await (db.select(
+                db.tabelAlokasiKantong,
+              )..where((a) => a.kantongId.equals(k.id))).get();
+              for (final a in alokasi) {
+                if (a.jenis == 'isi') {
+                  saldo += a.jumlahRupiah;
+                } else if (a.jenis == 'ambil') {
+                  saldo -= a.jumlahRupiah;
+                }
+              }
+            }
+
+            tujuanDarurat = DataTujuanDanaDaruratUmpanBalik(
+              danaTerkumpul: saldo,
+              targetRupiah: tujuanDaruratRow.targetRupiah,
+            );
+          }
+
+          final semuaTransaksiKeluarProgres = await (db.select(
+            db.tabelTransaksi,
+          )..where((t) => t.jenis.equals('keluar'))).get();
+
+          final daftarWajibProgres = <ItemPengeluaranWajib>[];
+          for (final t in semuaTransaksiKeluarProgres) {
+            if (t.kategoriId != null) {
+              final kat = await (db.select(
+                db.tabelKategori,
+              )..where((k) => k.id.equals(t.kategoriId!))).getSingleOrNull();
+              if (kat != null &&
+                  (kat.sifat == 'kebutuhan' || kat.sifat == 'utang')) {
+                daftarWajibProgres.add(
+                  ItemPengeluaranWajib(
+                    jumlahRupiah: t.jumlahRupiah,
+                    sifat: kat.sifat,
+                    waktu: t.waktuTransaksi,
+                  ),
+                );
+              }
+            }
+          }
+
+          final hasilWajibProgres = hitungPengeluaranWajibBulanan(
+            daftarPengeluaran: daftarWajibProgres,
+            waktuSekarang: waktuSekarang,
+          );
+
+          final w = hasilWajibProgres.total > 0
+              ? hasilWajibProgres.total
+              : null;
+          return formatProgresDanaDarurat(
+            tujuan: tujuanDarurat,
+            pengeluaranWajibPerBulan: w,
+          );
+
+        case 'ringkasan_utang':
+          final repoUtang = ref.watch(penyediaUtangRepositori);
+          final daftarUtang = await repoUtang.ambilDaftarUtangUmpanBalik();
+          final pernyataan =
+              await (db.select(db.tabelPernyataan)..where(
+                    (p) =>
+                        p.kunci.equals('tidak_punya_utang') &
+                        p.nilai.equals('true'),
+                  ))
+                  .getSingleOrNull();
+          final semuaTx = await db.select(db.tabelTransaksi).get();
+          final pemasukan = hitungPemasukanBulananRataRata(
+            daftarTransaksi: semuaTx,
+            waktuSekarang: waktuSekarang,
+          );
+          return formatRingkasanUtang(
+            daftarUtang: daftarUtang,
+            pemasukan: pemasukan,
+            tidakPunyaUtang: pernyataan != null,
+          );
+
+        case 'biaya_pinjaman_tercatat':
+          final repoUtang = ref.watch(penyediaUtangRepositori);
+          final daftarUtang = await repoUtang.ambilDaftarUtangUmpanBalik();
+          final pernyataan =
+              await (db.select(db.tabelPernyataan)..where(
+                    (p) =>
+                        p.kunci.equals('tidak_punya_utang') &
+                        p.nilai.equals('true'),
+                  ))
+                  .getSingleOrNull();
+          return formatBiayaPinjamanTercatat(
+            daftarUtang: daftarUtang,
+            tidakPunyaUtang: pernyataan != null,
+          );
+
+        case 'rasio_cicilan_bulan_ini':
+          final repoUtang = ref.watch(penyediaUtangRepositori);
+          final daftarUtang = await repoUtang.ambilDaftarUtangUmpanBalik();
+          final totalCicilan = daftarUtang.fold<int>(
+            0,
+            (prev, u) => prev + u.cicilanBulananRupiah,
+          );
+          final semuaTx = await db.select(db.tabelTransaksi).get();
+          final pemasukan = hitungPemasukanBulananRataRata(
+            daftarTransaksi: semuaTx,
+            waktuSekarang: waktuSekarang,
+          );
+          return formatRasioCicilanBulanIni(
+            totalCicilanBulanan: totalCicilan,
+            pemasukan: pemasukan,
+          );
+
+        case 'urutan_pelunasan':
+          final repoUtang = ref.watch(penyediaUtangRepositori);
+          final daftarUtang = await repoUtang.ambilDaftarUtangUmpanBalik();
+          final pernyataan =
+              await (db.select(db.tabelPernyataan)..where(
+                    (p) =>
+                        p.kunci.equals('tidak_punya_utang') &
+                        p.nilai.equals('true'),
+                  ))
+                  .getSingleOrNull();
+          return formatUrutanPelunasan(
+            daftarUtang: daftarUtang,
+            tidakPunyaUtang: pernyataan != null,
+          );
+
+        case 'ringkasan_langganan_dan_keinginan':
+          final semuaTagihan = await db.select(db.tabelTagihan).get();
+          final daftarTagihan = semuaTagihan
+              .map(
+                (t) => ItemLanggananUmpanBalik(
+                  nama: t.nama,
+                  jenis: t.jenis,
+                  frekuensi: t.frekuensi,
+                  jumlahPerkiraanRupiah: t.jumlahPerkiraanRupiah,
+                  aktif: t.aktif,
+                  diarsipkan: t.diarsipkan,
+                ),
+              )
+              .toList();
+
+          final semuaKategori = await db.select(db.tabelKategori).get();
+          final petaSifatKategori = {
+            for (final k in semuaKategori) k.id: k.sifat,
+          };
+
+          final sekarangLokal = waktuSekarang.toLocal();
+          final awalBulan = DateTime(
+            sekarangLokal.year,
+            sekarangLokal.month,
+            1,
+          );
+          final akhirBulan = DateTime(
+            sekarangLokal.year,
+            sekarangLokal.month + 1,
+            1,
+          );
+
+          final txBulanIni =
+              await (db.select(db.tabelTransaksi)..where(
+                    (t) =>
+                        (t.jenis.equals('keluar') |
+                            t.jenis.equals('pengeluaran')) &
+                        t.waktuTransaksi.isBiggerOrEqualValue(awalBulan) &
+                        t.waktuTransaksi.isSmallerThanValue(akhirBulan),
+                  ))
+                  .get();
+
+          var totalKeinginan = 0;
+          for (final tx in txBulanIni) {
+            if (tx.kategoriId != null &&
+                petaSifatKategori[tx.kategoriId] == 'keinginan') {
+              totalKeinginan += tx.jumlahRupiah;
+            }
+          }
+
+          return formatRingkasanLanggananDanKeinginan(
+            daftarTagihan: daftarTagihan,
+            totalKeinginanBulanIniRupiah: totalKeinginan,
+          );
+
+        case 'ringkasan_proteksi_dasar':
+          final tujuanDaruratRow =
+              await (db.select(db.tabelTujuan)
+                    ..where(
+                      (t) =>
+                          t.jenis.equals('dana_darurat') &
+                          (t.status.equals('aktif') |
+                              t.status.equals('tercapai')),
+                    )
+                    ..limit(1))
+                  .getSingleOrNull();
+
+          var danaDaruratTerkumpul = 0;
+          if (tujuanDaruratRow != null) {
+            final kantongList =
+                await (db.select(db.tabelKantong)..where(
+                      (k) =>
+                          k.tujuanId.equals(tujuanDaruratRow.id) &
+                          k.diarsipkan.equals(false),
+                    ))
+                    .get();
+
+            for (final k in kantongList) {
+              final alokasi = await (db.select(
+                db.tabelAlokasiKantong,
+              )..where((a) => a.kantongId.equals(k.id))).get();
+              for (final a in alokasi) {
+                if (a.jenis == 'isi') {
+                  danaDaruratTerkumpul += a.jumlahRupiah;
+                } else if (a.jenis == 'ambil') {
+                  danaDaruratTerkumpul -= a.jumlahRupiah;
+                }
+              }
+            }
+            if (danaDaruratTerkumpul < 0) {
+              danaDaruratTerkumpul = 0;
+            }
+          }
+
+          final semuaTransaksiKeluar =
+              await (db.select(db.tabelTransaksi)..where(
+                    (t) =>
+                        t.jenis.equals('keluar') |
+                        t.jenis.equals('pengeluaran'),
+                  ))
+                  .get();
+
+          final semuaKategori = await db.select(db.tabelKategori).get();
+          final petaSifatKategori = {
+            for (final k in semuaKategori) k.id: k.sifat,
+          };
+
+          final daftarWajib = <ItemPengeluaranWajib>[];
+          for (final t in semuaTransaksiKeluar) {
+            if (t.kategoriId != null) {
+              final sifat = petaSifatKategori[t.kategoriId];
+              if (sifat == 'kebutuhan' || sifat == 'utang') {
+                daftarWajib.add(
+                  ItemPengeluaranWajib(
+                    jumlahRupiah: t.jumlahRupiah,
+                    sifat: sifat!,
+                    waktu: t.waktuTransaksi,
+                  ),
+                );
+              }
+            }
+          }
+
+          final hasilWajib = hitungPengeluaranWajibBulanan(
+            daftarPengeluaran: daftarWajib,
+            waktuSekarang: waktuSekarang,
+          );
+
+          final String dasarStr;
+          if (hasilWajib.dasar == DasarPengeluaranWajib.tigaBulanTerakhir) {
+            dasarStr = 'rata-rata 3 bulan terakhir';
+          } else {
+            dasarStr = 'bulan ini';
+          }
+
+          return formatRingkasanProteksiDasar(
+            pengeluaranWajibBulananRupiah: hasilWajib.total,
+            dasarPengeluaranWajib: dasarStr,
+            danaDaruratTerkumpul: danaDaruratTerkumpul,
+          );
+
+        case 'ringkasan_pemasukan_tambahan':
+          final db = ref.read(penyediaBasisData);
+          final waktuSekarang = DateTime.now();
+          final awalBulan = DateTime(
+            waktuSekarang.year,
+            waktuSekarang.month,
+            1,
+          );
+          final akhirBulan = DateTime(
+            waktuSekarang.year,
+            waktuSekarang.month + 1,
+            1,
+          );
+
+          final txMasukBulanIni =
+              await (db.select(db.tabelTransaksi)..where(
+                    (t) =>
+                        t.jenis.equals('masuk') &
+                        t.waktuTransaksi.isBiggerOrEqualValue(awalBulan) &
+                        t.waktuTransaksi.isSmallerThanValue(akhirBulan),
+                  ))
+                  .get();
+
+          final semuaKategori = await db.select(db.tabelKategori).get();
+          final petaNamaKategori = {
+            for (final k in semuaKategori) k.id: k.nama,
+          };
+
+          final petaPemasukan = <String, int>{};
+          for (final tx in txMasukBulanIni) {
+            final namaKat =
+                (tx.kategoriId != null
+                    ? petaNamaKategori[tx.kategoriId]
+                    : null) ??
+                'Lainnya';
+            petaPemasukan[namaKat] =
+                (petaPemasukan[namaKat] ?? 0) + tx.jumlahRupiah;
+          }
+
+          final pernyataan =
+              await (db.select(db.tabelPernyataan)
+                    ..where((p) => p.kunci.equals('baru_satu_sumber')))
+                  .getSingleOrNull();
+          final baruSatuSumber =
+              pernyataan != null && pernyataan.nilai == 'true';
+
+          return formatRingkasanPemasukanTambahan(
+            petaPemasukanPerKategori: petaPemasukan,
+            baruSatuSumber: baruSatuSumber,
+          );
+
+        case 'ringkasan_penghasilan_tahunan':
+          final db = ref.read(penyediaBasisData);
+          final waktuSekarang = DateTime.now();
+          final awalTahun = DateTime(waktuSekarang.year, 1, 1);
+          final akhirTahun = DateTime(waktuSekarang.year + 1, 1, 1);
+
+          final txMasukTahunIni =
+              await (db.select(db.tabelTransaksi)..where(
+                    (t) =>
+                        t.jenis.equals('masuk') &
+                        t.waktuTransaksi.isBiggerOrEqualValue(awalTahun) &
+                        t.waktuTransaksi.isSmallerThanValue(akhirTahun),
+                  ))
+                  .get();
+
+          var totalTahunIni = 0;
+          final bulanSet = <int>{};
+          for (final tx in txMasukTahunIni) {
+            totalTahunIni += tx.jumlahRupiah;
+            bulanSet.add(tx.waktuTransaksi.month);
+          }
+
+          return formatRingkasanPenghasilanTahunan(
+            totalPemasukanTahunIni: totalTahunIni,
+            jumlahBulanTercatat: bulanSet.length,
+          );
+
+        case 'ringkasan_tujuan_besar':
+          final db = ref.read(penyediaBasisData);
+          final semuaTujuan =
+              await (db.select(db.tabelTujuan)..where(
+                    (t) =>
+                        t.status.equals('aktif') &
+                        t.jenis.isNotIn(['dana_darurat']),
+                  ))
+                  .get();
+
+          final waktuSekarang = DateTime.now();
+          final daftarTujuan = <DataTujuanBesarUmpanBalik>[];
+          for (final t in semuaTujuan) {
+            final kantongList =
+                await (db.select(db.tabelKantong)..where(
+                      (k) =>
+                          k.tujuanId.equals(t.id) & k.diarsipkan.equals(false),
+                    ))
+                    .get();
+
+            var saldo = 0;
+            for (final k in kantongList) {
+              final alokasi = await (db.select(
+                db.tabelAlokasiKantong,
+              )..where((a) => a.kantongId.equals(k.id))).get();
+              for (final a in alokasi) {
+                if (a.jenis == 'isi') {
+                  saldo += a.jumlahRupiah;
+                } else if (a.jenis == 'ambil') {
+                  saldo -= a.jumlahRupiah;
+                }
+              }
+            }
+
+            int? bulanTersisa;
+            if (t.tenggat != null) {
+              bulanTersisa = hitungBulanTersisa(t.tenggat!, waktuSekarang);
+            }
+
+            daftarTujuan.add(
+              DataTujuanBesarUmpanBalik(
+                nama: t.nama,
+                targetRupiah: t.targetRupiah,
+                danaTerkumpulRupiah: saldo,
+                bulanTersisa: bulanTersisa,
                 jenis: t.jenis,
-                frekuensi: t.frekuensi,
-                jumlahPerkiraanRupiah: t.jumlahPerkiraanRupiah,
-                aktif: t.aktif,
-                diarsipkan: t.diarsipkan,
-              ))
-          .toList();
+                dibuatPada: t.dibuatPada,
+                tenggat: t.tenggat,
+              ),
+            );
+          }
 
-      final semuaKategori = await db.select(db.tabelKategori).get();
-      final petaSifatKategori = {for (final k in semuaKategori) k.id: k.sifat};
+          final terpilih = pilihTujuanBesarUmpanBalik(daftarTujuan);
+          return formatRingkasanTujuanBesar(tujuan: terpilih);
 
-      final sekarangLokal = waktuSekarang.toLocal();
-      final awalBulan = DateTime(sekarangLokal.year, sekarangLokal.month, 1);
-      final akhirBulan = DateTime(sekarangLokal.year, sekarangLokal.month + 1, 1);
+        case 'uji_kemampuan_kpr':
+          final repoTx = ref.read(penyediaTransaksiRepositori);
+          final waktuSekarang = DateTime.now();
+          final pemasukan = await repoTx.hitungPemasukanRataRataSQL(
+            waktuSekarang: waktuSekarang,
+          );
 
-      final txBulanIni = await (db.select(db.tabelTransaksi)
-            ..where((t) =>
-                (t.jenis.equals('keluar') | t.jenis.equals('pengeluaran')) &
-                t.waktuTransaksi.isBiggerOrEqualValue(awalBulan) &
-                t.waktuTransaksi.isSmallerThanValue(akhirBulan)))
-          .get();
+          final repoUtang = ref.read(penyediaUtangRepositori);
+          final daftarUtang = await repoUtang.ambilDaftarUtangUmpanBalik();
+          final totalCicilan = daftarUtang.fold<int>(
+            0,
+            (prev, u) => prev + u.cicilanBulananRupiah,
+          );
 
-      var totalKeinginan = 0;
-      for (final tx in txBulanIni) {
-        if (tx.kategoriId != null && petaSifatKategori[tx.kategoriId] == 'keinginan') {
-          totalKeinginan += tx.jumlahRupiah;
-        }
-      }
+          final totalSaldo = ref.watch(penyediaTotalSaldoAktif);
 
-      return formatRingkasanLanggananDanKeinginan(
-        daftarTagihan: daftarTagihan,
-        totalKeinginanBulanIniRupiah: totalKeinginan,
-      );
+          return formatUjiKemampuanKpr(
+            pemasukanRataRata: pemasukan,
+            totalCicilanAktifRupiah: totalCicilan,
+            totalSaldoDompetAktifRupiah: totalSaldo,
+          );
 
-    case 'ringkasan_proteksi_dasar':
-      final tujuanDaruratRow = await (db.select(db.tabelTujuan)
-            ..where((t) =>
-                t.jenis.equals('dana_darurat') &
-                (t.status.equals('aktif') | t.status.equals('tercapai')))
-            ..limit(1))
-          .getSingleOrNull();
+        case 'proyeksi_kebebasan_finansial':
+          final semuaTransaksiKeluar =
+              await (db.select(db.tabelTransaksi)..where(
+                    (t) =>
+                        t.jenis.equals('keluar') |
+                        t.jenis.equals('pengeluaran'),
+                  ))
+                  .get();
 
-      var danaDaruratTerkumpul = 0;
-      if (tujuanDaruratRow != null) {
-        final kantongList = await (db.select(db.tabelKantong)
-              ..where((k) =>
-                  k.tujuanId.equals(tujuanDaruratRow.id) &
-                  k.diarsipkan.equals(false)))
-            .get();
+          final semuaKategori = await db.select(db.tabelKategori).get();
+          final petaSifatKategori = {
+            for (final k in semuaKategori) k.id: k.sifat,
+          };
 
-        for (final k in kantongList) {
-          final alokasi = await (db.select(db.tabelAlokasiKantong)
-                ..where((a) => a.kantongId.equals(k.id)))
-              .get();
-          for (final a in alokasi) {
-            if (a.jenis == 'isi') {
-              danaDaruratTerkumpul += a.jumlahRupiah;
-            } else if (a.jenis == 'ambil') {
-              danaDaruratTerkumpul -= a.jumlahRupiah;
+          final daftarWajib = <ItemPengeluaranWajib>[];
+          for (final t in semuaTransaksiKeluar) {
+            if (t.kategoriId != null) {
+              final sifat = petaSifatKategori[t.kategoriId];
+              if (sifat == 'kebutuhan' || sifat == 'utang') {
+                daftarWajib.add(
+                  ItemPengeluaranWajib(
+                    jumlahRupiah: t.jumlahRupiah,
+                    sifat: sifat!,
+                    waktu: t.waktuTransaksi,
+                  ),
+                );
+              }
             }
           }
-        }
-        if (danaDaruratTerkumpul < 0) {
-          danaDaruratTerkumpul = 0;
-        }
-      }
 
-      final semuaTransaksiKeluar = await (db.select(db.tabelTransaksi)
-            ..where((t) =>
-                t.jenis.equals('keluar') | t.jenis.equals('pengeluaran')))
-          .get();
+          final hasilWajib = hitungPengeluaranWajibBulanan(
+            daftarPengeluaran: daftarWajib,
+            waktuSekarang: waktuSekarang,
+          );
 
-      final semuaKategori = await db.select(db.tabelKategori).get();
-      final petaSifatKategori = {for (final k in semuaKategori) k.id: k.sifat};
-
-      final daftarWajib = <ItemPengeluaranWajib>[];
-      for (final t in semuaTransaksiKeluar) {
-        if (t.kategoriId != null) {
-          final sifat = petaSifatKategori[t.kategoriId];
-          if (sifat == 'kebutuhan' || sifat == 'utang') {
-            daftarWajib.add(ItemPengeluaranWajib(
-              jumlahRupiah: t.jumlahRupiah,
-              sifat: sifat!,
-              waktu: t.waktuTransaksi,
-            ));
+          final String dasarStr;
+          if (hasilWajib.dasar == DasarPengeluaranWajib.tigaBulanTerakhir) {
+            dasarStr = 'rata-rata 3 bulan terakhir';
+          } else {
+            dasarStr = 'bulan ini';
           }
-        }
+
+          final totalSaldo = ref.watch(penyediaTotalSaldoAktif);
+          final repoUtang = ref.read(penyediaUtangRepositori);
+          final totalUtang = await repoUtang.hitungTotalSisaUtangAktifSQL();
+          final kekayaanBersih = hitungKekayaanBersih(
+            totalSaldoDompetAktifRupiah: totalSaldo,
+            totalSisaUtangRupiah: totalUtang,
+          );
+
+          return formatProyeksiKebebasanFinansial(
+            pengeluaranWajibBulananRupiah: hasilWajib.total,
+            dasarPengeluaranWajib: dasarStr,
+            kekayaanBersihRupiah: kekayaanBersih,
+          );
+
+        case 'ringkasan_usaha_kecil':
+          final daftarDompetAktif = await (db.select(
+            db.tabelDompet,
+          )..where((d) => d.diarsipkan.equals(false))).get();
+          final jumlahDompetAktif = daftarDompetAktif.length;
+
+          final arusKas = ref.watch(penyediaArusKasBulanIni);
+          final totalPemasukanBulanIniRupiah = arusKas.totalMasuk;
+          final totalPengeluaranBulanIniRupiah = arusKas.totalKeluar;
+
+          final pernyataan =
+              await (db.select(db.tabelPernyataan)
+                    ..where((p) => p.kunci.equals('belum_punya_usaha')))
+                  .getSingleOrNull();
+          final belumPunyaUsaha =
+              pernyataan != null && pernyataan.nilai == 'true';
+
+          return RegistriUmpanBalik.formatRingkasanUsahaKecilMisi(
+            jumlahDompetAktif: jumlahDompetAktif,
+            totalPemasukanBulanIniRupiah: totalPemasukanBulanIniRupiah,
+            totalPengeluaranBulanIniRupiah: totalPengeluaranBulanIniRupiah,
+            belumPunyaUsaha: belumPunyaUsaha,
+          );
+
+        case 'arus_kas_bulan_ini':
+        default:
+          final arusKas = ref.watch(penyediaArusKasBulanIni);
+          return RegistriUmpanBalik.formatArusKasBulanIni(arusKas);
       }
-
-      final hasilWajib = hitungPengeluaranWajibBulanan(
-        daftarPengeluaran: daftarWajib,
-        waktuSekarang: waktuSekarang,
-      );
-
-      final String dasarStr;
-      if (hasilWajib.dasar == DasarPengeluaranWajib.tigaBulanTerakhir) {
-        dasarStr = 'rata-rata 3 bulan terakhir';
-      } else {
-        dasarStr = 'bulan ini';
-      }
-
-      return formatRingkasanProteksiDasar(
-        pengeluaranWajibBulananRupiah: hasilWajib.total,
-        dasarPengeluaranWajib: dasarStr,
-        danaDaruratTerkumpul: danaDaruratTerkumpul,
-      );
-
-    case 'ringkasan_pemasukan_tambahan':
-      final db = ref.read(penyediaBasisData);
-      final waktuSekarang = DateTime.now();
-      final awalBulan = DateTime(waktuSekarang.year, waktuSekarang.month, 1);
-      final akhirBulan = DateTime(waktuSekarang.year, waktuSekarang.month + 1, 1);
-
-      final txMasukBulanIni = await (db.select(db.tabelTransaksi)
-            ..where((t) =>
-                t.jenis.equals('masuk') &
-                t.waktuTransaksi.isBiggerOrEqualValue(awalBulan) &
-                t.waktuTransaksi.isSmallerThanValue(akhirBulan)))
-          .get();
-
-      final semuaKategori = await db.select(db.tabelKategori).get();
-      final petaNamaKategori = {for (final k in semuaKategori) k.id: k.nama};
-
-      final petaPemasukan = <String, int>{};
-      for (final tx in txMasukBulanIni) {
-        final namaKat = (tx.kategoriId != null ? petaNamaKategori[tx.kategoriId] : null) ?? 'Lainnya';
-        petaPemasukan[namaKat] = (petaPemasukan[namaKat] ?? 0) + tx.jumlahRupiah;
-      }
-
-      final pernyataan = await (db.select(db.tabelPernyataan)
-            ..where((p) => p.kunci.equals('baru_satu_sumber')))
-          .getSingleOrNull();
-      final baruSatuSumber = pernyataan != null && pernyataan.nilai == 'true';
-
-      return formatRingkasanPemasukanTambahan(
-        petaPemasukanPerKategori: petaPemasukan,
-        baruSatuSumber: baruSatuSumber,
-      );
-
-    case 'ringkasan_penghasilan_tahunan':
-      final db = ref.read(penyediaBasisData);
-      final waktuSekarang = DateTime.now();
-      final awalTahun = DateTime(waktuSekarang.year, 1, 1);
-      final akhirTahun = DateTime(waktuSekarang.year + 1, 1, 1);
-
-      final txMasukTahunIni = await (db.select(db.tabelTransaksi)
-            ..where((t) =>
-                t.jenis.equals('masuk') &
-                t.waktuTransaksi.isBiggerOrEqualValue(awalTahun) &
-                t.waktuTransaksi.isSmallerThanValue(akhirTahun)))
-          .get();
-
-      var totalTahunIni = 0;
-      final bulanSet = <int>{};
-      for (final tx in txMasukTahunIni) {
-        totalTahunIni += tx.jumlahRupiah;
-        bulanSet.add(tx.waktuTransaksi.month);
-      }
-
-      return formatRingkasanPenghasilanTahunan(
-        totalPemasukanTahunIni: totalTahunIni,
-        jumlahBulanTercatat: bulanSet.length,
-      );
-
-    case 'ringkasan_tujuan_besar':
-      final db = ref.read(penyediaBasisData);
-      final semuaTujuan = await (db.select(db.tabelTujuan)
-            ..where((t) =>
-                t.status.equals('aktif') & t.jenis.isNotIn(['dana_darurat'])))
-          .get();
-
-      final waktuSekarang = DateTime.now();
-      final daftarTujuan = <DataTujuanBesarUmpanBalik>[];
-      for (final t in semuaTujuan) {
-        final kantongList = await (db.select(db.tabelKantong)
-              ..where((k) =>
-                  k.tujuanId.equals(t.id) & k.diarsipkan.equals(false)))
-            .get();
-
-        var saldo = 0;
-        for (final k in kantongList) {
-          final alokasi = await (db.select(db.tabelAlokasiKantong)
-                ..where((a) => a.kantongId.equals(k.id)))
-              .get();
-          for (final a in alokasi) {
-            if (a.jenis == 'isi') {
-              saldo += a.jumlahRupiah;
-            } else if (a.jenis == 'ambil') {
-              saldo -= a.jumlahRupiah;
-            }
-          }
-        }
-
-        int? bulanTersisa;
-        if (t.tenggat != null) {
-          bulanTersisa = hitungBulanTersisa(t.tenggat!, waktuSekarang);
-        }
-
-        daftarTujuan.add(DataTujuanBesarUmpanBalik(
-          nama: t.nama,
-          targetRupiah: t.targetRupiah,
-          danaTerkumpulRupiah: saldo,
-          bulanTersisa: bulanTersisa,
-          jenis: t.jenis,
-          dibuatPada: t.dibuatPada,
-          tenggat: t.tenggat,
-        ));
-      }
-
-      final terpilih = pilihTujuanBesarUmpanBalik(daftarTujuan);
-      return formatRingkasanTujuanBesar(tujuan: terpilih);
-
-    case 'uji_kemampuan_kpr':
-      final repoTx = ref.read(penyediaTransaksiRepositori);
-      final waktuSekarang = DateTime.now();
-      final pemasukan = await repoTx.hitungPemasukanRataRataSQL(
-        waktuSekarang: waktuSekarang,
-      );
-
-      final repoUtang = ref.read(penyediaUtangRepositori);
-      final daftarUtang = await repoUtang.ambilDaftarUtangUmpanBalik();
-      final totalCicilan = daftarUtang.fold<int>(
-        0,
-        (prev, u) => prev + u.cicilanBulananRupiah,
-      );
-
-      final totalSaldo = ref.watch(penyediaTotalSaldoAktif);
-
-      return formatUjiKemampuanKpr(
-        pemasukanRataRata: pemasukan,
-        totalCicilanAktifRupiah: totalCicilan,
-        totalSaldoDompetAktifRupiah: totalSaldo,
-      );
-
-    case 'proyeksi_kebebasan_finansial':
-      final semuaTransaksiKeluar = await (db.select(db.tabelTransaksi)
-            ..where((t) =>
-                t.jenis.equals('keluar') | t.jenis.equals('pengeluaran')))
-          .get();
-
-      final semuaKategori = await db.select(db.tabelKategori).get();
-      final petaSifatKategori = {for (final k in semuaKategori) k.id: k.sifat};
-
-      final daftarWajib = <ItemPengeluaranWajib>[];
-      for (final t in semuaTransaksiKeluar) {
-        if (t.kategoriId != null) {
-          final sifat = petaSifatKategori[t.kategoriId];
-          if (sifat == 'kebutuhan' || sifat == 'utang') {
-            daftarWajib.add(ItemPengeluaranWajib(
-              jumlahRupiah: t.jumlahRupiah,
-              sifat: sifat!,
-              waktu: t.waktuTransaksi,
-            ));
-          }
-        }
-      }
-
-      final hasilWajib = hitungPengeluaranWajibBulanan(
-        daftarPengeluaran: daftarWajib,
-        waktuSekarang: waktuSekarang,
-      );
-
-      final String dasarStr;
-      if (hasilWajib.dasar == DasarPengeluaranWajib.tigaBulanTerakhir) {
-        dasarStr = 'rata-rata 3 bulan terakhir';
-      } else {
-        dasarStr = 'bulan ini';
-      }
-
-      final totalSaldo = ref.watch(penyediaTotalSaldoAktif);
-      final repoUtang = ref.read(penyediaUtangRepositori);
-      final totalUtang = await repoUtang.hitungTotalSisaUtangAktifSQL();
-      final kekayaanBersih = hitungKekayaanBersih(
-        totalSaldoDompetAktifRupiah: totalSaldo,
-        totalSisaUtangRupiah: totalUtang,
-      );
-
-      return formatProyeksiKebebasanFinansial(
-        pengeluaranWajibBulananRupiah: hasilWajib.total,
-        dasarPengeluaranWajib: dasarStr,
-        kekayaanBersihRupiah: kekayaanBersih,
-      );
-
-    case 'ringkasan_usaha_kecil':
-      final daftarDompetAktif = await (db.select(db.tabelDompet)
-            ..where((d) => d.diarsipkan.equals(false)))
-          .get();
-      final jumlahDompetAktif = daftarDompetAktif.length;
-
-      final arusKas = ref.watch(penyediaArusKasBulanIni);
-      final totalPemasukanBulanIniRupiah = arusKas.totalMasuk;
-      final totalPengeluaranBulanIniRupiah = arusKas.totalKeluar;
-
-      final pernyataan = await (db.select(db.tabelPernyataan)
-            ..where((p) => p.kunci.equals('belum_punya_usaha')))
-          .getSingleOrNull();
-      final belumPunyaUsaha = pernyataan != null && pernyataan.nilai == 'true';
-
-      return RegistriUmpanBalik.formatRingkasanUsahaKecilMisi(
-        jumlahDompetAktif: jumlahDompetAktif,
-        totalPemasukanBulanIniRupiah: totalPemasukanBulanIniRupiah,
-        totalPengeluaranBulanIniRupiah: totalPengeluaranBulanIniRupiah,
-        belumPunyaUsaha: belumPunyaUsaha,
-      );
-
-    case 'arus_kas_bulan_ini':
-    default:
-      final arusKas = ref.watch(penyediaArusKasBulanIni);
-      return RegistriUmpanBalik.formatArusKasBulanIni(arusKas);
-  }
-});
+    });

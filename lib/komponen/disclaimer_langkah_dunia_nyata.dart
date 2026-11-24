@@ -20,7 +20,9 @@ class DisclaimerLangkahDuniaNyata extends StatefulWidget {
   /// Helper untuk memuat teks disclaimer langsung dari rootBundle atau string default.
   static Future<String> muatTeksDisclaimer() async {
     try {
-      final jsonStr = await rootBundle.loadString('aset/konten/disclaimer.json');
+      final jsonStr = await rootBundle.loadString(
+        'aset/konten/disclaimer.json',
+      );
       final data = jsonDecode(jsonStr) as Map<String, dynamic>;
       return data['langkahDuniaNyata'] as String? ?? _teksBawaan;
     } catch (_) {
@@ -35,10 +37,12 @@ class DisclaimerLangkahDuniaNyata extends StatefulWidget {
       'Pastikan penyedia berizin sebelum memakai uangmu.';
 
   @override
-  State<DisclaimerLangkahDuniaNyata> createState() => _DisclaimerLangkahDuniaNyataState();
+  State<DisclaimerLangkahDuniaNyata> createState() =>
+      _DisclaimerLangkahDuniaNyataState();
 }
 
-class _DisclaimerLangkahDuniaNyataState extends State<DisclaimerLangkahDuniaNyata> {
+class _DisclaimerLangkahDuniaNyataState
+    extends State<DisclaimerLangkahDuniaNyata> {
   String _teks = DisclaimerLangkahDuniaNyata._teksBawaan;
   bool _terbuka = true;
 
@@ -65,7 +69,10 @@ class _DisclaimerLangkahDuniaNyataState extends State<DisclaimerLangkahDuniaNyat
     if (!_terbuka && widget.sudahMengerti) {
       return Container(
         margin: const EdgeInsets.only(bottom: SpasiFunda.m),
-        padding: const EdgeInsets.symmetric(horizontal: SpasiFunda.m, vertical: SpasiFunda.s),
+        padding: const EdgeInsets.symmetric(
+          horizontal: SpasiFunda.m,
+          vertical: SpasiFunda.s,
+        ),
         decoration: BoxDecoration(
           color: WarnaFunda.permukaan,
           borderRadius: BorderRadius.circular(SudutFunda.kartu),
@@ -73,15 +80,25 @@ class _DisclaimerLangkahDuniaNyataState extends State<DisclaimerLangkahDuniaNyat
         ),
         child: Row(
           children: [
-            const Icon(LucideIcons.shieldAlert, size: 18, color: WarnaFunda.peringatan),
+            const Icon(
+              LucideIcons.shieldAlert,
+              size: 18,
+              color: WarnaFunda.peringatan,
+            ),
             const SizedBox(width: SpasiFunda.s),
             const Expanded(
-              child: TeksFunda.catatan('Catatan: Langkah Dunia Nyata', warna: WarnaFunda.teks),
+              child: TeksFunda.catatan(
+                'Catatan: Langkah Dunia Nyata',
+                warna: WarnaFunda.teks,
+              ),
             ),
             TextButton(
               style: TextButton.styleFrom(minimumSize: const Size(48, 48)),
               onPressed: () => setState(() => _terbuka = true),
-              child: const TeksFunda.catatan('Baca Ulang', warna: WarnaFunda.utama),
+              child: const TeksFunda.catatan(
+                'Baca Ulang',
+                warna: WarnaFunda.utama,
+              ),
             ),
           ],
         ),
@@ -101,7 +118,11 @@ class _DisclaimerLangkahDuniaNyataState extends State<DisclaimerLangkahDuniaNyat
         children: [
           const Row(
             children: [
-              Icon(LucideIcons.shieldAlert, color: WarnaFunda.peringatan, size: 20),
+              Icon(
+                LucideIcons.shieldAlert,
+                color: WarnaFunda.peringatan,
+                size: 20,
+              ),
               SizedBox(width: SpasiFunda.s),
               Expanded(
                 child: TeksFunda.label(
@@ -130,7 +151,10 @@ class _DisclaimerLangkahDuniaNyataState extends State<DisclaimerLangkahDuniaNyat
                   setState(() => _terbuka = false);
                   widget.padaMengerti?.call();
                 },
-                child: const TeksFunda.label('Mengerti', warna: WarnaFunda.teks),
+                child: const TeksFunda.label(
+                  'Mengerti',
+                  warna: WarnaFunda.teks,
+                ),
               ),
             ),
         ],

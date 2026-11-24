@@ -26,8 +26,8 @@ class IndikatorMemuat extends StatelessWidget {
     this.nilai,
     this.ukuran = 36.0,
     this.ketebalan = 4.0,
-  })  : garis = false,
-        sudut = null;
+  }) : garis = false,
+       sudut = null;
 
   const IndikatorMemuat.lingkar({
     super.key,
@@ -36,8 +36,8 @@ class IndikatorMemuat extends StatelessWidget {
     this.nilai,
     this.ukuran = 36.0,
     this.ketebalan = 4.0,
-  })  : garis = false,
-        sudut = null;
+  }) : garis = false,
+       sudut = null;
 
   const IndikatorMemuat.garis({
     super.key,
@@ -46,9 +46,9 @@ class IndikatorMemuat extends StatelessWidget {
     this.nilai,
     double? tinggi,
     this.sudut,
-  })  : garis = true,
-        ukuran = tinggi ?? 4.0,
-        ketebalan = 4.0;
+  }) : garis = true,
+       ukuran = tinggi ?? 4.0,
+       ketebalan = 4.0;
 
   @override
   Widget build(BuildContext context) {

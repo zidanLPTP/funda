@@ -21,7 +21,9 @@ class PernyataanRepositori {
 
   /// Menyimpan atau memperbarui suatu pernyataan.
   Future<void> simpanPernyataan(String kunci, String nilai) async {
-    await _db.into(_db.tabelPernyataan).insertOnConflictUpdate(
+    await _db
+        .into(_db.tabelPernyataan)
+        .insertOnConflictUpdate(
           TabelPernyataanCompanion.insert(
             kunci: kunci,
             nilai: nilai,
@@ -32,6 +34,8 @@ class PernyataanRepositori {
 
   /// Menghapus atau mencabut suatu pernyataan.
   Future<int> hapusPernyataan(String kunci) {
-    return (_db.delete(_db.tabelPernyataan)..where((p) => p.kunci.equals(kunci))).go();
+    return (_db.delete(
+      _db.tabelPernyataan,
+    )..where((p) => p.kunci.equals(kunci))).go();
   }
 }
