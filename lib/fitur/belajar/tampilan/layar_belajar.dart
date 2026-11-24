@@ -247,6 +247,44 @@ class LayarBelajar extends ConsumerWidget {
             ),
           ],
 
+          if (modul.id == 'keuangan_usaha_kecil') ...[
+            ref.watch(penyediaStreamPernyataan).when(
+              data: (pernyataan) {
+                if (pernyataan['belum_punya_usaha'] == 'true') {
+                  return Container(
+                    margin: const EdgeInsets.only(top: SpasiFunda.s),
+                    padding: const EdgeInsets.symmetric(horizontal: SpasiFunda.m, vertical: SpasiFunda.s),
+                    decoration: BoxDecoration(
+                      color: WarnaFunda.tintBiru,
+                      borderRadius: BorderRadius.circular(SudutFunda.kecil),
+                    ),
+                    child: Row(
+                      children: [
+                        const Icon(LucideIcons.info, size: 16, color: WarnaFunda.utama),
+                        const SizedBox(width: SpasiFunda.s),
+                        const Expanded(
+                          child: TeksFunda.catatan('Kamu menyatakan belum punya usaha saat ini.', warna: WarnaFunda.teks),
+                        ),
+                        TextButton(
+                          style: TextButton.styleFrom(minimumSize: const Size(48, 36)),
+                          onPressed: () async {
+                            final repo = ref.read(penyediaPernyataanRepositori);
+                            await repo.hapusPernyataan('belum_punya_usaha');
+                            ref.invalidate(penyediaFotoData);
+                          },
+                          child: const TeksFunda.catatan('Cabut pernyataan', warna: WarnaFunda.utama),
+                        ),
+                      ],
+                    ),
+                  );
+                }
+                return const SizedBox.shrink();
+              },
+              loading: () => const SizedBox.shrink(),
+              error: (err, stack) => const SizedBox.shrink(),
+            ),
+          ],
+
           if (modul.id == 'mulai_tes_awal') ...[
             const SizedBox(height: SpasiFunda.m),
             TombolFunda(

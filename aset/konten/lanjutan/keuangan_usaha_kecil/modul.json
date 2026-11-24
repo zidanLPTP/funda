@@ -1,14 +1,147 @@
 {
-  "kuis": {
-    "jumlahSoal": 0,
-    "bankSoal": []
-  },
   "id": "keuangan_usaha_kecil",
-  "tersedia": false,
-  "urutan": 17,
-  "gerbang": [],
-  "deskripsiSingkat": "Memisahkan rekening pribadi dan modal usaha serta mengelola perputaran kas bisnis.",
-  "daftarPelajaran": [],
+  "judul": "Keuangan Usaha Kecil",
   "tingkat": "lanjutan",
-  "judul": "Keuangan Usaha Kecil"
+  "urutan": 17,
+  "deskripsiSingkat": "Memisahkan rekening pribadi dan modal usaha serta mengelola perputaran kas bisnis.",
+  "tersedia": true,
+  "gerbang": [
+    {
+      "tipe": "ada_data",
+      "objek": "sumber_pemasukan",
+      "min": 2,
+      "atauPernyataan": "belum_punya_usaha",
+      "pesan": "Catat pemasukan dari minimal 2 kategori berbeda dulu. Kalau kamu belum punya usaha saat ini, pilih Aku tidak punya ini."
+    }
+  ],
+  "daftarPelajaran": [
+    "keuangan_usaha_kecil_17_1",
+    "keuangan_usaha_kecil_17_2",
+    "keuangan_usaha_kecil_17_3"
+  ],
+  "kuis": {
+    "jumlahSoal": 5,
+    "bankSoal": [
+      {
+        "id": "soal_17_1",
+        "pelajaranId": "keuangan_usaha_kecil_17_1",
+        "tanya": "Apa langkah paling mendasar dalam mengelola keuangan usaha kecil?",
+        "pilihan": [
+          "Memisahkan tempat simpan dan catatan uang pribadi dengan uang usaha",
+          "Mencampur semua uang di satu dompet",
+          "Tidak mencatat pengeluaran bahan baku"
+        ],
+        "benar": 0,
+        "penjelasan": "Pemisahan kas adalah fondasi agar untung rugi usaha terlihat jelas."
+      },
+      {
+        "id": "soal_17_2",
+        "pelajaranId": "keuangan_usaha_kecil_17_1",
+        "tanya": "Mengapa pemilik usaha kecil sebaiknya menetapkan gaji rutin untuk dirinya sendiri?",
+        "pilihan": [
+          "Agar pengambilan uang pribadi terkendali dan tidak menggerus modal usaha",
+          "Agar usaha tidak pernah punya laba",
+          "Agar tidak perlu membayar pemasok"
+        ],
+        "benar": 0,
+        "penjelasan": "Gaji pemilik yang teratur menjaga batas tegas antara kas pribadi dan kas usaha."
+      },
+      {
+        "id": "soal_17_3",
+        "pelajaranId": "keuangan_usaha_kecil_17_1",
+        "tanya": "Penjualan Rp4.000.000, biaya bahan dan operasional Rp2.500.000. Berapa laba usahanya?",
+        "pilihan": [
+          "Rp1.500.000",
+          "Rp4.000.000",
+          "Rp2.500.000"
+        ],
+        "benar": 0,
+        "penjelasan": "Penjualan dikurangi biaya menghasilkan laba Rp1.500.000."
+      },
+      {
+        "id": "soal_17_4",
+        "pelajaranId": "keuangan_usaha_kecil_17_1",
+        "tanya": "Fitur apa di Funda yang memudahkan pemisahan kas pribadi dan kas usaha?",
+        "pilihan": [
+          "Membuat dompet terpisah dan mencatat transfer antar dompet",
+          "Menghapus semua transaksi keluar",
+          "Menggunakan Mode Sandbox saja"
+        ],
+        "benar": 0,
+        "penjelasan": "Banyak dompet di Funda membantu memantau saldo pribadi dan usaha secara terpisah."
+      },
+      {
+        "id": "soal_17_5",
+        "pelajaranId": "keuangan_usaha_kecil_17_2",
+        "tanya": "Apa arti omzet dalam usaha?",
+        "pilihan": [
+          "Total nilai penjualan kotor sebelum dikurangi biaya operasional",
+          "Sisa uang bersih setelah semua biaya dibayar",
+          "Total utang kepada pemasok"
+        ],
+        "benar": 0,
+        "penjelasan": "Omzet menunjukkan volume penjualan, belum mencerminkan keuntungan bersih."
+      },
+      {
+        "id": "soal_17_6",
+        "pelajaranId": "keuangan_usaha_kecil_17_2",
+        "tanya": "Mengapa biaya kecil seperti kemasan dan ongkos kirim tetap wajib dicatat?",
+        "pilihan": [
+          "Karena akumulasinya memengaruhi laba bersih dan ketepatan harga jual",
+          "Karena tidak memengaruhi apa pun",
+          "Karena selalu ditanggung pembeli secara otomatis"
+        ],
+        "benar": 0,
+        "penjelasan": "Pencatatan biaya yang lengkap mencegah kerugian tersembunyi."
+      },
+      {
+        "id": "soal_17_7",
+        "pelajaranId": "keuangan_usaha_kecil_17_2",
+        "tanya": "Apa risiko jika arus kas usaha tidak seimbang waktunya?",
+        "pilihan": [
+          "Usaha bisa kesulitan membayar pemasok meski di catatan terlihat untung",
+          "Laba bersih otomatis naik dua kali lipat",
+          "Modal kerja tidak dibutuhkan lagi"
+        ],
+        "benar": 0,
+        "penjelasan": "Arus kas tunai menjaga napas operasional usaha sehari-hari."
+      },
+      {
+        "id": "soal_17_8",
+        "pelajaranId": "keuangan_usaha_kecil_17_3",
+        "tanya": "Apa yang dimaksud dengan modal kerja?",
+        "pilihan": [
+          "Dana yang terus berputar untuk membiayai operasional harian usaha",
+          "Uang jajan pribadi pemilik usaha",
+          "Uang bonus akhir tahun karyawan"
+        ],
+        "benar": 0,
+        "penjelasan": "Modal kerja adalah napas operasional untuk membeli stok dan memproses pesanan."
+      },
+      {
+        "id": "soal_17_9",
+        "pelajaranId": "keuangan_usaha_kecil_17_3",
+        "tanya": "Bagaimana cara sehat menumbuhkan modal usaha kecil?",
+        "pilihan": [
+          "Menyisihkan sebagian laba bersih kembali ke kas usaha",
+          "Mengambil pinjaman ilegal",
+          "Menghentikan pencatatan keuangan"
+        ],
+        "benar": 0,
+        "penjelasan": "Memupuk modal dari laba ditahan memperkuat usaha tanpa beban bunga berat."
+      },
+      {
+        "id": "soal_17_10",
+        "pelajaranId": "keuangan_usaha_kecil_17_3",
+        "tanya": "Apa fungsi dana cadangan usaha?",
+        "pilihan": [
+          "Melindungi usaha saat penjualan sepi atau ada alat kerja rusak",
+          "Membeli barang mewah pribadi",
+          "Menggantikan seluruh modal kerja harian"
+        ],
+        "benar": 0,
+        "penjelasan": "Cadangan kas menjaga kelangsungan usaha di masa sulit."
+      }
+    ]
+  }
 }

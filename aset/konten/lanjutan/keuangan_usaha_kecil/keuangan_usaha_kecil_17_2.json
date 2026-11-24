@@ -1,0 +1,85 @@
+{
+  "id": "keuangan_usaha_kecil_17_2",
+  "modulId": "keuangan_usaha_kecil",
+  "judul": "Membaca Arus Kas Usaha dan Laba",
+  "durasiMenit": 6,
+  "status": "draf",
+  "catatanReviewer": "TODO-VERIFIKASI. Membahas perbedaan omzet vs laba bersih dan pentingnya arus kas tunai harian.",
+  "pemantik": "Di catatan penjualan tertulis untung Rp5.000.000, tetapi saldo di rekening usaha kosong karena pelanggan belum membayar. Di sinilah bedanya laba dan arus kas.",
+  "kartu": [
+    {
+      "judul": "Omzet bukan berarti untung",
+      "isi": "{{Omzet}} adalah total uang yang masuk dari penjualan sebelum dikurangi biaya apa pun. Sedangkan {{laba bersih}} adalah sisa uang setelah seluruh biaya bahan baku, ongkos kirim, kemasan, dan biaya operasional lainnya dibayar."
+    },
+    {
+      "judul": "Arus kas menjaga napas usaha",
+      "isi": "Usaha bisa terlihat untung di atas kertas tetapi tetap macet jika uang tunai tidak cukup saat harus membayar pemasok. Karena itu, pantau jadwal uang masuk dari pelanggan dan jadwal uang keluar untuk biaya rutin."
+    },
+    {
+      "judul": "Catat biaya kecil operasional",
+      "isi": "Biaya plastik kemasan, lakban, kuota internet, hingga listrik tempat usaha sering terlupa dicatat. Padahal bila digabung sebulan, biaya kecil ini sangat memengaruhi harga jual dan keuntungan sebenarnya."
+    }
+  ],
+  "contohAngka": {
+    "judul": "Beda omzet dan laba bersih pada usaha camilan rumahan",
+    "baris": [
+      {
+        "label": "Omzet penjualan sebulan",
+        "jumlah": 5000000
+      },
+      {
+        "label": "Bahan baku dan kemasan",
+        "jumlah": -3000000
+      },
+      {
+        "label": "Listrik, gas, dan promosi",
+        "jumlah": -500000
+      },
+      {
+        "label": "Laba bersih sebenarnya",
+        "jumlah": 1500000,
+        "ringkasan": true
+      }
+    ],
+    "kesimpulan": "Omzet Rp5.000.000 menghasilkan laba bersih Rp1.500.000. Harga jual yang sehat harus menutup seluruh biaya tersebut."
+  },
+  "cekPaham": [
+    {
+      "tanya": "Apa perbedaan antara omzet dan laba bersih?",
+      "pilihan": [
+        "Omzet adalah total penjualan kotor, sedangkan laba bersih adalah sisa setelah dikurangi semua biaya",
+        "Keduanya selalu bernilai sama persis",
+        "Omzet adalah uang yang tersisa di akhir tahun"
+      ],
+      "benar": 0,
+      "penjelasan": "Omzet besar belum tentu untung besar jika biayanya juga sangat tinggi."
+    },
+    {
+      "tanya": "Mengapa usaha yang untung di catatan tetap bisa kehabisan uang tunai?",
+      "pilihan": [
+        "Karena uang dari pelanggan belum cair sementara biaya pemasok harus dibayar sekarang",
+        "Karena omzet tidak perlu dicatat",
+        "Karena biaya kemasan selalu nol"
+      ],
+      "benar": 0,
+      "penjelasan": "Keseimbangan waktu antara uang masuk dan keluar (arus kas) menentukan kelancaran operasional harian."
+    },
+    {
+      "tanya": "Mengapa biaya kecil seperti kemasan dan ongkos kirim tetap harus dicatat?",
+      "pilihan": [
+        "Agar perhitungan laba bersih dan penentuan harga jual akurat",
+        "Supaya pelanggan bingung",
+        "Supaya pajak menjadi nol"
+      ],
+      "benar": 0,
+      "penjelasan": "Biaya tersembunyi yang tidak dicatat bisa membuatmu tanpa sadar menjual di bawah modal."
+    }
+  ],
+  "misi": {
+    "tipe": "lihat_hitungan",
+    "judul": "Tinjau kesiapan dompet dan arus kasmu",
+    "instruksi": "Buka ringkasan jumlah dompet aktif dan arus kasmu bulan ini, baca gambarannya, lalu tekan Mengerti.",
+    "umpanBalik": "ringkasan_usaha_kecil"
+  },
+  "tindakLanjut": "Hitung ulang satu produk atau jasa yang kamu tawarkan: apakah seluruh biaya kecil seperti kemasan dan kuota sudah masuk ke dalam modalnya?"
+}

@@ -1,0 +1,103 @@
+{
+  "id": "proteksi_keluarga_warisan_18_1",
+  "modulId": "proteksi_keluarga_warisan",
+  "judul": "Perencanaan Keuangan Bersama Keluarga",
+  "durasiMenit": 6,
+  "status": "draf",
+  "catatanReviewer": "TODO-VERIFIKASI. Prinsip umum keterbukaan keuangan keluarga dan persiapan tanggungan; bersifat edukatif umum.",
+  "pemantik": "Saat hidup sendiri, semua keputusan keuangan ada di kepalamu. Ketika berkeluarga atau menanggung orang tua, keterbukaan menjadi bentuk perlindungan.",
+  "kartu": [
+    {
+      "judul": "Keterbukaan mencegah kepanikan",
+      "isi": "Banyak keluarga mengalami kesulitan keuangan mendadak bukan karena tidak ada simpanan, melainkan karena pasangan atau keluarga tidak tahu di mana simpanan, polis asuransi, atau daftar cicilan berada."
+    },
+    {
+      "judul": "Sesuaikan proteksi saat tanggungan bertambah",
+      "isi": "Saat mulai memiliki pasangan, anak, atau orang tua yang bergantung pada penghasilanmu, skala tanggung jawab ikut berubah. Inilah waktu yang tepat meninjau ulang dana darurat dan proteksi jiwa yang memadai."
+    },
+    {
+      "judul": "Bicara soal uang dengan tenang",
+      "isi": "Membicarakan anggaran, tujuan besar, dan proteksi bersama keluarga tidak perlu menunggu ada masalah. Obrolan singkat yang rutin setahun sekali membangun rasa aman dan saling percaya."
+    }
+  ],
+  "contohAngka": {
+    "judul": "Ilustrasi penyesuaian dana darurat saat tanggungan bertambah",
+    "baris": [
+      {
+        "label": "Pengeluaran wajib saat lajang per bulan",
+        "jumlah": 2000000
+      },
+      {
+        "label": "Pengeluaran wajib setelah berkeluarga per bulan",
+        "jumlah": 4500000
+      },
+      {
+        "label": "Kenaikan kebutuhan bantalan per bulan",
+        "jumlah": 2500000,
+        "ringkasan": true
+      }
+    ],
+    "kesimpulan": "Saat pengeluaran wajib keluarga naik, target dana darurat dan perlindungan dasar perlu disesuaikan secara bertahap."
+  },
+  "cekPaham": [
+    {
+      "tanya": "Mengapa keterbukaan lokasi dokumen dan catatan keuangan penting dalam keluarga?",
+      "pilihan": [
+        "Agar keluarga tidak kebingungan mengakses hak, simpanan, atau kewajiban saat darurat",
+        "Agar semua rahasia PIN dibagikan ke publik",
+        "Agar tidak perlu mencatat pengeluaran"
+      ],
+      "benar": 0,
+      "penjelasan": "Informasi yang rapi dan diketahui orang tepercaya sangat membantu di situasi tak terduga."
+    },
+    {
+      "tanya": "Kapan waktu yang tepat meninjau ulang proteksi jiwa dan dana darurat?",
+      "pilihan": [
+        "Saat jumlah tanggungan keluarga bertambah atau penghasilan berubah signifikan",
+        "Tidak pernah perlu ditinjau",
+        "Hanya saat sedang diskon"
+      ],
+      "benar": 0,
+      "penjelasan": "Perubahan tanggung jawab mengubah besarnya perlindungan yang dibutuhkan keluarga."
+    },
+    {
+      "tanya": "Bagaimana cara terbaik membicarakan rencana keuangan dengan keluarga?",
+      "pilihan": [
+        "Secara terbuka, tenang, dan berkala sebelum muncul masalah",
+        "Menunggu sampai terjadi krisis besar",
+        "Menyembunyikan seluruh cicilan"
+      ],
+      "benar": 0,
+      "penjelasan": "Komunikasi yang tenang memudahkan keluarga menyusun prioritas bersama."
+    }
+  ],
+  "misi": {
+    "tipe": "keputusan",
+    "judul": "Menjaga keterbukaan di saat penting",
+    "instruksi": "Baca skenarionya, lalu pilih langkah yang paling melindungi keluargamu.",
+    "skenario": {
+      "pemantik": "Kamu adalah pencari nafkah utama bagi keluarga. Kamu punya beberapa rekening tabungan, polis kesehatan, dan satu cicilan rumah, tetapi belum ada anggota keluarga lain yang tahu rinciannya.",
+      "opsi": [
+        {
+          "id": "a",
+          "teks": "Buat ringkasan daftar rekening, polis, dan kewajiban tanpa PIN, lalu simpan di tempat aman yang diketahui pasangan atau keluarga tepercaya",
+          "aman": true,
+          "umpanBalik": "Tepat. Ringkasan terstruktur memudahkan keluarga mengurus segala sesuatu bila terjadi keadaan darurat, tanpa mengorbankan keamanan PIN."
+        },
+        {
+          "id": "b",
+          "teks": "Biarkan saja semua hanya kamu yang tahu agar terasa lebih rahasia",
+          "aman": false,
+          "umpanBalik": "Jika terjadi keadaan darurat, keluarga akan sangat kesulitan melacak hak dan kewajibanmu. Coba pilihan lain."
+        },
+        {
+          "id": "c",
+          "teks": "Bagikan seluruh kata sandi dan kode OTP di grup obrolan umum",
+          "aman": false,
+          "umpanBalik": "Membagikan kata sandi dan OTP di ruang publik sangat berisiko terhadap pencurian data. Coba pilihan lain."
+        }
+      ]
+    }
+  },
+  "tindakLanjut": "Jadwalkan satu waktu santai bersama keluarga atau orang tepercaya untuk menyelaraskan tujuan keuangan tahun ini."
+}

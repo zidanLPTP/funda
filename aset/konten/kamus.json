@@ -423,5 +423,45 @@
     "istilah": "tingkat penarikan",
     "arti": "Persentase dana pensiun yang diambil setiap tahun untuk membiayai hidup tanpa menghabiskan pokok terlalu cepat.",
     "contohRupiah": "Menarik 4 persen atau Rp24.000.000 per tahun dari dana pensiun Rp600.000.000."
+  },
+  {
+    "istilah": "keuangan usaha",
+    "arti": "Pengelolaan uang masuk, uang keluar, dan modal khusus untuk kegiatan usaha yang terpisah dari uang pribadi.",
+    "contohRupiah": "Memisahkan kas usaha Rp6.000.000 dari dompet pengeluaran pribadi."
+  },
+  {
+    "istilah": "omzet",
+    "arti": "Total uang yang diterima dari penjualan barang atau jasa sebelum dikurangi biaya apa pun.",
+    "contohRupiah": "Penjualan 100 porsi seharga Rp25.000 menghasilkan omzet Rp2.500.000."
+  },
+  {
+    "istilah": "laba bersih",
+    "arti": "Sisa keuntungan usaha setelah seluruh biaya bahan baku dan operasional dikurangkan dari omzet.",
+    "contohRupiah": "Omzet Rp5.000.000 dikurangi total biaya Rp3.500.000 menghasilkan laba bersih Rp1.500.000."
+  },
+  {
+    "istilah": "modal kerja",
+    "arti": "Dana yang berputar untuk membiayai operasional harian usaha seperti pembelian bahan baku dan stok.",
+    "contohRupiah": "Menyiapkan modal kerja Rp1.500.000 untuk belanja bahan pesanan minggu ini."
+  },
+  {
+    "istilah": "dokumen penting",
+    "arti": "Berkas identitas, kepemilikan, dan perlindungan resmi yang perlu disimpan rapi dan aman untuk kebutuhan keluarga.",
+    "contohRupiah": "Menyimpan polis asuransi dan sertifikat kepemilikan dalam satu map aman."
+  },
+  {
+    "istilah": "warisan",
+    "arti": "Harta maupun kewajiban yang ditinggalkan seseorang kepada ahli warisnya sesuai ketentuan hukum yang berlaku.",
+    "contohRupiah": "Mencatat daftar tabungan dan kewajiban secara rapi sebagai bekal keluarga."
+  },
+  {
+    "istilah": "ahli waris",
+    "arti": "Pihak yang berhak menerima warisan sesuai ketentuan hukum yang berlaku.",
+    "contohRupiah": "Keluarga inti yang tercatat sah sebagai ahli waris menurut hukum."
+  },
+  {
+    "istilah": "wasiat",
+    "arti": "Pernyataan resmi seseorang mengenai keinginan atas hartanya yang disusun sesuai aturan hukum yang berlaku.",
+    "contohRupiah": "Menyusun dokumen wasiat secara sah dengan pendampingan notaris."
   }
 ]

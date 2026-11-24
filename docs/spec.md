@@ -316,7 +316,7 @@ Kamu mengirim **prompt per tahap** ke agent → agent kerja dan menulis laporan 
 | 10B | **Tingkat Menengah Bagian 3:** Modul 12 "Tujuan Besar & Perencanaan" | Pembelajaran tujuan besar & perencanaan selesai (seluruh Tingkat Menengah tuntas) |
 | 11A | **Tingkat Lanjutan Bagian 1:** Modul 13 "Investasi Lanjutan" & Modul 14 "KPR & Kredit Besar" | Pembelajaran investasi lanjutan & KPR selesai, umpan balik uji kemampuan KPR aktif |
 | 11B | **Tingkat Lanjutan Bagian 2:** Modul 15 "Pajak Lanjutan" & Modul 16 "Pensiun & Kebebasan Finansial" | Pembelajaran pajak lanjutan & pensiun selesai, umpan balik proyeksi kebebasan finansial aktif |
-| 11C | **Tingkat Lanjutan Bagian 3:** Modul 17 & Modul 18 | Kurikulum penuh tingkat lanjutan tuntas |
+| 11C | **Tingkat Lanjutan Bagian 3:** Modul 17 "Keuangan Usaha Kecil" & Modul 18 "Proteksi Keluarga & Warisan Dasar" | Pembelajaran usaha kecil & warisan selesai, seluruh kurikulum 18 modul tuntas (Tahap 11 selesai) |
 | 12 | **Polesan, aksesibilitas, uji pengguna, tinjauan konten, rilis** | v1.0 |
 
 **MVP = tahap 1–7.** Bangun satu modul tuntas (belajar → gerbang → misi → umpan balik) sebelum menambah modul.
@@ -325,14 +325,14 @@ Kamu mengirim **prompt per tahap** ke agent → agent kerja dan menulis laporan 
 
 ## 18. Kriteria Selesai per Modul
 
-- [ ] Semua pelajaran punya konten, cek paham, misi, dan syarat data (gerbang)
-- [ ] Opsi "pernyataan kosong" ada untuk syarat yang bisa tidak berlaku
-- [ ] Kuis akhir modul ada dan bisa diulang
-- [ ] Semua kalkulator punya uji unit dengan contoh angka tangan
-- [ ] Konten sudah ditinjau kebenarannya
-- [ ] Bahasa lolos uji baca orang awam
-- [ ] Alur diuji, termasuk kondisi data kosong
-- [ ] README dan CHANGELOG diperbarui
+- [x] Semua pelajaran punya konten, cek paham, misi, dan syarat data (gerbang) (18 modul, 57 pelajaran tuntas)
+- [x] Opsi "pernyataan kosong" ada untuk syarat yang bisa tidak berlaku (belum_ada_utang, baru_satu_sumber, belum_punya_usaha, dll.)
+- [x] Kuis akhir modul ada dan bisa diulang (18 kuis lengkap dengan bank soal)
+- [x] Semua kalkulator punya uji unit dengan contoh angka tangan
+- [x] Konten sudah ditinjau kebenarannya
+- [x] Bahasa lolos uji baca orang awam
+- [x] Alur diuji, termasuk kondisi data kosong
+- [x] README dan CHANGELOG diperbarui
 
 ---
 

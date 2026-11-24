@@ -53,7 +53,6 @@ class PembacaKonten {
   static const List<String> istilahTeknisWajibKurung = [
     'surplus',
     'defisit',
-    'aset',
     'liabilitas',
   ];
   static const Set<String> objekGerbangValid = {
@@ -96,6 +95,7 @@ class PembacaKonten {
     'ringkasan_tujuan_besar',
     'uji_kemampuan_kpr',
     'proyeksi_kebebasan_finansial',
+    'ringkasan_usaha_kecil',
   };
 
   /// Mengurai string JSON kamus menjadi daftar istilah terindeks.

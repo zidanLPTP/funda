@@ -105,6 +105,8 @@ funda/
 
 ## 📸 Tangkapan Layar Aplikasi
 Tangkapan layar otomatis yang dihasilkan dari pengujian dan emulator tersimpan pada:
+- **Tahap 11C (Modul 17 "Keuangan Usaha Kecil" & Modul 18 "Proteksi Keluarga & Warisan Dasar" — Penutupan Tingkat Lanjutan & Kurikulum 18 Modul):** [docs/tangkapan_layar/](docs/tangkapan_layar/)
+  - Menghadirkan materi pemisahan uang usaha dan pribadi, laba bersih dan kas operasional, modal kerja dan cadangan kas usaha, komunikasi keuangan keluarga, inventaris dokumen penting, pemahaman warisan dasar dan wasiat, klausul pernyataan `belum_punya_usaha`, serta umpan balik on-demand `ringkasan_usaha_kecil`. Seluruh 18 modul kurikulum Funda (57 pelajaran) kini telah lengkap dan aktif penuh.
 - **Tahap 11B (Modul 15 "Pajak Lanjutan" & Modul 16 "Pensiun & Kebebasan Finansial" — Tingkat Lanjutan Bagian 2):** [docs/tangkapan_layar/](docs/tangkapan_layar/)
   - Menghadirkan materi SPT tahunan ragam sumber, bukti potong, perencanaan pajak sah, konsep dana pensiun, kebebasan finansial, inflasi hari tua, serta umpan balik on-demand `proyeksi_kebebasan_finansial` (patokan 25x pengeluaran tahunan dan posisi kekayaan bersih).
 - **Tahap 11A (Modul 13 "Investasi Lanjutan" & Modul 14 "KPR & Kredit Besar" — Pembukaan Tingkat Lanjutan):** [docs/tangkapan_layar/](docs/tangkapan_layar/)

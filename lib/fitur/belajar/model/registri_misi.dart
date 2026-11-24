@@ -268,6 +268,21 @@ class RegistriMisi {
       kekayaanBersihRupiah: kekayaanBersihRupiah,
     );
   }
+
+  /// Menghasilkan umpan balik ringkasan usaha kecil (17.2).
+  static String formatRingkasanUsahaKecilMisi({
+    required int jumlahDompetAktif,
+    required int totalPemasukanBulanIniRupiah,
+    required int totalPengeluaranBulanIniRupiah,
+    required bool belumPunyaUsaha,
+  }) {
+    return formatRingkasanUsahaKecil(
+      jumlahDompetAktif: jumlahDompetAktif,
+      totalPemasukanBulanIniRupiah: totalPemasukanBulanIniRupiah,
+      totalPengeluaranBulanIniRupiah: totalPengeluaranBulanIniRupiah,
+      belumPunyaUsaha: belumPunyaUsaha,
+    );
+  }
 }
 
 /// Penyedia teks umpan balik dari data nyata pengguna tanpa jargon.
@@ -515,6 +530,21 @@ class RegistriUmpanBalik {
       pengeluaranWajibBulananRupiah: pengeluaranWajibBulananRupiah,
       dasarPengeluaranWajib: dasarPengeluaranWajib,
       kekayaanBersihRupiah: kekayaanBersihRupiah,
+    );
+  }
+
+  /// Menghasilkan umpan balik ringkasan usaha kecil (17.2).
+  static String formatRingkasanUsahaKecilMisi({
+    required int jumlahDompetAktif,
+    required int totalPemasukanBulanIniRupiah,
+    required int totalPengeluaranBulanIniRupiah,
+    required bool belumPunyaUsaha,
+  }) {
+    return formatRingkasanUsahaKecil(
+      jumlahDompetAktif: jumlahDompetAktif,
+      totalPemasukanBulanIniRupiah: totalPemasukanBulanIniRupiah,
+      totalPengeluaranBulanIniRupiah: totalPengeluaranBulanIniRupiah,
+      belumPunyaUsaha: belumPunyaUsaha,
     );
   }
 }

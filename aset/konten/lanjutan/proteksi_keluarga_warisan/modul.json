@@ -1,20 +1,145 @@
 {
-    "kuis":  {
-                 "jumlahSoal":  0,
-                 "bankSoal":  [
-
-                              ]
-             },
-    "id":  "proteksi_keluarga_warisan",
-    "tersedia":  false,
-    "urutan":  18,
-    "gerbang":  [
-
-                ],
-    "deskripsiSingkat":  "Perencanaan dokumen masa depan dan pemahaman dasar distribusi warisan keluarga.",
-    "daftarPelajaran":  [
-
-                        ],
-    "tingkat":  "lanjutan",
-    "judul":  "Proteksi Keluarga \u0026 Warisan Dasar"
+  "id": "proteksi_keluarga_warisan",
+  "judul": "Proteksi Keluarga & Warisan Dasar",
+  "tingkat": "lanjutan",
+  "urutan": 18,
+  "deskripsiSingkat": "Perencanaan dokumen masa depan dan pemahaman dasar distribusi warisan keluarga.",
+  "tersedia": true,
+  "gerbang": [
+    {
+      "tipe": "modul_selesai",
+      "modulId": "proteksi_dasar",
+      "pesan": "Selesaikan Modul 10 (Proteksi Dasar) dulu sebelum mempelajari perencanaan proteksi keluarga dan warisan dasar."
+    }
+  ],
+  "daftarPelajaran": [
+    "proteksi_keluarga_warisan_18_1",
+    "proteksi_keluarga_warisan_18_2",
+    "proteksi_keluarga_warisan_18_3"
+  ],
+  "kuis": {
+    "jumlahSoal": 5,
+    "bankSoal": [
+      {
+        "id": "soal_18_1",
+        "pelajaranId": "proteksi_keluarga_warisan_18_1",
+        "tanya": "Mengapa keterbukaan catatan keuangan penting dalam keluarga?",
+        "pilihan": [
+          "Memudahkan keluarga mengakses informasi penting saat terjadi keadaan darurat",
+          "Supaya semua orang tahu PIN rekening",
+          "Supaya anggaran tidak perlu dibuat"
+        ],
+        "benar": 0,
+        "penjelasan": "Keterbukaan yang terukur melindungi keluarga dari kebingungan di saat darurat."
+      },
+      {
+        "id": "soal_18_2",
+        "pelajaranId": "proteksi_keluarga_warisan_18_1",
+        "tanya": "Saat tanggungan keluarga bertambah, apa yang perlu disesuaikan?",
+        "pilihan": [
+          "Target dana darurat dan perlindungan dasar keluarga",
+          "Mengurangi seluruh tabungan menjadi nol",
+          "Menghentikan pencatatan pengeluaran"
+        ],
+        "benar": 0,
+        "penjelasan": "Tanggungan baru meningkatkan skala kebutuhan yang harus dilindungi."
+      },
+      {
+        "id": "soal_18_3",
+        "pelajaranId": "proteksi_keluarga_warisan_18_1",
+        "tanya": "Kapan waktu terbaik membicarakan rencana keuangan bersama keluarga?",
+        "pilihan": [
+          "Secara rutin dan tenang sebelum muncul masalah",
+          "Hanya saat sudah terjadi krisis",
+          "Tidak pernah dibicarakan"
+        ],
+        "benar": 0,
+        "penjelasan": "Obrolan rutin membangun kesepahaman tanpa tekanan."
+      },
+      {
+        "id": "soal_18_4",
+        "pelajaranId": "proteksi_keluarga_warisan_18_1",
+        "tanya": "Pengeluaran wajib naik dari Rp2.000.000 menjadi Rp4.500.000 setelah berkeluarga. Berapa kenaikannya?",
+        "pilihan": [
+          "Rp2.500.000",
+          "Rp2.000.000",
+          "Rp6.500.000"
+        ],
+        "benar": 0,
+        "penjelasan": "Rp4.500.000 dikurangi Rp2.000.000 adalah kenaikan Rp2.500.000 per bulan."
+      },
+      {
+        "id": "soal_18_5",
+        "pelajaranId": "proteksi_keluarga_warisan_18_2",
+        "tanya": "Informasi apa yang TIDAK boleh ditulis terbuka di daftar ringkasan dokumen keluarga?",
+        "pilihan": [
+          "PIN, kata sandi, dan kode OTP",
+          "Nama penyedia asuransi",
+          "Lokasi map dokumen"
+        ],
+        "benar": 0,
+        "penjelasan": "Data autentikasi harus selalu dijaga keamanannya."
+      },
+      {
+        "id": "soal_18_6",
+        "pelajaranId": "proteksi_keluarga_warisan_18_2",
+        "tanya": "Siapa yang sebaiknya mengetahui lokasi penyimpanan map dokumen pentingmu?",
+        "pilihan": [
+          "Pasangan atau satu anggota keluarga tepercaya",
+          "Semua orang di internet",
+          "Tidak seorang pun"
+        ],
+        "benar": 0,
+        "penjelasan": "Satu orang tepercaya cukup untuk memastikan akses darurat tetap aman."
+      },
+      {
+        "id": "soal_18_7",
+        "pelajaranId": "proteksi_keluarga_warisan_18_2",
+        "tanya": "Seberapa sering daftar dokumen penting keluarga sebaiknya ditinjau ulang?",
+        "pilihan": [
+          "Secara berkala, misalnya setahun sekali atau saat ada dokumen baru",
+          "Tidak pernah ditinjau lagi",
+          "Setiap hari"
+        ],
+        "benar": 0,
+        "penjelasan": "Pembaruan tahunan menjaga daftar tetap sesuai kondisi terkini."
+      },
+      {
+        "id": "soal_18_8",
+        "pelajaranId": "proteksi_keluarga_warisan_18_3",
+        "tanya": "Apa yang tercakup dalam gambaran warisan secara umum?",
+        "pilihan": [
+          "Harta maupun kewajiban yang ditinggalkan kepada ahli waris sesuai hukum berlaku",
+          "Hanya barang elektronik saja",
+          "Hanya catatan belanja harian"
+        ],
+        "benar": 0,
+        "penjelasan": "Kejelasan harta dan kewajiban menghindarkan keluarga dari kesulitan administrasi."
+      },
+      {
+        "id": "soal_18_9",
+        "pelajaranId": "proteksi_keluarga_warisan_18_3",
+        "tanya": "Ke mana sebaiknya berkonsultasi untuk urusan wasiat atau pembagian warisan resmi?",
+        "pilihan": [
+          "Notaris atau ahli hukum yang berwenang",
+          "Grup obrolan acak",
+          "Aplikasi pencatat pengeluaran"
+        ],
+        "benar": 0,
+        "penjelasan": "Penanganan hukum waris membutuhkan pendampingan profesional berwenang."
+      },
+      {
+        "id": "soal_18_10",
+        "pelajaranId": "proteksi_keluarga_warisan_18_3",
+        "tanya": "Apa peran Funda terkait topik proteksi keluarga dan warisan?",
+        "pilihan": [
+          "Memberi edukasi umum dan alat bantu pencatatan, bukan nasihat hukum",
+          "Mengurus surat wasiat resmi",
+          "Menentukan pembagian hukum waris"
+        ],
+        "benar": 0,
+        "penjelasan": "Funda adalah aplikasi edukasi dan pencatatan pribadi yang jujur soal batasannya."
+      }
+    ]
+  }
 }

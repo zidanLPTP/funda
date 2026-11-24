@@ -2600,5 +2600,107 @@ void main() {
         expect(isiMateriKamus.contains(target.contohRupiah), isTrue, reason: 'Contoh Rupiah "$istilah" tidak ditemukan di docs/materi/kamus_modul_15_16.md');
       }
     });
+
+    test('Verifikasi Modul 17 "Keuangan Usaha Kecil" dan Modul 18 "Proteksi Keluarga & Warisan Dasar" cocok kata per kata dengan materi', () {
+      final berkasM17 = File('aset/konten/lanjutan/keuangan_usaha_kecil/modul.json');
+      expect(berkasM17.existsSync(), isTrue);
+      final m17 = jsonDecode(berkasM17.readAsStringSync());
+      expect(m17['id'], equals('keuangan_usaha_kecil'));
+      expect(m17['judul'], equals('Keuangan Usaha Kecil'));
+      expect(m17['tingkat'], equals('lanjutan'));
+      expect(m17['urutan'], equals(17));
+      expect(m17['tersedia'], isTrue);
+      expect(m17['gerbang'], hasLength(1));
+      expect(m17['gerbang'][0]['tipe'], equals('ada_data'));
+      expect(m17['gerbang'][0]['objek'], equals('sumber_pemasukan'));
+      expect(m17['gerbang'][0]['min'], equals(2));
+      expect(m17['gerbang'][0]['atauPernyataan'], equals('belum_punya_usaha'));
+      expect(m17['kuis']['bankSoal'], hasLength(10));
+      expect(m17['kuis']['jumlahSoal'], equals(5));
+
+      final berkasM18 = File('aset/konten/lanjutan/proteksi_keluarga_warisan/modul.json');
+      expect(berkasM18.existsSync(), isTrue);
+      final m18 = jsonDecode(berkasM18.readAsStringSync());
+      expect(m18['id'], equals('proteksi_keluarga_warisan'));
+      expect(m18['judul'], equals('Proteksi Keluarga & Warisan Dasar'));
+      expect(m18['tingkat'], equals('lanjutan'));
+      expect(m18['urutan'], equals(18));
+      expect(m18['tersedia'], isTrue);
+      expect(m18['gerbang'], hasLength(1));
+      expect(m18['gerbang'][0]['tipe'], equals('modul_selesai'));
+      expect(m18['gerbang'][0]['modulId'], equals('proteksi_dasar'));
+      expect(m18['kuis']['bankSoal'], hasLength(10));
+      expect(m18['kuis']['jumlahSoal'], equals(5));
+
+      // Verifikasi catatanReviewer Modul 18 wajib mengandung TODO-VERIFIKASI
+      for (var i = 1; i <= 3; i++) {
+        final f18 = File('aset/konten/lanjutan/proteksi_keluarga_warisan/proteksi_keluarga_warisan_18_$i.json');
+        expect(f18.existsSync(), isTrue);
+        final p18 = jsonDecode(f18.readAsStringSync());
+        expect(p18['catatanReviewer'], contains('TODO-VERIFIKASI'), reason: 'Pelajaran 18_$i wajib memuat TODO-VERIFIKASI di catatanReviewer');
+      }
+
+      // Verifikasi 8 entri kamus Modul 17 & 18
+      final berkasKamus = File('aset/konten/kamus.json');
+      final daftarKamus = (jsonDecode(berkasKamus.readAsStringSync()) as List)
+          .cast<Map<String, dynamic>>();
+
+      final materiKamusFile = File('docs/materi/kamus_modul_17_18.md');
+      expect(materiKamusFile.existsSync(), isTrue);
+      final isiMateriKamus = materiKamusFile.readAsStringSync();
+
+      const istilahModul17_18 = {
+        'keuangan usaha': (
+          arti: 'Pengelolaan uang masuk, uang keluar, dan modal khusus untuk kegiatan usaha yang terpisah dari uang pribadi.',
+          contohRupiah: 'Memisahkan kas usaha Rp6.000.000 dari dompet pengeluaran pribadi.',
+        ),
+        'omzet': (
+          arti: 'Total uang yang diterima dari penjualan barang atau jasa sebelum dikurangi biaya apa pun.',
+          contohRupiah: 'Penjualan 100 porsi seharga Rp25.000 menghasilkan omzet Rp2.500.000.',
+        ),
+        'laba bersih': (
+          arti: 'Sisa keuntungan usaha setelah seluruh biaya bahan baku dan operasional dikurangkan dari omzet.',
+          contohRupiah: 'Omzet Rp5.000.000 dikurangi total biaya Rp3.500.000 menghasilkan laba bersih Rp1.500.000.',
+        ),
+        'modal kerja': (
+          arti: 'Dana yang berputar untuk membiayai operasional harian usaha seperti pembelian bahan baku dan stok.',
+          contohRupiah: 'Menyiapkan modal kerja Rp1.500.000 untuk belanja bahan pesanan minggu ini.',
+        ),
+        'dokumen penting': (
+          arti: 'Berkas identitas, kepemilikan, dan perlindungan resmi yang perlu disimpan rapi dan aman untuk kebutuhan keluarga.',
+          contohRupiah: 'Menyimpan polis asuransi dan sertifikat kepemilikan dalam satu map aman.',
+        ),
+        'warisan': (
+          arti: 'Harta maupun kewajiban yang ditinggalkan seseorang kepada ahli warisnya sesuai ketentuan hukum yang berlaku.',
+          contohRupiah: 'Mencatat daftar tabungan dan kewajiban secara rapi sebagai bekal keluarga.',
+        ),
+        'ahli waris': (
+          arti: 'Pihak yang berhak menerima warisan sesuai ketentuan hukum yang berlaku.',
+          contohRupiah: 'Keluarga inti yang tercatat sah sebagai ahli waris menurut hukum.',
+        ),
+        'wasiat': (
+          arti: 'Pernyataan resmi seseorang mengenai keinginan atas hartanya yang disusun sesuai aturan hukum yang berlaku.',
+          contohRupiah: 'Menyusun dokumen wasiat secara sah dengan pendampingan notaris.',
+        ),
+      };
+
+      for (final e in istilahModul17_18.entries) {
+        final istilah = e.key;
+        final target = e.value;
+
+        // Cek di aset/konten/kamus.json
+        final entriJson = daftarKamus.firstWhere(
+          (k) => k['istilah'] == istilah,
+          orElse: () => throw Exception('Istilah "$istilah" tidak ditemukan di kamus.json'),
+        );
+        expect(entriJson['arti'], equals(target.arti), reason: 'Arti "$istilah" di kamus.json tidak cocok kata per kata');
+        expect(entriJson['contohRupiah'], equals(target.contohRupiah), reason: 'Contoh Rupiah "$istilah" di kamus.json tidak cocok kata per kata');
+
+        // Cek di docs/materi/kamus_modul_17_18.md
+        expect(isiMateriKamus.contains(istilah), isTrue, reason: 'Istilah "$istilah" tidak ditemukan di docs/materi/kamus_modul_17_18.md');
+        expect(isiMateriKamus.contains(target.arti), isTrue, reason: 'Arti "$istilah" tidak ditemukan di docs/materi/kamus_modul_17_18.md');
+        expect(isiMateriKamus.contains(target.contohRupiah), isTrue, reason: 'Contoh Rupiah "$istilah" tidak ditemukan di docs/materi/kamus_modul_17_18.md');
+      }
+    });
   });
 }

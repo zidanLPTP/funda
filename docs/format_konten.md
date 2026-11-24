@@ -630,6 +630,25 @@ Berkas ini adalah sumber kebenaran teks (*single source of truth*) untuk antarmu
   - V2 (Kekayaan bersih positif > 0): *"Dengan pengeluaran wajib sekitar [pengeluaranWajib] per bulan ([dasar]) atau [pengeluaranTahunan] per tahun, patokan awal 25 kali pengeluaran tahunan berada di sekitar [targetKebebasan]. Kekayaan bersihmu saat ini [kekayaanBersih] (sekitar [persen] persen dari patokan tersebut). Ini simulasi aturan praktis, bukan jaminan hasil."*
   - V3 (Kekayaan bersih belum positif <= 0): *"Dengan pengeluaran wajib sekitar [pengeluaranWajib] per bulan ([dasar]) atau [pengeluaranTahunan] per tahun, patokan awal 25 kali pengeluaran tahunan berada di sekitar [targetKebebasan]. Kekayaan bersihmu saat ini belum positif ([kekayaanBersih]), jadi fokus utama yang paling menenangkan adalah merapikan utang dan membangun tabungan bertahap. Ini simulasi aturan praktis, bukan jaminan hasil."*
 
+## 17. Kunci Umpan Balik On-Demand Misi Belajar Tahap 11C (Modul 17)
+
+### 17.1 `ringkasan_usaha_kecil`
+- **Konteks:** Digunakan pada misi tipe `lihat_hitungan` pelajaran 17.2 ("Menghitung Laba Bersih dan Menjaga Kas Usaha").
+- **Karakteristik:** Dipanggil secara on-demand saat misi 17.2 dibuka tanpa menambah kueri pada `FotoDataRepositori`.
+- **Logika Perhitungan:**
+  - Masukan: jumlah dompet aktif (`jumlahDompetAktif`), total pemasukan bulan berjalan (`totalPemasukanBulanIniRupiah`), dan total pengeluaran bulan berjalan (`totalPengeluaranBulanIniRupiah`).
+  - Arus kas bersih: `totalPemasukanBulanIniRupiah - totalPengeluaranBulanIniRupiah`.
+  - Seluruh perhitungan deterministik menggunakan pembagian bilangan bulat integer murni tanpa `double` dan tanpa `round()`.
+- **Variasi Respons:**
+  - V1 (Pemasukan > Pengeluaran / Arus kas positif): *"Kamu sudah punya [jumlahDompet] dompet aktif. Bulan ini ada pemasukan [pemasukan] dan pengeluaran [pengeluaran], sehingga arus kasmu masih positif [selisih]. Bila kamu punya usaha sampingan atau freelance, menyisihkan sebagian surplus ini ke rekening kas cadangan usaha akan menjaga bisnis tetap bertahan di masa sepi."*
+  - V2 (Pengeluaran > Pemasukan / Arus kas defisit): *"Kamu punya [jumlahDompet] dompet aktif. Bulan ini pengeluaranmu ([pengeluaran]) lebih besar dari pemasukan ([pemasukan]) dengan selisih [selisih]. Untuk usaha kecil, situasi seperti ini wajar saat belanja stok modal, tapi pastikan kamu tidak menutup kekurangannya dengan utang konsumtif atau uang kebutuhan pokok keluarga."*
+  - V3 (Belum ada catatan bulan ini): *"Kamu punya [jumlahDompet] dompet aktif, tetapi belum ada catatan transaksi pemasukan atau pengeluaran di bulan berjalan. Mulai catat transaksi harianmu agar pemisahan uang usaha dan uang pribadi bisa kamu pantau dengan jelas."*
+
+### 17.2 Pernyataan Gerbang Modul 17: `belum_punya_usaha`
+- **Konteks:** Gerbang Modul 17 adalah `ada_data sumber_pemasukan min 2`.
+- **Klausul Pernyataan:** Memiliki `atauPernyataan: "belum_punya_usaha"`. Pengguna yang belum memiliki usaha kecil dapat mengetuk tombol "Aku tidak punya ini" pada peta belajar untuk membuka modul dan mempelajari ilmunya terlebih dahulu. Pernyataan dapat dicabut sewaktu-waktu.
+
+
 
 
 

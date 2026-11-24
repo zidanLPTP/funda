@@ -1,0 +1,104 @@
+{
+  "id": "proteksi_keluarga_warisan_18_2",
+  "modulId": "proteksi_keluarga_warisan",
+  "judul": "Merapikan Dokumen Penting Keluarga",
+  "durasiMenit": 5,
+  "status": "draf",
+  "catatanReviewer": "TODO-VERIFIKASI. Daftar umum dokumen keuangan dan identitas keluarga yang perlu diarsipkan secara aman; tidak menyimpan dokumen sensitif di dalam aplikasi Funda.",
+  "pemantik": "Saat keadaan darurat datang, mencari berkas polis atau sertifikat di tumpukan kertas yang berantakan hanya menambah rasa panik.",
+  "kartu": [
+    {
+      "judul": "Kumpulkan di satu tempat aman",
+      "isi": "Kelompokkan {{dokumen penting}} seperti kartu identitas, kartu keluarga, polis asuransi, sertifikat properti, dan ringkasan rekening dalam satu map tahan air yang mudah dijangkau saat darurat."
+    },
+    {
+      "judul": "Buat salinan digital yang terlindungi",
+      "isi": "Selain berkas fisik, simpan salinan digitalnya di tempat penyimpanan pribadi yang aman dan terkunci. Pastikan kamu tidak menulis PIN atau kata sandi di dokumen ringkasan tersebut."
+    },
+    {
+      "judul": "Tinjau secara berkala",
+      "isi": "Periksa kelengkapan dokumen setahun sekali. Perbarui bila ada perubahan alamat, polis baru, atau penutupan rekening yang sudah tidak dipakai."
+    }
+  ],
+  "contohAngka": {
+    "judul": "Contoh kategori map dokumen penting keluarga",
+    "baris": [
+      {
+        "label": "Identitas: KTP, KK, Akta Kelahiran, Buku Nikah",
+        "jumlah": 4
+      },
+      {
+        "label": "Keuangan: Polis asuransi, daftar rekening, sertifikat",
+        "jumlah": 3
+      },
+      {
+        "label": "Total kelompok berkas yang dirapikan",
+        "jumlah": 7,
+        "ringkasan": true
+      }
+    ],
+    "kesimpulan": "Dengan mengelompokkan 7 berkas inti, keluarga bisa menemukan dokumen darurat dalam hitungan menit."
+  },
+  "cekPaham": [
+    {
+      "tanya": "Di mana sebaiknya dokumen fisik penting keluarga disimpan?",
+      "pilihan": [
+        "Dalam satu map tahan air dan mudah dijangkau saat darurat",
+        "Tersebar acak di berbagai sudut rumah",
+        "Ditinggalkan di tempat umum"
+      ],
+      "benar": 0,
+      "penjelasan": "Penyimpanan terpusat memudahkan penanganan saat terjadi kondisi darurat."
+    },
+    {
+      "tanya": "Bolehkah mencatat PIN atau kata sandi rekening pada lembar ringkasan dokumen?",
+      "pilihan": [
+        "Tidak boleh, demi menjaga keamanan akun perbankan",
+        "Boleh dan disebarkan ke media sosial",
+        "Wajib ditempel di pintu lemari es"
+      ],
+      "benar": 0,
+      "penjelasan": "Data autentikasi tetap harus dijaga kerahasiaannya demi keamanan akun."
+    },
+    {
+      "tanya": "Siapa yang sebaiknya tahu lokasi penyimpanan map dokumen pentingmu?",
+      "pilihan": [
+        "Pasangan atau satu anggota keluarga yang benar-benar kamu percaya",
+        "Semua orang di media sosial",
+        "Tidak seorang pun di dunia"
+      ],
+      "benar": 0,
+      "penjelasan": "Memberi tahu satu orang tepercaya menjaga keseimbangan antara privasi dan kesiapsiagaan darurat."
+    }
+  ],
+  "misi": {
+    "tipe": "daftar_periksa",
+    "disclaimer": true,
+    "minimalDicentang": 3,
+    "judul": "Daftar rapi dokumen pentingmu",
+    "instruksi": "Baca catatan di atas, lalu centang langkah perapian dokumen yang sudah atau akan kamu lakukan di luar aplikasi. Minimal tiga langkah.",
+    "langkah": [
+      {
+        "id": "l1",
+        "teks": "Aku mengelompokkan dokumen identitas dan kartu keluarga dalam satu tempat aman."
+      },
+      {
+        "id": "l2",
+        "teks": "Aku menyimpan salinan polis asuransi dan kartu jaminan sosial agar mudah ditemukan."
+      },
+      {
+        "id": "l3",
+        "teks": "Aku mencatat daftar ringkasan rekening, investasi, dan utang (tanpa PIN/kata sandi)."
+      },
+      {
+        "id": "l4",
+        "teks": "Aku memberi tahu satu anggota keluarga tepercaya mengenai lokasi penyimpanan dokumen tersebut."
+      },
+      {
+        "id": "l5",
+        "teks": "Aku meninjau ulang kelengkapan daftar dokumen minimal setahun sekali."
+      }
+    ]
+  },
+  "tindakLanjut": "Luangkan waktu 30 menit akhir pekan ini untuk merapikan satu map khusus dokumen pentingmu."
+}

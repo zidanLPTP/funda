@@ -5,6 +5,47 @@ Format penulisan mengacu pada standar Keep a Changelog dan penamaan commit Funda
 
 ---
 
+## [0.20.0] - 2026-11-24 — Tahap 11C: Modul 17 "Keuangan Usaha Kecil" & Modul 18 "Proteksi Keluarga & Warisan Dasar" (Penutupan Seluruh Tingkat Lanjutan & Kurikulum 18 Modul)
+
+Tahap 11C menutup secara paripurna seluruh Tingkat Lanjutan dan kurikulum 18 modul Funda (57 pelajaran total) dengan menghadirkan Modul 17 "Keuangan Usaha Kecil", Modul 18 "Proteksi Keluarga & Warisan Dasar", klausul pernyataan gerbang `belum_punya_usaha`, kunci umpan balik on-demand baru `ringkasan_usaha_kecil`, serta 8 entri kamus istilah baru (total kamus menjadi 93 entri):
+- **Kunci Umpan Balik On-Demand Misi 17.2 (`lib/perhitungan/perhitungan_umpan_balik_belajar.dart`, `lib/fitur/belajar/model/registri_misi.dart`, `lib/fitur/belajar/kontroler/penyedia_belajar.dart`):**
+  - Kunci `ringkasan_usaha_kecil`: dihitung on-demand saat misi 17.2 dibuka tanpa menambah kueri pada `FotoDataRepositori`.
+  - Fungsi murni integer deterministik tanpa `double` (`formatRingkasanUsahaKecil`):
+    - Masukan: jumlah dompet aktif, total pemasukan bulan berjalan, dan total pengeluaran bulan berjalan.
+    - Menghitung selisih arus kas bersih integer murni (`totalPemasukan - totalPengeluaran`).
+    - V1 (arus kas surplus > 0): memberi saran penyisihan surplus kas ke cadangan usaha.
+    - V2 (arus kas defisit < 0): memberi peringatan ramah bahwa defisit wajar saat belanja modal stok, dan mengingatkan agar tidak ditutup dengan utang konsumtif atau uang dapur keluarga.
+    - V3 (belum ada transaksi bulan ini): mengajak mulai mencatat transaksi harian agar pemisahan uang usaha dan pribadi terpantau jelas.
+  - TDD unit test lengkap V1-V3 dan evaluasi gerbang di `test/perhitungan/perhitungan_umpan_balik_tahap_11c_test.dart` (5 tests passed).
+- **Klausul Pernyataan Gerbang Modul 17 (`belum_punya_usaha`):**
+  - Menghadirkan opsi `atauPernyataan: "belum_punya_usaha"` pada gerbang `ada_data sumber_pemasukan min 2`.
+  - Tombol "Aku tidak punya ini" pada peta belajar memungkinkan pengguna tanpa usaha kecil untuk membuka modul dan mempelajari ilmunya lebih dulu.
+  - Pengguna dapat mencabut pernyataan kapan saja melalui banner informasi di peta belajar.
+- **Konten Edukasi Resmi Modul 17 & Modul 18 (`aset/konten/lanjutan/`):**
+  - **Modul 17 "Keuangan Usaha Kecil" (`keuangan_usaha_kecil`):**
+    - Mengubah stub `modul.json` menjadi `tersedia: true`, urutan 17, gerbang `ada_data sumber_pemasukan min 2` dengan `atauPernyataan: "belum_punya_usaha"`, bankSoal kuis 10 butir (sebaran 4/3/3).
+    - `keuangan_usaha_kecil_17_1.json`: "Memisahkan Uang Usaha dan Uang Pribadi", durasi 6 menit, misi `keputusan` ("Menjaga batas kas usaha").
+    - `keuangan_usaha_kecil_17_2.json`: "Menghitung Laba Bersih dan Menjaga Kas Usaha", durasi 6 menit, misi `lihat_hitungan` kunci `ringkasan_usaha_kecil`.
+    - `keuangan_usaha_kecil_17_3.json`: "Modal Kerja dan Cadangan Kas Usaha", durasi 5 menit, misi `refleksi` ("Aturan emas kas usahamu", min 10 karakter).
+  - **Modul 18 "Proteksi Keluarga & Warisan Dasar" (`proteksi_keluarga_warisan`):**
+    - Mengubah stub `modul.json` menjadi `tersedia: true`, urutan 18, gerbang `modul_selesai proteksi_dasar`, bankSoal kuis 10 butir (sebaran 4/3/3).
+    - Seluruh pelajaran Modul 18 memiliki `catatanReviewer: "TODO-VERIFIKASI..."`.
+    - `proteksi_keluarga_warisan_18_1.json`: "Komunikasi Keuangan Terbuka dalam Keluarga", durasi 6 menit, misi `keputusan` ("Menjaga keterbukaan di saat penting").
+    - `proteksi_keluarga_warisan_18_2.json`: "Daftar Periksa Dokumen Penting Keluarga", durasi 6 menit, misi `daftar_periksa` ("Merapikan dokumen penting keluarga", 5 langkah, min 3 dicentang, disclaimer: true).
+    - `proteksi_keluarga_warisan_18_3.json`: "Mengenal Gambaran Warisan Dasar dan Wasiat", durasi 6 menit, misi `daftar_periksa` ("Mengenal gambaran warisan dasar", 5 langkah, min 3 dicentang, disclaimer: true).
+- **Kamus Istilah Keuangan Baru (`aset/konten/kamus.json`):**
+  - Menambahkan 8 entri istilah terstandardisasi tanpa duplikasi (total 93 entri):
+    - Modul 17: `modal kerja`, `laba bersih`, `arus kas usaha`, `gaji pemilik`.
+    - Modul 18: `surat wasiat`, `ahli waris`, `harta warisan`, `daftar aset penting`.
+- **Pengujian & Verifikasi:**
+  - `test/perhitungan/perhitungan_umpan_balik_tahap_11c_test.dart`: 5 tests lulus.
+  - `test/konten/kesesuaian_lampiran_test.dart`: 62 tests lulus mencakup Modul 17, Modul 18, dan 8 entri kamus kata per kata.
+  - `test/konten/pemeriksa_semua_konten_test.dart`: 2 tests lulus (memvalidasi 19 modul dan 57 pelajaran lengkap tanpa stub `tersedia: false`).
+  - `test/fitur/belajar_tahap_11c_widget_test.dart`: 10 tests lulus mencakup tombol pernyataan dan cabut pernyataan, gerbang terkunci vs terbuka, seluruh varian misi (keputusan, lihat hitungan, refleksi, daftar periksa), kuis, dan aksesibilitas skala teks 2.0 tanpa overflow.
+  - Seluruh rangkaian test suite proyek lulus penuh tanpa regresi.
+
+---
+
 ## [0.19.0] - 2026-11-24 — Tahap 11B: Modul 15 "Pajak Lanjutan" & Modul 16 "Pensiun & Kebebasan Finansial" (Tingkat Lanjutan Bagian 2)
 
 Tahap 11B melanjutkan kurikulum Tingkat Lanjutan Funda dengan menghadirkan Modul 15 "Pajak Lanjutan", Modul 16 "Pensiun & Kebebasan Finansial", evaluasi gerbang multi-syarat `periode_data` transaksi 6 bulan dan 3 bulan berbeda, kunci umpan balik on-demand baru `proyeksi_kebebasan_finansial`, optimasi SQL agregasi rata-rata pemasukan KPR, dan 8 entri kamus istilah baru:

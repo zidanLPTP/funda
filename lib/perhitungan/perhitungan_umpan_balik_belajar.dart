@@ -1262,6 +1262,46 @@ String formatProyeksiKebebasanFinansial({
   return sb.toString();
 }
 
+/// Menghasilkan teks umpan balik untuk misi ringkasan usaha kecil (17.2).
+///
+/// Menampilkan kesiapan dompet dan ringkasan arus kas bulan berjalan,
+/// atau pesan alternatif jika pengguna menyatakan belum punya usaha.
+String formatRingkasanUsahaKecil({
+  required int jumlahDompetAktif,
+  required int totalPemasukanBulanIniRupiah,
+  required int totalPengeluaranBulanIniRupiah,
+  required bool belumPunyaUsaha,
+}) {
+  if (belumPunyaUsaha) {
+    return 'Kamu menyatakan belum punya usaha saat ini. Pelajaran ini tetap bisa kamu jadikan bekal agar nanti sejak hari pertama usaha, uang pribadi dan uang usaha langsung terpisah rapi.';
+  }
+
+  final String bagianDompet;
+  if (jumlahDompetAktif >= 2) {
+    bagianDompet =
+        'Kamu sudah punya $jumlahDompetAktif dompet aktif yang bisa dipakai memisahkan uang pribadi dan uang usaha.';
+  } else {
+    bagianDompet =
+        'Saat ini kamu baru punya $jumlahDompetAktif dompet aktif. Membuat dompet terpisah untuk usaha membantumu melihat hasil usaha lebih jernih.';
+  }
+
+  final String bagianArusKas;
+  if (totalPemasukanBulanIniRupiah > 0 || totalPengeluaranBulanIniRupiah > 0) {
+    final masukStr = formatRupiahRapat(totalPemasukanBulanIniRupiah);
+    final keluarStr = formatRupiahRapat(totalPengeluaranBulanIniRupiah);
+    bagianArusKas =
+        'Arus kas tercatat bulan ini: uang masuk $masukStr, uang keluar $keluarStr.';
+  } else {
+    bagianArusKas = 'Belum ada transaksi tercatat bulan ini.';
+  }
+
+  const penutup =
+      'Pisahkan catatan pribadi dan usaha agar modal kerja tidak terpakai tanpa sadar.';
+
+  return '$bagianDompet $bagianArusKas $penutup';
+}
+
+
 
 
 

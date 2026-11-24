@@ -163,6 +163,10 @@
 | practical installment ratio limit | batasAturanPraktisCicilanPersen | Batas aturan praktis perencanaan rasio cicilan bulanan (30%) tanpa tipe double |
 | financial freedom projection feedback | proyeksi_kebebasan_finansial | Umpan balik evaluasi patokan awal dana pensiun (25x pengeluaran tahunan) dan posisi kekayaan bersih |
 | practical retirement multiplier | pengaliAturanPraktisPensiun | Konstanta aturan praktis pengali pengeluaran tahunan dana pensiun (25x / aturan 4%) |
+| small business summary feedback | ringkasan_usaha_kecil | Umpan balik kesiapan dompet usaha dan arus kas bulan berjalan |
+| no business declaration | belum_punya_usaha | Kunci pernyataan pengguna belum memiliki usaha kecil untuk membuka modul 17 |
+| small business feedback calculation | formatRingkasanUsahaKecil | Logika perhitungan matematika murni evaluasi kas usaha kecil dan dompet |
+
 
 ## Aturan Cabang Kerja (Git)
 - Setiap tahap dikerjakan pada cabang khusus (contoh: `tahap-02-dompet-transaksi`).

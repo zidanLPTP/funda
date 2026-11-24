@@ -1,0 +1,86 @@
+{
+  "id": "keuangan_usaha_kecil_17_3",
+  "modulId": "keuangan_usaha_kecil",
+  "judul": "Menjaga Modal Kerja dan Dana Cadangan Usaha",
+  "durasiMenit": 6,
+  "status": "draf",
+  "catatanReviewer": "TODO-VERIFIKASI. Membahas perputaran modal kerja, pembentukan cadangan kas usaha, dan pertumbuhan bertahap.",
+  "pemantik": "Ada pesanan besar mendadak dari pelanggan baru, tetapi kamu tidak punya cukup uang tunai untuk membeli bahan bakunya.",
+  "kartu": [
+    {
+      "judul": "Apa itu modal kerja?",
+      "isi": "{{Modal kerja}} adalah dana yang terus berputar untuk menjalankan operasional harian usaha, seperti membeli stok barang, bahan baku, dan membayar biaya rutin sebelum uang penjualan kembali masuk."
+    },
+    {
+      "judul": "Sisihkan dana cadangan usaha",
+      "isi": "Sama seperti keuangan pribadi butuh dana darurat, usaha kecil juga butuh cadangan kas. Cadangan ini melindungi usahamu saat penjualan sedang lesu, ada alat kerja rusak, atau harga bahan baku naik mendadak."
+    },
+    {
+      "judul": "Tumbuh pelan tapi sehat",
+      "isi": "Menyisihkan sebagian laba bersih kembali ke kas usaha membuat usahamu tumbuh tanpa harus langsung bergantung pada pinjaman berbunga tinggi. Catat setiap perkembangan modalmu dengan jujur."
+    }
+  ],
+  "contohAngka": {
+    "judul": "Membagi laba bersih usaha Rp2.000.000 per bulan",
+    "baris": [
+      {
+        "label": "Laba bersih bulan ini",
+        "jumlah": 2000000
+      },
+      {
+        "label": "Ditransfer sebagai gaji pemilik",
+        "jumlah": 1200000
+      },
+      {
+        "label": "Ditahan untuk menambah modal kerja",
+        "jumlah": 500000
+      },
+      {
+        "label": "Disisihkan untuk cadangan alat dan masa sepi",
+        "jumlah": 300000
+      }
+    ],
+    "kesimpulan": "Membagi laba dengan porsi yang jelas membuat pemilik tetap terbayar sementara usaha makin kuat tiap bulan."
+  },
+  "cekPaham": [
+    {
+      "tanya": "Apa fungsi utama modal kerja dalam usaha kecil?",
+      "pilihan": [
+        "Membiayai perputaran operasional harian seperti bahan baku dan stok",
+        "Membeli barang konsumtif pribadi pemilik",
+        "Membayar liburan keluarga"
+      ],
+      "benar": 0,
+      "penjelasan": "Modal kerja memastikan usahamu selalu siap menerima dan menyelesaikan pesanan."
+    },
+    {
+      "tanya": "Mengapa usaha kecil juga membutuhkan dana cadangan terpisah?",
+      "pilihan": [
+        "Menghadapi masa penjualan sepi, kenaikan harga bahan, atau kerusakan alat kerja",
+        "Supaya tidak perlu melayani pelanggan",
+        "Supaya seluruh laba langsung habis"
+      ],
+      "benar": 0,
+      "penjelasan": "Cadangan kas mencegah usaha berhenti mendadak saat menghadapi gangguan operasional."
+    },
+    {
+      "tanya": "Bagaimana cara paling sehat memperbesar modal usaha kecil?",
+      "pilihan": [
+        "Menyisihkan sebagian laba bersih secara rutin kembali ke kas usaha",
+        "Mengambil pinjaman ilegal berbunga tinggi",
+        "Mencampurnya dengan uang makan harian"
+      ],
+      "benar": 0,
+      "penjelasan": "Pertumbuhan dari laba ditahan menjaga usaha tetap ringan tanpa tekanan cicilan berat."
+    }
+  ],
+  "misi": {
+    "tipe": "refleksi",
+    "minimalKarakter": 10,
+    "judul": "Aturan emas kas usahamu",
+    "instruksi": "Tulis satu aturan sederhana yang ingin kamu terapkan untuk menjaga uang usaha (atau persiapan jika nanti memulai usaha). Catatan ini privat di HP-mu.",
+    "pertanyaan": "Bagaimana caramu memisahkan kas usaha dan menentukan porsi laba yang ditahan untuk modal kerja?",
+    "petunjukInput": "Contoh: Aku akan pakai rekening terpisah untuk kas usaha dan menyisihkan 30 persen laba untuk modal kerja."
+  },
+  "tindakLanjut": "Jika kamu sudah berjualan, tinjau catatan omzet dan biaya operasionalmu setiap akhir minggu agar selalu terkendali."
+}

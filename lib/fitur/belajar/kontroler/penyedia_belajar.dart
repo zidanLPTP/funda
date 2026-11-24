@@ -1118,6 +1118,28 @@ final penyediaTeksUmpanBalikMisi = FutureProvider.autoDispose.family<String, Str
         kekayaanBersihRupiah: kekayaanBersih,
       );
 
+    case 'ringkasan_usaha_kecil':
+      final daftarDompetAktif = await (db.select(db.tabelDompet)
+            ..where((d) => d.diarsipkan.equals(false)))
+          .get();
+      final jumlahDompetAktif = daftarDompetAktif.length;
+
+      final arusKas = ref.watch(penyediaArusKasBulanIni);
+      final totalPemasukanBulanIniRupiah = arusKas.totalMasuk;
+      final totalPengeluaranBulanIniRupiah = arusKas.totalKeluar;
+
+      final pernyataan = await (db.select(db.tabelPernyataan)
+            ..where((p) => p.kunci.equals('belum_punya_usaha')))
+          .getSingleOrNull();
+      final belumPunyaUsaha = pernyataan != null && pernyataan.nilai == 'true';
+
+      return RegistriUmpanBalik.formatRingkasanUsahaKecilMisi(
+        jumlahDompetAktif: jumlahDompetAktif,
+        totalPemasukanBulanIniRupiah: totalPemasukanBulanIniRupiah,
+        totalPengeluaranBulanIniRupiah: totalPengeluaranBulanIniRupiah,
+        belumPunyaUsaha: belumPunyaUsaha,
+      );
+
     case 'arus_kas_bulan_ini':
     default:
       final arusKas = ref.watch(penyediaArusKasBulanIni);

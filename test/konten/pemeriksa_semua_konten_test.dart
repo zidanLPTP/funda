@@ -68,7 +68,8 @@ void main() {
 
         expect(modul.id.isNotEmpty, isTrue);
         expect(modul.judul.isNotEmpty, isTrue);
-        if (modul.tersedia && modul.id != 'mulai_tes_awal') {
+        expect(modul.tersedia, isTrue, reason: 'Modul ${modul.id} wajib tersedia: true (tidak ada lagi stub)');
+        if (modul.id != 'mulai_tes_awal') {
           expect(modul.daftarPelajaran.isNotEmpty, isTrue);
         }
 
@@ -183,6 +184,9 @@ void main() {
       print('Total berkas valid: ${berkasModulDitemukan.length} modul, ${berkasPelajaranDitemukan.length} pelajaran.');
       print('Total peringatan: ${daftarPeringatan.length}');
       print('=============================================');
+
+      expect(berkasModulDitemukan.length, equals(19), reason: 'Wajib ada 19 modul.json lengkap');
+      expect(berkasPelajaranDitemukan.length, equals(57), reason: 'Wajib ada 57 pelajaran lengkap tanpa stub');
     });
 
     test('Buktikan misi dengan tipe tanpa evaluator di RegistriMisi ditolak', () {

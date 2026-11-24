@@ -1,0 +1,103 @@
+{
+  "id": "proteksi_keluarga_warisan_18_3",
+  "modulId": "proteksi_keluarga_warisan",
+  "judul": "Mengenal Gambaran Warisan Dasar",
+  "durasiMenit": 6,
+  "status": "draf",
+  "catatanReviewer": "TODO-VERIFIKASI. Pengenalan sangat umum tentang konsep warisan, ahli waris, dan wasiat di Indonesia; konten sengaja tidak membahas perhitungan pembagian hukum waris (Islam/perdata/adat) dan menganjurkan konsultasi ahli hukum/notaris.",
+  "pemantik": "Membicarakan warisan sering dianggap tabu atau terlalu dini. Padahal, menyiapkan pencatatan yang rapi sejak sehat adalah bentuk kasih sayang kepada keluarga.",
+  "kartu": [
+    {
+      "judul": "Apa itu warisan secara sederhana?",
+      "isi": "{{Warisan}} adalah harta maupun kewajiban yang ditinggalkan seseorang kepada {{ahli waris}} yang berhak menurut hukum yang berlaku. Memahami konsep dasarnya membantu mencegah sengketa dan kebingungan di kemudian hari."
+    },
+    {
+      "judul": "Catatan harta dan utang yang jelas",
+      "isi": "Langkah paling praktis yang bisa dilakukan siapa saja adalah menjaga catatan kepemilikan dan utang tetap mutakhir. Dengan begitu, keluarga tidak kesulitan melacak aset atau tertimpa kewajiban yang tidak mereka ketahui."
+    },
+    {
+      "judul": "Konsultasikan ke pihak berwenang",
+      "isi": "Di Indonesia, aturan pembagian warisan dan pembuatan {{wasiat}} memiliki ketentuan hukum yang beragam dan spesifik. Untuk penyusunan resmi, selalu konsultasikan langsung kepada notaris atau ahli hukum yang berwenang."
+    }
+  ],
+  "contohAngka": {
+    "judul": "Tiga hal yang membuat proses warisan lebih tenang bagi keluarga",
+    "baris": [
+      {
+        "label": "Catatan daftar harta dan utang yang rapi",
+        "jumlah": 1
+      },
+      {
+        "label": "Dokumen kepemilikan yang sah dan tersimpan aman",
+        "jumlah": 1
+      },
+      {
+        "label": "Konsultasi resmi ke notaris atau ahli hukum bila diperlukan",
+        "jumlah": 1
+      }
+    ],
+    "kesimpulan": "Kesiapan administrasi yang sederhana menghindarkan keluarga dari proses yang panjang dan melelahkan."
+  },
+  "cekPaham": [
+    {
+      "tanya": "Mengapa merapikan catatan harta dan kewajiban sejak masih sehat itu bermanfaat?",
+      "pilihan": [
+        "Mencegah kebingungan dan sengketa keluarga di kemudian hari",
+        "Karena warisan hanya untuk orang lanjut usia",
+        "Supaya semua utang hilang tanpa catatan"
+      ],
+      "benar": 0,
+      "penjelasan": "Catatan yang jelas adalah bentuk tanggung jawab dan kepedulian kepada keluarga."
+    },
+    {
+      "tanya": "Siapa yang disebut ahli waris?",
+      "pilihan": [
+        "Pihak yang berhak menerima warisan sesuai ketentuan hukum yang berlaku",
+        "Setiap orang yang mengenal pemilik rekening",
+        "Pembuat aplikasi pencatat keuangan"
+      ],
+      "benar": 0,
+      "penjelasan": "Penetapan ahli waris mengikuti ketentuan hukum yang berlaku bagi keluarga tersebut."
+    },
+    {
+      "tanya": "Ke mana sebaiknya seseorang berkonsultasi untuk menyusun wasiat atau perencanaan warisan resmi?",
+      "pilihan": [
+        "Kepada notaris atau ahli hukum yang berwenang",
+        "Kepada akun anonim di media sosial",
+        "Menebak sendiri tanpa memeriksa aturan"
+      ],
+      "benar": 0,
+      "penjelasan": "Notaris atau ahli hukum memastikan dokumenmu sah dan sesuai ketentuan yang berlaku."
+    }
+  ],
+  "misi": {
+    "tipe": "daftar_periksa",
+    "disclaimer": true,
+    "minimalDicentang": 3,
+    "judul": "Langkah awal kesiapan keluarga",
+    "instruksi": "Baca catatan di atas, lalu centang prinsip kesiapan keluarga dan warisan dasar yang kamu pahami. Minimal tiga langkah.",
+    "langkah": [
+      {
+        "id": "l1",
+        "teks": "Aku memahami bahwa warisan mencakup catatan harta sekaligus kewajiban yang perlu jelas."
+      },
+      {
+        "id": "l2",
+        "teks": "Aku menjaga catatan kekayaan bersihku tetap rapi agar mudah dipahami bila dibutuhkan."
+      },
+      {
+        "id": "l3",
+        "teks": "Aku memastikan data penerima manfaat pada layanan proteksiku sesuai kondisi terbaru."
+      },
+      {
+        "id": "l4",
+        "teks": "Aku tahu bahwa pembuatan wasiat atau pembagian warisan resmi perlu dikonsultasikan ke notaris atau ahli hukum."
+      },
+      {
+        "id": "l5",
+        "teks": "Aku tahu bahwa Funda hanya menyediakan edukasi umum dan bukan nasihat hukum."
+      }
+    ]
+  },
+  "tindakLanjut": "Selamat! Kamu telah menyelesaikan seluruh 18 modul kurikulum Funda dari Pemula hingga Lanjutan. Terus jaga kebiasaan mencatat dan belajar pelan-pelan."
+}

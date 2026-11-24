@@ -1,0 +1,112 @@
+{
+  "id": "keuangan_usaha_kecil_17_1",
+  "modulId": "keuangan_usaha_kecil",
+  "judul": "Memisahkan Uang Pribadi dan Uang Usaha",
+  "durasiMenit": 5,
+  "status": "draf",
+  "catatanReviewer": "TODO-VERIFIKASI. Membahas prinsip pemisahan kas usaha kecil dan penetapan gaji pemilik secara teratur.",
+  "pemantik": "Jualanmu ramai setiap hari, tetapi di akhir bulan uang untuk beli bahan baku habis. Penyebab paling sering: uang usaha bercampur dengan uang jajan pribadi.",
+  "kartu": [
+    {
+      "judul": "Dua dompet, dua tujuan",
+      "isi": "Aturan nomor satu dalam {{keuangan usaha}} adalah memisahkan tempat simpan uang pribadi dan uang usaha. Meski usahamu masih berskala kecil dari kamar kos atau rumah, pemisahan ini membuatmu tahu apakah usahamu benar-benar untung atau hanya ramai di luar."
+    },
+    {
+      "judul": "Gaji dirimu sendiri secara teratur",
+      "isi": "Jangan mengambil uang dari kas usaha setiap kali ingin jajan. Tetapkan nominal gaji pribadi yang wajar untuk dirimu setiap bulan atau minggu, lalu pindahkan dari dompet usaha ke dompet pribadi. Di Funda, kamu bisa memakai fitur transfer antar dompet."
+    },
+    {
+      "judul": "Lindungi modal dari pengeluaran harian",
+      "isi": "Ketika uang pribadi dan usaha tercampur, modal usaha mudah tergerus tanpa terasa. Memisahkannya sejak awal membuatmu lebih tenang saat mengambil keputusan menambah stok atau mengembangkan usaha."
+    }
+  ],
+  "contohAngka": {
+    "judul": "Memisahkan kas usaha dan kas pribadi dalam sebulan",
+    "baris": [
+      {
+        "label": "Penjualan kotor usaha",
+        "jumlah": 6000000
+      },
+      {
+        "label": "Biaya bahan baku dan operasional",
+        "jumlah": -3800000
+      },
+      {
+        "label": "Sisa laba usaha",
+        "jumlah": 2200000,
+        "ringkasan": true
+      },
+      {
+        "label": "Gaji pemilik yang ditransfer ke dompet pribadi",
+        "jumlah": -1500000
+      },
+      {
+        "label": "Laba ditahan untuk modal usaha",
+        "jumlah": 700000,
+        "ringkasan": true
+      }
+    ],
+    "kesimpulan": "Dengan memisahkan kas, kamu bisa menikmati Rp1.500.000 dengan tenang sambil membesarkan modal usaha Rp700.000."
+  },
+  "cekPaham": [
+    {
+      "tanya": "Apa risiko utama jika uang usaha dicampur dengan uang pribadi?",
+      "pilihan": [
+        "Sulit mengetahui untung rugi sebenarnya dan modal mudah terpakai tanpa sadar",
+        "Penjualan otomatis meningkat dua kali lipat",
+        "Biaya bahan baku menjadi gratis"
+      ],
+      "benar": 0,
+      "penjelasan": "Pemisahan kas menjaga kejelasan laba dan melindungi kelangsungan modal."
+    },
+    {
+      "tanya": "Cara paling rapi bagi pemilik usaha kecil mengambil uang untuk kebutuhan pribadi adalah?",
+      "pilihan": [
+        "Menetapkan jatah gaji pemilik secara teratur dari kas usaha ke kas pribadi",
+        "Mengambil uang laci kapan saja tanpa dicatat",
+        "Menghabiskan seluruh hasil penjualan hari itu"
+      ],
+      "benar": 0,
+      "penjelasan": "Memberi diri sendiri gaji tetap menjaga kas usaha tetap terkendali."
+    },
+    {
+      "tanya": "Penjualan Rp6.000.000 dan biaya bahan baku Rp3.800.000. Berapa laba usahanya?",
+      "pilihan": [
+        "Rp2.200.000",
+        "Rp6.000.000",
+        "Rp3.800.000"
+      ],
+      "benar": 0,
+      "penjelasan": "Penjualan dikurangi biaya operasional menghasilkan laba Rp2.200.000."
+    }
+  ],
+  "misi": {
+    "tipe": "keputusan",
+    "judul": "Menjaga batas kas usaha",
+    "instruksi": "Baca skenarionya, lalu pilih langkah yang paling sehat untuk usahamu.",
+    "skenario": {
+      "pemantik": "Hari ini usahamu mendapat pembayaran pesanan Rp1.500.000. Besok kamu harus membeli bahan baku Rp1.000.000, tetapi malam ini teman mengajak makan di tempat mahal.",
+      "opsi": [
+        {
+          "id": "a",
+          "teks": "Pakai uang kas usaha dulu karena besok masih bisa cari pinjaman untuk bahan baku",
+          "aman": false,
+          "umpanBalik": "Mengambil uang modal kerja untuk keinginan pribadi bisa mengganggu pesanan besok. Coba pilihan lain."
+        },
+        {
+          "id": "b",
+          "teks": "Biarkan Rp1.500.000 tetap di dompet usaha, dan pakai anggaran jajan dari dompet pribadimu",
+          "aman": true,
+          "umpanBalik": "Tepat. Menjaga batas kas usaha memastikan operasional besok berjalan lancar tanpa utang."
+        },
+        {
+          "id": "c",
+          "teks": "Jangan catat penjualan hari ini agar bisa dipakai langsung",
+          "aman": false,
+          "umpanBalik": "Tidak mencatat transaksi membuat laporan laba rugi usahamu meleset. Coba pilihan lain."
+        }
+      ]
+    }
+  },
+  "tindakLanjut": "Jika kamu punya usaha sampingan, buat satu dompet khusus bernama \"Kas Usaha\" di Funda agar terpisah dari dompet harianmu."
+}
