@@ -595,6 +595,23 @@ Berkas ini adalah sumber kebenaran teks (*single source of truth*) untuk antarmu
   - Perhitungan setoran bulanan integer bulat ke atas: `setoran = (sisa + bulan - 1) ~/ bulan`.
   - Penutup tetap edukatif: *"Fokus pada satu atau dua tujuan utama lebih mudah dijalankan daripada mengejar semuanya sekaligus."*
 
+## 15. Kunci Umpan Balik On-Demand Misi Belajar Tahap 11A (Modul 14)
+
+### 15.1 `uji_kemampuan_kpr`
+- **Konteks:** Digunakan pada misi tipe `lihat_hitungan` pelajaran 14.3 ("Uji Kemampuan Bayar dari Arus Kas Nyata").
+- **Karakteristik:** Dipanggil secara on-demand saat misi 14.3 dibuka tanpa menambah kueri pada `FotoDataRepositori`.
+- **Logika Perhitungan:**
+  - Masukan: rata-rata pemasukan bulanan (`hitungPemasukanBulananRataRata` dari transaksi pengguna), total cicilan aktif per bulan (`cicilanBulananRupiah` dari daftar utang aktif), total saldo dompet aktif (`penyediaTotalSaldoAktif`).
+  - Aturan praktis cicilan: `batasAturanPraktisCicilanPersen = 30`.
+  - Ruang cicilan maksimal: `(pemasukan * 30) ~/ 100`.
+  - Estimasi sisa ruang cicilan: `max(0, ruangCicilanMaksimal - totalCicilanAktif)`.
+  - Seluruh perhitungan deterministik menggunakan pembagian bilangan bulat integer murni tanpa `double` dan tanpa `round()`.
+- **Variasi Respons:**
+  - V1 (Belum ada catatan pemasukan): *"Belum ada catatan pemasukan untuk menguji ruang cicilanmu. Catat pemasukanmu secara rutin dulu agar gambarannya bisa dihitung. Ini simulasi edukatif, bukan persetujuan kredit."*
+  - V2 (Ada sisa ruang cicilan > 0): *"Dengan pemasukan sekitar [pemasukan] per bulan ([dasar]) dan cicilan aktif saat ini [cicilan], estimasi sisa ruang cicilan (memakai patokan umum 30 persen) adalah sekitar [sisa] per bulan. Total saldo dompet aktifmu saat ini tercatat [saldo] (belum dikurangi dana darurat dan kebutuhan harian). Ini simulasi edukatif, bukan persetujuan kredit."*
+  - V3 (Cicilan aktif sudah >= 30 persen): Ditambahkan kalimat peringatan ramah: *"Cicilan aktifmu saat ini sudah memenuhi atau melampaui patokan 30 persen, sehingga melunasi sebagian utang dulu biasanya jauh lebih tenang sebelum mengambil kredit besar."*
+
+
 
 
 

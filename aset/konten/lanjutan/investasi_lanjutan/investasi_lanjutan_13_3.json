@@ -1,0 +1,104 @@
+{
+  "id": "investasi_lanjutan_13_3",
+  "modulId": "investasi_lanjutan",
+  "judul": "Menjaga Disiplin Saat Pasar Bergejolak",
+  "durasiMenit": 6,
+  "status": "draf",
+  "catatanReviewer": "TODO-VERIFIKASI. Prinsip umum investasi berkala (dollar-cost averaging) dan pengendalian emosi pasar; edukasi umum, bukan nasihat investasi.",
+  "pemantik": "Berita penuh warna merah, nilai portofolio turun 15 persen dalam sebulan. Dorongan paling kuat saat itu adalah langsung menjual semuanya karena panik.",
+  "kartu": [
+    {
+      "judul": "Gejolak adalah bagian dari perjalanan",
+      "isi": "Penurunan nilai sementara adalah hal yang normal dalam investasi jangka panjang. Menjual saat panik justru mengunci kerugian yang tadinya hanya tercatat di atas kertas."
+    },
+    {
+      "judul": "Manfaat menyetor secara berkala",
+      "isi": "{{Investasi berkala}} berarti menyisihkan nominal yang sama secara rutin setiap bulan, tanpa menebak-nebak kapan harga paling murah. Cara ini membantu melatih disiplin dan meratakan harga beli dari waktu ke waktu."
+    },
+    {
+      "judul": "Kembali ke tujuan awalmu",
+      "isi": "Saat pasar sedang bergejolak, tanyakan dua hal: apakah tujuan jangka panjangku berubah, dan apakah uang ini sedang kubutuhkan besok? Jika tidak, ketenangan dan konsistensi biasanya jauh lebih membantu daripada keputusan tergesa-gesa."
+    }
+  ],
+  "contohAngka": {
+    "judul": "Ilustrasi rutin menyisihkan Rp500.000 per bulan selama 12 bulan",
+    "baris": [
+      {
+        "label": "Setoran rutin bulanan",
+        "jumlah": 500000
+      },
+      {
+        "label": "Jumlah bulan menyetor",
+        "jumlah": 12
+      },
+      {
+        "label": "Total pokok yang terkumpul",
+        "jumlah": 6000000,
+        "ringkasan": true
+      }
+    ],
+    "kesimpulan": "Disiplin menyetor rutin membuatmu tetap melangkah maju tanpa harus stres menebak pergerakan pasar harian."
+  },
+  "cekPaham": [
+    {
+      "tanya": "Apa risiko menjual investasi jangka panjang saat sedang panik melihat penurunan sementara?",
+      "pilihan": [
+        "Mengunci kerugian yang tadinya hanya penurunan sementara di atas kertas",
+        "Langsung mendapat keuntungan ganda",
+        "Menghapus inflasi selamanya"
+      ],
+      "benar": 0,
+      "penjelasan": "Keputusan di bawah rasa panik sering merusak rencana jangka panjang yang sudah disusun."
+    },
+    {
+      "tanya": "Apa keuntungan utama metode investasi berkala dengan nominal rutin?",
+      "pilihan": [
+        "Melatih disiplin dan mengurangi stres menebak waktu terbaik",
+        "Menjamin harga tidak pernah turun",
+        "Menghilangkan semua risiko pasar"
+      ],
+      "benar": 0,
+      "penjelasan": "Investasi berkala membuat prosesnya terukur dan konsisten."
+    },
+    {
+      "tanya": "Pertanyaan apa yang membantu menenangkan diri saat nilai investasi sedang turun?",
+      "pilihan": [
+        "Apakah tujuan jangka panjangku berubah dan apakah uang ini dibutuhkan besok?",
+        "Apakah semua orang di media sosial sedang panik?",
+        "Apakah aku harus meminjam uang sekarang?"
+      ],
+      "benar": 0,
+      "penjelasan": "Mengingat kembali tujuan dan jangka waktu membantumu mengambil keputusan dengan kepala dingin."
+    }
+  ],
+  "misi": {
+    "tipe": "daftar_periksa",
+    "disclaimer": true,
+    "minimalDicentang": 3,
+    "judul": "Aturan tenang menghadapi gejolak pasar",
+    "instruksi": "Baca catatan di atas, lalu centang prinsip yang kamu pegang untuk investasi jangka panjangmu. Minimal tiga langkah.",
+    "langkah": [
+      {
+        "id": "l1",
+        "teks": "Aku hanya memakai uang dingin untuk instrumen yang nilainya bergejolak."
+      },
+      {
+        "id": "l2",
+        "teks": "Aku menentukan pembagian alokasi sesuai profil risiko dan jangka waktu tujuanku."
+      },
+      {
+        "id": "l3",
+        "teks": "Aku memeriksa rincian biaya dan perlakuan pajak sebelum memilih instrumen di luar Funda."
+      },
+      {
+        "id": "l4",
+        "teks": "Aku tidak mengambil keputusan jual atau beli secara panik karena berita sesaat."
+      },
+      {
+        "id": "l5",
+        "teks": "Aku meninjau ulang dan melakukan rebalancing portofolio secara berkala."
+      }
+    ]
+  },
+  "tindakLanjut": "Tulis profil risiko dan aturan pribadi investasimu di catatan agar bisa dibaca ulang saat pasar sedang ramai atau lesu."
+}

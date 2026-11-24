@@ -1,0 +1,87 @@
+{
+  "id": "investasi_lanjutan_13_1",
+  "modulId": "investasi_lanjutan",
+  "judul": "Menyusun Alokasi dan Rebalancing Portofolio",
+  "durasiMenit": 6,
+  "status": "draf",
+  "aturanPraktis": true,
+  "catatanReviewer": "TODO-VERIFIKASI. Konsep alokasi portofolio dan rebalancing bersifat edukatif umum; angka komposisi 50/30/20 hanya ilustrasi simulasi.",
+  "pemantik": "Awal tahun kamu membagi dana investasi dengan rapi. Setahun kemudian, satu instrumen naik tinggi sehingga porsinya jadi terlalu besar dibanding rencana awalmu.",
+  "kartu": [
+    {
+      "judul": "Alokasi mengikuti profil risiko",
+      "isi": "{{Profil risiko}} adalah seberapa nyaman kamu melihat nilai investasimu naik turun dalam jangka waktu tertentu. Orang yang baru mulai atau punya tujuan dekat biasanya memilih porsi instrumen stabil lebih besar dibanding instrumen yang bergejolak."
+    },
+    {
+      "judul": "Apa itu rebalancing?",
+      "isi": "{{Rebalancing}} adalah mengembalikan pembagian portofoliomu ke target awal secara berkala, misalnya setahun sekali. Tujuannya menjaga agar tingkat risiko investasimu tetap sesuai rencana, bukan ikut-ikutan euforia pasar."
+    },
+    {
+      "judul": "Latih dulu di Mode Sandbox",
+      "isi": "Di Mode Sandbox Funda, kamu bisa mencoba mengubah pembagian pasar uang, obligasi, dan saham lalu melihat bedanya saat pasar naik maupun turun. Menguji berbagai komposisi dengan uang fiktif membantumu mengenali batas nyamanmu sendiri."
+    }
+  ],
+  "contohAngka": {
+    "judul": "Ilustrasi pergeseran porsi portofolio Rp20.000.000 setelah 1 tahun",
+    "baris": [
+      {
+        "label": "Target awal: pasar uang 50 persen",
+        "jumlah": 10000000
+      },
+      {
+        "label": "Target awal: saham 50 persen",
+        "jumlah": 10000000
+      },
+      {
+        "label": "Setelah pasar naik: saham tumbuh menjadi",
+        "jumlah": 13000000
+      },
+      {
+        "label": "Porsi saham bergeser melampaui target awal",
+        "jumlah": 13000000,
+        "ringkasan": true
+      }
+    ],
+    "kesimpulan": "Karena porsi saham membesar, risiko portofolio ikut naik. Rebalancing membantu mengembalikannya ke porsi yang kamu rencanakan."
+  },
+  "cekPaham": [
+    {
+      "tanya": "Apa tujuan utama melakukan rebalancing portofolio?",
+      "pilihan": [
+        "Mengembalikan pembagian instrumen ke target awal agar risiko tetap terjaga",
+        "Menjual seluruh investasi setiap minggu",
+        "Mengejar instrumen yang sedang viral saja"
+      ],
+      "benar": 0,
+      "penjelasan": "Rebalancing menjaga agar porsi risikomu tidak melenceng jauh dari rencana awal."
+    },
+    {
+      "tanya": "Faktor apa yang paling menentukan pembagian alokasi investasi seseorang?",
+      "pilihan": [
+        "Profil risiko dan jangka waktu tujuannya",
+        "Tebakan acak di media sosial",
+        "Warna logo aplikasi"
+      ],
+      "benar": 0,
+      "penjelasan": "Jangka waktu dan kenyamanan menghadapi gejolak menentukan komposisi yang paling pas."
+    },
+    {
+      "tanya": "Seberapa sering rebalancing umumnya perlu ditinjau oleh investor pemula?",
+      "pilihan": [
+        "Secara berkala, misalnya setahun sekali atau saat porsi bergeser jauh",
+        "Setiap satu jam sekali",
+        "Tidak pernah perlu ditinjau"
+      ],
+      "benar": 0,
+      "penjelasan": "Peninjauan berkala menjaga keseimbangan tanpa memicu transaksi berlebihan."
+    }
+  ],
+  "misi": {
+    "tipe": "sandbox",
+    "disclaimer": true,
+    "minimalSimulasi": 1,
+    "judul": "Uji komposisi alokasi di Sandbox",
+    "instruksi": "Buka Mode Sandbox, coba atur pembagian alokasi sesuai batas nyamanmu, lalu majukan waktu minimal 1 tahun untuk melihat pergerakan nilainya."
+  },
+  "tindakLanjut": "Catat komposisi alokasi yang paling membuatmu tenang saat melihat skenario Pasar Turun di Mode Sandbox."
+}

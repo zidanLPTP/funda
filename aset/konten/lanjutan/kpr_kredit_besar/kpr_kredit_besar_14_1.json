@@ -1,0 +1,103 @@
+{
+  "id": "kpr_kredit_besar_14_1",
+  "modulId": "kpr_kredit_besar",
+  "judul": "Memahami Uang Muka dan Biaya Awal KPR",
+  "durasiMenit": 6,
+  "status": "draf",
+  "catatanReviewer": "TODO-VERIFIKASI. Gambaran umum komponen uang muka (DP) dan biaya awal pembelian rumah (notaris, pajak jual beli, provisi/admin bank) tanpa menyebut tarif tetap yang bergantung lokasi dan aturan terkini.",
+  "pemantik": "Harga rumah Rp400.000.000 dan uang mukanya Rp40.000.000. Banyak orang kaget karena saat akad ternyata masih ada biaya tambahan puluhan juta di luar uang muka.",
+  "kartu": [
+    {
+      "judul": "Uang muka bukan satu-satunya biaya awal",
+      "isi": "Saat mengambil {{KPR}} atau kredit hunian, kamu perlu menyiapkan {{uang muka}} sebagai bagian harga yang dibayar di awal. Namun di luar itu, ada biaya lain seperti biaya administrasi kredit, notaris, pajak pembelian, dan asuransi yang menyertai akad."
+    },
+    {
+      "judul": "Dampak uang muka terhadap cicilan",
+      "isi": "Makin besar uang muka yang kamu siapkan, makin kecil pokok pinjaman yang harus dicicil selama bertahun-tahun. Pokok yang lebih kecil berarti cicilan bulanan lebih ringan dan total bunga jangka panjang jauh lebih rendah."
+    },
+    {
+      "judul": "Jangan habiskan dana darurat untuk uang muka",
+      "isi": "Kesalahan yang sering terjadi adalah menguras seluruh tabungan dan dana darurat demi membayar uang muka. Padahal setelah pindah rumah, sering muncul biaya tak terduga seperti perbaikan, perabot dasar, dan tagihan rutin baru."
+    }
+  ],
+  "contohAngka": {
+    "judul": "Ilustrasi persiapan awal pembelian rumah Rp400.000.000",
+    "baris": [
+      {
+        "label": "Uang muka 15 persen (ilustrasi)",
+        "jumlah": 60000000
+      },
+      {
+        "label": "Perkiraan biaya akad, pajak, dan notaris (ilustrasi)",
+        "jumlah": 25000000
+      },
+      {
+        "label": "Total dana awal yang perlu disiapkan",
+        "jumlah": 85000000,
+        "ringkasan": true
+      }
+    ],
+    "kesimpulan": "Menyiapkan pos biaya akad sejak awal menghindarkanmu dari utang tambahan tepat sebelum pindah rumah."
+  },
+  "cekPaham": [
+    {
+      "tanya": "Mengapa menyiapkan uang muka saja sering belum cukup saat mengambil KPR?",
+      "pilihan": [
+        "Karena masih ada biaya akad, notaris, pajak pembelian, dan biaya pindah",
+        "Karena uang muka selalu dikembalikan saat akad",
+        "Karena rumah langsung lunas"
+      ],
+      "benar": 0,
+      "penjelasan": "Biaya pendukung akad jumlahnya cukup besar dan perlu masuk dalam target tabungan sejak awal."
+    },
+    {
+      "tanya": "Apa dampak menyiapkan uang muka yang lebih besar?",
+      "pilihan": [
+        "Pokok pinjaman lebih kecil sehingga cicilan dan total bunga lebih ringan",
+        "Total bunga menjadi jauh lebih besar",
+        "Tenor otomatis menjadi 50 tahun"
+      ],
+      "benar": 0,
+      "penjelasan": "Semakin kecil yang dipinjam, semakin kecil beban bunga yang ditanggung selama tenor."
+    },
+    {
+      "tanya": "Apakah dana darurat sebaiknya dihabiskan untuk menambah uang muka rumah?",
+      "pilihan": [
+        "Sebaiknya jangan, karena setelah pindah sering muncul biaya tak terduga",
+        "Ya, habiskan semuanya sampai saldo nol",
+        "Dana darurat tidak dibutuhkan pemilik rumah"
+      ],
+      "benar": 0,
+      "penjelasan": "Menjaga dana darurat tetap utuh melindungimu di bulan-bulan awal menempati rumah baru."
+    }
+  ],
+  "misi": {
+    "tipe": "keputusan",
+    "judul": "Menyiapkan dana akad rumah",
+    "instruksi": "Baca skenarionya, lalu pilih keputusan yang paling aman bagi arus kasmu.",
+    "skenario": {
+      "pemantik": "Kamu punya tabungan Rp70.000.000, termasuk Rp15.000.000 dana darurat. Ada penawaran rumah dengan uang muka dan biaya akad total Rp68.000.000.",
+      "opsi": [
+        {
+          "id": "a",
+          "teks": "Tunda dulu beberapa bulan sampai dana akad terkumpul tanpa menyentuh dana darurat",
+          "aman": true,
+          "umpanBalik": "Tepat. Membeli rumah dengan dana darurat tetap utuh membuat awal masa cicilanmu jauh lebih tenang."
+        },
+        {
+          "id": "b",
+          "teks": "Pakai seluruh tabungan termasuk dana darurat agar bisa langsung akad besok",
+          "aman": false,
+          "umpanBalik": "Saldo nol setelah akad sangat rentan jika ada perbaikan rumah atau biaya mendadak bulan depan. Coba pilihan lain."
+        },
+        {
+          "id": "c",
+          "teks": "Tutup kekurangannya dengan pinjaman online berbunga tinggi",
+          "aman": false,
+          "umpanBalik": "Menambah utang berbunga tinggi sebelum memulai cicilan KPR akan sangat menekan arus kasmu. Coba pilihan lain."
+        }
+      ]
+    }
+  },
+  "tindakLanjut": "Jika kamu punya tujuan uang muka rumah di Funda, pastikan targetnya sudah memperhitungkan perkiraan biaya akad dan perbaikan awal."
+}

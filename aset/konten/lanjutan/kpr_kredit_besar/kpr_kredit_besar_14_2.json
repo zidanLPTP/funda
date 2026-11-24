@@ -1,0 +1,103 @@
+{
+  "id": "kpr_kredit_besar_14_2",
+  "modulId": "kpr_kredit_besar",
+  "judul": "Sewa vs Beli dan Risiko Bunga Mengambang",
+  "durasiMenit": 6,
+  "status": "draf",
+  "catatanReviewer": "TODO-VERIFIKASI. Konsep umum bunga tetap (fixed) vs bunga mengambang (floating) pada KPR dan pertimbangan sewa vs beli; edukasi umum, bukan nasihat properti.",
+  "pemantik": "Cicilan dua tahun pertama terasa ringan. Di tahun ketiga, cicilan tiba-tiba naik jutaan rupiah per bulan karena masa bunga promo berakhir.",
+  "kartu": [
+    {
+      "judul": "Bunga tetap vs bunga mengambang",
+      "isi": "Pada banyak kredit rumah, cicilan awal memakai {{bunga tetap}} selama beberapa tahun pertama. Setelah masa itu habis, cicilan biasanya beralih ke {{bunga mengambang}} yang mengikuti suku bunga pasar, sehingga nominal cicilan bisa naik cukup signifikan."
+    },
+    {
+      "judul": "Sewa bukan berarti uang terbuang",
+      "isi": "Banyak orang merasa harus buru-buru membeli rumah padahal belum siap. Padahal menyewa memberi fleksibilitas lokasi, bebas biaya perbaikan besar, dan memberi waktu bagimu untuk mengumpulkan uang muka lebih besar tanpa tekanan cicilan."
+    },
+    {
+      "judul": "Pertimbangkan biaya kepemilikan",
+      "isi": "Memiliki rumah tidak hanya soal cicilan bulanan. Ada biaya perawatan berkala, pajak bumi dan bangunan, iuran lingkungan, hingga biaya transportasi jika lokasinya jauh dari tempat kerja. Masukkan semua itu dalam hitunganmu."
+    }
+  ],
+  "contohAngka": {
+    "judul": "Ilustrasi kenaikan cicilan saat beralih ke bunga mengambang",
+    "baris": [
+      {
+        "label": "Cicilan masa bunga tetap (tahun 1 sampai 3)",
+        "jumlah": 2800000
+      },
+      {
+        "label": "Perkiraan cicilan saat bunga mengambang (ilustrasi)",
+        "jumlah": 3800000
+      },
+      {
+        "label": "Kenaikan beban per bulan",
+        "jumlah": 1000000,
+        "ringkasan": true
+      }
+    ],
+    "kesimpulan": "Sebelum menyetujui kredit rumah, selalu tanyakan perkiraan cicilan setelah masa bunga tetap berakhir."
+  },
+  "cekPaham": [
+    {
+      "tanya": "Apa yang perlu diwaspadai setelah masa bunga tetap KPR berakhir?",
+      "pilihan": [
+        "Cicilan bulanan bisa naik saat beralih ke bunga mengambang",
+        "Cicilan otomatis menjadi gratis",
+        "Rumah langsung lunas otomatis"
+      ],
+      "benar": 0,
+      "penjelasan": "Bunga mengambang mengikuti pasar sehingga nominal cicilan dapat meningkat dari masa promo awal."
+    },
+    {
+      "tanya": "Mengapa menyewa rumah sementara bisa menjadi pilihan yang masuk akal?",
+      "pilihan": [
+        "Memberi fleksibilitas dan waktu mengumpulkan uang muka tanpa memaksakan cicilan",
+        "Karena membeli rumah selalu dilarang",
+        "Karena sewa tidak butuh anggaran"
+      ],
+      "benar": 0,
+      "penjelasan": "Menyewa memberi ruang untuk mempersiapkan keuangan hingga benar-benar siap membeli."
+    },
+    {
+      "tanya": "Biaya apa saja yang tetap muncul setelah memiliki rumah sendiri selain cicilan?",
+      "pilihan": [
+        "Biaya perawatan, pajak tahunan properti, dan iuran lingkungan",
+        "Tidak ada biaya apa pun lagi",
+        "Hanya biaya internet saja"
+      ],
+      "benar": 0,
+      "penjelasan": "Biaya kepemilikan rutin perlu diperhitungkan agar anggaran bulanan tidak kaget."
+    }
+  ],
+  "misi": {
+    "tipe": "keputusan",
+    "judul": "Menguji kesiapan saat cicilan naik",
+    "instruksi": "Pilih sikap yang paling bijak saat menerima tawaran KPR.",
+    "skenario": {
+      "pemantik": "Penjual menawarkan KPR dengan cicilan promo Rp2.500.000 selama 2 tahun pertama. Namun setelah masuk bunga mengambang, perkiraan cicilannya bisa naik menjadi Rp3.700.000, yang hampir memakan separuh gajimu.",
+      "opsi": [
+        {
+          "id": "a",
+          "teks": "Hitung ulang dengan harga rumah lebih terjangkau atau perbesar uang muka dulu",
+          "aman": true,
+          "umpanBalik": "Tepat. Mengukur kemampuan bayar dari skenario cicilan normal jauh lebih aman daripada hanya melihat cicilan promo."
+        },
+        {
+          "id": "b",
+          "teks": "Ambil saja dulu, urusan tahun ketiga dipikirkan nanti",
+          "aman": false,
+          "umpanBalik": "Kenaikan cicilan Rp1.200.000 per bulan bisa langsung mengganggu kebutuhan pokok jika tidak disiapkan. Coba pilihan lain."
+        },
+        {
+          "id": "c",
+          "teks": "Abaikan perkiraan bunga mengambang karena belum tentu naik",
+          "aman": false,
+          "umpanBalik": "Mengabaikan risiko bunga mengambang adalah salah satu penyebab tersering kredit rumah terasa berat di tengah jalan. Coba pilihan lain."
+        }
+      ]
+    }
+  },
+  "tindakLanjut": "Jika sedang mencari hunian, bandingkan total biaya sewa tahunan dengan total cicilan plus biaya perawatan kepemilikan."
+}

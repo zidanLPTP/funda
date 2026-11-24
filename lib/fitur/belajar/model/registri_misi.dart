@@ -240,6 +240,21 @@ class RegistriMisi {
       tujuan: tujuan,
     );
   }
+
+  /// Menghasilkan umpan balik uji kemampuan KPR dari data pemasukan dan cicilan aktif.
+  static String formatUjiKemampuanKprMisi({
+    required HasilPemasukanRataRata? pemasukanRataRata,
+    required int totalCicilanAktifRupiah,
+    required int totalSaldoDompetAktifRupiah,
+    String? deskripsiDasarOverride,
+  }) {
+    return formatUjiKemampuanKpr(
+      pemasukanRataRata: pemasukanRataRata,
+      totalCicilanAktifRupiah: totalCicilanAktifRupiah,
+      totalSaldoDompetAktifRupiah: totalSaldoDompetAktifRupiah,
+      deskripsiDasarOverride: deskripsiDasarOverride,
+    );
+  }
 }
 
 /// Penyedia teks umpan balik dari data nyata pengguna tanpa jargon.
@@ -459,6 +474,21 @@ class RegistriUmpanBalik {
   }) {
     return formatRingkasanTujuanBesar(
       tujuan: tujuan,
+    );
+  }
+
+  /// Menghasilkan umpan balik uji kemampuan KPR dari data pemasukan dan cicilan aktif.
+  static String formatUjiKemampuanKprMisi({
+    required HasilPemasukanRataRata? pemasukanRataRata,
+    required int totalCicilanAktifRupiah,
+    required int totalSaldoDompetAktifRupiah,
+    String? deskripsiDasarOverride,
+  }) {
+    return formatUjiKemampuanKpr(
+      pemasukanRataRata: pemasukanRataRata,
+      totalCicilanAktifRupiah: totalCicilanAktifRupiah,
+      totalSaldoDompetAktifRupiah: totalSaldoDompetAktifRupiah,
+      deskripsiDasarOverride: deskripsiDasarOverride,
     );
   }
 }

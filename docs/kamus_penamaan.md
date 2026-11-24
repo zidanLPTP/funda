@@ -159,6 +159,8 @@
 | annual income summary feedback | ringkasan_penghasilan_tahunan | Umpan balik rekapitulasi total pemasukan tahun berjalan untuk persiapan pelaporan pajak |
 | big goals summary feedback | ringkasan_tujuan_besar | Umpan balik proyeksi setoran bulanan dan evaluasi target tujuan non-dana-darurat |
 | big goal feedback data | DataTujuanBesarUmpanBalik | Model data evaluasi kandidat tujuan finansial besar |
+| mortgage capacity test feedback | uji_kemampuan_kpr | Umpan balik evaluasi rasio ruang cicilan aman 30 persen dari arus kas pemasukan dan cicilan aktif |
+| practical installment ratio limit | batasAturanPraktisCicilanPersen | Batas aturan praktis perencanaan rasio cicilan bulanan (30%) tanpa tipe double |
 
 ## Aturan Cabang Kerja (Git)
 - Setiap tahap dikerjakan pada cabang khusus (contoh: `tahap-02-dompet-transaksi`).

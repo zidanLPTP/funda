@@ -1,0 +1,82 @@
+{
+  "id": "kpr_kredit_besar_14_3",
+  "modulId": "kpr_kredit_besar",
+  "judul": "Uji Kemampuan Bayar dari Arus Kas Nyata",
+  "durasiMenit": 6,
+  "status": "draf",
+  "aturanPraktis": true,
+  "catatanReviewer": "TODO-VERIFIKASI. Penggunaan patokan umum 30 persen rasio cicilan terhadap pemasukan sebagai simulasi awal kemampuan bayar KPR; periksa kesesuaiannya dengan aturan perbankan terkini.",
+  "pemantik": "Bank mungkin menyetujui pinjamanmu, tetapi hanya kamu yang tahu apakah sisa uang setelah cicilan masih cukup untuk hidup dengan tenang.",
+  "kartu": [
+    {
+      "judul": "Uji dengan data 3 bulan terakhirmu",
+      "isi": "Kredit besar mengikat arus kasmu selama 10 hingga 20 tahun. Karena itu, ujilah kemampuan bayarmu memakai data pemasukan dan pengeluaran nyatamu di Funda, bukan sekadar angan-angan."
+    },
+    {
+      "judul": "Sisakan ruang untuk hidup dan menabung",
+      "isi": "Sebagai {{aturan praktis}}, banyak panduan memakai patokan total seluruh cicilan maksimal sekitar 30 persen dari pemasukan bulanan. Jika kamu masih punya cicilan lain, ruang untuk cicilan baru tentu berkurang."
+    },
+    {
+      "judul": "Coba simulasi hidup dengan cicilan",
+      "isi": "Cara paling jujur menguji kesiapan KPR adalah simulasi selama 3 sampai 6 bulan: sisihkan selisih antara biaya kos/sewa sekarang dan calon cicilan KPR ke kantong khusus. Kalau kamu tetap nyaman menjalani bulan-bulan itu, tanda kesiapanmu makin kuat."
+    }
+  ],
+  "contohAngka": {
+    "judul": "Uji ruang cicilan dari pemasukan Rp10.000.000 per bulan",
+    "baris": [
+      {
+        "label": "Patokan 30 persen untuk total semua cicilan",
+        "jumlah": 3000000
+      },
+      {
+        "label": "Cicilan aktif yang sudah berjalan",
+        "jumlah": -1000000
+      },
+      {
+        "label": "Sisa ruang untuk cicilan baru",
+        "jumlah": 2000000,
+        "ringkasan": true
+      }
+    ],
+    "kesimpulan": "Melunasi cicilan lama lebih dulu langsung memperbesar ruang amanmu untuk kredit besar."
+  },
+  "cekPaham": [
+    {
+      "tanya": "Mengapa menguji kemampuan bayar dari catatan arus kas nyata lebih akurat daripada tebakan?",
+      "pilihan": [
+        "Karena mencerminkan kebutuhan hidup dan cicilan aktualmu setiap bulan",
+        "Karena catatan selalu membuat cicilan lebih murah",
+        "Karena bank tidak pernah menghitung"
+      ],
+      "benar": 0,
+      "penjelasan": "Data nyata menunjukkan berapa ruang tersisa yang benar-benar nyaman untukmu."
+    },
+    {
+      "tanya": "Bagaimana cara praktis menguji kesiapan sebelum resmi mengambil KPR?",
+      "pilihan": [
+        "Menyisihkan selisih calon cicilan ke tabungan khusus selama beberapa bulan",
+        "Langsung menandatangani akad tanpa menghitung",
+        "Menghentikan seluruh tabungan"
+      ],
+      "benar": 0,
+      "penjelasan": "Simulasi menabung selisih cicilan membuktikan secara nyata apakah arus kasmu sanggup menahannya."
+    },
+    {
+      "tanya": "Pemasukan Rp10.000.000, patokan cicilan 30 persen (Rp3.000.000), dan cicilan aktif saat ini Rp1.000.000. Berapa sisa ruang cicilannya?",
+      "pilihan": [
+        "Rp2.000.000",
+        "Rp3.000.000",
+        "Rp4.000.000"
+      ],
+      "benar": 0,
+      "penjelasan": "Rp3.000.000 dikurangi cicilan aktif Rp1.000.000 menyisakan ruang Rp2.000.000."
+    }
+  ],
+  "misi": {
+    "tipe": "lihat_hitungan",
+    "judul": "Uji ruang cicilanmu dari data nyata",
+    "instruksi": "Buka hasil simulasi ruang cicilan berdasarkan data pemasukan dan cicilan aktifmu saat ini, baca isinya, lalu tekan Mengerti.",
+    "umpanBalik": "uji_kemampuan_kpr"
+  },
+  "tindakLanjut": "Jika berencana mengambil kredit besar dalam beberapa tahun ke depan, prioritaskan melunasi cicilan konsumtif kecil lebih dulu."
+}

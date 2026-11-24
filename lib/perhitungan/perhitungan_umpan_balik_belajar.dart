@@ -1134,5 +1134,71 @@ String formatRingkasanTujuanBesar({
   return '$k1 $k2 $k3';
 }
 
+/// Konstanta patokan aturan praktis rasio cicilan maksimal.
+/// TODO-VERIFIKASI: aturan praktis umum rasio cicilan 30%
+const int batasAturanPraktisCicilanPersen = 30;
+
+/// Menghasilkan teks umpan balik on-demand misi 14.3: uji_kemampuan_kpr.
+///
+/// Masukan:
+/// - [pemasukanRataRata]: `HasilPemasukanRataRata?` dari kalkulasi pemasukan rata-rata.
+/// - [totalCicilanAktifRupiah]: total cicilan bulanan yang sedang berjalan.
+/// - [totalSaldoDompetAktifRupiah]: total saldo seluruh dompet aktif pengguna saat ini.
+/// - [deskripsiDasarOverride]: opsi teks dasar pemasukan jika ingin ditentukan secara eksplisit.
+String formatUjiKemampuanKpr({
+  required HasilPemasukanRataRata? pemasukanRataRata,
+  required int totalCicilanAktifRupiah,
+  required int totalSaldoDompetAktifRupiah,
+  String? deskripsiDasarOverride,
+}) {
+  if (pemasukanRataRata == null ||
+      pemasukanRataRata.dasar == DasarPemasukanRataRata.belumAda ||
+      pemasukanRataRata.nilaiRupiah <= 0) {
+    return 'Belum ada catatan pemasukan untuk menguji ruang cicilanmu. '
+        'Catat pemasukanmu secara rutin dulu agar gambarannya bisa dihitung. '
+        'Ini simulasi edukatif, bukan persetujuan kredit.';
+  }
+
+  final pemasukan = pemasukanRataRata.nilaiRupiah;
+  final dasarStr = deskripsiDasarOverride ??
+      (pemasukanRataRata.dasar == DasarPemasukanRataRata.bulanBerjalan
+          ? 'bulan ini'
+          : 'rata-rata 3 bulan terakhir');
+
+  final ruangCicilanMaksimal =
+      (pemasukan * batasAturanPraktisCicilanPersen) ~/ 100;
+  final sisaMentah = ruangCicilanMaksimal - totalCicilanAktifRupiah;
+  final sisaRuangCicilan = sisaMentah < 0 ? 0 : sisaMentah;
+
+  final pemasukanStr = formatRupiahRapat(pemasukan);
+  final cicilanStr = formatRupiahRapat(totalCicilanAktifRupiah);
+  final sisaRuangStr = formatRupiahRapat(sisaRuangCicilan);
+  final saldoStr = formatRupiahRapat(totalSaldoDompetAktifRupiah);
+
+  final sb = StringBuffer();
+  sb.write(
+    'Dengan pemasukan sekitar $pemasukanStr per bulan ($dasarStr) dan '
+    'cicilan aktif saat ini $cicilanStr, estimasi sisa ruang cicilan '
+    '(memakai patokan umum 30 persen) adalah sekitar $sisaRuangStr per bulan.',
+  );
+
+  if (sisaRuangCicilan == 0) {
+    sb.write(
+      ' Cicilan aktifmu saat ini sudah memenuhi atau melampaui patokan 30 persen, '
+      'sehingga melunasi sebagian utang dulu biasanya jauh lebih tenang '
+      'sebelum mengambil kredit besar.',
+    );
+  }
+
+  sb.write(
+    ' Total saldo dompet aktifmu saat ini tercatat $saldoStr '
+    '(belum dikurangi dana darurat dan kebutuhan harian). '
+    'Ini simulasi edukatif, bukan persetujuan kredit.',
+  );
+
+  return sb.toString();
+}
+
+
 
 

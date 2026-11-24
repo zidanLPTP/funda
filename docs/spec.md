@@ -314,7 +314,9 @@ Kamu mengirim **prompt per tahap** ke agent → agent kerja dan menulis laporan 
 | 9B | **Modul 7 "Paylater, Kredit & Skor Kredit" & Modul 10 "Proteksi (Asuransi & Jaminan Sosial)":** Pembelajaran paylater, reputasi kredit, proteksi dasar, serta umpan balik ringkasan proteksi | Pembelajaran paylater & proteksi selesai (Tahap 9 tuntas) |
 | 10A | **Tingkat Menengah Bagian 2:** Modul 8 "Penghasilan Tambahan & Freelance" & Modul 9 "Pajak Dasar" | Pembelajaran penghasilan tambahan & pajak dasar selesai |
 | 10B | **Tingkat Menengah Bagian 3:** Modul 12 "Tujuan Besar & Perencanaan" | Pembelajaran tujuan besar & perencanaan selesai (seluruh Tingkat Menengah tuntas) |
-| 11 | **Tingkat Lanjutan** (modul 13–18) | Kurikulum penuh |
+| 11A | **Tingkat Lanjutan Bagian 1:** Modul 13 "Investasi Lanjutan" & Modul 14 "KPR & Kredit Besar" | Pembelajaran investasi lanjutan & KPR selesai, umpan balik uji kemampuan KPR aktif |
+| 11B | **Tingkat Lanjutan Bagian 2:** Modul 15 & Modul 16 | Pembelajaran tingkat lanjutan bagian 2 |
+| 11C | **Tingkat Lanjutan Bagian 3:** Modul 17 & Modul 18 | Kurikulum penuh tingkat lanjutan tuntas |
 | 12 | **Polesan, aksesibilitas, uji pengguna, tinjauan konten, rilis** | v1.0 |
 
 **MVP = tahap 1–7.** Bangun satu modul tuntas (belajar → gerbang → misi → umpan balik) sebelum menambah modul.

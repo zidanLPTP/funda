@@ -1,0 +1,103 @@
+{
+  "id": "investasi_lanjutan_13_2",
+  "modulId": "investasi_lanjutan",
+  "judul": "Memahami Biaya dan Pajak Investasi",
+  "durasiMenit": 6,
+  "status": "draf",
+  "catatanReviewer": "TODO-VERIFIKASI. Gambaran umum biaya transaksi, biaya pengelolaan, dan pajak investasi tanpa menyebut tarif pajak spesifik yang bisa berubah.",
+  "pemantik": "Dua instrumen punya kinerja kotor yang sama. Sepuluh tahun kemudian, hasil akhirnya berbeda jutaan rupiah karena potongan biaya kecil tiap tahun.",
+  "kartu": [
+    {
+      "judul": "Biaya kecil yang ikut memajemuk",
+      "isi": "Dalam berinvestasi, ada berbagai biaya seperti {{biaya pengelolaan}} tahunan, biaya beli, atau biaya jual. Walau terlihat kecil di awal, biaya yang dipotong terus-menerus ikut mengurangi hasil bersih jangka panjangmu."
+    },
+    {
+      "judul": "Perhatikan pajak atas hasil investasi",
+      "isi": "Setiap jenis instrumen investasi memiliki perlakuan pajak yang berbeda sesuai aturan yang berlaku. Ada yang pajaknya dipotong langsung saat cair, ada pula yang perlu dilaporkan di laporan tahunanmu."
+    },
+    {
+      "judul": "Bandingkan hasil bersihnya",
+      "isi": "Sebelum memilih instrumen apa pun di luar aplikasi, biasakan menanyakan dua hal: berapa total biaya tahunannya, dan bagaimana perlakuan pajaknya? Selalu cek informasi terbaru lewat penyedia berizin dan saluran resmi lembaga pajak."
+    }
+  ],
+  "contohAngka": {
+    "judul": "Ilustrasi dampak selisih biaya tahunan pada Rp20.000.000 dalam 1 tahun",
+    "baris": [
+      {
+        "label": "Perkiraan hasil kotor setahun",
+        "jumlah": 1600000
+      },
+      {
+        "label": "Potongan biaya pengelolaan dan transaksi (ilustrasi)",
+        "jumlah": -300000
+      },
+      {
+        "label": "Hasil bersih yang diterima",
+        "jumlah": 1300000,
+        "ringkasan": true
+      }
+    ],
+    "kesimpulan": "Membaca rincian biaya sejak awal membantumu menghitung hasil bersih yang realistis."
+  },
+  "cekPaham": [
+    {
+      "tanya": "Mengapa biaya pengelolaan tahunan perlu diperhatikan dalam investasi jangka panjang?",
+      "pilihan": [
+        "Karena potongan berulang tiap tahun ikut mengurangi hasil bersih jangka panjang",
+        "Karena biaya selalu dikembalikan di akhir tahun",
+        "Karena biaya membuat risiko menjadi nol"
+      ],
+      "benar": 0,
+      "penjelasan": "Semakin efisien biayanya, semakin besar porsi imbal hasil yang benar-benar kamu nikmati."
+    },
+    {
+      "tanya": "Bagaimana sikap yang tepat terkait pajak atas hasil investasi?",
+      "pilihan": [
+        "Memahami perlakuannya lewat sumber resmi dan melaporkannya sesuai aturan",
+        "Mengabaikan pajak karena nilainya kecil",
+        "Mempercayai rumor tanpa memeriksa"
+      ],
+      "benar": 0,
+      "penjelasan": "Kepatuhan pajak dan pencatatan yang rapi menjagamu tetap tenang dalam jangka panjang."
+    },
+    {
+      "tanya": "Angka mana yang paling penting diperhatikan saat membandingkan instrumen?",
+      "pilihan": [
+        "Hasil bersih setelah memperhitungkan biaya dan pajak",
+        "Hanya angka promosi kotor di iklan",
+        "Jumlah warna grafik"
+      ],
+      "benar": 0,
+      "penjelasan": "Hasil bersih mencerminkan nilai nyata yang benar-benar kamu terima."
+    }
+  ],
+  "misi": {
+    "tipe": "keputusan",
+    "judul": "Menilai tawaran instrumen berbiaya tinggi",
+    "instruksi": "Baca skenarionya, lalu pilih langkah yang paling cermat.",
+    "skenario": {
+      "pemantik": "Kamu melihat dua instrumen sejenis. Instrumen A menjelaskan rincian biaya pengelolaan dan risikonya secara terbuka. Instrumen B hanya memamerkan angka keuntungan tinggi tanpa rincian biaya.",
+      "opsi": [
+        {
+          "id": "a",
+          "teks": "Pilih mempelajari Instrumen A karena transparansi biaya dan risikonya jelas",
+          "aman": true,
+          "umpanBalik": "Tepat. Keterbukaan biaya dan risiko adalah ciri layanan yang sehat untuk dipelajari lebih lanjut."
+        },
+        {
+          "id": "b",
+          "teks": "Langsung pilih Instrumen B karena angka promosinya terlihat lebih tinggi",
+          "aman": false,
+          "umpanBalik": "Angka promosi tanpa rincian biaya bisa menyembunyikan potongan besar di belakang. Coba pilihan lain."
+        },
+        {
+          "id": "c",
+          "teks": "Masukkan semua tabungan ke keduanya tanpa membaca dokumennya",
+          "aman": false,
+          "umpanBalik": "Berinvestasi tanpa memahami biaya dan risiko sangat berisiko bagi keuanganmu. Coba pilihan lain."
+        }
+      ]
+    }
+  },
+  "tindakLanjut": "Biasakan membaca lembar fakta ringkas (fact sheet) atau rincian biaya setiap kali mempelajari sebuah instrumen di dunia nyata."
+}

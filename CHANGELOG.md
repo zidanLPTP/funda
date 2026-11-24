@@ -5,6 +5,38 @@ Format penulisan mengacu pada standar Keep a Changelog dan penamaan commit Funda
 
 ---
 
+## [0.18.0] - 2026-11-24 — Tahap 11A: Modul 13 "Investasi Lanjutan" & Modul 14 "KPR & Kredit Besar" (Pembukaan Tingkat Lanjutan)
+
+Tahap 11A membuka kurikulum Tingkat Lanjutan Funda dengan menghadirkan Modul 13 "Investasi Lanjutan: Alokasi & Risiko", Modul 14 "KPR & Kredit Besar", evaluasi gerbang multi-syarat `periode_data` transaksi 3 bulan berbeda, kunci umpan balik on-demand baru `uji_kemampuan_kpr`, dan 8 entri kamus istilah baru:
+- **Kunci Umpan Balik On-Demand Misi 14.3 (`lib/perhitungan/perhitungan_umpan_balik_belajar.dart`, `lib/fitur/belajar/model/registri_misi.dart`, `lib/fitur/belajar/kontroler/penyedia_belajar.dart`):**
+  - Kunci `uji_kemampuan_kpr`: dihitung on-demand saat misi 14.3 dibuka tanpa menambah kueri pada `FotoDataRepositori`.
+  - Fungsi murni integer deterministik tanpa `double` (`formatUjiKemampuanKpr`):
+    - Masukan: rata-rata pemasukan bulanan, cicilan aktif bulanan, dan total saldo dompet aktif.
+    - Patokan aturan praktis: 30 persen rasio cicilan terhadap pemasukan bulanan (`(pemasukan * 30) ~/ 100`).
+    - Estimasi sisa ruang cicilan: `max(0, batasMaksimal - cicilanAktif)`.
+    - Peringatan edukatif saat sisa ruang 0: *"Cicilan aktifmu saat ini sudah memenuhi atau melampaui patokan 30 persen, sehingga melunasi sebagian utang dulu biasanya jauh lebih tenang sebelum mengambil kredit besar."*
+    - Penutup tetap edukatif: *"Total saldo dompet aktifmu saat ini tercatat [saldo] (belum dikurangi dana darurat dan kebutuhan harian). Ini simulasi edukatif, bukan persetujuan kredit."*
+  - TDD unit test lengkap V1-V3 dan evaluasi gerbang 3 bulan transaksi berbeda di `test/perhitungan/perhitungan_umpan_balik_tahap_11a_test.dart` (4 tests passed).
+- **Konten Edukasi Resmi Modul 13 & Modul 14 (`aset/konten/lanjutan/`):**
+  - **Modul 13 "Investasi Lanjutan" (`investasi_lanjutan`):**
+    - Mengubah stub `modul.json` menjadi `tersedia: true`, urutan 13, gerbang `modul_selesai investasi_dasar` DAN `periode_data` transaksi min 3 bulan berbeda, bankSoal kuis 10 butir (sebaran 4/3/3).
+    - `investasi_lanjutan_13_1.json`: "Menyusun Alokasi dan Rebalancing Portofolio", durasi 6 menit, misi `sandbox` ("Uji komposisi alokasi di Sandbox"), `aturanPraktis: true`, `catatanReviewer: "TODO-VERIFIKASI..."`.
+    - `investasi_lanjutan_13_2.json`: "Memahami Biaya dan Pajak Investasi", durasi 6 menit, misi `keputusan` ("Menilai tawaran instrumen berbiaya tinggi"), catatanReviewer TODO-VERIFIKASI.
+    - `investasi_lanjutan_13_3.json`: "Menjaga Disiplin Saat Pasar Bergejolak", durasi 6 menit, misi `daftar_periksa` ("Aturan tenang menghadapi gejolak pasar"), catatanReviewer TODO-VERIFIKASI.
+  - **Modul 14 "KPR & Kredit Besar" (`kpr_kredit_besar`):**
+    - Mengubah stub `modul.json` menjadi `tersedia: true`, urutan 14, gerbang ganda `modul_selesai utang_cicilan` DAN `modul_selesai tujuan_besar` DAN `periode_data` transaksi min 3 bulan berbeda, bankSoal kuis 10 butir (sebaran 4/3/3).
+    - `kpr_kredit_besar_14_1.json`: "Memahami Uang Muka dan Biaya Awal KPR", durasi 6 menit, misi `keputusan` ("Menyiapkan dana akad rumah"), catatanReviewer TODO-VERIFIKASI.
+    - `kpr_kredit_besar_14_2.json`: "Sewa vs Beli dan Risiko Bunga Mengambang", durasi 6 menit, misi `keputusan` ("Menguji kesiapan saat cicilan naik"), catatanReviewer TODO-VERIFIKASI.
+    - `kpr_kredit_besar_14_3.json`: "Uji Kemampuan Bayar dari Arus Kas Nyata", durasi 6 menit, misi `lihat_hitungan` kunci `uji_kemampuan_kpr`, `aturanPraktis: true`, `catatanReviewer: "TODO-VERIFIKASI. Penggunaan patokan umum 30 persen rasio cicilan terhadap pemasukan sebagai simulasi awal kemampuan bayar KPR; periksa kesesuaiannya dengan aturan perbankan terkini."`.
+- **Ekstensi Kamus Keuangan (`aset/konten/kamus.json`):**
+  - Menambahkan 8 entri istilah baru persis kata per kata sesuai lampiran resmi: `profil risiko`, `rebalancing`, `biaya pengelolaan`, `investasi berkala`, `KPR`, `uang muka`, `bunga tetap`, `bunga mengambang` (total 77 istilah tanpa duplikasi).
+- **Pengujian Komprehensif:**
+  - 9 pengujian widget komprehensif di `test/fitur/belajar_tahap_11a_widget_test.dart` (termasuk status modul terkunci vs terbuka, misi sandbox, misi keputusan, misi daftar periksa, umpan balik nyata, kuis, dan bebas RenderFlex overflow pada skala teks 2.0 layar 360x640).
+  - Validasi kesesuaian lampiran kata per kata di `test/konten/kesesuaian_lampiran_test.dart`.
+  - Berkas integration test emulator di `integration_test/tahap_11a_emulator_test.dart` dan runner `tool/jalankan_test_dan_tangkapan_layar_tahap_11a.ps1`.
+
+---
+
 ## [0.17.0] - 2026-11-24 — Tahap 10B: Modul 12 "Tujuan Besar & Perencanaan" (Penutupan Tingkat Menengah)
 
 Tahap 10B menuntaskan seluruh kurikulum Tingkat Menengah Funda dengan menghadirkan Modul 12 "Tujuan Besar & Perencanaan", kunci umpan balik on-demand baru, dan penambahan kamus istilah:

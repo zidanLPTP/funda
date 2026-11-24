@@ -1047,6 +1047,30 @@ final penyediaTeksUmpanBalikMisi = FutureProvider.autoDispose.family<String, Str
       final terpilih = pilihTujuanBesarUmpanBalik(daftarTujuan);
       return formatRingkasanTujuanBesar(tujuan: terpilih);
 
+    case 'uji_kemampuan_kpr':
+      final db = ref.read(penyediaBasisData);
+      final waktuSekarang = DateTime.now();
+      final semuaTx = await db.select(db.tabelTransaksi).get();
+      final pemasukan = hitungPemasukanBulananRataRata(
+        daftarTransaksi: semuaTx,
+        waktuSekarang: waktuSekarang,
+      );
+
+      final repoUtang = ref.read(penyediaUtangRepositori);
+      final daftarUtang = await repoUtang.ambilDaftarUtangUmpanBalik();
+      final totalCicilan = daftarUtang.fold<int>(
+        0,
+        (prev, u) => prev + u.cicilanBulananRupiah,
+      );
+
+      final totalSaldo = ref.watch(penyediaTotalSaldoAktif);
+
+      return formatUjiKemampuanKpr(
+        pemasukanRataRata: pemasukan,
+        totalCicilanAktifRupiah: totalCicilan,
+        totalSaldoDompetAktifRupiah: totalSaldo,
+      );
+
     case 'arus_kas_bulan_ini':
     default:
       final arusKas = ref.watch(penyediaArusKasBulanIni);

@@ -1,20 +1,157 @@
 {
-    "kuis":  {
-                 "jumlahSoal":  0,
-                 "bankSoal":  [
-
-                              ]
-             },
-    "id":  "kpr_kredit_besar",
-    "tersedia":  false,
-    "urutan":  14,
-    "gerbang":  [
-
-                ],
-    "deskripsiSingkat":  "Simulasi kredit pemilikan rumah, uang muka, dan uji kemampuan bayar dari arus kas.",
-    "daftarPelajaran":  [
-
-                        ],
-    "tingkat":  "lanjutan",
-    "judul":  "KPR \u0026 Kredit Besar"
+  "id": "kpr_kredit_besar",
+  "judul": "KPR & Kredit Besar",
+  "tingkat": "lanjutan",
+  "urutan": 14,
+  "deskripsiSingkat": "Simulasi kredit pemilikan rumah, uang muka, dan uji kemampuan bayar dari arus kas.",
+  "tersedia": true,
+  "gerbang": [
+    {
+      "tipe": "modul_selesai",
+      "modulId": "utang_cicilan",
+      "pesan": "Selesaikan Modul 4 (Utang & Cicilan), Modul 12 (Tujuan Besar), dan catat transaksimu minimal di 3 bulan berbeda sebelum belajar KPR dan kredit besar."
+    },
+    {
+      "tipe": "modul_selesai",
+      "modulId": "tujuan_besar",
+      "pesan": "Selesaikan Modul 4 (Utang & Cicilan), Modul 12 (Tujuan Besar), dan catat transaksimu minimal di 3 bulan berbeda sebelum belajar KPR dan kredit besar."
+    },
+    {
+      "tipe": "periode_data",
+      "objek": "transaksi",
+      "satuan": "bulan_berbeda",
+      "min": 3,
+      "pesan": "Selesaikan Modul 4 (Utang & Cicilan), Modul 12 (Tujuan Besar), dan catat transaksimu minimal di 3 bulan berbeda sebelum belajar KPR dan kredit besar."
+    }
+  ],
+  "daftarPelajaran": [
+    "kpr_kredit_besar_14_1",
+    "kpr_kredit_besar_14_2",
+    "kpr_kredit_besar_14_3"
+  ],
+  "kuis": {
+    "jumlahSoal": 5,
+    "bankSoal": [
+      {
+        "id": "soal_14_1",
+        "pelajaranId": "kpr_kredit_besar_14_1",
+        "tanya": "Selain uang muka, biaya apa saja yang perlu disiapkan saat akad KPR?",
+        "pilihan": [
+          "Biaya administrasi, notaris, pajak pembelian, dan asuransi akad",
+          "Hanya harga cat tembok",
+          "Tidak ada biaya lain sama sekali"
+        ],
+        "benar": 0,
+        "penjelasan": "Biaya pendukung akad perlu dihitung sejak awal agar tabungan tidak kurang mendadak."
+      },
+      {
+        "id": "soal_14_2",
+        "pelajaranId": "kpr_kredit_besar_14_1",
+        "tanya": "Apa manfaat menyiapkan uang muka yang lebih besar saat mengambil KPR?",
+        "pilihan": [
+          "Pokok pinjaman lebih kecil sehingga cicilan dan total bunga lebih ringan",
+          "Cicilan menjadi lebih mahal",
+          "Biaya akad otomatis hilang"
+        ],
+        "benar": 0,
+        "penjelasan": "Uang muka besar mengurangi jumlah uang yang harus kamu pinjam."
+      },
+      {
+        "id": "soal_14_3",
+        "pelajaranId": "kpr_kredit_besar_14_1",
+        "tanya": "Mengapa dana darurat sebaiknya tidak dihabiskan untuk uang muka rumah?",
+        "pilihan": [
+          "Untuk berjaga-jaga menghadapi biaya tak terduga setelah pindah rumah",
+          "Karena dana darurat tidak bisa dipakai beli rumah",
+          "Karena cicilan baru mulai 5 tahun lagi"
+        ],
+        "benar": 0,
+        "penjelasan": "Tetap punya dana darurat menjaga kestabilan keuangan di masa awal kepemilikan rumah."
+      },
+      {
+        "id": "soal_14_4",
+        "pelajaranId": "kpr_kredit_besar_14_1",
+        "tanya": "Harga rumah Rp400.000.000 dengan uang muka 15 persen. Berapa uang mukanya?",
+        "pilihan": [
+          "Rp60.000.000",
+          "Rp40.000.000",
+          "Rp15.000.000"
+        ],
+        "benar": 0,
+        "penjelasan": "15 persen dari Rp400.000.000 adalah Rp60.000.000."
+      },
+      {
+        "id": "soal_14_5",
+        "pelajaranId": "kpr_kredit_besar_14_2",
+        "tanya": "Apa perbedaan bunga tetap dan bunga mengambang pada KPR?",
+        "pilihan": [
+          "Bunga tetap cicilannya sama selama periode tertentu, bunga mengambang mengikuti pasar",
+          "Keduanya selalu nol persen",
+          "Bunga mengambang selalu lebih murah selamanya"
+        ],
+        "benar": 0,
+        "penjelasan": "Saat masuk masa bunga mengambang, cicilan bulanan dapat berubah mengikuti suku bunga pasar."
+      },
+      {
+        "id": "soal_14_6",
+        "pelajaranId": "kpr_kredit_besar_14_2",
+        "tanya": "Kapan menyewa rumah bisa menjadi pilihan yang lebih bijak daripada memaksakan membeli?",
+        "pilihan": [
+          "Saat dana awal belum cukup atau lokasi kerja masih sering berpindah",
+          "Tidak pernah bijak dalam kondisi apa pun",
+          "Saat ingin menghindari mencatat keuangan"
+        ],
+        "benar": 0,
+        "penjelasan": "Menyewa memberi fleksibilitas dan waktu untuk mematangkan kesiapan finansial."
+      },
+      {
+        "id": "soal_14_7",
+        "pelajaranId": "kpr_kredit_besar_14_2",
+        "tanya": "Biaya rutin apa yang perlu diperhitungkan pemilik rumah di luar cicilan KPR?",
+        "pilihan": [
+          "Perawatan rumah, pajak properti tahunan, dan iuran lingkungan",
+          "Tidak ada biaya tambahan apa pun",
+          "Hanya biaya membeli perabot sekali saja"
+        ],
+        "benar": 0,
+        "penjelasan": "Kepemilikan properti membawa biaya perawatan berkala yang masuk ke anggaran."
+      },
+      {
+        "id": "soal_14_8",
+        "pelajaranId": "kpr_kredit_besar_14_3",
+        "tanya": "Mengapa cicilan aktif yang sudah berjalan mengurangi ruang untuk mengambil KPR baru?",
+        "pilihan": [
+          "Karena seluruh cicilan diambil dari pemasukan bulanan yang sama",
+          "Karena cicilan lama otomatis lunas saat ambil KPR",
+          "Karena bank melarang punya tabungan"
+        ],
+        "benar": 0,
+        "penjelasan": "Semakin banyak cicilan berjalan, semakin sempit ruang aman di arus kasmu."
+      },
+      {
+        "id": "soal_14_9",
+        "pelajaranId": "kpr_kredit_besar_14_3",
+        "tanya": "Bagaimana cara paling nyata menguji apakah kamu sanggup membayar calon cicilan KPR?",
+        "pilihan": [
+          "Rutin menyisihkan selisih calon cicilan ke kantong khusus selama beberapa bulan",
+          "Hanya membayangkannya tanpa mencoba",
+          "Mengosongkan pos makan harian"
+        ],
+        "benar": 0,
+        "penjelasan": "Simulasi menabung selisih cicilan menguji ketahanan arus kas secara langsung."
+      },
+      {
+        "id": "soal_14_10",
+        "pelajaranId": "kpr_kredit_besar_14_3",
+        "tanya": "Apa peran simulasi ruang cicilan di Funda?",
+        "pilihan": [
+          "Gambaran edukatif awal dari datamu sendiri, bukan persetujuan kredit bank",
+          "Jaminan pengajuan KPR pasti disetujui",
+          "Tempat mengajukan pinjaman rumah"
+        ],
+        "benar": 0,
+        "penjelasan": "Funda membantu kamu mengukur kesiapan sendiri sebelum mengambil keputusan di dunia nyata."
+      }
+    ]
+  }
 }

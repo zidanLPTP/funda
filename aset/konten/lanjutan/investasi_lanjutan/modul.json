@@ -1,14 +1,152 @@
 {
-  "kuis": {
-    "jumlahSoal": 0,
-    "bankSoal": []
-  },
   "id": "investasi_lanjutan",
-  "tersedia": false,
-  "urutan": 13,
-  "gerbang": [],
-  "deskripsiSingkat": "Strategi alokasi instrumen, penyeimbangan portofolio, dan manajemen risiko pribadi.",
-  "daftarPelajaran": [],
+  "judul": "Investasi Lanjutan",
   "tingkat": "lanjutan",
-  "judul": "Investasi Lanjutan"
+  "urutan": 13,
+  "deskripsiSingkat": "Strategi alokasi instrumen, penyeimbangan portofolio, dan manajemen risiko pribadi.",
+  "tersedia": true,
+  "gerbang": [
+    {
+      "tipe": "modul_selesai",
+      "modulId": "investasi_dasar",
+      "pesan": "Selesaikan Modul 11 (Investasi Dasar) dulu dan catat transaksimu minimal di 3 bulan berbeda agar kamu siap belajar strategi lanjutan."
+    },
+    {
+      "tipe": "periode_data",
+      "objek": "transaksi",
+      "satuan": "bulan_berbeda",
+      "min": 3,
+      "pesan": "Selesaikan Modul 11 (Investasi Dasar) dulu dan catat transaksimu minimal di 3 bulan berbeda agar kamu siap belajar strategi lanjutan."
+    }
+  ],
+  "daftarPelajaran": [
+    "investasi_lanjutan_13_1",
+    "investasi_lanjutan_13_2",
+    "investasi_lanjutan_13_3"
+  ],
+  "kuis": {
+    "jumlahSoal": 5,
+    "bankSoal": [
+      {
+        "id": "soal_13_1",
+        "pelajaranId": "investasi_lanjutan_13_1",
+        "tanya": "Apa yang dimaksud dengan profil risiko?",
+        "pilihan": [
+          "Tingkat kenyamanan seseorang menghadapi naik turunnya nilai investasi",
+          "Jumlah dompet yang dimiliki",
+          "Harga barang belanjaan harian"
+        ],
+        "benar": 0,
+        "penjelasan": "Profil risiko membantu memilih pembagian instrumen yang paling cocok untukmu."
+      },
+      {
+        "id": "soal_13_2",
+        "pelajaranId": "investasi_lanjutan_13_1",
+        "tanya": "Apa tujuan melakukan rebalancing portofolio?",
+        "pilihan": [
+          "Mengembalikan pembagian instrumen ke target awal agar tingkat risiko terkendali",
+          "Mengosongkan seluruh tabungan",
+          "Mengikuti tren sesaat setiap hari"
+        ],
+        "benar": 0,
+        "penjelasan": "Rebalancing mencegah porsi instrumen berisiko tumbuh terlalu besar tanpa disadari."
+      },
+      {
+        "id": "soal_13_3",
+        "pelajaranId": "investasi_lanjutan_13_1",
+        "tanya": "Untuk tujuan yang waktunya sudah makin dekat, arah penyesuaian alokasi yang umumnya masuk akal adalah?",
+        "pilihan": [
+          "Memperbesar porsi instrumen yang lebih stabil",
+          "Memindahkan semuanya ke instrumen paling bergejolak",
+          "Menghentikan pencatatan"
+        ],
+        "benar": 0,
+        "penjelasan": "Menjelang tujuan tercapai, menjaga kestabilan nilai menjadi lebih penting."
+      },
+      {
+        "id": "soal_13_4",
+        "pelajaranId": "investasi_lanjutan_13_1",
+        "tanya": "Apa manfaat menguji komposisi alokasi di Mode Sandbox Funda?",
+        "pilihan": [
+          "Mengenali batas nyamanmu saat melihat skenario naik dan turun tanpa risiko uang asli",
+          "Mendapat prediksi harga pasti bulan depan",
+          "Membeli saham langsung"
+        ],
+        "benar": 0,
+        "penjelasan": "Sandbox adalah ruang latihan aman dengan uang fiktif."
+      },
+      {
+        "id": "soal_13_5",
+        "pelajaranId": "investasi_lanjutan_13_2",
+        "tanya": "Mengapa biaya pengelolaan tahunan penting diperiksa?",
+        "pilihan": [
+          "Potongan kecil yang berulang tiap tahun ikut mengurangi hasil bersih jangka panjang",
+          "Karena biaya selalu nol di semua instrumen",
+          "Karena biaya menambah imbal hasil"
+        ],
+        "benar": 0,
+        "penjelasan": "Memahami biaya membantumu menilai hasil bersih yang sebenarnya."
+      },
+      {
+        "id": "soal_13_6",
+        "pelajaranId": "investasi_lanjutan_13_2",
+        "tanya": "Di mana tempat terbaik memastikan aturan pajak atas hasil investasi?",
+        "pilihan": [
+          "Penyedia berizin dan saluran resmi lembaga pajak",
+          "Rumor di kolom komentar",
+          "Tebakan pribadi"
+        ],
+        "benar": 0,
+        "penjelasan": "Aturan pajak bisa berubah, jadi selalu rujuk sumber resmi."
+      },
+      {
+        "id": "soal_13_7",
+        "pelajaranId": "investasi_lanjutan_13_2",
+        "tanya": "Saat membandingkan dua instrumen sejenis, angka mana yang paling jujur?",
+        "pilihan": [
+          "Perkiraan hasil bersih setelah biaya dan pajak",
+          "Angka promosi kotor tanpa keterangan biaya",
+          "Jumlah iklan yang tayang"
+        ],
+        "benar": 0,
+        "penjelasan": "Hasil bersih menunjukkan nilai nyata yang kamu terima."
+      },
+      {
+        "id": "soal_13_8",
+        "pelajaranId": "investasi_lanjutan_13_3",
+        "tanya": "Apa arti investasi berkala?",
+        "pilihan": [
+          "Menyetor nominal rutin secara teratur tanpa menebak-nebak harga pasar",
+          "Membeli hanya saat semua orang panik",
+          "Meminjam uang untuk investasi"
+        ],
+        "benar": 0,
+        "penjelasan": "Metode berkala membangun kebiasaan disiplin dan meratakan harga beli."
+      },
+      {
+        "id": "soal_13_9",
+        "pelajaranId": "investasi_lanjutan_13_3",
+        "tanya": "Mengapa menjual panik saat pasar turun sementara sering merugikan?",
+        "pilihan": [
+          "Mengunci kerugian sebelum tujuan jangka panjang tercapai",
+          "Membuat saldo langsung berlipat",
+          "Menghilangkan kebutuhan dana darurat"
+        ],
+        "benar": 0,
+        "penjelasan": "Fluktuasi sementara adalah hal wajar dalam perjalanan jangka panjang."
+      },
+      {
+        "id": "soal_13_10",
+        "pelajaranId": "investasi_lanjutan_13_3",
+        "tanya": "Apa sikap terbaik saat pasar sedang bergejolak tajam?",
+        "pilihan": [
+          "Tenang, tinjau kembali tujuan jangka panjang, dan hindari keputusan tergesa-gesa",
+          "Langsung jual semua tanpa berpikir",
+          "Ikut semua saran acak di media sosial"
+        ],
+        "benar": 0,
+        "penjelasan": "Ketenangan dan rencana yang jelas menjaga keputusanmu tetap sehat."
+      }
+    ]
+  }
 }

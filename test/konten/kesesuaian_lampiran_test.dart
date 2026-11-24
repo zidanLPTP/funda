@@ -2225,4 +2225,282 @@ void main() {
       }
     });
   });
+
+  group('Kesesuaian Lampiran Modul 13 "Investasi Lanjutan"', () {
+    late Map<String, dynamic> modulJson;
+    late Map<String, Map<String, dynamic>> pelajaranJson;
+    late String isiMateriLampiran;
+
+    setUpAll(() {
+      final fileMateri = File('docs/materi/modul_13_investasi_lanjutan.md');
+      expect(fileMateri.existsSync(), isTrue, reason: 'docs/materi/modul_13_investasi_lanjutan.md wajib ada');
+      isiMateriLampiran = fileMateri.readAsStringSync();
+
+      final fileModul = File('aset/konten/lanjutan/investasi_lanjutan/modul.json');
+      expect(fileModul.existsSync(), isTrue, reason: 'modul.json investasi_lanjutan wajib ada');
+      modulJson = jsonDecode(fileModul.readAsStringSync()) as Map<String, dynamic>;
+
+      pelajaranJson = {};
+      final daftarId = [
+        'investasi_lanjutan_13_1',
+        'investasi_lanjutan_13_2',
+        'investasi_lanjutan_13_3',
+      ];
+      for (final id in daftarId) {
+        final f = File('aset/konten/lanjutan/investasi_lanjutan/$id.json');
+        expect(f.existsSync(), isTrue, reason: 'Berkas $id.json wajib ada');
+        pelajaranJson[id] = jsonDecode(f.readAsStringSync()) as Map<String, dynamic>;
+      }
+    });
+
+    test('(a) Validasi Metadata Modul 13 dan Kuis 10 Bank Soal (4/3/3)', () {
+      expect(modulJson['id'], equals('investasi_lanjutan'));
+      expect(modulJson['judul'], equals('Investasi Lanjutan'));
+      expect(modulJson['tingkat'], equals('lanjutan'));
+      expect(modulJson['urutan'], equals(13));
+      expect(modulJson['tersedia'], isTrue);
+
+      final gerbang = (modulJson['gerbang'] as List).cast<Map<String, dynamic>>();
+      expect(gerbang, hasLength(2));
+      expect(gerbang[0]['tipe'], equals('modul_selesai'));
+      expect(gerbang[0]['modulId'], equals('investasi_dasar'));
+      expect(gerbang[1]['tipe'], equals('periode_data'));
+      expect(gerbang[1]['satuan'], equals('bulan_berbeda'));
+      expect(gerbang[1]['min'], equals(3));
+
+      final kuis = modulJson['kuis'] as Map<String, dynamic>;
+      expect(kuis['jumlahSoal'], equals(5));
+      final bankSoal = (kuis['bankSoal'] as List).cast<Map<String, dynamic>>();
+      expect(bankSoal, hasLength(10));
+
+      final soal13_1 = bankSoal.where((s) => s['pelajaranId'] == 'investasi_lanjutan_13_1').toList();
+      final soal13_2 = bankSoal.where((s) => s['pelajaranId'] == 'investasi_lanjutan_13_2').toList();
+      final soal13_3 = bankSoal.where((s) => s['pelajaranId'] == 'investasi_lanjutan_13_3').toList();
+      expect(soal13_1, hasLength(4));
+      expect(soal13_2, hasLength(3));
+      expect(soal13_3, hasLength(3));
+    });
+
+    test('(b) Validasi Pelajaran 13.1 (Menyusun Alokasi dan Rebalancing Portofolio & Misi Sandbox)', () {
+      final p = pelajaranJson['investasi_lanjutan_13_1']!;
+      expect(p['judul'], equals('Menyusun Alokasi dan Rebalancing Portofolio'));
+      expect(p['durasiMenit'], equals(6));
+      expect(p['status'], equals('draf'));
+      expect(p['aturanPraktis'], isTrue);
+      expect(p['catatanReviewer'], contains('TODO-VERIFIKASI'));
+
+      final misi = p['misi'] as Map<String, dynamic>;
+      expect(misi['tipe'], equals('sandbox'));
+      expect(misi['minimalSimulasi'], equals(1));
+      expect(misi['judul'], equals('Uji komposisi alokasi di Sandbox'));
+
+      expect(isiMateriLampiran.contains(p['judul'] as String), isTrue);
+      expect(isiMateriLampiran.contains(p['pemantik'] as String), isTrue);
+    });
+
+    test('(c) Validasi Pelajaran 13.2 (Memahami Biaya dan Pajak Investasi & Misi Keputusan)', () {
+      final p = pelajaranJson['investasi_lanjutan_13_2']!;
+      expect(p['judul'], equals('Memahami Biaya dan Pajak Investasi'));
+      expect(p['durasiMenit'], equals(6));
+      expect(p['status'], equals('draf'));
+
+      final misi = p['misi'] as Map<String, dynamic>;
+      expect(misi['tipe'], equals('keputusan'));
+      expect(misi['judul'], equals('Menilai tawaran instrumen berbiaya tinggi'));
+      final skenario = misi['skenario'] as Map<String, dynamic>;
+      final opsi = (skenario['opsi'] as List).cast<Map<String, dynamic>>();
+      expect(opsi, hasLength(3));
+
+      expect(isiMateriLampiran.contains(p['judul'] as String), isTrue);
+      expect(isiMateriLampiran.contains(p['pemantik'] as String), isTrue);
+    });
+
+    test('(d) Validasi Pelajaran 13.3 (Menjaga Disiplin Saat Pasar Bergejolak & Misi Daftar Periksa)', () {
+      final p = pelajaranJson['investasi_lanjutan_13_3']!;
+      expect(p['judul'], equals('Menjaga Disiplin Saat Pasar Bergejolak'));
+      expect(p['durasiMenit'], equals(6));
+      expect(p['status'], equals('draf'));
+
+      final misi = p['misi'] as Map<String, dynamic>;
+      expect(misi['tipe'], equals('daftar_periksa'));
+      expect(misi['judul'], equals('Aturan tenang menghadapi gejolak pasar'));
+      final langkah = (misi['langkah'] as List).cast<Map<String, dynamic>>();
+      expect(langkah, hasLength(5));
+
+      expect(isiMateriLampiran.contains(p['judul'] as String), isTrue);
+      expect(isiMateriLampiran.contains(p['pemantik'] as String), isTrue);
+    });
+  });
+
+  group('Kesesuaian Lampiran Modul 14 "KPR & Kredit Besar"', () {
+    late Map<String, dynamic> modulJson;
+    late Map<String, Map<String, dynamic>> pelajaranJson;
+    late String isiMateriLampiran;
+
+    setUpAll(() {
+      final fileMateri = File('docs/materi/modul_14_kpr_kredit_besar.md');
+      expect(fileMateri.existsSync(), isTrue, reason: 'docs/materi/modul_14_kpr_kredit_besar.md wajib ada');
+      isiMateriLampiran = fileMateri.readAsStringSync();
+
+      final fileModul = File('aset/konten/lanjutan/kpr_kredit_besar/modul.json');
+      expect(fileModul.existsSync(), isTrue, reason: 'modul.json kpr_kredit_besar wajib ada');
+      modulJson = jsonDecode(fileModul.readAsStringSync()) as Map<String, dynamic>;
+
+      pelajaranJson = {};
+      final daftarId = [
+        'kpr_kredit_besar_14_1',
+        'kpr_kredit_besar_14_2',
+        'kpr_kredit_besar_14_3',
+      ];
+      for (final id in daftarId) {
+        final f = File('aset/konten/lanjutan/kpr_kredit_besar/$id.json');
+        expect(f.existsSync(), isTrue, reason: 'Berkas $id.json wajib ada');
+        pelajaranJson[id] = jsonDecode(f.readAsStringSync()) as Map<String, dynamic>;
+      }
+    });
+
+    test('(a) Validasi Metadata Modul 14 dan Kuis 10 Bank Soal (4/3/3)', () {
+      expect(modulJson['id'], equals('kpr_kredit_besar'));
+      expect(modulJson['judul'], equals('KPR & Kredit Besar'));
+      expect(modulJson['tingkat'], equals('lanjutan'));
+      expect(modulJson['urutan'], equals(14));
+      expect(modulJson['tersedia'], isTrue);
+
+      final gerbang = (modulJson['gerbang'] as List).cast<Map<String, dynamic>>();
+      expect(gerbang, hasLength(3));
+      expect(gerbang[0]['tipe'], equals('modul_selesai'));
+      expect(gerbang[0]['modulId'], equals('utang_cicilan'));
+      expect(gerbang[1]['tipe'], equals('modul_selesai'));
+      expect(gerbang[1]['modulId'], equals('tujuan_besar'));
+      expect(gerbang[2]['tipe'], equals('periode_data'));
+      expect(gerbang[2]['satuan'], equals('bulan_berbeda'));
+      expect(gerbang[2]['min'], equals(3));
+
+      final kuis = modulJson['kuis'] as Map<String, dynamic>;
+      expect(kuis['jumlahSoal'], equals(5));
+      final bankSoal = (kuis['bankSoal'] as List).cast<Map<String, dynamic>>();
+      expect(bankSoal, hasLength(10));
+
+      final soal14_1 = bankSoal.where((s) => s['pelajaranId'] == 'kpr_kredit_besar_14_1').toList();
+      final soal14_2 = bankSoal.where((s) => s['pelajaranId'] == 'kpr_kredit_besar_14_2').toList();
+      final soal14_3 = bankSoal.where((s) => s['pelajaranId'] == 'kpr_kredit_besar_14_3').toList();
+      expect(soal14_1, hasLength(4));
+      expect(soal14_2, hasLength(3));
+      expect(soal14_3, hasLength(3));
+    });
+
+    test('(b) Validasi Pelajaran 14.1 (Memahami Uang Muka dan Biaya Awal KPR & Misi Keputusan)', () {
+      final p = pelajaranJson['kpr_kredit_besar_14_1']!;
+      expect(p['judul'], equals('Memahami Uang Muka dan Biaya Awal KPR'));
+      expect(p['durasiMenit'], equals(6));
+      expect(p['status'], equals('draf'));
+
+      final misi = p['misi'] as Map<String, dynamic>;
+      expect(misi['tipe'], equals('keputusan'));
+      expect(misi['judul'], equals('Menyiapkan dana akad rumah'));
+      final skenario = misi['skenario'] as Map<String, dynamic>;
+      final opsi = (skenario['opsi'] as List).cast<Map<String, dynamic>>();
+      expect(opsi, hasLength(3));
+
+      expect(isiMateriLampiran.contains(p['judul'] as String), isTrue);
+      expect(isiMateriLampiran.contains(p['pemantik'] as String), isTrue);
+    });
+
+    test('(c) Validasi Pelajaran 14.2 (Sewa vs Beli dan Risiko Bunga Mengambang & Misi Keputusan)', () {
+      final p = pelajaranJson['kpr_kredit_besar_14_2']!;
+      expect(p['judul'], equals('Sewa vs Beli dan Risiko Bunga Mengambang'));
+      expect(p['durasiMenit'], equals(6));
+      expect(p['status'], equals('draf'));
+
+      final misi = p['misi'] as Map<String, dynamic>;
+      expect(misi['tipe'], equals('keputusan'));
+      expect(misi['judul'], equals('Menguji kesiapan saat cicilan naik'));
+      final skenario = misi['skenario'] as Map<String, dynamic>;
+      final opsi = (skenario['opsi'] as List).cast<Map<String, dynamic>>();
+      expect(opsi, hasLength(3));
+
+      expect(isiMateriLampiran.contains(p['judul'] as String), isTrue);
+      expect(isiMateriLampiran.contains(p['pemantik'] as String), isTrue);
+    });
+
+    test('(d) Validasi Pelajaran 14.3 (Uji Kemampuan Bayar dari Arus Kas Nyata & Misi Umpan Balik uji_kemampuan_kpr)', () {
+      final p = pelajaranJson['kpr_kredit_besar_14_3']!;
+      expect(p['judul'], equals('Uji Kemampuan Bayar dari Arus Kas Nyata'));
+      expect(p['durasiMenit'], equals(6));
+      expect(p['status'], equals('draf'));
+      expect(p['aturanPraktis'], isTrue);
+      expect(p['catatanReviewer'], contains('TODO-VERIFIKASI'));
+      expect(p['catatanReviewer'], equals('TODO-VERIFIKASI. Penggunaan patokan umum 30 persen rasio cicilan terhadap pemasukan sebagai simulasi awal kemampuan bayar KPR; periksa kesesuaiannya dengan aturan perbankan terkini.'));
+
+      final misi = p['misi'] as Map<String, dynamic>;
+      expect(misi['tipe'], equals('lihat_hitungan'));
+      expect(misi['umpanBalik'], equals('uji_kemampuan_kpr'));
+
+      expect(isiMateriLampiran.contains(p['judul'] as String), isTrue);
+      expect(isiMateriLampiran.contains(p['pemantik'] as String), isTrue);
+    });
+
+    test('(e) Validasi 8 Entri Kamus Modul 13 & 14 Cocok Persis Kata per Kata', () {
+      final fileMateriKamus = File('docs/materi/kamus_modul_13_14.md');
+      expect(fileMateriKamus.existsSync(), isTrue);
+      final isiMateriKamus = fileMateriKamus.readAsStringSync();
+
+      final fileKamus = File('aset/konten/kamus.json');
+      expect(fileKamus.existsSync(), isTrue);
+      final daftarKamus = (jsonDecode(fileKamus.readAsStringSync()) as List).cast<Map<String, dynamic>>();
+
+      final istilahModul13_14 = <String, ({String arti, String contohRupiah})>{
+        'profil risiko': (
+          arti: 'Tingkat kenyamanan dan kemampuan seseorang menghadapi naik turunnya nilai investasi dalam jangka waktu tertentu.',
+          contohRupiah: 'Investor berprofil risiko rendah memilih porsi pasar uang Rp7.000.000 dari Rp10.000.000.',
+        ),
+        'rebalancing': (
+          arti: 'Menyesuaikan kembali pembagian portofolio investasi agar kembali ke komposisi target awal.',
+          contohRupiah: 'Memindahkan Rp1.500.000 dari saham yang naik tinggi ke pasar uang agar porsinya kembali seimbang.',
+        ),
+        'biaya pengelolaan': (
+          arti: 'Biaya tahunan yang dikenakan pengelola instrumen investasi atas layanan pengelolaan dana.',
+          contohRupiah: 'Potongan biaya pengelolaan Rp150.000 per tahun dari dana investasi Rp10.000.000.',
+        ),
+        'investasi berkala': (
+          arti: 'Kebiasaan menyisihkan nominal uang yang sama secara rutin ke instrumen investasi tanpa menebak waktu pasar.',
+          contohRupiah: 'Rutin menyisihkan Rp500.000 setiap tanggal gajian selama 12 bulan.',
+        ),
+        'KPR': (
+          arti: 'Kredit Pemilikan Rumah, yaitu fasilitas pinjaman jangka panjang untuk membeli tempat tinggal dengan cicilan berkala.',
+          contohRupiah: 'Mencicil rumah Rp3.000.000 per bulan selama 15 tahun.',
+        ),
+        'uang muka': (
+          arti: 'Bagian dari harga pembelian yang dibayar tunai di awal sebelum sisanya dicicil lewat kredit.',
+          contohRupiah: 'Membayar uang muka Rp60.000.000 untuk rumah seharga Rp400.000.000.',
+        ),
+        'bunga tetap': (
+          arti: 'Suku bunga pinjaman yang persentasenya tidak berubah selama periode tertentu sehingga cicilan bulanan tetap sama.',
+          contohRupiah: 'Cicilan KPR tetap Rp2.800.000 per bulan selama 3 tahun pertama.',
+        ),
+        'bunga mengambang': (
+          arti: 'Suku bunga pinjaman yang dapat berubah mengikuti pergerakan suku bunga pasar sehingga nominal cicilan bisa naik atau turun.',
+          contohRupiah: 'Cicilan KPR berubah dari Rp2.800.000 menjadi Rp3.800.000 setelah masa bunga tetap berakhir.',
+        ),
+      };
+
+      for (final e in istilahModul13_14.entries) {
+        final istilah = e.key;
+        final target = e.value;
+
+        // Cek di aset/konten/kamus.json
+        final entriJson = daftarKamus.firstWhere(
+          (k) => k['istilah'] == istilah,
+          orElse: () => throw Exception('Istilah "$istilah" tidak ditemukan di kamus.json'),
+        );
+        expect(entriJson['arti'], equals(target.arti), reason: 'Arti "$istilah" di kamus.json tidak cocok kata per kata');
+        expect(entriJson['contohRupiah'], equals(target.contohRupiah), reason: 'Contoh Rupiah "$istilah" di kamus.json tidak cocok kata per kata');
+
+        // Cek di docs/materi/kamus_modul_13_14.md
+        expect(isiMateriKamus.contains(istilah), isTrue, reason: 'Istilah "$istilah" tidak ditemukan di docs/materi/kamus_modul_13_14.md');
+        expect(isiMateriKamus.contains(target.arti), isTrue, reason: 'Arti "$istilah" tidak ditemukan di docs/materi/kamus_modul_13_14.md');
+        expect(isiMateriKamus.contains(target.contohRupiah), isTrue, reason: 'Contoh Rupiah "$istilah" tidak ditemukan di docs/materi/kamus_modul_13_14.md');
+      }
+    });
+  });
 }
