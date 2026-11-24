@@ -6,6 +6,22 @@
 
 ---
 
+## Unduh Aplikasi (Download APK Langsung)
+
+Berkas rilis resmi Funda v1.0.0 siap diunduh dan dipasang langsung pada ponsel pintar Android:
+
+- **Tautan Unduh Langsung Utama:** [funda-v1.0.0.apk (70.5 MB)](https://github.com/zidanLPTP/funda/releases/download/v1.0.0/funda-v1.0.0.apk)
+- **Tautan Unduh Alternatif:** [app-release.apk (70.5 MB)](https://github.com/zidanLPTP/funda/releases/download/v1.0.0/app-release.apk)
+- **Halaman Catatan Rilis GitHub:** [Rilis Resmi Funda v1.0.0](https://github.com/zidanLPTP/funda/releases/tag/v1.0.0)
+
+### Cara Pemasangan di Ponsel Android:
+1. Unduh berkas APK melalui salah satu tautan di atas langsung dari peramban ponsel Anda.
+2. Buka berkas APK yang telah selesai diunduh.
+3. Berikan izin pemasangan aplikasi dari sumber ini jika diminta oleh sistem Android.
+4. Tekan tombol Pasang (Install) dan buka aplikasi Funda.
+
+---
+
 ## Gambaran Tiga Sisi Funda
 
 1. **Dompet Digital Pencatatan:** Pencatatan arus kas, banyak dompet, alokasi kantong, jadwal tagihan rutin, pelacakan utang dan cicilan, serta kalkulasi kekayaan bersih (aplikasi tidak menyimpan atau memindahkan uang asli).
