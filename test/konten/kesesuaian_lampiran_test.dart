@@ -2502,5 +2502,103 @@ void main() {
         expect(isiMateriKamus.contains(target.contohRupiah), isTrue, reason: 'Contoh Rupiah "$istilah" tidak ditemukan di docs/materi/kamus_modul_13_14.md');
       }
     });
+
+    test('Verifikasi Modul 15 "Pajak Lanjutan" dan Modul 16 "Pensiun & Kebebasan Finansial" cocok kata per kata dengan materi', () {
+      final berkasM15 = File('aset/konten/lanjutan/pajak_lanjutan/modul.json');
+      expect(berkasM15.existsSync(), isTrue);
+      final m15 = jsonDecode(berkasM15.readAsStringSync());
+      expect(m15['id'], equals('pajak_lanjutan'));
+      expect(m15['judul'], equals('Pajak Lanjutan'));
+      expect(m15['tingkat'], equals('lanjutan'));
+      expect(m15['urutan'], equals(15));
+      expect(m15['tersedia'], isTrue);
+      expect(m15['gerbang'], hasLength(2));
+      expect(m15['gerbang'][0]['tipe'], equals('modul_selesai'));
+      expect(m15['gerbang'][0]['modulId'], equals('pajak_dasar'));
+      expect(m15['gerbang'][1]['tipe'], equals('periode_data'));
+      expect(m15['gerbang'][1]['satuan'], equals('bulan_berbeda'));
+      expect(m15['gerbang'][1]['min'], equals(6));
+      expect(m15['kuis']['bankSoal'], hasLength(10));
+      expect(m15['kuis']['jumlahSoal'], equals(5));
+
+      final berkasM16 = File('aset/konten/lanjutan/pensiun_kebebasan_finansial/modul.json');
+      expect(berkasM16.existsSync(), isTrue);
+      final m16 = jsonDecode(berkasM16.readAsStringSync());
+      expect(m16['id'], equals('pensiun_kebebasan_finansial'));
+      expect(m16['judul'], equals('Pensiun & Kebebasan Finansial'));
+      expect(m16['tingkat'], equals('lanjutan'));
+      expect(m16['urutan'], equals(16));
+      expect(m16['tersedia'], isTrue);
+      expect(m16['gerbang'], hasLength(2));
+      expect(m16['gerbang'][0]['tipe'], equals('modul_selesai'));
+      expect(m16['gerbang'][0]['modulId'], equals('investasi_lanjutan'));
+      expect(m16['gerbang'][1]['tipe'], equals('periode_data'));
+      expect(m16['gerbang'][1]['satuan'], equals('bulan_berbeda'));
+      expect(m16['gerbang'][1]['min'], equals(3));
+      expect(m16['kuis']['bankSoal'], hasLength(10));
+      expect(m16['kuis']['jumlahSoal'], equals(5));
+
+      // Verifikasi 8 entri kamus Modul 15 & 16
+      final berkasKamus = File('aset/konten/kamus.json');
+      final daftarKamus = (jsonDecode(berkasKamus.readAsStringSync()) as List)
+          .cast<Map<String, dynamic>>();
+
+      final materiKamusFile = File('docs/materi/kamus_modul_15_16.md');
+      expect(materiKamusFile.existsSync(), isTrue);
+      final isiMateriKamus = materiKamusFile.readAsStringSync();
+
+      const istilahModul15_16 = {
+        'pajak final': (
+          arti: 'Pajak yang perhitungannya dianggap selesai pada saat pemotongan dan tidak digabungkan lagi ke perhitungan utama tahunan.',
+          contohRupiah: 'Potongan pajak atas bunga simpanan bank yang sudah selesai saat dipotong.',
+        ),
+        'bukti potong': (
+          arti: 'Dokumen resmi dari pemberi kerja atau pemotong pajak yang mencatat jumlah pajak yang sudah dipotong di muka.',
+          contohRupiah: 'Bukti potong tahunan dari kantor atas gaji Rp60.000.000 setahun.',
+        ),
+        'perencanaan pajak': (
+          arti: 'Upaya mengatur administrasi dan pencatatan pajak secara sah sesuai aturan resmi agar tidak membayar lebih dari yang seharusnya.',
+          contohRupiah: 'Mencatat biaya operasional kerja lepas Rp4.000.000 secara rapi dengan bukti.',
+        ),
+        'konsultan pajak': (
+          arti: 'Pihak profesional berizin yang membantu memberikan panduan dan pendampingan resmi dalam urusan perpajakan.',
+          contohRupiah: 'Berkonsultasi dengan konsultan pajak berizin saat penghasilan berasal dari banyak sumber.',
+        ),
+        'dana pensiun': (
+          arti: 'Simpanan jangka panjang yang disiapkan untuk menopang biaya hidup saat seseorang tidak lagi bekerja aktif.',
+          contohRupiah: 'Menyisihkan Rp500.000 per bulan secara rutin untuk masa pensiun.',
+        ),
+        'kebebasan finansial': (
+          arti: 'Kondisi ketika hasil dari simpanan atau investasi sudah cukup untuk menutup biaya hidup rutin.',
+          contohRupiah: 'Hasil investasi bulanan mampu menutup pengeluaran wajib Rp3.000.000 per bulan.',
+        ),
+        'bunga majemuk': (
+          arti: 'Pertumbuhan nilai uang yang dihitung dari pokok awal ditambah hasil pertumbuhan yang sudah terkumpul sebelumnya.',
+          contohRupiah: 'Dana Rp10.000.000 yang terus dikembangkan bersama imbal hasilnya selama 20 tahun.',
+        ),
+        'tingkat penarikan': (
+          arti: 'Persentase dana pensiun yang diambil setiap tahun untuk membiayai hidup tanpa menghabiskan pokok terlalu cepat.',
+          contohRupiah: 'Menarik 4 persen atau Rp24.000.000 per tahun dari dana pensiun Rp600.000.000.',
+        ),
+      };
+
+      for (final e in istilahModul15_16.entries) {
+        final istilah = e.key;
+        final target = e.value;
+
+        // Cek di aset/konten/kamus.json
+        final entriJson = daftarKamus.firstWhere(
+          (k) => k['istilah'] == istilah,
+          orElse: () => throw Exception('Istilah "$istilah" tidak ditemukan di kamus.json'),
+        );
+        expect(entriJson['arti'], equals(target.arti), reason: 'Arti "$istilah" di kamus.json tidak cocok kata per kata');
+        expect(entriJson['contohRupiah'], equals(target.contohRupiah), reason: 'Contoh Rupiah "$istilah" di kamus.json tidak cocok kata per kata');
+
+        // Cek di docs/materi/kamus_modul_15_16.md
+        expect(isiMateriKamus.contains(istilah), isTrue, reason: 'Istilah "$istilah" tidak ditemukan di docs/materi/kamus_modul_15_16.md');
+        expect(isiMateriKamus.contains(target.arti), isTrue, reason: 'Arti "$istilah" tidak ditemukan di docs/materi/kamus_modul_15_16.md');
+        expect(isiMateriKamus.contains(target.contohRupiah), isTrue, reason: 'Contoh Rupiah "$istilah" tidak ditemukan di docs/materi/kamus_modul_15_16.md');
+      }
+    });
   });
 }

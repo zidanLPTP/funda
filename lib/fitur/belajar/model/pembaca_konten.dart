@@ -95,6 +95,7 @@ class PembacaKonten {
     'ringkasan_penghasilan_tahunan',
     'ringkasan_tujuan_besar',
     'uji_kemampuan_kpr',
+    'proyeksi_kebebasan_finansial',
   };
 
   /// Mengurai string JSON kamus menjadi daftar istilah terindeks.

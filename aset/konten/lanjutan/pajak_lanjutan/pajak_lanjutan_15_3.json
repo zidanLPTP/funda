@@ -1,0 +1,107 @@
+{
+  "id": "pajak_lanjutan_15_3",
+  "modulId": "pajak_lanjutan",
+  "judul": "Daftar Periksa Siap Lapor Tahunan",
+  "durasiMenit": 5,
+  "status": "draf",
+  "catatanReviewer": "TODO-VERIFIKASI. Langkah persiapan umum sebelum mengisi SPT Tahunan melalui kanal resmi lembaga pajak; tanpa menyebut alamat situs atau batas tanggal spesifik.",
+  "pemantik": "Melapor tahunan tidak perlu jadi drama semalam sebelum batas waktu. Dengan daftar periksa sederhana, semuanya bisa selesai dalam satu sore yang tenang.",
+  "kartu": [
+    {
+      "judul": "Cocokkan pemasukan dan bukti potong",
+      "isi": "Bandingkan rekap pemasukanmu di Funda dengan bukti potong yang kamu terima. Pastikan tidak ada sumber penghasilan yang terlewat atau tercatat ganda."
+    },
+    {
+      "judul": "Siapkan ringkasan harta dan utang akhir tahun",
+      "isi": "Buka menu Kekayaan Bersih di Funda untuk melihat daftar saldo dompet, tabungan, dan sisa utangmu. Angka ini membantumu mengingat posisi harta dan kewajiban yang perlu dicantumkan."
+    },
+    {
+      "judul": "Simpan tanda terima pelaporan",
+      "isi": "Setelah menyelesaikan pelaporan lewat saluran resmi lembaga pajak, simpan bukti penerimaan elektroniknya di folder arsipmu. Bukti itu berguna jika sewaktu-waktu dibutuhkan untuk urusan perbankan atau kredit besar."
+    }
+  ],
+  "contohAngka": {
+    "judul": "Empat kelompok arsip yang memudahkan pelaporan",
+    "baris": [
+      {
+        "label": "Bukti potong dan rekap penghasilan",
+        "jumlah": 1
+      },
+      {
+        "label": "Ringkasan saldo dompet dan tabungan",
+        "jumlah": 1
+      },
+      {
+        "label": "Ringkasan sisa utang aktif",
+        "jumlah": 1
+      },
+      {
+        "label": "Bukti penerimaan laporan tahun lalu",
+        "jumlah": 1
+      }
+    ],
+    "kesimpulan": "Menyimpan empat arsip ini secara konsisten membuat pelaporan setiap tahun makin cepat dan bebas panik."
+  },
+  "cekPaham": [
+    {
+      "tanya": "Menu apa di Funda yang membantu mengingat daftar saldo dan sisa utang di akhir tahun?",
+      "pilihan": [
+        "Menu Kekayaan Bersih",
+        "Menu Kamus Istilah",
+        "Mode Sandbox"
+      ],
+      "benar": 0,
+      "penjelasan": "Menu Kekayaan Bersih merangkum saldo dompet aktif dan sisa utang nyatamu."
+    },
+    {
+      "tanya": "Apa yang perlu disimpan setelah selesai melapor lewat saluran resmi lembaga pajak?",
+      "pilihan": [
+        "Bukti penerimaan pelaporan tahunan",
+        "Hanya tangkapan layar beranda",
+        "Tidak perlu menyimpan apa pun"
+      ],
+      "benar": 0,
+      "penjelasan": "Bukti penerimaan menjadi arsip resmi bahwa kamu telah memenuhi kewajiban melapor."
+    },
+    {
+      "tanya": "Mengapa menyiapkan data lebih awal sebelum batas waktu itu menguntungkan?",
+      "pilihan": [
+        "Memberi waktu memeriksa kesalahan tanpa panik dan menghindari antrean sistem",
+        "Supaya tarif pajak berubah sendiri",
+        "Supaya tidak perlu memakai bukti potong"
+      ],
+      "benar": 0,
+      "penjelasan": "Persiapan lebih awal membuat proses verifikasi data jauh lebih tenang."
+    }
+  ],
+  "misi": {
+    "tipe": "daftar_periksa",
+    "disclaimer": true,
+    "minimalDicentang": 3,
+    "judul": "Daftar siap lapor pajak lanjutan",
+    "instruksi": "Baca catatan di atas, lalu centang langkah persiapan pelaporan tahunan yang sudah atau akan kamu siapkan. Minimal tiga langkah.",
+    "langkah": [
+      {
+        "id": "l1",
+        "teks": "Aku mengelompokkan seluruh sumber pemasukanku (rutin dan tambahan) di kategori terpisah."
+      },
+      {
+        "id": "l2",
+        "teks": "Aku menyimpan seluruh bukti potong dan invoice dalam satu folder arsip khusus."
+      },
+      {
+        "id": "l3",
+        "teks": "Aku meninjau menu Kekayaan Bersih di akhir tahun untuk merangkum saldo dan sisa utang."
+      },
+      {
+        "id": "l4",
+        "teks": "Aku memastikan pelaporan dilakukan langsung lewat saluran resmi lembaga pajak."
+      },
+      {
+        "id": "l5",
+        "teks": "Aku menyimpan bukti penerimaan pelaporan tahunan dengan rapi setelah selesai melapor."
+      }
+    ]
+  },
+  "tindakLanjut": "Ingat, Funda hanya membantu merapikan catatan pribadimu. Untuk kepastian aturan terbaru, selalu rujuk saluran resmi lembaga pajak."
+}

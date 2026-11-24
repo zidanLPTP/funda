@@ -1199,6 +1199,69 @@ String formatUjiKemampuanKpr({
   return sb.toString();
 }
 
+// ============================================================================
+// MODUL 16: PENSIUN & KEBEBASAN FINANSIAL
+// ============================================================================
+
+/// Pengali aturan praktis pensiun (populer 25x pengeluaran tahunan / aturan 4%).
+/// 
+/// TODO-VERIFIKASI: aturan praktis populer 25x pengeluaran tahunan (aturan 4 persen)
+const int pengaliAturanPraktisPensiun = 25;
+
+/// Menghasilkan teks umpan balik proyeksi patokan kebebasan finansial / pensiun
+/// berdasarkan pengeluaran wajib bulanan dan posisi kekayaan bersih saat ini.
+///
+/// Aturan:
+/// - Pengeluaran tahunan = `pengeluaranWajibBulananRupiah * 12`.
+/// - Patokan awal kebebasan = `pengeluaranTahunan * pengaliAturanPraktisPensiun`.
+/// - Persentase tercapai = `kekayaanBersihRupiah <= 0 ? 0 : (kekayaanBersihRupiah * 100) ~/ targetKebebasan`.
+///
+/// Seluruh perhitungan bilangan bulat (integer arithmetic murni, tanpa double).
+String formatProyeksiKebebasanFinansial({
+  required int pengeluaranWajibBulananRupiah,
+  required String dasarPengeluaranWajib,
+  required int kekayaanBersihRupiah,
+}) {
+  if (pengeluaranWajibBulananRupiah <= 0) {
+    return 'Belum ada catatan pengeluaran kebutuhan untuk menghitung gambaran '
+        'dana pensiunmu. Catat pengeluaran kebutuhanmu dulu agar angkanya bisa '
+        'dihitung. Ini simulasi aturan praktis, bukan jaminan hasil.';
+  }
+
+  final pengeluaranTahunan = pengeluaranWajibBulananRupiah * 12;
+  final targetKebebasan = pengeluaranTahunan * pengaliAturanPraktisPensiun;
+
+  final pengeluaranWajibStr = formatRupiahRapat(pengeluaranWajibBulananRupiah);
+  final pengeluaranTahunanStr = formatRupiahRapat(pengeluaranTahunan);
+  final targetKebebasanStr = formatRupiahRapat(targetKebebasan);
+  final kekayaanBersihStr = formatRupiahRapat(kekayaanBersihRupiah);
+
+  final sb = StringBuffer();
+  sb.write(
+    'Dengan pengeluaran wajib sekitar $pengeluaranWajibStr per bulan ($dasarPengeluaranWajib) '
+    'atau $pengeluaranTahunanStr per tahun, patokan awal 25 kali pengeluaran tahunan '
+    'berada di sekitar $targetKebebasanStr.',
+  );
+
+  if (kekayaanBersihRupiah > 0) {
+    final persenTercapai = (kekayaanBersihRupiah * 100) ~/ targetKebebasan;
+    sb.write(
+      ' Kekayaan bersihmu saat ini $kekayaanBersihStr '
+      '(sekitar $persenTercapai persen dari patokan tersebut).',
+    );
+  } else {
+    sb.write(
+      ' Kekayaan bersihmu saat ini belum positif ($kekayaanBersihStr), '
+      'jadi fokus utama yang paling menenangkan adalah merapikan utang dan '
+      'membangun tabungan bertahap.',
+    );
+  }
+
+  sb.write(' Ini simulasi aturan praktis, bukan jaminan hasil.');
+
+  return sb.toString();
+}
+
 
 
 

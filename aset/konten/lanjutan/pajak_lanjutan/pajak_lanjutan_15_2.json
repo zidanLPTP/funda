@@ -1,0 +1,83 @@
+{
+  "id": "pajak_lanjutan_15_2",
+  "modulId": "pajak_lanjutan",
+  "judul": "Perencanaan Pajak yang Sah dan Etis",
+  "durasiMenit": 6,
+  "status": "draf",
+  "catatanReviewer": "TODO-VERIFIKASI. Konsep umum perbedaan perencanaan pajak yang sah (tax planning) dan penghindaran/penggelapan ilegal; edukasi umum, bukan nasihat pajak.",
+  "pemantik": "Banyak orang mengira mengurus pajak itu hanya soal membayar sebesar-besarnya atau malah menghindarinya. Padahal ada cara yang sah dan rapi untuk mengelolanya.",
+  "kartu": [
+    {
+      "judul": "Perencanaan pajak yang sah",
+      "isi": "{{Perencanaan pajak}} yang sah berarti memahami aturan resmi yang berlaku agar kamu tidak membayar lebih dari yang seharusnya, tanpa melanggar hukum. Contohnya memanfaatkan pencatatan biaya kerja yang diakui atau memperbarui status tanggungan secara akurat."
+    },
+    {
+      "judul": "Beda merencanakan dan menyembunyikan",
+      "isi": "Merencanakan secara sah dilakukan secara terbuka mengikuti ketentuan resmi. Sebaliknya, menyembunyikan penghasilan atau memalsukan catatan adalah pelanggaran yang membawa risiko denda dan masalah hukum serius."
+    },
+    {
+      "judul": "Gunakan konsultan berizin bila rumit",
+      "isi": "Saat sumber penghasilanmu makin beragam atau kamu mulai memiliki usaha, bertanya ke layanan resmi lembaga pajak atau {{konsultan pajak}} berizin adalah langkah yang bijak. Biaya konsultasi sering kali jauh lebih ringan daripada risiko salah lapor."
+    }
+  ],
+  "contohAngka": {
+    "judul": "Ilustrasi mencatat biaya operasional kerja lepas (fiktif)",
+    "baris": [
+      {
+        "label": "Total bayaran proyek setahun",
+        "jumlah": 24000000
+      },
+      {
+        "label": "Biaya alat dan kuota kerja yang tercatat rapi",
+        "jumlah": -4000000
+      },
+      {
+        "label": "Hasil bersih kerja lepas",
+        "jumlah": 20000000,
+        "ringkasan": true
+      }
+    ],
+    "kesimpulan": "Pencatatan biaya kerja yang jujur dan didukung bukti menunjukkan kondisi keuangan bersihmu secara objektif."
+  },
+  "cekPaham": [
+    {
+      "tanya": "Apa yang dimaksud dengan perencanaan pajak yang sah?",
+      "pilihan": [
+        "Mengelola kewajiban pajak secara tertib mengikuti aturan resmi agar tepat hitung",
+        "Menyembunyikan sebagian pemasukan agar tidak terlihat",
+        "Tidak pernah mendaftar identitas pajak"
+      ],
+      "benar": 0,
+      "penjelasan": "Perencanaan pajak yang sah selalu patuh pada peraturan resmi yang berlaku."
+    },
+    {
+      "tanya": "Kapan sebaiknya seseorang mempertimbangkan bertanya ke layanan resmi atau konsultan pajak berizin?",
+      "pilihan": [
+        "Saat sumber penghasilan makin beragam atau aturan terasa membingungkan",
+        "Hanya setelah terkena sanksi berat",
+        "Tidak pernah perlu bertanya ke siapa pun"
+      ],
+      "benar": 0,
+      "penjelasan": "Bertanya lebih awal mencegah kesalahan administrasi yang memakan waktu dan biaya."
+    },
+    {
+      "tanya": "Mengapa memperbarui status tanggungan keluarga di data pajak itu penting?",
+      "pilihan": [
+        "Karena status tanggungan memengaruhi perhitungan batas tidak kena pajak yang sah",
+        "Karena membuat pajak selalu gratis",
+        "Karena tidak memengaruhi apa pun"
+      ],
+      "benar": 0,
+      "penjelasan": "Data status yang akurat memastikan perhitungan pajakmu sesuai kondisi nyata."
+    }
+  ],
+  "misi": {
+    "tipe": "refleksi",
+    "minimalKarakter": 10,
+    "judul": "Merapikan kebiasaan arsip tahunanmu",
+    "instruksi": "Tulis satu kebiasaan sederhana yang akan kamu jalankan agar urusan rekap pajak tahunanmu makin tenang. Catatan ini privat di HP-mu.",
+    "pertanyaan": "Dokumen atau catatan apa yang paling sering tercecer darimu, dan bagaimana caramu merapikannya mulai bulan ini?",
+    "petunjukInput": "Contoh: Aku akan langsung menyimpan bukti potong dan invoice ke folder khusus di hari yang sama saat diterima."
+  },
+  "tindakLanjut": "Jika status pernikahan atau tanggunganmu berubah tahun ini, catat pengingat untuk memperbarui datanya lewat jalur resmi."
+}

@@ -611,6 +611,26 @@ Berkas ini adalah sumber kebenaran teks (*single source of truth*) untuk antarmu
   - V2 (Ada sisa ruang cicilan > 0): *"Dengan pemasukan sekitar [pemasukan] per bulan ([dasar]) dan cicilan aktif saat ini [cicilan], estimasi sisa ruang cicilan (memakai patokan umum 30 persen) adalah sekitar [sisa] per bulan. Total saldo dompet aktifmu saat ini tercatat [saldo] (belum dikurangi dana darurat dan kebutuhan harian). Ini simulasi edukatif, bukan persetujuan kredit."*
   - V3 (Cicilan aktif sudah >= 30 persen): Ditambahkan kalimat peringatan ramah: *"Cicilan aktifmu saat ini sudah memenuhi atau melampaui patokan 30 persen, sehingga melunasi sebagian utang dulu biasanya jauh lebih tenang sebelum mengambil kredit besar."*
 
+---
+
+## 16. Kunci Umpan Balik On-Demand Misi Belajar Tahap 11B (Modul 16)
+
+### 16.1 `proyeksi_kebebasan_finansial`
+- **Konteks:** Digunakan pada misi tipe `lihat_hitungan` pelajaran 16.2 ("Menghitung Patokan Awal Dana Pensiun").
+- **Karakteristik:** Dipanggil secara on-demand saat misi 16.2 dibuka tanpa menambah kueri pada `FotoDataRepositori`.
+- **Logika Perhitungan:**
+  - Masukan: pengeluaran wajib bulanan (`pengeluaranWajibBulananRupiah` dari transaksi kebutuhan pengguna), deskripsi dasar (`dasarPengeluaranWajib`), dan kekayaan bersih (`kekayaanBersihRupiah` dari total saldo dompet aktif dikurangi total sisa utang aktif).
+  - Konstanta aturan praktis: `pengaliAturanPraktisPensiun = 25` (aturan 4 persen).
+  - Pengeluaran tahunan: `pengeluaranWajibBulananRupiah * 12`.
+  - Target patokan kebebasan: `pengeluaranTahunan * pengaliAturanPraktisPensiun`.
+  - Persentase ketercapaian: `kekayaanBersihRupiah <= 0 ? 0 : (kekayaanBersihRupiah * 100) ~/ targetKebebasan`.
+  - Seluruh perhitungan deterministik menggunakan pembagian bilangan bulat integer murni tanpa `double` dan tanpa `round()`.
+- **Variasi Respons:**
+  - V1 (Belum ada catatan kebutuhan): *"Belum ada catatan pengeluaran kebutuhan untuk menghitung gambaran dana pensiunmu. Catat pengeluaran kebutuhanmu dulu agar angkanya bisa dihitung. Ini simulasi aturan praktis, bukan jaminan hasil."*
+  - V2 (Kekayaan bersih positif > 0): *"Dengan pengeluaran wajib sekitar [pengeluaranWajib] per bulan ([dasar]) atau [pengeluaranTahunan] per tahun, patokan awal 25 kali pengeluaran tahunan berada di sekitar [targetKebebasan]. Kekayaan bersihmu saat ini [kekayaanBersih] (sekitar [persen] persen dari patokan tersebut). Ini simulasi aturan praktis, bukan jaminan hasil."*
+  - V3 (Kekayaan bersih belum positif <= 0): *"Dengan pengeluaran wajib sekitar [pengeluaranWajib] per bulan ([dasar]) atau [pengeluaranTahunan] per tahun, patokan awal 25 kali pengeluaran tahunan berada di sekitar [targetKebebasan]. Kekayaan bersihmu saat ini belum positif ([kekayaanBersih]), jadi fokus utama yang paling menenangkan adalah merapikan utang dan membangun tabungan bertahap. Ini simulasi aturan praktis, bukan jaminan hasil."*
+
+
 
 
 

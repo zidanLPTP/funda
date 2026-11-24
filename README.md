@@ -105,6 +105,8 @@ funda/
 
 ## 📸 Tangkapan Layar Aplikasi
 Tangkapan layar otomatis yang dihasilkan dari pengujian dan emulator tersimpan pada:
+- **Tahap 11B (Modul 15 "Pajak Lanjutan" & Modul 16 "Pensiun & Kebebasan Finansial" — Tingkat Lanjutan Bagian 2):** [docs/tangkapan_layar/](docs/tangkapan_layar/)
+  - Menghadirkan materi SPT tahunan ragam sumber, bukti potong, perencanaan pajak sah, konsep dana pensiun, kebebasan finansial, inflasi hari tua, serta umpan balik on-demand `proyeksi_kebebasan_finansial` (patokan 25x pengeluaran tahunan dan posisi kekayaan bersih).
 - **Tahap 11A (Modul 13 "Investasi Lanjutan" & Modul 14 "KPR & Kredit Besar" — Pembukaan Tingkat Lanjutan):** [docs/tangkapan_layar/](docs/tangkapan_layar/)
   - Menghadirkan materi alokasi portofolio, profil risiko, rebalancing, biaya & pajak investasi, uang muka & biaya awal KPR, sewa vs beli & bunga mengambang, serta umpan balik on-demand `uji_kemampuan_kpr` (rasio cicilan 30 persen dari arus kas nyata).
 - **Tahap 10B (Modul 12 "Tujuan Besar & Perencanaan" & Penutupan Tingkat Menengah):** [docs/tangkapan_layar/](docs/tangkapan_layar/)

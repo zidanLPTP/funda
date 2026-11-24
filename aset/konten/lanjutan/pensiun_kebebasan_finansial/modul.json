@@ -1,20 +1,152 @@
 {
-    "kuis":  {
-                 "jumlahSoal":  0,
-                 "bankSoal":  [
-
-                              ]
-             },
-    "id":  "pensiun_kebebasan_finansial",
-    "tersedia":  false,
-    "urutan":  16,
-    "gerbang":  [
-
-                ],
-    "deskripsiSingkat":  "Menghitung angka kebebasan finansial dan proyeksi kebutuhan hari tua dengan inflasi.",
-    "daftarPelajaran":  [
-
-                        ],
-    "tingkat":  "lanjutan",
-    "judul":  "Pensiun \u0026 Kebebasan Finansial"
+  "id": "pensiun_kebebasan_finansial",
+  "judul": "Pensiun & Kebebasan Finansial",
+  "tingkat": "lanjutan",
+  "urutan": 16,
+  "deskripsiSingkat": "Menghitung angka kebebasan finansial dan proyeksi kebutuhan hari tua dengan inflasi.",
+  "tersedia": true,
+  "gerbang": [
+    {
+      "tipe": "modul_selesai",
+      "modulId": "investasi_lanjutan",
+      "pesan": "Selesaikan Modul 13 (Investasi Lanjutan) dulu dan catat transaksimu minimal di 3 bulan berbeda agar proyeksi pensiunmu memakai data nyata."
+    },
+    {
+      "tipe": "periode_data",
+      "objek": "transaksi",
+      "satuan": "bulan_berbeda",
+      "min": 3,
+      "pesan": "Selesaikan Modul 13 (Investasi Lanjutan) dulu dan catat transaksimu minimal di 3 bulan berbeda agar proyeksi pensiunmu memakai data nyata."
+    }
+  ],
+  "daftarPelajaran": [
+    "pensiun_kebebasan_finansial_16_1",
+    "pensiun_kebebasan_finansial_16_2",
+    "pensiun_kebebasan_finansial_16_3"
+  ],
+  "kuis": {
+    "jumlahSoal": 5,
+    "bankSoal": [
+      {
+        "id": "soal_16_1",
+        "pelajaranId": "pensiun_kebebasan_finansial_16_1",
+        "tanya": "Apa tujuan utama menyiapkan dana pensiun?",
+        "pilihan": [
+          "Menopang biaya hidup saat tidak lagi bekerja aktif",
+          "Membiayai belanja impulsif bulan ini",
+          "Membayar denda keterlambatan"
+        ],
+        "benar": 0,
+        "penjelasan": "Dana pensiun memberi rasa aman dan kemandirian finansial di masa tua."
+      },
+      {
+        "id": "soal_16_2",
+        "pelajaranId": "pensiun_kebebasan_finansial_16_1",
+        "tanya": "Mengapa memulai persiapan pensiun di usia muda sangat menguntungkan?",
+        "pilihan": [
+          "Waktu yang panjang memberi ruang bagi bunga majemuk dan meringankan setoran bulanan",
+          "Karena anak muda tidak punya pengeluaran",
+          "Karena inflasi tidak berlaku"
+        ],
+        "benar": 0,
+        "penjelasan": "Semakin dini memulai, semakin ringan usaha bulanan yang dibutuhkan."
+      },
+      {
+        "id": "soal_16_3",
+        "pelajaranId": "pensiun_kebebasan_finansial_16_1",
+        "tanya": "Apa makna kebebasan finansial?",
+        "pilihan": [
+          "Hasil simpanan atau investasi cukup menutup biaya hidup rutin",
+          "Menghabiskan seluruh gaji setiap bulan",
+          "Tidak pernah membuat anggaran"
+        ],
+        "benar": 0,
+        "penjelasan": "Kebebasan finansial membuatmu memiliki kendali penuh atas waktu dan pilihan hidup."
+      },
+      {
+        "id": "soal_16_4",
+        "pelajaranId": "pensiun_kebebasan_finansial_16_1",
+        "tanya": "Rutin menyisihkan Rp500.000 per bulan selama 10 tahun mengumpulkan pokok berapa?",
+        "pilihan": [
+          "Rp60.000.000",
+          "Rp5.000.000",
+          "Rp12.000.000"
+        ],
+        "benar": 0,
+        "penjelasan": "Rp500.000 dikali 120 bulan menghasilkan pokok Rp60.000.000 sebelum imbal hasil."
+      },
+      {
+        "id": "soal_16_5",
+        "pelajaranId": "pensiun_kebebasan_finansial_16_2",
+        "tanya": "Pengeluaran wajib Rp3.000.000 per bulan setara berapa per tahun?",
+        "pilihan": [
+          "Rp36.000.000",
+          "Rp30.000.000",
+          "Rp12.000.000"
+        ],
+        "benar": 0,
+        "penjelasan": "Rp3.000.000 dikali 12 bulan adalah Rp36.000.000 per tahun."
+      },
+      {
+        "id": "soal_16_6",
+        "pelajaranId": "pensiun_kebebasan_finansial_16_2",
+        "tanya": "Patokan aturan praktis 25 kali pengeluaran tahunan sebaiknya diperlakukan sebagai apa?",
+        "pilihan": [
+          "Kompas awal untuk merencanakan, bukan jaminan pasti",
+          "Hukum mutlak yang tidak boleh diubah",
+          "Alasan untuk tidak menabung"
+        ],
+        "benar": 0,
+        "penjelasan": "Patokan ini adalah titik awal yang perlu disesuaikan dengan kondisi dan inflasi."
+      },
+      {
+        "id": "soal_16_7",
+        "pelajaranId": "pensiun_kebebasan_finansial_16_2",
+        "tanya": "Apa pengaruh menjaga biaya hidup tetap wajar terhadap target dana pensiun?",
+        "pilihan": [
+          "Target dana pensiun yang dibutuhkan menjadi lebih terjangkau",
+          "Target dana pensiun menjadi tak terbatas",
+          "Tidak ada pengaruh sama sekali"
+        ],
+        "benar": 0,
+        "penjelasan": "Pengeluaran tahunan yang lebih efisien langsung mengecilkan target dana yang diperlukan."
+      },
+      {
+        "id": "soal_16_8",
+        "pelajaranId": "pensiun_kebebasan_finansial_16_3",
+        "tanya": "Mengapa inflasi harus diperhitungkan dalam rencana pensiun 20 tahun ke depan?",
+        "pilihan": [
+          "Karena harga kebutuhan hidup cenderung naik sehingga nominal yang dibutuhkan lebih besar",
+          "Karena harga barang selalu tetap",
+          "Karena tabungan otomatis berkurang"
+        ],
+        "benar": 0,
+        "penjelasan": "Memperhitungkan inflasi menjaga agar daya beli dana pensiunmu tetap cukup."
+      },
+      {
+        "id": "soal_16_9",
+        "pelajaranId": "pensiun_kebebasan_finansial_16_3",
+        "tanya": "Kapan waktu yang paling nyaman untuk menaikkan setoran dana pensiun?",
+        "pilihan": [
+          "Setiap kali penghasilan atau gaji mengalami kenaikan",
+          "Saat sedang kesulitan membayar makan",
+          "Saat punya banyak utang konsumtif"
+        ],
+        "benar": 0,
+        "penjelasan": "Menyisihkan sebagian kenaikan penghasilan tidak mengganggu gaya hidup yang sudah berjalan."
+      },
+      {
+        "id": "soal_16_10",
+        "pelajaranId": "pensiun_kebebasan_finansial_16_3",
+        "tanya": "Kondisi apa yang membantu dana pensiun bertahan lebih lama di masa tua?",
+        "pilihan": [
+          "Bebas cicilan besar dan memiliki perlindungan kesehatan aktif",
+          "Menambah cicilan konsumtif baru",
+          "Menghentikan semua pencatatan"
+        ],
+        "benar": 0,
+        "penjelasan": "Bebas utang dan terlindungi secara kesehatan menjaga dana pensiun fokus untuk biaya hidup."
+      }
+    ]
+  }
 }

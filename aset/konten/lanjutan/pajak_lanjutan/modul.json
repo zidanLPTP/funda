@@ -1,20 +1,152 @@
 {
-    "kuis":  {
-                 "jumlahSoal":  0,
-                 "bankSoal":  [
-
-                              ]
-             },
-    "id":  "pajak_lanjutan",
-    "tersedia":  false,
-    "urutan":  15,
-    "gerbang":  [
-
-                ],
-    "deskripsiSingkat":  "Pelaporan SPT tahunan dari ragam sumber penghasilan dan perencanaan pajak legal.",
-    "daftarPelajaran":  [
-
-                        ],
-    "tingkat":  "lanjutan",
-    "judul":  "Pajak Lanjutan"
+  "id": "pajak_lanjutan",
+  "judul": "Pajak Lanjutan",
+  "tingkat": "lanjutan",
+  "urutan": 15,
+  "deskripsiSingkat": "Pelaporan SPT tahunan dari ragam sumber penghasilan dan perencanaan pajak legal.",
+  "tersedia": true,
+  "gerbang": [
+    {
+      "tipe": "modul_selesai",
+      "modulId": "pajak_dasar",
+      "pesan": "Selesaikan Modul 9 (Pajak Dasar) dulu dan catat pemasukanmu minimal di 6 bulan berbeda agar kamu punya rekap nyata untuk pajak lanjutan."
+    },
+    {
+      "tipe": "periode_data",
+      "objek": "transaksi",
+      "satuan": "bulan_berbeda",
+      "min": 6,
+      "pesan": "Selesaikan Modul 9 (Pajak Dasar) dulu dan catat pemasukanmu minimal di 6 bulan berbeda agar kamu punya rekap nyata untuk pajak lanjutan."
+    }
+  ],
+  "daftarPelajaran": [
+    "pajak_lanjutan_15_1",
+    "pajak_lanjutan_15_2",
+    "pajak_lanjutan_15_3"
+  ],
+  "kuis": {
+    "jumlahSoal": 5,
+    "bankSoal": [
+      {
+        "id": "soal_15_1",
+        "pelajaranId": "pajak_lanjutan_15_1",
+        "tanya": "Bagaimana perlakuan umum terhadap beberapa sumber penghasilan dalam laporan tahunan?",
+        "pilihan": [
+          "Seluruh sumber penghasilan dalam setahun dicatat dan dilaporkan dalam satu laporan",
+          "Hanya melaporkan sumber yang paling kecil",
+          "Membiarkan sumber tambahan tanpa catatan"
+        ],
+        "benar": 0,
+        "penjelasan": "Pencatatan lengkap mencerminkan kondisi penghasilan tahunanmu secara akurat."
+      },
+      {
+        "id": "soal_15_2",
+        "pelajaranId": "pajak_lanjutan_15_1",
+        "tanya": "Apa ciri utama pajak bersifat final?",
+        "pilihan": [
+          "Perhitungannya selesai saat dipotong dan tidak digabung ulang ke hitungan utama",
+          "Tidak pernah dipotong sama sekali",
+          "Selalu dibayar dua kali"
+        ],
+        "benar": 0,
+        "penjelasan": "Pajak final bersifat tuntas pada saat pemotongan sesuai aturan yang berlaku."
+      },
+      {
+        "id": "soal_15_3",
+        "pelajaranId": "pajak_lanjutan_15_1",
+        "tanya": "Apa kegunaan menyimpan bukti potong dari kantor atau klien?",
+        "pilihan": [
+          "Membuktikan pajak yang sudah dipotong di muka agar tidak terhitung ganda",
+          "Menghapus kewajiban melapor tahunan",
+          "Menggantikan rekening bank"
+        ],
+        "benar": 0,
+        "penjelasan": "Bukti potong menjadi dokumen penting saat mengisi laporan tahunan."
+      },
+      {
+        "id": "soal_15_4",
+        "pelajaranId": "pajak_lanjutan_15_1",
+        "tanya": "Gaji setahun Rp60.000.000 ditambah proyek lepas Rp12.000.000. Berapa total penghasilan tercatatnya?",
+        "pilihan": [
+          "Rp72.000.000",
+          "Rp60.000.000",
+          "Rp48.000.000"
+        ],
+        "benar": 0,
+        "penjelasan": "Penjumlahan kedua sumber menghasilkan Rp72.000.000."
+      },
+      {
+        "id": "soal_15_5",
+        "pelajaranId": "pajak_lanjutan_15_2",
+        "tanya": "Apa prinsip utama perencanaan pajak yang sah?",
+        "pilihan": [
+          "Memahami dan mematuhi aturan resmi agar perhitungan tepat tanpa melanggar hukum",
+          "Menyembunyikan penghasilan dari catatan",
+          "Memalsukan bukti pengeluaran"
+        ],
+        "benar": 0,
+        "penjelasan": "Perencanaan yang sah berjalan terbuka sesuai ketentuan peraturan."
+      },
+      {
+        "id": "soal_15_6",
+        "pelajaranId": "pajak_lanjutan_15_2",
+        "tanya": "Kapan langkah tepat meminta bantuan layanan resmi atau konsultan pajak berizin?",
+        "pilihan": [
+          "Ketika sumber penghasilan beragam atau aturan terasa rumit",
+          "Hanya jika sudah terlambat bertahun-tahun",
+          "Tidak pernah disarankan"
+        ],
+        "benar": 0,
+        "penjelasan": "Panduan pihak berizin mencegah kekeliruan yang merugikan."
+      },
+      {
+        "id": "soal_15_7",
+        "pelajaranId": "pajak_lanjutan_15_2",
+        "tanya": "Mengapa pencatatan biaya kerja yang jujur penting bagi pekerja lepas?",
+        "pilihan": [
+          "Menunjukkan penghasilan bersih yang sebenarnya secara objektif",
+          "Supaya pengeluaran terlihat nol",
+          "Supaya tidak perlu menyimpan bukti"
+        ],
+        "benar": 0,
+        "penjelasan": "Catatan biaya yang rapi memberi gambaran nyata hasil bersih pekerjaanmu."
+      },
+      {
+        "id": "soal_15_8",
+        "pelajaranId": "pajak_lanjutan_15_3",
+        "tanya": "Fitur Funda mana yang membantu merangkum daftar saldo dan sisa utang untuk persiapan akhir tahun?",
+        "pilihan": [
+          "Layar Kekayaan Bersih",
+          "Mode Sandbox",
+          "Pengaturan Pengingat"
+        ],
+        "benar": 0,
+        "penjelasan": "Kekayaan Bersih merangkum total saldo dompet aktif dan sisa utangmu."
+      },
+      {
+        "id": "soal_15_9",
+        "pelajaranId": "pajak_lanjutan_15_3",
+        "tanya": "Dokumen apa yang wajib disimpan setelah menyelesaikan pelaporan tahunan?",
+        "pilihan": [
+          "Bukti penerimaan pelaporan resmi",
+          "Brosur promosi aplikasi",
+          "Daftar belanja mingguan"
+        ],
+        "benar": 0,
+        "penjelasan": "Bukti penerimaan menjadi arsip resmi kepatuhan pelaporanmu."
+      },
+      {
+        "id": "soal_15_10",
+        "pelajaranId": "pajak_lanjutan_15_3",
+        "tanya": "Mengapa menyiapkan data pelaporan lebih awal disarankan?",
+        "pilihan": [
+          "Lebih tenang memeriksa kelengkapan data tanpa terburu-buru",
+          "Karena aturan mewajibkan melapor tanpa data",
+          "Karena bukti potong tidak diperlukan"
+        ],
+        "benar": 0,
+        "penjelasan": "Persiapan awal meminimalkan kesalahan input dan stres menjelang batas waktu."
+      }
+    ]
+  }
 }

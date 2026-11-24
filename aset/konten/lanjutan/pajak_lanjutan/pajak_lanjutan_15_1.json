@@ -1,0 +1,103 @@
+{
+  "id": "pajak_lanjutan_15_1",
+  "modulId": "pajak_lanjutan",
+  "judul": "Menghadapi Penghasilan dari Beragam Sumber",
+  "durasiMenit": 6,
+  "status": "draf",
+  "catatanReviewer": "TODO-VERIFIKASI. Prinsip pelaporan penghasilan gabungan (karyawan + pekerjaan lepas/investasi) secara umum; tidak menyebut tarif atau formulir spesifik yang dapat berubah.",
+  "pemantik": "Kamu bekerja sebagai karyawan, sesekali menerima proyek desain, dan mulai punya sedikit hasil investasi. Saat waktunya lapor tahunan, semuanya perlu dicatat dengan rapi.",
+  "kartu": [
+    {
+      "judul": "Satu laporan untuk seluruh penghasilan",
+      "isi": "Dalam pelaporan pajak tahunan, seluruh sumber penghasilan dalam setahun umumnya digabungkan dalam satu catatan, baik yang sudah dipotong pajak oleh pemberi kerja maupun penghasilan tambahan dari luar kantor."
+    },
+    {
+      "judul": "Bedakan pajak final dan tidak final",
+      "isi": "Di dunia perpajakan, ada {{pajak final}} yang perhitungannya selesai saat dipotong dan tidak digabung ulang, serta pajak tidak final yang dihitung bersama penghasilan utama. Mengenali perbedaannya mencegahmu salah hitung saat melapor."
+    },
+    {
+      "judul": "Arsipkan bukti potong tiap sumber",
+      "isi": "Setiap kali kamu menerima {{bukti potong}} dari kantor, klien, atau penyedia layanan investasi berizin, simpan segera di satu folder khusus. Bukti potong itu menunjukkan pajak yang sudah kamu bayarkan di muka."
+    }
+  ],
+  "contohAngka": {
+    "judul": "Ilustrasi rekap tiga sumber penghasilan dalam setahun",
+    "baris": [
+      {
+        "label": "Penghasilan utama dari kantor (dengan bukti potong)",
+        "jumlah": 60000000
+      },
+      {
+        "label": "Penghasilan proyek sampingan",
+        "jumlah": 12000000
+      },
+      {
+        "label": "Total penghasilan tercatat setahun",
+        "jumlah": 72000000,
+        "ringkasan": true
+      }
+    ],
+    "kesimpulan": "Memisahkan catatan tiap sumber sejak awal tahun membuatmu tidak bingung saat menyusun laporan tahunan."
+  },
+  "cekPaham": [
+    {
+      "tanya": "Mengapa bukti potong dari kantor atau klien sangat penting disimpan?",
+      "pilihan": [
+        "Sebagai bukti resmi bahwa sebagian pajak sudah dipotong atau dibayar di muka",
+        "Supaya tidak perlu melapor sama sekali",
+        "Supaya gaji otomatis naik"
+      ],
+      "benar": 0,
+      "penjelasan": "Bukti potong mencegahmu membayar pajak dua kali atas penghasilan yang sama."
+    },
+    {
+      "tanya": "Apa perbedaan umum pajak final dan tidak final?",
+      "pilihan": [
+        "Pajak final perhitungannya selesai saat dipotong, sedangkan tidak final digabung di perhitungan tahunan",
+        "Pajak final selalu nol persen",
+        "Tidak ada bedanya sama sekali"
+      ],
+      "benar": 0,
+      "penjelasan": "Memahami sifat pajaknya membantu penempatan angka yang benar saat melapor."
+    },
+    {
+      "tanya": "Jika kamu punya gaji kantor dan hasil freelance, bagaimana pencatatannya di Funda?",
+      "pilihan": [
+        "Dipisah per kategori pemasukan sejak awal agar mudah direkap akhir tahun",
+        "Dicampur tanpa catatan",
+        "Hanya mencatat salah satunya saja"
+      ],
+      "benar": 0,
+      "penjelasan": "Pemisahan kategori memudahkanmu melihat total masing-masing sumber penghasilan."
+    }
+  ],
+  "misi": {
+    "tipe": "keputusan",
+    "judul": "Menata dokumen penghasilan beragam",
+    "instruksi": "Baca skenarionya, lalu pilih langkah yang paling rapi dan aman.",
+    "skenario": {
+      "pemantik": "Tahun ini kamu punya gaji bulanan, tiga proyek lepas, dan mulai rutin menyisihkan dana investasi. Bulan depan waktunya menyiapkan laporan tahunan.",
+      "opsi": [
+        {
+          "id": "a",
+          "teks": "Kumpulkan bukti potong kantor, rekap kategori freelance di Funda, dan ringkasan posisi akhir tahun",
+          "aman": true,
+          "umpanBalik": "Tepat. Data yang lengkap membuat proses pelaporan lewat saluran resmi jauh lebih cepat dan akurat."
+        },
+        {
+          "id": "b",
+          "teks": "Laporkan gaji kantor saja dan abaikan penghasilan proyek karena jumlahnya lebih kecil",
+          "aman": false,
+          "umpanBalik": "Mengabaikan sebagian sumber penghasilan dapat menimbulkan selisih catatan di kemudian hari. Coba pilihan lain."
+        },
+        {
+          "id": "c",
+          "teks": "Tunda melapor sampai tahun depan karena datanya terasa rumit",
+          "aman": false,
+          "umpanBalik": "Menunda pelaporan melewati batas waktu berisiko menimbulkan denda administrasi. Coba pilihan lain."
+        }
+      ]
+    }
+  },
+  "tindakLanjut": "Periksa folder Arsip Pajakmu hari ini. Pastikan seluruh bukti potong dan rekap proyek 6 bulan terakhir sudah terkumpul."
+}

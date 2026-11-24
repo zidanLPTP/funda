@@ -1,0 +1,103 @@
+{
+  "id": "pensiun_kebebasan_finansial_16_1",
+  "modulId": "pensiun_kebebasan_finansial",
+  "judul": "Memahami Dana Pensiun dan Kebebasan Finansial",
+  "durasiMenit": 6,
+  "status": "draf",
+  "catatanReviewer": "TODO-VERIFIKASI. Konsep umum dana pensiun dan kebebasan finansial bersifat edukatif; bukan janji hasil investasi.",
+  "pemantik": "Usia pensiun mungkin masih puluhan tahun lagi. Justru karena masih jauh, langkah kecil hari ini punya waktu sangat panjang untuk bertumbuh.",
+  "kartu": [
+    {
+      "judul": "Apa itu dana pensiun?",
+      "isi": "{{Dana pensiun}} adalah simpanan jangka panjang yang disiapkan untuk menopang biaya hidupmu saat kamu tidak lagi bekerja aktif. Menyiapkannya sejak muda membuat beban setoran bulanan jauh lebih ringan."
+    },
+    {
+      "judul": "Apa itu kebebasan finansial?",
+      "isi": "{{Kebebasan finansial}} adalah kondisi ketika hasil dari simpanan atau investasimu sudah cukup untuk menutup biaya hidup rutin, sehingga kamu bekerja karena pilihan, bukan semata-mata keterpaksaan."
+    },
+    {
+      "judul": "Waktu adalah teman terbaikmu",
+      "isi": "Semakin awal kamu mulai menyisihkan dana jangka panjang, semakin lama pula {{bunga majemuk}} bekerja membantu pertumbuhan danamu. Memulai kecil di usia dua puluhan sering kali jauh lebih ringan daripada mengejar dengan nominal besar di usia empat puluhan."
+    }
+  ],
+  "contohAngka": {
+    "judul": "Ilustrasi total pokok setoran Rp500.000 per bulan (belum termasuk imbal hasil)",
+    "baris": [
+      {
+        "label": "Jika rutin selama 10 tahun",
+        "jumlah": 60000000
+      },
+      {
+        "label": "Jika rutin selama 20 tahun",
+        "jumlah": 120000000
+      },
+      {
+        "label": "Jika rutin selama 30 tahun",
+        "jumlah": 180000000,
+        "ringkasan": true
+      }
+    ],
+    "kesimpulan": "Waktu yang panjang melipatgandakan dampak dari kebiasaan kecil yang konsisten."
+  },
+  "cekPaham": [
+    {
+      "tanya": "Mengapa menyiapkan dana pensiun sejak muda terasa jauh lebih ringan?",
+      "pilihan": [
+        "Karena waktu yang panjang membuat setoran bulanan lebih kecil dan memberi ruang bagi pertumbuhan",
+        "Karena biaya hidup di masa tua pasti nol",
+        "Karena tidak perlu mencatat anggaran"
+      ],
+      "benar": 0,
+      "penjelasan": "Waktu yang panjang adalah keunggulan terbesar yang dimiliki anak muda."
+    },
+    {
+      "tanya": "Apa makna sederhana dari kebebasan finansial?",
+      "pilihan": [
+        "Biaya hidup rutin sudah bisa ditopang oleh hasil simpanan atau investasi",
+        "Tidak pernah mengeluarkan uang sepeser pun",
+        "Memiliki utang sebanyak mungkin"
+      ],
+      "benar": 0,
+      "penjelasan": "Kebebasan finansial memberi pilihan hidup yang lebih tenang."
+    },
+    {
+      "tanya": "Apa yang dimaksud dengan bunga majemuk?",
+      "pilihan": [
+        "Pertumbuhan yang dihitung bukan hanya dari pokok awal, tetapi juga dari hasil yang sudah terkumpul sebelumnya",
+        "Biaya admin bank bulanan",
+        "Denda keterlambatan tagihan"
+      ],
+      "benar": 0,
+      "penjelasan": "Bunga majemuk bekerja makin terasa pada rentang waktu yang panjang."
+    }
+  ],
+  "misi": {
+    "tipe": "keputusan",
+    "judul": "Mulai menyiapkan masa depan sejak muda",
+    "instruksi": "Baca skenarionya, lalu pilih sikap yang paling masuk akal.",
+    "skenario": {
+      "pemantik": "Kamu baru berumur 24 tahun dan mulai punya penghasilan stabil. Dana daruratmu sudah mulai terisi, dan kamu berpikir apakah sudah perlu memikirkan dana pensiun.",
+      "opsi": [
+        {
+          "id": "a",
+          "teks": "Mulai sisihkan porsi kecil yang nyaman secara rutin agar kebiasaan dan waktu bekerja untukmu",
+          "aman": true,
+          "umpanBalik": "Tepat. Memulai dari nominal kecil di usia muda jauh lebih ringan daripada menunda puluhan tahun."
+        },
+        {
+          "id": "b",
+          "teks": "Tunggu sampai umur 45 tahun dulu karena pensiun masih sangat lama",
+          "aman": false,
+          "umpanBalik": "Menunda terlalu lama membuat nominal yang harus disisihkan tiap bulan nanti menjadi jauh lebih berat. Coba pilihan lain."
+        },
+        {
+          "id": "c",
+          "teks": "Kosongkan dana darurat dan kebutuhan pokok demi dana pensiun",
+          "aman": false,
+          "umpanBalik": "Dana pensiun dibangun setelah kebutuhan harian aman dan dana darurat terjaga. Coba pilihan lain."
+        }
+      ]
+    }
+  },
+  "tindakLanjut": "Bayangkan gaya hidup sederhana dan tenang seperti apa yang kamu inginkan di masa pensiun nanti."
+}

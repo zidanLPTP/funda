@@ -5,6 +5,45 @@ Format penulisan mengacu pada standar Keep a Changelog dan penamaan commit Funda
 
 ---
 
+## [0.19.0] - 2026-11-24 — Tahap 11B: Modul 15 "Pajak Lanjutan" & Modul 16 "Pensiun & Kebebasan Finansial" (Tingkat Lanjutan Bagian 2)
+
+Tahap 11B melanjutkan kurikulum Tingkat Lanjutan Funda dengan menghadirkan Modul 15 "Pajak Lanjutan", Modul 16 "Pensiun & Kebebasan Finansial", evaluasi gerbang multi-syarat `periode_data` transaksi 6 bulan dan 3 bulan berbeda, kunci umpan balik on-demand baru `proyeksi_kebebasan_finansial`, optimasi SQL agregasi rata-rata pemasukan KPR, dan 8 entri kamus istilah baru:
+- **Optimasi SQL Agregasi Pemasukan Rata-Rata (`lib/fitur/belajar/kontroler/penyedia_belajar.dart`):**
+  - Mengganti kueri `select(tabelTransaksi).get()` pada `case 'uji_kemampuan_kpr'` dengan `hitungPemasukanRataRataSQL(waktuSekarang: waktuSekarang)` di `TransaksiRepositori`.
+- **Kunci Umpan Balik On-Demand Misi 16.2 (`lib/perhitungan/perhitungan_umpan_balik_belajar.dart`, `lib/fitur/belajar/model/registri_misi.dart`, `lib/fitur/belajar/kontroler/penyedia_belajar.dart`):**
+  - Kunci `proyeksi_kebebasan_finansial`: dihitung on-demand saat misi 16.2 dibuka tanpa menambah kueri pada `FotoDataRepositori`.
+  - Fungsi murni integer deterministik tanpa `double` (`formatProyeksiKebebasanFinansial`):
+    - Masukan: pengeluaran wajib bulanan, dasar pengeluaran wajib, dan kekayaan bersih pengguna.
+    - Patokan aturan praktis: 25 kali pengeluaran tahunan (`pengaliAturanPraktisPensiun = 25`, turunan dari aturan 4 persen).
+    - Target kebebasan finansial: `pengeluaranTahunan * 25` (di mana `pengeluaranTahunan = pengeluaranWajibBulananRupiah * 12`).
+    - Persentase tercapai integer murni: `(kekayaanBersih * 100) ~/ targetKebebasan` (0 jika kekayaan bersih <= 0).
+    - Pesan edukatif menguatkan saat kekayaan bersih belum positif: *"Kekayaan bersihmu saat ini belum positif ([kekayaanBersih]), jadi fokus utama yang paling menenangkan adalah merapikan utang dan membangun tabungan bertahap."*
+    - Penutup tetap edukatif: *"Ini simulasi aturan praktis, bukan jaminan hasil."*
+  - TDD unit test lengkap V1-V3 dan evaluasi gerbang 6 bulan transaksi berbeda di `test/perhitungan/perhitungan_umpan_balik_tahap_11b_test.dart` (5 tests passed).
+- **Konten Edukasi Resmi Modul 15 & Modul 16 (`aset/konten/lanjutan/`):**
+  - **Modul 15 "Pajak Lanjutan" (`pajak_lanjutan`):**
+    - Mengubah stub `modul.json` menjadi `tersedia: true`, urutan 15, gerbang `modul_selesai pajak_dasar` DAN `periode_data` transaksi min 6 bulan berbeda, bankSoal kuis 10 butir (sebaran 4/3/3).
+    - `pajak_lanjutan_15_1.json`: "Menghadapi Penghasilan dari Beragam Sumber", durasi 6 menit, misi `keputusan` ("Menata dokumen penghasilan beragam"), catatanReviewer TODO-VERIFIKASI.
+    - `pajak_lanjutan_15_2.json`: "Perencanaan Pajak yang Sah dan Etis", durasi 6 menit, misi `refleksi` ("Merapikan kebiasaan arsip tahunanmu", min 10 karakter), catatanReviewer TODO-VERIFIKASI.
+    - `pajak_lanjutan_15_3.json`: "Daftar Periksa Siap Lapor Tahunan", durasi 5 menit, misi `daftar_periksa` ("Daftar siap lapor pajak lanjutan", 5 langkah, min 3 dicentang, disclaimer: true), catatanReviewer TODO-VERIFIKASI.
+  - **Modul 16 "Pensiun & Kebebasan Finansial" (`pensiun_kebebasan_finansial`):**
+    - Mengubah stub `modul.json` menjadi `tersedia: true`, urutan 16, gerbang `modul_selesai investasi_lanjutan` DAN `periode_data` transaksi min 3 bulan berbeda, bankSoal kuis 10 butir (sebaran 4/3/3).
+    - `pensiun_kebebasan_finansial_16_1.json`: "Memahami Dana Pensiun dan Kebebasan Finansial", durasi 6 menit, misi `keputusan` ("Mulai menyiapkan masa depan sejak muda"), catatanReviewer TODO-VERIFIKASI.
+    - `pensiun_kebebasan_finansial_16_2.json`: "Menghitung Patokan Awal Dana Pensiun", durasi 6 menit, misi `lihat_hitungan` kunci `proyeksi_kebebasan_finansial`, `aturanPraktis: true`, `catatanReviewer: "TODO-VERIFIKASI..."`.
+    - `pensiun_kebebasan_finansial_16_3.json`: "Menjaga Rencana Pensiun dari Inflasi", durasi 6 menit, misi `daftar_periksa` ("Peta jalan masa pensiun tenang", 5 langkah, min 3 dicentang, disclaimer: true), catatanReviewer TODO-VERIFIKASI.
+- **Kamus Istilah Keuangan Baru (`aset/konten/kamus.json`):**
+  - Menambahkan 8 entri istilah terstandardisasi tanpa duplikasi (total 85 entri):
+    - Modul 15: `pajak final`, `bukti potong`, `perencanaan pajak`, `konsultan pajak`.
+    - Modul 16: `dana pensiun`, `kebebasan finansial`, `bunga majemuk`, `tingkat penarikan`.
+- **Pengujian & Verifikasi:**
+  - `test/perhitungan/perhitungan_umpan_balik_tahap_11b_test.dart`: 5 tests lulus.
+  - `test/konten/kesesuaian_lampiran_test.dart`: 61 tests lulus mencakup Modul 15, Modul 16, dan 8 entri kamus kata per kata.
+  - `test/konten/pemeriksa_semua_konten_test.dart`: 2 tests lulus (memvalidasi 19 modul dan 51 pelajaran).
+  - `test/fitur/belajar_tahap_11b_widget_test.dart`: 9 tests lulus mencakup status modul terkunci/terbuka, seluruh varian misi (keputusan, refleksi, daftar periksa, lihat hitungan), kuis, dan aksesibilitas skala teks 2.0 tanpa overflow.
+  - Seluruh rangkaian test suite proyek lulus penuh tanpa regresi.
+
+---
+
 ## [0.18.0] - 2026-11-24 — Tahap 11A: Modul 13 "Investasi Lanjutan" & Modul 14 "KPR & Kredit Besar" (Pembukaan Tingkat Lanjutan)
 
 Tahap 11A membuka kurikulum Tingkat Lanjutan Funda dengan menghadirkan Modul 13 "Investasi Lanjutan: Alokasi & Risiko", Modul 14 "KPR & Kredit Besar", evaluasi gerbang multi-syarat `periode_data` transaksi 3 bulan berbeda, kunci umpan balik on-demand baru `uji_kemampuan_kpr`, dan 8 entri kamus istilah baru:

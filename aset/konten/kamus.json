@@ -383,5 +383,45 @@
     "istilah": "bunga mengambang",
     "arti": "Suku bunga pinjaman yang dapat berubah mengikuti pergerakan suku bunga pasar sehingga nominal cicilan bisa naik atau turun.",
     "contohRupiah": "Cicilan KPR berubah dari Rp2.800.000 menjadi Rp3.800.000 setelah masa bunga tetap berakhir."
+  },
+  {
+    "istilah": "pajak final",
+    "arti": "Pajak yang perhitungannya dianggap selesai pada saat pemotongan dan tidak digabungkan lagi ke perhitungan utama tahunan.",
+    "contohRupiah": "Potongan pajak atas bunga simpanan bank yang sudah selesai saat dipotong."
+  },
+  {
+    "istilah": "bukti potong",
+    "arti": "Dokumen resmi dari pemberi kerja atau pemotong pajak yang mencatat jumlah pajak yang sudah dipotong di muka.",
+    "contohRupiah": "Bukti potong tahunan dari kantor atas gaji Rp60.000.000 setahun."
+  },
+  {
+    "istilah": "perencanaan pajak",
+    "arti": "Upaya mengatur administrasi dan pencatatan pajak secara sah sesuai aturan resmi agar tidak membayar lebih dari yang seharusnya.",
+    "contohRupiah": "Mencatat biaya operasional kerja lepas Rp4.000.000 secara rapi dengan bukti."
+  },
+  {
+    "istilah": "konsultan pajak",
+    "arti": "Pihak profesional berizin yang membantu memberikan panduan dan pendampingan resmi dalam urusan perpajakan.",
+    "contohRupiah": "Berkonsultasi dengan konsultan pajak berizin saat penghasilan berasal dari banyak sumber."
+  },
+  {
+    "istilah": "dana pensiun",
+    "arti": "Simpanan jangka panjang yang disiapkan untuk menopang biaya hidup saat seseorang tidak lagi bekerja aktif.",
+    "contohRupiah": "Menyisihkan Rp500.000 per bulan secara rutin untuk masa pensiun."
+  },
+  {
+    "istilah": "kebebasan finansial",
+    "arti": "Kondisi ketika hasil dari simpanan atau investasi sudah cukup untuk menutup biaya hidup rutin.",
+    "contohRupiah": "Hasil investasi bulanan mampu menutup pengeluaran wajib Rp3.000.000 per bulan."
+  },
+  {
+    "istilah": "bunga majemuk",
+    "arti": "Pertumbuhan nilai uang yang dihitung dari pokok awal ditambah hasil pertumbuhan yang sudah terkumpul sebelumnya.",
+    "contohRupiah": "Dana Rp10.000.000 yang terus dikembangkan bersama imbal hasilnya selama 20 tahun."
+  },
+  {
+    "istilah": "tingkat penarikan",
+    "arti": "Persentase dana pensiun yang diambil setiap tahun untuk membiayai hidup tanpa menghabiskan pokok terlalu cepat.",
+    "contohRupiah": "Menarik 4 persen atau Rp24.000.000 per tahun dari dana pensiun Rp600.000.000."
   }
 ]

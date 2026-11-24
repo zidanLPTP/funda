@@ -1,0 +1,82 @@
+{
+  "id": "pensiun_kebebasan_finansial_16_2",
+  "modulId": "pensiun_kebebasan_finansial",
+  "judul": "Menghitung Patokan Awal Dana Pensiun",
+  "durasiMenit": 6,
+  "status": "draf",
+  "aturanPraktis": true,
+  "catatanReviewer": "TODO-VERIFIKASI. Aturan praktis 25 kali pengeluaran tahunan (berkaitan dengan studi 4 persen penarikan tahunan / Trinity Study) adalah pedoman ilustratif populer; kondisi inflasi dan imbal hasil Indonesia dapat berbeda, wajib ditinjau.",
+  "pemantik": "Berapa sebenarnya angka yang cukup untuk pensiun? Tanpa patokan awal, targetnya terasa kabur dan sulit dikejar.",
+  "kartu": [
+    {
+      "judul": "Mulai dari biaya hidup tahunanmu",
+      "isi": "Patokan dana pensiun selalu berangkat dari biaya hidupmu sendiri, bukan angka milik orang lain. Kalikan pengeluaran wajib bulananmu dengan 12 untuk mendapatkan gambaran pengeluaran tahunan."
+    },
+    {
+      "judul": "Mengenal aturan praktis 25 kali",
+      "isi": "Sebagai {{aturan praktis}}, banyak literatur perencanaan keuangan memakai patokan 25 kali pengeluaran tahunan sebagai gambaran awal angka kebebasan finansial. Angka ini terkait dengan {{tingkat penarikan}} sekitar 4 persen per tahun."
+    },
+    {
+      "judul": "Anggap sebagai kompas, bukan hukum pasti",
+      "isi": "Patokan 25 kali lahir dari simulasi historis tertentu, sehingga kondisi inflasi, pajak, dan kebutuhan kesehatan di masa depan bisa membuatnya berbeda. Gunakan angka ini sebagai kompas awal yang selalu kamu tinjau ulang."
+    }
+  ],
+  "contohAngka": {
+    "judul": "Ilustrasi patokan 25 kali untuk pengeluaran wajib Rp2.000.000 per bulan",
+    "baris": [
+      {
+        "label": "Pengeluaran wajib per bulan",
+        "jumlah": 2000000
+      },
+      {
+        "label": "Pengeluaran wajib setahun (12 bulan)",
+        "jumlah": 24000000
+      },
+      {
+        "label": "Patokan awal 25 kali pengeluaran tahunan",
+        "jumlah": 600000000,
+        "ringkasan": true
+      }
+    ],
+    "kesimpulan": "Menurunkan biaya hidup yang tidak perlu bukan hanya menghemat hari ini, tetapi juga mengecilkan target dana pensiunmu."
+  },
+  "cekPaham": [
+    {
+      "tanya": "Dari mana perhitungan patokan dana pensiun seseorang sebaiknya dimulai?",
+      "pilihan": [
+        "Dari pengeluaran hidup bulanan dan tahunannya sendiri",
+        "Dari angka acak milik orang lain",
+        "Dari batas kartu kredit"
+      ],
+      "benar": 0,
+      "penjelasan": "Gaya hidup dan kebutuhan setiap orang berbeda, sehingga targetnya pun pribadi."
+    },
+    {
+      "tanya": "Pengeluaran wajibmu Rp2.000.000 per bulan (Rp24.000.000 per tahun). Berapa patokan 25 kali pengeluaran tahunannya?",
+      "pilihan": [
+        "Rp600.000.000",
+        "Rp240.000.000",
+        "Rp50.000.000"
+      ],
+      "benar": 0,
+      "penjelasan": "Rp24.000.000 dikali 25 menghasilkan Rp600.000.000."
+    },
+    {
+      "tanya": "Bagaimana sebaiknya memperlakukan patokan 25 kali pengeluaran tahunan?",
+      "pilihan": [
+        "Sebagai kompas awal yang disesuaikan dengan inflasi dan kondisimu",
+        "Sebagai jaminan hukum pasti berhasil",
+        "Sebagai alasan untuk berhenti menabung"
+      ],
+      "benar": 0,
+      "penjelasan": "Kondisi ekonomi berubah seiring waktu, jadi patokan awal perlu dievaluasi berkala."
+    }
+  ],
+  "misi": {
+    "tipe": "lihat_hitungan",
+    "judul": "Lihat patokan awal dana pensiunmu",
+    "instruksi": "Buka hasil simulasi patokan awal dana pensiun berdasarkan data pengeluaran wajib dan kekayaan bersihmu saat ini, baca isinya, lalu tekan Mengerti.",
+    "umpanBalik": "proyeksi_kebebasan_finansial"
+  },
+  "tindakLanjut": "Coba bandingkan target awal ini dengan kemampuan menabungmu sekarang. Ingat, angka besar selalu dimulai dari langkah kecil yang konsisten."
+}

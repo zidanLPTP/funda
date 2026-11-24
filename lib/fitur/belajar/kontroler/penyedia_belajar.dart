@@ -1069,6 +1069,55 @@ final penyediaTeksUmpanBalikMisi = FutureProvider.autoDispose.family<String, Str
         totalSaldoDompetAktifRupiah: totalSaldo,
       );
 
+    case 'proyeksi_kebebasan_finansial':
+      final semuaTransaksiKeluar = await (db.select(db.tabelTransaksi)
+            ..where((t) =>
+                t.jenis.equals('keluar') | t.jenis.equals('pengeluaran')))
+          .get();
+
+      final semuaKategori = await db.select(db.tabelKategori).get();
+      final petaSifatKategori = {for (final k in semuaKategori) k.id: k.sifat};
+
+      final daftarWajib = <ItemPengeluaranWajib>[];
+      for (final t in semuaTransaksiKeluar) {
+        if (t.kategoriId != null) {
+          final sifat = petaSifatKategori[t.kategoriId];
+          if (sifat == 'kebutuhan' || sifat == 'utang') {
+            daftarWajib.add(ItemPengeluaranWajib(
+              jumlahRupiah: t.jumlahRupiah,
+              sifat: sifat!,
+              waktu: t.waktuTransaksi,
+            ));
+          }
+        }
+      }
+
+      final hasilWajib = hitungPengeluaranWajibBulanan(
+        daftarPengeluaran: daftarWajib,
+        waktuSekarang: waktuSekarang,
+      );
+
+      final String dasarStr;
+      if (hasilWajib.dasar == DasarPengeluaranWajib.tigaBulanTerakhir) {
+        dasarStr = 'rata-rata 3 bulan terakhir';
+      } else {
+        dasarStr = 'bulan ini';
+      }
+
+      final totalSaldo = ref.watch(penyediaTotalSaldoAktif);
+      final repoUtang = ref.read(penyediaUtangRepositori);
+      final totalUtang = await repoUtang.hitungTotalSisaUtangAktifSQL();
+      final kekayaanBersih = hitungKekayaanBersih(
+        totalSaldoDompetAktifRupiah: totalSaldo,
+        totalSisaUtangRupiah: totalUtang,
+      );
+
+      return formatProyeksiKebebasanFinansial(
+        pengeluaranWajibBulananRupiah: hasilWajib.total,
+        dasarPengeluaranWajib: dasarStr,
+        kekayaanBersihRupiah: kekayaanBersih,
+      );
+
     case 'arus_kas_bulan_ini':
     default:
       final arusKas = ref.watch(penyediaArusKasBulanIni);

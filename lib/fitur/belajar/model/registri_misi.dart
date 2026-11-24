@@ -255,6 +255,19 @@ class RegistriMisi {
       deskripsiDasarOverride: deskripsiDasarOverride,
     );
   }
+
+  /// Menghasilkan umpan balik proyeksi patokan kebebasan finansial dari pengeluaran wajib dan kekayaan bersih.
+  static String formatProyeksiKebebasanFinansialMisi({
+    required int pengeluaranWajibBulananRupiah,
+    required String dasarPengeluaranWajib,
+    required int kekayaanBersihRupiah,
+  }) {
+    return formatProyeksiKebebasanFinansial(
+      pengeluaranWajibBulananRupiah: pengeluaranWajibBulananRupiah,
+      dasarPengeluaranWajib: dasarPengeluaranWajib,
+      kekayaanBersihRupiah: kekayaanBersihRupiah,
+    );
+  }
 }
 
 /// Penyedia teks umpan balik dari data nyata pengguna tanpa jargon.
@@ -489,6 +502,19 @@ class RegistriUmpanBalik {
       totalCicilanAktifRupiah: totalCicilanAktifRupiah,
       totalSaldoDompetAktifRupiah: totalSaldoDompetAktifRupiah,
       deskripsiDasarOverride: deskripsiDasarOverride,
+    );
+  }
+
+  /// Menghasilkan umpan balik proyeksi patokan kebebasan finansial dari pengeluaran wajib dan kekayaan bersih.
+  static String formatProyeksiKebebasanFinansialMisi({
+    required int pengeluaranWajibBulananRupiah,
+    required String dasarPengeluaranWajib,
+    required int kekayaanBersihRupiah,
+  }) {
+    return formatProyeksiKebebasanFinansial(
+      pengeluaranWajibBulananRupiah: pengeluaranWajibBulananRupiah,
+      dasarPengeluaranWajib: dasarPengeluaranWajib,
+      kekayaanBersihRupiah: kekayaanBersihRupiah,
     );
   }
 }

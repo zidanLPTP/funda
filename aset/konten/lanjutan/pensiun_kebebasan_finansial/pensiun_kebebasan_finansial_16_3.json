@@ -1,0 +1,104 @@
+{
+  "id": "pensiun_kebebasan_finansial_16_3",
+  "modulId": "pensiun_kebebasan_finansial",
+  "judul": "Menjaga Rencana Pensiun dari Inflasi",
+  "durasiMenit": 6,
+  "status": "draf",
+  "catatanReviewer": "TODO-VERIFIKASI. Prinsip umum penyesuaian target pensiun terhadap inflasi dan proteksi kesehatan usia lanjut; edukasi umum, bukan nasihat produk dana pensiun.",
+  "pemantik": "Biaya hidup Rp3.000.000 hari ini tidak akan sama nilainya dua puluh tahun lagi. Rencana jangka panjang perlu memperhitungkan hal itu.",
+  "kartu": [
+    {
+      "judul": "Inflasi mengubah angka kebutuhan masa depan",
+      "isi": "Karena harga barang cenderung naik setiap tahun, angka kebutuhan pensiunmu di masa depan akan lebih besar dari biaya hidup hari ini. Itu sebabnya dana pensiun jangka sangat panjang biasanya tidak cukup hanya disimpan tunai diam."
+    },
+    {
+      "judul": "Naikkan setoran saat penghasilan naik",
+      "isi": "Salah satu cara paling ringan melawan inflasi adalah menaikkan setoran dana jangka panjang setiap kali gajimu naik. Kamu tidak merasa kehilangan gaya hidup, sementara rencana masa depanmu melaju lebih cepat."
+    },
+    {
+      "judul": "Jaga kesehatan dan bebas utang sebelum pensiun",
+      "isi": "Dua hal yang sangat meringankan masa pensiun adalah memasuki usia pensiun tanpa beban cicilan besar, serta tetap memiliki perlindungan kesehatan yang aktif. Keduanya menjaga agar dana pensiunmu tidak cepat terkuras."
+    }
+  ],
+  "contohAngka": {
+    "judul": "Ilustrasi menaikkan setoran saat gaji bertambah",
+    "baris": [
+      {
+        "label": "Setoran awal per bulan",
+        "jumlah": 500000
+      },
+      {
+        "label": "Tambahan setoran saat gaji naik tahun berikutnya",
+        "jumlah": 150000
+      },
+      {
+        "label": "Setoran baru per bulan",
+        "jumlah": 650000,
+        "ringkasan": true
+      }
+    ],
+    "kesimpulan": "Menaikkan setoran secara bertahap seiring kenaikan penghasilan membantu menjaga rencanamu tetap selaras dengan inflasi."
+  },
+  "cekPaham": [
+    {
+      "tanya": "Mengapa dana pensiun untuk 20 tahun lagi kurang optimal jika hanya disimpan tunai diam?",
+      "pilihan": [
+        "Karena daya belinya akan tergerus inflasi dari tahun ke tahun",
+        "Karena uang tunai tidak bisa dihitung",
+        "Karena inflasi selalu negatif"
+      ],
+      "benar": 0,
+      "penjelasan": "Kenaikan harga jangka panjang menyusutkan daya beli uang yang tidak dikembangkan."
+    },
+    {
+      "tanya": "Cara paling ringan menaikkan setoran dana pensiun dari waktu ke waktu adalah?",
+      "pilihan": [
+        "Menambah porsi setoran setiap kali penghasilan naik",
+        "Memotong seluruh biaya makan pokok",
+        "Meminjam uang untuk menyetor"
+      ],
+      "benar": 0,
+      "penjelasan": "Menyisihkan sebagian kenaikan gaji terasa ringan karena gaya hidupmu tetap terjaga."
+    },
+    {
+      "tanya": "Dua kondisi apa yang sangat meringankan masa pensiun?",
+      "pilihan": [
+        "Bebas dari beban cicilan besar dan memiliki perlindungan kesehatan aktif",
+        "Memiliki banyak tagihan paylater",
+        "Tidak memiliki catatan apa pun"
+      ],
+      "benar": 0,
+      "penjelasan": "Tanpa cicilan dan dengan proteksi kesehatan, dana pensiunmu fokus menopang hidup yang tenang."
+    }
+  ],
+  "misi": {
+    "tipe": "daftar_periksa",
+    "disclaimer": true,
+    "minimalDicentang": 3,
+    "judul": "Peta jalan masa pensiun tenang",
+    "instruksi": "Baca catatan di atas, lalu centang prinsip persiapan jangka panjang yang kamu pegang. Minimal tiga langkah.",
+    "langkah": [
+      {
+        "id": "l1",
+        "teks": "Aku memahami bahwa dana pensiun dibangun bertahap setelah fondasi harian dan dana darurat aman."
+      },
+      {
+        "id": "l2",
+        "teks": "Aku meninjau ulang pengeluaran wajibku secara berkala agar proyeksi tetap relevan."
+      },
+      {
+        "id": "l3",
+        "teks": "Aku berencana menaikkan setoran jangka panjang secara bertahap saat penghasilanku bertambah."
+      },
+      {
+        "id": "l4",
+        "teks": "Aku menargetkan memasuki masa pensiun tanpa beban cicilan konsumtif yang berat."
+      },
+      {
+        "id": "l5",
+        "teks": "Aku mengecek izin resmi setiap lembaga pengelola dana pensiun atau investasi sebelum memakainya di luar Funda."
+      }
+    ]
+  },
+  "tindakLanjut": "Selamat! Kamu sudah mempelajari peta besar keuangan jangka panjang. Evaluasi rencanamu minimal setahun sekali."
+}

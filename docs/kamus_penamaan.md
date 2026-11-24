@@ -161,6 +161,8 @@
 | big goal feedback data | DataTujuanBesarUmpanBalik | Model data evaluasi kandidat tujuan finansial besar |
 | mortgage capacity test feedback | uji_kemampuan_kpr | Umpan balik evaluasi rasio ruang cicilan aman 30 persen dari arus kas pemasukan dan cicilan aktif |
 | practical installment ratio limit | batasAturanPraktisCicilanPersen | Batas aturan praktis perencanaan rasio cicilan bulanan (30%) tanpa tipe double |
+| financial freedom projection feedback | proyeksi_kebebasan_finansial | Umpan balik evaluasi patokan awal dana pensiun (25x pengeluaran tahunan) dan posisi kekayaan bersih |
+| practical retirement multiplier | pengaliAturanPraktisPensiun | Konstanta aturan praktis pengali pengeluaran tahunan dana pensiun (25x / aturan 4%) |
 
 ## Aturan Cabang Kerja (Git)
 - Setiap tahap dikerjakan pada cabang khusus (contoh: `tahap-02-dompet-transaksi`).
