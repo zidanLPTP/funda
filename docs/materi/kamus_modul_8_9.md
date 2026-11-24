@@ -1,0 +1,8 @@
+- penghasilan tidak tetap | Pemasukan yang jumlah atau waktu masuknya berubah-ubah setiap bulan, seperti hasil proyek atau komisi. | Bulan ini masuk Rp3.500.000, bulan depan masuk Rp1.500.000.
+- freelance | Pekerjaan lepas berdasarkan proyek atau jasa tertentu tanpa terikat gaji bulanan tetap dari satu kantor. | Mengerjakan proyek desain dengan bayaran Rp1.200.000.
+- bantalan masa sepi | Simpanan khusus bagi pekerja berpenghasilan tidak tetap untuk menutup kebutuhan saat proyek sedang turun. | Menyisihkan Rp500.000 saat bulan ramai untuk persiapan bulan sepi.
+- invoice | Dokumen tagihan resmi yang dikirim kepada klien berisi rincian pekerjaan dan jumlah yang harus dibayar. | Mengirim invoice sebesar Rp2.000.000 setelah proyek selesai.
+- pajak penghasilan | Kontribusi wajib kepada negara atas penghasilan yang diterima sesuai peraturan yang berlaku. | Potongan pajak dari gaji bulanan sesuai ketentuan resmi.
+- NPWP | Nomor Pokok Wajib Pajak, yaitu nomor identitas yang digunakan dalam administrasi perpajakan. | Mencantumkan NPWP saat melamar kerja dan melapor pajak tahunan.
+- PTKP | Penghasilan Tidak Kena Pajak, yaitu batas penghasilan tahunan yang tidak dikenai pajak sesuai aturan resmi. | Penghasilan setahun di bawah batas PTKP umumnya tidak dikenai pajak penghasilan.
+- SPT Tahunan | Surat Pemberitahuan Tahunan yang berisi laporan penghasilan, pajak, harta, dan utang wajib pajak dalam setahun. | Melaporkan rekap penghasilan setahun Rp54.000.000 lewat layanan pajak resmi.
