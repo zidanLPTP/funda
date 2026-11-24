@@ -1048,11 +1048,9 @@ final penyediaTeksUmpanBalikMisi = FutureProvider.autoDispose.family<String, Str
       return formatRingkasanTujuanBesar(tujuan: terpilih);
 
     case 'uji_kemampuan_kpr':
-      final db = ref.read(penyediaBasisData);
+      final repoTx = ref.read(penyediaTransaksiRepositori);
       final waktuSekarang = DateTime.now();
-      final semuaTx = await db.select(db.tabelTransaksi).get();
-      final pemasukan = hitungPemasukanBulananRataRata(
-        daftarTransaksi: semuaTx,
+      final pemasukan = await repoTx.hitungPemasukanRataRataSQL(
         waktuSekarang: waktuSekarang,
       );
 
