@@ -106,6 +106,7 @@ class _LayarPengaturanState extends ConsumerState<LayarPengaturan> {
     final pengingatAktif = ref.watch(penyediaPengingatAktif);
     final jamPengingat = ref.watch(penyediaJamPengingat);
     final tampilkanNominal = ref.watch(penyediaTampilkanNominalNotifikasi);
+    final hapticAktif = ref.watch(penyediaHapticAktif);
 
     return Scaffold(
       backgroundColor: WarnaFunda.latar,
@@ -179,6 +180,50 @@ class _LayarPengaturanState extends ConsumerState<LayarPengaturan> {
                       },
                     ),
                   ],
+                ],
+              ),
+            ),
+            const SizedBox(height: SpasiFunda.m),
+
+            // Grup 2: Interaksi & Umpan Balik Haptik
+            PetakBento(
+              anak: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(SpasiFunda.xs),
+                        decoration: BoxDecoration(
+                          color: WarnaFunda.permukaan,
+                          borderRadius: BorderRadius.circular(SudutFunda.kecil),
+                        ),
+                        child: const Icon(
+                          LucideIcons.smartphone,
+                          color: WarnaFunda.utama,
+                          size: 20,
+                        ),
+                      ),
+                      const SizedBox(width: SpasiFunda.s),
+                      const Expanded(
+                        child: TeksFunda.label('Interaksi & Getaran Taktil'),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: SpasiFunda.s),
+                  SwitchListTile(
+                    contentPadding: EdgeInsets.zero,
+                    title: const TeksFunda.isi('Umpan Balik Getaran (Haptik)'),
+                    subtitle: const TeksFunda.catatan(
+                      'Memberikan getaran fisik halus saat menekan tombol, memilih tab, dan lulus kuis',
+                    ),
+                    value: hapticAktif,
+                    onChanged: (aktif) async {
+                      await ref
+                          .read(penyediaHapticAktif.notifier)
+                          .setelHapticAktif(aktif);
+                    },
+                  ),
                 ],
               ),
             ),

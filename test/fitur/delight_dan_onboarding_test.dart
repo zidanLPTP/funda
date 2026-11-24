@@ -8,6 +8,7 @@ import 'package:funda/fitur/onboarding/tampilan/layar_onboarding.dart';
 import 'package:funda/komponen/komponen_funda.dart';
 import 'package:funda/perhitungan/perhitungan_beranda.dart';
 import 'package:funda/tema/tema_funda.dart';
+import 'package:funda/util/haptic.dart';
 import '../pembantu/pompa_uji.dart';
 
 void main() {
@@ -102,8 +103,9 @@ void main() {
         expect(find.text('Lanjut'), findsOneWidget);
 
         // Pindah ke Slide 2
-        final controller =
-            tester.widget<PageView>(find.byType(PageView)).controller!;
+        final controller = tester
+            .widget<PageView>(find.byType(PageView))
+            .controller!;
         controller.jumpToPage(1);
         await tester.pump();
         expect(
@@ -139,5 +141,26 @@ void main() {
         expect(malam.sapaan, 'Selamat malam');
       },
     );
+
+    test('UtilHaptic menghormati sakelar preferensi aktif/nonaktif', () {
+      UtilHaptic.aktif = true;
+      expect(UtilHaptic.aktif, isTrue);
+      UtilHaptic.pilih();
+      UtilHaptic.ringan();
+      UtilHaptic.sedang();
+      UtilHaptic.sukses();
+      UtilHaptic.suksesBesar();
+
+      UtilHaptic.aktif = false;
+      expect(UtilHaptic.aktif, isFalse);
+      UtilHaptic.pilih();
+      UtilHaptic.ringan();
+      UtilHaptic.sedang();
+      UtilHaptic.sukses();
+      UtilHaptic.suksesBesar();
+
+      // Kembalikan ke default true
+      UtilHaptic.aktif = true;
+    });
   });
 }

@@ -181,11 +181,156 @@ class LayarLainnya extends StatelessWidget {
             ikon: LucideIcons.info,
             judul: 'Tentang Funda',
             keterangan: 'Versi 1.0.0 (Teman Mengelola Uang yang Nyaman & Aman)',
-            padaKetuk: () => _tampilkanPesan(context, 'Tentang Funda'),
+            padaKetuk: () => _tampilkanTentangFunda(context),
           ),
           const SizedBox(height: SpasiFunda.xl),
         ],
       ),
+    );
+  }
+
+  void _tampilkanTentangFunda(BuildContext context) {
+    showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (ctx) {
+        return Container(
+          decoration: const BoxDecoration(
+            color: WarnaFunda.latar,
+            borderRadius: BorderRadius.vertical(
+              top: Radius.circular(SudutFunda.lembar),
+            ),
+          ),
+          padding: const EdgeInsets.all(SpasiFunda.l),
+          child: SafeArea(
+            top: false,
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  // Gagang Modal
+                  Container(
+                    width: 40,
+                    height: 4,
+                    margin: const EdgeInsets.only(bottom: SpasiFunda.m),
+                    decoration: BoxDecoration(
+                      color: WarnaFunda.garis,
+                      borderRadius: BorderRadius.circular(SudutFunda.pil),
+                    ),
+                  ),
+
+                  // Lambang Ikon Funda
+                  Container(
+                    width: 64,
+                    height: 64,
+                    decoration: BoxDecoration(
+                      color: WarnaFunda.utama,
+                      borderRadius: BorderRadius.circular(SudutFunda.kartu),
+                      boxShadow: const [
+                        BoxShadow(
+                          color: WarnaFunda.bayangan,
+                          blurRadius: 12,
+                          offset: Offset(0, 4),
+                        ),
+                      ],
+                    ),
+                    child: const Icon(
+                      LucideIcons.sprout,
+                      size: 32,
+                      color: WarnaFunda.putih,
+                    ),
+                  ),
+                  const SizedBox(height: SpasiFunda.m),
+
+                  const TeksFunda.judulLayar('Funda'),
+                  const SizedBox(height: SpasiFunda.xs),
+                  const TeksFunda.label('Versi 1.0.0', warna: WarnaFunda.utama),
+                  const SizedBox(height: SpasiFunda.xs),
+                  const TeksFunda.catatan(
+                    'Teman Mengelola Uang yang Nyaman, Sadar, dan Aman',
+                  ),
+                  const SizedBox(height: SpasiFunda.l),
+
+                  // 3 Pilar Bento
+                  PetakBento(
+                    anak: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: const [
+                        Row(
+                          children: [
+                            Icon(
+                              LucideIcons.shieldCheck,
+                              size: 18,
+                              color: WarnaFunda.utama,
+                            ),
+                            SizedBox(width: SpasiFunda.s),
+                            TeksFunda.label('100% Offline & Privat'),
+                          ],
+                        ),
+                        SizedBox(height: SpasiFunda.xs),
+                        TeksFunda.catatan(
+                          'Data keuanganmu tersimpan aman di perangkatmu sendiri. Tidak ada pelacakan, tidak ada server backend luar, dan bebas iklan selamanya.',
+                        ),
+                        SizedBox(height: SpasiFunda.m),
+                        Row(
+                          children: [
+                            Icon(
+                              LucideIcons.heartHandshake,
+                              size: 18,
+                              color: WarnaFunda.sifatKeinginan,
+                            ),
+                            SizedBox(width: SpasiFunda.s),
+                            TeksFunda.label('Ruang Tenang Tanpa Penghakiman'),
+                          ],
+                        ),
+                        SizedBox(height: SpasiFunda.xs),
+                        TeksFunda.catatan(
+                          'Membantumu memahami ke mana uangmu mengalir dengan jernih, tanpa rasa bersalah atau label negatif.',
+                        ),
+                        SizedBox(height: SpasiFunda.m),
+                        Row(
+                          children: [
+                            Icon(
+                              LucideIcons.graduationCap,
+                              size: 18,
+                              color: WarnaFunda.info,
+                            ),
+                            SizedBox(width: SpasiFunda.s),
+                            TeksFunda.label('18 Modul Belajar Nyata'),
+                          ],
+                        ),
+                        SizedBox(height: SpasiFunda.xs),
+                        TeksFunda.catatan(
+                          'Pelajaran micro-learning yang melatih data pribadimu sendiri: dari arus kas dasar hingga pensiun dan proteksi.',
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: SpasiFunda.l),
+
+                  // Tombol Aksi
+                  TombolFunda.primer(
+                    lebarPenuh: true,
+                    teks: 'Buka Panduan Nilai Funda',
+                    padaTekan: () {
+                      Navigator.pop(ctx);
+                      context.push('/onboarding');
+                    },
+                  ),
+                  const SizedBox(height: SpasiFunda.s),
+                  TombolFunda.sekunder(
+                    lebarPenuh: true,
+                    teks: 'Tutup',
+                    padaTekan: () => Navigator.pop(ctx),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 

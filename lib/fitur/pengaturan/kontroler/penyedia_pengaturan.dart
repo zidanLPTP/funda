@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../data/penyedia_basis_data.dart';
 import '../../../layanan/pengingat/penyedia_layanan_pengingat.dart';
+import '../../../util/haptic.dart';
 
 /// Notifier reaktif status saklar pengingat lokal (aktif / mati).
 class PengaturanPengingatAktifNotifier extends Notifier<bool> {
@@ -102,3 +103,32 @@ final penyediaTampilkanNominalNotifikasi =
     NotifierProvider<TampilkanNominalNotifikasiNotifier, bool>(
       TampilkanNominalNotifikasiNotifier.new,
     );
+
+/// Notifier preferensi getaran haptik (default: aktif / true).
+class HapticAktifNotifier extends Notifier<bool> {
+  @override
+  bool build() {
+    _muatAwal();
+    return true;
+  }
+
+  Future<void> _muatAwal() async {
+    final db = ref.read(penyediaBasisData);
+    final val = await db.bacaPengaturan('haptic_aktif');
+    // Jika belum disetel di database, default adalah true
+    final aktif = val == null ? true : val == 'true';
+    state = aktif;
+    UtilHaptic.aktif = aktif;
+  }
+
+  Future<void> setelHapticAktif(bool aktif) async {
+    state = aktif;
+    UtilHaptic.aktif = aktif;
+    final db = ref.read(penyediaBasisData);
+    await db.simpanPengaturan('haptic_aktif', aktif ? 'true' : 'false');
+  }
+}
+
+final penyediaHapticAktif = NotifierProvider<HapticAktifNotifier, bool>(
+  HapticAktifNotifier.new,
+);

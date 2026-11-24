@@ -42,7 +42,7 @@ class LayananPengingatNyata implements LayananPengingat {
     // 2. Pengaturan inisialisasi per platform
     // Izin awal iOS disetel false karena izin hanya boleh diminta saat saklar dinyalakan
     const androidSettings = AndroidInitializationSettings(
-      '@mipmap/ic_launcher',
+      '@drawable/ic_notifikasi',
     );
     const darwinSettings = DarwinInitializationSettings(
       requestAlertPermission: false,
