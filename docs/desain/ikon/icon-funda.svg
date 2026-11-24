@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <defs>
+    
+    <linearGradient id="bgHijau" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#156B45" />
+      <stop offset="55%" stop-color="#0E5133" />
+      <stop offset="100%" stop-color="#093822" />
+    </linearGradient>
+
+    
+    <linearGradient id="daunSegar" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#34C776" />
+      <stop offset="100%" stop-color="#6EE79E" />
+    </linearGradient>
+
+    
+    <filter id="bayanganHalus" x="-15%" y="-15%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="14" stdDeviation="16" flood-color="#052113" flood-opacity="0.32" />
+    </filter>
+  </defs>
+
+  
+  <rect x="0" y="0" width="1024" height="1024" rx="230" fill="url(#bgHijau)" />
+
+  
+  <g transform="translate(-45, 35)" filter="url(#bayanganHalus)">
+    
+    <path d="M 285 785
+         L 285 450
+         C 285 335, 350 285, 465 285
+         L 555 285
+         C 615 285, 658 262, 685 225
+         C 672 308, 622 382, 525 385
+         L 455 385
+         C 405 385, 388 402, 388 450
+         L 388 515
+         L 575 515
+         C 575 572, 535 610, 475 610
+         L 388 610
+         L 388 785
+         Z" fill="#FFFFFF" />
+
+    
+    <path d="M 645 228
+         C 588 225, 545 180, 552 118
+         C 612 125, 655 172, 645 228 Z" fill="url(#daunSegar)" />
+    <path d="M 634 216 Q 604 180, 578 148" fill="none" stroke="#0E5133" stroke-width="11" stroke-linecap="round" />
+
+    
+    <path d="M 692 222
+         C 696 148, 762 108, 852 125
+         C 840 208, 775 256, 692 222 Z" fill="url(#daunSegar)" />
+    <path d="M 708 214 Q 765 178, 818 146" fill="none" stroke="#0E5133" stroke-width="13" stroke-linecap="round" />
+
+    
+    <path d="M 690 268
+         C 748 268, 790 315, 780 390
+         C 715 384, 676 335, 690 268 Z" fill="url(#daunSegar)" />
+    <path d="M 702 282 Q 734 320, 758 356" fill="none" stroke="#0E5133" stroke-width="11" stroke-linecap="round" />
+  </g>
+</svg>

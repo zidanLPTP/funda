@@ -221,25 +221,26 @@ class LayarLainnya extends StatelessWidget {
                     ),
                   ),
 
-                  // Lambang Ikon Funda
+                  // Lambang Ikon Resmi Funda
                   Container(
-                    width: 64,
-                    height: 64,
+                    width: 72,
+                    height: 72,
                     decoration: BoxDecoration(
-                      color: WarnaFunda.utama,
                       borderRadius: BorderRadius.circular(SudutFunda.kartu),
                       boxShadow: const [
                         BoxShadow(
                           color: WarnaFunda.bayangan,
-                          blurRadius: 12,
-                          offset: Offset(0, 4),
+                          blurRadius: 16,
+                          offset: Offset(0, 6),
                         ),
                       ],
                     ),
-                    child: const Icon(
-                      LucideIcons.sprout,
-                      size: 32,
-                      color: WarnaFunda.putih,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(SudutFunda.kartu),
+                      child: Image.asset(
+                        'aset/gambar/app_icon_512.png',
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
                   const SizedBox(height: SpasiFunda.m),

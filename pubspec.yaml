@@ -42,6 +42,7 @@ flutter:
 
   assets:
     - aset/font/
+    - aset/gambar/
     - aset/konten/
     - aset/konten/pemula/mulai_tes_awal/
     - aset/konten/pemula/anggaran_arus_kas/
