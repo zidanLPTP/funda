@@ -4,10 +4,13 @@ from PIL import Image, ImageDraw
 
 def buat_ikon_funda(ukuran, bentuk="squircle", foreground_saja=False, monokrom=False):
     """
-    Membuat ikon Funda (Opsi 3: The Living Leaf dengan transisi gradasi putih ke hijau daun).
+    Membuat ikon Funda Opsi 3 asli (The Living Leaf):
+    - Huruf 'F' putih murni solid (#FFFFFF).
+    - Tunas daun di ujung palang berwarna hijau muda segar (#68D391).
+    - Latar belakang Forest Green (#1A4332).
     - bentuk: 'squircle', 'lingkaran', 'kotak'
-    - foreground_saja: True jika hanya gambar F + tunas dengan latar transparan (untuk adaptive icon foreground)
-    - monokrom: True jika siluet putih murni dengan latar transparan (untuk status bar notification)
+    - foreground_saja: True jika hanya gambar F + daun dengan latar transparan (untuk adaptive icon)
+    - monokrom: True jika siluet putih murni (untuk notifikasi status bar)
     """
     img = Image.new("RGBA", (ukuran, ukuran), (0, 0, 0, 0))
     draw = ImageDraw.Draw(img)
@@ -26,52 +29,45 @@ def buat_ikon_funda(ukuran, bentuk="squircle", foreground_saja=False, monokrom=F
             draw.rectangle([0, 0, s - 1, s - 1], fill=warna_latar)
 
     # 2. Skala koordinat gambar F dan Daun (berbasis kanvas normal 100x100)
-    # Area aktif: 25% margin agar adaptive icon tidak terpotong (safe zone)
     margin = 0.22 if foreground_saja else 0.18
     w_aktif = s * (1.0 - 2 * margin)
     h_aktif = s * (1.0 - 2 * margin)
     x0 = s * margin
     y0 = s * margin
 
-    # Fungsi pembantu untuk konversi koordinat persen (0..100) ke pixel
-    def kx(px):
-        return x0 + (px / 100.0) * w_aktif
-    def ky(py):
-        return y0 + (py / 100.0) * h_aktif
-
-    # Buat kanvas resolusi tinggi sementara untuk rendering anti-aliased halus
+    # Buat kanvas resolusi tinggi sementara untuk rendering anti-aliased halus (supersampling 4x)
     skala_super = 4
     super_w = s * skala_super
-    super_img = Image.new("RGBA", (super_w, super_w), (0, 0, 0, 0))
-    s_draw = ImageDraw.Draw(super_img)
+    super_fg = Image.new("RGBA", (super_w, super_w), (0, 0, 0, 0))
+    s_draw = ImageDraw.Draw(super_fg)
 
     def skx(px):
         return (x0 + (px / 100.0) * w_aktif) * skala_super
     def sky(py):
         return (y0 + (py / 100.0) * h_aktif) * skala_super
 
-    # Masking layer untuk monogram 'F' dan Daun
-    mask_img = Image.new("L", (super_w, super_w), 0)
-    mask_draw = ImageDraw.Draw(mask_img)
+    # Warna elemen
+    warna_f = (255, 255, 255, 255) # Putih murni solid
+    warna_daun = (255, 255, 255, 255) if monokrom else (104, 211, 145, 255) # Hijau muda tunas #68D391
 
-    # A. Batang Vertikal 'F'
+    # A. Batang Vertikal 'F' (Putih)
     bx1, by1 = skx(28), sky(15)
     bx2, by2 = skx(43), sky(85)
     rad_batang = int(super_w * 0.035)
-    mask_draw.rounded_rectangle([bx1, by1, bx2, by2], radius=rad_batang, fill=255)
+    s_draw.rounded_rectangle([bx1, by1, bx2, by2], radius=rad_batang, fill=warna_f)
 
-    # B. Palang Horizontal Tengah 'F'
+    # B. Palang Horizontal Tengah 'F' (Putih)
     px1, py1 = skx(40), sky(45)
     px2, py2 = skx(68), sky(57)
     rad_palang = int(super_w * 0.025)
-    mask_draw.rounded_rectangle([px1, py1, px2, py2], radius=rad_palang, fill=255)
+    s_draw.rounded_rectangle([px1, py1, px2, py2], radius=rad_palang, fill=warna_f)
 
-    # C. Palang Horizontal Atas 'F'
+    # C. Palang Horizontal Atas 'F' (Putih)
     ax1, ay1 = skx(38), sky(15)
     ax2, ay2 = skx(72), sky(27)
-    mask_draw.rounded_rectangle([ax1, ay1, ax2, ay2], radius=rad_palang, fill=255)
+    s_draw.rounded_rectangle([ax1, ay1, ax2, ay2], radius=rad_palang, fill=warna_f)
 
-    # D. Tunas Daun Pertama (Daun Utama mengarah ke kanan atas)
+    # D. Tunas Daun Pertama (Daun Utama mengarah ke kanan atas - Hijau Muda #68D391)
     titik_daun1 = [
         (skx(70), sky(18)),
         (skx(82), sky(12)),
@@ -80,9 +76,9 @@ def buat_ikon_funda(ukuran, bentuk="squircle", foreground_saja=False, monokrom=F
         (skx(88), sky(32)),
         (skx(74), sky(28)),
     ]
-    mask_draw.polygon(titik_daun1, fill=255)
+    s_draw.polygon(titik_daun1, fill=warna_daun)
 
-    # E. Tunas Daun Kedua (Daun Kecil di ketiak tunas)
+    # E. Tunas Daun Kedua (Daun Kecil di ketiak tunas - Hijau Muda #68D391)
     titik_daun2 = [
         (skx(66), sky(28)),
         (skx(78), sky(32)),
@@ -90,43 +86,10 @@ def buat_ikon_funda(ukuran, bentuk="squircle", foreground_saja=False, monokrom=F
         (skx(78), sky(44)),
         (skx(68), sky(38)),
     ]
-    mask_draw.polygon(titik_daun2, fill=255)
-
-    # 3. Warna atau Gradasi Monogram
-    if monokrom:
-        # Putih solid untuk notifikasi
-        grad_img = Image.new("RGBA", (super_w, super_w), (255, 255, 255, 255))
-    else:
-        # Gradasi dari bawah ke atas: Putih Murni (#FFFFFF) -> Mint (#A8ECC4) -> Daun Segar (#52B788)
-        grad_img = Image.new("RGBA", (super_w, super_w))
-        warna_bawah = (255, 255, 255)       # Putih di bagian bawah huruf F
-        warna_tengah = (215, 245, 225)      # Transisi putih-ke-mint halus
-        warna_atas = (82, 183, 136)         # Hijau daun segar #52B788 di ujung tunas daun
-
-        # Render gradasi vertikal bergaris
-        for y in range(super_w):
-            rasio = 1.0 - (y / float(super_w)) # 0 di bawah, 1 di atas
-            if rasio < 0.45:
-                # Bawah ke tengah
-                t = rasio / 0.45
-                r = int(warna_bawah[0] + t * (warna_tengah[0] - warna_bawah[0]))
-                g = int(warna_bawah[1] + t * (warna_tengah[1] - warna_bawah[1]))
-                b = int(warna_bawah[2] + t * (warna_tengah[2] - warna_bawah[2]))
-            else:
-                # Tengah ke atas
-                t = (rasio - 0.45) / 0.55
-                r = int(warna_tengah[0] + t * (warna_atas[0] - warna_tengah[0]))
-                g = int(warna_tengah[1] + t * (warna_atas[1] - warna_tengah[1]))
-                b = int(warna_tengah[2] + t * (warna_atas[2] - warna_tengah[2]))
-            
-            grad_draw = ImageDraw.Draw(grad_img)
-            grad_draw.line([(0, y), (super_w, y)], fill=(r, g, b, 255))
-
-    # Terapkan masking pada gradasi
-    grad_img.putalpha(mask_img)
+    s_draw.polygon(titik_daun2, fill=warna_daun)
 
     # Resize supersampled image kembali ke ukuran target dengan resampling berkualitas tinggi (LANCZOS)
-    foreground = grad_img.resize((s, s), Image.Resampling.LANCZOS)
+    foreground = super_fg.resize((s, s), Image.Resampling.LANCZOS)
 
     # Gabungkan dengan kanvas utama
     img = Image.alpha_composite(img, foreground)
@@ -135,7 +98,7 @@ def buat_ikon_funda(ukuran, bentuk="squircle", foreground_saja=False, monokrom=F
 def main():
     root_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
     
-    # Buat direktori tujuan bila belum ada
+    # Direktori tujuan
     res_dir = os.path.join(root_dir, "android", "app", "src", "main", "res")
     aset_dir = os.path.join(root_dir, "aset", "gambar")
     os.makedirs(aset_dir, exist_ok=True)
@@ -174,7 +137,7 @@ def main():
         # ic_launcher_foreground (untuk adaptive icon v26)
         ikon_fg = buat_ikon_funda(size, foreground_saja=True)
         ikon_fg.save(os.path.join(folder_path, "ic_launcher_foreground.png"))
-        print(f"Tersimpan ikon Android: {folder} ({size}x{size})")
+        print(f"Tersimpan ikon Android asli Opsi 3: {folder} ({size}x{size})")
 
     # 3. Simpan Ikon Notifikasi Monokrom di res/drawable/ic_notifikasi.png
     notif_icon = buat_ikon_funda(96, monokrom=True)
