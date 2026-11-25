@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '../../../data/basis_data.dart';
 import '../../../data/model/jenis_bunga.dart';
 import '../../../data/model/jenis_utang.dart';
@@ -12,7 +13,8 @@ import '../../../perhitungan/perhitungan_utang_dashboard.dart';
 import '../../../tema/token.dart';
 import '../../../util/format_rupiah.dart';
 
-/// Layar formulir untuk mencatat atau mengubah utang / cicilan.
+/// Layar formulir untuk mencatat atau mengubah utang / cicilan bergaya editorial bersih:
+/// header kanvas kuning tenang, isian kartu putih 1px, dan tombol simpan sticky pilGelap.
 class LayarFormUtang extends ConsumerStatefulWidget {
   const LayarFormUtang({super.key, this.utang});
 
@@ -154,7 +156,6 @@ class _LayarFormUtangState extends ConsumerState<LayarFormUtang> {
     final repo = ref.read(penyediaUtangRepositori);
 
     if (_sedangUbah) {
-      // Perbarui
       await repo.perbaruiUtang(
         widget.utang!
             .toCompanion(true)
@@ -177,7 +178,6 @@ class _LayarFormUtangState extends ConsumerState<LayarFormUtang> {
             ),
       );
     } else {
-      // Tambah baru
       await repo.buatUtang(
         nama: nama,
         jenis: _jenisTerpilih.kode,
@@ -197,379 +197,404 @@ class _LayarFormUtangState extends ConsumerState<LayarFormUtang> {
 
     if (mounted) {
       setState(() => _sedangMemuat = false);
-      context.pop();
+      final router = GoRouter.maybeOf(context);
+      if (router != null) {
+        router.pop();
+      } else {
+        Navigator.maybePop(context);
+      }
     }
+  }
+
+  InputDecoration _dekorasiInput({String? hintText}) {
+    return InputDecoration(
+      hintText: hintText,
+      filled: true,
+      fillColor: WarnaFunda.latar,
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(SudutFunda.kartu),
+        borderSide: const BorderSide(color: WarnaFunda.garis),
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(SudutFunda.kartu),
+        borderSide: const BorderSide(color: WarnaFunda.garis),
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
+    final isTeksBesar = MediaQuery.textScalerOf(context).scale(1) > 1.3;
+
     return Scaffold(
       backgroundColor: WarnaFunda.latar,
-      appBar: AppBar(
-        title: TeksFunda.judulBagian(
-          _sedangUbah ? 'Ubah Catatan Utang' : 'Catat Utang / Cicilan',
-        ),
-        backgroundColor: WarnaFunda.latar,
-        elevation: 0,
-      ),
       body: SafeArea(
         child: Form(
           key: _kunciForm,
-          child: ListView(
-            padding: const EdgeInsets.all(SpasiFunda.m),
+          child: Column(
             children: [
-              // 1. Nama Utang
-              const TeksFunda.label('Nama Utang / Cicilan *'),
-              const SizedBox(height: SpasiFunda.xs),
-              TextFormField(
-                key: const Key('bidang_nama_utang'),
-                controller: _pengontrolNama,
-                decoration: InputDecoration(
-                  hintText: 'Misal: Cicilan Laptop, Paylater Belanja',
-                  filled: true,
-                  fillColor: WarnaFunda.permukaan,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(SudutFunda.kecil),
-                    borderSide: const BorderSide(color: WarnaFunda.garis),
+              // Header Kanvas Kuning Tenang
+              Container(
+                width: double.infinity,
+                decoration: const BoxDecoration(
+                  color: WarnaFunda.kanvasKuning,
+                  borderRadius: BorderRadius.vertical(
+                    bottom: Radius.circular(SudutFunda.petak),
                   ),
                 ),
-                validator: (val) {
-                  if (val == null || val.trim().isEmpty) {
-                    return 'Nama utang belum diisi.';
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: SpasiFunda.m),
-
-              // 2. Jenis Utang
-              const TeksFunda.label('Jenis Utang'),
-              const SizedBox(height: SpasiFunda.xs),
-              DropdownButtonFormField<JenisUtang>(
-                initialValue: _jenisTerpilih,
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: WarnaFunda.permukaan,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(SudutFunda.kecil),
-                    borderSide: const BorderSide(color: WarnaFunda.garis),
-                  ),
-                ),
-                items: JenisUtang.values.map((j) {
-                  return DropdownMenuItem(value: j, child: Text(j.label));
-                }).toList(),
-                onChanged: (val) {
-                  if (val != null) setState(() => _jenisTerpilih = val);
-                },
-              ),
-              const SizedBox(height: SpasiFunda.m),
-
-              // 3. Pemberi Pinjaman / Lembaga
-              const TeksFunda.label('Pemberi Pinjaman / Lembaga (Opsional)'),
-              const SizedBox(height: SpasiFunda.xs),
-              TextFormField(
-                key: const Key('bidang_pemberi_pinjaman'),
-                controller: _pengontrolPemberi,
-                decoration: InputDecoration(
-                  hintText: 'Misal: Bank Mandiri, Teman, Tokopedia Paylater',
-                  filled: true,
-                  fillColor: WarnaFunda.permukaan,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(SudutFunda.kecil),
-                    borderSide: const BorderSide(color: WarnaFunda.garis),
-                  ),
+                padding: const EdgeInsets.all(SpasiFunda.marginLayar),
+                child: HeaderSubLayarEditorial(
+                  judul: _sedangUbah
+                      ? 'Ubah Catatan Utang'
+                      : 'Catat Utang / Cicilan',
+                  subjudul: 'Kelola sisa kewajibanmu dengan jernih & terukur.',
                 ),
               ),
-              const SizedBox(height: SpasiFunda.m),
 
-              // 4. Sisa Utang Saat Ini (Wajib)
-              const TeksFunda.label('Sisa Utang Saat Ini *'),
-              const SizedBox(height: SpasiFunda.xs),
-              TextFormField(
-                key: const Key('bidang_sisa_utang'),
-                controller: _pengontrolSisaAwal,
-                keyboardType: TextInputType.number,
-                decoration: InputDecoration(
-                  hintText: 'Rp 0',
-                  filled: true,
-                  fillColor: WarnaFunda.permukaan,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(SudutFunda.kecil),
-                    borderSide: const BorderSide(color: WarnaFunda.garis),
-                  ),
-                ),
-                onChanged: (teks) {
-                  final angka = ambilAngkaRupiah(teks);
-                  final format = formatRupiah(angka);
-                  _pengontrolSisaAwal.value = TextEditingValue(
-                    text: format,
-                    selection: TextSelection.collapsed(offset: format.length),
-                  );
-                },
-                validator: (val) {
-                  final angka = ambilAngkaRupiah(val ?? '');
-                  if (angka <= 0) {
-                    return 'Sisa utang harus lebih besar dari Rp 0.';
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: SpasiFunda.m),
-
-              // 5. Pokok Awal Pinjaman (Opsional)
-              const TeksFunda.label('Pokok Awal Pinjaman (Opsional)'),
-              const SizedBox(height: SpasiFunda.xs),
-              TextFormField(
-                key: const Key('bidang_pokok_awal'),
-                controller: _pengontrolPokokAwal,
-                keyboardType: TextInputType.number,
-                decoration: InputDecoration(
-                  hintText: 'Rp 0',
-                  filled: true,
-                  fillColor: WarnaFunda.permukaan,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(SudutFunda.kecil),
-                    borderSide: const BorderSide(color: WarnaFunda.garis),
-                  ),
-                ),
-                onChanged: (teks) {
-                  final angka = ambilAngkaRupiah(teks);
-                  final format = formatRupiah(angka);
-                  _pengontrolPokokAwal.value = TextEditingValue(
-                    text: format,
-                    selection: TextSelection.collapsed(offset: format.length),
-                  );
-                },
-              ),
-              const SizedBox(height: SpasiFunda.m),
-
-              // 6. Cicilan Bulanan
-              const TeksFunda.label('Cicilan per Bulan (Opsional)'),
-              const SizedBox(height: SpasiFunda.xs),
-              TextFormField(
-                key: const Key('bidang_cicilan_bulanan'),
-                controller: _pengontrolCicilan,
-                keyboardType: TextInputType.number,
-                decoration: InputDecoration(
-                  hintText: 'Rp 0',
-                  filled: true,
-                  fillColor: WarnaFunda.permukaan,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(SudutFunda.kecil),
-                    borderSide: const BorderSide(color: WarnaFunda.garis),
-                  ),
-                ),
-                onChanged: (teks) {
-                  final angka = ambilAngkaRupiah(teks);
-                  final format = formatRupiah(angka);
-                  _pengontrolCicilan.value = TextEditingValue(
-                    text: format,
-                    selection: TextSelection.collapsed(offset: format.length),
-                  );
-                },
-              ),
-              const SizedBox(height: SpasiFunda.m),
-
-              // 7. Jenis Bunga & Bunga per Tahun
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                    flex: 3,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const TeksFunda.label('Jenis Bunga'),
-                        const SizedBox(height: SpasiFunda.xs),
-                        DropdownButtonFormField<JenisBunga>(
-                          initialValue: _jenisBungaTerpilih,
-                          decoration: InputDecoration(
-                            filled: true,
-                            fillColor: WarnaFunda.permukaan,
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(
-                                SudutFunda.kecil,
-                              ),
-                              borderSide: const BorderSide(
-                                color: WarnaFunda.garis,
-                              ),
-                            ),
-                          ),
-                          items: JenisBunga.values.map((b) {
-                            return DropdownMenuItem(
-                              value: b,
-                              child: Text(
-                                b.label,
-                                style: const TextStyle(fontSize: 13),
-                              ),
-                            );
-                          }).toList(),
-                          onChanged: (val) {
-                            if (val != null) {
-                              setState(() => _jenisBungaTerpilih = val);
-                            }
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(width: SpasiFunda.s),
-                  Expanded(
-                    flex: 2,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const TeksFunda.label('Bunga / Thn (%)'),
-                        const SizedBox(height: SpasiFunda.xs),
-                        TextFormField(
-                          key: const Key('bidang_bunga_per_tahun'),
-                          controller: _pengontrolBunga,
-                          keyboardType: const TextInputType.numberWithOptions(
-                            decimal: true,
-                          ),
-                          decoration: InputDecoration(
-                            hintText: 'Misal: 8.5',
-                            filled: true,
-                            fillColor: WarnaFunda.permukaan,
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(
-                                SudutFunda.kecil,
-                              ),
-                              borderSide: const BorderSide(
-                                color: WarnaFunda.garis,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: SpasiFunda.m),
-
-              // 8. Tenor & Tanggal Jatuh Tempo
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const TeksFunda.label('Tenor (Bulan)'),
-                        const SizedBox(height: SpasiFunda.xs),
-                        TextFormField(
-                          key: const Key('bidang_tenor_bulan'),
-                          controller: _pengontrolTenor,
-                          keyboardType: TextInputType.number,
-                          decoration: InputDecoration(
-                            hintText: 'Misal: 12',
-                            filled: true,
-                            fillColor: WarnaFunda.permukaan,
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(
-                                SudutFunda.kecil,
-                              ),
-                              borderSide: const BorderSide(
-                                color: WarnaFunda.garis,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(width: SpasiFunda.s),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const TeksFunda.label('Jatuh Tempo (Tgl 1-31)'),
-                        const SizedBox(height: SpasiFunda.xs),
-                        TextFormField(
-                          key: const Key('bidang_jatuh_tempo'),
-                          controller: _pengontrolJatuhTempo,
-                          keyboardType: TextInputType.number,
-                          decoration: InputDecoration(
-                            hintText: 'Tgl 1-31',
-                            filled: true,
-                            fillColor: WarnaFunda.permukaan,
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(
-                                SudutFunda.kecil,
-                              ),
-                              borderSide: const BorderSide(
-                                color: WarnaFunda.garis,
-                              ),
-                            ),
-                          ),
-                          validator: (val) {
-                            if (val == null || val.trim().isEmpty) return null;
-                            final n = int.tryParse(val.trim());
-                            if (n == null || n < 1 || n > 31) {
-                              return 'Tanggal harus 1-31';
-                            }
-                            return null;
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: SpasiFunda.m),
-
-              // 9. Tanggal Mulai Pinjaman
-              const TeksFunda.label('Tanggal Mulai (Opsional)'),
-              const SizedBox(height: SpasiFunda.xs),
-              InkWell(
-                onTap: _pilihTanggalMulai,
-                borderRadius: BorderRadius.circular(SudutFunda.kecil),
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: SpasiFunda.m,
-                    vertical: SpasiFunda.m,
-                  ),
-                  decoration: BoxDecoration(
-                    color: WarnaFunda.permukaan,
-                    borderRadius: BorderRadius.circular(SudutFunda.kecil),
-                    border: Border.all(color: WarnaFunda.garis),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      TeksFunda.isi(
-                        _tanggalMulai != null
-                            ? DateFormat(
-                                'd MMMM yyyy',
-                                'id_ID',
-                              ).format(_tanggalMulai!)
-                            : 'Pilih Tanggal Mulai',
-                        warna: _tanggalMulai != null
-                            ? WarnaFunda.teks
-                            : WarnaFunda.teksRedup,
+              Expanded(
+                child: ListView(
+                  padding: const EdgeInsets.all(SpasiFunda.marginLayar),
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(SpasiFunda.l),
+                      decoration: BoxDecoration(
+                        color: WarnaFunda.permukaan,
+                        borderRadius: BorderRadius.circular(SudutFunda.petak),
+                        border: Border.all(color: WarnaFunda.garis, width: 1.0),
                       ),
-                      const Icon(
-                        Icons.calendar_month,
-                        color: WarnaFunda.teksRedup,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // 1. Nama Utang
+                          const TeksFunda.label('Nama Utang / Cicilan *'),
+                          const SizedBox(height: SpasiFunda.xs),
+                          TextFormField(
+                            key: const Key('bidang_nama_utang'),
+                            controller: _pengontrolNama,
+                            decoration: _dekorasiInput(
+                              hintText:
+                                  'Misal: Cicilan Laptop, Paylater Belanja',
+                            ),
+                            validator: (val) {
+                              if (val == null || val.trim().isEmpty) {
+                                return 'Nama utang belum diisi.';
+                              }
+                              return null;
+                            },
+                          ),
+                          const SizedBox(height: SpasiFunda.m),
+
+                          // 2. Jenis Utang
+                          const TeksFunda.label('Jenis Utang'),
+                          const SizedBox(height: SpasiFunda.xs),
+                          DropdownButtonFormField<JenisUtang>(
+                            initialValue: _jenisTerpilih,
+                            isExpanded: true,
+                            decoration: _dekorasiInput(),
+                            items: JenisUtang.values.map((j) {
+                              return DropdownMenuItem(
+                                value: j,
+                                child: Text(j.label),
+                              );
+                            }).toList(),
+                            onChanged: (val) {
+                              if (val != null) {
+                                setState(() => _jenisTerpilih = val);
+                              }
+                            },
+                          ),
+                          const SizedBox(height: SpasiFunda.m),
+
+                          // 3. Pemberi Pinjaman / Lembaga
+                          const TeksFunda.label(
+                            'Pemberi Pinjaman / Lembaga (Opsional)',
+                          ),
+                          const SizedBox(height: SpasiFunda.xs),
+                          TextFormField(
+                            key: const Key('bidang_pemberi_pinjaman'),
+                            controller: _pengontrolPemberi,
+                            decoration: _dekorasiInput(
+                              hintText:
+                                  'Misal: Bank Mandiri, Teman, Tokopedia Paylater',
+                            ),
+                          ),
+                          const SizedBox(height: SpasiFunda.m),
+
+                          // 4. Sisa Utang Saat Ini (Wajib)
+                          const TeksFunda.label('Sisa Utang Saat Ini *'),
+                          const SizedBox(height: SpasiFunda.xs),
+                          TextFormField(
+                            key: const Key('bidang_sisa_utang'),
+                            controller: _pengontrolSisaAwal,
+                            keyboardType: TextInputType.number,
+                            decoration: _dekorasiInput(hintText: 'Rp 0'),
+                            onChanged: (teks) {
+                              final angka = ambilAngkaRupiah(teks);
+                              final format = formatRupiah(angka);
+                              _pengontrolSisaAwal.value = TextEditingValue(
+                                text: format,
+                                selection: TextSelection.collapsed(
+                                  offset: format.length,
+                                ),
+                              );
+                            },
+                            validator: (val) {
+                              final angka = ambilAngkaRupiah(val ?? '');
+                              if (angka <= 0) {
+                                return 'Sisa utang harus lebih besar dari Rp 0.';
+                              }
+                              return null;
+                            },
+                          ),
+                          const SizedBox(height: SpasiFunda.m),
+
+                          // 5. Pokok Awal Pinjaman (Opsional)
+                          const TeksFunda.label(
+                            'Pokok Awal Pinjaman (Opsional)',
+                          ),
+                          const SizedBox(height: SpasiFunda.xs),
+                          TextFormField(
+                            key: const Key('bidang_pokok_awal'),
+                            controller: _pengontrolPokokAwal,
+                            keyboardType: TextInputType.number,
+                            decoration: _dekorasiInput(hintText: 'Rp 0'),
+                            onChanged: (teks) {
+                              final angka = ambilAngkaRupiah(teks);
+                              final format = formatRupiah(angka);
+                              _pengontrolPokokAwal.value = TextEditingValue(
+                                text: format,
+                                selection: TextSelection.collapsed(
+                                  offset: format.length,
+                                ),
+                              );
+                            },
+                          ),
+                          const SizedBox(height: SpasiFunda.m),
+
+                          // 6. Cicilan Bulanan
+                          const TeksFunda.label('Cicilan per Bulan (Opsional)'),
+                          const SizedBox(height: SpasiFunda.xs),
+                          TextFormField(
+                            key: const Key('bidang_cicilan_bulanan'),
+                            controller: _pengontrolCicilan,
+                            keyboardType: TextInputType.number,
+                            decoration: _dekorasiInput(hintText: 'Rp 0'),
+                            onChanged: (teks) {
+                              final angka = ambilAngkaRupiah(teks);
+                              final format = formatRupiah(angka);
+                              _pengontrolCicilan.value = TextEditingValue(
+                                text: format,
+                                selection: TextSelection.collapsed(
+                                  offset: format.length,
+                                ),
+                              );
+                            },
+                          ),
+                          const SizedBox(height: SpasiFunda.m),
+
+                          // 7. Jenis Bunga & Bunga per Tahun (responsif skala teks)
+                          _susunDuaKolom(
+                            isTeksBesar: isTeksBesar,
+                            flexKiri: 3,
+                            flexKanan: 2,
+                            kiri: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const TeksFunda.label('Jenis Bunga'),
+                                const SizedBox(height: SpasiFunda.xs),
+                                DropdownButtonFormField<JenisBunga>(
+                                  initialValue: _jenisBungaTerpilih,
+                                  isExpanded: true,
+                                  decoration: _dekorasiInput(),
+                                  items: JenisBunga.values.map((b) {
+                                    return DropdownMenuItem(
+                                      value: b,
+                                      child: Text(
+                                        b.label,
+                                        style: const TextStyle(fontSize: 13),
+                                      ),
+                                    );
+                                  }).toList(),
+                                  onChanged: (val) {
+                                    if (val != null) {
+                                      setState(() => _jenisBungaTerpilih = val);
+                                    }
+                                  },
+                                ),
+                              ],
+                            ),
+                            kanan: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const TeksFunda.label('Bunga / Thn (%)'),
+                                const SizedBox(height: SpasiFunda.xs),
+                                TextFormField(
+                                  key: const Key('bidang_bunga_per_tahun'),
+                                  controller: _pengontrolBunga,
+                                  keyboardType:
+                                      const TextInputType.numberWithOptions(
+                                        decimal: true,
+                                      ),
+                                  decoration: _dekorasiInput(
+                                    hintText: 'Misal: 8.5',
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(height: SpasiFunda.m),
+
+                          // 8. Tenor & Tanggal Jatuh Tempo (responsif skala teks)
+                          _susunDuaKolom(
+                            isTeksBesar: isTeksBesar,
+                            flexKiri: 1,
+                            flexKanan: 1,
+                            kiri: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const TeksFunda.label('Tenor (Bulan)'),
+                                const SizedBox(height: SpasiFunda.xs),
+                                TextFormField(
+                                  key: const Key('bidang_tenor_bulan'),
+                                  controller: _pengontrolTenor,
+                                  keyboardType: TextInputType.number,
+                                  decoration: _dekorasiInput(
+                                    hintText: 'Misal: 12',
+                                  ),
+                                ),
+                              ],
+                            ),
+                            kanan: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const TeksFunda.label('Jatuh Tempo (Tgl 1-31)'),
+                                const SizedBox(height: SpasiFunda.xs),
+                                TextFormField(
+                                  key: const Key('bidang_jatuh_tempo'),
+                                  controller: _pengontrolJatuhTempo,
+                                  keyboardType: TextInputType.number,
+                                  decoration: _dekorasiInput(
+                                    hintText: 'Tgl 1-31',
+                                  ),
+                                  validator: (val) {
+                                    if (val == null || val.trim().isEmpty) {
+                                      return null;
+                                    }
+                                    final n = int.tryParse(val.trim());
+                                    if (n == null || n < 1 || n > 31) {
+                                      return 'Tanggal harus 1-31';
+                                    }
+                                    return null;
+                                  },
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(height: SpasiFunda.m),
+
+                          // 9. Tanggal Mulai Pinjaman
+                          const TeksFunda.label('Tanggal Mulai (Opsional)'),
+                          const SizedBox(height: SpasiFunda.xs),
+                          InkWell(
+                            onTap: _pilihTanggalMulai,
+                            borderRadius: BorderRadius.circular(
+                              SudutFunda.kartu,
+                            ),
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: SpasiFunda.m,
+                                vertical: SpasiFunda.m,
+                              ),
+                              decoration: BoxDecoration(
+                                color: WarnaFunda.latar,
+                                borderRadius: BorderRadius.circular(
+                                  SudutFunda.kartu,
+                                ),
+                                border: Border.all(color: WarnaFunda.garis),
+                              ),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: TeksFunda.isi(
+                                      _tanggalMulai != null
+                                          ? DateFormat(
+                                              'd MMMM yyyy',
+                                              'id_ID',
+                                            ).format(_tanggalMulai!)
+                                          : 'Pilih Tanggal Mulai',
+                                      warna: _tanggalMulai != null
+                                          ? WarnaFunda.teks
+                                          : WarnaFunda.teksRedup,
+                                    ),
+                                  ),
+                                  const SizedBox(width: SpasiFunda.s),
+                                  const Icon(
+                                    LucideIcons.calendar,
+                                    size: 18,
+                                    color: WarnaFunda.teksRedup,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
-              const SizedBox(height: SpasiFunda.xl),
 
-              // Tombol Simpan
-              TombolFunda.primer(
-                key: const Key('tombol_simpan_utang'),
-                teks: _sedangUbah ? 'Simpan Perubahan' : 'Catat Utang',
-                memuat: _sedangMemuat,
-                padaTekan: _sedangMemuat ? null : _simpan,
+              // Tombol Simpan Sticky Bawah
+              Container(
+                padding: const EdgeInsets.fromLTRB(
+                  SpasiFunda.marginLayar,
+                  SpasiFunda.s,
+                  SpasiFunda.marginLayar,
+                  SpasiFunda.m,
+                ),
+                decoration: const BoxDecoration(
+                  color: WarnaFunda.permukaan,
+                  border: Border(top: BorderSide(color: WarnaFunda.garis)),
+                ),
+                child: TombolFunda.pilGelap(
+                  key: const Key('tombol_simpan_utang'),
+                  teks: _sedangUbah ? 'Simpan Perubahan' : 'Catat Utang',
+                  lebarPenuh: true,
+                  memuat: _sedangMemuat,
+                  padaTekan: _sedangMemuat ? null : _simpan,
+                ),
               ),
             ],
           ),
         ),
       ),
+    );
+  }
+
+  Widget _susunDuaKolom({
+    required bool isTeksBesar,
+    required int flexKiri,
+    required int flexKanan,
+    required Widget kiri,
+    required Widget kanan,
+  }) {
+    if (isTeksBesar) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          kiri,
+          const SizedBox(height: SpasiFunda.m),
+          kanan,
+        ],
+      );
+    }
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Expanded(flex: flexKiri, child: kiri),
+        const SizedBox(width: SpasiFunda.s),
+        Expanded(flex: flexKanan, child: kanan),
+      ],
     );
   }
 }

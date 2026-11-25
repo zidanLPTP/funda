@@ -11,10 +11,13 @@ import '../../../komponen/pembantu_ikon.dart';
 import '../../../perhitungan/perhitungan_tagihan.dart';
 import '../../../tema/token.dart';
 import '../../../util/format_rupiah.dart';
+import '../../pengaturan/tampilan/layar_pengaturan.dart';
 import '../../transaksi/tampilan/layar_form_transaksi.dart';
 import '../kontroler/penyedia_tagihan.dart';
+import 'layar_form_tagihan.dart';
+import 'layar_semua_tagihan.dart';
 
-/// Layar utama Jadwal Tagihan & Langganan Berulang dengan navigasi per bulan.
+/// Layar utama Jadwal Tagihan & Langganan Berulang dengan gaya editorial bersih.
 class LayarJadwalTagihan extends ConsumerStatefulWidget {
   const LayarJadwalTagihan({super.key});
 
@@ -23,6 +26,15 @@ class LayarJadwalTagihan extends ConsumerStatefulWidget {
 }
 
 class _LayarJadwalTagihanState extends ConsumerState<LayarJadwalTagihan> {
+  void _bukaRute(String rute, WidgetBuilder pembuatCadangan) {
+    final router = GoRouter.maybeOf(context);
+    if (router != null) {
+      context.push(rute);
+    } else {
+      Navigator.push(context, MaterialPageRoute(builder: pembuatCadangan));
+    }
+  }
+
   Future<void> _lewatiPeriode(ItemJadwalTampilan item) async {
     final messenger = ScaffoldMessenger.of(context);
     final setuju = await showDialog<bool>(
@@ -38,7 +50,9 @@ class _LayarJadwalTagihanState extends ConsumerState<LayarJadwalTagihan> {
             child: const Text('Batal'),
           ),
           FilledButton(
-            style: FilledButton.styleFrom(backgroundColor: WarnaFunda.utama),
+            style: FilledButton.styleFrom(
+              backgroundColor: WarnaFunda.tombolGelap,
+            ),
             onPressed: () => Navigator.pop(ctx, true),
             child: const Text('Lewati'),
           ),
@@ -105,9 +119,12 @@ class _LayarJadwalTagihanState extends ConsumerState<LayarJadwalTagihan> {
 
   void _bukaFormPembayaran(ItemJadwalTampilan item) {
     if (item.isCicilanUtang && item.idUtang != null) {
-      context.push('/utang/detail/${item.idUtang}').then((_) {
-        ref.invalidate(penyediaJadwalBulanTerpilih);
-      });
+      final router = GoRouter.maybeOf(context);
+      if (router != null) {
+        context.push('/utang/detail/${item.idUtang}').then((_) {
+          ref.invalidate(penyediaJadwalBulanTerpilih);
+        });
+      }
       return;
     }
 
@@ -128,7 +145,7 @@ class _LayarJadwalTagihanState extends ConsumerState<LayarJadwalTagihan> {
     });
   }
 
-  Widget _bangunKartuJadwal(
+  Widget _bangunBarisJadwal(
     ItemJadwalTampilan item,
     List<EntitasKategori> daftarKategori,
   ) {
@@ -175,20 +192,16 @@ class _LayarJadwalTagihanState extends ConsumerState<LayarJadwalTagihan> {
         item.status == StatusKemunculan.dibayar ||
         item.status == StatusKemunculan.dilewati;
 
-    return PetakBento(
-      anak: Column(
+    return Padding(
+      padding: const EdgeInsets.all(SpasiFunda.m),
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                width: 42,
-                height: 42,
-                decoration: BoxDecoration(
-                  color: latarStatus,
-                  borderRadius: BorderRadius.circular(SudutFunda.kartu),
-                ),
+              Padding(
+                padding: const EdgeInsets.only(top: 2),
                 child: Icon(
                   item.isCicilanUtang
                       ? LucideIcons.creditCard
@@ -206,13 +219,14 @@ class _LayarJadwalTagihanState extends ConsumerState<LayarJadwalTagihan> {
                   children: [
                     Wrap(
                       spacing: SpasiFunda.xs,
+                      runSpacing: SpasiFunda.xs,
                       crossAxisAlignment: WrapCrossAlignment.center,
                       children: [
                         TeksFunda.label(item.nama),
                         if (item.isCicilanUtang)
                           Container(
                             padding: const EdgeInsets.symmetric(
-                              horizontal: 6,
+                              horizontal: SpasiFunda.s,
                               vertical: 2,
                             ),
                             decoration: BoxDecoration(
@@ -221,13 +235,9 @@ class _LayarJadwalTagihanState extends ConsumerState<LayarJadwalTagihan> {
                                 SudutFunda.pil,
                               ),
                             ),
-                            child: const Text(
+                            child: const TeksFunda.catatan(
                               'Cicilan Utang',
-                              style: TextStyle(
-                                fontSize: 10,
-                                fontWeight: FontWeight.bold,
-                                color: WarnaFunda.sifatUtang,
-                              ),
+                              warna: WarnaFunda.teks,
                             ),
                           ),
                       ],
@@ -239,16 +249,20 @@ class _LayarJadwalTagihanState extends ConsumerState<LayarJadwalTagihan> {
                         'id_ID',
                       ).format(item.tanggalJatuhTempo),
                     ),
+                    const SizedBox(height: SpasiFunda.xs),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: SpasiFunda.s,
+                        vertical: 2,
+                      ),
+                      decoration: BoxDecoration(
+                        color: latarStatus,
+                        borderRadius: BorderRadius.circular(SudutFunda.pil),
+                      ),
+                      child: TeksFunda.catatan(labelStatus, warna: warnaStatus),
+                    ),
                   ],
                 ),
-              ),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                decoration: BoxDecoration(
-                  color: latarStatus,
-                  borderRadius: BorderRadius.circular(SudutFunda.kecil),
-                ),
-                child: TeksFunda.catatan(labelStatus, warna: warnaStatus),
               ),
             ],
           ),
@@ -279,11 +293,16 @@ class _LayarJadwalTagihanState extends ConsumerState<LayarJadwalTagihan> {
                 ],
               ),
               if (!sudahSelesai) ...[
-                Row(
-                  mainAxisSize: MainAxisSize.min,
+                Wrap(
+                  spacing: SpasiFunda.xs,
+                  crossAxisAlignment: WrapCrossAlignment.center,
                   children: [
-                    if (!item.isCicilanUtang) ...[
+                    if (!item.isCicilanUtang)
                       IconButton(
+                        constraints: const BoxConstraints(
+                          minWidth: 48,
+                          minHeight: 48,
+                        ),
                         icon: const Icon(
                           LucideIcons.skipForward,
                           size: 20,
@@ -292,14 +311,15 @@ class _LayarJadwalTagihanState extends ConsumerState<LayarJadwalTagihan> {
                         tooltip: 'Lewati periode ini',
                         onPressed: () => _lewatiPeriode(item),
                       ),
-                      const SizedBox(width: SpasiFunda.xs),
-                    ],
                     FilledButton.icon(
                       style: FilledButton.styleFrom(
-                        backgroundColor: WarnaFunda.utama,
+                        backgroundColor: WarnaFunda.tombolGelap,
+                        foregroundColor: WarnaFunda.teksPutih,
+                        shape: const StadiumBorder(),
+                        minimumSize: const Size(0, 44),
                         padding: const EdgeInsets.symmetric(
-                          horizontal: 12,
-                          vertical: 8,
+                          horizontal: SpasiFunda.m,
+                          vertical: SpasiFunda.s,
                         ),
                       ),
                       icon: const Icon(LucideIcons.check, size: 16),
@@ -331,12 +351,63 @@ class _LayarJadwalTagihanState extends ConsumerState<LayarJadwalTagihan> {
     );
   }
 
+  Widget _bangunKelompokKartu({
+    required IconData ikon,
+    required Color warnaJudul,
+    required String judul,
+    required List<ItemJadwalTampilan> daftarItem,
+    required List<EntitasKategori> daftarKategori,
+  }) {
+    if (daftarItem.isEmpty) return const SizedBox.shrink();
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Icon(ikon, color: warnaJudul, size: 18),
+            const SizedBox(width: SpasiFunda.xs),
+            Expanded(
+              child: TeksFunda.label(
+                '$judul (${daftarItem.length})',
+                warna: warnaJudul,
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: SpasiFunda.s),
+        Container(
+          decoration: BoxDecoration(
+            color: WarnaFunda.permukaan,
+            borderRadius: BorderRadius.circular(SudutFunda.kartu),
+            border: Border.all(color: WarnaFunda.garis, width: 1.0),
+          ),
+          child: Column(
+            children: [
+              for (var i = 0; i < daftarItem.length; i++) ...[
+                if (i > 0)
+                  const Divider(
+                    height: 1,
+                    thickness: 1,
+                    color: WarnaFunda.garis,
+                  ),
+                _bangunBarisJadwal(daftarItem[i], daftarKategori),
+              ],
+            ],
+          ),
+        ),
+        const SizedBox(height: SpasiFunda.l),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final bulanTerpilih = ref.watch(penyediaBulanJadwalTerpilih);
     final jadwalBulanAsync = ref.watch(penyediaJadwalBulanTerpilih);
     final ringkasan = ref.watch(penyediaRingkasanBulanTerpilih);
     final daftarKategori = ref.watch(penyediaDaftarKategori).value ?? [];
+    final isTeksBesar = MediaQuery.textScalerOf(context).scale(1) > 1.3;
 
     final namaBulanTahun = DateFormat(
       'MMMM yyyy',
@@ -345,259 +416,303 @@ class _LayarJadwalTagihanState extends ConsumerState<LayarJadwalTagihan> {
 
     return Scaffold(
       backgroundColor: WarnaFunda.latar,
-      appBar: AppBar(
-        title: const TeksFunda.judulBagian('Tagihan & Pengingat'),
-        backgroundColor: WarnaFunda.latar,
-        elevation: 0,
-        actions: [
-          IconButton(
-            icon: const Icon(LucideIcons.listFilter, color: WarnaFunda.teks),
-            tooltip: 'Master Tagihan',
-            onPressed: () => context.push('/tagihan/semua'),
-          ),
-          IconButton(
-            icon: const Icon(LucideIcons.settings, color: WarnaFunda.teks),
-            tooltip: 'Pengaturan Pengingat',
-            onPressed: () => context.push('/pengaturan'),
-          ),
-        ],
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: WarnaFunda.utama,
-        foregroundColor: WarnaFunda.permukaan,
-        onPressed: () => context.push('/tagihan/tambah'),
-        icon: const Icon(LucideIcons.plus),
-        label: const Text('Tagihan Baru'),
-      ),
       body: SafeArea(
-        child: ListView(
-          padding: const EdgeInsets.all(SpasiFunda.m),
+        child: Column(
           children: [
-            // Navigasi Pemilih Bulan
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                IconButton(
-                  icon: const Icon(LucideIcons.chevronLeft),
-                  tooltip: 'Bulan Sebelumnya',
-                  onPressed: () => ref
-                      .read(penyediaBulanJadwalTerpilih.notifier)
-                      .gantiBulan(-1),
-                ),
-                TeksFunda.judulBagian(namaBulanTahun),
-                IconButton(
-                  icon: const Icon(LucideIcons.chevronRight),
-                  tooltip: 'Bulan Berikutnya',
-                  onPressed: () => ref
-                      .read(penyediaBulanJadwalTerpilih.notifier)
-                      .gantiBulan(1),
-                ),
-              ],
+            Padding(
+              padding: const EdgeInsets.fromLTRB(
+                SpasiFunda.marginLayar,
+                SpasiFunda.s,
+                SpasiFunda.marginLayar,
+                SpasiFunda.s,
+              ),
+              child: HeaderSubLayarEditorial(
+                judul: 'Tagihan & Pengingat',
+                aksiKanan: [
+                  IconButton(
+                    constraints: const BoxConstraints(
+                      minWidth: 48,
+                      minHeight: 48,
+                    ),
+                    icon: const Icon(
+                      LucideIcons.listFilter,
+                      color: WarnaFunda.teks,
+                      size: 20,
+                    ),
+                    tooltip: 'Master Tagihan',
+                    onPressed: () => _bukaRute(
+                      '/tagihan/semua',
+                      (_) => const LayarSemuaTagihan(),
+                    ),
+                  ),
+                  IconButton(
+                    constraints: const BoxConstraints(
+                      minWidth: 48,
+                      minHeight: 48,
+                    ),
+                    icon: const Icon(
+                      LucideIcons.settings,
+                      color: WarnaFunda.teks,
+                      size: 20,
+                    ),
+                    tooltip: 'Pengaturan Pengingat',
+                    onPressed: () => _bukaRute(
+                      '/pengaturan',
+                      (_) => const LayarPengaturan(),
+                    ),
+                  ),
+                  TombolPilHeaderEditorial(
+                    key: const Key('tombol_tambah_tagihan_jadwal'),
+                    teks: 'Baru',
+                    ikon: LucideIcons.plus,
+                    warnaTeks: WarnaFunda.teksPutih,
+                    warnaLatar: WarnaFunda.tombolGelap,
+                    warnaBatas: WarnaFunda.tombolGelap,
+                    padaTekan: () => _bukaRute(
+                      '/tagihan/tambah',
+                      (_) => const LayarFormTagihan(),
+                    ),
+                  ),
+                ],
+              ),
             ),
-            const SizedBox(height: SpasiFunda.s),
-
-            // Hero Ringkasan Bulan Terpilih
-            PetakBento.ukuran2x1(
-              warnaKustom: WarnaFunda.tintBiru,
-              labelAkses:
-                  'Sudah dibayar ${formatRupiah(ringkasan.sudahDibayarRupiah)}, perkiraan sisa ${formatRupiah(ringkasan.sisaPerkiraanRupiah)}',
-              anak: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+            Expanded(
+              child: ListView(
+                padding: const EdgeInsets.fromLTRB(
+                  SpasiFunda.marginLayar,
+                  SpasiFunda.xs,
+                  SpasiFunda.marginLayar,
+                  SpasiFunda.xl,
+                ),
                 children: [
-                  TeksFunda.label('Ringkasan $namaBulanTahun'),
-                  const SizedBox(height: SpasiFunda.s),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
+                  // Navigasi Pemilih Bulan
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: SpasiFunda.xs,
+                      vertical: SpasiFunda.xs,
+                    ),
+                    decoration: BoxDecoration(
+                      color: WarnaFunda.permukaan,
+                      borderRadius: BorderRadius.circular(SudutFunda.kartu),
+                      border: Border.all(color: WarnaFunda.garis, width: 1.0),
+                    ),
+                    child: Row(
+                      children: [
+                        IconButton(
+                          constraints: const BoxConstraints(
+                            minWidth: 48,
+                            minHeight: 48,
+                          ),
+                          icon: const Icon(LucideIcons.chevronLeft),
+                          tooltip: 'Bulan Sebelumnya',
+                          onPressed: () => ref
+                              .read(penyediaBulanJadwalTerpilih.notifier)
+                              .gantiBulan(-1),
+                        ),
+                        Expanded(
+                          child: Center(
+                            child: TeksFunda.judulBagian(
+                              namaBulanTahun,
+                              rataTeks: TextAlign.center,
+                            ),
+                          ),
+                        ),
+                        IconButton(
+                          constraints: const BoxConstraints(
+                            minWidth: 48,
+                            minHeight: 48,
+                          ),
+                          icon: const Icon(LucideIcons.chevronRight),
+                          tooltip: 'Bulan Berikutnya',
+                          onPressed: () => ref
+                              .read(penyediaBulanJadwalTerpilih.notifier)
+                              .gantiBulan(1),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: SpasiFunda.m),
+
+                  // Hero Kanvas Biru Ringkasan Bulan Terpilih
+                  Semantics(
+                    label:
+                        'Sudah dibayar ${formatRupiah(ringkasan.sudahDibayarRupiah)}, perkiraan sisa ${formatRupiah(ringkasan.sisaPerkiraanRupiah)}',
+                    child: Container(
+                      key: const Key('hero_kanvas_jadwal_tagihan'),
+                      padding: const EdgeInsets.all(SpasiFunda.l),
+                      decoration: BoxDecoration(
+                        color: WarnaFunda.kanvasBiru,
+                        borderRadius: BorderRadius.circular(SudutFunda.petak),
+                        border: Border.all(
+                          color: WarnaFunda.batasBiru,
+                          width: 1.0,
+                        ),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          TeksFunda.label('Ringkasan $namaBulanTahun'),
+                          const SizedBox(height: SpasiFunda.m),
+                          if (isTeksBesar) ...[
                             const TeksFunda.catatan('Sudah Dibayar'),
                             const SizedBox(height: SpasiFunda.xs),
                             TeksFunda.judulBagian(
                               formatRupiah(ringkasan.sudahDibayarRupiah),
                               warna: WarnaFunda.pemasukan,
                             ),
-                          ],
-                        ),
-                      ),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
+                            const SizedBox(height: SpasiFunda.m),
                             const TeksFunda.catatan('Perkiraan Sisa'),
                             const SizedBox(height: SpasiFunda.xs),
                             TeksFunda.judulBagian(
                               formatRupiah(ringkasan.sisaPerkiraanRupiah),
                             ),
+                          ] else ...[
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      const TeksFunda.catatan('Sudah Dibayar'),
+                                      const SizedBox(height: SpasiFunda.xs),
+                                      TeksFunda.judulBagian(
+                                        formatRupiah(
+                                          ringkasan.sudahDibayarRupiah,
+                                        ),
+                                        warna: WarnaFunda.pemasukan,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      const TeksFunda.catatan('Perkiraan Sisa'),
+                                      const SizedBox(height: SpasiFunda.xs),
+                                      TeksFunda.judulBagian(
+                                        formatRupiah(
+                                          ringkasan.sisaPerkiraanRupiah,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
                           ],
-                        ),
+                          const SizedBox(height: SpasiFunda.s),
+                          TeksFunda.catatan(
+                            '${ringkasan.jumlahBelumDitandai} tagihan belum ditandai (${jadwalBulanAsync.value?.length ?? 0} total periode)',
+                          ),
+                          if (ringkasan.jumlahTanpaNominal > 0) ...[
+                            const SizedBox(height: SpasiFunda.xs),
+                            TeksFunda.catatan(
+                              '${ringkasan.jumlahTanpaNominal} tagihan belum ada perkiraan',
+                              warna: WarnaFunda.peringatan,
+                            ),
+                          ],
+                        ],
                       ),
-                    ],
-                  ),
-                  const SizedBox(height: SpasiFunda.s),
-                  TeksFunda.catatan(
-                    '${ringkasan.jumlahBelumDitandai} tagihan belum ditandai (${jadwalBulanAsync.value?.length ?? 0} total periode)',
-                  ),
-                  if (ringkasan.jumlahTanpaNominal > 0) ...[
-                    const SizedBox(height: SpasiFunda.xs),
-                    TeksFunda.catatan(
-                      '${ringkasan.jumlahTanpaNominal} tagihan belum ada perkiraan',
-                      warna: WarnaFunda.peringatan,
                     ),
-                  ],
+                  ),
+                  const SizedBox(height: SpasiFunda.l),
+
+                  jadwalBulanAsync.when(
+                    loading: () => const Padding(
+                      padding: EdgeInsets.all(SpasiFunda.xl),
+                      child: Center(child: IndikatorMemuat()),
+                    ),
+                    error: (err, _) =>
+                        Center(child: Text('Terjadi kesalahan: $err')),
+                    data: (daftarItem) {
+                      final perluPerhatian = daftarItem
+                          .where(
+                            (i) =>
+                                i.status == StatusKemunculan.hariIni ||
+                                i.status == StatusKemunculan.lewat ||
+                                i.status == StatusKemunculan.lewatKedaluwarsa,
+                          )
+                          .toList();
+                      final akanDatang = daftarItem
+                          .where((i) => i.status == StatusKemunculan.akanDatang)
+                          .toList();
+                      final sudahDitandai = daftarItem
+                          .where(
+                            (i) =>
+                                i.status == StatusKemunculan.dibayar ||
+                                i.status == StatusKemunculan.dilewati,
+                          )
+                          .toList();
+
+                      if (daftarItem.isEmpty) {
+                        return Container(
+                          padding: const EdgeInsets.all(SpasiFunda.xl),
+                          decoration: BoxDecoration(
+                            color: WarnaFunda.permukaan,
+                            borderRadius: BorderRadius.circular(
+                              SudutFunda.petak,
+                            ),
+                            border: Border.all(
+                              color: WarnaFunda.garis,
+                              width: 1.0,
+                            ),
+                          ),
+                          child: const Column(
+                            children: [
+                              Icon(
+                                LucideIcons.calendarCheck,
+                                size: 40,
+                                color: WarnaFunda.utama,
+                              ),
+                              SizedBox(height: SpasiFunda.m),
+                              TeksFunda.judulBagian(
+                                'Tidak Ada Tagihan Bulan Ini',
+                                rataTeks: TextAlign.center,
+                              ),
+                              SizedBox(height: SpasiFunda.xs),
+                              TeksFunda.catatan(
+                                'Semua jadwal tagihan pada bulan ini tenang.',
+                                rataTeks: TextAlign.center,
+                              ),
+                            ],
+                          ),
+                        );
+                      }
+
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          _bangunKelompokKartu(
+                            ikon: LucideIcons.circleAlert,
+                            warnaJudul: WarnaFunda.pengeluaran,
+                            judul: 'Perlu Perhatian',
+                            daftarItem: perluPerhatian,
+                            daftarKategori: daftarKategori,
+                          ),
+                          _bangunKelompokKartu(
+                            ikon: LucideIcons.calendar,
+                            warnaJudul: WarnaFunda.utama,
+                            judul: 'Akan Datang',
+                            daftarItem: akanDatang,
+                            daftarKategori: daftarKategori,
+                          ),
+                          _bangunKelompokKartu(
+                            ikon: LucideIcons.circleCheck,
+                            warnaJudul: WarnaFunda.pemasukan,
+                            judul: 'Sudah Ditandai',
+                            daftarItem: sudahDitandai,
+                            daftarKategori: daftarKategori,
+                          ),
+                        ],
+                      );
+                    },
+                  ),
                 ],
               ),
             ),
-            const SizedBox(height: SpasiFunda.m),
-
-            jadwalBulanAsync.when(
-              loading: () => const Padding(
-                padding: EdgeInsets.all(SpasiFunda.xl),
-                child: Center(child: IndikatorMemuat()),
-              ),
-              error: (err, _) => Center(child: Text('Terjadi kesalahan: $err')),
-              data: (daftarItem) {
-                final perluPerhatian = daftarItem
-                    .where(
-                      (i) =>
-                          i.status == StatusKemunculan.hariIni ||
-                          i.status == StatusKemunculan.lewat ||
-                          i.status == StatusKemunculan.lewatKedaluwarsa,
-                    )
-                    .toList();
-                final akanDatang = daftarItem
-                    .where((i) => i.status == StatusKemunculan.akanDatang)
-                    .toList();
-                final sudahDitandai = daftarItem
-                    .where(
-                      (i) =>
-                          i.status == StatusKemunculan.dibayar ||
-                          i.status == StatusKemunculan.dilewati,
-                    )
-                    .toList();
-
-                if (daftarItem.isEmpty) {
-                  return Center(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: SpasiFunda.xl,
-                      ),
-                      child: Column(
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.all(SpasiFunda.l),
-                            decoration: const BoxDecoration(
-                              color: WarnaFunda.tintHijau,
-                              shape: BoxShape.circle,
-                            ),
-                            child: const Icon(
-                              LucideIcons.calendarCheck,
-                              size: 40,
-                              color: WarnaFunda.utama,
-                            ),
-                          ),
-                          const SizedBox(height: SpasiFunda.m),
-                          const TeksFunda.judulBagian(
-                            'Tidak Ada Tagihan Bulan Ini',
-                          ),
-                          const SizedBox(height: SpasiFunda.xs),
-                          const TeksFunda.catatan(
-                            'Semua jadwal tagihan pada bulan ini tenang.',
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
-                }
-
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Kelompok 1: Perlu Perhatian (Hari Ini + Lewat)
-                    if (perluPerhatian.isNotEmpty) ...[
-                      Row(
-                        children: [
-                          const Icon(
-                            LucideIcons.circleAlert,
-                            color: WarnaFunda.pengeluaran,
-                            size: 20,
-                          ),
-                          const SizedBox(width: SpasiFunda.xs),
-                          TeksFunda.label(
-                            'Perlu Perhatian (${perluPerhatian.length})',
-                            warna: WarnaFunda.pengeluaran,
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: SpasiFunda.s),
-                      ...perluPerhatian.map(
-                        (item) => Padding(
-                          padding: const EdgeInsets.only(
-                            bottom: SpasiFunda.jarakPetak,
-                          ),
-                          child: _bangunKartuJadwal(item, daftarKategori),
-                        ),
-                      ),
-                      const SizedBox(height: SpasiFunda.s),
-                    ],
-
-                    // Kelompok 2: Akan Datang
-                    if (akanDatang.isNotEmpty) ...[
-                      Row(
-                        children: [
-                          const Icon(
-                            LucideIcons.calendar,
-                            color: WarnaFunda.utama,
-                            size: 20,
-                          ),
-                          const SizedBox(width: SpasiFunda.xs),
-                          TeksFunda.label('Akan Datang (${akanDatang.length})'),
-                        ],
-                      ),
-                      const SizedBox(height: SpasiFunda.s),
-                      ...akanDatang.map(
-                        (item) => Padding(
-                          padding: const EdgeInsets.only(
-                            bottom: SpasiFunda.jarakPetak,
-                          ),
-                          child: _bangunKartuJadwal(item, daftarKategori),
-                        ),
-                      ),
-                      const SizedBox(height: SpasiFunda.s),
-                    ],
-
-                    // Kelompok 3: Sudah Ditandai (Dibayar / Dilewati)
-                    if (sudahDitandai.isNotEmpty) ...[
-                      Row(
-                        children: [
-                          const Icon(
-                            LucideIcons.circleCheck,
-                            color: WarnaFunda.pemasukan,
-                            size: 20,
-                          ),
-                          const SizedBox(width: SpasiFunda.xs),
-                          TeksFunda.label(
-                            'Sudah Ditandai (${sudahDitandai.length})',
-                            warna: WarnaFunda.pemasukan,
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: SpasiFunda.s),
-                      ...sudahDitandai.map(
-                        (item) => Padding(
-                          padding: const EdgeInsets.only(
-                            bottom: SpasiFunda.jarakPetak,
-                          ),
-                          child: _bangunKartuJadwal(item, daftarKategori),
-                        ),
-                      ),
-                    ],
-                  ],
-                );
-              },
-            ),
-            const SizedBox(height: 80),
           ],
         ),
       ),
