@@ -12,6 +12,16 @@ abstract final class AsetIlustrasiFunda {
   static const laporanBulanan = 'aset/gambar/ilustrasi/laporan_bulanan.svg';
   static const modeSandbox = 'aset/gambar/ilustrasi/mode_sandbox.svg';
   static const iconFunda = 'aset/gambar/ilustrasi/icon-funda.svg';
+  static const anggaranKosong = 'aset/gambar/ilustrasi/anggaran_kosong.svg';
+  static const catatTransaksi = 'aset/gambar/ilustrasi/catat_transaksi.svg';
+  static const catatanKosong = 'aset/gambar/ilustrasi/catatan_kosong.svg';
+  static const privasiLokal = 'aset/gambar/ilustrasi/privasi_lokal.svg';
+  static const tagihanTenang = 'aset/gambar/ilustrasi/tagihan_tenang.svg';
+  static const tujuanKosong = 'aset/gambar/ilustrasi/tujuan_kosong.svg';
+  static const tutorialFiturLengkap =
+      'aset/gambar/ilustrasi/tutorial_fitur_lengkap.svg';
+  static const utangLunasKosong =
+      'aset/gambar/ilustrasi/utang_lunas_kosong.svg';
 
   static const mulaiTesAwal = 'aset/gambar/ilustrasi/mulai-tes-awal.svg';
   static const anggaranArusKas =

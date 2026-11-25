@@ -100,7 +100,7 @@ class PembungkusBilahNavigasi extends ConsumerWidget {
               ItemSorotanTutorial(
                 kunciTarget: kunciTutorial.tabCatatan,
                 ikon: LucideIcons.receipt,
-                pathSvg: AsetIlustrasiFunda.anggaranArusKas,
+                pathSvg: AsetIlustrasiFunda.catatTransaksi,
                 warnaAksen: WarnaFunda.sifatKebutuhan,
                 warnaLatarIkon: WarnaFunda.kanvasBiru,
                 judul: 'Tab Catatan',
@@ -120,7 +120,7 @@ class PembungkusBilahNavigasi extends ConsumerWidget {
               ItemSorotanTutorial(
                 kunciTarget: kunciTutorial.tabLainnya,
                 ikon: LucideIcons.layoutGrid,
-                pathSvg: AsetIlustrasiFunda.laporanBulanan,
+                pathSvg: AsetIlustrasiFunda.tutorialFiturLengkap,
                 warnaAksen: WarnaFunda.sifatUtang,
                 warnaLatarIkon: WarnaFunda.kanvasKuning,
                 judul: 'Tab Lainnya',

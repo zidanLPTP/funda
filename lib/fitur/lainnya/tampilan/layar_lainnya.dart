@@ -366,15 +366,14 @@ class LayarLainnya extends ConsumerWidget {
                   Row(
                     children: [
                       Container(
-                        padding: const EdgeInsets.all(SpasiFunda.m),
+                        padding: const EdgeInsets.all(SpasiFunda.s),
                         decoration: BoxDecoration(
                           color: WarnaFunda.kanvasMint,
                           borderRadius: BorderRadius.circular(SudutFunda.kartu),
                         ),
-                        child: const Icon(
-                          LucideIcons.shieldCheck,
-                          size: 24,
-                          color: WarnaFunda.pemasukan,
+                        child: const IlustrasiSvgFunda(
+                          pathAset: AsetIlustrasiFunda.privasiLokal,
+                          tinggi: 52,
                         ),
                       ),
                       const SizedBox(width: SpasiFunda.m),

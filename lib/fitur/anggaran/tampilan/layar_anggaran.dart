@@ -357,11 +357,10 @@ class LayarAnggaran extends ConsumerWidget {
                               SudutFunda.kartu,
                             ),
                           ),
-                          child: const Center(
-                            child: IlustrasiGeometrisFunda(
-                              jenis: JenisIlustrasiFunda.neraca,
-                              warnaAksen: WarnaFunda.sifatKebutuhan,
-                              ukuran: 64,
+                          child: Center(
+                            child: IlustrasiSvgFunda(
+                              pathAset: AsetIlustrasiFunda.anggaranKosong,
+                              tinggi: isTeksBesar ? 80 : 104,
                             ),
                           ),
                         ),

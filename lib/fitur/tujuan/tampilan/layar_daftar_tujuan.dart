@@ -86,11 +86,10 @@ class LayarDaftarTujuan extends ConsumerWidget {
                                   SudutFunda.kartu,
                                 ),
                               ),
-                              child: const Center(
-                                child: IlustrasiGeometrisFunda(
-                                  jenis: JenisIlustrasiFunda.sasaran,
-                                  warnaAksen: WarnaFunda.utama,
-                                  ukuran: 64,
+                              child: Center(
+                                child: IlustrasiSvgFunda(
+                                  pathAset: AsetIlustrasiFunda.tujuanKosong,
+                                  tinggi: isTeksBesar ? 80 : 104,
                                 ),
                               ),
                             ),

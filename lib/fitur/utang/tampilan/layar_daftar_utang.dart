@@ -168,10 +168,24 @@ class LayarDaftarUtang extends ConsumerWidget {
                             ),
                             child: Column(
                               children: [
-                                const Icon(
-                                  LucideIcons.circleCheck,
-                                  size: 40,
-                                  color: WarnaFunda.pemasukan,
+                                Container(
+                                  width: double.infinity,
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: SpasiFunda.m,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: WarnaFunda.kanvasMint,
+                                    borderRadius: BorderRadius.circular(
+                                      SudutFunda.kartu,
+                                    ),
+                                  ),
+                                  child: const Center(
+                                    child: IlustrasiSvgFunda(
+                                      pathAset:
+                                          AsetIlustrasiFunda.utangLunasKosong,
+                                      tinggi: 92,
+                                    ),
+                                  ),
                                 ),
                                 const SizedBox(height: SpasiFunda.m),
                                 const TeksFunda.catatan(

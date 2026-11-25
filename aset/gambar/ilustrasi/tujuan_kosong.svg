@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 160" width="240" height="160">
+  
+  <ellipse cx="120" cy="146" rx="76" ry="6.5" fill="#0B2E22" fill-opacity="0.12" />
+
+  
+  <path d="M 44 48 C 44 42, 49 38, 55 38 C 58 31, 69 31, 72 38 C 77 38, 82 42, 82 48 Z" fill="#FFFFFF" stroke="#0B2E22" stroke-width="3.8" stroke-linejoin="round" />
+
+  
+  <path d="M 86 86 C 98 56, 114 42, 134 40" fill="none" stroke="#0F766E" stroke-width="3.8" stroke-linecap="round" stroke-dasharray="6 6" />
+  <path d="M 127 34 L 135 40 L 128 47" fill="none" stroke="#0F766E" stroke-width="3.8" stroke-linecap="round" stroke-linejoin="round" />
+
+  
+  <g>
+    <circle cx="70" cy="101" r="13" fill="#FACC15" stroke="#0B2E22" stroke-width="4" />
+    <circle cx="70" cy="101" r="8" fill="#FDE047" stroke="#D97706" stroke-width="1.8" />
+    <path d="M 70 96.5 L 70 105.5" fill="none" stroke="#B45309" stroke-width="3" stroke-linecap="round" />
+  </g>
+
+  
+  <g stroke="#0B2E22" stroke-width="4.5" stroke-linejoin="round">
+    
+    <rect x="48" y="114" width="44" height="24" rx="9" fill="#CCFBF1" />
+    
+    <rect x="98" y="96" width="44" height="42" rx="9" fill="#14B8A6" />
+    
+    <rect x="148" y="78" width="44" height="60" rx="9" fill="#0F766E" />
+  </g>
+
+  
+  <g fill="none" stroke-linecap="round">
+    <path d="M 60 126 L 80 126" stroke="#0F766E" stroke-opacity="0.5" stroke-width="3.5" />
+    <path d="M 110 110 L 130 110" stroke="#FFFFFF" stroke-opacity="0.65" stroke-width="3.5" />
+    <path d="M 160 92 L 180 92" stroke="#99F6E4" stroke-opacity="0.6" stroke-width="3.5" />
+    <path d="M 160 104 L 174 104" stroke="#99F6E4" stroke-opacity="0.38" stroke-width="3.5" />
+  </g>
+
+  
+  <g>
+    <circle cx="170" cy="40" r="25" fill="#FFFFFF" />
+    <circle cx="170" cy="40" r="25" fill="none" stroke="#0B2E22" stroke-width="3.8" stroke-linecap="round" stroke-dasharray="9 7" />
+    
+    <circle cx="170" cy="40" r="15" fill="#FACC15" stroke="#0B2E22" stroke-width="4" />
+    <path d="M 170 33.5 L 170 46.5 M 163.5 40 L 176.5 40" fill="none" stroke="#0B2E22" stroke-width="4" stroke-linecap="round" />
+  </g>
+</svg>

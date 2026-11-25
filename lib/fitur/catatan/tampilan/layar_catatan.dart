@@ -334,9 +334,8 @@ class _LayarCatatanState extends ConsumerState<LayarCatatan> {
                   pesan:
                       'Buat dompet pertamamu terlebih dahulu agar bisa mulai mencatat transaksi.',
                   teksTombol: 'Buat Dompet Pertamamu',
-                  jenisIlustrasi: JenisIlustrasiFunda.celengan,
+                  pathSvg: AsetIlustrasiFunda.belumAdaDompet,
                   warnaKanvas: WarnaFunda.kanvasMint,
-                  warnaAksen: WarnaFunda.utama,
                   padaTekan: () {
                     Navigator.push(
                       context,
@@ -482,15 +481,10 @@ class _LayarCatatanState extends ConsumerState<LayarCatatan> {
                           teksTombol: _filter.jumlahFilterAktif > 0
                               ? 'Hapus Semua Filter'
                               : 'Catat Transaksi Sekarang',
-                          jenisIlustrasi: adaSaringan
-                              ? JenisIlustrasiFunda.kompas
-                              : JenisIlustrasiFunda.neraca,
+                          pathSvg: AsetIlustrasiFunda.catatanKosong,
                           warnaKanvas: adaSaringan
                               ? WarnaFunda.kanvasBiru
                               : WarnaFunda.kanvasMint,
-                          warnaAksen: adaSaringan
-                              ? WarnaFunda.sifatKebutuhan
-                              : WarnaFunda.utama,
                           padaTekan: () {
                             if (_filter.jumlahFilterAktif > 0) {
                               setState(() {
@@ -798,18 +792,16 @@ class _KartuKosongCatatanEditorial extends StatelessWidget {
   final String judul;
   final String pesan;
   final String teksTombol;
-  final JenisIlustrasiFunda jenisIlustrasi;
+  final String pathSvg;
   final Color warnaKanvas;
-  final Color warnaAksen;
   final VoidCallback padaTekan;
 
   const _KartuKosongCatatanEditorial({
     required this.judul,
     required this.pesan,
     required this.teksTombol,
-    required this.jenisIlustrasi,
+    required this.pathSvg,
     required this.warnaKanvas,
-    required this.warnaAksen,
     required this.padaTekan,
   });
 
@@ -833,10 +825,9 @@ class _KartuKosongCatatanEditorial extends StatelessWidget {
               horizontal: SpasiFunda.l,
             ),
             child: Center(
-              child: IlustrasiGeometrisFunda(
-                jenis: jenisIlustrasi,
-                warnaAksen: warnaAksen,
-                ukuran: teksBesar ? 76 : 96,
+              child: IlustrasiSvgFunda(
+                pathAset: pathSvg,
+                tinggi: teksBesar ? 80 : 108,
               ),
             ),
           ),

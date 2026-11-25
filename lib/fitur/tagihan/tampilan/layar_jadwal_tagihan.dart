@@ -649,7 +649,7 @@ class _LayarJadwalTagihanState extends ConsumerState<LayarJadwalTagihan> {
 
                       if (daftarItem.isEmpty) {
                         return Container(
-                          padding: const EdgeInsets.all(SpasiFunda.xl),
+                          padding: const EdgeInsets.all(SpasiFunda.l),
                           decoration: BoxDecoration(
                             color: WarnaFunda.permukaan,
                             borderRadius: BorderRadius.circular(
@@ -660,20 +660,33 @@ class _LayarJadwalTagihanState extends ConsumerState<LayarJadwalTagihan> {
                               width: 1.0,
                             ),
                           ),
-                          child: const Column(
+                          child: Column(
                             children: [
-                              Icon(
-                                LucideIcons.calendarCheck,
-                                size: 40,
-                                color: WarnaFunda.utama,
+                              Container(
+                                width: double.infinity,
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: SpasiFunda.m,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: WarnaFunda.kanvasMint,
+                                  borderRadius: BorderRadius.circular(
+                                    SudutFunda.kartu,
+                                  ),
+                                ),
+                                child: const Center(
+                                  child: IlustrasiSvgFunda(
+                                    pathAset: AsetIlustrasiFunda.tagihanTenang,
+                                    tinggi: 96,
+                                  ),
+                                ),
                               ),
-                              SizedBox(height: SpasiFunda.m),
-                              TeksFunda.judulBagian(
+                              const SizedBox(height: SpasiFunda.m),
+                              const TeksFunda.judulBagian(
                                 'Tidak Ada Tagihan Bulan Ini',
                                 rataTeks: TextAlign.center,
                               ),
-                              SizedBox(height: SpasiFunda.xs),
-                              TeksFunda.catatan(
+                              const SizedBox(height: SpasiFunda.xs),
+                              const TeksFunda.catatan(
                                 'Semua jadwal tagihan pada bulan ini tenang.',
                                 rataTeks: TextAlign.center,
                               ),

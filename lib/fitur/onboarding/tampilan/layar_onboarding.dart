@@ -45,7 +45,7 @@ class _LayarOnboardingState extends ConsumerState<LayarOnboarding> {
           'Funda tidak punya server backend dan tidak mengirimkan datamu ke mana pun. Seluruh catatan keuangan dan refleksi tersimpan privat di perangkatmu.',
       kanvas: WarnaFunda.kanvasMint,
       warnaTag: WarnaFunda.pemasukan,
-      pathSvg: AsetIlustrasiFunda.proteksiDasar,
+      pathSvg: AsetIlustrasiFunda.privasiLokal,
     ),
     ItemSlideOnboarding(
       tag: 'Belajar Sambil Praktik',

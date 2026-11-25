@@ -395,10 +395,23 @@ class _LayarSemuaTagihanState extends ConsumerState<LayarSemuaTagihan> {
                           ),
                           child: Column(
                             children: [
-                              const Icon(
-                                LucideIcons.receipt,
-                                size: 48,
-                                color: WarnaFunda.teksRedup,
+                              Container(
+                                width: double.infinity,
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: SpasiFunda.m,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: WarnaFunda.kanvasBiru,
+                                  borderRadius: BorderRadius.circular(
+                                    SudutFunda.kartu,
+                                  ),
+                                ),
+                                child: const Center(
+                                  child: IlustrasiSvgFunda(
+                                    pathAset: AsetIlustrasiFunda.tagihanTenang,
+                                    tinggi: 92,
+                                  ),
+                                ),
                               ),
                               const SizedBox(height: SpasiFunda.m),
                               TeksFunda.judulBagian(
