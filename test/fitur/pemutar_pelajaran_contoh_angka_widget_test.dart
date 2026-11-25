@@ -12,6 +12,7 @@ import 'package:funda/fitur/belajar/kontroler/penyedia_belajar.dart';
 import 'package:funda/fitur/belajar/model/pembaca_konten.dart';
 import 'package:funda/fitur/belajar/tampilan/layar_kuis_modul.dart';
 import 'package:funda/fitur/belajar/tampilan/layar_pemutar_pelajaran.dart';
+import 'package:funda/komponen/indikator_memuat.dart';
 import 'package:funda/perhitungan/perhitungan_belajar.dart';
 import 'package:funda/perhitungan/perhitungan_umpan_balik_belajar.dart';
 import 'package:funda/tema/tema.dart';
@@ -85,6 +86,7 @@ void main() {
             ProviderScope(
               overrides: [
                 penyediaBasisData.overrideWithValue(db),
+                penyediaTanpaAnimasi.overrideWithValue(true),
                 penyediaFotoData.overrideWith(
                   (ref) => Future.value(FotoDataPengguna.kosong()),
                 ),
@@ -221,6 +223,7 @@ void main() {
             ProviderScope(
               overrides: [
                 penyediaBasisData.overrideWithValue(db),
+                penyediaTanpaAnimasi.overrideWithValue(true),
                 penyediaFotoData.overrideWith(
                   (ref) => Future.value(FotoDataPengguna.kosong()),
                 ),
@@ -243,13 +246,10 @@ void main() {
           );
           await tester.pump();
 
-          // Berpindah dari Pemantik (langkah 0) -> Cek Paham (langkah 1) -> Misi (langkah 2)
-          await tester.tap(find.text('Lanjut'));
-          await tester.pump();
+          // Berpindah dari Pemantik (langkah 0) -> Misi (langkah 1, karena Cek Paham kosong)
           await tester.tap(find.text('Lanjut'));
           await tester.pump();
 
-          expect(find.text('Misi Praktik Nyata'), findsOneWidget);
           expect(find.text('Buat 3 Anggaran'), findsOneWidget);
 
           await bongkarWidget(tester);
@@ -308,6 +308,7 @@ void main() {
             ProviderScope(
               overrides: [
                 penyediaBasisData.overrideWithValue(db),
+                penyediaTanpaAnimasi.overrideWithValue(true),
                 penyediaFotoData.overrideWith(
                   (ref) => Future.value(FotoDataPengguna.kosong()),
                 ),
@@ -389,6 +390,7 @@ void main() {
             ProviderScope(
               overrides: [
                 penyediaBasisData.overrideWithValue(db),
+                penyediaTanpaAnimasi.overrideWithValue(true),
                 penyediaFotoData.overrideWith(
                   (ref) => Future.value(FotoDataPengguna.kosong()),
                 ),
@@ -440,16 +442,10 @@ void main() {
           expect(tester.takeException(), isNull);
           expect(find.text('Arus Kas Bulanan Detail'), findsOneWidget);
 
-          // Pindah ke Cek Paham (kosong, lanjut)
+          // Pindah langsung ke Misi (karena Cek Paham kosong)
           await tester.tap(find.text('Lanjut'));
           await tester.pump();
           expect(tester.takeException(), isNull);
-
-          // Pindah ke Misi Praktik Nyata
-          await tester.tap(find.text('Lanjut'));
-          await tester.pump();
-          expect(tester.takeException(), isNull);
-          expect(find.text('Misi Praktik Nyata'), findsOneWidget);
           expect(find.text('Misi Uji Skala'), findsOneWidget);
 
           await bongkarWidget(tester);

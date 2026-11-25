@@ -14,6 +14,7 @@ import '../../../perhitungan/perhitungan_tagihan.dart';
 import '../../../tema/token.dart';
 import '../../../util/format_rupiah.dart';
 import '../../pengaturan/kontroler/penyedia_pengaturan.dart';
+import '../../pengaturan/tampilan/layar_pengaturan.dart';
 import '../kontroler/penyedia_tagihan.dart';
 
 /// Layar formulir untuk membuat atau mengubah data tagihan/langganan berulang.
@@ -81,6 +82,18 @@ class _LayarFormTagihanState extends ConsumerState<LayarFormTagihan> {
     _pengontrolNama.dispose();
     _pengontrolNominalPerkiraan.dispose();
     super.dispose();
+  }
+
+  void _bukaPengaturan() {
+    final router = GoRouter.maybeOf(context);
+    if (router != null) {
+      context.push('/pengaturan');
+    } else {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (_) => const LayarPengaturan()),
+      );
+    }
   }
 
   Future<void> _pilihTanggalJatuhTempo() async {
@@ -173,7 +186,12 @@ class _LayarFormTagihanState extends ConsumerState<LayarFormTagihan> {
       await sinkronkanPengingatLokal(ref);
 
       if (mounted) {
-        context.pop();
+        final router = GoRouter.maybeOf(context);
+        if (router != null && context.canPop()) {
+          context.pop();
+        } else {
+          Navigator.maybePop(context);
+        }
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
@@ -206,378 +224,472 @@ class _LayarFormTagihanState extends ConsumerState<LayarFormTagihan> {
 
     return Scaffold(
       backgroundColor: WarnaFunda.latar,
-      appBar: AppBar(
-        title: TeksFunda.judulBagian(
-          _sedangUbah ? 'Ubah Tagihan' : 'Tambah Tagihan',
+      bottomNavigationBar: SafeArea(
+        top: false,
+        child: Container(
+          padding: const EdgeInsets.fromLTRB(
+            SpasiFunda.marginLayar,
+            SpasiFunda.s,
+            SpasiFunda.marginLayar,
+            SpasiFunda.m,
+          ),
+          decoration: const BoxDecoration(
+            color: WarnaFunda.permukaan,
+            border: Border(
+              top: BorderSide(color: WarnaFunda.garis, width: 1.0),
+            ),
+          ),
+          child: TombolFunda.pilGelap(
+            teks: _sedangUbah ? 'Simpan Perubahan' : 'Tambah Tagihan',
+            memuat: _memuat,
+            lebarPenuh: true,
+            padaTekan: _simpan,
+          ),
         ),
-        backgroundColor: WarnaFunda.latar,
-        elevation: 0,
       ),
       body: SafeArea(
+        bottom: false,
         child: Form(
           key: _kunciForm,
           child: ListView(
-            padding: const EdgeInsets.all(SpasiFunda.m),
+            padding: const EdgeInsets.only(bottom: SpasiFunda.xl),
             children: [
-              if (!pengingatGlobalAktif)
-                Container(
-                  margin: const EdgeInsets.only(bottom: SpasiFunda.m),
-                  padding: const EdgeInsets.all(SpasiFunda.m),
-                  decoration: BoxDecoration(
-                    color: WarnaFunda.tintAmber,
-                    borderRadius: BorderRadius.circular(SudutFunda.kartu),
+              // Header Kanvas Atas
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.fromLTRB(
+                  SpasiFunda.marginLayar,
+                  SpasiFunda.s,
+                  SpasiFunda.marginLayar,
+                  SpasiFunda.l,
+                ),
+                decoration: BoxDecoration(
+                  color: !pengingatGlobalAktif
+                      ? WarnaFunda.kanvasKuning
+                      : WarnaFunda.kanvasBiru,
+                  borderRadius: const BorderRadius.vertical(
+                    bottom: Radius.circular(SudutFunda.petak),
                   ),
-                  child: Row(
-                    children: [
-                      const Icon(
-                        LucideIcons.bellOff,
-                        color: WarnaFunda.teks,
-                        size: 24,
-                      ),
-                      const SizedBox(width: SpasiFunda.m),
-                      Expanded(
-                        child: Column(
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    HeaderSubLayarEditorial(
+                      judul: _sedangUbah ? 'Ubah Tagihan' : 'Tambah Tagihan',
+                      subjudul: 'Jadwal tagihan & langganan berulang',
+                    ),
+                    if (!pengingatGlobalAktif) ...[
+                      const SizedBox(height: SpasiFunda.m),
+                      Container(
+                        padding: const EdgeInsets.all(SpasiFunda.m),
+                        decoration: BoxDecoration(
+                          color: WarnaFunda.permukaan,
+                          borderRadius: BorderRadius.circular(SudutFunda.kartu),
+                          border: Border.all(
+                            color: WarnaFunda.batasAmber,
+                            width: 1.0,
+                          ),
+                        ),
+                        child: Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const TeksFunda.label(
-                              'Pengingat Sistem Belum Dinyalakan',
+                            const Icon(
+                              LucideIcons.bellOff,
+                              color: WarnaFunda.peringatan,
+                              size: 20,
                             ),
-                            const SizedBox(height: SpasiFunda.xs),
-                            const TeksFunda.catatan(
-                              'Nyalakan di Pengaturan agar notifikasi jadwal jatuh tempo bisa muncul di perangkatmu.',
-                            ),
-                            const SizedBox(height: SpasiFunda.s),
-                            GestureDetector(
-                              onTap: () => context.push('/pengaturan'),
-                              child: const TeksFunda.label(
-                                'Buka Pengaturan →',
-                                warna: WarnaFunda.utama,
+                            const SizedBox(width: SpasiFunda.m),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const TeksFunda.label(
+                                    'Pengingat Sistem Belum Dinyalakan',
+                                  ),
+                                  const SizedBox(height: SpasiFunda.xs),
+                                  const TeksFunda.catatan(
+                                    'Nyalakan di Pengaturan agar notifikasi jadwal jatuh tempo bisa muncul di perangkatmu.',
+                                  ),
+                                  const SizedBox(height: SpasiFunda.s),
+                                  GestureDetector(
+                                    onTap: _bukaPengaturan,
+                                    child: const TeksFunda.label(
+                                      'Buka Pengaturan →',
+                                      warna: WarnaFunda.utama,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                           ],
                         ),
                       ),
                     ],
-                  ),
-                ),
-
-              // 1. Jenis Tagihan
-              PetakBento(
-                anak: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const TeksFunda.label('Jenis Tagihan'),
-                    const SizedBox(height: SpasiFunda.s),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: ChoiceChip(
-                            label: const Center(child: Text('Tagihan')),
-                            selected: _jenis == JenisTagihan.tagihan,
-                            onSelected: (selected) {
-                              if (selected) {
-                                setState(() => _jenis = JenisTagihan.tagihan);
-                              }
-                            },
-                          ),
-                        ),
-                        const SizedBox(width: SpasiFunda.s),
-                        Expanded(
-                          child: ChoiceChip(
-                            label: const Center(child: Text('Langganan')),
-                            selected: _jenis == JenisTagihan.langganan,
-                            onSelected: (selected) {
-                              if (selected) {
-                                setState(() => _jenis = JenisTagihan.langganan);
-                              }
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
                   ],
                 ),
               ),
-              const SizedBox(height: SpasiFunda.m),
-
-              // 2. Nama & Perkiraan Nominal
-              PetakBento(
-                anak: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+              Padding(
+                padding: const EdgeInsets.all(SpasiFunda.marginLayar),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    TextFormField(
-                      controller: _pengontrolNama,
-                      decoration: const InputDecoration(
-                        labelText: 'Nama Tagihan / Layanan *',
-                        hintText: 'Misal: Listrik PLN, Spotify, Internet',
-                        border: OutlineInputBorder(),
+                    // 1. Jenis Tagihan & Nama
+                    Container(
+                      padding: const EdgeInsets.all(SpasiFunda.l),
+                      decoration: BoxDecoration(
+                        color: WarnaFunda.permukaan,
+                        borderRadius: BorderRadius.circular(SudutFunda.kartu),
+                        border: Border.all(color: WarnaFunda.garis, width: 1.0),
                       ),
-                      validator: (value) {
-                        if (value == null || value.trim().isEmpty) {
-                          return 'Nama tagihan wajib diisi.';
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: SpasiFunda.m),
-                    TextFormField(
-                      controller: _pengontrolNominalPerkiraan,
-                      keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(
-                        labelText: 'Perkiraan Nominal (Opsional)',
-                        hintText: 'Rp 0 (kosongkan jika fluktuatif)',
-                        helperText:
-                            'Kosongkan jika nominal berubah-ubah tiap bulan.',
-                        border: OutlineInputBorder(),
-                      ),
-                      onChanged: (teks) {
-                        if (teks.isEmpty) return;
-                        try {
-                          final nominal = ambilAngkaRupiah(teks);
-                          final baru = formatRupiah(nominal);
-                          _pengontrolNominalPerkiraan.value = TextEditingValue(
-                            text: baru,
-                            selection: TextSelection.collapsed(
-                              offset: baru.length,
-                            ),
-                          );
-                        } catch (_) {}
-                      },
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: SpasiFunda.m),
-
-              // 3. Frekuensi & Jadwal Jatuh Tempo
-              PetakBento(
-                anak: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const TeksFunda.label('Frekuensi Pengulangan'),
-                    const SizedBox(height: SpasiFunda.s),
-                    Wrap(
-                      spacing: SpasiFunda.s,
-                      children: FrekuensiTagihan.values.map((f) {
-                        return ChoiceChip(
-                          label: Text(f.judul),
-                          selected: _frekuensi == f,
-                          onSelected: (selected) {
-                            if (selected) setState(() => _frekuensi = f);
-                          },
-                        );
-                      }).toList(),
-                    ),
-                    const SizedBox(height: SpasiFunda.m),
-                    ListTile(
-                      contentPadding: EdgeInsets.zero,
-                      leading: const Icon(
-                        LucideIcons.calendar,
-                        color: WarnaFunda.utama,
-                      ),
-                      title: const TeksFunda.isi('Jatuh Tempo Pertama'),
-                      subtitle: TeksFunda.catatan(
-                        DateFormat(
-                          'EEEE, d MMMM yyyy',
-                          'id_ID',
-                        ).format(_tanggalJatuhTempoPertama),
-                      ),
-                      trailing: const Icon(LucideIcons.chevronRight, size: 20),
-                      onTap: _pilihTanggalJatuhTempo,
-                    ),
-                    const Divider(),
-                    SwitchListTile(
-                      contentPadding: EdgeInsets.zero,
-                      title: const TeksFunda.isi('Memiliki Batas Akhir'),
-                      subtitle: const TeksFunda.catatan(
-                        'Aktifkan jika langganan berakhir pada tanggal tertentu',
-                      ),
-                      value: _punyaBatasAkhir,
-                      onChanged: (aktif) {
-                        setState(() {
-                          _punyaBatasAkhir = aktif;
-                          if (aktif && _berakhirPada == null) {
-                            _berakhirPada = _tanggalJatuhTempoPertama.add(
-                              const Duration(days: 365),
-                            );
-                          }
-                        });
-                      },
-                    ),
-                    if (_punyaBatasAkhir) ...[
-                      ListTile(
-                        contentPadding: EdgeInsets.zero,
-                        leading: const Icon(
-                          LucideIcons.calendarOff,
-                          color: WarnaFunda.pengeluaran,
-                        ),
-                        title: const TeksFunda.isi('Berakhir Pada'),
-                        subtitle: TeksFunda.catatan(
-                          _berakhirPada != null
-                              ? DateFormat(
-                                  'EEEE, d MMMM yyyy',
-                                  'id_ID',
-                                ).format(_berakhirPada!)
-                              : 'Pilih tanggal',
-                        ),
-                        trailing: const Icon(
-                          LucideIcons.chevronRight,
-                          size: 20,
-                        ),
-                        onTap: _pilihTanggalBerakhir,
-                      ),
-                    ],
-                  ],
-                ),
-              ),
-              const SizedBox(height: SpasiFunda.m),
-
-              // 4. Kategori & Dompet Bawaan
-              PetakBento(
-                anak: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const TeksFunda.label('Kategori & Pembayaran'),
-                    const SizedBox(height: SpasiFunda.s),
-                    DropdownButtonFormField<String>(
-                      initialValue: _kategoriIdTerpilih,
-                      decoration: const InputDecoration(
-                        labelText: 'Kategori Pengeluaran *',
-                        border: OutlineInputBorder(),
-                      ),
-                      items: kategoriKeluar.map((k) {
-                        return DropdownMenuItem(
-                          value: k.id,
-                          child: Row(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const TeksFunda.label('Jenis Tagihan'),
+                          const SizedBox(height: SpasiFunda.s),
+                          Wrap(
+                            spacing: SpasiFunda.s,
+                            runSpacing: SpasiFunda.s,
                             children: [
-                              Icon(ambilIkonLucide(k.ikon), size: 18),
-                              const SizedBox(width: SpasiFunda.s),
-                              Text(k.nama),
+                              ChoiceChip(
+                                label: const Text('Tagihan'),
+                                selected: _jenis == JenisTagihan.tagihan,
+                                onSelected: (selected) {
+                                  if (selected) {
+                                    setState(
+                                      () => _jenis = JenisTagihan.tagihan,
+                                    );
+                                  }
+                                },
+                              ),
+                              ChoiceChip(
+                                label: const Text('Langganan'),
+                                selected: _jenis == JenisTagihan.langganan,
+                                onSelected: (selected) {
+                                  if (selected) {
+                                    setState(
+                                      () => _jenis = JenisTagihan.langganan,
+                                    );
+                                  }
+                                },
+                              ),
                             ],
                           ),
-                        );
-                      }).toList(),
-                      validator: (val) {
-                        if (val == null || val.isEmpty) {
-                          return 'Kategori pengeluaran wajib dipilih.';
-                        }
-                        return null;
-                      },
-                      onChanged: (id) =>
-                          setState(() => _kategoriIdTerpilih = id),
+                          const SizedBox(height: SpasiFunda.m),
+                          TextFormField(
+                            controller: _pengontrolNama,
+                            decoration: const InputDecoration(
+                              labelText: 'Nama Tagihan / Layanan *',
+                              hintText: 'Misal: Listrik PLN, Spotify, Internet',
+                              border: OutlineInputBorder(),
+                            ),
+                            validator: (value) {
+                              if (value == null || value.trim().isEmpty) {
+                                return 'Nama tagihan wajib diisi.';
+                              }
+                              return null;
+                            },
+                          ),
+                          const SizedBox(height: SpasiFunda.m),
+                          TextFormField(
+                            controller: _pengontrolNominalPerkiraan,
+                            keyboardType: TextInputType.number,
+                            decoration: const InputDecoration(
+                              labelText: 'Perkiraan Nominal (Opsional)',
+                              hintText: 'Rp 0 (kosongkan jika fluktuatif)',
+                              helperText:
+                                  'Kosongkan jika nominal berubah-ubah tiap bulan.',
+                              border: OutlineInputBorder(),
+                            ),
+                            onChanged: (teks) {
+                              if (teks.isEmpty) return;
+                              try {
+                                final nominal = ambilAngkaRupiah(teks);
+                                final baru = formatRupiah(nominal);
+                                _pengontrolNominalPerkiraan.value =
+                                    TextEditingValue(
+                                      text: baru,
+                                      selection: TextSelection.collapsed(
+                                        offset: baru.length,
+                                      ),
+                                    );
+                              } catch (_) {}
+                            },
+                          ),
+                        ],
+                      ),
                     ),
                     const SizedBox(height: SpasiFunda.m),
-                    DropdownButtonFormField<String>(
-                      initialValue: _dompetBawaanIdTerpilih,
-                      decoration: const InputDecoration(
-                        labelText: 'Dompet Pembayaran Bawaan (Opsional)',
-                        border: OutlineInputBorder(),
+
+                    // 2. Frekuensi & Jadwal Jatuh Tempo
+                    Container(
+                      padding: const EdgeInsets.all(SpasiFunda.l),
+                      decoration: BoxDecoration(
+                        color: WarnaFunda.permukaan,
+                        borderRadius: BorderRadius.circular(SudutFunda.kartu),
+                        border: Border.all(color: WarnaFunda.garis, width: 1.0),
                       ),
-                      items: [
-                        const DropdownMenuItem(
-                          value: null,
-                          child: Text('Pilih Saat Membayar'),
-                        ),
-                        ...daftarDompet.map((d) {
-                          return DropdownMenuItem(
-                            value: d.id,
-                            child: Row(
-                              children: [
-                                Icon(ambilIkonLucide(d.ikon), size: 18),
-                                const SizedBox(width: SpasiFunda.s),
-                                Text(d.nama),
-                              ],
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const TeksFunda.label('Frekuensi Pengulangan'),
+                          const SizedBox(height: SpasiFunda.s),
+                          Wrap(
+                            spacing: SpasiFunda.s,
+                            runSpacing: SpasiFunda.s,
+                            children: FrekuensiTagihan.values.map((f) {
+                              return ChoiceChip(
+                                label: Text(f.judul),
+                                selected: _frekuensi == f,
+                                onSelected: (selected) {
+                                  if (selected) setState(() => _frekuensi = f);
+                                },
+                              );
+                            }).toList(),
+                          ),
+                          const SizedBox(height: SpasiFunda.m),
+                          ListTile(
+                            contentPadding: EdgeInsets.zero,
+                            leading: const Icon(
+                              LucideIcons.calendar,
+                              color: WarnaFunda.utama,
                             ),
-                          );
-                        }),
-                      ],
-                      onChanged: (id) =>
-                          setState(() => _dompetBawaanIdTerpilih = id),
+                            title: const TeksFunda.isi('Jatuh Tempo Pertama'),
+                            subtitle: TeksFunda.catatan(
+                              DateFormat(
+                                'EEEE, d MMMM yyyy',
+                                'id_ID',
+                              ).format(_tanggalJatuhTempoPertama),
+                            ),
+                            trailing: const Icon(
+                              LucideIcons.chevronRight,
+                              size: 20,
+                            ),
+                            onTap: _pilihTanggalJatuhTempo,
+                          ),
+                          const Divider(
+                            height: 1,
+                            thickness: 1,
+                            color: WarnaFunda.garis,
+                          ),
+                          SwitchListTile(
+                            contentPadding: EdgeInsets.zero,
+                            title: const TeksFunda.isi('Memiliki Batas Akhir'),
+                            subtitle: const TeksFunda.catatan(
+                              'Aktifkan jika langganan berakhir pada tanggal tertentu',
+                            ),
+                            value: _punyaBatasAkhir,
+                            onChanged: (aktif) {
+                              setState(() {
+                                _punyaBatasAkhir = aktif;
+                                if (aktif && _berakhirPada == null) {
+                                  _berakhirPada = _tanggalJatuhTempoPertama.add(
+                                    const Duration(days: 365),
+                                  );
+                                }
+                              });
+                            },
+                          ),
+                          if (_punyaBatasAkhir) ...[
+                            const Divider(
+                              height: 1,
+                              thickness: 1,
+                              color: WarnaFunda.garis,
+                            ),
+                            ListTile(
+                              contentPadding: EdgeInsets.zero,
+                              leading: const Icon(
+                                LucideIcons.calendarOff,
+                                color: WarnaFunda.pengeluaran,
+                              ),
+                              title: const TeksFunda.isi('Berakhir Pada'),
+                              subtitle: TeksFunda.catatan(
+                                _berakhirPada != null
+                                    ? DateFormat(
+                                        'EEEE, d MMMM yyyy',
+                                        'id_ID',
+                                      ).format(_berakhirPada!)
+                                    : 'Pilih tanggal',
+                              ),
+                              trailing: const Icon(
+                                LucideIcons.chevronRight,
+                                size: 20,
+                              ),
+                              onTap: _pilihTanggalBerakhir,
+                            ),
+                          ],
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: SpasiFunda.m),
+
+                    // 3. Kategori & Dompet Bawaan
+                    Container(
+                      padding: const EdgeInsets.all(SpasiFunda.l),
+                      decoration: BoxDecoration(
+                        color: WarnaFunda.permukaan,
+                        borderRadius: BorderRadius.circular(SudutFunda.kartu),
+                        border: Border.all(color: WarnaFunda.garis, width: 1.0),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const TeksFunda.label('Kategori & Pembayaran'),
+                          const SizedBox(height: SpasiFunda.s),
+                          DropdownButtonFormField<String>(
+                            isExpanded: true,
+                            initialValue: _kategoriIdTerpilih,
+                            decoration: const InputDecoration(
+                              labelText: 'Kategori Pengeluaran *',
+                              border: OutlineInputBorder(),
+                            ),
+                            items: kategoriKeluar.map((k) {
+                              return DropdownMenuItem(
+                                value: k.id,
+                                child: Row(
+                                  children: [
+                                    Icon(ambilIkonLucide(k.ikon), size: 18),
+                                    const SizedBox(width: SpasiFunda.s),
+                                    Expanded(
+                                      child: Text(
+                                        k.nama,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            }).toList(),
+                            validator: (val) {
+                              if (val == null || val.isEmpty) {
+                                return 'Kategori pengeluaran wajib dipilih.';
+                              }
+                              return null;
+                            },
+                            onChanged: (id) =>
+                                setState(() => _kategoriIdTerpilih = id),
+                          ),
+                          const SizedBox(height: SpasiFunda.m),
+                          DropdownButtonFormField<String>(
+                            isExpanded: true,
+                            initialValue: _dompetBawaanIdTerpilih,
+                            decoration: const InputDecoration(
+                              labelText: 'Dompet Pembayaran Bawaan (Opsional)',
+                              border: OutlineInputBorder(),
+                            ),
+                            items: [
+                              const DropdownMenuItem(
+                                value: null,
+                                child: Text(
+                                  'Pilih Saat Membayar',
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                              ...daftarDompet.map((d) {
+                                return DropdownMenuItem(
+                                  value: d.id,
+                                  child: Row(
+                                    children: [
+                                      Icon(ambilIkonLucide(d.ikon), size: 18),
+                                      const SizedBox(width: SpasiFunda.s),
+                                      Expanded(
+                                        child: Text(
+                                          d.nama,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              }),
+                            ],
+                            onChanged: (id) =>
+                                setState(() => _dompetBawaanIdTerpilih = id),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: SpasiFunda.m),
+
+                    // 4. Pilihan Pengingat
+                    Container(
+                      padding: const EdgeInsets.all(SpasiFunda.l),
+                      decoration: BoxDecoration(
+                        color: WarnaFunda.permukaan,
+                        borderRadius: BorderRadius.circular(SudutFunda.kartu),
+                        border: Border.all(color: WarnaFunda.garis, width: 1.0),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const TeksFunda.label('Waktu Pengingat'),
+                          const SizedBox(height: SpasiFunda.xs),
+                          const TeksFunda.catatan(
+                            'Pemberitahuan ramah sebelum jatuh tempo tiba',
+                          ),
+                          const SizedBox(height: SpasiFunda.s),
+                          Wrap(
+                            spacing: SpasiFunda.s,
+                            runSpacing: SpasiFunda.s,
+                            children: [
+                              FilterChip(
+                                label: const Text('Hari-H (0 hari)'),
+                                selected: _hariPengingatTerpilih.contains(0),
+                                onSelected: (aktif) {
+                                  setState(() {
+                                    if (aktif) {
+                                      _hariPengingatTerpilih.add(0);
+                                    } else {
+                                      _hariPengingatTerpilih.remove(0);
+                                    }
+                                  });
+                                },
+                              ),
+                              FilterChip(
+                                label: const Text('1 hari sebelumnya'),
+                                selected: _hariPengingatTerpilih.contains(1),
+                                onSelected: (aktif) {
+                                  setState(() {
+                                    if (aktif) {
+                                      _hariPengingatTerpilih.add(1);
+                                    } else {
+                                      _hariPengingatTerpilih.remove(1);
+                                    }
+                                  });
+                                },
+                              ),
+                              FilterChip(
+                                label: const Text('3 hari sebelumnya'),
+                                selected: _hariPengingatTerpilih.contains(3),
+                                onSelected: (aktif) {
+                                  setState(() {
+                                    if (aktif) {
+                                      _hariPengingatTerpilih.add(3);
+                                    } else {
+                                      _hariPengingatTerpilih.remove(3);
+                                    }
+                                  });
+                                },
+                              ),
+                              FilterChip(
+                                label: const Text('7 hari sebelumnya'),
+                                selected: _hariPengingatTerpilih.contains(7),
+                                onSelected: (aktif) {
+                                  setState(() {
+                                    if (aktif) {
+                                      _hariPengingatTerpilih.add(7);
+                                    } else {
+                                      _hariPengingatTerpilih.remove(7);
+                                    }
+                                  });
+                                },
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),
-              ),
-              const SizedBox(height: SpasiFunda.m),
-
-              // 5. Pilihan Pengingat
-              PetakBento(
-                anak: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const TeksFunda.label('Waktu Pengingat'),
-                    const SizedBox(height: SpasiFunda.xs),
-                    const TeksFunda.catatan(
-                      'Pemberitahuan ramah sebelum jatuh tempo tiba',
-                    ),
-                    const SizedBox(height: SpasiFunda.s),
-                    Wrap(
-                      spacing: SpasiFunda.s,
-                      children: [
-                        FilterChip(
-                          label: const Text('Hari-H (0 hari)'),
-                          selected: _hariPengingatTerpilih.contains(0),
-                          onSelected: (aktif) {
-                            setState(() {
-                              if (aktif) {
-                                _hariPengingatTerpilih.add(0);
-                              } else {
-                                _hariPengingatTerpilih.remove(0);
-                              }
-                            });
-                          },
-                        ),
-                        FilterChip(
-                          label: const Text('1 hari sebelumnya'),
-                          selected: _hariPengingatTerpilih.contains(1),
-                          onSelected: (aktif) {
-                            setState(() {
-                              if (aktif) {
-                                _hariPengingatTerpilih.add(1);
-                              } else {
-                                _hariPengingatTerpilih.remove(1);
-                              }
-                            });
-                          },
-                        ),
-                        FilterChip(
-                          label: const Text('3 hari sebelumnya'),
-                          selected: _hariPengingatTerpilih.contains(3),
-                          onSelected: (aktif) {
-                            setState(() {
-                              if (aktif) {
-                                _hariPengingatTerpilih.add(3);
-                              } else {
-                                _hariPengingatTerpilih.remove(3);
-                              }
-                            });
-                          },
-                        ),
-                        FilterChip(
-                          label: const Text('7 hari sebelumnya'),
-                          selected: _hariPengingatTerpilih.contains(7),
-                          onSelected: (aktif) {
-                            setState(() {
-                              if (aktif) {
-                                _hariPengingatTerpilih.add(7);
-                              } else {
-                                _hariPengingatTerpilih.remove(7);
-                              }
-                            });
-                          },
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: SpasiFunda.l),
-
-              // Tombol Simpan
-              TombolFunda.primer(
-                teks: _sedangUbah ? 'Simpan Perubahan' : 'Tambah Tagihan',
-                memuat: _memuat,
-                lebarPenuh: true,
-                padaTekan: _simpan,
               ),
             ],
           ),

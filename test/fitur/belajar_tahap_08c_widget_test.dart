@@ -105,17 +105,21 @@ void main() {
             await tester.pump();
           }
 
-          // Jawab 3 soal Cek Paham
+          // Jawab 3 soal Cek Paham (1 soal per halaman)
           final opsi1 = find.textContaining('Berhenti, lalu periksa');
           await tester.ensureVisible(opsi1);
           await tester.pump();
           await tester.tap(opsi1);
+          await tester.pump();
+          await tester.tap(find.byKey(const Key('tombol_lanjut')));
           await tester.pump();
 
           final opsi2 = find.textContaining('Tidak seorang pun');
           await tester.ensureVisible(opsi2);
           await tester.pump();
           await tester.tap(opsi2);
+          await tester.pump();
+          await tester.tap(find.byKey(const Key('tombol_lanjut')));
           await tester.pump();
 
           final opsi3 = find.textContaining('Penyedia menjelaskan total biaya');
@@ -255,17 +259,21 @@ void main() {
             await tester.pump();
           }
 
-          // Jawab 3 soal Cek Paham untuk 5.2
+          // Jawab 3 soal Cek Paham untuk 5.2 (1 soal per halaman)
           final opsi1 = find.textContaining('Tanda bahaya');
           await tester.ensureVisible(opsi1);
           await tester.pump();
           await tester.tap(opsi1);
+          await tester.pump();
+          await tester.tap(find.byKey(const Key('tombol_lanjut')));
           await tester.pump();
 
           final opsi2 = find.textContaining('Lewat situs atau layanan resmi');
           await tester.ensureVisible(opsi2);
           await tester.pump();
           await tester.tap(opsi2);
+          await tester.pump();
+          await tester.tap(find.byKey(const Key('tombol_lanjut')));
           await tester.pump();
 
           final opsi3 = find.textContaining('Rp600.000');
@@ -446,7 +454,7 @@ void main() {
 
           // Pastikan render tidak melempar RenderFlex overflow exception
           expect(tester.takeException(), isNull);
-          expect(find.text('Pemantik'), findsOneWidget);
+          expect(find.text(pel.judul), findsOneWidget);
 
           await bongkarWidget(tester);
         },

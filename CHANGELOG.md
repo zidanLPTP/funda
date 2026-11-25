@@ -5,6 +5,22 @@ Format penulisan mengacu pada standar Keep a Changelog dan penamaan commit Funda
 
 ---
 
+## [1.1.0] - 2026-11-25 — Tahap 13B & 13C: Redesain Editorial Anti-Slop, Animasi Kata, UX Belajar, Tutorial, Bersih Debug UI & Optimasi APK
+
+Tahap 13B dan 13C menghadirkan penyegaran visual *Colorful Bento + Card* serta redesain editorial modern untuk pengalaman belajar:
+- **Pembersihan Fitur & Label Debug UI (`aktifkanFiturDebugUi = false`):**
+  - Menambahkan konstanta pusat `aktifkanFiturDebugUi = false` pada `lib/aplikasi/konfigurasi_debug.dart` sehingga seluruh elemen debug antarmuka (lencana `"Draf"` di pemutar pelajaran, banner Galeri Komponen di Beranda, kartu menu Galeri di Lainnya, tombol Jadwalkan Pengingat Uji di Pengaturan, serta rute `/galeri`) nonaktif secara default layaknya versi produksi termasuk saat dijalankan dalam mode debug.
+- **Redesain Editorial Anti-Slop Tab Belajar (`LayarBelajar` & `LayarDetailModul`):**
+  - Menghadirkan kartu sorotan atas terbelah dua horizontal (*Split Card*) dengan blok `WarnaFunda.mintCerah` dan ilustrasi vektor geometris buatan sendiri, disertai tombol aksi utama pil gelap (`TombolFunda.pilGelap`, `WarnaFunda.tombolGelap`).
+  - Menyajikan setiap modul sebagai kartu horizontal ringkas berisi judul tegas, pil progres `selesai/total` (atau `Profil tersimpan` untuk Modul 0), serta ikon vektor garis berwarna cerah tanpa kotak latar; mengetuk modul membuka halaman penuh editorial `LayarDetailModul` (`/belajar/modul/:modulId`) dengan kanvas ilustrasi atas, daftar materi timeline bernomor bersih tanpa tombol per baris, kotak syarat gerbang/pernyataan kosong, kuis akhir modul, dan satu tombol pil gelap utama di bawah.
+- **Redesain Pemutar Pelajaran, Koleksi Ilustrasi Vektor, & `TeksAnimasiKata`:**
+  - Menambahkan koleksi ilustrasi vektor geometris murni pada `lib/komponen/ilustrasi_funda.dart` (`IlustrasiGeometrisFunda` dan `KanvasIlustrasiPelajaran`).
+  - Memperbarui bilah atas `LayarPemutarPelajaran` menjadi tombol tutup bulat (`x`) dan *progress bar* bersegmen, kanvas ilustrasi pastel cerah, area bacaan lapang rata kiri (`TextAlign.start`, `height: 1.6`, bebas `TextAlign.justify`), serta tombol pil gelap bawah.
+  - Membuat komponen `TeksAnimasiKata` (`lib/komponen/teks_animasi_kata.dart`) dengan animasi kata muncul berurutan dari bawah ke atas, jeda adaptif (maksimal ~1.200 ms), ketuk-untuk-selesai instan, dukungan penuh `{{istilah}}` kamus dan `**tebal**`, serta kepatuhan penuh pada `disableAnimations` dan `penyediaTanpaAnimasi`.
+- **Penyegaran Visual Bento + Card, Tutorial Beranda, Tes Awal & Optimasi APK (Tahap 13B):**
+  - Memperkuat saturasi tint pastel, batas warna serasi, dan bayangan kartu terukur (`WarnaFunda.bayanganKartu`), menyelaraskan warna ikon seluruh layar utama, serta menghapus seluruh ikon bintang (`star` / `sparkles`).
+  - Menambahkan tutorial interaktif Beranda 4 langkah (`LapisanTutorialBeranda`), menu **Ulangi Tutorial Aplikasi** & **Perbarui Profil Keuangan** di Pengaturan, 12 soal baru Tes Awal (`tes_awal.json`), dan aktivasi R8 (`isMinifyEnabled = true`, `isShrinkResources = true`).
+
 ## [1.0.2] - 2026-11-24 — Tahap 13A: Hotfix Kritis Navigasi, Layar Catatan & ANR
 
 Tahap 13A merupakan pembaruan hotfix kritis setelah pengujian langsung pada perangkat Android fisik untuk memperbaiki 3 kendala utama:

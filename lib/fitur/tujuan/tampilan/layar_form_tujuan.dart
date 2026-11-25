@@ -12,7 +12,8 @@ import '../../../tema/token.dart';
 import '../../../util/format_rupiah.dart';
 import '../kontroler/penyedia_tujuan.dart';
 
-/// Form tambah atau ubah tujuan finansial pengguna.
+/// Form tambah atau ubah tujuan finansial pengguna bergaya editorial bersih:
+/// header kanvas pastel dinamis, isian kartu putih 1px, dan tombol simpan sticky pilGelap.
 class LayarFormTujuan extends ConsumerStatefulWidget {
   const LayarFormTujuan({super.key, this.tujuan});
 
@@ -84,6 +85,26 @@ class _LayarFormTujuanState extends ConsumerState<LayarFormTujuan> {
     });
   }
 
+  Color _kanvasUntukWarna(String kunci) {
+    return switch (kunci) {
+      'biru' => WarnaFunda.kanvasBiru,
+      'hijau' => WarnaFunda.kanvasMint,
+      'amber' => WarnaFunda.kanvasKuning,
+      'merah' => WarnaFunda.kanvasKoral,
+      _ => ambilWarnaTint(kunci),
+    };
+  }
+
+  Color _aksenUntukWarna(String kunci) {
+    return switch (kunci) {
+      'biru' => WarnaFunda.sifatKebutuhan,
+      'hijau' => WarnaFunda.utama,
+      'amber' => WarnaFunda.peringatan,
+      'merah' => WarnaFunda.pengeluaran,
+      _ => ambilWarnaAksenTint(kunci),
+    };
+  }
+
   Future<void> _pilihTenggat() async {
     final sekarang = DateTime.now();
     final hasil = await showDatePicker(
@@ -145,213 +166,329 @@ class _LayarFormTujuanState extends ConsumerState<LayarFormTujuan> {
   @override
   Widget build(BuildContext context) {
     final isUbah = widget.tujuan != null;
+    final warnaKanvas = _kanvasUntukWarna(_warna);
+    final warnaAksen = _aksenUntukWarna(_warna);
 
     return Scaffold(
       backgroundColor: WarnaFunda.latar,
-      appBar: AppBar(
-        title: TeksFunda.judulBagian(isUbah ? 'Ubah Tujuan' : 'Tambah Tujuan'),
-      ),
       body: SafeArea(
         child: Form(
           key: _formKey,
-          child: ListView(
-            padding: const EdgeInsets.all(SpasiFunda.m),
+          child: Column(
             children: [
-              if (_pesanGalat != null) ...[
-                Container(
-                  padding: const EdgeInsets.all(SpasiFunda.m),
-                  decoration: BoxDecoration(
-                    color: WarnaFunda.pengeluaran.withAlpha(25),
-                    borderRadius: BorderRadius.circular(SudutFunda.kartu),
-                    border: Border.all(color: WarnaFunda.pengeluaran),
+              // Header Kanvas Dinamis mengikuti warna kartu tujuan
+              Container(
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: warnaKanvas,
+                  borderRadius: const BorderRadius.vertical(
+                    bottom: Radius.circular(SudutFunda.petak),
                   ),
-                  child: Row(
-                    children: [
-                      const Icon(
-                        LucideIcons.alertCircle,
-                        color: WarnaFunda.pengeluaran,
-                      ),
-                      const SizedBox(width: SpasiFunda.s),
-                      Expanded(
-                        child: TeksFunda.catatan(
-                          _pesanGalat!,
-                          warna: WarnaFunda.pengeluaran,
+                ),
+                padding: const EdgeInsets.all(SpasiFunda.marginLayar),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    HeaderSubLayarEditorial(
+                      judul: isUbah ? 'Ubah Tujuan' : 'Tambah Tujuan',
+                    ),
+                    const SizedBox(height: SpasiFunda.m),
+                    Row(
+                      children: [
+                        Icon(
+                          ambilIkonLucide(_ikon),
+                          size: 28,
+                          color: warnaAksen,
+                        ),
+                        const SizedBox(width: SpasiFunda.m),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              TeksFunda.label(
+                                _pengontrolNama.text.trim().isEmpty
+                                    ? 'Tujuan Keuangan Baru'
+                                    : _pengontrolNama.text.trim(),
+                              ),
+                              TeksFunda.catatan(
+                                _jenis.label,
+                                warna: WarnaFunda.teksRedup,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+
+              // Area Form Gulir
+              Expanded(
+                child: ListView(
+                  padding: const EdgeInsets.all(SpasiFunda.marginLayar),
+                  children: [
+                    if (_pesanGalat != null) ...[
+                      Container(
+                        padding: const EdgeInsets.all(SpasiFunda.m),
+                        decoration: BoxDecoration(
+                          color: WarnaFunda.tintMawar,
+                          borderRadius: BorderRadius.circular(SudutFunda.kartu),
+                          border: Border.all(color: WarnaFunda.pengeluaran),
+                        ),
+                        child: Row(
+                          children: [
+                            const Icon(
+                              LucideIcons.circleAlert,
+                              color: WarnaFunda.pengeluaran,
+                            ),
+                            const SizedBox(width: SpasiFunda.s),
+                            Expanded(
+                              child: TeksFunda.catatan(
+                                _pesanGalat!,
+                                warna: WarnaFunda.pengeluaran,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
+                      const SizedBox(height: SpasiFunda.m),
                     ],
-                  ),
-                ),
-                const SizedBox(height: SpasiFunda.m),
-              ],
 
-              // Nama Tujuan
-              const TeksFunda.label('Nama Tujuan'),
-              const SizedBox(height: SpasiFunda.xs),
-              TextFormField(
-                controller: _pengontrolNama,
-                decoration: InputDecoration(
-                  hintText: 'Contoh: Dana Darurat 3 Bulan, Liburan Akhir Tahun',
-                  filled: true,
-                  fillColor: WarnaFunda.permukaan,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(SudutFunda.kecil),
-                    borderSide: const BorderSide(color: WarnaFunda.garis),
-                  ),
-                ),
-                validator: (val) {
-                  if (val == null || val.trim().isEmpty) {
-                    return 'Nama tujuan wajib diisi';
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: SpasiFunda.m),
-
-              // Target Nominal Rupiah
-              const TeksFunda.label('Target Dana (Rupiah)'),
-              const SizedBox(height: SpasiFunda.xs),
-              TextFormField(
-                controller: _pengontrolTarget,
-                keyboardType: TextInputType.number,
-                decoration: InputDecoration(
-                  hintText: 'Rp 0',
-                  filled: true,
-                  fillColor: WarnaFunda.permukaan,
-                  prefixIcon: const Icon(LucideIcons.target),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(SudutFunda.kecil),
-                    borderSide: const BorderSide(color: WarnaFunda.garis),
-                  ),
-                ),
-                onChanged: _padaUbahTarget,
-                validator: (_) {
-                  if (_targetRupiah <= 0) {
-                    return 'Target dana harus lebih dari 0';
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: SpasiFunda.m),
-
-              // Jenis Tujuan (hanya saat buat baru)
-              if (!isUbah) ...[
-                const TeksFunda.label('Jenis Tujuan'),
-                const SizedBox(height: SpasiFunda.xs),
-                DropdownButtonFormField<JenisTujuan>(
-                  initialValue: _jenis,
-                  decoration: InputDecoration(
-                    filled: true,
-                    fillColor: WarnaFunda.permukaan,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(SudutFunda.kecil),
-                      borderSide: const BorderSide(color: WarnaFunda.garis),
-                    ),
-                  ),
-                  items: JenisTujuan.values.map((j) {
-                    return DropdownMenuItem(value: j, child: Text(j.label));
-                  }).toList(),
-                  onChanged: (val) {
-                    if (val != null) setState(() => _jenis = val);
-                  },
-                ),
-                const SizedBox(height: SpasiFunda.m),
-              ],
-
-              // Tenggat Target (Opsional)
-              const TeksFunda.label('Tenggat Target (Opsional)'),
-              const SizedBox(height: SpasiFunda.xs),
-              InkWell(
-                onTap: _pilihTenggat,
-                borderRadius: BorderRadius.circular(SudutFunda.kecil),
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: SpasiFunda.m,
-                    vertical: SpasiFunda.m,
-                  ),
-                  decoration: BoxDecoration(
-                    color: WarnaFunda.permukaan,
-                    borderRadius: BorderRadius.circular(SudutFunda.kecil),
-                    border: Border.all(color: WarnaFunda.garis),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
+                    Container(
+                      padding: const EdgeInsets.all(SpasiFunda.l),
+                      decoration: BoxDecoration(
+                        color: WarnaFunda.permukaan,
+                        borderRadius: BorderRadius.circular(SudutFunda.petak),
+                        border: Border.all(color: WarnaFunda.garis, width: 1.0),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Icon(LucideIcons.calendar, size: 20),
-                          const SizedBox(width: SpasiFunda.s),
-                          TeksFunda.isi(
-                            _tenggat != null
-                                ? DateFormat(
-                                    'd MMMM yyyy',
-                                    'id_ID',
-                                  ).format(_tenggat!)
-                                : 'Tanpa tenggat waktu',
+                          // Nama Tujuan
+                          const TeksFunda.label('Nama Tujuan'),
+                          const SizedBox(height: SpasiFunda.xs),
+                          TextFormField(
+                            controller: _pengontrolNama,
+                            onChanged: (_) => setState(() {}),
+                            decoration: InputDecoration(
+                              hintText:
+                                  'Contoh: Dana Darurat 3 Bulan, Liburan Akhir Tahun',
+                              filled: true,
+                              fillColor: WarnaFunda.latar,
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(
+                                  SudutFunda.kartu,
+                                ),
+                                borderSide: const BorderSide(
+                                  color: WarnaFunda.garis,
+                                ),
+                              ),
+                            ),
+                            validator: (val) {
+                              if (val == null || val.trim().isEmpty) {
+                                return 'Nama tujuan wajib diisi';
+                              }
+                              return null;
+                            },
+                          ),
+                          const SizedBox(height: SpasiFunda.m),
+
+                          // Target Nominal Rupiah
+                          const TeksFunda.label('Target Dana (Rupiah)'),
+                          const SizedBox(height: SpasiFunda.xs),
+                          TextFormField(
+                            controller: _pengontrolTarget,
+                            keyboardType: TextInputType.number,
+                            decoration: InputDecoration(
+                              hintText: 'Rp 0',
+                              filled: true,
+                              fillColor: WarnaFunda.latar,
+                              prefixIcon: const Icon(LucideIcons.target),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(
+                                  SudutFunda.kartu,
+                                ),
+                                borderSide: const BorderSide(
+                                  color: WarnaFunda.garis,
+                                ),
+                              ),
+                            ),
+                            onChanged: _padaUbahTarget,
+                            validator: (_) {
+                              if (_targetRupiah <= 0) {
+                                return 'Target dana harus lebih dari 0';
+                              }
+                              return null;
+                            },
+                          ),
+                          const SizedBox(height: SpasiFunda.m),
+
+                          // Jenis Tujuan (hanya saat buat baru)
+                          if (!isUbah) ...[
+                            const TeksFunda.label('Jenis Tujuan'),
+                            const SizedBox(height: SpasiFunda.xs),
+                            DropdownButtonFormField<JenisTujuan>(
+                              initialValue: _jenis,
+                              isExpanded: true,
+                              decoration: InputDecoration(
+                                filled: true,
+                                fillColor: WarnaFunda.latar,
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(
+                                    SudutFunda.kartu,
+                                  ),
+                                  borderSide: const BorderSide(
+                                    color: WarnaFunda.garis,
+                                  ),
+                                ),
+                              ),
+                              items: JenisTujuan.values.map((j) {
+                                return DropdownMenuItem(
+                                  value: j,
+                                  child: Text(j.label),
+                                );
+                              }).toList(),
+                              onChanged: (val) {
+                                if (val != null) setState(() => _jenis = val);
+                              },
+                            ),
+                            const SizedBox(height: SpasiFunda.m),
+                          ],
+
+                          // Tenggat Target (Opsional)
+                          const TeksFunda.label('Tenggat Target (Opsional)'),
+                          const SizedBox(height: SpasiFunda.xs),
+                          InkWell(
+                            onTap: _pilihTenggat,
+                            borderRadius: BorderRadius.circular(
+                              SudutFunda.kartu,
+                            ),
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: SpasiFunda.m,
+                                vertical: SpasiFunda.m,
+                              ),
+                              decoration: BoxDecoration(
+                                color: WarnaFunda.latar,
+                                borderRadius: BorderRadius.circular(
+                                  SudutFunda.kartu,
+                                ),
+                                border: Border.all(color: WarnaFunda.garis),
+                              ),
+                              child: Row(
+                                children: [
+                                  const Icon(
+                                    LucideIcons.calendar,
+                                    size: 20,
+                                    color: WarnaFunda.utama,
+                                  ),
+                                  const SizedBox(width: SpasiFunda.s),
+                                  Expanded(
+                                    child: TeksFunda.isi(
+                                      _tenggat != null
+                                          ? DateFormat(
+                                              'd MMMM yyyy',
+                                              'id_ID',
+                                            ).format(_tenggat!)
+                                          : 'Tanpa tenggat waktu',
+                                    ),
+                                  ),
+                                  if (_tenggat != null)
+                                    IconButton(
+                                      icon: const Icon(LucideIcons.x, size: 16),
+                                      constraints: const BoxConstraints(
+                                        minWidth: 48,
+                                        minHeight: 48,
+                                      ),
+                                      onPressed: () =>
+                                          setState(() => _tenggat = null),
+                                    )
+                                  else
+                                    const Icon(
+                                      LucideIcons.chevronRight,
+                                      size: 18,
+                                    ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: SpasiFunda.m),
+
+                          // Pemilih Ikon
+                          const TeksFunda.label('Pilih Ikon'),
+                          const SizedBox(height: SpasiFunda.xs),
+                          Wrap(
+                            spacing: SpasiFunda.s,
+                            runSpacing: SpasiFunda.s,
+                            children: _pilihanIkon.map((kunciIkon) {
+                              final terpilih = _ikon == kunciIkon;
+                              return ChoiceChip(
+                                avatar: Icon(
+                                  ambilIkonLucide(kunciIkon),
+                                  size: 18,
+                                ),
+                                label: Text(kunciIkon),
+                                selected: terpilih,
+                                onSelected: (_) =>
+                                    setState(() => _ikon = kunciIkon),
+                              );
+                            }).toList(),
+                          ),
+                          const SizedBox(height: SpasiFunda.m),
+
+                          // Pemilih Warna Tint
+                          const TeksFunda.label('Pilih Warna Kartu'),
+                          const SizedBox(height: SpasiFunda.xs),
+                          Wrap(
+                            spacing: SpasiFunda.s,
+                            runSpacing: SpasiFunda.s,
+                            children: _pilihanWarna.map((kunciWarna) {
+                              final terpilih = _warna == kunciWarna;
+                              final warnaBg = _kanvasUntukWarna(kunciWarna);
+                              return ChoiceChip(
+                                avatar: Container(
+                                  width: 14,
+                                  height: 14,
+                                  decoration: BoxDecoration(
+                                    color: warnaBg,
+                                    shape: BoxShape.circle,
+                                    border: Border.all(color: WarnaFunda.garis),
+                                  ),
+                                ),
+                                label: Text(kunciWarna),
+                                selected: terpilih,
+                                onSelected: (_) =>
+                                    setState(() => _warna = kunciWarna),
+                              );
+                            }).toList(),
                           ),
                         ],
                       ),
-                      if (_tenggat != null)
-                        IconButton(
-                          icon: const Icon(LucideIcons.x, size: 16),
-                          onPressed: () => setState(() => _tenggat = null),
-                        )
-                      else
-                        const Icon(LucideIcons.chevronRight, size: 18),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
-              const SizedBox(height: SpasiFunda.m),
 
-              // Pemilih Ikon
-              const TeksFunda.label('Pilih Ikon'),
-              const SizedBox(height: SpasiFunda.xs),
-              Wrap(
-                spacing: SpasiFunda.s,
-                runSpacing: SpasiFunda.s,
-                children: _pilihanIkon.map((kunciIkon) {
-                  final terpilih = _ikon == kunciIkon;
-                  return ChoiceChip(
-                    avatar: Icon(ambilIkonLucide(kunciIkon), size: 18),
-                    label: Text(kunciIkon),
-                    selected: terpilih,
-                    onSelected: (_) => setState(() => _ikon = kunciIkon),
-                  );
-                }).toList(),
-              ),
-              const SizedBox(height: SpasiFunda.m),
-
-              // Pemilih Warna Tint
-              const TeksFunda.label('Pilih Warna Kartu'),
-              const SizedBox(height: SpasiFunda.xs),
-              Wrap(
-                spacing: SpasiFunda.s,
-                children: _pilihanWarna.map((kunciWarna) {
-                  final terpilih = _warna == kunciWarna;
-                  final warnaBg = ambilWarnaTint(kunciWarna);
-                  return ChoiceChip(
-                    avatar: Container(
-                      width: 14,
-                      height: 14,
-                      decoration: BoxDecoration(
-                        color: warnaBg,
-                        shape: BoxShape.circle,
-                        border: Border.all(color: WarnaFunda.garis),
-                      ),
-                    ),
-                    label: Text(kunciWarna),
-                    selected: terpilih,
-                    onSelected: (_) => setState(() => _warna = kunciWarna),
-                  );
-                }).toList(),
-              ),
-              const SizedBox(height: SpasiFunda.xl),
-
-              // Tombol Simpan
-              TombolFunda.primer(
-                teks: isUbah ? 'Simpan Perubahan' : 'Buat Tujuan',
-                memuat: _sedangMemuat,
-                padaTekan: _simpan,
+              // Tombol Simpan Sticky Bawah
+              Container(
+                padding: const EdgeInsets.fromLTRB(
+                  SpasiFunda.marginLayar,
+                  SpasiFunda.s,
+                  SpasiFunda.marginLayar,
+                  SpasiFunda.m,
+                ),
+                decoration: const BoxDecoration(
+                  color: WarnaFunda.permukaan,
+                  border: Border(top: BorderSide(color: WarnaFunda.garis)),
+                ),
+                child: TombolFunda.pilGelap(
+                  key: const Key('tombol_simpan_tujuan'),
+                  teks: isUbah ? 'Simpan Perubahan' : 'Buat Tujuan',
+                  lebarPenuh: true,
+                  memuat: _sedangMemuat,
+                  padaTekan: _simpan,
+                ),
               ),
             ],
           ),

@@ -9,10 +9,26 @@ import '../../../perhitungan/perhitungan_utang_dashboard.dart';
 import '../../../tema/token.dart';
 import '../../../util/format_rupiah.dart';
 import '../kontroler/penyedia_utang.dart';
+import 'layar_detail_utang.dart';
+import 'layar_form_utang.dart';
 
-/// Layar daftar seluruh catatan utang dan cicilan pengguna.
+/// Layar daftar seluruh catatan utang dan cicilan pengguna bergaya editorial bersih:
+/// header tombol kembali >= 48dp + pil Catat, hero kanvas amber/kuning tenang,
+/// dan daftar menyatu dalam kartu putih border 1px.
 class LayarDaftarUtang extends ConsumerWidget {
   const LayarDaftarUtang({super.key});
+
+  void _bukaFormTambah(BuildContext context) {
+    final router = GoRouter.maybeOf(context);
+    if (router != null) {
+      router.push('/utang/tambah');
+    } else {
+      Navigator.push(
+        context,
+        MaterialPageRoute<void>(builder: (_) => const LayarFormUtang()),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -25,170 +41,279 @@ class LayarDaftarUtang extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: WarnaFunda.latar,
-      appBar: AppBar(
-        title: const TeksFunda.judulBagian('Utang & Cicilan'),
-        backgroundColor: WarnaFunda.latar,
-        elevation: 0,
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: WarnaFunda.utama,
-        foregroundColor: WarnaFunda.permukaan,
-        icon: const Icon(LucideIcons.plus),
-        label: const Text('Catat Utang'),
-        onPressed: () => context.push('/utang/tambah'),
-      ),
       body: SafeArea(
-        child: RefreshIndicator(
-          onRefresh: () async {
-            ref.invalidate(penyediaDaftarUtangAktif);
-            ref.invalidate(penyediaDaftarUtangLunas);
-            ref.invalidate(penyediaTotalSisaUtangAktif);
-          },
-          child: ListView(
-            padding: const EdgeInsets.all(SpasiFunda.m),
-            children: [
-              // 1. Bento Hero: Ringkasan Utang & Rasio Cicilan
-              PetakBento.ukuran2x1(
-                warnaKustom: WarnaFunda.tintAmber,
-                labelAkses:
-                    'Total sisa utang ${formatRupiah(totalSisaUtang)}, cicilan bulanan ${formatRupiah(totalCicilan)}',
-                anak: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(
+                SpasiFunda.marginLayar,
+                SpasiFunda.marginLayar,
+                SpasiFunda.marginLayar,
+                SpasiFunda.s,
+              ),
+              child: HeaderSubLayarEditorial(
+                judul: 'Utang & Cicilan',
+                aksiKanan: [
+                  TombolPilHeaderEditorial(
+                    key: const Key('tombol_catat_utang_header'),
+                    teks: 'Catat',
+                    ikon: LucideIcons.plus,
+                    padaTekan: () => _bukaFormTambah(context),
+                  ),
+                ],
+              ),
+            ),
+            Expanded(
+              child: RefreshIndicator(
+                onRefresh: () async {
+                  ref.invalidate(penyediaDaftarUtangAktif);
+                  ref.invalidate(penyediaDaftarUtangLunas);
+                  ref.invalidate(penyediaTotalSisaUtangAktif);
+                },
+                child: ListView(
+                  padding: const EdgeInsets.fromLTRB(
+                    SpasiFunda.marginLayar,
+                    SpasiFunda.s,
+                    SpasiFunda.marginLayar,
+                    SpasiFunda.xxl,
+                  ),
                   children: [
-                    const TeksFunda.label('Total Sisa Utang Aktif'),
-                    const SizedBox(height: SpasiFunda.s),
-                    TeksFunda.angkaBesar(formatRupiah(totalSisaUtang)),
-                    const SizedBox(height: SpasiFunda.m),
-                    Wrap(
-                      alignment: WrapAlignment.spaceBetween,
-                      spacing: SpasiFunda.m,
-                      runSpacing: SpasiFunda.s,
-                      children: [
-                        Column(
+                    // 1. Hero Kanvas Kuning: Ringkasan Utang & Rasio Cicilan
+                    Semantics(
+                      container: true,
+                      label:
+                          'Total sisa utang ${formatRupiah(totalSisaUtang)}, cicilan bulanan ${formatRupiah(totalCicilan)}',
+                      child: Container(
+                        key: const Key('hero_kanvas_daftar_utang'),
+                        padding: const EdgeInsets.all(SpasiFunda.l),
+                        decoration: BoxDecoration(
+                          color: WarnaFunda.kanvasKuning,
+                          borderRadius: BorderRadius.circular(SudutFunda.petak),
+                        ),
+                        child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             const TeksFunda.catatan(
-                              'Kewajiban Cicilan / Bulan',
+                              'Total Sisa Utang Aktif',
+                              warna: WarnaFunda.teksRedup,
                             ),
-                            TeksFunda.label(formatRupiah(totalCicilan)),
+                            const SizedBox(height: SpasiFunda.xs),
+                            TeksFunda.angkaBesar(
+                              formatRupiah(totalSisaUtang),
+                              angkaTabular: true,
+                            ),
+                            const SizedBox(height: SpasiFunda.m),
+                            Wrap(
+                              alignment: WrapAlignment.spaceBetween,
+                              spacing: SpasiFunda.m,
+                              runSpacing: SpasiFunda.s,
+                              children: [
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const TeksFunda.catatan(
+                                      'Kewajiban Cicilan / Bulan',
+                                    ),
+                                    TeksFunda.label(
+                                      formatRupiah(totalCicilan),
+                                      angkaTabular: true,
+                                    ),
+                                  ],
+                                ),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const TeksFunda.catatan('Rasio Cicilan'),
+                                    TeksFunda.label(
+                                      rasioCicilan != null
+                                          ? '$rasioCicilan%'
+                                          : '-',
+                                      angkaTabular: true,
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: SpasiFunda.xs),
+                            TeksFunda.catatan(
+                              rasioCicilan != null
+                                  ? 'Bagian dari pemasukanmu (${dasarPemasukan.dasar.keterangan})'
+                                  : dasarPemasukan.dasar.keterangan,
+                              warna: WarnaFunda.teksRedup,
+                            ),
                           ],
                         ),
-                        Column(
+                      ),
+                    ),
+                    const SizedBox(height: SpasiFunda.xl),
+
+                    // 2. Daftar Utang Aktif
+                    const TeksFunda.judulBagian('Utang yang Sedang Berjalan'),
+                    const SizedBox(height: SpasiFunda.s),
+
+                    daftarUtangAktifAsync.when(
+                      data: (daftarAktif) {
+                        if (daftarAktif.isEmpty) {
+                          return Container(
+                            padding: const EdgeInsets.all(SpasiFunda.l),
+                            decoration: BoxDecoration(
+                              color: WarnaFunda.permukaan,
+                              borderRadius: BorderRadius.circular(
+                                SudutFunda.petak,
+                              ),
+                              border: Border.all(
+                                color: WarnaFunda.garis,
+                                width: 1.0,
+                              ),
+                            ),
+                            child: Column(
+                              children: [
+                                const Icon(
+                                  LucideIcons.circleCheck,
+                                  size: 40,
+                                  color: WarnaFunda.pemasukan,
+                                ),
+                                const SizedBox(height: SpasiFunda.m),
+                                const TeksFunda.catatan(
+                                  'Tidak ada utang aktif saat ini. Semua kewajibanmu terkontrol dengan baik!',
+                                  rataTeks: TextAlign.center,
+                                  warna: WarnaFunda.teksRedup,
+                                ),
+                                const SizedBox(height: SpasiFunda.l),
+                                TombolFunda.pilGelap(
+                                  lebarPenuh: true,
+                                  teks: 'Catat Utang Baru',
+                                  padaTekan: () => _bukaFormTambah(context),
+                                ),
+                              ],
+                            ),
+                          );
+                        }
+
+                        return Container(
+                          key: const Key('kartu_daftar_utang_aktif'),
+                          decoration: BoxDecoration(
+                            color: WarnaFunda.permukaan,
+                            borderRadius: BorderRadius.circular(
+                              SudutFunda.petak,
+                            ),
+                            border: Border.all(
+                              color: WarnaFunda.garis,
+                              width: 1.0,
+                            ),
+                          ),
+                          clipBehavior: Clip.antiAlias,
+                          child: Column(
+                            children: [
+                              for (var i = 0; i < daftarAktif.length; i++) ...[
+                                _BarisItemUtang(utang: daftarAktif[i]),
+                                if (i < daftarAktif.length - 1)
+                                  const Divider(
+                                    height: 1,
+                                    indent: SpasiFunda.l,
+                                    endIndent: SpasiFunda.l,
+                                    color: WarnaFunda.garis,
+                                  ),
+                              ],
+                            ],
+                          ),
+                        );
+                      },
+                      loading: () => const Center(
+                        child: Padding(
+                          padding: EdgeInsets.all(SpasiFunda.m),
+                          child: IndikatorMemuat(),
+                        ),
+                      ),
+                      error: (err, _) =>
+                          Center(child: Text('Gagal memuat: $err')),
+                    ),
+                    const SizedBox(height: SpasiFunda.xl),
+
+                    // 3. Daftar Utang Lunas
+                    daftarUtangLunasAsync.when(
+                      data: (daftarLunas) {
+                        if (daftarLunas.isEmpty) return const SizedBox.shrink();
+
+                        return Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const TeksFunda.catatan('Rasio Cicilan'),
-                            TeksFunda.label(
-                              rasioCicilan != null ? '$rasioCicilan%' : '-',
+                            Row(
+                              children: [
+                                const TeksFunda.judulBagian('Sudah Lunas'),
+                                const SizedBox(width: SpasiFunda.s),
+                                Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: SpasiFunda.s,
+                                    vertical: 2,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: WarnaFunda.tintHijau,
+                                    borderRadius: BorderRadius.circular(
+                                      SudutFunda.pil,
+                                    ),
+                                  ),
+                                  child: TeksFunda.catatan(
+                                    '${daftarLunas.length}',
+                                    warna: WarnaFunda.pemasukan,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: SpasiFunda.s),
+                            Container(
+                              decoration: BoxDecoration(
+                                color: WarnaFunda.permukaan,
+                                borderRadius: BorderRadius.circular(
+                                  SudutFunda.petak,
+                                ),
+                                border: Border.all(
+                                  color: WarnaFunda.garis,
+                                  width: 1.0,
+                                ),
+                              ),
+                              clipBehavior: Clip.antiAlias,
+                              child: Column(
+                                children: [
+                                  for (
+                                    var i = 0;
+                                    i < daftarLunas.length;
+                                    i++
+                                  ) ...[
+                                    _BarisItemUtang(
+                                      utang: daftarLunas[i],
+                                      isLunas: true,
+                                    ),
+                                    if (i < daftarLunas.length - 1)
+                                      const Divider(
+                                        height: 1,
+                                        indent: SpasiFunda.l,
+                                        endIndent: SpasiFunda.l,
+                                        color: WarnaFunda.garis,
+                                      ),
+                                  ],
+                                ],
+                              ),
                             ),
                           ],
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: SpasiFunda.xs),
-                    TeksFunda.catatan(
-                      rasioCicilan != null
-                          ? 'Bagian dari pemasukanmu (${dasarPemasukan.dasar.keterangan})'
-                          : dasarPemasukan.dasar.keterangan,
-                      warna: WarnaFunda.teksRedup,
+                        );
+                      },
+                      loading: () => const SizedBox.shrink(),
+                      error: (_, _) => const SizedBox.shrink(),
                     ),
                   ],
                 ),
               ),
-              const SizedBox(height: SpasiFunda.l),
-
-              // 2. Daftar Utang Aktif
-              const TeksFunda.judulBagian('Utang yang Sedang Berjalan'),
-              const SizedBox(height: SpasiFunda.s),
-
-              daftarUtangAktifAsync.when(
-                data: (daftarAktif) {
-                  if (daftarAktif.isEmpty) {
-                    return Container(
-                      padding: const EdgeInsets.all(SpasiFunda.l),
-                      decoration: BoxDecoration(
-                        color: WarnaFunda.permukaan,
-                        borderRadius: BorderRadius.circular(SudutFunda.kartu),
-                        border: Border.all(color: WarnaFunda.garis),
-                      ),
-                      child: KeadaanKosong(
-                        ikon: LucideIcons.checkCircle2,
-                        pesan:
-                            'Tidak ada utang aktif saat ini. Semua kewajibanmu terkontrol dengan baik!',
-                        teksTombol: 'Catat Utang Baru',
-                        padaAksi: () => context.push('/utang/tambah'),
-                      ),
-                    );
-                  }
-
-                  return Column(
-                    children: daftarAktif.map((utang) {
-                      return _KartuItemUtang(utang: utang);
-                    }).toList(),
-                  );
-                },
-                loading: () => const Center(
-                  child: Padding(
-                    padding: EdgeInsets.all(SpasiFunda.m),
-                    child: IndikatorMemuat(),
-                  ),
-                ),
-                error: (err, _) => Center(child: Text('Gagal memuat: $err')),
-              ),
-              const SizedBox(height: SpasiFunda.l),
-
-              // 3. Daftar Utang Lunas (Bagian Terpisah)
-              daftarUtangLunasAsync.when(
-                data: (daftarLunas) {
-                  if (daftarLunas.isEmpty) return const SizedBox.shrink();
-
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          const TeksFunda.judulBagian('Sudah Lunas'),
-                          const SizedBox(width: SpasiFunda.s),
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: SpasiFunda.s,
-                              vertical: 2,
-                            ),
-                            decoration: BoxDecoration(
-                              color: WarnaFunda.sukses.withAlpha(25),
-                              borderRadius: BorderRadius.circular(
-                                SudutFunda.pil,
-                              ),
-                            ),
-                            child: TeksFunda.catatan(
-                              '${daftarLunas.length}',
-                              warna: WarnaFunda.sukses,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: SpasiFunda.s),
-                      ...daftarLunas.map((utang) {
-                        return _KartuItemUtang(utang: utang, isLunas: true);
-                      }),
-                      const SizedBox(height: SpasiFunda.xl),
-                    ],
-                  );
-                },
-                loading: () => const SizedBox.shrink(),
-                error: (_, _) => const SizedBox.shrink(),
-              ),
-
-              const SizedBox(height: 64), // Ruang untuk FAB
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
   }
 }
 
-class _KartuItemUtang extends ConsumerWidget {
-  const _KartuItemUtang({required this.utang, this.isLunas = false});
+class _BarisItemUtang extends ConsumerWidget {
+  const _BarisItemUtang({required this.utang, this.isLunas = false});
 
   final EntitasUtang utang;
   final bool isLunas;
@@ -204,101 +329,111 @@ class _KartuItemUtang extends ConsumerWidget {
       cicilanBulananRupiah: utang.cicilanBulananRupiah,
     );
 
-    return Container(
-      margin: const EdgeInsets.only(bottom: SpasiFunda.m),
-      decoration: BoxDecoration(
-        color: WarnaFunda.permukaan,
-        borderRadius: BorderRadius.circular(SudutFunda.kartu),
-        border: Border.all(color: WarnaFunda.garis),
-      ),
-      child: Material(
-        color: WarnaFunda.transparan,
-        child: InkWell(
-          borderRadius: BorderRadius.circular(SudutFunda.kartu),
-          onTap: () => context.push('/utang/${utang.id}'),
-          child: Padding(
-            padding: const EdgeInsets.all(SpasiFunda.m),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          TeksFunda.label(utang.nama),
-                          TeksFunda.catatan(
-                            utang.pemberi != null && utang.pemberi!.isNotEmpty
-                                ? '${JenisUtang.dariKode(utang.jenis).label} • ${utang.pemberi}'
-                                : JenisUtang.dariKode(utang.jenis).label,
-                          ),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: SpasiFunda.s,
-                        vertical: 2,
-                      ),
-                      decoration: BoxDecoration(
-                        color:
-                            (isLunas
-                                    ? WarnaFunda.sukses
-                                    : WarnaFunda.peringatan)
-                                .withAlpha(25),
-                        borderRadius: BorderRadius.circular(SudutFunda.pil),
-                      ),
-                      child: TeksFunda.catatan(
-                        isLunas ? 'Lunas' : 'Aktif',
-                        warna: isLunas
-                            ? WarnaFunda.sukses
-                            : WarnaFunda.peringatan,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: SpasiFunda.m),
-                Wrap(
-                  alignment: WrapAlignment.spaceBetween,
-                  crossAxisAlignment: WrapCrossAlignment.end,
-                  spacing: SpasiFunda.m,
-                  runSpacing: SpasiFunda.s,
-                  children: [
-                    Column(
+    return Material(
+      color: WarnaFunda.transparan,
+      child: InkWell(
+        onTap: () {
+          final router = GoRouter.maybeOf(context);
+          if (router != null) {
+            router.push('/utang/${utang.id}');
+          } else {
+            Navigator.push(
+              context,
+              MaterialPageRoute<void>(
+                builder: (_) => LayarDetailUtang(utangId: utang.id),
+              ),
+            );
+          }
+        },
+        child: Padding(
+          padding: const EdgeInsets.all(SpasiFunda.l),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Icon(
+                    isLunas ? LucideIcons.circleCheck : LucideIcons.creditCard,
+                    size: 22,
+                    color: isLunas
+                        ? WarnaFunda.pemasukan
+                        : WarnaFunda.sifatUtang,
+                  ),
+                  const SizedBox(width: SpasiFunda.m),
+                  Expanded(
+                    child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const TeksFunda.catatan('Sisa Utang'),
-                        TeksFunda.label(
-                          formatRupiah(sisaUtang),
-                          warna: isLunas ? WarnaFunda.sukses : WarnaFunda.teks,
-                          angkaTabular: true,
+                        TeksFunda.label(utang.nama),
+                        TeksFunda.catatan(
+                          utang.pemberi != null && utang.pemberi!.isNotEmpty
+                              ? '${JenisUtang.dariKode(utang.jenis).label} • ${utang.pemberi}'
+                              : JenisUtang.dariKode(utang.jenis).label,
                         ),
                       ],
                     ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        if (utang.cicilanBulananRupiah > 0) ...[
-                          TeksFunda.catatan(
-                            '${formatRupiah(utang.cicilanBulananRupiah)} / bln',
-                          ),
-                          if (estimasiBulan != null)
-                            TeksFunda.catatan('$estimasiBulan bulan lagi')
-                          else if (utang.tanggalJatuhTempoBulanan != null)
-                            TeksFunda.catatan(
-                              'Jatuh tempo tgl ${utang.tanggalJatuhTempoBulanan}',
-                            ),
-                        ] else ...[
-                          const TeksFunda.catatan('Tanpa cicilan rutin'),
-                        ],
-                      ],
+                  ),
+                  const SizedBox(width: SpasiFunda.s),
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: SpasiFunda.s,
+                      vertical: 2,
                     ),
-                  ],
-                ),
-              ],
-            ),
+                    decoration: BoxDecoration(
+                      color: isLunas
+                          ? WarnaFunda.tintHijau
+                          : WarnaFunda.tintAmber,
+                      borderRadius: BorderRadius.circular(SudutFunda.pil),
+                    ),
+                    child: TeksFunda.catatan(
+                      isLunas ? 'Lunas' : 'Aktif',
+                      warna: isLunas
+                          ? WarnaFunda.pemasukan
+                          : WarnaFunda.peringatan,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: SpasiFunda.m),
+              Wrap(
+                alignment: WrapAlignment.spaceBetween,
+                crossAxisAlignment: WrapCrossAlignment.end,
+                spacing: SpasiFunda.m,
+                runSpacing: SpasiFunda.s,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const TeksFunda.catatan('Sisa Utang'),
+                      TeksFunda.label(
+                        formatRupiah(sisaUtang),
+                        warna: isLunas ? WarnaFunda.pemasukan : WarnaFunda.teks,
+                        angkaTabular: true,
+                      ),
+                    ],
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      if (utang.cicilanBulananRupiah > 0) ...[
+                        TeksFunda.catatan(
+                          '${formatRupiah(utang.cicilanBulananRupiah)} / bln',
+                          angkaTabular: true,
+                        ),
+                        if (estimasiBulan != null)
+                          TeksFunda.catatan('$estimasiBulan bulan lagi')
+                        else if (utang.tanggalJatuhTempoBulanan != null)
+                          TeksFunda.catatan(
+                            'Jatuh tempo tgl ${utang.tanggalJatuhTempoBulanan}',
+                          ),
+                      ] else ...[
+                        const TeksFunda.catatan('Tanpa cicilan rutin'),
+                      ],
+                    ],
+                  ),
+                ],
+              ),
+            ],
           ),
         ),
       ),

@@ -4,7 +4,7 @@ import '../util/haptic.dart';
 import 'indikator_memuat.dart';
 
 /// Jenis varian tampilan tombol Funda.
-enum VarianTombolFunda { primer, sekunder, teks }
+enum VarianTombolFunda { primer, sekunder, teks, pilGelap }
 
 /// Tombol standar aplikasi Funda dengan tinggi minimal 48dp dan bentuk pil.
 class TombolFunda extends StatelessWidget {
@@ -52,6 +52,17 @@ class TombolFunda extends StatelessWidget {
     this.labelAkses,
   }) : varian = VarianTombolFunda.teks;
 
+  /// Pintasan untuk tombol pil warna hijau hutan gelap kontras tinggi.
+  const TombolFunda.pilGelap({
+    super.key,
+    required this.teks,
+    this.padaTekan,
+    this.memuat = false,
+    this.ikon,
+    this.lebarPenuh = true,
+    this.labelAkses,
+  }) : varian = VarianTombolFunda.pilGelap;
+
   final String teks;
   final VoidCallback? padaTekan;
   final VarianTombolFunda varian;
@@ -78,6 +89,7 @@ class TombolFunda extends StatelessWidget {
       VarianTombolFunda.primer => _bangunTombolPrimer(isiKonten),
       VarianTombolFunda.sekunder => _bangunTombolSekunder(isiKonten),
       VarianTombolFunda.teks => _bangunTombolTeks(isiKonten),
+      VarianTombolFunda.pilGelap => _bangunTombolPilGelap(isiKonten),
     };
 
     if (lebarPenuh) {
@@ -95,7 +107,8 @@ class TombolFunda extends StatelessWidget {
   Widget _bangunIsi() {
     if (memuat) {
       final warnaIndikator = switch (varian) {
-        VarianTombolFunda.primer => WarnaFunda.putih,
+        VarianTombolFunda.primer ||
+        VarianTombolFunda.pilGelap => WarnaFunda.putih,
         VarianTombolFunda.sekunder => WarnaFunda.utama,
         VarianTombolFunda.teks => WarnaFunda.utama,
       };
@@ -104,7 +117,8 @@ class TombolFunda extends StatelessWidget {
     }
 
     final warnaTeks = switch (varian) {
-      VarianTombolFunda.primer => WarnaFunda.teksPutih,
+      VarianTombolFunda.primer || VarianTombolFunda.pilGelap =>
+        _aktif ? WarnaFunda.teksPutih : WarnaFunda.teksRedup,
       VarianTombolFunda.sekunder =>
         _aktif ? WarnaFunda.utama : WarnaFunda.teksRedup,
       VarianTombolFunda.teks =>
@@ -191,6 +205,26 @@ class TombolFunda extends StatelessWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(SudutFunda.pil),
         ),
+      ),
+      child: isi,
+    );
+  }
+
+  Widget _bangunTombolPilGelap(Widget isi) {
+    return FilledButton(
+      onPressed: _aktif ? _padaTekanDenganHaptic : null,
+      style: FilledButton.styleFrom(
+        backgroundColor: WarnaFunda.tombolGelap,
+        foregroundColor: WarnaFunda.teksPutih,
+        disabledBackgroundColor: WarnaFunda.garis,
+        disabledForegroundColor: WarnaFunda.teksRedup,
+        minimumSize: const Size(double.infinity, 52),
+        padding: const EdgeInsets.symmetric(
+          horizontal: SpasiFunda.xl,
+          vertical: SpasiFunda.m,
+        ),
+        shape: const StadiumBorder(),
+        elevation: 0,
       ),
       child: isi,
     );

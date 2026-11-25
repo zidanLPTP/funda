@@ -16,6 +16,7 @@ import 'package:funda/fitur/belajar/tampilan/komponen_teks_istilah.dart';
 import 'package:funda/fitur/belajar/tampilan/layar_belajar.dart';
 import 'package:funda/fitur/belajar/tampilan/layar_kuis_modul.dart';
 import 'package:funda/fitur/belajar/tampilan/layar_pemutar_pelajaran.dart';
+import 'package:funda/komponen/komponen_funda.dart';
 import 'package:funda/perhitungan/perhitungan_belajar.dart';
 import 'package:funda/tema/tema.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -227,6 +228,7 @@ void main() {
           ProviderScope(
             overrides: [
               penyediaBasisData.overrideWithValue(db),
+              penyediaTanpaAnimasi.overrideWithValue(true),
               penyediaPetaBelajar.overrideWith(
                 (ref) => Future.value([itemModul1, itemModul2]),
               ),
@@ -239,14 +241,18 @@ void main() {
         );
         await tester.pump();
 
-        // Cek judul layar dan bagian
+        // Cek judul layar, bagian, dan kartu modul ramping
         expect(find.text('Belajar Finansial'), findsOneWidget);
         expect(find.text('Tingkat Pemula'), findsOneWidget);
         expect(find.text('Anggaran & Arus Kas'), findsOneWidget);
         expect(find.text('Investasi Pemula'), findsOneWidget);
         expect(find.text('Segera Hadir'), findsOneWidget);
 
-        // Cek pelajaran terkunci dan tombol pernyataan
+        // Ketuk kartu modul aktif untuk membuka daftar pelajaran & syarat
+        await tester.tap(find.text('Anggaran & Arus Kas'));
+        await pompaHinggaAda(tester, find.text('Memetakan Arus Kas'));
+
+        // Cek pelajaran terkunci dan tombol pernyataan di lembar detail modul
         expect(find.text('Memetakan Arus Kas'), findsOneWidget);
         expect(find.text('Catat minimal 3 transaksi nyata.'), findsOneWidget);
         expect(find.text('Aku tidak punya ini'), findsOneWidget);
@@ -256,6 +262,7 @@ void main() {
         await tester.ensureVisible(find.text('Aku tidak punya ini'));
         await tester.pump();
         await tester.tap(find.text('Aku tidak punya ini'));
+        await tester.pump();
         await tester.pump();
 
         // Verifikasi di DB bahwa pernyataan tersimpan
@@ -404,6 +411,7 @@ void main() {
           ProviderScope(
             overrides: [
               penyediaBasisData.overrideWithValue(db),
+              penyediaTanpaAnimasi.overrideWithValue(true),
               penyediaFotoData.overrideWith(
                 (ref) => Future.value(FotoDataPengguna.kosong()),
               ),
@@ -422,7 +430,7 @@ void main() {
         await tester.pump();
 
         // Langkah 1: Pemantik
-        expect(find.text('Pemantik'), findsOneWidget);
+        expect(find.text('Memetakan Arus Kas'), findsOneWidget);
         expect(
           find.textContaining('Temanmu bertanya, "Uangmu bulan ini cukup?"'),
           findsOneWidget,
@@ -464,14 +472,18 @@ void main() {
           findsOneWidget,
         );
 
-        // Jawab ketiga soal cek paham
+        // Jawab ketiga soal cek paham (1 soal per halaman PageView)
         await tester.tap(find.text('Minus Rp200.000, uang keluar lebih besar'));
+        await tester.pump();
+        await tester.tap(find.text('Lanjut'));
         await tester.pump();
 
         final soal2 = find.text('Biaya kos bulanan');
         await tester.ensureVisible(soal2);
         await tester.pump();
         await tester.tap(soal2);
+        await tester.pump();
+        await tester.tap(find.text('Lanjut'));
         await tester.pump();
 
         final soal3 = find.text(
@@ -482,7 +494,7 @@ void main() {
         await tester.tap(soal3);
         await tester.pump();
 
-        // Sekarang tombol Lanjut aktif -> Langkah 7: Misi Praktik
+        // Sekarang tombol Lanjut aktif -> Langkah Misi Praktik
         await tester.tap(find.text('Lanjut'));
         await tester.pump();
         expect(find.text('Petakan uang masuk dan keluar'), findsOneWidget);

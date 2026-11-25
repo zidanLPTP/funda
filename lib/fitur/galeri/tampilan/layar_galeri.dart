@@ -145,7 +145,7 @@ class _LayarGaleriState extends State<LayarGaleri> {
                       warna: WarnaFunda.sifatKebutuhan,
                     ),
                     _LencanaSifat(
-                      ikon: LucideIcons.sparkles,
+                      ikon: LucideIcons.gift,
                       nama: 'Keinginan',
                       warna: WarnaFunda.sifatKeinginan,
                     ),

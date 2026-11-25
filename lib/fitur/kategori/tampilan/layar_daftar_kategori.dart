@@ -40,46 +40,89 @@ class _LayarDaftarKategoriState extends ConsumerState<LayarDaftarKategori>
 
     return Scaffold(
       backgroundColor: WarnaFunda.latar,
-      appBar: AppBar(
-        title: const TeksFunda.judulBagian('Kategori Keuangan'),
-        actions: [
-          IconButton(
-            icon: const Icon(LucideIcons.plus),
-            tooltip: 'Tambah Kategori Kustom',
-            onPressed: () => _tampilkanDialogTambahKategori(context),
-          ),
-        ],
-        bottom: TabBar(
-          controller: _tabController,
-          labelColor: WarnaFunda.utama,
-          unselectedLabelColor: WarnaFunda.teksRedup,
-          indicatorColor: WarnaFunda.utama,
-          tabs: const [
-            Tab(text: 'Pengeluaran'),
-            Tab(text: 'Pemasukan'),
-          ],
-        ),
-      ),
       body: SafeArea(
-        child: daftarKategoriAsync.when(
-          loading: () => const Center(child: IndikatorMemuat()),
-          error: (e, _) => Center(child: Text('Terjadi kesalahan: $e')),
-          data: (semuaKategori) {
-            final daftarKeluar = semuaKategori
-                .where((k) => k.arus == 'keluar')
-                .toList();
-            final daftarMasuk = semuaKategori
-                .where((k) => k.arus == 'masuk')
-                .toList();
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(
+                SpasiFunda.marginLayar,
+                SpasiFunda.s,
+                SpasiFunda.marginLayar,
+                SpasiFunda.s,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  HeaderSubLayarEditorial(
+                    judul: 'Kategori Keuangan',
+                    aksiKanan: [
+                      TombolPilHeaderEditorial(
+                        key: const Key('tombol_tambah_kategori'),
+                        teks: 'Tambah',
+                        ikon: LucideIcons.plus,
+                        warnaTeks: WarnaFunda.teksPutih,
+                        warnaLatar: WarnaFunda.tombolGelap,
+                        warnaBatas: WarnaFunda.tombolGelap,
+                        padaTekan: () =>
+                            _tampilkanDialogTambahKategori(context),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: SpasiFunda.m),
+                  Container(
+                    padding: const EdgeInsets.all(SpasiFunda.xs),
+                    decoration: BoxDecoration(
+                      color: WarnaFunda.permukaan,
+                      borderRadius: BorderRadius.circular(SudutFunda.pil),
+                      border: Border.all(color: WarnaFunda.garis, width: 1.0),
+                    ),
+                    child: TabBar(
+                      controller: _tabController,
+                      dividerColor: WarnaFunda.transparan,
+                      indicatorSize: TabBarIndicatorSize.tab,
+                      indicator: BoxDecoration(
+                        color: WarnaFunda.tombolGelap,
+                        borderRadius: BorderRadius.circular(SudutFunda.pil),
+                      ),
+                      labelColor: WarnaFunda.teksPutih,
+                      unselectedLabelColor: WarnaFunda.teksRedup,
+                      labelStyle: const TextStyle(
+                        fontFamily: TipografiFunda.namaKeluargaFont,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 13,
+                      ),
+                      tabs: const [
+                        Tab(text: 'Pengeluaran'),
+                        Tab(text: 'Pemasukan'),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Expanded(
+              child: daftarKategoriAsync.when(
+                loading: () => const Center(child: IndikatorMemuat()),
+                error: (e, _) => Center(child: Text('Terjadi kesalahan: $e')),
+                data: (semuaKategori) {
+                  final daftarKeluar = semuaKategori
+                      .where((k) => k.arus == 'keluar')
+                      .toList();
+                  final daftarMasuk = semuaKategori
+                      .where((k) => k.arus == 'masuk')
+                      .toList();
 
-            return TabBarView(
-              controller: _tabController,
-              children: [
-                _DaftarKategoriKeluar(daftarKategori: daftarKeluar),
-                _DaftarKategoriMasuk(daftarKategori: daftarMasuk),
-              ],
-            );
-          },
+                  return TabBarView(
+                    controller: _tabController,
+                    children: [
+                      _DaftarKategoriKeluar(daftarKategori: daftarKeluar),
+                      _DaftarKategoriMasuk(daftarKategori: daftarMasuk),
+                    ],
+                  );
+                },
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -89,7 +132,7 @@ class _LayarDaftarKategoriState extends ConsumerState<LayarDaftarKategori>
     final pengontrolNama = TextEditingController();
     var arus = 'keluar';
     var sifat = SifatKategori.keinginan;
-    var ikon = 'tag';
+    const ikon = 'tag';
 
     showDialog(
       context: context,
@@ -120,7 +163,9 @@ class _LayarDaftarKategoriState extends ConsumerState<LayarDaftarKategori>
                   const SizedBox(height: SpasiFunda.m),
                   const TeksFunda.label('Arah Arus'),
                   const SizedBox(height: SpasiFunda.s),
-                  Row(
+                  Wrap(
+                    spacing: SpasiFunda.s,
+                    runSpacing: SpasiFunda.s,
                     children: [
                       ChoiceChip(
                         label: const Text('Pengeluaran'),
@@ -130,7 +175,6 @@ class _LayarDaftarKategoriState extends ConsumerState<LayarDaftarKategori>
                           if (val) setDialogState(() => arus = 'keluar');
                         },
                       ),
-                      const SizedBox(width: SpasiFunda.s),
                       ChoiceChip(
                         label: const Text('Pemasukan'),
                         selected: arus == 'masuk',
@@ -151,6 +195,7 @@ class _LayarDaftarKategoriState extends ConsumerState<LayarDaftarKategori>
                     const TeksFunda.label('Sifat Pengeluaran'),
                     const SizedBox(height: SpasiFunda.s),
                     DropdownButtonFormField<SifatKategori>(
+                      isExpanded: true,
                       initialValue: sifat,
                       decoration: InputDecoration(
                         filled: true,
@@ -170,7 +215,10 @@ class _LayarDaftarKategoriState extends ConsumerState<LayarDaftarKategori>
                           ].map((s) {
                             return DropdownMenuItem(
                               value: s,
-                              child: Text(s.label),
+                              child: Text(
+                                s.label,
+                                overflow: TextOverflow.ellipsis,
+                              ),
                             );
                           }).toList(),
                       onChanged: (val) {
@@ -186,8 +234,9 @@ class _LayarDaftarKategoriState extends ConsumerState<LayarDaftarKategori>
                 onPressed: () => Navigator.pop(ctx),
                 child: const Text('Batal'),
               ),
-              TombolFunda.primer(
+              TombolFunda.pilGelap(
                 teks: 'Simpan',
+                lebarPenuh: false,
                 padaTekan: () async {
                   final nama = pengontrolNama.text.trim();
                   if (nama.isEmpty) return;
@@ -202,7 +251,7 @@ class _LayarDaftarKategoriState extends ConsumerState<LayarDaftarKategori>
                       nama: drift.Value(nama),
                       arus: drift.Value(arus),
                       sifat: drift.Value(sifat.kode),
-                      ikon: drift.Value(ikon),
+                      ikon: const drift.Value(ikon),
                       bawaan: const drift.Value(false),
                       diarsipkan: const drift.Value(false),
                     ),
@@ -238,27 +287,28 @@ class _DaftarKategoriKeluar extends ConsumerWidget {
     }
 
     return ListView(
-      padding: const EdgeInsets.all(SpasiFunda.marginLayar),
+      padding: const EdgeInsets.fromLTRB(
+        SpasiFunda.marginLayar,
+        SpasiFunda.xs,
+        SpasiFunda.marginLayar,
+        SpasiFunda.xl,
+      ),
       children: [
-        // Penanda Ajakan Lembut Belum Dilabeli
         if ((perSifat[SifatKategori.belumDilabeli]?.isNotEmpty ?? false))
           Container(
             padding: const EdgeInsets.all(SpasiFunda.m),
             margin: const EdgeInsets.only(bottom: SpasiFunda.l),
             decoration: BoxDecoration(
-              color: WarnaFunda.tintAmber,
+              color: WarnaFunda.kanvasKuning,
               borderRadius: BorderRadius.circular(SudutFunda.kartu),
-              border: Border.all(color: WarnaFunda.peringatan.withAlpha(50)),
+              border: Border.all(color: WarnaFunda.batasAmber, width: 1.0),
             ),
-            child: Row(
+            child: const Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Icon(
-                  LucideIcons.sparkles,
-                  color: WarnaFunda.peringatan,
-                  size: 20,
-                ),
-                const SizedBox(width: SpasiFunda.m),
-                const Expanded(
+                Icon(LucideIcons.tags, color: WarnaFunda.peringatan, size: 20),
+                SizedBox(width: SpasiFunda.m),
+                Expanded(
                   child: TeksFunda.catatan(
                     'Beberapa pengeluaran sengaja "Belum Dilabeli" agar kamu bisa melabelinya sesuai kebiasaan belanjamu nanti di pelajaran!',
                     warna: WarnaFunda.teks,
@@ -283,7 +333,7 @@ class _DaftarKategoriKeluar extends ConsumerWidget {
 
           final ikonSifat = switch (sifat) {
             SifatKategori.kebutuhan => LucideIcons.shield,
-            SifatKategori.keinginan => LucideIcons.sparkles,
+            SifatKategori.keinginan => LucideIcons.gift,
             SifatKategori.tabungan => LucideIcons.piggyBank,
             SifatKategori.utang => LucideIcons.calendarClock,
             _ => LucideIcons.helpCircle,
@@ -296,15 +346,37 @@ class _DaftarKategoriKeluar extends ConsumerWidget {
                 children: [
                   Icon(ikonSifat, size: 18, color: warnaSifat),
                   const SizedBox(width: SpasiFunda.s),
-                  TeksFunda.label(sifat.label, warna: warnaSifat),
-                  const SizedBox(width: SpasiFunda.s),
-                  TeksFunda.catatan('(${kategoriList.length})'),
+                  Expanded(
+                    child: TeksFunda.label(
+                      '${sifat.label} (${kategoriList.length})',
+                      warna: warnaSifat,
+                    ),
+                  ),
                 ],
               ),
               const SizedBox(height: SpasiFunda.s),
-              ...kategoriList.map(
-                (kategori) =>
-                    _BarisKategori(kategori: kategori, warnaSifat: warnaSifat),
+              Container(
+                decoration: BoxDecoration(
+                  color: WarnaFunda.permukaan,
+                  borderRadius: BorderRadius.circular(SudutFunda.kartu),
+                  border: Border.all(color: WarnaFunda.garis, width: 1.0),
+                ),
+                child: Column(
+                  children: [
+                    for (var i = 0; i < kategoriList.length; i++) ...[
+                      if (i > 0)
+                        const Divider(
+                          height: 1,
+                          thickness: 1,
+                          color: WarnaFunda.garis,
+                        ),
+                      _BarisKategori(
+                        kategori: kategoriList[i],
+                        warnaSifat: warnaSifat,
+                      ),
+                    ],
+                  ],
+                ),
               ),
               const SizedBox(height: SpasiFunda.l),
             ],
@@ -323,24 +395,51 @@ class _DaftarKategoriMasuk extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return ListView(
-      padding: const EdgeInsets.all(SpasiFunda.marginLayar),
+      padding: const EdgeInsets.fromLTRB(
+        SpasiFunda.marginLayar,
+        SpasiFunda.xs,
+        SpasiFunda.marginLayar,
+        SpasiFunda.xl,
+      ),
       children: [
-        const Row(
+        Row(
           children: [
-            Icon(
+            const Icon(
               LucideIcons.arrowDownLeft,
               size: 18,
               color: WarnaFunda.pemasukan,
             ),
-            SizedBox(width: SpasiFunda.s),
-            TeksFunda.label('Semua Pemasukan', warna: WarnaFunda.pemasukan),
+            const SizedBox(width: SpasiFunda.s),
+            Expanded(
+              child: TeksFunda.label(
+                'Semua Pemasukan (${daftarKategori.length})',
+                warna: WarnaFunda.pemasukan,
+              ),
+            ),
           ],
         ),
         const SizedBox(height: SpasiFunda.s),
-        ...daftarKategori.map(
-          (kategori) => _BarisKategori(
-            kategori: kategori,
-            warnaSifat: WarnaFunda.pemasukan,
+        Container(
+          decoration: BoxDecoration(
+            color: WarnaFunda.permukaan,
+            borderRadius: BorderRadius.circular(SudutFunda.kartu),
+            border: Border.all(color: WarnaFunda.garis, width: 1.0),
+          ),
+          child: Column(
+            children: [
+              for (var i = 0; i < daftarKategori.length; i++) ...[
+                if (i > 0)
+                  const Divider(
+                    height: 1,
+                    thickness: 1,
+                    color: WarnaFunda.garis,
+                  ),
+                _BarisKategori(
+                  kategori: daftarKategori[i],
+                  warnaSifat: WarnaFunda.pemasukan,
+                ),
+              ],
+            ],
           ),
         ),
       ],
@@ -356,68 +455,55 @@ class _BarisKategori extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: SpasiFunda.s),
-      decoration: BoxDecoration(
-        color: WarnaFunda.permukaan,
-        borderRadius: BorderRadius.circular(SudutFunda.kartu),
-        border: Border.all(color: WarnaFunda.garis),
+    return ListTile(
+      contentPadding: const EdgeInsets.symmetric(
+        horizontal: SpasiFunda.m,
+        vertical: SpasiFunda.xs,
       ),
-      child: ListTile(
-        leading: Container(
-          padding: const EdgeInsets.all(SpasiFunda.s),
-          decoration: BoxDecoration(
-            color: warnaSifat.withAlpha(20),
-            borderRadius: BorderRadius.circular(SudutFunda.kecil),
-          ),
-          child: Icon(
-            ambilIkonLucide(kategori.ikon),
-            size: 20,
-            color: warnaSifat,
-          ),
-        ),
-        title: Row(
-          children: [
-            Text(kategori.nama, style: TipografiFunda.label),
-            if (kategori.diarsipkan) ...[
-              const SizedBox(width: SpasiFunda.s),
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: SpasiFunda.xs,
-                  vertical: 2,
-                ),
-                decoration: BoxDecoration(
-                  color: WarnaFunda.peringatan.withAlpha(25),
-                  borderRadius: BorderRadius.circular(SudutFunda.pil),
-                ),
-                child: const Text('Arsip', style: TipografiFunda.catatan),
+      leading: Icon(
+        ambilIkonLucide(kategori.ikon),
+        size: 20,
+        color: warnaSifat,
+      ),
+      title: Wrap(
+        spacing: SpasiFunda.s,
+        runSpacing: SpasiFunda.xs,
+        crossAxisAlignment: WrapCrossAlignment.center,
+        children: [
+          Text(kategori.nama, style: TipografiFunda.label),
+          if (kategori.diarsipkan)
+            Container(
+              padding: const EdgeInsets.symmetric(
+                horizontal: SpasiFunda.s,
+                vertical: 2,
               ),
-            ],
-          ],
-        ),
-        trailing: PopupMenuButton<String>(
-          icon: const Icon(LucideIcons.ellipsisVertical, size: 18),
-          onSelected: (aksi) => _tanganiAksi(context, ref, aksi),
-          itemBuilder: (context) => [
-            if (kategori.arus == 'keluar')
-              const PopupMenuItem(
-                value: 'ubah_sifat',
-                child: Text('Ubah Sifat'),
+              decoration: BoxDecoration(
+                color: WarnaFunda.tintAmber,
+                borderRadius: BorderRadius.circular(SudutFunda.pil),
               ),
-            PopupMenuItem(
-              value: 'arsip',
-              child: Text(kategori.diarsipkan ? 'Pulihkan' : 'Arsipkan'),
+              child: const TeksFunda.catatan('Arsip', warna: WarnaFunda.teks),
             ),
-            if (!kategori.bawaan)
-              const PopupMenuItem(
-                value: 'hapus',
-                child: Text(
-                  'Hapus Kustom',
-                  style: TextStyle(color: WarnaFunda.bahaya),
-                ),
+        ],
+      ),
+      trailing: PopupMenuButton<String>(
+        icon: const Icon(LucideIcons.ellipsisVertical, size: 18),
+        onSelected: (aksi) => _tanganiAksi(context, ref, aksi),
+        itemBuilder: (context) => [
+          if (kategori.arus == 'keluar')
+            const PopupMenuItem(value: 'ubah_sifat', child: Text('Ubah Sifat')),
+          PopupMenuItem(
+            value: 'arsip',
+            child: Text(kategori.diarsipkan ? 'Pulihkan' : 'Arsipkan'),
+          ),
+          if (!kategori.bawaan)
+            const PopupMenuItem(
+              value: 'hapus',
+              child: Text(
+                'Hapus Kustom',
+                style: TextStyle(color: WarnaFunda.bahaya),
               ),
-          ],
-        ),
+            ),
+        ],
       ),
     );
   }
@@ -467,39 +553,42 @@ class _BarisKategori extends ConsumerWidget {
         builder: (context, setDialogState) {
           return AlertDialog(
             title: TeksFunda.judulBagian('Ubah Sifat ${kategori.nama}'),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children:
-                  [
-                    SifatKategori.kebutuhan,
-                    SifatKategori.keinginan,
-                    SifatKategori.tabungan,
-                    SifatKategori.utang,
-                    SifatKategori.belumDilabeli,
-                  ].map((s) {
-                    final terpilih = sifatTerpilih == s;
-                    return ListTile(
-                      title: Text(s.label),
-                      leading: Icon(
-                        terpilih ? LucideIcons.circleDot : LucideIcons.circle,
-                        color: terpilih
-                            ? WarnaFunda.utama
-                            : WarnaFunda.teksRedup,
-                        size: 20,
-                      ),
-                      onTap: () {
-                        setDialogState(() => sifatTerpilih = s);
-                      },
-                    );
-                  }).toList(),
+            content: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children:
+                    [
+                      SifatKategori.kebutuhan,
+                      SifatKategori.keinginan,
+                      SifatKategori.tabungan,
+                      SifatKategori.utang,
+                      SifatKategori.belumDilabeli,
+                    ].map((s) {
+                      final terpilih = sifatTerpilih == s;
+                      return ListTile(
+                        title: Text(s.label),
+                        leading: Icon(
+                          terpilih ? LucideIcons.circleDot : LucideIcons.circle,
+                          color: terpilih
+                              ? WarnaFunda.utama
+                              : WarnaFunda.teksRedup,
+                          size: 20,
+                        ),
+                        onTap: () {
+                          setDialogState(() => sifatTerpilih = s);
+                        },
+                      );
+                    }).toList(),
+              ),
             ),
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(ctx),
                 child: const Text('Batal'),
               ),
-              TombolFunda.primer(
+              TombolFunda.pilGelap(
                 teks: 'Simpan',
+                lebarPenuh: false,
                 padaTekan: () async {
                   final repo = ref.read(penyediaKategoriRepositori);
                   await repo.perbaruiKategori(

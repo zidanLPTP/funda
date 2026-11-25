@@ -225,12 +225,14 @@ void main() {
             await tester.pump();
           }
 
-          // Jawab 3 soal Cek Paham 13.1
+          // Jawab 3 soal Cek Paham 13.1 (1 soal per halaman)
           final opsi1 = find.textContaining(
             'Mengembalikan pembagian instrumen ke target awal',
           );
           await tester.ensureVisible(opsi1);
           await tester.tap(opsi1);
+          await tester.pump();
+          await tester.tap(find.byKey(const Key('tombol_lanjut')));
           await tester.pump();
 
           final opsi2 = find.textContaining(
@@ -238,6 +240,8 @@ void main() {
           );
           await tester.ensureVisible(opsi2);
           await tester.tap(opsi2);
+          await tester.pump();
+          await tester.tap(find.byKey(const Key('tombol_lanjut')));
           await tester.pump();
 
           final opsi3 = find.textContaining(
@@ -321,12 +325,14 @@ void main() {
             await tester.pump();
           }
 
-          // Jawab 3 soal Cek Paham 13.2
+          // Jawab 3 soal Cek Paham 13.2 (1 soal per halaman)
           final opsi1 = find.textContaining(
             'potongan berulang tiap tahun ikut mengurangi',
           );
           await tester.ensureVisible(opsi1);
           await tester.tap(opsi1);
+          await tester.pump();
+          await tester.tap(find.byKey(const Key('tombol_lanjut')));
           await tester.pump();
 
           final opsi2 = find.textContaining(
@@ -334,6 +340,8 @@ void main() {
           );
           await tester.ensureVisible(opsi2);
           await tester.tap(opsi2);
+          await tester.pump();
+          await tester.tap(find.byKey(const Key('tombol_lanjut')));
           await tester.pump();
 
           final opsi3 = find.textContaining(
@@ -424,12 +432,14 @@ void main() {
             await tester.pump();
           }
 
-          // Jawab 3 soal Cek Paham 13.3
+          // Jawab 3 soal Cek Paham 13.3 (1 soal per halaman)
           final opsi1 = find.textContaining(
             'Mengunci kerugian yang tadinya hanya penurunan sementara',
           );
           await tester.ensureVisible(opsi1);
           await tester.tap(opsi1);
+          await tester.pump();
+          await tester.tap(find.byKey(const Key('tombol_lanjut')));
           await tester.pump();
 
           final opsi2 = find.textContaining(
@@ -437,6 +447,8 @@ void main() {
           );
           await tester.ensureVisible(opsi2);
           await tester.tap(opsi2);
+          await tester.pump();
+          await tester.tap(find.byKey(const Key('tombol_lanjut')));
           await tester.pump();
 
           final opsi3 = find.textContaining(
@@ -538,12 +550,14 @@ void main() {
             await tester.pump();
           }
 
-          // Jawab 3 soal Cek Paham 14.1
+          // Jawab 3 soal Cek Paham 14.1 (1 soal per halaman)
           final opsi1 = find.textContaining(
             'Karena masih ada biaya akad, notaris',
           );
           await tester.ensureVisible(opsi1);
           await tester.tap(opsi1);
+          await tester.pump();
+          await tester.tap(find.byKey(const Key('tombol_lanjut')));
           await tester.pump();
 
           final opsi2 = find.textContaining(
@@ -551,6 +565,8 @@ void main() {
           );
           await tester.ensureVisible(opsi2);
           await tester.tap(opsi2);
+          await tester.pump();
+          await tester.tap(find.byKey(const Key('tombol_lanjut')));
           await tester.pump();
 
           final opsi3 = find.textContaining(
@@ -634,12 +650,14 @@ void main() {
             await tester.pump();
           }
 
-          // Jawab 3 soal Cek Paham 14.2
+          // Jawab 3 soal Cek Paham 14.2 (1 soal per halaman)
           final opsi1 = find.textContaining(
             'Cicilan bulanan bisa naik saat beralih ke bunga mengambang',
           );
           await tester.ensureVisible(opsi1);
           await tester.tap(opsi1);
+          await tester.pump();
+          await tester.tap(find.byKey(const Key('tombol_lanjut')));
           await tester.pump();
 
           final opsi2 = find.textContaining(
@@ -647,6 +665,8 @@ void main() {
           );
           await tester.ensureVisible(opsi2);
           await tester.tap(opsi2);
+          await tester.pump();
+          await tester.tap(find.byKey(const Key('tombol_lanjut')));
           await tester.pump();
 
           final opsi3 = find.textContaining(
@@ -778,12 +798,14 @@ void main() {
             await tester.pump();
           }
 
-          // Jawab 3 soal Cek Paham 14.3
+          // Jawab 3 soal Cek Paham 14.3 (1 soal per halaman)
           final opsi1 = find.textContaining(
             'mencerminkan kebutuhan hidup dan cicilan aktualmu',
           );
           await tester.ensureVisible(opsi1);
           await tester.tap(opsi1);
+          await tester.pump();
+          await tester.tap(find.byKey(const Key('tombol_lanjut')));
           await tester.pump();
 
           final opsi2 = find.textContaining(
@@ -791,6 +813,8 @@ void main() {
           );
           await tester.ensureVisible(opsi2);
           await tester.tap(opsi2);
+          await tester.pump();
+          await tester.tap(find.byKey(const Key('tombol_lanjut')));
           await tester.pump();
 
           final opsi3 = find.textContaining('Rp2.000.000');
@@ -818,8 +842,8 @@ void main() {
           await tester.pump();
 
           // Umpan balik nyata muncul
-          await pompaHinggaAda(tester, find.text('Umpan Balik Nyata'));
-          expect(find.text('Umpan Balik Nyata'), findsOneWidget);
+          await pompaHinggaAda(tester, find.text('Hasil dari Datamu'));
+          expect(find.text('Hasil dari Datamu'), findsOneWidget);
 
           // Verifikasi teks uji_kemampuan_kpr
           expect(

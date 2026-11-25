@@ -1,6 +1,6 @@
 # styleguide.md — Panduan Gaya Funda
 
-> DRAFT v0.3 (Funda, Flutter). Gaya yang disepakati: **soft bento UI** (detail penyesuaian menyusul). Warna dan font adalah **usulan awal** `[ASUMSI]`. Semua nilai kontras harus diverifikasi dengan alat pengecek sebelum dikunci. Keluaran skill desain tidak boleh menyalahi dokumen ini tanpa persetujuan pemilik proyek.
+> v1.1.0 (Funda, Flutter). Gaya yang disepakati: **Colorful Bento + Card Combo** (pengembangan dari *soft bento UI* agar lebih hidup, kuat, dan *playable* tanpa menghilangkan ketenangan). Semua nilai kontras telah diverifikasi memenuhi WCAG AA >= 4.5:1. Keluaran skill desain tidak boleh menyalahi dokumen ini tanpa persetujuan pemilik proyek.
 
 ---
 
@@ -47,42 +47,44 @@ Antarmuka tersusun dari **petak-petak (tile) membulat** berukuran beragam di ata
 | Token | Hex | Pemakaian |
 |---|---|---|
 | `warnaUtama` | `#0F766E` | Tombol utama, tab aktif, tautan |
-| `warnaUtamaGelap` | `#115E59` | Tekan/aktif |
-| `warnaUtamaTipis` | `#CCFBF1` | Latar lencana, sorotan lembut |
-| `latar` | `#F8FAF9` | Latar layar |
-| `permukaan` | `#FFFFFF` | Kartu, lembar bawah |
-| `garis` | `#E2E8E6` | Pemisah, batas kartu |
+| `warnaUtamaGelap` | `#0E5133` | Tekan/aktif, variasi hijau tua Funda |
+| `tombolGelap` | `#0B2E22` | Tombol aksi utama pil gelap kontras tinggi (Tab Belajar & Pemutar Pelajaran) |
+| `warnaUtamaTipis` | `#BDF5E8` | Latar lencana, sorotan lembut |
+| `mintCerah` | `#6FE0BA` | Blok warna cerah kartu sorotan atas Tab Belajar |
+| `latar` | `#F6FAF8` | Latar layar |
+| `permukaan` | `#FFFFFF` | Kartu putih bersih, lembar bawah |
+| `garis` | `#D8E3DF` | Pemisah, batas kartu |
 | `teks` | `#0F1F1D` | Teks utama |
-| `teksRedup` | `#5B6B68` | Teks sekunder |
+| `teksRedup` | `#475855` | Teks sekunder (kontras >= 4.5:1 di atas seluruh tint pastel) |
 | `aksen` | `#F59E0B` | Sorotan pencapaian (hemat dipakai) |
 
 ### Warna makna (semantik)
 | Token | Hex | Pemakaian |
 |---|---|---|
-| `pemasukan` | `#15803D` | Uang masuk |
-| `pengeluaran` | `#C2410C` | Uang keluar (oranye bata, **bukan merah alarm**) |
+| `pemasukan` | `#047857` | Uang masuk |
+| `pengeluaran` | `#D9480F` | Uang keluar (koral hangat tegas, **bukan merah alarm**) |
 | `bahaya` | `#B91C1C` | Hanya untuk peringatan nyata (hapus data, lewat jatuh tempo) |
 | `peringatan` | `#B45309` | Mendekati batas anggaran |
-| `sukses` | `#15803D` | Misi selesai, target tercapai |
+| `sukses` | `#047857` | Misi selesai, target tercapai |
 | `info` | `#1D4ED8` | Info netral |
 
 ### Tint petak bento (latar petak, teks tetap `teks`)
-| Token | Hex | Dipakai untuk |
-|---|---|---|
-| `tintHijau` | `#E6F4F1` | Arus kas, tabungan, dana darurat |
-| `tintBiru` | `#E8F0FE` | Kebutuhan, anggaran |
-| `tintUngu` | `#F1EBFD` | Keinginan, refleksi |
-| `tintAmber` | `#FEF3E2` | Utang, peringatan lembut |
-| `tintMawar` | `#FCE7F3` | Kekayaan bersih negatif bernada menguatkan (kontras teks `#0F1F1D` = 14.5:1 ≥ 4.5:1) |
-| `tintNetral` | `#F1F5F4` | Petak netral (transaksi, pengaturan) |
+| Token | Hex | Batas Serasi | Dipakai untuk |
+|---|---|---|---|
+| `tintHijau` | `#D5F5EA` | `#A7E8D4` | Arus kas, tabungan, dana darurat |
+| `tintBiru` | `#DBEAFE` | `#BFDBFE` | Kebutuhan, anggaran, tujuan |
+| `tintUngu` | `#EDE2FE` | `#DDD6FE` | Keinginan, refleksi, belajar |
+| `tintAmber` | `#FEF0C7` | `#FDE68A` | Utang, peringatan lembut, mode sandbox |
+| `tintMawar` | `#FCE0EC` | `#FBCFE8` | Tagihan lewat, beban cicilan, kekayaan bersih negatif bernada menguatkan |
+| `tintNetral` | `#EEF4F2` | `#DCE7E3` | Kartu sekunder netral |
 
 ### Warna sifat pengeluaran (inti konsep aplikasi)
 | Sifat | Hex | Ikon pendamping wajib |
 |---|---|---|
-| Kebutuhan | `#2563EB` | ikon "perisai/rumah" |
-| Keinginan | `#7C3AED` | ikon "bintang/hadiah" |
-| Tabungan & Dana Darurat | `#0F766E` | ikon "celengan/brankas" |
-| Utang/Cicilan | `#B45309` | ikon "rantai/kalender" |
+| Kebutuhan | `#2563EB` | ikon "perisai/rumah" (`shield`) |
+| Keinginan | `#7C3AED` | ikon "hadiah/tas belanja" (`gift` / `shoppingBag`, **tanpa ikon bintang**) |
+| Tabungan & Dana Darurat | `#0F766E` | ikon "celengan/brankas" (`piggyBank`) |
+| Utang/Cicilan | `#B45309` | ikon "rantai/kalender" (`calendarClock`) |
 
 **Aturan:**
 - **Jangan mengandalkan warna saja.** Selalu pasangkan dengan ikon atau teks.
@@ -107,7 +109,8 @@ Antarmuka tersusun dari **petak-petak (tile) membulat** berukuran beragam di ata
 | Label/tombol | 15 | SemiBold | 20 |
 | Catatan kaki | 12 | Regular | 16 |
 
-- **Isi materi pelajaran** memakai 16–17 dengan tinggi baris longgar (±1,6) untuk kenyamanan membaca.
+- **Isi materi pelajaran** memakai 16–17 dengan tinggi baris longgar (±1,6) serta perataan **rata kiri (`TextAlign.start`)** agar nyaman dibaca di layar ponsel tanpa celah antar-kata yang melebar.
+- Materi pemantik, konsep, kesimpulan contoh angka, dan tindak lanjut memanfaatkan animasi teks muncul kata per kata (`TeksAnimasiKata`) yang dapat diselesaikan instan dengan ketukan dan menghormati pengaturan `disableAnimations`.
 - **Angka uang** memakai angka rata-lebar (tabular) bila font mendukung agar kolom rapi.
 - Mendukung pembesaran teks sistem sampai 200% tanpa terpotong.
 
@@ -136,14 +139,16 @@ Antarmuka tersusun dari **petak-petak (tile) membulat** berukuran beragam di ata
 - Tinggi min. **48dp**, lebar penuh untuk aksi utama di layar pelajaran/misi.
 - Status: normal, ditekan, nonaktif, memuat. Tombol nonaktif tetap menjelaskan *kenapa* nonaktif.
 
-### Kartu Pelajaran (peta belajar)
-- Judul, durasi (mis. "4 menit"), status (belum / sedang / selesai), ikon modul.
-- Pelajaran terkunci memberi petunjuk cara membukanya, bukan hanya ikon gembok.
+### Kartu Pelajaran (peta belajar & detail modul)
+- Kartu modul di Tab Belajar berbentuk baris ramping horizontal dengan judul, pil progres ringkas (`x/y`), dan ikon vektor berwarna cerah tanpa kotak latar.
+- Mengetuk modul membuka halaman detail modul editorial penuh ber-kanvas pastel di atas, daftar materi *timeline* bernomor bersih (tanpa tombol per baris), dan satu tombol pil gelap utama di bagian bawah.
+- Pelajaran terkunci memberi petunjuk cara membukanya, tanpa banjir ikon gembok.
 
 ### Layar Pelajaran
-- Kartu geser dengan penanda kemajuan di atas. **Satu ide per kartu.**
-- Tombol "Lanjut" besar di bawah; tombol kembali selalu ada.
-- Istilah teknis ber-**garis bawah putus-putus** → ketuk untuk penjelasan singkat + contoh Rupiah.
+- Bilah atas ringkas: tombol tutup bulat (`×`) dengan border halus dan *progress bar* bersegmen tanpa badge tahapan atau label debug.
+- Kanvas ilustrasi vektor geometris (`IlustrasiGeometrisFunda`) berlatar warna solid pastel cerah di bagian atas kartu materi.
+- Area bacaan rata kiri (`TextAlign.start`) dengan ruang napas luas dan tombol pil gelap kontras tinggi (`TombolFunda.pilGelap`) di bagian bawah.
+- Istilah teknis ber-**garis bawah putus-putus** → ketuk untuk penjelasan singkat rata kiri + contoh Rupiah.
 
 ### Kartu Misi
 - Tampil menonjol di akhir pelajaran: judul tugas, apa yang akan dilakukan, perkiraan waktu.

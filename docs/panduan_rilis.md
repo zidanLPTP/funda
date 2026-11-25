@@ -51,12 +51,20 @@ android {
 }
 ```
 
-### D. Perintah Build Android App Bundle (AAB)
-Untuk rilis ke Google Play Console:
-```bash
-flutter build appbundle --release
-```
-Berkas output terletak di: `build/app/outputs/bundle/release/app-release.aab`.
+### D. Perintah Build Android App Bundle (AAB) & APK Per-ABI (R8 Aktif)
+Sejak v1.1.0, `android/app/build.gradle.kts` mengaktifkan `isMinifyEnabled = true`, `isShrinkResources = true`, serta aturan `android/app/proguard-rules.pro` untuk menjaga kelas Drift/SQLite/JNA dan `flutter_local_notifications`. Aset gambar besar yang tidak dirender di UI (`app_icon_1024.png` dan `icon-funda.svg`) dipisahkan ke `docs/desain/ikon/`.
+
+1. **Untuk distribusi APK langsung per arsitektur (lebih ramping, cocok untuk perangkat Android modern):**
+   ```bash
+   flutter build apk --release --split-per-abi
+   ```
+   Berkas APK utama untuk perangkat Android modern (64-bit ARM): `build/app/outputs/flutter-apk/app-arm64-v8a-release.apk`.
+
+2. **Untuk rilis ke Google Play Console (AAB):**
+   ```bash
+   flutter build appbundle --release
+   ```
+   Berkas output terletak di: `build/app/outputs/bundle/release/app-release.aab`.
 
 ---
 

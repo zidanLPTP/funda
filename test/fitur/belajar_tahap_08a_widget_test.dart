@@ -238,8 +238,8 @@ void main() {
 
           await tester.pump();
 
-          // Maju: Pemantik(0) -> Kartu(1) -> Contoh(2) -> CekPaham(3) -> Misi Praktik(4)
-          for (var i = 0; i < 4; i++) {
+          // Maju: Pemantik(0) -> Kartu(1) -> Contoh(2) -> Misi Praktik(3) (cekPaham kosong)
+          for (var i = 0; i < 3; i++) {
             await tester.tap(find.text('Lanjut'));
             await tester.pump();
           }
@@ -448,7 +448,7 @@ void main() {
           await tester.pump();
 
           // Pastikan langkah berpindah (Konsep 1)
-          expect(find.text('Konsep Inti (1/3)'), findsOneWidget);
+          expect(find.text(pel.kartu.first.judul), findsOneWidget);
 
           await bongkarWidget(tester);
         },

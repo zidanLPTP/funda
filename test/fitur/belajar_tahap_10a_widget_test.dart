@@ -8,6 +8,7 @@ import 'package:drift/native.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:funda/komponen/indikator_memuat.dart';
 import 'package:funda/komponen/tombol_funda.dart';
 import 'package:funda/data/basis_data.dart';
 import 'package:funda/data/penyedia_data.dart';
@@ -89,6 +90,7 @@ void main() {
           ProviderScope(
             overrides: [
               penyediaBasisData.overrideWithValue(db),
+              penyediaTanpaAnimasi.overrideWithValue(true),
               penyediaFotoData.overrideWith(
                 (ref) => Future.value(fotoDataTerkunci),
               ),
@@ -111,15 +113,20 @@ void main() {
           find.text('Penghasilan Tambahan & Freelance'),
         );
 
-        // Modul 8 harus terlihat
+        // Modul 8 harus terlihat lalu ketuk untuk membuka lembar detail modul
         expect(find.text('Penghasilan Tambahan & Freelance'), findsOneWidget);
+        await tester.tap(find.text('Penghasilan Tambahan & Freelance'));
+        await pompaHinggaAda(tester, find.text('Aku tidak punya ini'));
 
         // Cari tombol "Aku tidak punya ini"
         final tombolPernyataan = find.text('Aku tidak punya ini');
         expect(tombolPernyataan, findsOneWidget);
 
         // Tap tombol pernyataan
+        await tester.ensureVisible(tombolPernyataan);
+        await tester.pump();
         await tester.tap(tombolPernyataan);
+        await tester.pump();
         await tester.pump();
 
         // Verifikasi pernyataan tersimpan di database
@@ -259,11 +266,13 @@ void main() {
         await tester.pump();
       }
 
-      // Jawab 3 soal Cek Paham 8.2
+      // Jawab 3 soal Cek Paham 8.2 (1 soal per halaman)
       final opsi1 = find.textContaining('Mudah melihat mana penghasilan rutin');
       await tester.ensureVisible(opsi1);
       await tester.pump();
       await tester.tap(opsi1);
+      await tester.pump();
+      await tester.tap(find.byKey(const Key('tombol_lanjut')));
       await tester.pump();
 
       final opsi2 = find.textContaining(
@@ -272,6 +281,8 @@ void main() {
       await tester.ensureVisible(opsi2);
       await tester.pump();
       await tester.tap(opsi2);
+      await tester.pump();
+      await tester.tap(find.byKey(const Key('tombol_lanjut')));
       await tester.pump();
 
       final opsi3 = find.textContaining('Bantalan masa sepi, dana darurat');
@@ -298,8 +309,8 @@ void main() {
       await tester.pump();
 
       // Umpan balik nyata muncul
-      await pompaHinggaAda(tester, find.text('Umpan Balik Nyata'));
-      expect(find.text('Umpan Balik Nyata'), findsOneWidget);
+      await pompaHinggaAda(tester, find.text('Hasil dari Datamu'));
+      expect(find.text('Hasil dari Datamu'), findsOneWidget);
       expect(
         find.textContaining(
           'Bulan ini pemasukanmu datang dari 2 sumber dengan total Rp4.200.000.',
@@ -381,13 +392,15 @@ void main() {
         await tester.pump();
       }
 
-      // Jawab 3 soal Cek Paham 9.2
+      // Jawab 3 soal Cek Paham 9.2 (1 soal per halaman)
       final opsi1 = find.textContaining(
         'Batas penghasilan tahunan yang tidak dikenai pajak',
       );
       await tester.ensureVisible(opsi1);
       await tester.pump();
       await tester.tap(opsi1);
+      await tester.pump();
+      await tester.tap(find.byKey(const Key('tombol_lanjut')));
       await tester.pump();
 
       final opsi2 = find.textContaining(
@@ -396,6 +409,8 @@ void main() {
       await tester.ensureVisible(opsi2);
       await tester.pump();
       await tester.tap(opsi2);
+      await tester.pump();
+      await tester.tap(find.byKey(const Key('tombol_lanjut')));
       await tester.pump();
 
       final opsi3 = find.textContaining(
@@ -424,8 +439,8 @@ void main() {
       await tester.pump();
 
       // Umpan balik nyata muncul
-      await pompaHinggaAda(tester, find.text('Umpan Balik Nyata'));
-      expect(find.text('Umpan Balik Nyata'), findsOneWidget);
+      await pompaHinggaAda(tester, find.text('Hasil dari Datamu'));
+      expect(find.text('Hasil dari Datamu'), findsOneWidget);
       expect(
         find.textContaining(
           'Total pemasukanmu yang tercatat tahun ini: Rp10.000.000 (dari 1 bulan yang tercatat).',
@@ -453,6 +468,7 @@ void main() {
           ProviderScope(
             overrides: [
               penyediaBasisData.overrideWithValue(db),
+              penyediaTanpaAnimasi.overrideWithValue(true),
               penyediaFotoData.overrideWith(
                 (ref) => Future.value(FotoDataPengguna.kosong()),
               ),
@@ -480,13 +496,15 @@ void main() {
           await tester.pump();
         }
 
-        // Jawab 3 soal Cek Paham 9.3
+        // Jawab 3 soal Cek Paham 9.3 (1 soal per halaman)
         final opsi1 = find.textContaining(
           'Laporan penghasilan, pajak yang sudah dipotong',
         );
         await tester.ensureVisible(opsi1);
         await tester.pump();
         await tester.tap(opsi1);
+        await tester.pump();
+        await tester.tap(find.byKey(const Key('tombol_lanjut')));
         await tester.pump();
 
         final opsi2 = find.textContaining(
@@ -495,6 +513,8 @@ void main() {
         await tester.ensureVisible(opsi2);
         await tester.pump();
         await tester.tap(opsi2);
+        await tester.pump();
+        await tester.tap(find.byKey(const Key('tombol_lanjut')));
         await tester.pump();
 
         final opsi3 = find.textContaining(
@@ -629,6 +649,7 @@ void main() {
           ProviderScope(
             overrides: [
               penyediaBasisData.overrideWithValue(db),
+              penyediaTanpaAnimasi.overrideWithValue(true),
               penyediaFotoData.overrideWith(
                 (ref) => Future.value(FotoDataPengguna.kosong()),
               ),

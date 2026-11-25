@@ -31,8 +31,10 @@ void main() {
     await initializeDateFormatting('id_ID', null);
   });
 
-  setUp(() {
+  setUp(() async {
     db = BasisDataFunda(NativeDatabase.memory());
+    // Anggap tutorial Beranda sudah selesai saat menguji regresi navigasi tab
+    await db.simpanPengaturan('tutorial_beranda_selesai', 'true');
   });
 
   tearDown(() async {
@@ -148,11 +150,7 @@ void main() {
         await tester.tap(find.byKey(const Key('tombol_lanjut')));
         await tester.pump();
 
-        // Langkah 1 (Kartu) -> Tekan Lanjut -> Langkah 2 (Cek Paham)
-        await tester.tap(find.byKey(const Key('tombol_lanjut')));
-        await tester.pump();
-
-        // Langkah 2 (Cek Paham) -> Tekan Lanjut -> Langkah 3 (Misi Praktik)
+        // Langkah 1 (Kartu) -> Tekan Lanjut -> Langkah 2 (Misi Praktik, karena cekPaham kosong)
         await tester.tap(find.byKey(const Key('tombol_lanjut')));
         await tester.pump();
 
@@ -178,8 +176,9 @@ void main() {
         await tester.pumpWidget(
           bangunAplikasiUji(
             overrides: [
-              penyediaTransaksiBerhalaman(const ParameterKueriTransaksi())
-                  .overrideWith((ref) => Stream.value([])),
+              penyediaTransaksiBerhalaman(
+                const ParameterKueriTransaksi(),
+              ).overrideWith((ref) => Stream.value([])),
             ],
           ),
         );
@@ -205,22 +204,25 @@ void main() {
       '2b. Alur menyelesaikan kuis modul -> kembali ke Beranda -> klik tab Catatan -> benar-benar menampilkan LayarCatatan (tidak lempar ke Beranda)',
       (tester) async {
         // Simpan hasil kuis modul 1 ke db
-        await db.into(db.tabelHasilKuis).insert(
-          TabelHasilKuisCompanion(
-            modulId: const drift.Value('anggaran_arus_kas'),
-            skorPersen: const drift.Value(100),
-            benar: const drift.Value(5),
-            total: const drift.Value(5),
-            lulus: const drift.Value(true),
-            waktu: drift.Value(DateTime.now().toUtc()),
-          ),
-        );
+        await db
+            .into(db.tabelHasilKuis)
+            .insert(
+              TabelHasilKuisCompanion(
+                modulId: const drift.Value('anggaran_arus_kas'),
+                skorPersen: const drift.Value(100),
+                benar: const drift.Value(5),
+                total: const drift.Value(5),
+                lulus: const drift.Value(true),
+                waktu: drift.Value(DateTime.now().toUtc()),
+              ),
+            );
 
         await tester.pumpWidget(
           bangunAplikasiUji(
             overrides: [
-              penyediaTransaksiBerhalaman(const ParameterKueriTransaksi())
-                  .overrideWith((ref) => Stream.value([])),
+              penyediaTransaksiBerhalaman(
+                const ParameterKueriTransaksi(),
+              ).overrideWith((ref) => Stream.value([])),
             ],
           ),
         );
@@ -249,8 +251,9 @@ void main() {
           bangunAplikasiUji(
             overrides: [
               penyediaPetaBelajar.overrideWith((ref) => Future.value([])),
-              penyediaTransaksiBerhalaman(const ParameterKueriTransaksi())
-                  .overrideWith((ref) => Stream.value([])),
+              penyediaTransaksiBerhalaman(
+                const ParameterKueriTransaksi(),
+              ).overrideWith((ref) => Stream.value([])),
             ],
           ),
         );
@@ -279,8 +282,9 @@ void main() {
         await tester.pumpWidget(
           bangunAplikasiUji(
             overrides: [
-              penyediaTransaksiBerhalaman(const ParameterKueriTransaksi())
-                  .overrideWith((ref) => Stream.value([])),
+              penyediaTransaksiBerhalaman(
+                const ParameterKueriTransaksi(),
+              ).overrideWith((ref) => Stream.value([])),
             ],
           ),
         );

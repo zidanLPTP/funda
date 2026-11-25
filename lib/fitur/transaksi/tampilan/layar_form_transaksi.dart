@@ -8,14 +8,16 @@ import '../../../data/basis_data.dart';
 import '../../../data/model/jenis_transaksi.dart';
 import '../../../data/model/sifat_kategori.dart';
 import '../../../data/penyedia_data.dart';
-import '../../utang/kontroler/penyedia_utang.dart';
 import '../../../komponen/komponen_funda.dart';
 import '../../../komponen/pembantu_ikon.dart';
 import '../../../perhitungan/perhitungan_keuangan.dart';
 import '../../../tema/token.dart';
 import '../../../util/format_rupiah.dart';
+import '../../utang/kontroler/penyedia_utang.dart';
 
-/// Layar Formulir Catat Transaksi (Pemasukan, Pengeluaran, Transfer Antar Dompet).
+/// Layar Formulir Catat Transaksi bergaya editorial modern:
+/// header kanvas pastel dinamis (Koral / Mint / Biru), papan nominal besar bebas kotak kaku,
+/// kartu putih ber-border 1px, dan sticky bottom CTA pil gelap.
 class LayarFormTransaksi extends ConsumerStatefulWidget {
   const LayarFormTransaksi({
     super.key,
@@ -104,6 +106,18 @@ class _LayarFormTransaksiState extends ConsumerState<LayarFormTransaksi> {
     super.dispose();
   }
 
+  Color get _warnaKanvasHeader => switch (_jenisTerpilih) {
+    JenisTransaksi.keluar => WarnaFunda.kanvasKoral,
+    JenisTransaksi.masuk => WarnaFunda.kanvasMint,
+    _ => WarnaFunda.kanvasBiru,
+  };
+
+  Color get _warnaAksenJenis => switch (_jenisTerpilih) {
+    JenisTransaksi.keluar => WarnaFunda.pengeluaran,
+    JenisTransaksi.masuk => WarnaFunda.pemasukan,
+    _ => WarnaFunda.utama,
+  };
+
   void _tambahNominalPintasan(int tambahan) {
     var nominalSekarang = 0;
     try {
@@ -143,6 +157,124 @@ class _LayarFormTransaksiState extends ConsumerState<LayarFormTransaksi> {
         waktu.hour,
         waktu.minute,
       );
+    });
+  }
+
+  void _bukaPemilihDompetSheet({
+    required String judul,
+    required List<EntitasDompet> daftarDompet,
+    required Map<String, int> petaSaldo,
+    required String? terpilihId,
+    String? kecualikanId,
+    required ValueChanged<String> padaPilih,
+  }) {
+    final tanpaAnimasi =
+        MediaQuery.disableAnimationsOf(context) ||
+        ref.read(penyediaTanpaAnimasi);
+    final opsi = daftarDompet.where((d) => d.id != kecualikanId).toList();
+
+    showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      sheetAnimationStyle: tanpaAnimasi ? AnimationStyle.noAnimation : null,
+      backgroundColor: WarnaFunda.permukaan,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(SudutFunda.lembar),
+        ),
+      ),
+      builder: (ctx) => SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(
+            SpasiFunda.l,
+            SpasiFunda.m,
+            SpasiFunda.l,
+            SpasiFunda.l,
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Center(
+                child: Container(
+                  width: 40,
+                  height: 4,
+                  decoration: BoxDecoration(
+                    color: WarnaFunda.garis,
+                    borderRadius: BorderRadius.circular(SudutFunda.pil),
+                  ),
+                ),
+              ),
+              const SizedBox(height: SpasiFunda.m),
+              TeksFunda.judulBagian(judul),
+              const SizedBox(height: SpasiFunda.m),
+              if (opsi.isEmpty)
+                const Padding(
+                  padding: EdgeInsets.symmetric(vertical: SpasiFunda.m),
+                  child: TeksFunda.catatan(
+                    'Belum ada dompet lain yang tersedia.',
+                    warna: WarnaFunda.teksRedup,
+                  ),
+                )
+              else
+                ConstrainedBox(
+                  constraints: BoxConstraints(
+                    maxHeight: MediaQuery.sizeOf(context).height * 0.5,
+                  ),
+                  child: ListView.separated(
+                    shrinkWrap: true,
+                    itemCount: opsi.length,
+                    separatorBuilder: (_, _) =>
+                        const Divider(height: 1, color: WarnaFunda.garis),
+                    itemBuilder: (_, idx) {
+                      final d = opsi[idx];
+                      final saldo = petaSaldo[d.id] ?? d.saldoAwalRupiah;
+                      final terpilih = d.id == terpilihId;
+                      return ListTile(
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: SpasiFunda.s,
+                          vertical: 4,
+                        ),
+                        leading: Icon(
+                          ambilIkonLucide(d.ikon),
+                          size: 20,
+                          color: terpilih
+                              ? WarnaFunda.utama
+                              : WarnaFunda.teksRedup,
+                        ),
+                        title: TeksFunda.label(d.nama),
+                        subtitle: TeksFunda.catatan(
+                          formatRupiah(saldo),
+                          warna: WarnaFunda.teksRedup,
+                        ),
+                        trailing: terpilih
+                            ? const Icon(
+                                LucideIcons.check,
+                                size: 18,
+                                color: WarnaFunda.utama,
+                              )
+                            : null,
+                        onTap: () {
+                          padaPilih(d.id);
+                          Navigator.pop(ctx);
+                        },
+                      );
+                    },
+                  ),
+                ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _tukarDompetTransfer() {
+    if (_dompetIdTerpilih == null && _dompetTujuanIdTerpilih == null) return;
+    setState(() {
+      final sementara = _dompetIdTerpilih;
+      _dompetIdTerpilih = _dompetTujuanIdTerpilih;
+      _dompetTujuanIdTerpilih = sementara;
     });
   }
 
@@ -259,7 +391,12 @@ class _LayarFormTransaksiState extends ConsumerState<LayarFormTransaksi> {
 
     if (mounted) {
       setState(() => _memuat = false);
-      context.pop();
+      final router = GoRouter.maybeOf(context);
+      if (router != null) {
+        router.pop();
+      } else {
+        Navigator.maybePop(context);
+      }
     }
   }
 
@@ -288,7 +425,6 @@ class _LayarFormTransaksiState extends ConsumerState<LayarFormTransaksi> {
       return false;
     }).toList();
 
-    // Hitung apakah dompet asal akan minus
     var nominalKetik = 0;
     try {
       nominalKetik = ambilAngkaRupiah(_pengontrolNominal.text);
@@ -311,449 +447,845 @@ class _LayarFormTransaksiState extends ConsumerState<LayarFormTransaksi> {
       }
     }
 
-    return PembungkusLayar(
-      appBar: AppBar(
-        title: TeksFunda.judulBagian(
-          _sedangUbah ? 'Ubah Catatan Transaksi' : 'Catat Transaksi',
-        ),
-      ),
-      bisaGulir: true,
-      anak: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+    final dompetAsalObj = daftarDompetAktif
+        .where((d) => d.id == _dompetIdTerpilih)
+        .firstOrNull;
+    final dompetTujuanObj = daftarDompetAktif
+        .where((d) => d.id == _dompetTujuanIdTerpilih)
+        .firstOrNull;
+
+    return Scaffold(
+      backgroundColor: WarnaFunda.latar,
+      body: Column(
         children: [
-          // Segmen Jenis Transaksi (Keluar, Masuk, Transfer)
-          Container(
-            padding: const EdgeInsets.all(SpasiFunda.xs),
-            decoration: BoxDecoration(
-              color: WarnaFunda.permukaan,
-              borderRadius: BorderRadius.circular(SudutFunda.pil),
-              border: Border.all(color: WarnaFunda.garis),
-            ),
-            child: Row(
-              children: [
-                _ItemSegmen(
-                  judul: 'Pengeluaran',
-                  terpilih: _jenisTerpilih == JenisTransaksi.keluar,
-                  warnaAktif: WarnaFunda.pengeluaran,
-                  padaPilih: () => setState(() {
-                    _jenisTerpilih = JenisTransaksi.keluar;
-                    _kategoriIdTerpilih = null;
-                  }),
-                ),
-                _ItemSegmen(
-                  judul: 'Pemasukan',
-                  terpilih: _jenisTerpilih == JenisTransaksi.masuk,
-                  warnaAktif: WarnaFunda.pemasukan,
-                  padaPilih: () => setState(() {
-                    _jenisTerpilih = JenisTransaksi.masuk;
-                    _kategoriIdTerpilih = null;
-                  }),
-                ),
-                _ItemSegmen(
-                  judul: 'Transfer',
-                  terpilih: _jenisTerpilih == JenisTransaksi.transfer,
-                  warnaAktif: WarnaFunda.utama,
-                  padaPilih: () => setState(() {
-                    _jenisTerpilih = JenisTransaksi.transfer;
-                    _kategoriIdTerpilih = null;
-                  }),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: SpasiFunda.xl),
-
-          // Papan Input Nominal Besar
-          const TeksFunda.isiKecil('Nominal Transaksi'),
-          const SizedBox(height: SpasiFunda.xs),
-          TextField(
-            controller: _pengontrolNominal,
-            keyboardType: TextInputType.number,
-            style: TipografiFunda.angkaBesar.copyWith(
-              color: _jenisTerpilih == JenisTransaksi.masuk
-                  ? WarnaFunda.pemasukan
-                  : (_jenisTerpilih == JenisTransaksi.keluar
-                        ? WarnaFunda.pengeluaran
-                        : WarnaFunda.utama),
-            ),
-            decoration: InputDecoration(
-              filled: true,
-              fillColor: WarnaFunda.permukaan,
-              contentPadding: const EdgeInsets.symmetric(
-                horizontal: SpasiFunda.l,
-                vertical: SpasiFunda.m,
-              ),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(SudutFunda.kartu),
-                borderSide: const BorderSide(color: WarnaFunda.garis),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(SudutFunda.kartu),
-                borderSide: const BorderSide(color: WarnaFunda.garis),
-              ),
-            ),
-            onChanged: (teks) {
-              try {
-                final nominal = ambilAngkaRupiah(teks);
-                final format = formatRupiah(nominal);
-                if (format != teks) {
-                  _pengontrolNominal.value = TextEditingValue(
-                    text: format,
-                    selection: TextSelection.collapsed(offset: format.length),
-                  );
-                }
-              } catch (_) {}
-              setState(() {});
-            },
-          ),
-          const SizedBox(height: SpasiFunda.s),
-
-          // Pintasan Nominal Cepat (+10rb, +50rb, +100rb, +500rb)
-          Wrap(
-            spacing: SpasiFunda.s,
-            runSpacing: SpasiFunda.s,
-            children: [
-              _TombolPintasanNominal(
-                label: '+10rb',
-                padaTekan: () => _tambahNominalPintasan(10000),
-              ),
-              _TombolPintasanNominal(
-                label: '+50rb',
-                padaTekan: () => _tambahNominalPintasan(50000),
-              ),
-              _TombolPintasanNominal(
-                label: '+100rb',
-                padaTekan: () => _tambahNominalPintasan(100000),
-              ),
-              _TombolPintasanNominal(
-                label: '+500rb',
-                padaTekan: () => _tambahNominalPintasan(500000),
-              ),
-            ],
-          ),
-          const SizedBox(height: SpasiFunda.l),
-
-          // Peringatan Lembut Bila Saldo Dompet Jadi Minus
-          if (apakahMinus) ...[
-            Container(
-              padding: const EdgeInsets.all(SpasiFunda.m),
-              decoration: BoxDecoration(
-                color: WarnaFunda.tintAmber,
-                borderRadius: BorderRadius.circular(SudutFunda.kartu),
-                border: Border.all(color: WarnaFunda.peringatan.withAlpha(50)),
-              ),
-              child: Row(
+          Expanded(
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Icon(
-                    LucideIcons.alertCircle,
-                    color: WarnaFunda.peringatan,
-                    size: 20,
-                  ),
-                  const SizedBox(width: SpasiFunda.m),
-                  Expanded(
-                    child: TeksFunda.catatan(
-                      'Saldo dompet ini akan menjadi minus (${formatRupiah(saldoSetelahAksi)}). Tetap bisa disimpan kok, cek lagi catatannya jika ragu ya.',
-                      warna: WarnaFunda.teks,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: SpasiFunda.l),
-          ],
-
-          // Pemilih Dompet Sumber / Asal
-          TeksFunda.label(
-            _jenisTerpilih == JenisTransaksi.transfer
-                ? 'Dompet Asal'
-                : 'Dompet Pembayaran',
-          ),
-          const SizedBox(height: SpasiFunda.s),
-          DropdownButtonFormField<String>(
-            isExpanded: true,
-            initialValue: _dompetIdTerpilih,
-            decoration: InputDecoration(
-              filled: true,
-              fillColor: WarnaFunda.permukaan,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(SudutFunda.kartu),
-                borderSide: const BorderSide(color: WarnaFunda.garis),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(SudutFunda.kartu),
-                borderSide: const BorderSide(color: WarnaFunda.garis),
-              ),
-            ),
-            items: daftarDompetAktif.map((d) {
-              final saldo = petaSaldo[d.id] ?? d.saldoAwalRupiah;
-              return DropdownMenuItem(
-                value: d.id,
-                child: Row(
-                  children: [
-                    Icon(
-                      ambilIkonLucide(d.ikon),
-                      size: 18,
-                      color: WarnaFunda.utama,
-                    ),
-                    const SizedBox(width: SpasiFunda.s),
-                    Expanded(
-                      child: Text(
-                        '${d.nama} (${formatRupiah(saldo)})',
-                        overflow: TextOverflow.ellipsis,
+                  // Header Kanvas Pastel Dinamis + Segmen + Papan Nominal Besar
+                  Container(
+                    key: const Key('header_kanvas_form_transaksi'),
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      color: _warnaKanvasHeader,
+                      borderRadius: const BorderRadius.vertical(
+                        bottom: Radius.circular(SudutFunda.petak),
                       ),
                     ),
-                  ],
-                ),
-              );
-            }).toList(),
-            onChanged: (val) => setState(() => _dompetIdTerpilih = val),
-          ),
-          const SizedBox(height: SpasiFunda.l),
+                    child: SafeArea(
+                      bottom: false,
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(
+                          SpasiFunda.l,
+                          SpasiFunda.s,
+                          SpasiFunda.l,
+                          SpasiFunda.l,
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // Baris Tutup / Kembali Bulat & Judul
+                            Row(
+                              children: [
+                                Semantics(
+                                  button: true,
+                                  label: 'Kembali',
+                                  child: InkWell(
+                                    key: const Key(
+                                      'tombol_kembali_form_transaksi',
+                                    ),
+                                    onTap: () => Navigator.maybePop(context),
+                                    borderRadius: BorderRadius.circular(
+                                      SudutFunda.pil,
+                                    ),
+                                    child: Container(
+                                      width: 44,
+                                      height: 44,
+                                      decoration: BoxDecoration(
+                                        color: WarnaFunda.permukaan,
+                                        shape: BoxShape.circle,
+                                        border: Border.all(
+                                          color: WarnaFunda.garis,
+                                        ),
+                                      ),
+                                      child: const Icon(
+                                        LucideIcons.arrowLeft,
+                                        size: 18,
+                                        color: WarnaFunda.teks,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(width: SpasiFunda.m),
+                                Expanded(
+                                  child: TeksFunda.judulBagian(
+                                    _sedangUbah
+                                        ? 'Ubah Catatan Transaksi'
+                                        : 'Catat Transaksi',
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: SpasiFunda.m),
 
-          // Bagian Khusus Transfer: Dompet Tujuan & Biaya Admin
-          if (_jenisTerpilih == JenisTransaksi.transfer) ...[
-            const TeksFunda.label('Dompet Tujuan Transfer'),
-            const SizedBox(height: SpasiFunda.s),
-            DropdownButtonFormField<String>(
-              isExpanded: true,
-              initialValue: _dompetTujuanIdTerpilih,
-              decoration: InputDecoration(
-                hintText: 'Pilih dompet penerima',
-                filled: true,
-                fillColor: WarnaFunda.permukaan,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(SudutFunda.kartu),
-                  borderSide: const BorderSide(color: WarnaFunda.garis),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(SudutFunda.kartu),
-                  borderSide: const BorderSide(color: WarnaFunda.garis),
-                ),
-              ),
-              items: daftarDompetAktif
-                  .where((d) => d.id != _dompetIdTerpilih)
-                  .map((d) {
-                    return DropdownMenuItem(
-                      value: d.id,
-                      child: Row(
-                        children: [
-                          Icon(
-                            ambilIkonLucide(d.ikon),
-                            size: 18,
-                            color: WarnaFunda.utama,
-                          ),
-                          const SizedBox(width: SpasiFunda.s),
-                          Expanded(
-                            child: Text(
-                              d.nama,
-                              overflow: TextOverflow.ellipsis,
+                            // Segmen Pil Jenis Transaksi (Keluar, Masuk, Transfer)
+                            Container(
+                              padding: const EdgeInsets.all(SpasiFunda.xs),
+                              decoration: BoxDecoration(
+                                color: WarnaFunda.permukaan,
+                                borderRadius: BorderRadius.circular(
+                                  SudutFunda.pil,
+                                ),
+                              ),
+                              child: Row(
+                                children: [
+                                  _ItemSegmen(
+                                    judul: 'Pengeluaran',
+                                    terpilih:
+                                        _jenisTerpilih == JenisTransaksi.keluar,
+                                    warnaAktif: WarnaFunda.pengeluaran,
+                                    padaPilih: () => setState(() {
+                                      _jenisTerpilih = JenisTransaksi.keluar;
+                                      _kategoriIdTerpilih = null;
+                                    }),
+                                  ),
+                                  _ItemSegmen(
+                                    judul: 'Pemasukan',
+                                    terpilih:
+                                        _jenisTerpilih == JenisTransaksi.masuk,
+                                    warnaAktif: WarnaFunda.pemasukan,
+                                    padaPilih: () => setState(() {
+                                      _jenisTerpilih = JenisTransaksi.masuk;
+                                      _kategoriIdTerpilih = null;
+                                    }),
+                                  ),
+                                  _ItemSegmen(
+                                    judul: 'Transfer',
+                                    terpilih:
+                                        _jenisTerpilih ==
+                                        JenisTransaksi.transfer,
+                                    warnaAktif: WarnaFunda.utama,
+                                    padaPilih: () => setState(() {
+                                      _jenisTerpilih = JenisTransaksi.transfer;
+                                      _kategoriIdTerpilih = null;
+                                    }),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(height: SpasiFunda.l),
+
+                            // Papan Input Nominal Besar Bebas Kotak Kaku
+                            const TeksFunda.catatan(
+                              'Nominal Transaksi',
+                              warna: WarnaFunda.teksRedup,
+                            ),
+                            TextField(
+                              controller: _pengontrolNominal,
+                              keyboardType: TextInputType.number,
+                              style: TipografiFunda.angkaBesar.copyWith(
+                                color: WarnaFunda.teks,
+                                fontFeatures: const [
+                                  FontFeature.tabularFigures(),
+                                ],
+                              ),
+                              decoration: const InputDecoration(
+                                border: InputBorder.none,
+                                enabledBorder: InputBorder.none,
+                                focusedBorder: InputBorder.none,
+                                filled: false,
+                                isDense: true,
+                                contentPadding: EdgeInsets.symmetric(
+                                  vertical: SpasiFunda.xs,
+                                ),
+                              ),
+                              onChanged: (teks) {
+                                try {
+                                  final nominal = ambilAngkaRupiah(teks);
+                                  final format = formatRupiah(nominal);
+                                  if (format != teks) {
+                                    _pengontrolNominal.value = TextEditingValue(
+                                      text: format,
+                                      selection: TextSelection.collapsed(
+                                        offset: format.length,
+                                      ),
+                                    );
+                                  }
+                                } catch (_) {}
+                                setState(() {});
+                              },
+                            ),
+                            const SizedBox(height: SpasiFunda.s),
+
+                            // Pintasan Nominal Cepat (+10rb, +50rb, +100rb, +500rb)
+                            Wrap(
+                              spacing: SpasiFunda.s,
+                              runSpacing: SpasiFunda.s,
+                              children: [
+                                _TombolPintasanNominal(
+                                  label: '+10rb',
+                                  warnaAksen: _warnaAksenJenis,
+                                  padaTekan: () =>
+                                      _tambahNominalPintasan(10000),
+                                ),
+                                _TombolPintasanNominal(
+                                  label: '+50rb',
+                                  warnaAksen: _warnaAksenJenis,
+                                  padaTekan: () =>
+                                      _tambahNominalPintasan(50000),
+                                ),
+                                _TombolPintasanNominal(
+                                  label: '+100rb',
+                                  warnaAksen: _warnaAksenJenis,
+                                  padaTekan: () =>
+                                      _tambahNominalPintasan(100000),
+                                ),
+                                _TombolPintasanNominal(
+                                  label: '+500rb',
+                                  warnaAksen: _warnaAksenJenis,
+                                  padaTekan: () =>
+                                      _tambahNominalPintasan(500000),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  // Area Isian Formulir dalam Kartu Putih Bersih 1px Border
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(
+                      SpasiFunda.l,
+                      SpasiFunda.l,
+                      SpasiFunda.l,
+                      SpasiFunda.xl,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Peringatan Lembut Bila Saldo Dompet Jadi Minus
+                        if (apakahMinus) ...[
+                          Container(
+                            padding: const EdgeInsets.all(SpasiFunda.m),
+                            decoration: BoxDecoration(
+                              color: WarnaFunda.tintAmber,
+                              borderRadius: BorderRadius.circular(
+                                SudutFunda.kartu,
+                              ),
+                              border: Border.all(color: WarnaFunda.batasAmber),
+                            ),
+                            child: Row(
+                              children: [
+                                const Icon(
+                                  LucideIcons.alertCircle,
+                                  color: WarnaFunda.peringatan,
+                                  size: 20,
+                                ),
+                                const SizedBox(width: SpasiFunda.m),
+                                Expanded(
+                                  child: TeksFunda.catatan(
+                                    'Saldo dompet ini akan menjadi minus (${formatRupiah(saldoSetelahAksi)}). Tetap bisa disimpan kok, cek lagi catatannya jika ragu ya.',
+                                    warna: WarnaFunda.teks,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
+                          const SizedBox(height: SpasiFunda.m),
                         ],
-                      ),
-                    );
-                  })
-                  .toList(),
-              onChanged: (val) => setState(() => _dompetTujuanIdTerpilih = val),
-            ),
-            const SizedBox(height: SpasiFunda.l),
 
-            const TeksFunda.label('Biaya Admin Transfer (Opsional)'),
-            const SizedBox(height: SpasiFunda.s),
-            TextField(
-              controller: _pengontrolBiayaAdmin,
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(
-                filled: true,
-                fillColor: WarnaFunda.permukaan,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(SudutFunda.kartu),
-                  borderSide: const BorderSide(color: WarnaFunda.garis),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(SudutFunda.kartu),
-                  borderSide: const BorderSide(color: WarnaFunda.garis),
-                ),
-              ),
-              onChanged: (teks) {
-                try {
-                  final nominal = ambilAngkaRupiah(teks);
-                  final format = formatRupiah(nominal);
-                  if (format != teks) {
-                    _pengontrolBiayaAdmin.value = TextEditingValue(
-                      text: format,
-                      selection: TextSelection.collapsed(offset: format.length),
-                    );
-                  }
-                } catch (_) {}
-                setState(() {});
-              },
-            ),
-            const SizedBox(height: SpasiFunda.l),
-          ],
+                        // Kartu Dompet (Chip Horizontal untuk Keluar/Masuk; Alur Modal untuk Transfer)
+                        if (_jenisTerpilih != JenisTransaksi.transfer)
+                          _KartuPutihForm(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const TeksFunda.label('Dompet Pembayaran'),
+                                const SizedBox(height: SpasiFunda.m),
+                                if (daftarDompetAktif.isEmpty)
+                                  const TeksFunda.catatan(
+                                    'Belum ada dompet aktif.',
+                                    warna: WarnaFunda.teksRedup,
+                                  )
+                                else
+                                  SingleChildScrollView(
+                                    key: const Key('daftar_chip_dompet_cepat'),
+                                    scrollDirection: Axis.horizontal,
+                                    child: Row(
+                                      children: daftarDompetAktif.map((d) {
+                                        final terpilih =
+                                            _dompetIdTerpilih == d.id;
+                                        final saldo =
+                                            petaSaldo[d.id] ??
+                                            d.saldoAwalRupiah;
+                                        return Padding(
+                                          padding: const EdgeInsets.only(
+                                            right: SpasiFunda.s,
+                                          ),
+                                          child: Semantics(
+                                            button: true,
+                                            selected: terpilih,
+                                            label:
+                                                'Dompet ${d.nama}, saldo ${formatRupiah(saldo)}',
+                                            child: InkWell(
+                                              key: Key('chip_dompet_${d.id}'),
+                                              onTap: () => setState(
+                                                () => _dompetIdTerpilih = d.id,
+                                              ),
+                                              borderRadius:
+                                                  BorderRadius.circular(
+                                                    SudutFunda.kartu,
+                                                  ),
+                                              child: Container(
+                                                constraints:
+                                                    const BoxConstraints(
+                                                      minWidth: 120,
+                                                      minHeight: 48,
+                                                    ),
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                      horizontal: SpasiFunda.m,
+                                                      vertical: SpasiFunda.s,
+                                                    ),
+                                                decoration: BoxDecoration(
+                                                  color: terpilih
+                                                      ? WarnaFunda.utamaTipis
+                                                      : WarnaFunda.latar,
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                        SudutFunda.kartu,
+                                                      ),
+                                                  border: Border.all(
+                                                    color: terpilih
+                                                        ? WarnaFunda.utama
+                                                        : WarnaFunda.garis,
+                                                    width: terpilih ? 1.5 : 1.0,
+                                                  ),
+                                                ),
+                                                child: Row(
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
+                                                  children: [
+                                                    Icon(
+                                                      ambilIkonLucide(d.ikon),
+                                                      size: 18,
+                                                      color: terpilih
+                                                          ? WarnaFunda
+                                                                .utamaGelap
+                                                          : WarnaFunda.utama,
+                                                    ),
+                                                    const SizedBox(
+                                                      width: SpasiFunda.s,
+                                                    ),
+                                                    Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        Text(
+                                                          d.nama,
+                                                          style: TipografiFunda
+                                                              .label
+                                                              .copyWith(
+                                                                fontSize: 13,
+                                                                color:
+                                                                    WarnaFunda
+                                                                        .teks,
+                                                              ),
+                                                        ),
+                                                        Text(
+                                                          formatRupiah(saldo),
+                                                          style: TipografiFunda
+                                                              .catatan
+                                                              .copyWith(
+                                                                color: WarnaFunda
+                                                                    .teksRedup,
+                                                              ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        );
+                                      }).toList(),
+                                    ),
+                                  ),
+                              ],
+                            ),
+                          )
+                        else
+                          _KartuPutihForm(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    const TeksFunda.label('Alur Transfer'),
+                                    Semantics(
+                                      button: true,
+                                      label: 'Tukar dompet asal dan tujuan',
+                                      child: InkWell(
+                                        key: const Key(
+                                          'tombol_tukar_dompet_transfer',
+                                        ),
+                                        onTap: _tukarDompetTransfer,
+                                        borderRadius: BorderRadius.circular(
+                                          SudutFunda.pil,
+                                        ),
+                                        child: Container(
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: SpasiFunda.s,
+                                            vertical: 4,
+                                          ),
+                                          decoration: BoxDecoration(
+                                            color: WarnaFunda.tintNetral,
+                                            borderRadius: BorderRadius.circular(
+                                              SudutFunda.pil,
+                                            ),
+                                          ),
+                                          child: const Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              Icon(
+                                                LucideIcons.arrowUpDown,
+                                                size: 14,
+                                                color: WarnaFunda.utama,
+                                              ),
+                                              SizedBox(width: 4),
+                                              TeksFunda.catatan(
+                                                'Tukar',
+                                                warna: WarnaFunda.utama,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: SpasiFunda.m),
+                                _BarisPilihDompetTransfer(
+                                  key: const Key(
+                                    'pemilih_dompet_asal_transfer',
+                                  ),
+                                  label: 'Dari Dompet Asal',
+                                  dompet: dompetAsalObj,
+                                  saldo: dompetAsalObj != null
+                                      ? (petaSaldo[dompetAsalObj.id] ??
+                                            dompetAsalObj.saldoAwalRupiah)
+                                      : null,
+                                  padaKetuk: () => _bukaPemilihDompetSheet(
+                                    judul: 'Pilih Dompet Asal',
+                                    daftarDompet: daftarDompetAktif,
+                                    petaSaldo: petaSaldo,
+                                    terpilihId: _dompetIdTerpilih,
+                                    padaPilih: (id) => setState(() {
+                                      _dompetIdTerpilih = id;
+                                      if (_dompetTujuanIdTerpilih == id) {
+                                        _dompetTujuanIdTerpilih = null;
+                                      }
+                                    }),
+                                  ),
+                                ),
+                                const Divider(
+                                  height: SpasiFunda.l,
+                                  color: WarnaFunda.garis,
+                                ),
+                                _BarisPilihDompetTransfer(
+                                  key: const Key(
+                                    'pemilih_dompet_tujuan_transfer',
+                                  ),
+                                  label: 'Ke Dompet Tujuan',
+                                  dompet: dompetTujuanObj,
+                                  saldo: dompetTujuanObj != null
+                                      ? (petaSaldo[dompetTujuanObj.id] ??
+                                            dompetTujuanObj.saldoAwalRupiah)
+                                      : null,
+                                  padaKetuk: () => _bukaPemilihDompetSheet(
+                                    judul: 'Pilih Dompet Tujuan',
+                                    daftarDompet: daftarDompetAktif,
+                                    petaSaldo: petaSaldo,
+                                    terpilihId: _dompetTujuanIdTerpilih,
+                                    kecualikanId: _dompetIdTerpilih,
+                                    padaPilih: (id) => setState(
+                                      () => _dompetTujuanIdTerpilih = id,
+                                    ),
+                                  ),
+                                ),
+                                const Divider(
+                                  height: SpasiFunda.l,
+                                  color: WarnaFunda.garis,
+                                ),
+                                const TeksFunda.catatan(
+                                  'Biaya Admin Transfer (Opsional)',
+                                  warna: WarnaFunda.teksRedup,
+                                ),
+                                TextField(
+                                  controller: _pengontrolBiayaAdmin,
+                                  keyboardType: TextInputType.number,
+                                  decoration: const InputDecoration(
+                                    border: InputBorder.none,
+                                    enabledBorder: InputBorder.none,
+                                    focusedBorder: InputBorder.none,
+                                    filled: false,
+                                    isDense: true,
+                                    contentPadding: EdgeInsets.symmetric(
+                                      vertical: SpasiFunda.xs,
+                                    ),
+                                  ),
+                                  onChanged: (teks) {
+                                    try {
+                                      final nominal = ambilAngkaRupiah(teks);
+                                      final format = formatRupiah(nominal);
+                                      if (format != teks) {
+                                        _pengontrolBiayaAdmin
+                                            .value = TextEditingValue(
+                                          text: format,
+                                          selection: TextSelection.collapsed(
+                                            offset: format.length,
+                                          ),
+                                        );
+                                      }
+                                    } catch (_) {}
+                                    setState(() {});
+                                  },
+                                ),
+                              ],
+                            ),
+                          ),
+                        const SizedBox(height: SpasiFunda.m),
 
-          // Pemilih Kategori (khusus Masuk & Keluar)
-          if (_jenisTerpilih != JenisTransaksi.transfer) ...[
-            const TeksFunda.label('Pilih Kategori'),
-            const SizedBox(height: SpasiFunda.s),
-            Wrap(
-              spacing: SpasiFunda.s,
-              runSpacing: SpasiFunda.s,
-              children: kategoriSesuaiArus.map((kategori) {
-                final terpilih = _kategoriIdTerpilih == kategori.id;
-                final sifat = SifatKategori.dariKode(kategori.sifat);
+                        // Kartu Kategori (khusus Masuk & Keluar)
+                        if (_jenisTerpilih != JenisTransaksi.transfer) ...[
+                          _KartuPutihForm(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const TeksFunda.label('Pilih Kategori'),
+                                const SizedBox(height: SpasiFunda.m),
+                                Wrap(
+                                  spacing: SpasiFunda.s,
+                                  runSpacing: SpasiFunda.s,
+                                  children: kategoriSesuaiArus.map((kategori) {
+                                    final terpilih =
+                                        _kategoriIdTerpilih == kategori.id;
+                                    final sifat = SifatKategori.dariKode(
+                                      kategori.sifat,
+                                    );
 
-                final warnaSifat = switch (sifat) {
-                  SifatKategori.kebutuhan => WarnaFunda.sifatKebutuhan,
-                  SifatKategori.keinginan => WarnaFunda.sifatKeinginan,
-                  SifatKategori.tabungan => WarnaFunda.sifatTabungan,
-                  SifatKategori.utang => WarnaFunda.sifatUtang,
-                  _ => WarnaFunda.teksRedup,
-                };
+                                    final warnaSifat = switch (sifat) {
+                                      SifatKategori.kebutuhan =>
+                                        WarnaFunda.sifatKebutuhan,
+                                      SifatKategori.keinginan =>
+                                        WarnaFunda.sifatKeinginan,
+                                      SifatKategori.tabungan =>
+                                        WarnaFunda.sifatTabungan,
+                                      SifatKategori.utang =>
+                                        WarnaFunda.sifatUtang,
+                                      _ => WarnaFunda.teksRedup,
+                                    };
 
-                return Semantics(
-                  button: true,
-                  selected: terpilih,
-                  label: 'Kategori ${kategori.nama}, sifat ${sifat.label}',
-                  child: FilterChip(
-                    selected: terpilih,
-                    showCheckmark: false,
-                    avatar: Icon(
-                      ambilIkonLucide(kategori.ikon),
-                      size: 16,
-                      color: terpilih ? WarnaFunda.teksPutih : warnaSifat,
+                                    return Semantics(
+                                      button: true,
+                                      selected: terpilih,
+                                      label:
+                                          'Kategori ${kategori.nama}, sifat ${sifat.label}',
+                                      child: FilterChip(
+                                        selected: terpilih,
+                                        showCheckmark: false,
+                                        avatar: Icon(
+                                          ambilIkonLucide(kategori.ikon),
+                                          size: 16,
+                                          color: terpilih
+                                              ? WarnaFunda.teksPutih
+                                              : warnaSifat,
+                                        ),
+                                        label: Text(kategori.nama),
+                                        labelStyle: TipografiFunda.catatan
+                                            .copyWith(
+                                              color: terpilih
+                                                  ? WarnaFunda.teksPutih
+                                                  : WarnaFunda.teks,
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                        backgroundColor: WarnaFunda.latar,
+                                        selectedColor: warnaSifat,
+                                        side: BorderSide(
+                                          color: terpilih
+                                              ? warnaSifat
+                                              : WarnaFunda.garis,
+                                        ),
+                                        onSelected: (val) {
+                                          setState(() {
+                                            _kategoriIdTerpilih = val
+                                                ? kategori.id
+                                                : null;
+                                          });
+                                        },
+                                      ),
+                                    );
+                                  }).toList(),
+                                ),
+                                if (apakahKategoriUtang &&
+                                    daftarUtangAktif.isNotEmpty) ...[
+                                  const SizedBox(height: SpasiFunda.l),
+                                  const TeksFunda.label(
+                                    'Hubungkan ke Utang (Opsional)',
+                                  ),
+                                  const SizedBox(height: SpasiFunda.s),
+                                  DropdownButtonFormField<String?>(
+                                    isExpanded: true,
+                                    initialValue: _utangIdTerpilih,
+                                    decoration: InputDecoration(
+                                      filled: true,
+                                      fillColor: WarnaFunda.latar,
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(
+                                          SudutFunda.kartu,
+                                        ),
+                                        borderSide: const BorderSide(
+                                          color: WarnaFunda.garis,
+                                        ),
+                                      ),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(
+                                          SudutFunda.kartu,
+                                        ),
+                                        borderSide: const BorderSide(
+                                          color: WarnaFunda.garis,
+                                        ),
+                                      ),
+                                    ),
+                                    items: [
+                                      const DropdownMenuItem<String?>(
+                                        value: null,
+                                        child: Text(
+                                          'Tidak dihubungkan ke utang spesifik',
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ),
+                                      ...daftarUtangAktif.map((u) {
+                                        return DropdownMenuItem<String?>(
+                                          value: u.id,
+                                          child: Text(
+                                            u.nama,
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                        );
+                                      }),
+                                    ],
+                                    onChanged: (val) {
+                                      setState(() => _utangIdTerpilih = val);
+                                    },
+                                  ),
+                                ],
+                              ],
+                            ),
+                          ),
+                          const SizedBox(height: SpasiFunda.m),
+                        ],
+
+                        // Kartu Detail Tambahan: Tanggal & Catatan
+                        _KartuPutihForm(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              InkWell(
+                                onTap: _pilihTanggalWaktu,
+                                borderRadius: BorderRadius.circular(
+                                  SudutFunda.kecil,
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: SpasiFunda.xs,
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      const Icon(
+                                        LucideIcons.calendar,
+                                        size: 18,
+                                        color: WarnaFunda.utama,
+                                      ),
+                                      const SizedBox(width: SpasiFunda.m),
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            const TeksFunda.catatan(
+                                              'Tanggal & Waktu',
+                                              warna: WarnaFunda.teksRedup,
+                                            ),
+                                            const SizedBox(height: 2),
+                                            TeksFunda.isiKecil(
+                                              DateFormat(
+                                                'EEEE, d MMMM yyyy HH:mm',
+                                                'id_ID',
+                                              ).format(_waktuTransaksi),
+                                              warna: WarnaFunda.teks,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      const Icon(
+                                        LucideIcons.chevronRight,
+                                        size: 16,
+                                        color: WarnaFunda.teksRedup,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              const Divider(
+                                height: SpasiFunda.l,
+                                color: WarnaFunda.garis,
+                              ),
+                              const TeksFunda.catatan(
+                                'Catatan (Opsional)',
+                                warna: WarnaFunda.teksRedup,
+                              ),
+                              TextField(
+                                controller: _pengontrolCatatan,
+                                decoration: const InputDecoration(
+                                  hintText:
+                                      'Misal: Sarapan bubur ayam, bayar wifi bulanan',
+                                  border: InputBorder.none,
+                                  enabledBorder: InputBorder.none,
+                                  focusedBorder: InputBorder.none,
+                                  filled: false,
+                                  isDense: true,
+                                  contentPadding: EdgeInsets.symmetric(
+                                    vertical: SpasiFunda.xs,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
-                    label: Text(kategori.nama),
-                    labelStyle: TipografiFunda.catatan.copyWith(
-                      color: terpilih ? WarnaFunda.teksPutih : WarnaFunda.teks,
-                      fontWeight: FontWeight.w600,
-                    ),
-                    backgroundColor: WarnaFunda.permukaan,
-                    selectedColor: warnaSifat,
-                    side: BorderSide(
-                      color: terpilih ? warnaSifat : WarnaFunda.garis,
-                    ),
-                    onSelected: (val) {
-                      setState(() {
-                        _kategoriIdTerpilih = val ? kategori.id : null;
-                      });
-                    },
                   ),
-                );
-              }).toList(),
-            ),
-            const SizedBox(height: SpasiFunda.l),
-
-            // Dropdown Hubungkan ke Utang (jika kategori sifatnya utang)
-            if (apakahKategoriUtang && daftarUtangAktif.isNotEmpty) ...[
-              const TeksFunda.label('Hubungkan ke Utang (Opsional)'),
-              const SizedBox(height: SpasiFunda.s),
-              DropdownButtonFormField<String?>(
-                isExpanded: true,
-                initialValue: _utangIdTerpilih,
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: WarnaFunda.permukaan,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(SudutFunda.kartu),
-                    borderSide: const BorderSide(color: WarnaFunda.garis),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(SudutFunda.kartu),
-                    borderSide: const BorderSide(color: WarnaFunda.garis),
-                  ),
-                ),
-                items: [
-                  const DropdownMenuItem<String?>(
-                    value: null,
-                    child: Text(
-                      'Tidak dihubungkan ke utang spesifik',
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                  ...daftarUtangAktif.map((u) {
-                    return DropdownMenuItem<String?>(
-                      value: u.id,
-                      child: Text(u.nama, overflow: TextOverflow.ellipsis),
-                    );
-                  }),
                 ],
-                onChanged: (val) {
-                  setState(() => _utangIdTerpilih = val);
-                },
-              ),
-              const SizedBox(height: SpasiFunda.l),
-            ],
-          ],
-
-          // Tanggal & Waktu
-          const TeksFunda.label('Tanggal & Waktu'),
-          const SizedBox(height: SpasiFunda.s),
-          InkWell(
-            onTap: _pilihTanggalWaktu,
-            borderRadius: BorderRadius.circular(SudutFunda.kartu),
-            child: Container(
-              padding: const EdgeInsets.symmetric(
-                horizontal: SpasiFunda.l,
-                vertical: SpasiFunda.m,
-              ),
-              decoration: BoxDecoration(
-                color: WarnaFunda.permukaan,
-                borderRadius: BorderRadius.circular(SudutFunda.kartu),
-                border: Border.all(color: WarnaFunda.garis),
-              ),
-              child: Row(
-                children: [
-                  const Icon(
-                    LucideIcons.calendar,
-                    size: 20,
-                    color: WarnaFunda.utama,
-                  ),
-                  const SizedBox(width: SpasiFunda.m),
-                  Expanded(
-                    child: TeksFunda.isi(
-                      DateFormat(
-                        'EEEE, d MMMM yyyy HH:mm',
-                        'id_ID',
-                      ).format(_waktuTransaksi),
-                    ),
-                  ),
-                ],
               ),
             ),
           ),
-          const SizedBox(height: SpasiFunda.l),
 
-          // Catatan Opsional
-          const TeksFunda.label('Catatan (Opsional)'),
-          const SizedBox(height: SpasiFunda.s),
-          TextField(
-            controller: _pengontrolCatatan,
-            decoration: InputDecoration(
-              hintText: 'Misal: Sarapan bubur ayam, bayar wifi bulanan',
-              filled: true,
-              fillColor: WarnaFunda.permukaan,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(SudutFunda.kartu),
-                borderSide: const BorderSide(color: WarnaFunda.garis),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(SudutFunda.kartu),
-                borderSide: const BorderSide(color: WarnaFunda.garis),
+          // Sticky Bottom CTA Pil Gelap Kontras Tinggi
+          Container(
+            padding: const EdgeInsets.fromLTRB(
+              SpasiFunda.l,
+              SpasiFunda.m,
+              SpasiFunda.l,
+              SpasiFunda.m,
+            ),
+            decoration: const BoxDecoration(
+              color: WarnaFunda.permukaan,
+              border: Border(top: BorderSide(color: WarnaFunda.garis)),
+            ),
+            child: SafeArea(
+              top: false,
+              child: TombolFunda.pilGelap(
+                key: const Key('tombol_simpan_transaksi'),
+                teks: _sedangUbah ? 'Perbarui Transaksi' : 'Simpan Transaksi',
+                memuat: _memuat,
+                padaTekan: _simpan,
               ),
             ),
           ),
-          const SizedBox(height: SpasiFunda.xxxl),
-
-          // Tombol Simpan
-          TombolFunda.primer(
-            teks: _sedangUbah ? 'Perbarui Transaksi' : 'Simpan Transaksi',
-            lebarPenuh: true,
-            memuat: _memuat,
-            padaTekan: _simpan,
-          ),
-          const SizedBox(height: SpasiFunda.l),
         ],
+      ),
+    );
+  }
+}
+
+class _KartuPutihForm extends StatelessWidget {
+  final Widget child;
+
+  const _KartuPutihForm({required this.child});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(SpasiFunda.l),
+      decoration: BoxDecoration(
+        color: WarnaFunda.permukaan,
+        borderRadius: BorderRadius.circular(SudutFunda.petak),
+        border: Border.all(color: WarnaFunda.garis, width: 1.0),
+      ),
+      child: child,
+    );
+  }
+}
+
+class _BarisPilihDompetTransfer extends StatelessWidget {
+  final String label;
+  final EntitasDompet? dompet;
+  final int? saldo;
+  final VoidCallback padaKetuk;
+
+  const _BarisPilihDompetTransfer({
+    super.key,
+    required this.label,
+    required this.dompet,
+    required this.saldo,
+    required this.padaKetuk,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: padaKetuk,
+      borderRadius: BorderRadius.circular(SudutFunda.kecil),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 4),
+        child: Row(
+          children: [
+            Icon(
+              dompet != null
+                  ? ambilIkonLucide(dompet!.ikon)
+                  : LucideIcons.wallet,
+              size: 20,
+              color: dompet != null ? WarnaFunda.utama : WarnaFunda.teksRedup,
+            ),
+            const SizedBox(width: SpasiFunda.m),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  TeksFunda.catatan(label, warna: WarnaFunda.teksRedup),
+                  const SizedBox(height: 2),
+                  Text(
+                    dompet != null
+                        ? '${dompet!.nama} (${formatRupiah(saldo ?? 0)})'
+                        : 'Ketuk untuk memilih dompet',
+                    style: TipografiFunda.label.copyWith(
+                      color: dompet != null
+                          ? WarnaFunda.teks
+                          : WarnaFunda.teksRedup,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(width: SpasiFunda.s),
+            const Icon(
+              LucideIcons.chevronRight,
+              size: 16,
+              color: WarnaFunda.teksRedup,
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -778,7 +1310,7 @@ class _ItemSegmen extends StatelessWidget {
       child: GestureDetector(
         onTap: padaPilih,
         child: Container(
-          padding: const EdgeInsets.symmetric(vertical: SpasiFunda.m),
+          padding: const EdgeInsets.symmetric(vertical: SpasiFunda.s + 2),
           decoration: BoxDecoration(
             color: terpilih ? warnaAktif : WarnaFunda.transparan,
             borderRadius: BorderRadius.circular(SudutFunda.pil),
@@ -786,9 +1318,11 @@ class _ItemSegmen extends StatelessWidget {
           child: Text(
             judul,
             textAlign: TextAlign.center,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
             style: TipografiFunda.label.copyWith(
               color: terpilih ? WarnaFunda.teksPutih : WarnaFunda.teksRedup,
-              fontSize: 14,
+              fontSize: 13,
             ),
           ),
         ),
@@ -798,9 +1332,14 @@ class _ItemSegmen extends StatelessWidget {
 }
 
 class _TombolPintasanNominal extends StatelessWidget {
-  const _TombolPintasanNominal({required this.label, required this.padaTekan});
+  const _TombolPintasanNominal({
+    required this.label,
+    required this.warnaAksen,
+    required this.padaTekan,
+  });
 
   final String label;
+  final Color warnaAksen;
   final VoidCallback padaTekan;
 
   @override
@@ -816,13 +1355,12 @@ class _TombolPintasanNominal extends StatelessWidget {
         decoration: BoxDecoration(
           color: WarnaFunda.permukaan,
           borderRadius: BorderRadius.circular(SudutFunda.pil),
-          border: Border.all(color: WarnaFunda.garis),
         ),
         child: Text(
           label,
           style: TipografiFunda.catatan.copyWith(
             fontWeight: FontWeight.w600,
-            color: WarnaFunda.utama,
+            color: warnaAksen,
           ),
         ),
       ),

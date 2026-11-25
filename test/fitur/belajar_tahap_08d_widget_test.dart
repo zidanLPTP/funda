@@ -91,17 +91,21 @@ void main() {
           await tester.pump();
         }
 
-        // Jawab 3 soal Cek Paham
+        // Jawab 3 soal Cek Paham (1 soal per halaman)
         final opsi1 = find.textContaining('Membeli sesuatu secara mendadak');
         await tester.ensureVisible(opsi1);
         await tester.pump();
         await tester.tap(opsi1);
+        await tester.pump();
+        await tester.tap(find.byKey(const Key('tombol_lanjut')));
         await tester.pump();
 
         final opsi2 = find.textContaining('Notifikasi promo saat sedang lelah');
         await tester.ensureVisible(opsi2);
         await tester.pump();
         await tester.tap(opsi2);
+        await tester.pump();
+        await tester.tap(find.byKey(const Key('tombol_lanjut')));
         await tester.pump();
 
         final opsi3 = find.textContaining('Menambah jarak kecil');
@@ -302,7 +306,7 @@ void main() {
           await tester.pump();
         }
 
-        // Jawab 3 soal Cek Paham 6.2
+        // Jawab 3 soal Cek Paham 6.2 (1 soal per halaman)
         final opsi1 = find.textContaining(
           'Nominalnya kecil dan berjalan rutin',
         );
@@ -310,11 +314,15 @@ void main() {
         await tester.pump();
         await tester.tap(opsi1);
         await tester.pump();
+        await tester.tap(find.byKey(const Key('tombol_lanjut')));
+        await tester.pump();
 
         final opsi2 = find.textContaining('Apakah aku benar-benar memakainya');
         await tester.ensureVisible(opsi2);
         await tester.pump();
         await tester.tap(opsi2);
+        await tester.pump();
+        await tester.tap(find.byKey(const Key('tombol_lanjut')));
         await tester.pump();
 
         final opsi3 = find.textContaining('Rp600.000');
@@ -341,8 +349,8 @@ void main() {
         await tester.pump();
 
         // Umpan balik nyata muncul
-        await pompaHinggaAda(tester, find.text('Umpan Balik Nyata'));
-        expect(find.text('Umpan Balik Nyata'), findsOneWidget);
+        await pompaHinggaAda(tester, find.text('Hasil dari Datamu'));
+        expect(find.text('Hasil dari Datamu'), findsOneWidget);
         expect(
           find.textContaining(
             'Kamu punya 2 langganan aktif dengan perkiraan sekitar Rp155.000 per bulan.',
@@ -434,7 +442,7 @@ void main() {
 
         // Render awal bebas overflow
         expect(tester.takeException(), isNull);
-        expect(find.text('Pemantik'), findsOneWidget);
+        expect(find.text(pel.judul), findsOneWidget);
 
         await bongkarWidget(tester);
       },

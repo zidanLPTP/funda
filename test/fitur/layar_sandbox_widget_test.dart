@@ -243,13 +243,15 @@ void main() {
           await tester.pump();
         }
 
-        // Jawab 3 soal Cek Paham 11.2
+        // Jawab 3 soal Cek Paham 11.2 (1 soal per halaman PageView)
         final opsi1 = find.textContaining(
           'Makin tinggi potensi imbal hasil, umumnya makin besar',
         );
         await tester.ensureVisible(opsi1);
         await tester.pump();
         await tester.tap(opsi1);
+        await tester.pump();
+        await tester.tap(find.byKey(const Key('tombol_lanjut')));
         await tester.pump();
 
         final opsi2 = find.textContaining(
@@ -258,6 +260,8 @@ void main() {
         await tester.ensureVisible(opsi2);
         await tester.pump();
         await tester.tap(opsi2);
+        await tester.pump();
+        await tester.tap(find.byKey(const Key('tombol_lanjut')));
         await tester.pump();
 
         final opsi3 = find.textContaining('Saham');

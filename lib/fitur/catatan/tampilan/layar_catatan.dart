@@ -69,7 +69,9 @@ class KondisiFilterTransaksi {
   }
 }
 
-/// Layar Tab Catatan Keuangan dengan riwayat per hari, pencarian, dan filter lembar bawah.
+/// Layar Tab Catatan Keuangan bergaya editorial bersih:
+/// header ringkas + tombol pil gelap `+ Catat`, bilah cari & filter,
+/// dan transaksi dikelompokkan per hari dalam satu kartu putih border 1px.
 class LayarCatatan extends ConsumerStatefulWidget {
   const LayarCatatan({super.key});
 
@@ -118,13 +120,24 @@ class _LayarCatatanState extends ConsumerState<LayarCatatan> {
     super.dispose();
   }
 
+  void _bukaFormCatat() {
+    Navigator.push(
+      context,
+      MaterialPageRoute<void>(builder: (_) => const LayarFormTransaksi()),
+    );
+  }
+
   void _bukaLembarFilter(
     List<EntitasDompet> daftarDompet,
     List<EntitasKategori> daftarKategori,
   ) {
-    showModalBottomSheet(
+    final tanpaAnimasi =
+        MediaQuery.disableAnimationsOf(context) ||
+        ref.read(penyediaTanpaAnimasi);
+    showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
+      sheetAnimationStyle: tanpaAnimasi ? AnimationStyle.noAnimation : null,
       backgroundColor: WarnaFunda.permukaan,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
@@ -142,6 +155,89 @@ class _LayarCatatanState extends ConsumerState<LayarCatatan> {
     );
   }
 
+  Widget _bangunHeaderEditorial(
+    BuildContext context, {
+    required bool tampilkanTombolCatat,
+  }) {
+    final bisaKembali = Navigator.canPop(context);
+    return Padding(
+      padding: const EdgeInsets.only(bottom: SpasiFunda.m),
+      child: Row(
+        children: [
+          if (bisaKembali) ...[
+            Semantics(
+              button: true,
+              label: 'Kembali',
+              child: InkWell(
+                onTap: () => Navigator.pop(context),
+                borderRadius: BorderRadius.circular(SudutFunda.pil),
+                child: Container(
+                  width: 44,
+                  height: 44,
+                  decoration: BoxDecoration(
+                    color: WarnaFunda.permukaan,
+                    shape: BoxShape.circle,
+                    border: Border.all(color: WarnaFunda.garis),
+                  ),
+                  child: const Icon(
+                    LucideIcons.arrowLeft,
+                    size: 18,
+                    color: WarnaFunda.teks,
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(width: SpasiFunda.m),
+          ],
+          const Expanded(child: TeksFunda.judulLayar('Catatan Keuangan')),
+          if (tampilkanTombolCatat) ...[
+            const SizedBox(width: SpasiFunda.s),
+            Semantics(
+              button: true,
+              label: 'Catat Transaksi',
+              child: InkWell(
+                key: const Key('tombol_catat_header_catatan'),
+                onTap: _bukaFormCatat,
+                borderRadius: BorderRadius.circular(SudutFunda.pil),
+                child: Container(
+                  constraints: const BoxConstraints(minHeight: 44),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: SpasiFunda.m,
+                    vertical: SpasiFunda.s,
+                  ),
+                  decoration: BoxDecoration(
+                    color: WarnaFunda.tombolGelap,
+                    borderRadius: BorderRadius.circular(SudutFunda.pil),
+                  ),
+                  child: const Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        LucideIcons.plus,
+                        size: 16,
+                        color: WarnaFunda.teksPutih,
+                      ),
+                      SizedBox(width: SpasiFunda.xs),
+                      Text(
+                        'Catat',
+                        style: TextStyle(
+                          fontFamily: TipografiFunda.namaKeluargaFont,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                          color: WarnaFunda.teksPutih,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final dompetAktifAsync = ref.watch(penyediaDaftarDompetAktif);
@@ -149,12 +245,20 @@ class _LayarCatatanState extends ConsumerState<LayarCatatan> {
 
     // Tampilkan pemuat saat data dompet pertama kali diambil
     if (dompetAktifAsync.isLoading && !dompetAktifAsync.hasValue) {
-      return PembungkusLayar(
-        appBar: AppBar(
-          leading: Navigator.canPop(context) ? const BackButton() : null,
-          title: const TeksFunda.judulBagian('Catatan Keuangan'),
+      return Scaffold(
+        backgroundColor: WarnaFunda.latar,
+        body: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(SpasiFunda.marginLayar),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _bangunHeaderEditorial(context, tampilkanTombolCatat: false),
+                const Expanded(child: Center(child: IndikatorMemuat())),
+              ],
+            ),
+          ),
         ),
-        anak: const Center(child: IndikatorMemuat()),
       );
     }
 
@@ -169,11 +273,25 @@ class _LayarCatatanState extends ConsumerState<LayarCatatan> {
     switch (_filter.rentang) {
       case RentangWaktuFilter.hariIni:
         mulai = hariIni;
-        selesai = DateTime(hariIni.year, hariIni.month, hariIni.day, 23, 59, 59);
+        selesai = DateTime(
+          hariIni.year,
+          hariIni.month,
+          hariIni.day,
+          23,
+          59,
+          59,
+        );
         break;
       case RentangWaktuFilter.tujuhHari:
         mulai = hariIni.subtract(const Duration(days: 7));
-        selesai = DateTime(hariIni.year, hariIni.month, hariIni.day, 23, 59, 59);
+        selesai = DateTime(
+          hariIni.year,
+          hariIni.month,
+          hariIni.day,
+          23,
+          59,
+          59,
+        );
         break;
       case RentangWaktuFilter.bulanIni:
         mulai = DateTime(hariIni.year, hariIni.month, 1);
@@ -201,255 +319,331 @@ class _LayarCatatanState extends ConsumerState<LayarCatatan> {
 
     // Jika belum ada dompet sama sekali di aplikasi
     if (daftarDompetAktif.isEmpty && daftarSemuaDompet.isEmpty) {
-      return PembungkusLayar(
-        bisaGulir: true,
-        appBar: AppBar(
-          leading: Navigator.canPop(context) ? const BackButton() : null,
-          title: const TeksFunda.judulBagian('Catatan Keuangan'),
-        ),
-        anak: KeadaanKosong(
-          ikon: LucideIcons.wallet,
-          judul: 'Belum Ada Dompet',
-          pesan:
-              'Buat dompet pertamamu terlebih dahulu agar bisa mulai mencatat transaksi.',
-          teksTombol: 'Buat Dompet Pertamamu',
-          padaAksi: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => const LayarFormDompet()),
-            );
-          },
+      return Scaffold(
+        backgroundColor: WarnaFunda.latar,
+        body: SafeArea(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(SpasiFunda.marginLayar),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _bangunHeaderEditorial(context, tampilkanTombolCatat: false),
+                const SizedBox(height: SpasiFunda.m),
+                _KartuKosongCatatanEditorial(
+                  judul: 'Belum Ada Dompet',
+                  pesan:
+                      'Buat dompet pertamamu terlebih dahulu agar bisa mulai mencatat transaksi.',
+                  teksTombol: 'Buat Dompet Pertamamu',
+                  jenisIlustrasi: JenisIlustrasiFunda.celengan,
+                  warnaKanvas: WarnaFunda.kanvasMint,
+                  warnaAksen: WarnaFunda.utama,
+                  padaTekan: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute<void>(
+                        builder: (_) => const LayarFormDompet(),
+                      ),
+                    );
+                  },
+                ),
+              ],
+            ),
+          ),
         ),
       );
     }
 
-    return PembungkusLayar(
-      appBar: AppBar(
-        leading: Navigator.canPop(context) ? const BackButton() : null,
-        title: const TeksFunda.judulBagian('Catatan Keuangan'),
-        actions: [
-          IconButton(
-            icon: const Icon(LucideIcons.plus),
-            tooltip: 'Catat Transaksi',
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => const LayarFormTransaksi()),
-              );
-            },
+    return Scaffold(
+      backgroundColor: WarnaFunda.latar,
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(
+            SpasiFunda.marginLayar,
+            SpasiFunda.marginLayar,
+            SpasiFunda.marginLayar,
+            0,
           ),
-        ],
-      ),
-      anak: Column(
-        children: [
-          // Bilah Pencarian & Tombol Filter
-          Row(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Expanded(
-                child: TextField(
-                  controller: _pengontrolCari,
-                  decoration: InputDecoration(
-                    hintText: 'Cari catatan atau kategori...',
-                    prefixIcon: const Icon(LucideIcons.search, size: 20),
-                    suffixIcon: _kataKunci.isNotEmpty
-                        ? IconButton(
-                            icon: const Icon(Icons.clear, size: 18),
-                            onPressed: () {
-                              _pengontrolCari.clear();
-                              setState(() => _kataKunci = '');
-                            },
-                          )
-                        : null,
-                    filled: true,
-                    fillColor: WarnaFunda.permukaan,
-                    contentPadding: const EdgeInsets.symmetric(
-                      horizontal: SpasiFunda.m,
-                      vertical: SpasiFunda.s,
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(SudutFunda.pil),
-                      borderSide: const BorderSide(color: WarnaFunda.garis),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(SudutFunda.pil),
-                      borderSide: const BorderSide(color: WarnaFunda.garis),
+              _bangunHeaderEditorial(context, tampilkanTombolCatat: true),
+
+              // Bilah Pencarian & Tombol Filter
+              Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      controller: _pengontrolCari,
+                      decoration: InputDecoration(
+                        hintText: 'Cari catatan atau kategori...',
+                        prefixIcon: const Icon(LucideIcons.search, size: 20),
+                        suffixIcon: _kataKunci.isNotEmpty
+                            ? IconButton(
+                                icon: const Icon(Icons.clear, size: 18),
+                                onPressed: () {
+                                  _pengontrolCari.clear();
+                                  setState(() => _kataKunci = '');
+                                },
+                              )
+                            : null,
+                        filled: true,
+                        fillColor: WarnaFunda.permukaan,
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: SpasiFunda.m,
+                          vertical: SpasiFunda.s,
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(SudutFunda.pil),
+                          borderSide: const BorderSide(color: WarnaFunda.garis),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(SudutFunda.pil),
+                          borderSide: const BorderSide(color: WarnaFunda.garis),
+                        ),
+                      ),
+                      onChanged: (teks) {
+                        setState(() => _kataKunci = teks.trim().toLowerCase());
+                      },
                     ),
                   ),
-                  onChanged: (teks) {
-                    setState(() => _kataKunci = teks.trim().toLowerCase());
+                  const SizedBox(width: SpasiFunda.s),
+                  Stack(
+                    clipBehavior: Clip.none,
+                    children: [
+                      IconButton.filledTonal(
+                        tooltip: 'Filter Transaksi',
+                        onPressed: () => _bukaLembarFilter(
+                          daftarSemuaDompet,
+                          daftarKategori,
+                        ),
+                        icon: const Icon(
+                          LucideIcons.slidersHorizontal,
+                          size: 20,
+                        ),
+                        style: IconButton.styleFrom(
+                          minimumSize: const Size(48, 48),
+                          backgroundColor: _filter.jumlahFilterAktif > 0
+                              ? WarnaFunda.utamaTipis
+                              : WarnaFunda.permukaan,
+                          foregroundColor: _filter.jumlahFilterAktif > 0
+                              ? WarnaFunda.utamaGelap
+                              : WarnaFunda.teks,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(SudutFunda.pil),
+                            side: const BorderSide(color: WarnaFunda.garis),
+                          ),
+                        ),
+                      ),
+                      if (_filter.jumlahFilterAktif > 0)
+                        Positioned(
+                          top: -2,
+                          right: -2,
+                          child: Container(
+                            padding: const EdgeInsets.all(5),
+                            decoration: const BoxDecoration(
+                              color: WarnaFunda.tombolGelap,
+                              shape: BoxShape.circle,
+                            ),
+                            child: Text(
+                              '${_filter.jumlahFilterAktif}',
+                              style: TipografiFunda.catatan.copyWith(
+                                color: WarnaFunda.teksPutih,
+                                fontSize: 10,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
+                ],
+              ),
+              const SizedBox(height: SpasiFunda.m),
+
+              // Daftar Riwayat Transaksi Dikelompokkan 1 Kartu Putih per Hari
+              Expanded(
+                child: daftarTransaksiAsync.when(
+                  loading: () => const Center(child: IndikatorMemuat()),
+                  error: (e, _) => Center(child: Text('Terjadi kesalahan: $e')),
+                  data: (transaksiTersaring) {
+                    if (transaksiTersaring.isEmpty) {
+                      final adaSaringan =
+                          _kataKunci.isNotEmpty ||
+                          _filter.jumlahFilterAktif > 0;
+                      return SingleChildScrollView(
+                        padding: const EdgeInsets.only(bottom: SpasiFunda.xl),
+                        child: _KartuKosongCatatanEditorial(
+                          judul: adaSaringan
+                              ? 'Tidak Ada Catatan yang Cocok'
+                              : 'Belum Ada Transaksi',
+                          pesan: adaSaringan
+                              ? 'Coba sesuaikan kata kunci pencarian atau hapus beberapa filter yang aktif.'
+                              : 'Setiap langkah keuangan dimulai dari satu catatan kecil. Yuk mulai catat transaksi pertamamu!',
+                          teksTombol: _filter.jumlahFilterAktif > 0
+                              ? 'Hapus Semua Filter'
+                              : 'Catat Transaksi Sekarang',
+                          jenisIlustrasi: adaSaringan
+                              ? JenisIlustrasiFunda.kompas
+                              : JenisIlustrasiFunda.neraca,
+                          warnaKanvas: adaSaringan
+                              ? WarnaFunda.kanvasBiru
+                              : WarnaFunda.kanvasMint,
+                          warnaAksen: adaSaringan
+                              ? WarnaFunda.sifatKebutuhan
+                              : WarnaFunda.utama,
+                          padaTekan: () {
+                            if (_filter.jumlahFilterAktif > 0) {
+                              setState(() {
+                                _filter = const KondisiFilterTransaksi();
+                                _pengontrolCari.clear();
+                                _kataKunci = '';
+                              });
+                            } else {
+                              _bukaFormCatat();
+                            }
+                          },
+                        ),
+                      );
+                    }
+
+                    // Kelompokkan per tanggal lokal perangkat
+                    final petaHari = <DateTime, List<EntitasTransaksi>>{};
+                    for (final t in transaksiTersaring) {
+                      final hari = ambilTanggalLokalPerangkat(t.waktuTransaksi);
+                      petaHari.putIfAbsent(hari, () => []).add(t);
+                    }
+
+                    final daftarHari = petaHari.keys.toList()
+                      ..sort((a, b) => b.compareTo(a));
+
+                    return ListView.builder(
+                      controller: _pengontrolGulir,
+                      padding: const EdgeInsets.only(bottom: SpasiFunda.xl),
+                      itemCount: daftarHari.length,
+                      itemBuilder: (context, indeks) {
+                        final hari = daftarHari[indeks];
+                        final daftarTransaksiHari = petaHari[hari]!;
+
+                        var masukHari = 0;
+                        var keluarHari = 0;
+                        for (final t in daftarTransaksiHari) {
+                          if (t.jenis == 'masuk') {
+                            masukHari += t.jumlahRupiah;
+                          } else if (t.jenis == 'keluar') {
+                            keluarHari += t.jumlahRupiah;
+                          } else if (t.jenis == 'transfer') {
+                            keluarHari += t.biayaAdminRupiah;
+                          }
+                        }
+                        final selisihHariLokal = masukHari - keluarHari;
+
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // Header Tanggal & Pil Subjumlah Harian
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                vertical: SpasiFunda.s,
+                              ),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Expanded(
+                                    child: TeksFunda.label(
+                                      DateFormat(
+                                        'EEEE, d MMMM yyyy',
+                                        'id_ID',
+                                      ).format(hari),
+                                      warna: WarnaFunda.teksRedup,
+                                    ),
+                                  ),
+                                  const SizedBox(width: SpasiFunda.s),
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: SpasiFunda.s,
+                                      vertical: 2,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: selisihHariLokal >= 0
+                                          ? WarnaFunda.tintHijau
+                                          : WarnaFunda.tintMawar,
+                                      borderRadius: BorderRadius.circular(
+                                        SudutFunda.pil,
+                                      ),
+                                    ),
+                                    child: TeksFunda.catatan(
+                                      '${selisihHariLokal >= 0 ? '+' : ''}${formatRupiah(selisihHariLokal)}',
+                                      warna: selisihHariLokal >= 0
+                                          ? WarnaFunda.pemasukan
+                                          : WarnaFunda.pengeluaran,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+
+                            // Satu Kartu Putih Border 1px Berpemisah Tipis per Hari
+                            Container(
+                              key: Key('kartu_harian_catatan_$indeks'),
+                              margin: const EdgeInsets.only(
+                                bottom: SpasiFunda.m,
+                              ),
+                              decoration: BoxDecoration(
+                                color: WarnaFunda.permukaan,
+                                borderRadius: BorderRadius.circular(
+                                  SudutFunda.petak,
+                                ),
+                                border: Border.all(
+                                  color: WarnaFunda.garis,
+                                  width: 1.0,
+                                ),
+                              ),
+                              clipBehavior: Clip.antiAlias,
+                              child: Column(
+                                children: daftarTransaksiHari
+                                    .asMap()
+                                    .entries
+                                    .map((entry) {
+                                      final idxTx = entry.key;
+                                      final transaksi = entry.value;
+                                      return Column(
+                                        children: [
+                                          _ItemBarisTransaksi(
+                                            transaksi: transaksi,
+                                            daftarDompet: daftarSemuaDompet,
+                                            daftarKategori: daftarKategori,
+                                            padaKetuk: () =>
+                                                _tampilkanAksiTransaksi(
+                                                  context,
+                                                  ref,
+                                                  transaksi,
+                                                ),
+                                          ),
+                                          if (idxTx <
+                                              daftarTransaksiHari.length - 1)
+                                            const Divider(
+                                              height: 1,
+                                              indent: SpasiFunda.l,
+                                              endIndent: SpasiFunda.l,
+                                              color: WarnaFunda.garis,
+                                            ),
+                                        ],
+                                      );
+                                    })
+                                    .toList(),
+                              ),
+                            ),
+                          ],
+                        );
+                      },
+                    );
                   },
                 ),
               ),
-              const SizedBox(width: SpasiFunda.s),
-              Stack(
-                clipBehavior: Clip.none,
-                children: [
-                  IconButton.filledTonal(
-                    tooltip: 'Filter Transaksi',
-                    onPressed: () =>
-                        _bukaLembarFilter(daftarSemuaDompet, daftarKategori),
-                    icon: const Icon(LucideIcons.slidersHorizontal, size: 20),
-                    style: IconButton.styleFrom(
-                      backgroundColor: _filter.jumlahFilterAktif > 0
-                          ? WarnaFunda.utamaTipis
-                          : WarnaFunda.permukaan,
-                      foregroundColor: _filter.jumlahFilterAktif > 0
-                          ? WarnaFunda.utamaGelap
-                          : WarnaFunda.teks,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(SudutFunda.pil),
-                        side: const BorderSide(color: WarnaFunda.garis),
-                      ),
-                    ),
-                  ),
-                  if (_filter.jumlahFilterAktif > 0)
-                    Positioned(
-                      top: -2,
-                      right: -2,
-                      child: Container(
-                        padding: const EdgeInsets.all(4),
-                        decoration: const BoxDecoration(
-                          color: WarnaFunda.utama,
-                          shape: BoxShape.circle,
-                        ),
-                        child: Text(
-                          '${_filter.jumlahFilterAktif}',
-                          style: TipografiFunda.catatan.copyWith(
-                            color: WarnaFunda.teksPutih,
-                            fontSize: 10,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ),
-                ],
-              ),
             ],
           ),
-          const SizedBox(height: SpasiFunda.m),
-
-          // Daftar Riwayat Transaksi Dikelompokkan Per Hari
-          Expanded(
-            child: daftarTransaksiAsync.when(
-              loading: () => const Center(child: IndikatorMemuat()),
-              error: (e, _) => Center(child: Text('Terjadi kesalahan: $e')),
-              data: (transaksiTersaring) {
-                if (transaksiTersaring.isEmpty) {
-                  return SingleChildScrollView(
-                    child: KeadaanKosong(
-                      ikon: LucideIcons.receipt,
-                      judul:
-                          _kataKunci.isNotEmpty || _filter.jumlahFilterAktif > 0
-                          ? 'Tidak Ada Catatan yang Cocok'
-                          : 'Belum Ada Transaksi',
-                      pesan:
-                          _kataKunci.isNotEmpty || _filter.jumlahFilterAktif > 0
-                          ? 'Coba sesuaikan kata kunci pencarian atau hapus beberapa filter yang aktif.'
-                          : 'Setiap langkah keuangan dimulai dari satu catatan kecil. Yuk mulai catat transaksi pertamamu!',
-                      teksTombol: _filter.jumlahFilterAktif > 0
-                          ? 'Hapus Semua Filter'
-                          : 'Catat Transaksi Sekarang',
-                      padaAksi: () {
-                        if (_filter.jumlahFilterAktif > 0) {
-                          setState(() {
-                            _filter = const KondisiFilterTransaksi();
-                            _pengontrolCari.clear();
-                            _kataKunci = '';
-                          });
-                        } else {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => const LayarFormTransaksi(),
-                            ),
-                          );
-                        }
-                      },
-                    ),
-                  );
-                }
-
-                // Kelompokkan per tanggal lokal perangkat
-                final petaHari = <DateTime, List<EntitasTransaksi>>{};
-                for (final t in transaksiTersaring) {
-                  final hari = ambilTanggalLokalPerangkat(t.waktuTransaksi);
-                  petaHari.putIfAbsent(hari, () => []).add(t);
-                }
-
-                final daftarHari = petaHari.keys.toList()
-                  ..sort((a, b) => b.compareTo(a));
-
-                return ListView.builder(
-                  controller: _pengontrolGulir,
-                  itemCount: daftarHari.length,
-                  itemBuilder: (context, indeks) {
-                    final hari = daftarHari[indeks];
-                    final daftarTransaksiHari = petaHari[hari]!;
-
-                    // Hitung subjumlah harian lokal sebagai nilai mula-mula
-                    var masukHari = 0;
-                    var keluarHari = 0;
-                    for (final t in daftarTransaksiHari) {
-                      if (t.jenis == 'masuk') {
-                        masukHari += t.jumlahRupiah;
-                      } else if (t.jenis == 'keluar') {
-                        keluarHari += t.jumlahRupiah;
-                      } else if (t.jenis == 'transfer') {
-                        keluarHari += t.biayaAdminRupiah;
-                      }
-                    }
-                    final selisihHariLokal = masukHari - keluarHari;
-
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // Header Tanggal & Subjumlah Harian (Agregasi SQL)
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                            vertical: SpasiFunda.s,
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              TeksFunda.label(
-                                DateFormat(
-                                  'EEEE, d MMMM yyyy',
-                                  'id_ID',
-                                ).format(hari),
-                                warna: WarnaFunda.teksRedup,
-                              ),
-                              TeksFunda.catatan(
-                                '${selisihHariLokal >= 0 ? '+' : ''}${formatRupiah(selisihHariLokal)}',
-                                warna: selisihHariLokal >= 0
-                                    ? WarnaFunda.pemasukan
-                                    : WarnaFunda.pengeluaran,
-                              ),
-                            ],
-                          ),
-                        ),
-
-                        // Item Transaksi di Hari Tersebut
-                        ...daftarTransaksiHari.map((transaksi) {
-                          return _ItemBarisTransaksi(
-                            transaksi: transaksi,
-                            daftarDompet: daftarSemuaDompet,
-                            daftarKategori: daftarKategori,
-                            padaKetuk: () => _tampilkanAksiTransaksi(
-                              context,
-                              ref,
-                              transaksi,
-                            ),
-                          );
-                        }),
-                        const SizedBox(height: SpasiFunda.m),
-                      ],
-                    );
-                  },
-                );
-              },
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }
@@ -459,8 +653,12 @@ class _LayarCatatanState extends ConsumerState<LayarCatatan> {
     WidgetRef ref,
     EntitasTransaksi transaksi,
   ) {
-    showModalBottomSheet(
+    final tanpaAnimasi =
+        MediaQuery.disableAnimationsOf(context) ||
+        ref.read(penyediaTanpaAnimasi);
+    showModalBottomSheet<void>(
       context: context,
+      sheetAnimationStyle: tanpaAnimasi ? AnimationStyle.noAnimation : null,
       backgroundColor: WarnaFunda.permukaan,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
@@ -504,7 +702,7 @@ class _LayarCatatanState extends ConsumerState<LayarCatatan> {
                   Navigator.pop(ctx);
                   Navigator.push(
                     context,
-                    MaterialPageRoute(
+                    MaterialPageRoute<void>(
                       builder: (_) => LayarFormTransaksi(transaksi: transaksi),
                     ),
                   );
@@ -596,6 +794,71 @@ class _LayarCatatanState extends ConsumerState<LayarCatatan> {
   }
 }
 
+class _KartuKosongCatatanEditorial extends StatelessWidget {
+  final String judul;
+  final String pesan;
+  final String teksTombol;
+  final JenisIlustrasiFunda jenisIlustrasi;
+  final Color warnaKanvas;
+  final Color warnaAksen;
+  final VoidCallback padaTekan;
+
+  const _KartuKosongCatatanEditorial({
+    required this.judul,
+    required this.pesan,
+    required this.teksTombol,
+    required this.jenisIlustrasi,
+    required this.warnaKanvas,
+    required this.warnaAksen,
+    required this.padaTekan,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final teksBesar = MediaQuery.textScalerOf(context).scale(1) >= 1.5;
+    return Container(
+      decoration: BoxDecoration(
+        color: WarnaFunda.permukaan,
+        borderRadius: BorderRadius.circular(SudutFunda.petak),
+        border: Border.all(color: WarnaFunda.garis),
+      ),
+      clipBehavior: Clip.antiAlias,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Container(
+            color: warnaKanvas,
+            padding: const EdgeInsets.symmetric(
+              vertical: SpasiFunda.xl,
+              horizontal: SpasiFunda.l,
+            ),
+            child: Center(
+              child: IlustrasiGeometrisFunda(
+                jenis: jenisIlustrasi,
+                warnaAksen: warnaAksen,
+                ukuran: teksBesar ? 76 : 96,
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(SpasiFunda.l),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                TeksFunda.judulBagian(judul),
+                const SizedBox(height: SpasiFunda.s),
+                TeksFunda.isiKecil(pesan, warna: WarnaFunda.teksRedup),
+                const SizedBox(height: SpasiFunda.l),
+                TombolFunda.pilGelap(teks: teksTombol, padaTekan: padaTekan),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class _ItemBarisTransaksi extends StatelessWidget {
   const _ItemBarisTransaksi({
     required this.transaksi,
@@ -669,7 +932,6 @@ class _ItemBarisTransaksi extends StatelessWidget {
         ? WarnaFunda.pemasukan
         : (isTransfer ? WarnaFunda.utama : WarnaFunda.pengeluaran);
 
-    // Judul & Ikon
     String judulBaris;
     IconData ikonBaris;
     Color warnaIkon;
@@ -685,69 +947,81 @@ class _ItemBarisTransaksi extends StatelessWidget {
     } else {
       judulBaris = jenis.label;
       ikonBaris = LucideIcons.slidersHorizontal;
-      warnaIkon = WarnaFunda.teksRedup;
+      warnaIkon = WarnaFunda.utama;
     }
 
-    return Container(
-      margin: const EdgeInsets.only(bottom: SpasiFunda.s),
-      decoration: BoxDecoration(
-        color: WarnaFunda.permukaan,
-        borderRadius: BorderRadius.circular(SudutFunda.kartu),
-        border: Border.all(color: WarnaFunda.garis),
-      ),
-      child: ListTile(
+    return Material(
+      color: WarnaFunda.transparan,
+      child: InkWell(
         onTap: padaKetuk,
-        contentPadding: const EdgeInsets.symmetric(
-          horizontal: SpasiFunda.m,
-          vertical: SpasiFunda.xs,
-        ),
-        leading: Container(
-          padding: const EdgeInsets.all(SpasiFunda.s),
-          decoration: BoxDecoration(
-            color: warnaIkon.withAlpha(20),
-            borderRadius: BorderRadius.circular(SudutFunda.kecil),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: SpasiFunda.l,
+            vertical: SpasiFunda.m,
           ),
-          child: Icon(ikonBaris, size: 20, color: warnaIkon),
-        ),
-        title: Text(judulBaris, style: TipografiFunda.label),
-        subtitle: Row(
-          children: [
-            if (!isTransfer) ...[
-              Text(dompetAsal.nama, style: TipografiFunda.catatan),
-              const SizedBox(width: SpasiFunda.s),
-            ],
-            if (transaksi.catatan != null && transaksi.catatan!.isNotEmpty) ...[
+          child: Row(
+            children: [
+              Icon(ikonBaris, size: 20, color: warnaIkon),
+              const SizedBox(width: SpasiFunda.m),
               Expanded(
-                child: Text(
-                  '• ${transaksi.catatan}',
-                  style: TipografiFunda.catatan,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(judulBaris, style: TipografiFunda.label),
+                    const SizedBox(height: 2),
+                    Row(
+                      children: [
+                        if (!isTransfer) ...[
+                          Flexible(
+                            child: Text(
+                              dompetAsal.nama,
+                              style: TipografiFunda.catatan,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          if (transaksi.catatan != null &&
+                              transaksi.catatan!.isNotEmpty)
+                            const SizedBox(width: SpasiFunda.s),
+                        ],
+                        if (transaksi.catatan != null &&
+                            transaksi.catatan!.isNotEmpty)
+                          Expanded(
+                            child: Text(
+                              '• ${transaksi.catatan}',
+                              style: TipografiFunda.catatan,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                      ],
+                    ),
+                  ],
                 ),
+              ),
+              const SizedBox(width: SpasiFunda.s),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Text(
+                    '$tanda${formatRupiah(transaksi.jumlahRupiah)}',
+                    style: TipografiFunda.label.copyWith(
+                      color: warnaNominal,
+                      fontFeatures: const [FontFeature.tabularFigures()],
+                    ),
+                  ),
+                  if (transaksi.biayaAdminRupiah > 0)
+                    Text(
+                      'admin ${formatRupiah(transaksi.biayaAdminRupiah)}',
+                      style: TipografiFunda.catatan.copyWith(
+                        fontSize: 10,
+                        color: WarnaFunda.teksRedup,
+                      ),
+                    ),
+                ],
               ),
             ],
-          ],
-        ),
-        trailing: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            Text(
-              '$tanda${formatRupiah(transaksi.jumlahRupiah)}',
-              style: TipografiFunda.label.copyWith(
-                color: warnaNominal,
-                fontFeatures: const [FontFeature.tabularFigures()],
-              ),
-            ),
-            if (transaksi.biayaAdminRupiah > 0)
-              Text(
-                'admin ${formatRupiah(transaksi.biayaAdminRupiah)}',
-                style: TipografiFunda.catatan.copyWith(
-                  fontSize: 10,
-                  color: WarnaFunda.teksRedup,
-                ),
-              ),
-          ],
+          ),
         ),
       ),
     );
@@ -919,9 +1193,8 @@ class _LembarFilterState extends State<_LembarFilter> {
             ),
             const SizedBox(height: SpasiFunda.xl),
 
-            TombolFunda.primer(
+            TombolFunda.pilGelap(
               teks: 'Terapkan Filter',
-              lebarPenuh: true,
               padaTekan: () {
                 widget.padaTerapkan(_filterSaatIni);
                 Navigator.pop(context);

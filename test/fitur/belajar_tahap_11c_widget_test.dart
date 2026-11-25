@@ -15,6 +15,7 @@ import 'package:funda/fitur/belajar/model/pembaca_konten.dart';
 import 'package:funda/fitur/belajar/tampilan/layar_belajar.dart';
 import 'package:funda/fitur/belajar/tampilan/layar_kuis_modul.dart';
 import 'package:funda/fitur/belajar/tampilan/layar_pemutar_pelajaran.dart';
+import 'package:funda/komponen/indikator_memuat.dart';
 import 'package:funda/perhitungan/perhitungan_belajar.dart';
 import 'package:funda/tema/tema_funda.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -91,6 +92,7 @@ void main() {
             ProviderScope(
               overrides: [
                 penyediaBasisData.overrideWithValue(db),
+                penyediaTanpaAnimasi.overrideWithValue(true),
                 penyediaFotoData.overrideWith(
                   (ref) => Future.value(fotoDataTerkunci),
                 ),
@@ -112,12 +114,19 @@ void main() {
           await pompaHinggaAda(tester, find.text('Keuangan Usaha Kecil'));
           expect(find.text('Keuangan Usaha Kecil'), findsOneWidget);
 
+          // Ketuk kartu modul untuk membuka lembar detail modul
+          await tester.tap(find.text('Keuangan Usaha Kecil'));
+          await pompaHinggaAda(tester, find.text('Aku tidak punya ini'));
+
           // Cari tombol "Aku tidak punya ini"
           final tombolPernyataan = find.text('Aku tidak punya ini');
           expect(tombolPernyataan, findsOneWidget);
 
           // Tap tombol pernyataan
+          await tester.ensureVisible(tombolPernyataan);
+          await tester.pump();
           await tester.tap(tombolPernyataan);
+          await tester.pump();
           await tester.pump();
 
           // Verifikasi pernyataan tersimpan di database
@@ -192,6 +201,7 @@ void main() {
             ProviderScope(
               overrides: [
                 penyediaBasisData.overrideWithValue(db),
+                penyediaTanpaAnimasi.overrideWithValue(true),
                 penyediaFotoData.overrideWith(
                   (ref) => Future.value(fotoDataTerkunci),
                 ),
@@ -217,6 +227,13 @@ void main() {
           expect(
             find.text('Proteksi Keluarga & Warisan Dasar'),
             findsOneWidget,
+          );
+
+          // Ketuk kartu modul untuk memeriksa pesan gerbang pada lembar detail modul
+          await tester.tap(find.text('Proteksi Keluarga & Warisan Dasar'));
+          await pompaHinggaAda(
+            tester,
+            find.textContaining('Selesaikan Modul 10 (Proteksi Dasar) dulu'),
           );
 
           // Verifikasi pesan gerbang muncul
@@ -257,6 +274,7 @@ void main() {
             ProviderScope(
               overrides: [
                 penyediaBasisData.overrideWithValue(db),
+                penyediaTanpaAnimasi.overrideWithValue(true),
                 penyediaFotoData.overrideWith(
                   (ref) => Future.value(fotoDataTerbuka),
                 ),
@@ -308,6 +326,7 @@ void main() {
             ProviderScope(
               overrides: [
                 penyediaBasisData.overrideWithValue(db),
+                penyediaTanpaAnimasi.overrideWithValue(true),
                 penyediaFotoData.overrideWith(
                   (ref) => Future.value(FotoDataPengguna.kosong()),
                 ),
@@ -334,12 +353,14 @@ void main() {
             await tester.pump();
           }
 
-          // Jawab 3 soal Cek Paham 17.1
+          // Jawab 3 soal Cek Paham 17.1 (1 soal per halaman)
           final opsi1 = find.textContaining(
             'Sulit mengetahui untung rugi sebenarnya',
           );
           await tester.ensureVisible(opsi1);
           await tester.tap(opsi1);
+          await tester.pump();
+          await tester.tap(find.byKey(const Key('tombol_lanjut')));
           await tester.pump();
 
           final opsi2 = find.textContaining(
@@ -347,6 +368,8 @@ void main() {
           );
           await tester.ensureVisible(opsi2);
           await tester.tap(opsi2);
+          await tester.pump();
+          await tester.tap(find.byKey(const Key('tombol_lanjut')));
           await tester.pump();
 
           final opsi3 = find.text('Rp2.200.000');
@@ -508,12 +531,14 @@ void main() {
             await tester.pump();
           }
 
-          // Jawab 3 soal Cek Paham 17.2
+          // Jawab 3 soal Cek Paham 17.2 (1 soal per halaman)
           final opsi1 = find.textContaining(
             'Omzet adalah total penjualan kotor',
           );
           await tester.ensureVisible(opsi1);
           await tester.tap(opsi1);
+          await tester.pump();
+          await tester.tap(find.byKey(const Key('tombol_lanjut')));
           await tester.pump();
 
           final opsi2 = find.textContaining(
@@ -521,6 +546,8 @@ void main() {
           );
           await tester.ensureVisible(opsi2);
           await tester.tap(opsi2);
+          await tester.pump();
+          await tester.tap(find.byKey(const Key('tombol_lanjut')));
           await tester.pump();
 
           final opsi3 = find.textContaining(
@@ -591,6 +618,7 @@ void main() {
             ProviderScope(
               overrides: [
                 penyediaBasisData.overrideWithValue(db),
+                penyediaTanpaAnimasi.overrideWithValue(true),
                 penyediaFotoData.overrideWith(
                   (ref) => Future.value(FotoDataPengguna.kosong()),
                 ),
@@ -617,17 +645,21 @@ void main() {
             await tester.pump();
           }
 
-          // Jawab 3 soal Cek Paham 17.3
+          // Jawab 3 soal Cek Paham 17.3 (1 soal per halaman)
           final opsi1 = find.textContaining(
             'Membiayai perputaran operasional harian',
           );
           await tester.ensureVisible(opsi1);
           await tester.tap(opsi1);
           await tester.pump();
+          await tester.tap(find.byKey(const Key('tombol_lanjut')));
+          await tester.pump();
 
           final opsi2 = find.textContaining('Menghadapi masa penjualan sepi');
           await tester.ensureVisible(opsi2);
           await tester.tap(opsi2);
+          await tester.pump();
+          await tester.tap(find.byKey(const Key('tombol_lanjut')));
           await tester.pump();
 
           final opsi3 = find.textContaining(
@@ -692,6 +724,7 @@ void main() {
             ProviderScope(
               overrides: [
                 penyediaBasisData.overrideWithValue(db),
+                penyediaTanpaAnimasi.overrideWithValue(true),
                 penyediaFotoData.overrideWith(
                   (ref) => Future.value(FotoDataPengguna.kosong()),
                 ),
@@ -718,12 +751,14 @@ void main() {
             await tester.pump();
           }
 
-          // Jawab 3 soal Cek Paham 18.1
+          // Jawab 3 soal Cek Paham 18.1 (1 soal per halaman)
           final opsi1 = find.textContaining(
             'Agar keluarga tidak kebingungan mengakses hak',
           );
           await tester.ensureVisible(opsi1);
           await tester.tap(opsi1);
+          await tester.pump();
+          await tester.tap(find.byKey(const Key('tombol_lanjut')));
           await tester.pump();
 
           final opsi2 = find.textContaining(
@@ -731,6 +766,8 @@ void main() {
           );
           await tester.ensureVisible(opsi2);
           await tester.tap(opsi2);
+          await tester.pump();
+          await tester.tap(find.byKey(const Key('tombol_lanjut')));
           await tester.pump();
 
           final opsi3 = find.textContaining(
@@ -792,6 +829,7 @@ void main() {
             ProviderScope(
               overrides: [
                 penyediaBasisData.overrideWithValue(db),
+                penyediaTanpaAnimasi.overrideWithValue(true),
                 penyediaFotoData.overrideWith(
                   (ref) => Future.value(FotoDataPengguna.kosong()),
                 ),
@@ -818,10 +856,12 @@ void main() {
             await tester.pump();
           }
 
-          // Jawab 3 soal Cek Paham 18.2
+          // Jawab 3 soal Cek Paham 18.2 (1 soal per halaman)
           final opsi1 = find.textContaining('Dalam satu map tahan air');
           await tester.ensureVisible(opsi1);
           await tester.tap(opsi1);
+          await tester.pump();
+          await tester.tap(find.byKey(const Key('tombol_lanjut')));
           await tester.pump();
 
           final opsi2 = find.textContaining(
@@ -829,6 +869,8 @@ void main() {
           );
           await tester.ensureVisible(opsi2);
           await tester.tap(opsi2);
+          await tester.pump();
+          await tester.tap(find.byKey(const Key('tombol_lanjut')));
           await tester.pump();
 
           final opsi3 = find.textContaining(
@@ -901,6 +943,7 @@ void main() {
             ProviderScope(
               overrides: [
                 penyediaBasisData.overrideWithValue(db),
+                penyediaTanpaAnimasi.overrideWithValue(true),
                 penyediaFotoData.overrideWith(
                   (ref) => Future.value(FotoDataPengguna.kosong()),
                 ),
@@ -927,12 +970,14 @@ void main() {
             await tester.pump();
           }
 
-          // Jawab 3 soal Cek Paham 18.3
+          // Jawab 3 soal Cek Paham 18.3 (1 soal per halaman)
           final opsi1 = find.textContaining(
             'Mencegah kebingungan dan sengketa keluarga',
           );
           await tester.ensureVisible(opsi1);
           await tester.tap(opsi1);
+          await tester.pump();
+          await tester.tap(find.byKey(const Key('tombol_lanjut')));
           await tester.pump();
 
           final opsi2 = find.textContaining(
@@ -940,6 +985,8 @@ void main() {
           );
           await tester.ensureVisible(opsi2);
           await tester.tap(opsi2);
+          await tester.pump();
+          await tester.tap(find.byKey(const Key('tombol_lanjut')));
           await tester.pump();
 
           final opsi3 = find.textContaining(
@@ -1050,6 +1097,7 @@ void main() {
             ProviderScope(
               overrides: [
                 penyediaBasisData.overrideWithValue(db),
+                penyediaTanpaAnimasi.overrideWithValue(true),
                 penyediaFotoData.overrideWith(
                   (ref) => Future.value(FotoDataPengguna.kosong()),
                 ),

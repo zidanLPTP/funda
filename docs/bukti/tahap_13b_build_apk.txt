@@ -1,0 +1,8 @@
+﻿Running Gradle task 'assembleRelease'...                        
+Expected to find fonts for (packages/cupertino_icons/CupertinoIcons, MaterialIcons, packages/lucide_icons_flutter/Lucide), but found (MaterialIcons, packages/lucide_icons_flutter/Lucide). This usually means you are referring to font families in an IconData class but not including them in the assets section of your pubspec.yaml, are missing the package that would include them, or are missing "uses-material-design: true".
+Font asset "lucide.ttf" was tree-shaken, reducing it from 986208 to 39020 bytes (96.0% reduction). Tree-shaking can be disabled by providing the --no-tree-shake-icons flag when building your app.
+Font asset "MaterialIcons-Regular.otf" was tree-shaken, reducing it from 1645184 to 2968 bytes (99.8% reduction). Tree-shaking can be disabled by providing the --no-tree-shake-icons flag when building your app.
+Running Gradle task 'assembleRelease'...                          325.0s
+√ Built build\app\outputs\flutter-apk\app-armeabi-v7a-release.apk (23.7MB)
+√ Built build\app\outputs\flutter-apk\app-arm64-v8a-release.apk (25.3MB)
+√ Built build\app\outputs\flutter-apk\app-x86_64-release.apk (26.7MB)

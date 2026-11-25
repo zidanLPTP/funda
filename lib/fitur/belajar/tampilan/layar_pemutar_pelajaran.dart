@@ -15,7 +15,6 @@ import '../kontroler/penyedia_belajar.dart';
 import '../model/pembaca_konten.dart';
 import '../model/registri_misi.dart';
 import '../../transaksi/tampilan/layar_form_transaksi.dart';
-import 'komponen_teks_istilah.dart';
 
 /// Layar pemutar pelajaran kartu geser berurutan (Micro-learning Funda).
 class LayarPemutarPelajaran extends ConsumerStatefulWidget {
@@ -204,18 +203,29 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
     super.dispose();
   }
 
+  bool _punyaContohAngka(PelajaranKonten pel) {
+    final contoh = pel.contohAngka;
+    return contoh != null &&
+        (contoh.baris.isNotEmpty || contoh.judul.isNotEmpty);
+  }
+
+  int _indeksMulaiCekPaham(PelajaranKonten pel) {
+    return 1 + pel.kartu.length + (_punyaContohAngka(pel) ? 1 : 0);
+  }
+
+  int _indeksMisi(PelajaranKonten pel) {
+    return _indeksMulaiCekPaham(pel) + pel.cekPaham.length;
+  }
+
   // Menghitung total kartu/langkah dalam pelajaran ini:
-  // 1 (Pemantik) + N (Kartu Konsep) + 1 (Contoh Angka) + 1 (Cek Paham) + 1 (Misi) + 1 (Umpan Balik) + (Tindak Lanjut jika ada ? 1 : 0)
+  // 1 (Pemantik) + N (Kartu Konsep) + (Contoh Angka ? 1 : 0) + M (Cek Paham, 1 soal/halaman) + 1 (Misi) + 1 (Umpan Balik) + (Tindak Lanjut ? 1 : 0)
   int _hitungTotalLangkah() {
-    if (_pelajaran == null) return 1;
-    var total = 1; // Pemantik
-    total += _pelajaran!.kartu.length; // Kartu konsep
-    total += 1; // Contoh Angka
-    total += 1; // Cek Paham
+    final pel = _pelajaran;
+    if (pel == null) return 1;
+    var total = _indeksMisi(pel);
     total += 1; // Misi
     total += 1; // Umpan Balik
-    if (_pelajaran!.tindakLanjut != null &&
-        _pelajaran!.tindakLanjut!.isNotEmpty) {
+    if (pel.tindakLanjut != null && pel.tindakLanjut!.isNotEmpty) {
       total += 1; // Tindak Lanjut
     }
     return total;
@@ -227,8 +237,7 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
     // Bila sedang berada di langkah misi dan misi selesai (bukan dilewati),
     // pastikan hasil tercatat ke tabel_hasil_misi untuk semua tipe misi.
     if (_pelajaran != null) {
-      final indeksCekPaham = 1 + _pelajaran!.kartu.length + 1;
-      final indeksMisi = indeksCekPaham + 1;
+      final indeksMisi = _indeksMisi(_pelajaran!);
       if (_indeksLangkah == indeksMisi && !_misiDilewati) {
         final pel = _pelajaran!;
         if (pel.misi.tipe == 'ada_data' ||
@@ -355,64 +364,71 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
     final totalLangkah = _hitungTotalLangkah();
     final fotoData =
         ref.watch(penyediaFotoData).value ?? FotoDataPengguna.kosong();
+    final temaVisual = temaVisualUntukModul(pel.modulId);
 
     return Scaffold(
-      backgroundColor: WarnaFunda.latar,
+      backgroundColor: WarnaFunda.permukaan,
       body: SafeArea(
         child: Column(
           children: [
-            // Header: Tombol Kembali + Penanda Kemajuan + Lencana Draf
+            // Bilah Atas Editorial: Tombol Tutup Bulat (X) + Progress Bar Bersegmen
             Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: SpasiFunda.m,
-                vertical: SpasiFunda.s,
+              padding: const EdgeInsets.fromLTRB(
+                SpasiFunda.l,
+                SpasiFunda.m,
+                SpasiFunda.l,
+                SpasiFunda.s,
               ),
               child: Row(
                 children: [
-                  IconButton(
-                    icon: const Icon(
-                      LucideIcons.arrowLeft,
-                      color: WarnaFunda.teks,
-                    ),
-                    onPressed: () => Navigator.pop(context),
-                    tooltip: 'Kembali',
-                  ),
-                  const SizedBox(width: SpasiFunda.xs),
-                  Expanded(
-                    child: ClipRRect(
+                  Semantics(
+                    button: true,
+                    label: 'Tutup pelajaran',
+                    child: InkWell(
+                      key: const Key('tombol_tutup_pelajaran'),
+                      onTap: () => Navigator.pop(context),
                       borderRadius: BorderRadius.circular(SudutFunda.pil),
-                      child: IndikatorMemuat.garis(
-                        nilai: (totalLangkah > 0)
-                            ? (_indeksLangkah + 1) / totalLangkah
-                            : 0.0,
-                        warnaLatar: WarnaFunda.garis,
-                        warna: WarnaFunda.utama,
-                        tinggi: 8,
+                      child: Container(
+                        width: 48,
+                        height: 48,
+                        decoration: BoxDecoration(
+                          color: WarnaFunda.permukaan,
+                          shape: BoxShape.circle,
+                          border: Border.all(color: WarnaFunda.garis),
+                        ),
+                        child: const Icon(
+                          LucideIcons.x,
+                          size: 20,
+                          color: WarnaFunda.teks,
+                        ),
                       ),
                     ),
                   ),
                   const SizedBox(width: SpasiFunda.m),
-                  TeksFunda.catatan(
-                    '${_indeksLangkah + 1}/$totalLangkah',
-                    warna: WarnaFunda.teksRedup,
-                  ),
-                  if (kDebugMode && pel.status == 'draf') ...[
-                    const SizedBox(width: SpasiFunda.s),
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 6,
-                        vertical: 2,
-                      ),
-                      decoration: BoxDecoration(
-                        color: WarnaFunda.tintAmber,
-                        borderRadius: BorderRadius.circular(SudutFunda.pil),
-                      ),
-                      child: const TeksFunda.catatan(
-                        'Draf',
-                        warna: WarnaFunda.peringatan,
-                      ),
+                  Expanded(
+                    child: Row(
+                      key: const Key('progress_bersegmen_pelajaran'),
+                      children: List.generate(totalLangkah, (idx) {
+                        final aktif = idx <= _indeksLangkah;
+                        return Expanded(
+                          child: Container(
+                            height: 6,
+                            margin: EdgeInsets.only(
+                              right: idx == totalLangkah - 1 ? 0 : 4,
+                            ),
+                            decoration: BoxDecoration(
+                              color: aktif
+                                  ? temaVisual.aksen
+                                  : WarnaFunda.segmenNonAktif,
+                              borderRadius: BorderRadius.circular(
+                                SudutFunda.pil,
+                              ),
+                            ),
+                          ),
+                        );
+                      }),
                     ),
-                  ],
+                  ),
                 ],
               ),
             ),
@@ -427,21 +443,22 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
               ),
             ),
 
-            // Tombol Aksi Lanjut di Bagian Bawah
+            // Tombol Pil Gelap Aksi Bawah Kontras Tinggi
             Padding(
-              padding: const EdgeInsets.all(SpasiFunda.m),
-              child: SizedBox(
-                width: double.infinity,
-                child: TombolFunda(
-                  key: const Key('tombol_lanjut'),
-                  teks: _indeksLangkah == totalLangkah - 1
-                      ? 'Selesai Belajar'
-                      : 'Lanjut',
-                  lebarPenuh: true,
-                  padaTekan: _cekApakahBisaLanjut(pel, fotoData)
-                      ? _lanjutkanKeLangkahBerikutnya
-                      : null,
-                ),
+              padding: const EdgeInsets.fromLTRB(
+                SpasiFunda.xl,
+                SpasiFunda.s,
+                SpasiFunda.xl,
+                SpasiFunda.l,
+              ),
+              child: TombolFunda.pilGelap(
+                key: const Key('tombol_lanjut'),
+                teks: _indeksLangkah == totalLangkah - 1
+                    ? 'Selesai Belajar'
+                    : 'Lanjut',
+                padaTekan: _cekApakahBisaLanjut(pel, fotoData)
+                    ? _lanjutkanKeLangkahBerikutnya
+                    : null,
               ),
             ),
           ],
@@ -451,14 +468,16 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
   }
 
   bool _cekApakahBisaLanjut(PelajaranKonten pel, FotoDataPengguna fotoData) {
-    // Pada langkah Cek Paham, pengguna harus menjawab semua soal
-    final indeksCekPaham = 1 + pel.kartu.length + 1;
-    if (_indeksLangkah == indeksCekPaham) {
-      return _jawabanCekPaham.length >= pel.cekPaham.length;
+    final indeksMulaiCek = _indeksMulaiCekPaham(pel);
+    final indeksMisi = _indeksMisi(pel);
+
+    // Pada tiap halaman Cek Paham (1 soal per langkah), wajib memilih jawaban soal aktif
+    if (_indeksLangkah >= indeksMulaiCek && _indeksLangkah < indeksMisi) {
+      final indeksSoal = _indeksLangkah - indeksMulaiCek;
+      return _jawabanCekPaham.containsKey(indeksSoal);
     }
 
     // Pada langkah Misi, misi harus sudah terverifikasi selesai atau dilewati
-    final indeksMisi = indeksCekPaham + 1;
     if (_indeksLangkah == indeksMisi) {
       if (_misiDilewati) return true;
       if (pel.misi.tipe == 'keputusan' ||
@@ -486,34 +505,27 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
     // 1. Pemantik
     kartuWidgets.add(
       _pembungkusKartu(
-        tag: 'Pemantik',
         judul: pel.judul,
+        headerVisual: KanvasIlustrasiPelajaran(modulId: pel.modulId),
+        pakaiKartuMembungkus: false,
         isi: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              padding: const EdgeInsets.all(SpasiFunda.l),
-              decoration: BoxDecoration(
-                color: WarnaFunda.utamaTipis,
-                borderRadius: BorderRadius.circular(SudutFunda.kartu),
-              ),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Icon(
-                    LucideIcons.sparkles,
-                    color: WarnaFunda.utama,
-                    size: 24,
-                  ),
-                  const SizedBox(width: SpasiFunda.m),
-                  Expanded(child: TeksFunda.isi(pel.pemantik)),
-                ],
+            TeksAnimasiKata(
+              teks: pel.pemantik,
+              dukungIstilah: false,
+              rataTeks: TextAlign.start,
+              gaya: TipografiFunda.isi.copyWith(
+                fontSize: 16,
+                height: 1.6,
+                color: WarnaFunda.teks,
               ),
             ),
             const SizedBox(height: SpasiFunda.l),
             const TeksFunda.isiKecil(
               'Mari kita bedah pelan-pelan melalui kartu konsep berikut ini.',
               warna: WarnaFunda.teksRedup,
+              rataTeks: TextAlign.start,
             ),
           ],
         ),
@@ -525,11 +537,18 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
       final k = pel.kartu[i];
       kartuWidgets.add(
         _pembungkusKartu(
-          tag: 'Konsep Inti (${i + 1}/${pel.kartu.length})',
           judul: k.judul,
-          isi: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [TeksDenganIstilah(teks: k.isi)],
+          headerVisual: KanvasIlustrasiPelajaran(modulId: pel.modulId),
+          pakaiKartuMembungkus: false,
+          isi: TeksAnimasiKata(
+            teks: k.isi,
+            dukungIstilah: true,
+            rataTeks: TextAlign.start,
+            gaya: TipografiFunda.isi.copyWith(
+              fontSize: 16,
+              height: 1.6,
+              color: WarnaFunda.teks,
+            ),
           ),
         ),
       );
@@ -537,19 +556,17 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
 
     // 3. Contoh Angka Konkret
     final contoh = pel.contohAngka;
-    if (contoh != null &&
-        (contoh.baris.isNotEmpty || contoh.judul.isNotEmpty)) {
+    if (contoh != null && _punyaContohAngka(pel)) {
       kartuWidgets.add(
         _pembungkusKartu(
-          tag: 'Contoh Nyata',
           judul: contoh.judul.isNotEmpty ? contoh.judul : 'Gambaran Angka',
           isi: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                padding: const EdgeInsets.all(SpasiFunda.m),
+                padding: const EdgeInsets.all(SpasiFunda.l),
                 decoration: BoxDecoration(
-                  color: WarnaFunda.permukaan,
+                  color: WarnaFunda.latar,
                   borderRadius: BorderRadius.circular(SudutFunda.kartu),
                   border: Border.all(color: WarnaFunda.garis),
                 ),
@@ -578,16 +595,17 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
                               : null,
                           children: [
                             Padding(
-                              padding: const EdgeInsets.symmetric(
-                                vertical: SpasiFunda.xs,
+                              padding: const EdgeInsets.only(
+                                top: SpasiFunda.xs,
+                                bottom: SpasiFunda.xs,
+                                right: SpasiFunda.s,
                               ),
                               child: Text(
                                 b.label,
-                                style: TextStyle(
+                                style: TipografiFunda.isiKecil.copyWith(
                                   fontWeight: isTebal
-                                      ? FontWeight.bold
-                                      : FontWeight.normal,
-                                  fontSize: 13,
+                                      ? FontWeight.w700
+                                      : FontWeight.w400,
                                   color: isTebal
                                       ? WarnaFunda.teks
                                       : WarnaFunda.teksRedup,
@@ -601,12 +619,14 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
                               child: Text(
                                 formatJumlah,
                                 textAlign: TextAlign.right,
-                                style: TextStyle(
+                                style: TipografiFunda.isiKecil.copyWith(
                                   fontWeight: isTebal
-                                      ? FontWeight.bold
-                                      : FontWeight.w500,
-                                  fontSize: 13,
+                                      ? FontWeight.w700
+                                      : FontWeight.w600,
                                   color: WarnaFunda.teks,
+                                  fontFeatures: const [
+                                    FontFeature.tabularFigures(),
+                                  ],
                                 ),
                               ),
                             ),
@@ -617,10 +637,15 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
                     if (contoh.kesimpulan.isNotEmpty) ...[
                       const SizedBox(height: SpasiFunda.m),
                       const Divider(color: WarnaFunda.garis),
-                      const SizedBox(height: SpasiFunda.xs),
-                      TeksFunda.isiKecil(
-                        contoh.kesimpulan,
-                        warna: WarnaFunda.teksRedup,
+                      const SizedBox(height: SpasiFunda.s),
+                      TeksAnimasiKata(
+                        teks: contoh.kesimpulan,
+                        dukungIstilah: false,
+                        rataTeks: TextAlign.start,
+                        gaya: TipografiFunda.isiKecil.copyWith(
+                          height: 1.6,
+                          color: WarnaFunda.teksRedup,
+                        ),
                       ),
                     ],
                   ],
@@ -632,111 +657,114 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
       );
     }
 
-    // 4. Cek Paham (Soal Singkat)
-    kartuWidgets.add(
-      _pembungkusKartu(
-        tag: 'Cek Paham',
-        judul: 'Uji Pemahaman Singkat',
-        isi: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            ...pel.cekPaham.asMap().entries.map((entry) {
-              final idx = entry.key;
-              final soal = entry.value;
-              final jawabanDipilih = _jawabanCekPaham[idx];
-              final sudahDijawab = jawabanDipilih != null;
+    // 4. Cek Paham (1 soal per halaman PageView)
+    for (var idx = 0; idx < pel.cekPaham.length; idx++) {
+      final soal = pel.cekPaham[idx];
+      final jawabanDipilih = _jawabanCekPaham[idx];
+      final sudahDijawab = jawabanDipilih != null;
 
-              return Container(
-                margin: const EdgeInsets.only(bottom: SpasiFunda.l),
-                padding: const EdgeInsets.all(SpasiFunda.m),
-                decoration: BoxDecoration(
-                  color: WarnaFunda.permukaan,
+      kartuWidgets.add(
+        _pembungkusKartu(
+          judul: 'Uji Pemahaman Singkat',
+          isi: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              TeksFunda.catatan(
+                'Pertanyaan ${idx + 1} dari ${pel.cekPaham.length}',
+                warna: WarnaFunda.utama,
+              ),
+              const SizedBox(height: SpasiFunda.s),
+              TeksFunda.label(soal.tanya),
+              const SizedBox(height: SpasiFunda.m),
+              ...soal.pilihan.asMap().entries.map((pEntry) {
+                final pIdx = pEntry.key;
+                final teksPilihan = pEntry.value;
+                final isSelected = jawabanDipilih == pIdx;
+
+                Color latarPilihan = WarnaFunda.permukaan;
+                Color borderPilihan = WarnaFunda.garis;
+
+                if (sudahDijawab) {
+                  if (pIdx == soal.benar) {
+                    latarPilihan = WarnaFunda.tintHijau;
+                    borderPilihan = WarnaFunda.pemasukan;
+                  } else if (isSelected) {
+                    latarPilihan = WarnaFunda.tintMawar;
+                    borderPilihan = WarnaFunda.pengeluaran;
+                  }
+                }
+
+                return InkWell(
+                  onTap: sudahDijawab
+                      ? null
+                      : () {
+                          HapticFeedback.selectionClick();
+                          setState(() {
+                            _jawabanCekPaham[idx] = pIdx;
+                          });
+                        },
                   borderRadius: BorderRadius.circular(SudutFunda.kartu),
-                  border: Border.all(color: WarnaFunda.garis),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    TeksFunda.label('${idx + 1}. ${soal.tanya}'),
-                    const SizedBox(height: SpasiFunda.m),
-                    ...soal.pilihan.asMap().entries.map((pEntry) {
-                      final pIdx = pEntry.key;
-                      final teksPilihan = pEntry.value;
-                      final isSelected = jawabanDipilih == pIdx;
-
-                      Color latarPilihan = WarnaFunda.permukaan;
-                      Color borderPilihan = WarnaFunda.garis;
-
-                      if (sudahDijawab) {
-                        if (pIdx == soal.benar) {
-                          latarPilihan = WarnaFunda.tintHijau;
-                          borderPilihan = WarnaFunda.pemasukan;
-                        } else if (isSelected) {
-                          latarPilihan = WarnaFunda.tintMawar;
-                          borderPilihan = WarnaFunda.pengeluaran;
-                        }
-                      }
-
-                      return GestureDetector(
-                        onTap: sudahDijawab
-                            ? null
-                            : () {
-                                setState(() {
-                                  _jawabanCekPaham[idx] = pIdx;
-                                });
-                              },
-                        child: Container(
-                          margin: const EdgeInsets.only(bottom: SpasiFunda.s),
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: SpasiFunda.m,
-                            vertical: SpasiFunda.s,
-                          ),
-                          decoration: BoxDecoration(
-                            color: latarPilihan,
-                            borderRadius: BorderRadius.circular(
-                              SudutFunda.kecil,
-                            ),
-                            border: Border.all(color: borderPilihan),
-                          ),
-                          child: Row(
-                            children: [
-                              Icon(
-                                isSelected
-                                    ? LucideIcons.checkCircle2
-                                    : LucideIcons.circle,
-                                size: 18,
-                                color: isSelected
-                                    ? WarnaFunda.utama
-                                    : WarnaFunda.teksRedup,
-                              ),
-                              const SizedBox(width: SpasiFunda.s),
-                              Expanded(child: TeksFunda.isiKecil(teksPilihan)),
-                            ],
-                          ),
-                        ),
-                      );
-                    }),
-                    if (sudahDijawab) ...[
-                      const SizedBox(height: SpasiFunda.s),
-                      Container(
-                        padding: const EdgeInsets.all(SpasiFunda.s),
-                        decoration: BoxDecoration(
-                          color: jawabanDipilih == soal.benar
-                              ? WarnaFunda.tintHijau
-                              : WarnaFunda.tintAmber,
-                          borderRadius: BorderRadius.circular(SudutFunda.kecil),
-                        ),
-                        child: TeksFunda.catatan(soal.penjelasan),
+                  child: Container(
+                    constraints: const BoxConstraints(minHeight: 48),
+                    margin: const EdgeInsets.only(bottom: SpasiFunda.s),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: SpasiFunda.m,
+                      vertical: SpasiFunda.s,
+                    ),
+                    decoration: BoxDecoration(
+                      color: latarPilihan,
+                      borderRadius: BorderRadius.circular(SudutFunda.kartu),
+                      border: Border.all(
+                        color: borderPilihan,
+                        width: isSelected ? 1.5 : 1.0,
                       ),
-                    ],
-                  ],
+                    ),
+                    child: Row(
+                      children: [
+                        Icon(
+                          isSelected
+                              ? LucideIcons.checkCircle2
+                              : LucideIcons.circle,
+                          size: 18,
+                          color: isSelected
+                              ? WarnaFunda.utama
+                              : WarnaFunda.teksRedup,
+                        ),
+                        const SizedBox(width: SpasiFunda.s),
+                        Expanded(child: TeksFunda.isiKecil(teksPilihan)),
+                      ],
+                    ),
+                  ),
+                );
+              }),
+              if (sudahDijawab) ...[
+                const SizedBox(height: SpasiFunda.m),
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(SpasiFunda.m),
+                  decoration: BoxDecoration(
+                    color: jawabanDipilih == soal.benar
+                        ? WarnaFunda.tintHijau
+                        : WarnaFunda.tintAmber,
+                    borderRadius: BorderRadius.circular(SudutFunda.kartu),
+                    border: Border.all(
+                      color: jawabanDipilih == soal.benar
+                          ? WarnaFunda.batasHijau
+                          : WarnaFunda.batasAmber,
+                    ),
+                  ),
+                  child: TeksFunda.isiKecil(
+                    soal.penjelasan,
+                    warna: WarnaFunda.teks,
+                    rataTeks: TextAlign.start,
+                  ),
                 ),
-              );
-            }),
-          ],
+              ],
+            ],
+          ),
         ),
-      ),
-    );
+      );
+    }
 
     // 5. Kartu Misi Praktik
     kartuWidgets.add(_bangunKartuMisiPraktik(pel.misi, fotoData));
@@ -748,31 +776,18 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
     if (pel.tindakLanjut != null && pel.tindakLanjut!.isNotEmpty) {
       kartuWidgets.add(
         _pembungkusKartu(
-          tag: 'Tindak Lanjut',
           judul: 'Langkah Kecil Berikutnya',
-          isi: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                padding: const EdgeInsets.all(SpasiFunda.l),
-                decoration: BoxDecoration(
-                  color: WarnaFunda.utamaTipis,
-                  borderRadius: BorderRadius.circular(SudutFunda.kartu),
-                ),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Icon(
-                      LucideIcons.lightbulb,
-                      color: WarnaFunda.utama,
-                      size: 24,
-                    ),
-                    const SizedBox(width: SpasiFunda.m),
-                    Expanded(child: TeksFunda.isi(pel.tindakLanjut!)),
-                  ],
-                ),
-              ),
-            ],
+          headerVisual: KanvasIlustrasiPelajaran(modulId: pel.modulId),
+          pakaiKartuMembungkus: false,
+          isi: TeksAnimasiKata(
+            teks: pel.tindakLanjut!,
+            dukungIstilah: false,
+            rataTeks: TextAlign.start,
+            gaya: TipografiFunda.isi.copyWith(
+              fontSize: 16,
+              height: 1.6,
+              color: WarnaFunda.teks,
+            ),
           ),
         ),
       );
@@ -799,7 +814,6 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
     final sudahSelesai = evalMisi.selesai || _misiTerverifikasi;
 
     return _pembungkusKartu(
-      tag: 'Misi Praktik Nyata',
       judul: misi.judul,
       isi: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -973,7 +987,6 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
     final opsiList = skenario?.opsi ?? [];
 
     return _pembungkusKartu(
-      tag: 'Misi Praktik Nyata',
       judul: misi.judul,
       isi: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -1277,7 +1290,6 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
     final memenuhiSyarat = jumlahDicentang >= minDicentang;
 
     return _pembungkusKartu(
-      tag: 'Misi Praktik Nyata',
       judul: misi.judul,
       isi: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -1502,7 +1514,6 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
     final cukupKarakter = panjangKarakter >= minimalKarakter;
 
     return _pembungkusKartu(
-      tag: 'Misi Praktik Nyata',
       judul: misi.judul,
       isi: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -1679,7 +1690,6 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
     final sudahSelesai = _misiTerverifikasi;
 
     return _pembungkusKartu(
-      tag: 'Misi Praktik Nyata',
       judul: misi.judul,
       isi: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -1868,7 +1878,6 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
     final teksUmpanBalik = umpanBalikAsync.value ?? 'Memuat analisis datamu...';
 
     return _pembungkusKartu(
-      tag: 'Umpan Balik Nyata',
       judul: 'Hasil dari Datamu',
       isi: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -1919,41 +1928,48 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
   }
 
   Widget _pembungkusKartu({
-    required String tag,
     required String judul,
     required Widget isi,
+    Widget? headerVisual,
+    bool pakaiKartuMembungkus = true,
   }) {
+    final konten = Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        if (headerVisual != null) ...[
+          headerVisual,
+          const SizedBox(height: SpasiFunda.xl),
+        ],
+        TeksFunda.judulLayar(judul),
+        const SizedBox(height: SpasiFunda.m),
+        isi,
+        const SizedBox(height: SpasiFunda.m),
+      ],
+    );
+
+    if (!pakaiKartuMembungkus) {
+      return SingleChildScrollView(
+        padding: const EdgeInsets.fromLTRB(
+          SpasiFunda.xl,
+          SpasiFunda.s,
+          SpasiFunda.xl,
+          SpasiFunda.m,
+        ),
+        child: konten,
+      );
+    }
+
     return SingleChildScrollView(
       padding: const EdgeInsets.symmetric(horizontal: SpasiFunda.marginLayar),
       child: Container(
-        margin: const EdgeInsets.only(top: SpasiFunda.s),
+        margin: const EdgeInsets.only(top: SpasiFunda.s, bottom: SpasiFunda.s),
         padding: const EdgeInsets.all(SpasiFunda.l),
         decoration: BoxDecoration(
           color: WarnaFunda.permukaan,
           borderRadius: BorderRadius.circular(SudutFunda.petak),
           border: Border.all(color: WarnaFunda.garis),
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              padding: const EdgeInsets.symmetric(
-                horizontal: SpasiFunda.s,
-                vertical: SpasiFunda.xs,
-              ),
-              decoration: BoxDecoration(
-                color: WarnaFunda.utamaTipis,
-                borderRadius: BorderRadius.circular(SudutFunda.pil),
-              ),
-              child: TeksFunda.catatan(tag, warna: WarnaFunda.utama),
-            ),
-            const SizedBox(height: SpasiFunda.m),
-            TeksFunda.judulLayar(judul),
-            const SizedBox(height: SpasiFunda.m),
-            isi,
-            const SizedBox(height: SpasiFunda.m),
-          ],
-        ),
+        child: konten,
       ),
     );
   }

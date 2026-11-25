@@ -12,9 +12,35 @@ import '../../../util/format_rupiah.dart';
 import '../../kategori/kontroler/penyedia_kategori.dart';
 import '../kontroler/penyedia_anggaran.dart';
 
-/// Layar perencanaan dan pemantauan anggaran per kategori per bulan kalender.
+/// Layar perencanaan dan pemantauan anggaran per kategori per bulan kalender
+/// bergaya editorial bersih.
 class LayarAnggaran extends ConsumerWidget {
   const LayarAnggaran({super.key});
+
+  Future<void> _salinDariBulanLalu(
+    BuildContext context,
+    WidgetRef ref,
+    dynamic repoAnggaran,
+    ({int tahun, int bulan}) periode,
+  ) async {
+    final jumlahSalin = await repoAnggaran.salinAnggaranDariBulanLalu(
+      tahunTujuan: periode.tahun,
+      bulanTujuan: periode.bulan,
+    );
+    if (context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            jumlahSalin > 0
+                ? 'Berhasil menyalin $jumlahSalin pos anggaran dari bulan lalu (pos yang sudah ada tidak ditimpa).'
+                : 'Semua pos anggaran sudah terisi atau tidak ada anggaran bulan lalu yang dapat disalin.',
+          ),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+      ref.invalidate(penyediaRealisasiAnggaranBulan);
+    }
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -23,6 +49,7 @@ class LayarAnggaran extends ConsumerWidget {
     final ringkasan = ref.watch(penyediaRingkasanAnggaranBulan);
     final daftarKategori = ref.watch(penyediaDaftarKategori).value ?? [];
     final repoAnggaran = ref.watch(penyediaAnggaranRepositori);
+    final isTeksBesar = MediaQuery.textScalerOf(context).scale(1) > 1.3;
 
     final namaBulan = DateFormat(
       'MMMM yyyy',
@@ -31,119 +58,167 @@ class LayarAnggaran extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: WarnaFunda.latar,
-      appBar: AppBar(
-        title: const TeksFunda.judulBagian('Anggaran Bulanan'),
-        actions: [
-          IconButton(
-            icon: const Icon(LucideIcons.copyPlus),
-            tooltip: 'Salin dari Bulan Lalu',
-            onPressed: () async {
-              final jumlahSalin = await repoAnggaran.salinAnggaranDariBulanLalu(
-                tahunTujuan: periode.tahun,
-                bulanTujuan: periode.bulan,
-              );
-              if (context.mounted) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(
-                      jumlahSalin > 0
-                          ? 'Berhasil menyalin $jumlahSalin pos anggaran dari bulan lalu (pos yang sudah ada tidak ditimpa).'
-                          : 'Semua pos anggaran sudah terisi atau tidak ada anggaran bulan lalu yang dapat disalin.',
-                    ),
-                  ),
-                );
-                ref.invalidate(penyediaRealisasiAnggaranBulan);
-              }
-            },
-          ),
-          IconButton(
-            icon: const Icon(LucideIcons.plus),
-            tooltip: 'Atur Anggaran',
-            onPressed: () => _bukaDialogAturAnggaran(
-              context,
-              ref,
-              daftarKategori,
-              periode.tahun,
-              periode.bulan,
-            ),
-          ),
-        ],
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: WarnaFunda.utama,
-        foregroundColor: WarnaFunda.teksPutih,
-        onPressed: () => _bukaDialogAturAnggaran(
-          context,
-          ref,
-          daftarKategori,
-          periode.tahun,
-          periode.bulan,
-        ),
-        icon: const Icon(LucideIcons.plus, size: 20),
-        label: const Text('Atur Anggaran'),
-      ),
       body: SafeArea(
         child: ListView(
-          padding: const EdgeInsets.all(SpasiFunda.m),
+          padding: const EdgeInsets.all(SpasiFunda.marginLayar),
           children: [
-            // Navigasi Pengalih Bulan
+            // Header Sub-Layar Editorial + Pil Atur Anggaran
+            HeaderSubLayarEditorial(
+              judul: 'Anggaran Bulanan',
+              aksiKanan: [
+                TombolPilHeaderEditorial(
+                  key: const Key('tombol_atur_anggaran_header'),
+                  teks: 'Atur',
+                  ikon: LucideIcons.plus,
+                  padaTekan: () => _bukaDialogAturAnggaran(
+                    context,
+                    ref,
+                    daftarKategori,
+                    periode.tahun,
+                    periode.bulan,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: SpasiFunda.m),
+
+            // Kartu Kontrol Periode Bulan + Akses Cepat Salin Bulan Lalu
             Container(
-              padding: const EdgeInsets.symmetric(
-                horizontal: SpasiFunda.m,
-                vertical: SpasiFunda.s,
-              ),
               decoration: BoxDecoration(
                 color: WarnaFunda.permukaan,
-                borderRadius: BorderRadius.circular(SudutFunda.kartu),
-                border: Border.all(color: WarnaFunda.garis),
+                borderRadius: BorderRadius.circular(SudutFunda.petak),
+                border: Border.all(color: WarnaFunda.garis, width: 1.0),
               ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              clipBehavior: Clip.antiAlias,
+              child: Column(
                 children: [
-                  IconButton(
-                    icon: const Icon(LucideIcons.chevronLeft),
-                    tooltip: 'Bulan Sebelumnya',
-                    onPressed: () => ref
-                        .read(penyediaPeriodeAnggaran.notifier)
-                        .bulanSebelumnya(),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: SpasiFunda.s,
+                      vertical: SpasiFunda.xs,
+                    ),
+                    child: Row(
+                      children: [
+                        IconButton(
+                          icon: const Icon(LucideIcons.chevronLeft),
+                          tooltip: 'Bulan Sebelumnya',
+                          constraints: const BoxConstraints(
+                            minWidth: 48,
+                            minHeight: 48,
+                          ),
+                          onPressed: () => ref
+                              .read(penyediaPeriodeAnggaran.notifier)
+                              .bulanSebelumnya(),
+                        ),
+                        Expanded(
+                          child: Center(
+                            child: TeksFunda.judulBagian(
+                              namaBulan,
+                              rataTeks: TextAlign.center,
+                            ),
+                          ),
+                        ),
+                        IconButton(
+                          icon: const Icon(LucideIcons.chevronRight),
+                          tooltip: 'Bulan Berikutnya',
+                          constraints: const BoxConstraints(
+                            minWidth: 48,
+                            minHeight: 48,
+                          ),
+                          onPressed: () => ref
+                              .read(penyediaPeriodeAnggaran.notifier)
+                              .bulanBerikutnya(),
+                        ),
+                      ],
+                    ),
                   ),
-                  TeksFunda.judulBagian(namaBulan),
-                  IconButton(
-                    icon: const Icon(LucideIcons.chevronRight),
-                    tooltip: 'Bulan Berikutnya',
-                    onPressed: () => ref
-                        .read(penyediaPeriodeAnggaran.notifier)
-                        .bulanBerikutnya(),
+                  const Divider(height: 1, color: WarnaFunda.garis),
+                  Material(
+                    color: WarnaFunda.transparan,
+                    child: InkWell(
+                      key: const Key('tombol_salin_anggaran_bulan_lalu'),
+                      onTap: () => _salinDariBulanLalu(
+                        context,
+                        ref,
+                        repoAnggaran,
+                        periode,
+                      ),
+                      child: const Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: SpasiFunda.l,
+                          vertical: SpasiFunda.m,
+                        ),
+                        child: Row(
+                          children: [
+                            Icon(
+                              LucideIcons.copyPlus,
+                              size: 18,
+                              color: WarnaFunda.utama,
+                            ),
+                            SizedBox(width: SpasiFunda.s),
+                            Expanded(
+                              child: TeksFunda.label(
+                                'Salin dari bulan lalu',
+                                warna: WarnaFunda.utama,
+                              ),
+                            ),
+                            Icon(
+                              LucideIcons.chevronRight,
+                              size: 16,
+                              color: WarnaFunda.utama,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
                   ),
                 ],
               ),
             ),
             const SizedBox(height: SpasiFunda.m),
 
-            // Petak Bento Hero: Ringkasan Total Anggaran
-            PetakBento.ukuran2x1(
-              warnaKustom: WarnaFunda.tintBiru,
-              anak: Column(
+            // Hero Kanvas Mint/Biru: Ringkasan Total Anggaran
+            Container(
+              key: const Key('hero_kanvas_anggaran'),
+              padding: const EdgeInsets.all(SpasiFunda.l),
+              decoration: BoxDecoration(
+                color: WarnaFunda.kanvasMint,
+                borderRadius: BorderRadius.circular(SudutFunda.petak),
+              ),
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  Wrap(
+                    alignment: WrapAlignment.spaceBetween,
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    spacing: SpasiFunda.s,
+                    runSpacing: SpasiFunda.xs,
                     children: [
                       const TeksFunda.label('Total Anggaran'),
-                      TeksFunda.catatan(
-                        '${ringkasan.persentaseTerpakai}% terpakai',
-                        warna: ringkasan.persentaseTerpakai > 100
-                            ? WarnaFunda.pengeluaran
-                            : WarnaFunda.teksRedup,
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: SpasiFunda.s,
+                          vertical: 2,
+                        ),
+                        decoration: BoxDecoration(
+                          color: WarnaFunda.permukaan,
+                          borderRadius: BorderRadius.circular(SudutFunda.pil),
+                        ),
+                        child: TeksFunda.catatan(
+                          '${ringkasan.persentaseTerpakai}% terpakai',
+                          warna: ringkasan.persentaseTerpakai > 100
+                              ? WarnaFunda.pengeluaran
+                              : WarnaFunda.teks,
+                        ),
                       ),
                     ],
                   ),
                   const SizedBox(height: SpasiFunda.s),
                   TeksFunda.angkaBesar(
                     formatRupiah(ringkasan.totalBatasRupiah),
+                    angkaTabular: true,
                   ),
                   const SizedBox(height: SpasiFunda.m),
-                  // Progress Bar Total
                   ClipRRect(
                     borderRadius: BorderRadius.circular(SudutFunda.pil),
                     child: IndikatorMemuat.garis(
@@ -152,7 +227,7 @@ class LayarAnggaran extends ConsumerWidget {
                         1.0,
                       ),
                       tinggi: 8,
-                      warnaLatar: WarnaFunda.garis,
+                      warnaLatar: WarnaFunda.permukaan,
                       warna: ringkasan.persentaseTerpakai > 100
                           ? WarnaFunda.pengeluaran
                           : ringkasan.persentaseTerpakai >= 80
@@ -161,83 +236,89 @@ class LayarAnggaran extends ConsumerWidget {
                     ),
                   ),
                   const SizedBox(height: SpasiFunda.m),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const TeksFunda.catatan('Terpakai'),
-                          TeksFunda.label(
-                            formatRupiah(ringkasan.totalTerpakaiRupiah),
-                          ),
-                        ],
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          const TeksFunda.catatan('Sisa Anggaran'),
-                          TeksFunda.label(
-                            formatRupiah(ringkasan.totalSisaRupiah),
-                            warna: ringkasan.totalSisaRupiah < 0
-                                ? WarnaFunda.pengeluaran
-                                : WarnaFunda.sukses,
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
+                  if (isTeksBesar) ...[
+                    const TeksFunda.catatan('Terpakai'),
+                    TeksFunda.label(
+                      formatRupiah(ringkasan.totalTerpakaiRupiah),
+                      angkaTabular: true,
+                    ),
+                    const SizedBox(height: SpasiFunda.s),
+                    const TeksFunda.catatan('Sisa Anggaran'),
+                    TeksFunda.label(
+                      formatRupiah(ringkasan.totalSisaRupiah),
+                      angkaTabular: true,
+                      warna: ringkasan.totalSisaRupiah < 0
+                          ? WarnaFunda.pengeluaran
+                          : WarnaFunda.pemasukan,
+                    ),
+                  ] else
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const TeksFunda.catatan('Terpakai'),
+                            TeksFunda.label(
+                              formatRupiah(ringkasan.totalTerpakaiRupiah),
+                              angkaTabular: true,
+                            ),
+                          ],
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            const TeksFunda.catatan('Sisa Anggaran'),
+                            TeksFunda.label(
+                              formatRupiah(ringkasan.totalSisaRupiah),
+                              angkaTabular: true,
+                              warna: ringkasan.totalSisaRupiah < 0
+                                  ? WarnaFunda.pengeluaran
+                                  : WarnaFunda.pemasukan,
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                 ],
               ),
             ),
-            const SizedBox(height: SpasiFunda.m),
+            const SizedBox(height: SpasiFunda.l),
 
-            // Baris Ringkasan Per Sifat (Bento Grid)
+            // Baris Ringkasan Per Sifat (2x2 Putih Border 1px; menumpuk saat skala teks > 1.3)
             if (ringkasan.totalBatasRupiah > 0) ...[
               const TeksFunda.judulBagian('Ringkasan Alokasi Sifat'),
               const SizedBox(height: SpasiFunda.s),
-              Row(
-                children: [
-                  Expanded(
-                    child: _KartuMiniSifat(
-                      label: 'Kebutuhan',
-                      batas: ringkasan.totalKebutuhanBatasRupiah,
-                      terpakai: ringkasan.totalKebutuhanTerpakaiRupiah,
-                      warnaDasar: WarnaFunda.sifatKebutuhan,
-                    ),
-                  ),
-                  const SizedBox(width: SpasiFunda.s),
-                  Expanded(
-                    child: _KartuMiniSifat(
-                      label: 'Keinginan',
-                      batas: ringkasan.totalKeinginanBatasRupiah,
-                      terpakai: ringkasan.totalKeinginanTerpakaiRupiah,
-                      warnaDasar: WarnaFunda.sifatKeinginan,
-                    ),
-                  ),
-                ],
+              _susunPasanganSifat(
+                isTeksBesar: isTeksBesar,
+                kiri: _KartuMiniSifat(
+                  label: 'Kebutuhan',
+                  batas: ringkasan.totalKebutuhanBatasRupiah,
+                  terpakai: ringkasan.totalKebutuhanTerpakaiRupiah,
+                  warnaDasar: WarnaFunda.sifatKebutuhan,
+                ),
+                kanan: _KartuMiniSifat(
+                  label: 'Keinginan',
+                  batas: ringkasan.totalKeinginanBatasRupiah,
+                  terpakai: ringkasan.totalKeinginanTerpakaiRupiah,
+                  warnaDasar: WarnaFunda.sifatKeinginan,
+                ),
               ),
               const SizedBox(height: SpasiFunda.s),
-              Row(
-                children: [
-                  Expanded(
-                    child: _KartuMiniSifat(
-                      label: 'Tabungan',
-                      batas: ringkasan.totalTabunganBatasRupiah,
-                      terpakai: ringkasan.totalTabunganTerpakaiRupiah,
-                      warnaDasar: WarnaFunda.sifatTabungan,
-                    ),
-                  ),
-                  const SizedBox(width: SpasiFunda.s),
-                  Expanded(
-                    child: _KartuMiniSifat(
-                      label: 'Utang',
-                      batas: ringkasan.totalUtangBatasRupiah,
-                      terpakai: ringkasan.totalUtangTerpakaiRupiah,
-                      warnaDasar: WarnaFunda.sifatUtang,
-                    ),
-                  ),
-                ],
+              _susunPasanganSifat(
+                isTeksBesar: isTeksBesar,
+                kiri: _KartuMiniSifat(
+                  label: 'Tabungan',
+                  batas: ringkasan.totalTabunganBatasRupiah,
+                  terpakai: ringkasan.totalTabunganTerpakaiRupiah,
+                  warnaDasar: WarnaFunda.sifatTabungan,
+                ),
+                kanan: _KartuMiniSifat(
+                  label: 'Utang',
+                  batas: ringkasan.totalUtangBatasRupiah,
+                  terpakai: ringkasan.totalUtangTerpakaiRupiah,
+                  warnaDasar: WarnaFunda.sifatUtang,
+                ),
               ),
               const SizedBox(height: SpasiFunda.l),
             ],
@@ -255,42 +336,97 @@ class LayarAnggaran extends ConsumerWidget {
               error: (e, _) => Center(child: Text('Terjadi kesalahan: $e')),
               data: (daftarItem) {
                 if (daftarItem.isEmpty) {
-                  return KeadaanKosong(
-                    ikon: LucideIcons.pieChart,
-                    judul: 'Belum Ada Anggaran',
-                    pesan:
-                        'Rencanakan pengeluaran bulan $namaBulan agar keuanganmu tetap tenang dan terkendali.',
-                    teksTombol: 'Atur Anggaran Sekarang',
-                    padaAksi: () => _bukaDialogAturAnggaran(
-                      context,
-                      ref,
-                      daftarKategori,
-                      periode.tahun,
-                      periode.bulan,
+                  return Container(
+                    padding: const EdgeInsets.all(SpasiFunda.l),
+                    decoration: BoxDecoration(
+                      color: WarnaFunda.permukaan,
+                      borderRadius: BorderRadius.circular(SudutFunda.petak),
+                      border: Border.all(color: WarnaFunda.garis, width: 1.0),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.symmetric(
+                            vertical: SpasiFunda.l,
+                          ),
+                          decoration: BoxDecoration(
+                            color: WarnaFunda.kanvasBiru,
+                            borderRadius: BorderRadius.circular(
+                              SudutFunda.kartu,
+                            ),
+                          ),
+                          child: const Center(
+                            child: IlustrasiGeometrisFunda(
+                              jenis: JenisIlustrasiFunda.neraca,
+                              warnaAksen: WarnaFunda.sifatKebutuhan,
+                              ukuran: 64,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: SpasiFunda.m),
+                        const TeksFunda.judulBagian(
+                          'Belum Ada Anggaran',
+                          rataTeks: TextAlign.center,
+                        ),
+                        const SizedBox(height: SpasiFunda.xs),
+                        TeksFunda.catatan(
+                          'Rencanakan pengeluaran bulan $namaBulan agar keuanganmu tetap tenang dan terkendali.',
+                          rataTeks: TextAlign.center,
+                          warna: WarnaFunda.teksRedup,
+                        ),
+                        const SizedBox(height: SpasiFunda.l),
+                        TombolFunda.pilGelap(
+                          lebarPenuh: true,
+                          teks: 'Atur Anggaran Sekarang',
+                          padaTekan: () => _bukaDialogAturAnggaran(
+                            context,
+                            ref,
+                            daftarKategori,
+                            periode.tahun,
+                            periode.bulan,
+                          ),
+                        ),
+                      ],
                     ),
                   );
                 }
 
-                return ListView.separated(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: daftarItem.length,
-                  separatorBuilder: (_, _) =>
-                      const SizedBox(height: SpasiFunda.s),
-                  itemBuilder: (context, index) {
-                    final item = daftarItem[index];
-                    return _KartuItemAnggaran(
-                      item: item,
-                      padaKetuk: () => _bukaDialogAturAnggaran(
-                        context,
-                        ref,
-                        daftarKategori,
-                        periode.tahun,
-                        periode.bulan,
-                        anggaranLama: item,
-                      ),
-                    );
-                  },
+                // Daftar Pos Anggaran Menyatu dalam 1 Kartu Putih Border 1px
+                return Container(
+                  key: const Key('kartu_daftar_anggaran'),
+                  decoration: BoxDecoration(
+                    color: WarnaFunda.permukaan,
+                    borderRadius: BorderRadius.circular(SudutFunda.petak),
+                    border: Border.all(color: WarnaFunda.garis, width: 1.0),
+                  ),
+                  clipBehavior: Clip.antiAlias,
+                  child: Column(
+                    children: [
+                      for (var i = 0; i < daftarItem.length; i++) ...[
+                        _BarisItemAnggaran(
+                          item: daftarItem[i],
+                          isTeksBesar: isTeksBesar,
+                          padaKetuk: () => _bukaDialogAturAnggaran(
+                            context,
+                            ref,
+                            daftarKategori,
+                            periode.tahun,
+                            periode.bulan,
+                            anggaranLama: daftarItem[i],
+                          ),
+                        ),
+                        if (i < daftarItem.length - 1)
+                          const Divider(
+                            height: 1,
+                            indent: SpasiFunda.l,
+                            endIndent: SpasiFunda.l,
+                            color: WarnaFunda.garis,
+                          ),
+                      ],
+                    ],
+                  ),
                 );
               },
             ),
@@ -298,6 +434,29 @@ class LayarAnggaran extends ConsumerWidget {
           ],
         ),
       ),
+    );
+  }
+
+  Widget _susunPasanganSifat({
+    required bool isTeksBesar,
+    required Widget kiri,
+    required Widget kanan,
+  }) {
+    if (isTeksBesar) {
+      return Column(
+        children: [
+          kiri,
+          const SizedBox(height: SpasiFunda.s),
+          kanan,
+        ],
+      );
+    }
+    return Row(
+      children: [
+        Expanded(child: kiri),
+        const SizedBox(width: SpasiFunda.s),
+        Expanded(child: kanan),
+      ],
     );
   }
 
@@ -309,9 +468,13 @@ class LayarAnggaran extends ConsumerWidget {
     int bulan, {
     ItemRealisasiAnggaran? anggaranLama,
   }) {
-    showModalBottomSheet(
+    final tanpaAnimasi =
+        MediaQuery.disableAnimationsOf(context) ||
+        ref.read(penyediaTanpaAnimasi);
+    showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
+      sheetAnimationStyle: tanpaAnimasi ? AnimationStyle.noAnimation : null,
       backgroundColor: WarnaFunda.permukaan,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
@@ -347,11 +510,12 @@ class _KartuMiniSifat extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: double.infinity,
       padding: const EdgeInsets.all(SpasiFunda.m),
       decoration: BoxDecoration(
         color: WarnaFunda.permukaan,
         borderRadius: BorderRadius.circular(SudutFunda.kartu),
-        border: Border.all(color: WarnaFunda.garis),
+        border: Border.all(color: WarnaFunda.garis, width: 1.0),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -367,130 +531,167 @@ class _KartuMiniSifat extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: SpasiFunda.xs),
-              TeksFunda.label(label),
+              Expanded(child: TeksFunda.label(label)),
             ],
           ),
           const SizedBox(height: SpasiFunda.xs),
-          TeksFunda.catatan('Batas: ${formatRupiah(batas)}'),
-          TeksFunda.catatan('Pakai: ${formatRupiah(terpakai)}'),
+          TeksFunda.catatan(
+            'Batas: ${formatRupiah(batas)}',
+            angkaTabular: true,
+          ),
+          TeksFunda.catatan(
+            'Pakai: ${formatRupiah(terpakai)}',
+            angkaTabular: true,
+          ),
         ],
       ),
     );
   }
 }
 
-class _KartuItemAnggaran extends StatelessWidget {
-  const _KartuItemAnggaran({required this.item, required this.padaKetuk});
+class _BarisItemAnggaran extends StatelessWidget {
+  const _BarisItemAnggaran({
+    required this.item,
+    required this.isTeksBesar,
+    required this.padaKetuk,
+  });
 
   final ItemRealisasiAnggaran item;
+  final bool isTeksBesar;
   final VoidCallback padaKetuk;
 
   @override
   Widget build(BuildContext context) {
-    Color warnaStatus;
-    IconData ikonStatus;
-    String labelStatus;
+    final (
+      Color warnaStatus,
+      Color tintStatus,
+      IconData ikonStatus,
+      String labelStatus,
+    ) = switch (item.status) {
+      StatusAnggaran.aman => (
+        WarnaFunda.pemasukan,
+        WarnaFunda.tintHijau,
+        LucideIcons.circleCheck,
+        'Aman',
+      ),
+      StatusAnggaran.mendekati => (
+        WarnaFunda.peringatan,
+        WarnaFunda.tintAmber,
+        LucideIcons.triangleAlert,
+        'Mendekati batas',
+      ),
+      StatusAnggaran.melewati => (
+        WarnaFunda.pengeluaran,
+        WarnaFunda.tintMawar,
+        LucideIcons.circleAlert,
+        'Melebihi batas',
+      ),
+    };
 
-    switch (item.status) {
-      case StatusAnggaran.aman:
-        warnaStatus = WarnaFunda.sukses;
-        ikonStatus = LucideIcons.circleCheck;
-        labelStatus = 'Aman';
-        break;
-      case StatusAnggaran.mendekati:
-        warnaStatus = WarnaFunda.peringatan;
-        ikonStatus = LucideIcons.alertTriangle;
-        labelStatus = 'Mendekati batas';
-        break;
-      case StatusAnggaran.melewati:
-        warnaStatus = WarnaFunda.pengeluaran;
-        ikonStatus = LucideIcons.alertCircle;
-        labelStatus = 'Melebihi batas';
-        break;
-    }
+    final pilStatus = Container(
+      padding: const EdgeInsets.symmetric(
+        horizontal: SpasiFunda.s,
+        vertical: 2,
+      ),
+      decoration: BoxDecoration(
+        color: tintStatus,
+        borderRadius: BorderRadius.circular(SudutFunda.pil),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(ikonStatus, size: 12, color: warnaStatus),
+          const SizedBox(width: SpasiFunda.xs),
+          Flexible(child: TeksFunda.catatan(labelStatus, warna: warnaStatus)),
+        ],
+      ),
+    );
 
-    return InkWell(
-      onTap: padaKetuk,
-      borderRadius: BorderRadius.circular(SudutFunda.kartu),
-      child: Container(
-        padding: const EdgeInsets.all(SpasiFunda.m),
-        decoration: BoxDecoration(
-          color: WarnaFunda.permukaan,
-          borderRadius: BorderRadius.circular(SudutFunda.kartu),
-          border: Border.all(color: WarnaFunda.garis),
+    final nominalBlok = Column(
+      crossAxisAlignment: isTeksBesar
+          ? CrossAxisAlignment.start
+          : CrossAxisAlignment.end,
+      children: [
+        TeksFunda.label(formatRupiah(item.terpakaiRupiah), angkaTabular: true),
+        TeksFunda.catatan(
+          'dari ${formatRupiah(item.batasRupiah)}',
+          angkaTabular: true,
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(SpasiFunda.s),
-                  decoration: BoxDecoration(
-                    color: WarnaFunda.latar,
-                    borderRadius: BorderRadius.circular(SudutFunda.kecil),
-                  ),
-                  child: Icon(
-                    ambilIkonLucide(item.kategoriIkon),
-                    size: 20,
-                    color: WarnaFunda.utama,
-                  ),
-                ),
-                const SizedBox(width: SpasiFunda.m),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      TeksFunda.label(item.kategoriNama),
-                      Row(
-                        children: [
-                          Icon(ikonStatus, size: 12, color: warnaStatus),
-                          const SizedBox(width: 4),
-                          TeksFunda.catatan(labelStatus, warna: warnaStatus),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    TeksFunda.label(
-                      formatRupiah(item.terpakaiRupiah),
-                      angkaTabular: true,
+      ],
+    );
+
+    return Material(
+      color: WarnaFunda.transparan,
+      child: InkWell(
+        onTap: padaKetuk,
+        child: Padding(
+          padding: const EdgeInsets.all(SpasiFunda.l),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 2),
+                    child: Icon(
+                      ambilIkonLucide(item.kategoriIkon),
+                      size: 22,
+                      color: warnaStatus,
                     ),
-                    TeksFunda.catatan('dari ${formatRupiah(item.batasRupiah)}'),
+                  ),
+                  const SizedBox(width: SpasiFunda.m),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        TeksFunda.label(item.kategoriNama),
+                        const SizedBox(height: SpasiFunda.xs),
+                        pilStatus,
+                        if (isTeksBesar) ...[
+                          const SizedBox(height: SpasiFunda.s),
+                          nominalBlok,
+                        ],
+                      ],
+                    ),
+                  ),
+                  if (!isTeksBesar) ...[
+                    const SizedBox(width: SpasiFunda.s),
+                    nominalBlok,
                   ],
-                ),
-              ],
-            ),
-            const SizedBox(height: SpasiFunda.m),
-            // Progress Bar
-            ClipRRect(
-              borderRadius: BorderRadius.circular(SudutFunda.pil),
-              child: IndikatorMemuat.garis(
-                nilai: (item.persentase / 100).clamp(0.0, 1.0),
-                tinggi: 6,
-                warnaLatar: WarnaFunda.garis,
-                warna: warnaStatus,
+                ],
               ),
-            ),
-            const SizedBox(height: SpasiFunda.xs),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                TeksFunda.catatan('${item.persentase}%'),
-                TeksFunda.catatan(
-                  item.sisaRupiah >= 0
-                      ? 'Sisa ${formatRupiah(item.sisaRupiah)}'
-                      : 'Lewat ${formatRupiah(item.sisaRupiah.abs())}',
-                  warna: item.sisaRupiah < 0
-                      ? WarnaFunda.pengeluaran
-                      : WarnaFunda.teksRedup,
+              const SizedBox(height: SpasiFunda.m),
+              // Progress Bar
+              ClipRRect(
+                borderRadius: BorderRadius.circular(SudutFunda.pil),
+                child: IndikatorMemuat.garis(
+                  nilai: (item.persentase / 100).clamp(0.0, 1.0),
+                  tinggi: 6,
+                  warnaLatar: WarnaFunda.garis,
+                  warna: warnaStatus,
                 ),
-              ],
-            ),
-          ],
+              ),
+              const SizedBox(height: SpasiFunda.xs),
+              Wrap(
+                alignment: WrapAlignment.spaceBetween,
+                spacing: SpasiFunda.s,
+                runSpacing: SpasiFunda.xs,
+                children: [
+                  TeksFunda.catatan('${item.persentase}%', angkaTabular: true),
+                  TeksFunda.catatan(
+                    item.sisaRupiah >= 0
+                        ? 'Sisa ${formatRupiah(item.sisaRupiah)}'
+                        : 'Lewat ${formatRupiah(item.sisaRupiah.abs())}',
+                    angkaTabular: true,
+                    warna: item.sisaRupiah < 0
+                        ? WarnaFunda.pengeluaran
+                        : WarnaFunda.teksRedup,
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -530,7 +731,6 @@ class _LembarAturAnggaranState extends ConsumerState<_LembarAturAnggaran> {
       _batasRupiah = widget.anggaranLama!.batasRupiah;
       _pengontrolNominal.text = formatRupiah(_batasRupiah);
     } else {
-      // Ambil kategori keluar pertama yang belum diarsipkan
       final kategoriKeluar = widget.daftarKategori
           .where((k) => k.arus == 'keluar' && !k.diarsipkan)
           .toList();
@@ -557,126 +757,166 @@ class _LembarAturAnggaranState extends ConsumerState<_LembarAturAnggaran> {
   @override
   Widget build(BuildContext context) {
     final repoAnggaran = ref.watch(penyediaAnggaranRepositori);
+    final isTeksBesar = MediaQuery.textScalerOf(context).scale(1) > 1.3;
     final kategoriKeluar = widget.daftarKategori
         .where((k) => k.arus == 'keluar' && !k.diarsipkan)
         .toList();
 
-    return Padding(
-      padding: EdgeInsets.only(
-        left: SpasiFunda.m,
-        right: SpasiFunda.m,
-        top: SpasiFunda.m,
-        bottom: MediaQuery.of(context).viewInsets.bottom + SpasiFunda.m,
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              TeksFunda.judulBagian(
-                widget.anggaranLama != null
-                    ? 'Ubah Batas Anggaran'
-                    : 'Atur Anggaran Kategori',
+    return SafeArea(
+      top: false,
+      child: SingleChildScrollView(
+        padding: EdgeInsets.only(
+          left: SpasiFunda.l,
+          right: SpasiFunda.l,
+          top: SpasiFunda.l,
+          bottom: MediaQuery.of(context).viewInsets.bottom + SpasiFunda.l,
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: TeksFunda.judulBagian(
+                    widget.anggaranLama != null
+                        ? 'Ubah Batas Anggaran'
+                        : 'Atur Anggaran Kategori',
+                  ),
+                ),
+                IconButton(
+                  icon: const Icon(LucideIcons.x),
+                  constraints: const BoxConstraints(
+                    minWidth: 48,
+                    minHeight: 48,
+                  ),
+                  onPressed: () => Navigator.pop(context),
+                ),
+              ],
+            ),
+            const SizedBox(height: SpasiFunda.m),
+            if (widget.anggaranLama == null) ...[
+              const TeksFunda.label('Pilih Kategori'),
+              const SizedBox(height: SpasiFunda.xs),
+              DropdownButtonFormField<String>(
+                initialValue: _kategoriTerpilihId,
+                isExpanded: true,
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: WarnaFunda.latar,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(SudutFunda.kartu),
+                    borderSide: const BorderSide(color: WarnaFunda.garis),
+                  ),
+                ),
+                items: kategoriKeluar.map((k) {
+                  return DropdownMenuItem(
+                    value: k.id,
+                    child: Row(
+                      children: [
+                        Icon(ambilIkonLucide(k.ikon), size: 18),
+                        const SizedBox(width: SpasiFunda.s),
+                        Expanded(
+                          child: Text(k.nama, overflow: TextOverflow.ellipsis),
+                        ),
+                      ],
+                    ),
+                  );
+                }).toList(),
+                onChanged: (id) => setState(() => _kategoriTerpilihId = id),
               ),
-              IconButton(
-                icon: const Icon(LucideIcons.x),
-                onPressed: () => Navigator.pop(context),
-              ),
+              const SizedBox(height: SpasiFunda.m),
             ],
-          ),
-          const SizedBox(height: SpasiFunda.m),
-          // Pemilih Kategori (hanya jika buat baru)
-          if (widget.anggaranLama == null) ...[
-            const TeksFunda.label('Pilih Kategori'),
+
+            const TeksFunda.label('Batas Nominal Bulanan'),
             const SizedBox(height: SpasiFunda.xs),
-            DropdownButtonFormField<String>(
-              initialValue: _kategoriTerpilihId,
+            TextField(
+              controller: _pengontrolNominal,
+              keyboardType: TextInputType.number,
               decoration: InputDecoration(
+                hintText: 'Rp 0',
+                prefixIcon: const Icon(LucideIcons.walletCards),
                 filled: true,
                 fillColor: WarnaFunda.latar,
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(SudutFunda.kecil),
+                  borderRadius: BorderRadius.circular(SudutFunda.kartu),
                   borderSide: const BorderSide(color: WarnaFunda.garis),
                 ),
               ),
-              items: kategoriKeluar.map((k) {
-                return DropdownMenuItem(
-                  value: k.id,
-                  child: Row(
-                    children: [
-                      Icon(ambilIkonLucide(k.ikon), size: 18),
-                      const SizedBox(width: SpasiFunda.s),
-                      Text(k.nama),
-                    ],
-                  ),
-                );
-              }).toList(),
-              onChanged: (id) => setState(() => _kategoriTerpilihId = id),
+              onChanged: _padaUbahNominal,
             ),
-            const SizedBox(height: SpasiFunda.m),
-          ],
+            const SizedBox(height: SpasiFunda.l),
 
-          // Input Batas Nominal
-          const TeksFunda.label('Batas Nominal Bulanan'),
-          const SizedBox(height: SpasiFunda.xs),
-          TextField(
-            controller: _pengontrolNominal,
-            keyboardType: TextInputType.number,
-            decoration: InputDecoration(
-              hintText: 'Rp 0',
-              prefixIcon: const Icon(LucideIcons.walletCards),
-              filled: true,
-              fillColor: WarnaFunda.latar,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(SudutFunda.kecil),
-                borderSide: const BorderSide(color: WarnaFunda.garis),
+            if (isTeksBesar || widget.anggaranLama == null) ...[
+              TombolFunda.pilGelap(
+                lebarPenuh: true,
+                teks: 'Simpan Anggaran',
+                padaTekan: _batasRupiah > 0 && _kategoriTerpilihId != null
+                    ? () async {
+                        await repoAnggaran.simpanAnggaran(
+                          tahun: widget.tahun,
+                          bulan: widget.bulan,
+                          kategoriId: _kategoriTerpilihId!,
+                          batasRupiah: _batasRupiah,
+                        );
+                        widget.padaSelesai();
+                        if (context.mounted) Navigator.pop(context);
+                      }
+                    : null,
               ),
-            ),
-            onChanged: _padaUbahNominal,
-          ),
-          const SizedBox(height: SpasiFunda.l),
-
-          // Tombol Simpan & Hapus
-          Row(
-            children: [
               if (widget.anggaranLama != null) ...[
-                Expanded(
-                  child: TombolFunda.sekunder(
-                    teks: 'Hapus Anggaran',
-                    padaTekan: () async {
-                      await repoAnggaran.hapusAnggaran(
-                        widget.anggaranLama!.anggaranId,
-                      );
-                      widget.padaSelesai();
-                      if (context.mounted) Navigator.pop(context);
-                    },
-                  ),
+                const SizedBox(height: SpasiFunda.s),
+                TombolFunda.sekunder(
+                  lebarPenuh: true,
+                  teks: 'Hapus Anggaran',
+                  padaTekan: () async {
+                    await repoAnggaran.hapusAnggaran(
+                      widget.anggaranLama!.anggaranId,
+                    );
+                    widget.padaSelesai();
+                    if (context.mounted) Navigator.pop(context);
+                  },
                 ),
-                const SizedBox(width: SpasiFunda.m),
               ],
-              Expanded(
-                child: TombolFunda.primer(
-                  teks: 'Simpan Anggaran',
-                  padaTekan: _batasRupiah > 0 && _kategoriTerpilihId != null
-                      ? () async {
-                          await repoAnggaran.simpanAnggaran(
-                            tahun: widget.tahun,
-                            bulan: widget.bulan,
-                            kategoriId: _kategoriTerpilihId!,
-                            batasRupiah: _batasRupiah,
-                          );
-                          widget.padaSelesai();
-                          if (context.mounted) Navigator.pop(context);
-                        }
-                      : null,
-                ),
+            ] else
+              Row(
+                children: [
+                  Expanded(
+                    child: TombolFunda.sekunder(
+                      teks: 'Hapus Anggaran',
+                      padaTekan: () async {
+                        await repoAnggaran.hapusAnggaran(
+                          widget.anggaranLama!.anggaranId,
+                        );
+                        widget.padaSelesai();
+                        if (context.mounted) Navigator.pop(context);
+                      },
+                    ),
+                  ),
+                  const SizedBox(width: SpasiFunda.m),
+                  Expanded(
+                    child: TombolFunda.pilGelap(
+                      teks: 'Simpan Anggaran',
+                      lebarPenuh: false,
+                      padaTekan: _batasRupiah > 0 && _kategoriTerpilihId != null
+                          ? () async {
+                              await repoAnggaran.simpanAnggaran(
+                                tahun: widget.tahun,
+                                bulan: widget.bulan,
+                                kategoriId: _kategoriTerpilihId!,
+                                batasRupiah: _batasRupiah,
+                              );
+                              widget.padaSelesai();
+                              if (context.mounted) Navigator.pop(context);
+                            }
+                          : null,
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
-          const SizedBox(height: SpasiFunda.m),
-        ],
+          ],
+        ),
       ),
     );
   }

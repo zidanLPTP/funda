@@ -279,6 +279,11 @@ void main() {
         }
       }
 
+      // Layar transisi profil -> tes pemahaman
+      expect(find.text('Profil Keuanganmu Tersimpan!'), findsOneWidget);
+      await tester.tap(find.byKey(const Key('tombol_mulai_soal_tes_awal')));
+      await tester.pump();
+
       // Jawab 12 pertanyaan soal tes awal
       for (var i = 0; i < 12; i++) {
         expect(find.textContaining('Tes Awal (${i + 1}/12)'), findsOneWidget);
@@ -296,6 +301,13 @@ void main() {
           await tester.pump();
         }
       }
+
+      // Layar animasi selesai tes awal
+      expect(find.text('Tes Awal Selesai!'), findsOneWidget);
+      await tester.tap(
+        find.byKey(const Key('tombol_lihat_rekomendasi_tes_awal')),
+      );
+      await tester.pump();
 
       // Tahap Hasil
       expect(find.text('Hasil Tes Awal'), findsOneWidget);

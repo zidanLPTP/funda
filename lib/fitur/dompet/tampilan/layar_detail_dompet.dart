@@ -17,7 +17,9 @@ import '../../kantong/kontroler/penyedia_kantong.dart';
 import '../../kantong/tampilan/layar_daftar_kantong.dart';
 import 'layar_form_dompet.dart';
 
-/// Layar Detail satu dompet: melihat saldo, saldo bebas, kantong, riwayat transaksi berhalaman, sesuaikan saldo, arsip, dan hapus.
+/// Layar Detail satu dompet bergaya editorial bersih:
+/// header tombol kembali >= 48dp + pil Ubah, hero kanvas saldo & saldo bebas,
+/// tombol sesuaikan saldo pilGelap, kantong, dan riwayat berpemisah tipis.
 class LayarDetailDompet extends ConsumerStatefulWidget {
   const LayarDetailDompet({super.key, required this.dompetId});
 
@@ -30,6 +32,15 @@ class LayarDetailDompet extends ConsumerStatefulWidget {
 class _LayarDetailDompetState extends ConsumerState<LayarDetailDompet> {
   int _limitTransaksi = 50;
 
+  void _tutupLayar() {
+    final router = GoRouter.maybeOf(context);
+    if (router != null) {
+      router.pop();
+    } else {
+      Navigator.maybePop(context);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final daftarDompetAsync = ref.watch(penyediaDaftarDompet);
@@ -40,11 +51,17 @@ class _LayarDetailDompetState extends ConsumerState<LayarDetailDompet> {
     final daftarKantongAsync = ref.watch(
       penyediaKantongDompet(widget.dompetId),
     );
+    final isTeksBesar = MediaQuery.textScalerOf(context).scale(1) > 1.3;
 
     return daftarDompetAsync.when(
-      loading: () => const Scaffold(body: Center(child: IndikatorMemuat())),
-      error: (e, _) =>
-          Scaffold(body: Center(child: Text('Terjadi kesalahan: $e'))),
+      loading: () => const Scaffold(
+        backgroundColor: WarnaFunda.latar,
+        body: Center(child: IndikatorMemuat()),
+      ),
+      error: (e, _) => Scaffold(
+        backgroundColor: WarnaFunda.latar,
+        body: Center(child: Text('Terjadi kesalahan: $e')),
+      ),
       data: (daftar) {
         final dompet = daftar.firstWhere(
           (d) => d.id == widget.dompetId,
@@ -52,495 +69,600 @@ class _LayarDetailDompetState extends ConsumerState<LayarDetailDompet> {
         );
         final saldo = petaSaldo[dompet.id] ?? dompet.saldoAwalRupiah;
         final jenis = JenisDompet.dariKode(dompet.jenis);
+        final warnaKanvas = ambilWarnaTint(dompet.warna);
+        final warnaAksen = ambilWarnaAksenTint(dompet.warna);
 
-        return PembungkusLayar(
-          appBar: AppBar(
-            title: TeksFunda.judulBagian(dompet.nama),
-            actions: [
-              IconButton(
-                icon: const Icon(LucideIcons.pencil),
-                tooltip: 'Ubah Dompet',
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => LayarFormDompet(dompet: dompet),
-                    ),
-                  );
-                },
-              ),
-            ],
-          ),
-          bisaGulir: true,
-          anak: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Kartu Bento Saldo Dompet & Saldo Bebas
-              PetakBento.ukuran2x1(
-                warnaKustom: ambilWarnaTint(dompet.warna),
-                anak: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.all(SpasiFunda.s),
-                          decoration: BoxDecoration(
-                            color: WarnaFunda.permukaan,
-                            borderRadius: BorderRadius.circular(
-                              SudutFunda.kecil,
-                            ),
-                          ),
-                          child: Icon(
-                            ambilIkonLucide(dompet.ikon),
-                            size: 20,
-                            color: WarnaFunda.utama,
-                          ),
-                        ),
-                        const SizedBox(width: SpasiFunda.m),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            TeksFunda.label(dompet.nama),
-                            TeksFunda.catatan(jenis.label),
-                          ],
-                        ),
-                        const Spacer(),
-                        if (dompet.diarsipkan)
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: SpasiFunda.s,
-                              vertical: SpasiFunda.xs,
-                            ),
-                            decoration: BoxDecoration(
-                              color: WarnaFunda.peringatan.withAlpha(25),
-                              borderRadius: BorderRadius.circular(
-                                SudutFunda.pil,
-                              ),
-                            ),
-                            child: const TeksFunda.catatan(
-                              'Diarsipkan',
-                              warna: WarnaFunda.peringatan,
-                            ),
-                          ),
-                      ],
-                    ),
-                    const SizedBox(height: SpasiFunda.l),
-                    const TeksFunda.isiKecil('Saldo Berjalan Saat Ini'),
-                    const SizedBox(height: SpasiFunda.xs),
-                    TeksFunda.angkaBesar(
-                      formatRupiah(saldo),
-                      warna: saldo < 0
-                          ? WarnaFunda.pengeluaran
-                          : WarnaFunda.teks,
-                    ),
-                    if (saldo < 0) ...[
-                      const SizedBox(height: SpasiFunda.xs),
-                      const TeksFunda.catatan(
-                        'Saldo dompet ini minus. Cek kembali catatan pengeluaranmu.',
-                        warna: WarnaFunda.pengeluaran,
-                      ),
-                    ],
-                    const SizedBox(height: SpasiFunda.m),
-                    // Indikator Saldo Bebas
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: SpasiFunda.m,
-                        vertical: SpasiFunda.s,
-                      ),
-                      decoration: BoxDecoration(
-                        color: WarnaFunda.permukaan,
-                        borderRadius: BorderRadius.circular(SudutFunda.kecil),
-                        border: Border.all(
-                          color: saldoBebas < 0
-                              ? WarnaFunda.pengeluaran
-                              : WarnaFunda.garis,
-                        ),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const TeksFunda.catatan('Saldo Bebas:'),
-                          TeksFunda.label(
-                            formatRupiah(saldoBebas),
-                            warna: saldoBebas < 0
-                                ? WarnaFunda.pengeluaran
-                                : WarnaFunda.teks,
-                          ),
-                        ],
-                      ),
-                    ),
-                    if (saldoBebas < 0) ...[
-                      const SizedBox(height: SpasiFunda.xs),
-                      const TeksFunda.catatan(
-                        'Alokasi kantong melebihi saldo dompet yang tersedia.',
-                        warna: WarnaFunda.pengeluaran,
-                      ),
-                    ],
-                  ],
-                ),
-              ),
-              const SizedBox(height: SpasiFunda.l),
-
-              // Baris Aksi: Sesuaikan Saldo & Arsipkan (Responsif Skala Teks Aksesibilitas)
-              LayoutBuilder(
-                builder: (context, constraints) {
-                  final textScale = MediaQuery.textScalerOf(context).scale(1.0);
-                  if (textScale > 1.3 || constraints.maxWidth < 360) {
-                    return Column(
-                      children: [
-                        TombolFunda.primer(
-                          teks: 'Sesuaikan Saldo',
-                          lebarPenuh: true,
-                          ikon: const Icon(
-                            LucideIcons.slidersHorizontal,
-                            size: 16,
-                          ),
-                          padaTekan: () => _tampilkanDialogSesuaikanSaldo(
-                            context,
-                            ref,
-                            dompet,
-                            saldo,
-                          ),
-                        ),
-                        const SizedBox(height: SpasiFunda.s),
-                        TombolFunda.sekunder(
-                          teks: dompet.diarsipkan ? 'Pulihkan' : 'Arsipkan',
-                          lebarPenuh: true,
-                          ikon: Icon(
-                            dompet.diarsipkan
-                                ? LucideIcons.archiveRestore
-                                : LucideIcons.archive,
-                            size: 16,
-                          ),
-                          padaTekan: () async {
-                            await repoDompet.arsipkanDompet(
-                              dompet.id,
-                              !dompet.diarsipkan,
-                            );
-                            if (context.mounted) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(
-                                    dompet.diarsipkan
-                                        ? 'Dompet berhasil dipulihkan.'
-                                        : 'Dompet berhasil diarsipkan.',
-                                  ),
-                                ),
-                              );
-                            }
-                          },
-                        ),
-                      ],
-                    );
-                  }
-
-                  return Row(
-                    children: [
-                      Expanded(
-                        child: TombolFunda.primer(
-                          teks: 'Sesuaikan Saldo',
-                          ikon: const Icon(
-                            LucideIcons.slidersHorizontal,
-                            size: 16,
-                          ),
-                          padaTekan: () => _tampilkanDialogSesuaikanSaldo(
-                            context,
-                            ref,
-                            dompet,
-                            saldo,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: SpasiFunda.m),
-                      Expanded(
-                        child: TombolFunda.sekunder(
-                          teks: dompet.diarsipkan ? 'Pulihkan' : 'Arsipkan',
-                          ikon: Icon(
-                            dompet.diarsipkan
-                                ? LucideIcons.archiveRestore
-                                : LucideIcons.archive,
-                            size: 16,
-                          ),
-                          padaTekan: () async {
-                            await repoDompet.arsipkanDompet(
-                              dompet.id,
-                              !dompet.diarsipkan,
-                            );
-                            if (context.mounted) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(
-                                    dompet.diarsipkan
-                                        ? 'Dompet berhasil dipulihkan.'
-                                        : 'Dompet berhasil diarsipkan.',
-                                  ),
-                                ),
-                              );
-                            }
-                          },
-                        ),
-                      ),
-                    ],
-                  );
-                },
-              ),
-              const SizedBox(height: SpasiFunda.m),
-
-              // Tombol Hapus Permanen (bila belum ada transaksi)
-              FutureBuilder<bool>(
-                future: repoDompet.cekApakahDompetMemilikiTransaksi(dompet.id),
-                builder: (context, snapshot) {
-                  final adaTransaksi = snapshot.data ?? true;
-                  if (!adaTransaksi) {
-                    return TombolFunda.teks(
-                      teks: 'Hapus Dompet Ini Secara Permanen',
-                      lebarPenuh: true,
-                      padaTekan: () async {
-                        final yakin = await showDialog<bool>(
-                          context: context,
-                          builder: (ctx) => AlertDialog(
-                            title: const TeksFunda.judulBagian('Hapus Dompet?'),
-                            content: const TeksFunda.isi(
-                              'Dompet ini belum memiliki transaksi dan akan dihapus secara permanen.',
-                            ),
-                            actions: [
-                              TextButton(
-                                onPressed: () => Navigator.pop(ctx, false),
-                                child: const Text('Batal'),
-                              ),
-                              TombolFunda.primer(
-                                teks: 'Hapus',
-                                padaTekan: () => Navigator.pop(ctx, true),
-                              ),
-                            ],
-                          ),
-                        );
-                        if (yakin == true) {
-                          await repoDompet.hapusDompetPermanen(dompet.id);
-                          if (context.mounted) {
-                            context.pop();
-                          }
-                        }
-                      },
-                    );
-                  }
-                  return const SizedBox.shrink();
-                },
-              ),
-              const SizedBox(height: SpasiFunda.l),
-
-              // Bagian Kantong di Dompet Ini
-              Wrap(
-                alignment: WrapAlignment.spaceBetween,
-                crossAxisAlignment: WrapCrossAlignment.center,
-                runSpacing: SpasiFunda.xs,
-                children: [
-                  const TeksFunda.judulBagian('Kantong di Dompet Ini'),
-                  TextButton.icon(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => const LayarDaftarKantong(),
-                        ),
-                      );
-                    },
-                    icon: const Icon(LucideIcons.arrowRight, size: 16),
-                    label: const Text('Kelola Kantong'),
+        return Scaffold(
+          backgroundColor: WarnaFunda.latar,
+          body: SafeArea(
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(
+                    SpasiFunda.marginLayar,
+                    SpasiFunda.marginLayar,
+                    SpasiFunda.marginLayar,
+                    SpasiFunda.s,
                   ),
-                ],
-              ),
-              const SizedBox(height: SpasiFunda.s),
-              daftarKantongAsync.when(
-                loading: () => const Center(child: IndikatorMemuat()),
-                error: (e, _) => Center(child: Text('Terjadi kesalahan: $e')),
-                data: (daftarKantong) {
-                  if (daftarKantong.isEmpty) {
-                    return Container(
-                      padding: const EdgeInsets.all(SpasiFunda.m),
-                      decoration: BoxDecoration(
-                        color: WarnaFunda.permukaan,
-                        borderRadius: BorderRadius.circular(SudutFunda.kartu),
-                        border: Border.all(color: WarnaFunda.garis),
-                      ),
-                      child: const Center(
-                        child: TeksFunda.catatan(
-                          'Belum ada kantong di dompet ini.',
-                        ),
-                      ),
-                    );
-                  }
-
-                  return Column(
-                    children: daftarKantong.map((k) {
-                      final saldoKantongAsync = ref.watch(
-                        penyediaSaldoKantong(k.id),
-                      );
-                      final saldoK = saldoKantongAsync.value ?? 0;
-
-                      return Container(
-                        margin: const EdgeInsets.only(bottom: SpasiFunda.s),
-                        padding: const EdgeInsets.all(SpasiFunda.m),
-                        decoration: BoxDecoration(
-                          color: WarnaFunda.permukaan,
-                          borderRadius: BorderRadius.circular(SudutFunda.kartu),
-                          border: Border.all(color: WarnaFunda.garis),
-                        ),
-                        child: Row(
-                          children: [
-                            Icon(ambilIkonLucide(k.ikon), size: 18),
-                            const SizedBox(width: SpasiFunda.s),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  TeksFunda.label(k.nama),
-                                  TeksFunda.catatan(
-                                    k.tujuanId != null
-                                        ? 'Tertaut Tujuan'
-                                        : 'Kantong Bebas',
-                                  ),
-                                ],
-                              ),
-                            ),
-                            TeksFunda.label(
-                              formatRupiah(saldoK),
-                              angkaTabular: true,
-                            ),
-                          ],
-                        ),
-                      );
-                    }).toList(),
-                  );
-                },
-              ),
-              const SizedBox(height: SpasiFunda.xl),
-
-              // Riwayat Transaksi Dompet (Berhalaman)
-              const TeksFunda.judulBagian('Riwayat Transaksi Dompet Ini'),
-              const SizedBox(height: SpasiFunda.m),
-              StreamBuilder<List<EntitasTransaksi>>(
-                stream: repoTransaksi.pantauTransaksiDompet(
-                  dompet.id,
-                  limit: _limitTransaksi,
-                ),
-                builder: (context, snapshot) {
-                  final daftar = snapshot.data ?? [];
-                  if (daftar.isEmpty) {
-                    return Container(
-                      padding: const EdgeInsets.all(SpasiFunda.xl),
-                      decoration: BoxDecoration(
-                        color: WarnaFunda.permukaan,
-                        borderRadius: BorderRadius.circular(SudutFunda.kartu),
-                        border: Border.all(color: WarnaFunda.garis),
-                      ),
-                      child: const Center(
-                        child: TeksFunda.isiKecil(
-                          'Belum ada transaksi di dompet ini.',
-                        ),
-                      ),
-                    );
-                  }
-
-                  return Column(
-                    children: [
-                      ListView.separated(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: daftar.length,
-                        separatorBuilder: (_, index) =>
-                            const SizedBox(height: SpasiFunda.s),
-                        itemBuilder: (context, indeks) {
-                          final t = daftar[indeks];
-                          final jenis = JenisTransaksi.dariKode(t.jenis);
-                          final isMasuk =
-                              jenis == JenisTransaksi.masuk ||
-                              jenis == JenisTransaksi.penyesuaianMasuk ||
-                              (jenis == JenisTransaksi.transfer &&
-                                  t.dompetTujuanId == dompet.id);
-
-                          final tanda = isMasuk ? '+' : '-';
-                          final warnaNominal = isMasuk
-                              ? WarnaFunda.pemasukan
-                              : WarnaFunda.pengeluaran;
-
-                          return Container(
-                            padding: const EdgeInsets.all(SpasiFunda.m),
-                            decoration: BoxDecoration(
-                              color: WarnaFunda.permukaan,
-                              borderRadius: BorderRadius.circular(
-                                SudutFunda.kartu,
-                              ),
-                              border: Border.all(color: WarnaFunda.garis),
-                            ),
-                            child: Row(
-                              children: [
-                                Container(
-                                  padding: const EdgeInsets.all(SpasiFunda.s),
-                                  decoration: BoxDecoration(
-                                    color: isMasuk
-                                        ? WarnaFunda.tintHijau
-                                        : WarnaFunda.tintAmber,
-                                    borderRadius: BorderRadius.circular(
-                                      SudutFunda.kecil,
-                                    ),
-                                  ),
-                                  child: Icon(
-                                    isMasuk
-                                        ? LucideIcons.arrowDownLeft
-                                        : LucideIcons.arrowUpRight,
-                                    size: 18,
-                                    color: warnaNominal,
-                                  ),
-                                ),
-                                const SizedBox(width: SpasiFunda.m),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      TeksFunda.label(jenis.label),
-                                      if (t.catatan != null &&
-                                          t.catatan!.isNotEmpty) ...[
-                                        const SizedBox(height: SpasiFunda.xs),
-                                        TeksFunda.catatan(t.catatan!),
-                                      ],
-                                    ],
-                                  ),
-                                ),
-                                TeksFunda.label(
-                                  '$tanda${formatRupiah(t.jumlahRupiah)}',
-                                  warna: warnaNominal,
-                                  angkaTabular: true,
-                                ),
-                              ],
+                  child: HeaderSubLayarEditorial(
+                    judul: dompet.nama,
+                    aksiKanan: [
+                      TombolPilHeaderEditorial(
+                        key: const Key('tombol_ubah_dompet_header'),
+                        teks: 'Ubah',
+                        ikon: LucideIcons.pencil,
+                        padaTekan: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute<void>(
+                              builder: (_) => LayarFormDompet(dompet: dompet),
                             ),
                           );
                         },
                       ),
-                      if (daftar.length >= _limitTransaksi) ...[
+                    ],
+                  ),
+                ),
+                Expanded(
+                  child: SingleChildScrollView(
+                    padding: const EdgeInsets.fromLTRB(
+                      SpasiFunda.marginLayar,
+                      SpasiFunda.s,
+                      SpasiFunda.marginLayar,
+                      SpasiFunda.xxl,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Hero Kanvas Saldo Dompet & Saldo Bebas
+                        Container(
+                          key: const Key('hero_kanvas_detail_dompet'),
+                          width: double.infinity,
+                          padding: const EdgeInsets.all(SpasiFunda.l),
+                          decoration: BoxDecoration(
+                            color: warnaKanvas,
+                            borderRadius: BorderRadius.circular(
+                              SudutFunda.petak,
+                            ),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  Icon(
+                                    ambilIkonLucide(dompet.ikon),
+                                    size: 22,
+                                    color: warnaAksen,
+                                  ),
+                                  const SizedBox(width: SpasiFunda.m),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        TeksFunda.label(dompet.nama),
+                                        TeksFunda.catatan(
+                                          jenis.label,
+                                          warna: WarnaFunda.teksRedup,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  if (dompet.diarsipkan)
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: SpasiFunda.s,
+                                        vertical: SpasiFunda.xs,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color: WarnaFunda.permukaan,
+                                        borderRadius: BorderRadius.circular(
+                                          SudutFunda.pil,
+                                        ),
+                                      ),
+                                      child: const TeksFunda.catatan(
+                                        'Diarsipkan',
+                                        warna: WarnaFunda.peringatan,
+                                      ),
+                                    ),
+                                ],
+                              ),
+                              const SizedBox(height: SpasiFunda.l),
+                              const TeksFunda.catatan(
+                                'Saldo Berjalan Saat Ini',
+                                warna: WarnaFunda.teksRedup,
+                              ),
+                              const SizedBox(height: SpasiFunda.xs),
+                              TeksFunda.angkaBesar(
+                                formatRupiah(saldo),
+                                angkaTabular: true,
+                                warna: saldo < 0
+                                    ? WarnaFunda.pengeluaran
+                                    : WarnaFunda.teks,
+                              ),
+                              if (saldo < 0) ...[
+                                const SizedBox(height: SpasiFunda.xs),
+                                const TeksFunda.catatan(
+                                  'Saldo dompet ini minus. Cek kembali catatan pengeluaranmu.',
+                                  warna: WarnaFunda.pengeluaran,
+                                ),
+                              ],
+                              const SizedBox(height: SpasiFunda.m),
+                              // Indikator Saldo Bebas
+                              Container(
+                                width: double.infinity,
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: SpasiFunda.m,
+                                  vertical: SpasiFunda.s,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: WarnaFunda.permukaan,
+                                  borderRadius: BorderRadius.circular(
+                                    SudutFunda.kartu,
+                                  ),
+                                  border: Border.all(
+                                    color: saldoBebas < 0
+                                        ? WarnaFunda.pengeluaran
+                                        : WarnaFunda.garis,
+                                  ),
+                                ),
+                                child: Wrap(
+                                  alignment: WrapAlignment.spaceBetween,
+                                  crossAxisAlignment: WrapCrossAlignment.center,
+                                  spacing: SpasiFunda.s,
+                                  runSpacing: SpasiFunda.xs,
+                                  children: [
+                                    const TeksFunda.catatan('Saldo Bebas:'),
+                                    TeksFunda.label(
+                                      formatRupiah(saldoBebas),
+                                      angkaTabular: true,
+                                      warna: saldoBebas < 0
+                                          ? WarnaFunda.pengeluaran
+                                          : WarnaFunda.teks,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              if (saldoBebas < 0) ...[
+                                const SizedBox(height: SpasiFunda.xs),
+                                const TeksFunda.catatan(
+                                  'Alokasi kantong melebihi saldo dompet yang tersedia.',
+                                  warna: WarnaFunda.pengeluaran,
+                                ),
+                              ],
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: SpasiFunda.l),
+
+                        // Baris Aksi: Sesuaikan Saldo (pilGelap) & Arsipkan
+                        if (isTeksBesar) ...[
+                          TombolFunda.pilGelap(
+                            teks: 'Sesuaikan Saldo',
+                            lebarPenuh: true,
+                            ikon: const Icon(
+                              LucideIcons.slidersHorizontal,
+                              size: 16,
+                            ),
+                            padaTekan: () => _tampilkanDialogSesuaikanSaldo(
+                              context,
+                              ref,
+                              dompet,
+                              saldo,
+                            ),
+                          ),
+                          const SizedBox(height: SpasiFunda.s),
+                          TombolFunda.sekunder(
+                            teks: dompet.diarsipkan ? 'Pulihkan' : 'Arsipkan',
+                            lebarPenuh: true,
+                            ikon: Icon(
+                              dompet.diarsipkan
+                                  ? LucideIcons.archiveRestore
+                                  : LucideIcons.archive,
+                              size: 16,
+                            ),
+                            padaTekan: () => _arsipDompet(repoDompet, dompet),
+                          ),
+                        ] else
+                          Row(
+                            children: [
+                              Expanded(
+                                child: TombolFunda.pilGelap(
+                                  teks: 'Sesuaikan Saldo',
+                                  lebarPenuh: false,
+                                  ikon: const Icon(
+                                    LucideIcons.slidersHorizontal,
+                                    size: 16,
+                                  ),
+                                  padaTekan: () =>
+                                      _tampilkanDialogSesuaikanSaldo(
+                                        context,
+                                        ref,
+                                        dompet,
+                                        saldo,
+                                      ),
+                                ),
+                              ),
+                              const SizedBox(width: SpasiFunda.m),
+                              Expanded(
+                                child: TombolFunda.sekunder(
+                                  teks: dompet.diarsipkan
+                                      ? 'Pulihkan'
+                                      : 'Arsipkan',
+                                  ikon: Icon(
+                                    dompet.diarsipkan
+                                        ? LucideIcons.archiveRestore
+                                        : LucideIcons.archive,
+                                    size: 16,
+                                  ),
+                                  padaTekan: () =>
+                                      _arsipDompet(repoDompet, dompet),
+                                ),
+                              ),
+                            ],
+                          ),
+                        const SizedBox(height: SpasiFunda.s),
+
+                        // Tombol Hapus Permanen (bila belum ada transaksi)
+                        FutureBuilder<bool>(
+                          future: repoDompet.cekApakahDompetMemilikiTransaksi(
+                            dompet.id,
+                          ),
+                          builder: (context, snapshot) {
+                            final adaTransaksi = snapshot.data ?? true;
+                            if (!adaTransaksi) {
+                              return TombolFunda.teks(
+                                teks: 'Hapus Dompet Ini Secara Permanen',
+                                lebarPenuh: true,
+                                padaTekan: () async {
+                                  final yakin = await showDialog<bool>(
+                                    context: context,
+                                    builder: (ctx) => AlertDialog(
+                                      title: const TeksFunda.judulBagian(
+                                        'Hapus Dompet?',
+                                      ),
+                                      content: const TeksFunda.isi(
+                                        'Dompet ini belum memiliki transaksi dan akan dihapus secara permanen.',
+                                      ),
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () =>
+                                              Navigator.pop(ctx, false),
+                                          child: const Text('Batal'),
+                                        ),
+                                        TombolFunda.primer(
+                                          teks: 'Hapus',
+                                          padaTekan: () =>
+                                              Navigator.pop(ctx, true),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                  if (yakin == true) {
+                                    await repoDompet.hapusDompetPermanen(
+                                      dompet.id,
+                                    );
+                                    if (mounted) _tutupLayar();
+                                  }
+                                },
+                              );
+                            }
+                            return const SizedBox.shrink();
+                          },
+                        ),
+                        const SizedBox(height: SpasiFunda.l),
+
+                        // Bagian Kantong di Dompet Ini
+                        Wrap(
+                          alignment: WrapAlignment.spaceBetween,
+                          crossAxisAlignment: WrapCrossAlignment.center,
+                          spacing: SpasiFunda.s,
+                          runSpacing: SpasiFunda.xs,
+                          children: [
+                            const TeksFunda.judulBagian(
+                              'Kantong di Dompet Ini',
+                            ),
+                            TextButton.icon(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute<void>(
+                                    builder: (_) => const LayarDaftarKantong(),
+                                  ),
+                                );
+                              },
+                              icon: const Icon(
+                                LucideIcons.arrowRight,
+                                size: 16,
+                              ),
+                              label: const Text('Kelola Kantong'),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: SpasiFunda.s),
+                        daftarKantongAsync.when(
+                          loading: () => const Center(child: IndikatorMemuat()),
+                          error: (e, _) =>
+                              Center(child: Text('Terjadi kesalahan: $e')),
+                          data: (daftarKantong) {
+                            if (daftarKantong.isEmpty) {
+                              return Container(
+                                padding: const EdgeInsets.all(SpasiFunda.l),
+                                decoration: BoxDecoration(
+                                  color: WarnaFunda.permukaan,
+                                  borderRadius: BorderRadius.circular(
+                                    SudutFunda.petak,
+                                  ),
+                                  border: Border.all(
+                                    color: WarnaFunda.garis,
+                                    width: 1.0,
+                                  ),
+                                ),
+                                child: const Center(
+                                  child: TeksFunda.catatan(
+                                    'Belum ada kantong di dompet ini.',
+                                  ),
+                                ),
+                              );
+                            }
+
+                            return Container(
+                              decoration: BoxDecoration(
+                                color: WarnaFunda.permukaan,
+                                borderRadius: BorderRadius.circular(
+                                  SudutFunda.petak,
+                                ),
+                                border: Border.all(
+                                  color: WarnaFunda.garis,
+                                  width: 1.0,
+                                ),
+                              ),
+                              child: Column(
+                                children: [
+                                  for (
+                                    var i = 0;
+                                    i < daftarKantong.length;
+                                    i++
+                                  ) ...[
+                                    () {
+                                      final k = daftarKantong[i];
+                                      final saldoKantongAsync = ref.watch(
+                                        penyediaSaldoKantong(k.id),
+                                      );
+                                      final saldoK =
+                                          saldoKantongAsync.value ?? 0;
+
+                                      return Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: SpasiFunda.l,
+                                          vertical: SpasiFunda.m,
+                                        ),
+                                        child: Row(
+                                          children: [
+                                            Icon(
+                                              ambilIkonLucide(k.ikon),
+                                              size: 20,
+                                              color: warnaAksen,
+                                            ),
+                                            const SizedBox(width: SpasiFunda.m),
+                                            Expanded(
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  TeksFunda.label(k.nama),
+                                                  TeksFunda.catatan(
+                                                    k.tujuanId != null
+                                                        ? 'Tertaut Tujuan'
+                                                        : 'Kantong Bebas',
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            const SizedBox(width: SpasiFunda.s),
+                                            TeksFunda.label(
+                                              formatRupiah(saldoK),
+                                              angkaTabular: true,
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                    }(),
+                                    if (i < daftarKantong.length - 1)
+                                      const Divider(
+                                        height: 1,
+                                        indent: SpasiFunda.l,
+                                        endIndent: SpasiFunda.l,
+                                        color: WarnaFunda.garis,
+                                      ),
+                                  ],
+                                ],
+                              ),
+                            );
+                          },
+                        ),
+                        const SizedBox(height: SpasiFunda.xl),
+
+                        // Riwayat Transaksi Dompet (Menyatu dalam 1 Kartu Putih Border 1px)
+                        const TeksFunda.judulBagian(
+                          'Riwayat Transaksi Dompet Ini',
+                        ),
                         const SizedBox(height: SpasiFunda.m),
-                        TombolFunda.sekunder(
-                          teks: 'Muat Lebih Banyak',
-                          lebarPenuh: true,
-                          padaTekan: () {
-                            setState(() {
-                              _limitTransaksi += 50;
-                            });
+                        StreamBuilder<List<EntitasTransaksi>>(
+                          stream: repoTransaksi.pantauTransaksiDompet(
+                            dompet.id,
+                            limit: _limitTransaksi,
+                          ),
+                          builder: (context, snapshot) {
+                            final daftar = snapshot.data ?? [];
+                            if (daftar.isEmpty) {
+                              return Container(
+                                padding: const EdgeInsets.all(SpasiFunda.xl),
+                                decoration: BoxDecoration(
+                                  color: WarnaFunda.permukaan,
+                                  borderRadius: BorderRadius.circular(
+                                    SudutFunda.petak,
+                                  ),
+                                  border: Border.all(
+                                    color: WarnaFunda.garis,
+                                    width: 1.0,
+                                  ),
+                                ),
+                                child: const Center(
+                                  child: TeksFunda.isiKecil(
+                                    'Belum ada transaksi di dompet ini.',
+                                  ),
+                                ),
+                              );
+                            }
+
+                            return Column(
+                              children: [
+                                Container(
+                                  decoration: BoxDecoration(
+                                    color: WarnaFunda.permukaan,
+                                    borderRadius: BorderRadius.circular(
+                                      SudutFunda.petak,
+                                    ),
+                                    border: Border.all(
+                                      color: WarnaFunda.garis,
+                                      width: 1.0,
+                                    ),
+                                  ),
+                                  child: Column(
+                                    children: [
+                                      for (
+                                        var i = 0;
+                                        i < daftar.length;
+                                        i++
+                                      ) ...[
+                                        () {
+                                          final t = daftar[i];
+                                          final jenisTx =
+                                              JenisTransaksi.dariKode(t.jenis);
+                                          final isMasuk =
+                                              jenisTx == JenisTransaksi.masuk ||
+                                              jenisTx ==
+                                                  JenisTransaksi
+                                                      .penyesuaianMasuk ||
+                                              (jenisTx ==
+                                                      JenisTransaksi.transfer &&
+                                                  t.dompetTujuanId ==
+                                                      dompet.id);
+
+                                          final tanda = isMasuk ? '+' : '-';
+                                          final warnaNominal = isMasuk
+                                              ? WarnaFunda.pemasukan
+                                              : WarnaFunda.pengeluaran;
+
+                                          return Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                              horizontal: SpasiFunda.l,
+                                              vertical: SpasiFunda.m,
+                                            ),
+                                            child: Row(
+                                              children: [
+                                                Icon(
+                                                  isMasuk
+                                                      ? LucideIcons
+                                                            .arrowDownLeft
+                                                      : LucideIcons
+                                                            .arrowUpRight,
+                                                  size: 20,
+                                                  color: warnaNominal,
+                                                ),
+                                                const SizedBox(
+                                                  width: SpasiFunda.m,
+                                                ),
+                                                Expanded(
+                                                  child: Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      TeksFunda.label(
+                                                        jenisTx.label,
+                                                      ),
+                                                      if (t.catatan != null &&
+                                                          t
+                                                              .catatan!
+                                                              .isNotEmpty) ...[
+                                                        const SizedBox(
+                                                          height: 2,
+                                                        ),
+                                                        TeksFunda.catatan(
+                                                          t.catatan!,
+                                                        ),
+                                                      ],
+                                                    ],
+                                                  ),
+                                                ),
+                                                const SizedBox(
+                                                  width: SpasiFunda.s,
+                                                ),
+                                                TeksFunda.label(
+                                                  '$tanda${formatRupiah(t.jumlahRupiah)}',
+                                                  warna: warnaNominal,
+                                                  angkaTabular: true,
+                                                ),
+                                              ],
+                                            ),
+                                          );
+                                        }(),
+                                        if (i < daftar.length - 1)
+                                          const Divider(
+                                            height: 1,
+                                            indent: SpasiFunda.l,
+                                            endIndent: SpasiFunda.l,
+                                            color: WarnaFunda.garis,
+                                          ),
+                                      ],
+                                    ],
+                                  ),
+                                ),
+                                if (daftar.length >= _limitTransaksi) ...[
+                                  const SizedBox(height: SpasiFunda.m),
+                                  TombolFunda.sekunder(
+                                    teks: 'Muat Lebih Banyak',
+                                    lebarPenuh: true,
+                                    padaTekan: () {
+                                      setState(() {
+                                        _limitTransaksi += 50;
+                                      });
+                                    },
+                                  ),
+                                ],
+                              ],
+                            );
                           },
                         ),
                       ],
-                    ],
-                  );
-                },
-              ),
-              const SizedBox(height: SpasiFunda.xxl),
-            ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         );
       },
     );
+  }
+
+  Future<void> _arsipDompet(dynamic repoDompet, EntitasDompet dompet) async {
+    await repoDompet.arsipkanDompet(dompet.id, !dompet.diarsipkan);
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            dompet.diarsipkan
+                ? 'Dompet berhasil dipulihkan.'
+                : 'Dompet berhasil diarsipkan.',
+          ),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+    }
   }
 
   void _tampilkanDialogSesuaikanSaldo(
@@ -551,7 +673,7 @@ class _LayarDetailDompetState extends ConsumerState<LayarDetailDompet> {
   ) {
     final pengontrol = TextEditingController(text: formatRupiah(saldoSekarang));
 
-    showDialog(
+    showDialog<void>(
       context: context,
       builder: (ctx) => AlertDialog(
         title: const TeksFunda.judulBagian('Sesuaikan Saldo'),
@@ -601,8 +723,9 @@ class _LayarDetailDompetState extends ConsumerState<LayarDetailDompet> {
             onPressed: () => Navigator.pop(ctx),
             child: const Text('Batal'),
           ),
-          TombolFunda.primer(
+          TombolFunda.pilGelap(
             teks: 'Simpan Penyesuaian',
+            lebarPenuh: false,
             padaTekan: () async {
               int saldoSebenarnya = 0;
               try {

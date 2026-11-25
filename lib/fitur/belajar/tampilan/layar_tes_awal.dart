@@ -6,6 +6,7 @@ import '../../../data/penyedia_data.dart';
 import '../../../komponen/komponen_funda.dart';
 import '../../../perhitungan/perhitungan_tes_awal_personalisasi.dart';
 import '../../../tema/token.dart';
+import '../../../util/haptic.dart';
 import '../kontroler/penyedia_belajar.dart';
 import '../model/pembaca_konten.dart';
 
@@ -17,7 +18,14 @@ class LayarTesAwal extends ConsumerStatefulWidget {
   ConsumerState<LayarTesAwal> createState() => _LayarTesAwalState();
 }
 
-enum TahapTesAwal { pembuka, profil, soal, hasil }
+enum TahapTesAwal {
+  pembuka,
+  profil,
+  transisiProfil,
+  soal,
+  animasiSelesai,
+  hasil,
+}
 
 class _LayarTesAwalState extends ConsumerState<LayarTesAwal> {
   TahapTesAwal _tahap = TahapTesAwal.pembuka;
@@ -136,10 +144,11 @@ class _LayarTesAwalState extends ConsumerState<LayarTesAwal> {
     ref.invalidate(penyediaLanjutBelajarBeranda);
 
     if (mounted) {
+      UtilHaptic.suksesBesar();
       setState(() {
         _hasilSkor = hasil;
         _sedangMenyimpan = false;
-        _tahap = TahapTesAwal.hasil;
+        _tahap = TahapTesAwal.animasiSelesai;
       });
     }
   }
@@ -191,8 +200,12 @@ class _LayarTesAwalState extends ConsumerState<LayarTesAwal> {
         return _bangunTampilanPembuka();
       case TahapTesAwal.profil:
         return _bangunTampilanProfil();
+      case TahapTesAwal.transisiProfil:
+        return _bangunTampilanTransisiProfil();
       case TahapTesAwal.soal:
         return _bangunTampilanSoal();
+      case TahapTesAwal.animasiSelesai:
+        return _bangunTampilanAnimasiSelesai();
       case TahapTesAwal.hasil:
         return _bangunTampilanHasil();
     }
@@ -430,12 +443,196 @@ class _LayarTesAwalState extends ConsumerState<LayarTesAwal> {
                             daftarPertanyaan.length - 1) {
                           setState(() => _indeksPertanyaanProfil++);
                         } else {
+                          UtilHaptic.sukses();
                           setState(() {
-                            _indeksSoal = 0;
-                            _tahap = TahapTesAwal.soal;
+                            _tahap = TahapTesAwal.transisiProfil;
                           });
                         }
                       },
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _bangunTampilanTransisiProfil() {
+    final tanpaAnimasi =
+        MediaQuery.disableAnimationsOf(context) ||
+        ref.watch(penyediaTanpaAnimasi);
+    final durasi = tanpaAnimasi
+        ? Duration.zero
+        : const Duration(milliseconds: 350);
+
+    return Scaffold(
+      backgroundColor: WarnaFunda.latar,
+      appBar: AppBar(
+        title: const Text('Profil Keuangan'),
+        leading: IconButton(
+          icon: const Icon(LucideIcons.arrowLeft),
+          onPressed: () {
+            setState(() {
+              _indeksPertanyaanProfil = _konten!.pertanyaanProfil.length - 1;
+              _tahap = TahapTesAwal.profil;
+            });
+          },
+        ),
+      ),
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(SpasiFunda.marginLayar),
+          child: Column(
+            children: [
+              Expanded(
+                child: Center(
+                  child: SingleChildScrollView(
+                    child: TweenAnimationBuilder<double>(
+                      tween: Tween(begin: tanpaAnimasi ? 1.0 : 0.9, end: 1.0),
+                      duration: durasi,
+                      curve: Curves.easeOutBack,
+                      builder: (context, nilai, child) {
+                        return Opacity(
+                          opacity: nilai.clamp(0.0, 1.0),
+                          child: Transform.scale(scale: nilai, child: child),
+                        );
+                      },
+                      child: PetakBento.ukuran2x1(
+                        tint: TintPetakBento.putih,
+                        anak: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Container(
+                              width: 72,
+                              height: 72,
+                              decoration: BoxDecoration(
+                                color: WarnaFunda.tintHijau,
+                                borderRadius: BorderRadius.circular(
+                                  SudutFunda.petak,
+                                ),
+                                border: Border.all(
+                                  color: WarnaFunda.batasHijau,
+                                ),
+                              ),
+                              child: const Icon(
+                                LucideIcons.userCheck,
+                                size: 36,
+                                color: WarnaFunda.utama,
+                              ),
+                            ),
+                            const SizedBox(height: SpasiFunda.l),
+                            const TeksFunda.judulLayar(
+                              'Profil Keuanganmu Tersimpan!',
+                              rataTeks: TextAlign.center,
+                            ),
+                            const SizedBox(height: SpasiFunda.m),
+                            const TeksFunda.isi(
+                              'Sekarang lanjut ke 12 pertanyaan singkat untuk memetakan pemahamanmu. Jawab santai saja — nggak perlu takut salah, ada opsi "Belum tahu" bila masih asing.',
+                              warna: WarnaFunda.teksRedup,
+                              rataTeks: TextAlign.center,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: SpasiFunda.m),
+              TombolFunda.primer(
+                key: const Key('tombol_mulai_soal_tes_awal'),
+                lebarPenuh: true,
+                teks: 'Mulai 12 Pertanyaan',
+                padaTekan: () {
+                  UtilHaptic.pilih();
+                  setState(() {
+                    _indeksSoal = 0;
+                    _tahap = TahapTesAwal.soal;
+                  });
+                },
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _bangunTampilanAnimasiSelesai() {
+    final tanpaAnimasi =
+        MediaQuery.disableAnimationsOf(context) ||
+        ref.watch(penyediaTanpaAnimasi);
+    final durasi = tanpaAnimasi
+        ? Duration.zero
+        : const Duration(milliseconds: 420);
+
+    return Scaffold(
+      backgroundColor: WarnaFunda.latar,
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(SpasiFunda.marginLayar),
+          child: Column(
+            children: [
+              Expanded(
+                child: Center(
+                  child: SingleChildScrollView(
+                    child: TweenAnimationBuilder<double>(
+                      tween: Tween(begin: tanpaAnimasi ? 1.0 : 0.84, end: 1.0),
+                      duration: durasi,
+                      curve: Curves.easeOutBack,
+                      builder: (context, nilai, child) {
+                        return Opacity(
+                          opacity: nilai.clamp(0.0, 1.0),
+                          child: Transform.scale(scale: nilai, child: child),
+                        );
+                      },
+                      child: PetakBento.ukuran2x1(
+                        tint: TintPetakBento.hijau,
+                        anak: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Container(
+                              width: 80,
+                              height: 80,
+                              decoration: const BoxDecoration(
+                                color: WarnaFunda.permukaan,
+                                shape: BoxShape.circle,
+                              ),
+                              child: const Icon(
+                                LucideIcons.checkCircle2,
+                                size: 44,
+                                color: WarnaFunda.pemasukan,
+                              ),
+                            ),
+                            const SizedBox(height: SpasiFunda.l),
+                            const TeksFunda.judulLayar(
+                              'Tes Awal Selesai!',
+                              rataTeks: TextAlign.center,
+                            ),
+                            const SizedBox(height: SpasiFunda.m),
+                            const TeksFunda.isi(
+                              'Terima kasih sudah meluangkan waktu. Rekomendasi belajar yang sesuai dengan kondisimu sudah siap dilihat.',
+                              warna: WarnaFunda.teksRedup,
+                              rataTeks: TextAlign.center,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: SpasiFunda.m),
+              TombolFunda.primer(
+                key: const Key('tombol_lihat_rekomendasi_tes_awal'),
+                lebarPenuh: true,
+                teks: 'Lihat Rekomendasi',
+                padaTekan: () {
+                  UtilHaptic.pilih();
+                  setState(() {
+                    _tahap = TahapTesAwal.hasil;
+                  });
+                },
               ),
             ],
           ),
@@ -645,13 +842,27 @@ class _LayarTesAwalState extends ConsumerState<LayarTesAwal> {
                                     children: [
                                       Row(
                                         children: [
-                                          const Icon(
-                                            LucideIcons.sparkles,
-                                            size: 18,
-                                            color: WarnaFunda.utama,
+                                          Container(
+                                            padding: const EdgeInsets.all(6),
+                                            decoration: BoxDecoration(
+                                              color: WarnaFunda.tintHijau,
+                                              borderRadius:
+                                                  BorderRadius.circular(
+                                                    SudutFunda.kecil,
+                                                  ),
+                                            ),
+                                            child: const Icon(
+                                              LucideIcons.compass,
+                                              size: 16,
+                                              color: WarnaFunda.utama,
+                                            ),
                                           ),
-                                          const SizedBox(width: SpasiFunda.xs),
-                                          TeksFunda.label(rek.judulAlasan),
+                                          const SizedBox(width: SpasiFunda.s),
+                                          Expanded(
+                                            child: TeksFunda.label(
+                                              rek.judulAlasan,
+                                            ),
+                                          ),
                                         ],
                                       ),
                                       const SizedBox(height: SpasiFunda.xs),
