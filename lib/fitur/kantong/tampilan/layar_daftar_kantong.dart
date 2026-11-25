@@ -305,10 +305,23 @@ class _LayarDaftarKantongState extends ConsumerState<LayarDaftarKantong> {
                           ),
                           child: Column(
                             children: [
-                              const Icon(
-                                LucideIcons.layers,
-                                size: 40,
-                                color: WarnaFunda.sifatKeinginan,
+                              Container(
+                                width: double.infinity,
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: SpasiFunda.m,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: WarnaFunda.kanvasUngu,
+                                  borderRadius: BorderRadius.circular(
+                                    SudutFunda.kartu,
+                                  ),
+                                ),
+                                child: const Center(
+                                  child: IlustrasiSvgFunda(
+                                    pathAset: AsetIlustrasiFunda.kantongKosong,
+                                    tinggi: 92,
+                                  ),
+                                ),
                               ),
                               const SizedBox(height: SpasiFunda.m),
                               const TeksFunda.judulBagian(

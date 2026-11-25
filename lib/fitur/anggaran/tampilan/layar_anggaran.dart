@@ -296,12 +296,14 @@ class LayarAnggaran extends ConsumerWidget {
                   batas: ringkasan.totalKebutuhanBatasRupiah,
                   terpakai: ringkasan.totalKebutuhanTerpakaiRupiah,
                   warnaDasar: WarnaFunda.sifatKebutuhan,
+                  pathSvg: AsetIkonFunda.sifatKebutuhan,
                 ),
                 kanan: _KartuMiniSifat(
                   label: 'Keinginan',
                   batas: ringkasan.totalKeinginanBatasRupiah,
                   terpakai: ringkasan.totalKeinginanTerpakaiRupiah,
                   warnaDasar: WarnaFunda.sifatKeinginan,
+                  pathSvg: AsetIkonFunda.sifatKeinginan,
                 ),
               ),
               const SizedBox(height: SpasiFunda.s),
@@ -312,12 +314,14 @@ class LayarAnggaran extends ConsumerWidget {
                   batas: ringkasan.totalTabunganBatasRupiah,
                   terpakai: ringkasan.totalTabunganTerpakaiRupiah,
                   warnaDasar: WarnaFunda.sifatTabungan,
+                  pathSvg: AsetIkonFunda.sifatTabungan,
                 ),
                 kanan: _KartuMiniSifat(
                   label: 'Utang',
                   batas: ringkasan.totalUtangBatasRupiah,
                   terpakai: ringkasan.totalUtangTerpakaiRupiah,
                   warnaDasar: WarnaFunda.sifatUtang,
+                  pathSvg: AsetIkonFunda.sifatUtang,
                 ),
               ),
               const SizedBox(height: SpasiFunda.l),
@@ -499,12 +503,14 @@ class _KartuMiniSifat extends StatelessWidget {
     required this.batas,
     required this.terpakai,
     required this.warnaDasar,
+    this.pathSvg,
   });
 
   final String label;
   final int batas;
   final int terpakai;
   final Color warnaDasar;
+  final String? pathSvg;
 
   @override
   Widget build(BuildContext context) {
@@ -521,14 +527,17 @@ class _KartuMiniSifat extends StatelessWidget {
         children: [
           Row(
             children: [
-              Container(
-                width: 8,
-                height: 8,
-                decoration: BoxDecoration(
-                  color: warnaDasar,
-                  shape: BoxShape.circle,
+              if (pathSvg != null)
+                IkonSvgFunda(pathAset: pathSvg!, ukuran: 18)
+              else
+                Container(
+                  width: 8,
+                  height: 8,
+                  decoration: BoxDecoration(
+                    color: warnaDasar,
+                    shape: BoxShape.circle,
+                  ),
                 ),
-              ),
               const SizedBox(width: SpasiFunda.xs),
               Expanded(child: TeksFunda.label(label)),
             ],

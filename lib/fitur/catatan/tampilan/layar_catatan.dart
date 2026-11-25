@@ -952,7 +952,13 @@ class _ItemBarisTransaksi extends StatelessWidget {
           ),
           child: Row(
             children: [
-              Icon(ikonBaris, size: 20, color: warnaIkon),
+              if (isTransfer)
+                const IkonSvgFunda(
+                  pathAset: AsetIkonFunda.transaksiTransfer,
+                  ukuran: 22,
+                )
+              else
+                Icon(ikonBaris, size: 20, color: warnaIkon),
               const SizedBox(width: SpasiFunda.m),
               Expanded(
                 child: Column(
@@ -1116,6 +1122,10 @@ class _LembarFilterState extends State<_LembarFilter> {
                   },
                 ),
                 ChoiceChip(
+                  avatar: const IkonSvgFunda(
+                    pathAset: AsetIkonFunda.transaksiPengeluaran,
+                    ukuran: 16,
+                  ),
                   label: const Text('Pengeluaran'),
                   selected: _filterSaatIni.jenis == JenisTransaksi.keluar,
                   onSelected: (val) {
@@ -1127,6 +1137,10 @@ class _LembarFilterState extends State<_LembarFilter> {
                   },
                 ),
                 ChoiceChip(
+                  avatar: const IkonSvgFunda(
+                    pathAset: AsetIkonFunda.transaksiPemasukan,
+                    ukuran: 16,
+                  ),
                   label: const Text('Pemasukan'),
                   selected: _filterSaatIni.jenis == JenisTransaksi.masuk,
                   onSelected: (val) {
@@ -1138,6 +1152,10 @@ class _LembarFilterState extends State<_LembarFilter> {
                   },
                 ),
                 ChoiceChip(
+                  avatar: const IkonSvgFunda(
+                    pathAset: AsetIkonFunda.transaksiTransfer,
+                    ukuran: 16,
+                  ),
                   label: const Text('Transfer'),
                   selected: _filterSaatIni.jenis == JenisTransaksi.transfer,
                   onSelected: (val) {

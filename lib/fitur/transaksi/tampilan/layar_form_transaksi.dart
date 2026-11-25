@@ -542,6 +542,7 @@ class _LayarFormTransaksiState extends ConsumerState<LayarFormTransaksi> {
                                 children: [
                                   _ItemSegmen(
                                     judul: 'Pengeluaran',
+                                    pathSvg: AsetIkonFunda.transaksiPengeluaran,
                                     terpilih:
                                         _jenisTerpilih == JenisTransaksi.keluar,
                                     warnaAktif: WarnaFunda.pengeluaran,
@@ -552,6 +553,7 @@ class _LayarFormTransaksiState extends ConsumerState<LayarFormTransaksi> {
                                   ),
                                   _ItemSegmen(
                                     judul: 'Pemasukan',
+                                    pathSvg: AsetIkonFunda.transaksiPemasukan,
                                     terpilih:
                                         _jenisTerpilih == JenisTransaksi.masuk,
                                     warnaAktif: WarnaFunda.pemasukan,
@@ -562,6 +564,7 @@ class _LayarFormTransaksiState extends ConsumerState<LayarFormTransaksi> {
                                   ),
                                   _ItemSegmen(
                                     judul: 'Transfer',
+                                    pathSvg: AsetIkonFunda.transaksiTransfer,
                                     terpilih:
                                         _jenisTerpilih ==
                                         JenisTransaksi.transfer,
@@ -769,14 +772,26 @@ class _LayarFormTransaksiState extends ConsumerState<LayarFormTransaksi> {
                                                   mainAxisSize:
                                                       MainAxisSize.min,
                                                   children: [
-                                                    Icon(
-                                                      ambilIkonLucide(d.ikon),
-                                                      size: 18,
-                                                      color: terpilih
-                                                          ? WarnaFunda
-                                                                .utamaGelap
-                                                          : WarnaFunda.utama,
-                                                    ),
+                                                    if (pathSvgUntukJenisDompet(
+                                                          d.jenis,
+                                                        ) !=
+                                                        null)
+                                                      IkonSvgFunda(
+                                                        pathAset:
+                                                            pathSvgUntukJenisDompet(
+                                                              d.jenis,
+                                                            )!,
+                                                        ukuran: 20,
+                                                      )
+                                                    else
+                                                      Icon(
+                                                        ambilIkonLucide(d.ikon),
+                                                        size: 18,
+                                                        color: terpilih
+                                                            ? WarnaFunda
+                                                                  .utamaGelap
+                                                            : WarnaFunda.utama,
+                                                      ),
                                                     const SizedBox(
                                                       width: SpasiFunda.s,
                                                     ),
@@ -1249,13 +1264,20 @@ class _BarisPilihDompetTransfer extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 4),
         child: Row(
           children: [
-            Icon(
-              dompet != null
-                  ? ambilIkonLucide(dompet!.ikon)
-                  : LucideIcons.wallet,
-              size: 20,
-              color: dompet != null ? WarnaFunda.utama : WarnaFunda.teksRedup,
-            ),
+            if (dompet != null &&
+                pathSvgUntukJenisDompet(dompet!.jenis) != null)
+              IkonSvgFunda(
+                pathAset: pathSvgUntukJenisDompet(dompet!.jenis)!,
+                ukuran: 22,
+              )
+            else
+              Icon(
+                dompet != null
+                    ? ambilIkonLucide(dompet!.ikon)
+                    : LucideIcons.wallet,
+                size: 20,
+                color: dompet != null ? WarnaFunda.utama : WarnaFunda.teksRedup,
+              ),
             const SizedBox(width: SpasiFunda.m),
             Expanded(
               child: Column(
@@ -1297,33 +1319,53 @@ class _ItemSegmen extends StatelessWidget {
     required this.terpilih,
     required this.warnaAktif,
     required this.padaPilih,
+    this.pathSvg,
   });
 
   final String judul;
   final bool terpilih;
   final Color warnaAktif;
   final VoidCallback padaPilih;
+  final String? pathSvg;
 
   @override
   Widget build(BuildContext context) {
+    final teksBesar = MediaQuery.textScalerOf(context).scale(1) > 1.3;
     return Expanded(
       child: GestureDetector(
         onTap: padaPilih,
         child: Container(
-          padding: const EdgeInsets.symmetric(vertical: SpasiFunda.s + 2),
+          padding: const EdgeInsets.symmetric(
+            horizontal: SpasiFunda.xs,
+            vertical: SpasiFunda.s + 2,
+          ),
           decoration: BoxDecoration(
             color: terpilih ? warnaAktif : WarnaFunda.transparan,
             borderRadius: BorderRadius.circular(SudutFunda.pil),
           ),
-          child: Text(
-            judul,
-            textAlign: TextAlign.center,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: TipografiFunda.label.copyWith(
-              color: terpilih ? WarnaFunda.teksPutih : WarnaFunda.teksRedup,
-              fontSize: 13,
-            ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (pathSvg != null && !teksBesar) ...[
+                IkonSvgFunda(pathAset: pathSvg!, ukuran: 15),
+                const SizedBox(width: 4),
+              ],
+              Flexible(
+                child: Text(
+                  judul,
+                  textAlign: TextAlign.center,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TipografiFunda.label.copyWith(
+                    color: terpilih
+                        ? WarnaFunda.teksPutih
+                        : WarnaFunda.teksRedup,
+                    fontSize: 13,
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       ),

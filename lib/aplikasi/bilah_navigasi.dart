@@ -46,37 +46,41 @@ class PembungkusBilahNavigasi extends ConsumerWidget {
               onDestinationSelected: _padaPilihTab,
               destinations: [
                 const NavigationDestination(
-                  icon: Icon(LucideIcons.house),
-                  selectedIcon: Icon(
-                    LucideIcons.house,
-                    color: WarnaFunda.utama,
+                  icon: IkonSvgFunda(
+                    pathAset: AsetIkonFunda.navBerandaNonaktif,
+                  ),
+                  selectedIcon: IkonSvgFunda(
+                    pathAset: AsetIkonFunda.navBerandaAktif,
                   ),
                   label: 'Beranda',
                 ),
                 NavigationDestination(
                   key: kunciTutorial.tabCatatan,
-                  icon: const Icon(LucideIcons.receipt),
-                  selectedIcon: const Icon(
-                    LucideIcons.receipt,
-                    color: WarnaFunda.utama,
+                  icon: const IkonSvgFunda(
+                    pathAset: AsetIkonFunda.navCatatanNonaktif,
+                  ),
+                  selectedIcon: const IkonSvgFunda(
+                    pathAset: AsetIkonFunda.navCatatanAktif,
                   ),
                   label: 'Catatan',
                 ),
                 NavigationDestination(
                   key: kunciTutorial.tabBelajar,
-                  icon: const Icon(LucideIcons.bookOpen),
-                  selectedIcon: const Icon(
-                    LucideIcons.bookOpen,
-                    color: WarnaFunda.utama,
+                  icon: const IkonSvgFunda(
+                    pathAset: AsetIkonFunda.navBelajarNonaktif,
+                  ),
+                  selectedIcon: const IkonSvgFunda(
+                    pathAset: AsetIkonFunda.navBelajarAktif,
                   ),
                   label: 'Belajar',
                 ),
                 NavigationDestination(
                   key: kunciTutorial.tabLainnya,
-                  icon: const Icon(LucideIcons.ellipsis),
-                  selectedIcon: const Icon(
-                    LucideIcons.ellipsis,
-                    color: WarnaFunda.utama,
+                  icon: const IkonSvgFunda(
+                    pathAset: AsetIkonFunda.navLainnyaNonaktif,
+                  ),
+                  selectedIcon: const IkonSvgFunda(
+                    pathAset: AsetIkonFunda.navLainnyaAktif,
                   ),
                   label: 'Lainnya',
                 ),

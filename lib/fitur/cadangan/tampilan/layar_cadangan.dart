@@ -351,16 +351,11 @@ class _LayarCadanganState extends ConsumerState<LayarCadangan> {
                       borderRadius: BorderRadius.circular(SudutFunda.petak),
                     ),
                     child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Icon(
-                          sudahDicadangkan
-                              ? LucideIcons.circleCheck
-                              : LucideIcons.clock,
-                          color: sudahDicadangkan
-                              ? WarnaFunda.pemasukan
-                              : WarnaFunda.peringatan,
-                          size: 28,
+                        const IlustrasiSvgFunda(
+                          pathAset: AsetIlustrasiFunda.cadanganData,
+                          tinggi: 60,
                         ),
                         const SizedBox(width: SpasiFunda.m),
                         Expanded(

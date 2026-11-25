@@ -1134,10 +1134,9 @@ class _BannerPengingatCadangan extends StatelessWidget {
         children: [
           const Row(
             children: [
-              Icon(
-                LucideIcons.shieldCheck,
-                size: 20,
-                color: WarnaFunda.peringatan,
+              IlustrasiSvgFunda(
+                pathAset: AsetIlustrasiFunda.cadanganData,
+                tinggi: 34,
               ),
               SizedBox(width: SpasiFunda.s),
               Expanded(
@@ -1276,13 +1275,19 @@ class _KartuTransaksiTerakhir extends StatelessWidget {
                         ),
                         child: Row(
                           children: [
-                            Icon(
-                              ambilIkonLucide(
-                                (kategori?.ikon as String?) ?? 'receipt',
+                            if (isTransfer)
+                              const IkonSvgFunda(
+                                pathAset: AsetIkonFunda.transaksiTransfer,
+                                ukuran: 20,
+                              )
+                            else
+                              Icon(
+                                ambilIkonLucide(
+                                  (kategori?.ikon as String?) ?? 'receipt',
+                                ),
+                                size: 18,
+                                color: warnaNominal,
                               ),
-                              size: 18,
-                              color: warnaNominal,
-                            ),
                             const SizedBox(width: SpasiFunda.m),
                             Expanded(
                               child: Text(

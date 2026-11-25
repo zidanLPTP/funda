@@ -268,7 +268,11 @@ class _LayarFormDompetState extends ConsumerState<LayarFormDompet> {
                         runSpacing: SpasiFunda.s,
                         children: JenisDompet.values.map((jenis) {
                           final terpilih = _jenisTerpilih == jenis;
+                          final svgJenis = pathSvgUntukJenisDompet(jenis.kode);
                           return ChoiceChip(
+                            avatar: svgJenis != null
+                                ? IkonSvgFunda(pathAset: svgJenis, ukuran: 18)
+                                : null,
                             label: Text(jenis.label),
                             selected: terpilih,
                             selectedColor: WarnaFunda.kanvasMint,

@@ -63,7 +63,7 @@ class _LayarOnboardingState extends ConsumerState<LayarOnboarding> {
           'Tidak ada label pelit atau boros. Funda membantumu melihat ke mana uang mengalir dengan jernih, tenang, dan memberdayakan.',
       kanvas: WarnaFunda.kanvasUngu,
       warnaTag: WarnaFunda.sifatKeinginan,
-      pathSvg: AsetIlustrasiFunda.psikologiUang,
+      pathSvg: AsetIlustrasiFunda.ruangTenang,
     ),
   ];
 

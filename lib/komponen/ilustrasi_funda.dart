@@ -22,6 +22,12 @@ abstract final class AsetIlustrasiFunda {
       'aset/gambar/ilustrasi/tutorial_fitur_lengkap.svg';
   static const utangLunasKosong =
       'aset/gambar/ilustrasi/utang_lunas_kosong.svg';
+  static const cadanganData = 'aset/gambar/ilustrasi/cadangan_data.svg';
+  static const kantongKosong = 'aset/gambar/ilustrasi/kantong_kosong.svg';
+  static const kekayaanBersih = 'aset/gambar/ilustrasi/kekayaan_bersih.svg';
+  static const kuisLulus = 'aset/gambar/ilustrasi/kuis_lulus.svg';
+  static const kuisUlangi = 'aset/gambar/ilustrasi/kuis_ulangi.svg';
+  static const ruangTenang = 'aset/gambar/ilustrasi/ruang_tenang.svg';
 
   static const mulaiTesAwal = 'aset/gambar/ilustrasi/mulai-tes-awal.svg';
   static const anggaranArusKas =
@@ -50,6 +56,93 @@ abstract final class AsetIlustrasiFunda {
       'aset/gambar/ilustrasi/keuangan_usaha_kecil.svg';
   static const proteksiKeluargaWarisan =
       'aset/gambar/ilustrasi/proteksi_keluarga_warisan.svg';
+}
+
+/// Kumpulan path aset ikon SVG custom Funda di `aset/gambar/ikon/`.
+abstract final class AsetIkonFunda {
+  static const navBerandaAktif = 'aset/gambar/ikon/ic_nav_beranda_aktif.svg';
+  static const navBerandaNonaktif =
+      'aset/gambar/ikon/ic_nav_beranda_nonaktif.svg';
+  static const navCatatanAktif = 'aset/gambar/ikon/ic_nav_catatan_aktif.svg';
+  static const navCatatanNonaktif =
+      'aset/gambar/ikon/ic_nav_catatan_nonaktif.svg';
+  static const navBelajarAktif = 'aset/gambar/ikon/ic_nav_belajar_aktif.svg';
+  static const navBelajarNonaktif =
+      'aset/gambar/ikon/ic_nav_belajar_nonaktif.svg';
+  static const navLainnyaAktif = 'aset/gambar/ikon/ic_nav_lainnya_aktif.svg';
+  static const navLainnyaNonaktif =
+      'aset/gambar/ikon/ic_nav_lainnya_nonaktif.svg';
+
+  static const dompetBank = 'aset/gambar/ikon/ic_dompet_bank.svg';
+  static const dompetEwallet = 'aset/gambar/ikon/ic_dompet_ewallet.svg';
+  static const dompetTunai = 'aset/gambar/ikon/ic_dompet_tunai.svg';
+
+  static const sifatKebutuhan = 'aset/gambar/ikon/ic_sifat_kebutuhan.svg';
+  static const sifatKeinginan = 'aset/gambar/ikon/ic_sifat_keinginan.svg';
+  static const sifatTabungan = 'aset/gambar/ikon/ic_sifat_tabungan.svg';
+  static const sifatUtang = 'aset/gambar/ikon/ic_sifat_utang.svg';
+
+  static const transaksiPemasukan =
+      'aset/gambar/ikon/ic_transaksi_pemasukan.svg';
+  static const transaksiPengeluaran =
+      'aset/gambar/ikon/ic_transaksi_pengeluaran.svg';
+  static const transaksiTransfer = 'aset/gambar/ikon/ic_transaksi_transfer.svg';
+}
+
+/// Widget perender ikon SVG custom berukuran tetap (default 24x24).
+class IkonSvgFunda extends StatelessWidget {
+  final String pathAset;
+  final double ukuran;
+  final String? labelAkses;
+
+  const IkonSvgFunda({
+    super.key,
+    required this.pathAset,
+    this.ukuran = 24,
+    this.labelAkses,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SvgPicture.asset(
+      pathAset,
+      width: ukuran,
+      height: ukuran,
+      fit: BoxFit.contain,
+      excludeFromSemantics: labelAkses == null,
+      semanticsLabel: labelAkses,
+    );
+  }
+}
+
+/// Mengembalikan path ikon SVG custom berdasarkan kode jenis dompet.
+String? pathSvgUntukJenisDompet(String kodeJenis) {
+  return switch (kodeJenis) {
+    'rekening_bank' => AsetIkonFunda.dompetBank,
+    'e_wallet' => AsetIkonFunda.dompetEwallet,
+    'tunai' => AsetIkonFunda.dompetTunai,
+    _ => null,
+  };
+}
+
+/// Mengembalikan path ikon SVG custom berdasarkan kode sifat pengeluaran.
+String? pathSvgUntukSifatKategori(String kodeSifat) {
+  return switch (kodeSifat) {
+    'kebutuhan' => AsetIkonFunda.sifatKebutuhan,
+    'keinginan' => AsetIkonFunda.sifatKeinginan,
+    'tabungan' => AsetIkonFunda.sifatTabungan,
+    'utang' => AsetIkonFunda.sifatUtang,
+    _ => null,
+  };
+}
+
+/// Mengembalikan path ikon SVG custom berdasarkan kode jenis transaksi.
+String pathSvgUntukJenisTransaksi(String kodeJenis) {
+  return switch (kodeJenis) {
+    'masuk' || 'penyesuaian_masuk' => AsetIkonFunda.transaksiPemasukan,
+    'transfer' => AsetIkonFunda.transaksiTransfer,
+    _ => AsetIkonFunda.transaksiPengeluaran,
+  };
 }
 
 /// Widget perender ilustrasi SVG lokal dari aset Funda.

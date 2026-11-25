@@ -369,16 +369,21 @@ class _LayarKuisModulState extends ConsumerState<LayarKuisModul> {
             children: [
               const Spacer(),
               Container(
-                width: 96,
-                height: 96,
-                decoration: BoxDecoration(
-                  color: _lulus ? WarnaFunda.tintHijau : WarnaFunda.tintAmber,
-                  shape: BoxShape.circle,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: SpasiFunda.xl,
+                  vertical: SpasiFunda.l,
                 ),
-                child: Icon(
-                  _lulus ? LucideIcons.award : LucideIcons.bookOpen,
-                  size: 48,
-                  color: _lulus ? WarnaFunda.pemasukan : WarnaFunda.peringatan,
+                decoration: BoxDecoration(
+                  color: _lulus
+                      ? WarnaFunda.kanvasMint
+                      : WarnaFunda.kanvasKuning,
+                  borderRadius: BorderRadius.circular(SudutFunda.petak),
+                ),
+                child: IlustrasiSvgFunda(
+                  pathAset: _lulus
+                      ? AsetIlustrasiFunda.kuisLulus
+                      : AsetIlustrasiFunda.kuisUlangi,
+                  tinggi: 108,
                 ),
               ),
               const SizedBox(height: SpasiFunda.l),

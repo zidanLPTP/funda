@@ -214,10 +214,9 @@ class _LayarLaporanBulananState extends ConsumerState<LayarLaporanBulanan> {
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const IlustrasiGeometrisFunda(
-                          jenis: JenisIlustrasiFunda.neraca,
-                          warnaAksen: WarnaFunda.sifatKebutuhan,
-                          ukuran: 52,
+                        const IlustrasiSvgFunda(
+                          pathAset: AsetIlustrasiFunda.laporanBulanan,
+                          tinggi: 60,
                         ),
                         const SizedBox(width: SpasiFunda.m),
                         Expanded(

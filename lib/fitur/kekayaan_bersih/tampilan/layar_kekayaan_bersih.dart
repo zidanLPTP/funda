@@ -71,14 +71,33 @@ class LayarKekayaanBersih extends ConsumerWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const TeksFunda.label('Total Kekayaan Bersih'),
-                          const SizedBox(height: SpasiFunda.s),
-                          TeksFunda.angkaBesar(
-                            formatRupiah(kekayaanBersih),
-                            angkaTabular: true,
-                            warna: isNegatif
-                                ? WarnaFunda.pengeluaran
-                                : WarnaFunda.pemasukan,
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const TeksFunda.label(
+                                      'Total Kekayaan Bersih',
+                                    ),
+                                    const SizedBox(height: SpasiFunda.s),
+                                    TeksFunda.angkaBesar(
+                                      formatRupiah(kekayaanBersih),
+                                      angkaTabular: true,
+                                      warna: isNegatif
+                                          ? WarnaFunda.pengeluaran
+                                          : WarnaFunda.pemasukan,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(width: SpasiFunda.s),
+                              const IlustrasiSvgFunda(
+                                pathAset: AsetIlustrasiFunda.kekayaanBersih,
+                                tinggi: 64,
+                              ),
+                            ],
                           ),
                           const SizedBox(height: SpasiFunda.m),
                           Wrap(

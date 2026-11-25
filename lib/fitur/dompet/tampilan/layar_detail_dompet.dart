@@ -71,6 +71,7 @@ class _LayarDetailDompetState extends ConsumerState<LayarDetailDompet> {
         final jenis = JenisDompet.dariKode(dompet.jenis);
         final warnaKanvas = ambilWarnaTint(dompet.warna);
         final warnaAksen = ambilWarnaAksenTint(dompet.warna);
+        final svgJenis = pathSvgUntukJenisDompet(dompet.jenis);
 
         return Scaffold(
           backgroundColor: WarnaFunda.latar,
@@ -130,11 +131,14 @@ class _LayarDetailDompetState extends ConsumerState<LayarDetailDompet> {
                             children: [
                               Row(
                                 children: [
-                                  Icon(
-                                    ambilIkonLucide(dompet.ikon),
-                                    size: 22,
-                                    color: warnaAksen,
-                                  ),
+                                  if (svgJenis != null)
+                                    IkonSvgFunda(pathAset: svgJenis, ukuran: 28)
+                                  else
+                                    Icon(
+                                      ambilIkonLucide(dompet.ikon),
+                                      size: 22,
+                                      color: warnaAksen,
+                                    ),
                                   const SizedBox(width: SpasiFunda.m),
                                   Expanded(
                                     child: Column(

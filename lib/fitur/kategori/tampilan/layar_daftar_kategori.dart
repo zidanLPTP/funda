@@ -338,13 +338,17 @@ class _DaftarKategoriKeluar extends ConsumerWidget {
             SifatKategori.utang => LucideIcons.calendarClock,
             _ => LucideIcons.helpCircle,
           };
+          final svgSifat = pathSvgUntukSifatKategori(sifat.kode);
 
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
                 children: [
-                  Icon(ikonSifat, size: 18, color: warnaSifat),
+                  if (svgSifat != null)
+                    IkonSvgFunda(pathAset: svgSifat, ukuran: 20)
+                  else
+                    Icon(ikonSifat, size: 18, color: warnaSifat),
                   const SizedBox(width: SpasiFunda.s),
                   Expanded(
                     child: TeksFunda.label(
