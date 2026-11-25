@@ -9,3 +9,4 @@ export 'animasi_funda.dart';
 export 'efek_perayaan.dart';
 export 'ilustrasi_funda.dart';
 export 'teks_animasi_kata.dart';
+export 'header_editorial_funda.dart';
