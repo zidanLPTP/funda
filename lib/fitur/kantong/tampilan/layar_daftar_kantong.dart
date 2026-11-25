@@ -12,7 +12,9 @@ import '../../../util/format_rupiah.dart';
 import '../../dompet/kontroler/penyedia_dompet.dart';
 import '../kontroler/penyedia_kantong.dart';
 
-/// Layar manajemen seluruh kantong per dompet.
+/// Layar manajemen seluruh kantong per dompet bergaya editorial bersih:
+/// header tombol kembali >= 48dp, pesan edukasi tenang, hero kanvas saldo bebas,
+/// dan daftar kantong menyatu dalam 1 kartu putih border 1px.
 class LayarDaftarKantong extends ConsumerStatefulWidget {
   const LayarDaftarKantong({super.key});
 
@@ -24,9 +26,13 @@ class _LayarDaftarKantongState extends ConsumerState<LayarDaftarKantong> {
   String? _dompetTerpilihId;
 
   void _bukaDialogTambahKantongBebas(BuildContext context, String dompetId) {
-    showModalBottomSheet(
+    final tanpaAnimasi =
+        MediaQuery.disableAnimationsOf(context) ||
+        ref.read(penyediaTanpaAnimasi);
+    showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
+      sheetAnimationStyle: tanpaAnimasi ? AnimationStyle.noAnimation : null,
       backgroundColor: WarnaFunda.permukaan,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
@@ -42,9 +48,13 @@ class _LayarDaftarKantongState extends ConsumerState<LayarDaftarKantong> {
     required EntitasKantong kantong,
     required bool isIsi,
   }) {
-    showModalBottomSheet(
+    final tanpaAnimasi =
+        MediaQuery.disableAnimationsOf(context) ||
+        ref.read(penyediaTanpaAnimasi);
+    showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
+      sheetAnimationStyle: tanpaAnimasi ? AnimationStyle.noAnimation : null,
       backgroundColor: WarnaFunda.permukaan,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
@@ -58,13 +68,35 @@ class _LayarDaftarKantongState extends ConsumerState<LayarDaftarKantong> {
   @override
   Widget build(BuildContext context) {
     final daftarDompet = ref.watch(penyediaDaftarDompetAktif).value ?? [];
+    final isTeksBesar = MediaQuery.textScalerOf(context).scale(1) > 1.3;
 
     if (daftarDompet.isEmpty) {
       return Scaffold(
-        appBar: AppBar(title: const TeksFunda.judulBagian('Kantong Dompet')),
-        body: const Center(
-          child: Text(
-            'Buat dompet terlebih dahulu sebelum menggunakan kantong.',
+        backgroundColor: WarnaFunda.latar,
+        body: const SafeArea(
+          child: Column(
+            children: [
+              Padding(
+                padding: EdgeInsets.fromLTRB(
+                  SpasiFunda.marginLayar,
+                  SpasiFunda.marginLayar,
+                  SpasiFunda.marginLayar,
+                  0,
+                ),
+                child: HeaderSubLayarEditorial(judul: 'Kantong Dompet'),
+              ),
+              Expanded(
+                child: Center(
+                  child: Padding(
+                    padding: EdgeInsets.all(SpasiFunda.l),
+                    child: TeksFunda.isiKecil(
+                      'Buat dompet terlebih dahulu sebelum menggunakan kantong.',
+                      rataTeks: TextAlign.center,
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       );
@@ -82,256 +114,369 @@ class _LayarDaftarKantongState extends ConsumerState<LayarDaftarKantong> {
       penyediaKantongDompet(dompetTerpilih.id),
     );
     final repoKantong = ref.watch(penyediaKantongRepositori);
+    final warnaKanvas = ambilWarnaTint(dompetTerpilih.warna);
+    final warnaAksen = ambilWarnaAksenTint(dompetTerpilih.warna);
 
     return Scaffold(
       backgroundColor: WarnaFunda.latar,
-      appBar: AppBar(
-        title: const TeksFunda.judulBagian('Kantong Dompet'),
-        actions: [
-          IconButton(
-            icon: const Icon(LucideIcons.plus),
-            tooltip: 'Buat Kantong Bebas',
-            onPressed: () =>
-                _bukaDialogTambahKantongBebas(context, dompetTerpilih.id),
-          ),
-        ],
-      ),
       body: SafeArea(
-        child: ListView(
-          padding: const EdgeInsets.all(SpasiFunda.m),
+        child: Column(
           children: [
-            // Teks Edukatif Bantuan
-            Container(
-              padding: const EdgeInsets.all(SpasiFunda.m),
-              decoration: BoxDecoration(
-                color: WarnaFunda.utamaTipis,
-                borderRadius: BorderRadius.circular(SudutFunda.kartu),
-                border: Border.all(color: WarnaFunda.utama.withAlpha(50)),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(
+                SpasiFunda.marginLayar,
+                SpasiFunda.marginLayar,
+                SpasiFunda.marginLayar,
+                SpasiFunda.s,
               ),
-              child: const Row(
-                children: [
-                  Icon(LucideIcons.info, color: WarnaFunda.utama),
-                  SizedBox(width: SpasiFunda.m),
-                  Expanded(
-                    child: TeksFunda.isiKecil(
-                      'Ini hanya penandaan. Uangmu tidak berpindah antar rekening.',
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: SpasiFunda.m),
-
-            // Pemilih Tab Dompet (Chips Horizontal)
-            SizedBox(
-              height: 44,
-              child: ListView.separated(
-                scrollDirection: Axis.horizontal,
-                itemCount: daftarDompet.length,
-                separatorBuilder: (_, _) => const SizedBox(width: SpasiFunda.s),
-                itemBuilder: (context, index) {
-                  final d = daftarDompet[index];
-                  final terpilih = d.id == dompetTerpilih.id;
-                  return ChoiceChip(
-                    avatar: Icon(ambilIkonLucide(d.ikon), size: 16),
-                    label: Text(d.nama),
-                    selected: terpilih,
-                    onSelected: (_) => setState(() => _dompetTerpilihId = d.id),
-                  );
-                },
-              ),
-            ),
-            const SizedBox(height: SpasiFunda.m),
-
-            // Kartu Bento Saldo Bebas Dompet Ini
-            PetakBento.ukuran2x1(
-              warnaKustom: ambilWarnaTint(dompetTerpilih.warna),
-              anak: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Icon(ambilIkonLucide(dompetTerpilih.ikon), size: 20),
-                      const SizedBox(width: SpasiFunda.s),
-                      TeksFunda.label(dompetTerpilih.nama),
-                    ],
-                  ),
-                  const SizedBox(height: SpasiFunda.m),
-                  const TeksFunda.catatan(
-                    'Saldo Bebas (Uang Belum Terkunci Kantong)',
-                  ),
-                  const SizedBox(height: SpasiFunda.xs),
-                  TeksFunda.angkaBesar(
-                    formatRupiah(saldoBebas),
-                    warna: saldoBebas < 0
-                        ? WarnaFunda.pengeluaran
-                        : WarnaFunda.teks,
-                  ),
-                  if (saldoBebas < 0) ...[
-                    const SizedBox(height: SpasiFunda.xs),
-                    const TeksFunda.catatan(
-                      'Perhatian: Alokasi kantong melebihi saldo dompet yang ada!',
-                      warna: WarnaFunda.pengeluaran,
-                    ),
-                  ],
-                ],
-              ),
-            ),
-            const SizedBox(height: SpasiFunda.l),
-
-            // Daftar Kantong di Dompet Tersebut
-            Wrap(
-              alignment: WrapAlignment.spaceBetween,
-              crossAxisAlignment: WrapCrossAlignment.center,
-              spacing: SpasiFunda.s,
-              children: [
-                const TeksFunda.judulBagian('Daftar Kantong'),
-                TextButton.icon(
-                  onPressed: () =>
-                      _bukaDialogTambahKantongBebas(context, dompetTerpilih.id),
-                  icon: const Icon(LucideIcons.plus, size: 16),
-                  label: const Text('Kantong Bebas'),
-                ),
-              ],
-            ),
-            const SizedBox(height: SpasiFunda.s),
-
-            daftarKantongAsync.when(
-              loading: () => const Center(
-                child: Padding(
-                  padding: EdgeInsets.all(SpasiFunda.xl),
-                  child: IndikatorMemuat(),
-                ),
-              ),
-              error: (e, _) => Center(child: Text('Terjadi kesalahan: $e')),
-              data: (daftarKantong) {
-                if (daftarKantong.isEmpty) {
-                  return KeadaanKosong(
-                    ikon: LucideIcons.layers,
-                    judul: 'Belum Ada Kantong',
-                    pesan:
-                        'Pisahkan pos uang di dalam dompet ini tanpa harus membuka rekening baru.',
-                    teksTombol: 'Buat Kantong Sekarang',
-                    padaAksi: () => _bukaDialogTambahKantongBebas(
+              child: HeaderSubLayarEditorial(
+                judul: 'Kantong Dompet',
+                aksiKanan: [
+                  TombolPilHeaderEditorial(
+                    key: const Key('tombol_tambah_kantong_header'),
+                    teks: 'Tambah',
+                    ikon: LucideIcons.plus,
+                    padaTekan: () => _bukaDialogTambahKantongBebas(
                       context,
                       dompetTerpilih.id,
                     ),
-                  );
-                }
-
-                return ListView.separated(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: daftarKantong.length,
-                  separatorBuilder: (_, _) =>
-                      const SizedBox(height: SpasiFunda.s),
-                  itemBuilder: (context, index) {
-                    final k = daftarKantong[index];
-                    final saldoKantongAsync = ref.watch(
-                      penyediaSaldoKantong(k.id),
-                    );
-                    final saldoK = saldoKantongAsync.value ?? 0;
-
-                    return Container(
-                      padding: const EdgeInsets.all(SpasiFunda.m),
-                      decoration: BoxDecoration(
-                        color: WarnaFunda.permukaan,
-                        borderRadius: BorderRadius.circular(SudutFunda.kartu),
-                        border: Border.all(color: WarnaFunda.garis),
+                  ),
+                ],
+              ),
+            ),
+            Expanded(
+              child: ListView(
+                padding: const EdgeInsets.fromLTRB(
+                  SpasiFunda.marginLayar,
+                  SpasiFunda.s,
+                  SpasiFunda.marginLayar,
+                  SpasiFunda.xxl,
+                ),
+                children: [
+                  // Teks Edukatif Bantuan Tenang (Kartu Putih Beraksen Hijau)
+                  Container(
+                    padding: const EdgeInsets.all(SpasiFunda.m),
+                    decoration: BoxDecoration(
+                      color: WarnaFunda.permukaan,
+                      borderRadius: BorderRadius.circular(SudutFunda.kartu),
+                      border: Border.all(
+                        color: WarnaFunda.batasHijau,
+                        width: 1.0,
                       ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              Container(
-                                padding: const EdgeInsets.all(SpasiFunda.s),
-                                decoration: BoxDecoration(
-                                  color: ambilWarnaTint(k.warna),
-                                  borderRadius: BorderRadius.circular(
-                                    SudutFunda.kecil,
-                                  ),
-                                ),
-                                child: Icon(
-                                  ambilIkonLucide(k.ikon),
-                                  size: 18,
-                                  color: WarnaFunda.utama,
-                                ),
-                              ),
-                              const SizedBox(width: SpasiFunda.m),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    TeksFunda.label(k.nama),
-                                    TeksFunda.catatan(
-                                      k.tujuanId != null
-                                          ? 'Tertaut ke Tujuan'
-                                          : 'Kantong Bebas',
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              TeksFunda.label(
-                                formatRupiah(saldoK),
-                                angkaTabular: true,
-                              ),
-                            ],
+                    ),
+                    child: const Row(
+                      children: [
+                        Icon(
+                          LucideIcons.info,
+                          color: WarnaFunda.utama,
+                          size: 20,
+                        ),
+                        SizedBox(width: SpasiFunda.m),
+                        Expanded(
+                          child: TeksFunda.isiKecil(
+                            'Ini hanya penandaan. Uangmu tidak berpindah antar rekening.',
+                            warna: WarnaFunda.teks,
                           ),
-                          const SizedBox(height: SpasiFunda.m),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              if (saldoK == 0)
-                                TextButton(
-                                  onPressed: () async {
-                                    await repoKantong.arsipkanKantong(k.id);
-                                    if (context.mounted) {
-                                      ScaffoldMessenger.of(
-                                        context,
-                                      ).showSnackBar(
-                                        const SnackBar(
-                                          content: Text(
-                                            'Kantong berhasil diarsipkan.',
-                                          ),
-                                        ),
-                                      );
-                                    }
-                                  },
-                                  child: const Text('Arsipkan'),
-                                ),
-                              const SizedBox(width: SpasiFunda.s),
-                              OutlinedButton.icon(
-                                onPressed: saldoK > 0
-                                    ? () => _bukaModalAlokasiKantong(
-                                        context,
-                                        kantong: k,
-                                        isIsi: false,
-                                      )
-                                    : null,
-                                icon: const Icon(LucideIcons.minus, size: 14),
-                                label: const Text('Ambil'),
-                              ),
-                              const SizedBox(width: SpasiFunda.s),
-                              FilledButton.tonalIcon(
-                                onPressed: () => _bukaModalAlokasiKantong(
-                                  context,
-                                  kantong: k,
-                                  isIsi: true,
-                                ),
-                                icon: const Icon(LucideIcons.plus, size: 14),
-                                label: const Text('Isi'),
-                              ),
-                            ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: SpasiFunda.m),
+
+                  // Pemilih Tab Dompet (Chips Horizontal)
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: daftarDompet.map((d) {
+                        final terpilih = d.id == dompetTerpilih.id;
+                        return Padding(
+                          padding: const EdgeInsets.only(right: SpasiFunda.s),
+                          child: ChoiceChip(
+                            avatar: Icon(
+                              ambilIkonLucide(d.ikon),
+                              size: 16,
+                              color: terpilih
+                                  ? WarnaFunda.utamaGelap
+                                  : WarnaFunda.teksRedup,
+                            ),
+                            label: Text(d.nama),
+                            selected: terpilih,
+                            selectedColor: WarnaFunda.kanvasMint,
+                            backgroundColor: WarnaFunda.permukaan,
+                            onSelected: (_) =>
+                                setState(() => _dompetTerpilihId = d.id),
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                  const SizedBox(height: SpasiFunda.m),
+
+                  // Hero Kanvas Saldo Bebas Dompet Ini
+                  Container(
+                    key: const Key('hero_kanvas_kantong'),
+                    padding: const EdgeInsets.all(SpasiFunda.l),
+                    decoration: BoxDecoration(
+                      color: warnaKanvas,
+                      borderRadius: BorderRadius.circular(SudutFunda.petak),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Icon(
+                              ambilIkonLucide(dompetTerpilih.ikon),
+                              size: 20,
+                              color: warnaAksen,
+                            ),
+                            const SizedBox(width: SpasiFunda.s),
+                            Expanded(
+                              child: TeksFunda.label(dompetTerpilih.nama),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: SpasiFunda.m),
+                        const TeksFunda.catatan(
+                          'Saldo Bebas (Uang Belum Terkunci Kantong)',
+                          warna: WarnaFunda.teksRedup,
+                        ),
+                        const SizedBox(height: SpasiFunda.xs),
+                        TeksFunda.angkaBesar(
+                          formatRupiah(saldoBebas),
+                          angkaTabular: true,
+                          warna: saldoBebas < 0
+                              ? WarnaFunda.pengeluaran
+                              : WarnaFunda.teks,
+                        ),
+                        if (saldoBebas < 0) ...[
+                          const SizedBox(height: SpasiFunda.xs),
+                          const TeksFunda.catatan(
+                            'Perhatian: Alokasi kantong melebihi saldo dompet yang ada!',
+                            warna: WarnaFunda.pengeluaran,
                           ),
                         ],
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: SpasiFunda.l),
+
+                  // Daftar Kantong di Dompet Tersebut
+                  Wrap(
+                    alignment: WrapAlignment.spaceBetween,
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    spacing: SpasiFunda.s,
+                    children: [
+                      const TeksFunda.judulBagian('Daftar Kantong'),
+                      TextButton.icon(
+                        onPressed: () => _bukaDialogTambahKantongBebas(
+                          context,
+                          dompetTerpilih.id,
+                        ),
+                        icon: const Icon(LucideIcons.plus, size: 16),
+                        label: const Text('Kantong Bebas'),
                       ),
-                    );
-                  },
-                );
-              },
+                    ],
+                  ),
+                  const SizedBox(height: SpasiFunda.s),
+
+                  daftarKantongAsync.when(
+                    loading: () => const Center(
+                      child: Padding(
+                        padding: EdgeInsets.all(SpasiFunda.xl),
+                        child: IndikatorMemuat(),
+                      ),
+                    ),
+                    error: (e, _) =>
+                        Center(child: Text('Terjadi kesalahan: $e')),
+                    data: (daftarKantong) {
+                      if (daftarKantong.isEmpty) {
+                        return Container(
+                          padding: const EdgeInsets.all(SpasiFunda.l),
+                          decoration: BoxDecoration(
+                            color: WarnaFunda.permukaan,
+                            borderRadius: BorderRadius.circular(
+                              SudutFunda.petak,
+                            ),
+                            border: Border.all(
+                              color: WarnaFunda.garis,
+                              width: 1.0,
+                            ),
+                          ),
+                          child: Column(
+                            children: [
+                              const Icon(
+                                LucideIcons.layers,
+                                size: 40,
+                                color: WarnaFunda.sifatKeinginan,
+                              ),
+                              const SizedBox(height: SpasiFunda.m),
+                              const TeksFunda.judulBagian(
+                                'Belum Ada Kantong',
+                                rataTeks: TextAlign.center,
+                              ),
+                              const SizedBox(height: SpasiFunda.xs),
+                              const TeksFunda.catatan(
+                                'Pisahkan pos uang di dalam dompet ini tanpa harus membuka rekening baru.',
+                                rataTeks: TextAlign.center,
+                                warna: WarnaFunda.teksRedup,
+                              ),
+                              const SizedBox(height: SpasiFunda.l),
+                              TombolFunda.pilGelap(
+                                lebarPenuh: true,
+                                teks: 'Buat Kantong Sekarang',
+                                padaTekan: () => _bukaDialogTambahKantongBebas(
+                                  context,
+                                  dompetTerpilih.id,
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      }
+
+                      // Daftar Kantong Menyatu dalam 1 Kartu Putih Border 1px
+                      return Container(
+                        decoration: BoxDecoration(
+                          color: WarnaFunda.permukaan,
+                          borderRadius: BorderRadius.circular(SudutFunda.petak),
+                          border: Border.all(
+                            color: WarnaFunda.garis,
+                            width: 1.0,
+                          ),
+                        ),
+                        child: Column(
+                          children: [
+                            for (var i = 0; i < daftarKantong.length; i++) ...[
+                              () {
+                                final k = daftarKantong[i];
+                                final saldoKantongAsync = ref.watch(
+                                  penyediaSaldoKantong(k.id),
+                                );
+                                final saldoK = saldoKantongAsync.value ?? 0;
+                                final aksenKantong = ambilWarnaAksenTint(
+                                  k.warna,
+                                );
+
+                                return Padding(
+                                  padding: const EdgeInsets.all(SpasiFunda.l),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Icon(
+                                            ambilIkonLucide(k.ikon),
+                                            size: 22,
+                                            color: aksenKantong,
+                                          ),
+                                          const SizedBox(width: SpasiFunda.m),
+                                          Expanded(
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                TeksFunda.label(k.nama),
+                                                TeksFunda.catatan(
+                                                  k.tujuanId != null
+                                                      ? 'Tertaut ke Tujuan'
+                                                      : 'Kantong Bebas',
+                                                ),
+                                                if (isTeksBesar) ...[
+                                                  const SizedBox(height: 2),
+                                                  TeksFunda.label(
+                                                    formatRupiah(saldoK),
+                                                    angkaTabular: true,
+                                                  ),
+                                                ],
+                                              ],
+                                            ),
+                                          ),
+                                          if (!isTeksBesar) ...[
+                                            const SizedBox(width: SpasiFunda.s),
+                                            TeksFunda.label(
+                                              formatRupiah(saldoK),
+                                              angkaTabular: true,
+                                            ),
+                                          ],
+                                        ],
+                                      ),
+                                      const SizedBox(height: SpasiFunda.m),
+                                      Wrap(
+                                        alignment: WrapAlignment.end,
+                                        spacing: SpasiFunda.s,
+                                        runSpacing: SpasiFunda.xs,
+                                        children: [
+                                          if (saldoK == 0)
+                                            TextButton(
+                                              onPressed: () async {
+                                                await repoKantong
+                                                    .arsipkanKantong(k.id);
+                                                if (context.mounted) {
+                                                  ScaffoldMessenger.of(
+                                                    context,
+                                                  ).showSnackBar(
+                                                    const SnackBar(
+                                                      content: Text(
+                                                        'Kantong berhasil diarsipkan.',
+                                                      ),
+                                                    ),
+                                                  );
+                                                }
+                                              },
+                                              child: const Text('Arsipkan'),
+                                            ),
+                                          OutlinedButton.icon(
+                                            onPressed: saldoK > 0
+                                                ? () =>
+                                                      _bukaModalAlokasiKantong(
+                                                        context,
+                                                        kantong: k,
+                                                        isIsi: false,
+                                                      )
+                                                : null,
+                                            icon: const Icon(
+                                              LucideIcons.minus,
+                                              size: 14,
+                                            ),
+                                            label: const Text('Ambil'),
+                                          ),
+                                          FilledButton.tonalIcon(
+                                            onPressed: () =>
+                                                _bukaModalAlokasiKantong(
+                                                  context,
+                                                  kantong: k,
+                                                  isIsi: true,
+                                                ),
+                                            icon: const Icon(
+                                              LucideIcons.plus,
+                                              size: 14,
+                                            ),
+                                            label: const Text('Isi'),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              }(),
+                              if (i < daftarKantong.length - 1)
+                                const Divider(
+                                  height: 1,
+                                  indent: SpasiFunda.l,
+                                  endIndent: SpasiFunda.l,
+                                  color: WarnaFunda.garis,
+                                ),
+                            ],
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+                ],
+              ),
             ),
-            const SizedBox(height: SpasiFunda.xxl),
           ],
         ),
       ),
@@ -390,65 +535,74 @@ class _LembarTambahKantongBebasState
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(
-        left: SpasiFunda.m,
-        right: SpasiFunda.m,
-        top: SpasiFunda.m,
-        bottom: MediaQuery.of(context).viewInsets.bottom + SpasiFunda.m,
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const TeksFunda.judulBagian('Buat Kantong Bebas'),
-              IconButton(
-                icon: const Icon(LucideIcons.x),
-                onPressed: () => Navigator.pop(context),
-              ),
-            ],
-          ),
-          const SizedBox(height: SpasiFunda.m),
-          const TeksFunda.label('Nama Kantong'),
-          const SizedBox(height: SpasiFunda.xs),
-          TextField(
-            controller: _pengontrolNama,
-            decoration: InputDecoration(
-              hintText: 'Contoh: Jajan Mingguan, Servis Kendaraan',
-              filled: true,
-              fillColor: WarnaFunda.latar,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(SudutFunda.kecil),
-                borderSide: const BorderSide(color: WarnaFunda.garis),
+    return SafeArea(
+      top: false,
+      child: SingleChildScrollView(
+        padding: EdgeInsets.only(
+          left: SpasiFunda.l,
+          right: SpasiFunda.l,
+          top: SpasiFunda.l,
+          bottom: MediaQuery.of(context).viewInsets.bottom + SpasiFunda.l,
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Expanded(
+                  child: TeksFunda.judulBagian('Buat Kantong Bebas'),
+                ),
+                IconButton(
+                  icon: const Icon(LucideIcons.x),
+                  constraints: const BoxConstraints(
+                    minWidth: 48,
+                    minHeight: 48,
+                  ),
+                  onPressed: () => Navigator.pop(context),
+                ),
+              ],
+            ),
+            const SizedBox(height: SpasiFunda.m),
+            const TeksFunda.label('Nama Kantong'),
+            const SizedBox(height: SpasiFunda.xs),
+            TextField(
+              controller: _pengontrolNama,
+              decoration: InputDecoration(
+                hintText: 'Contoh: Jajan Mingguan, Servis Kendaraan',
+                filled: true,
+                fillColor: WarnaFunda.latar,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(SudutFunda.kartu),
+                  borderSide: const BorderSide(color: WarnaFunda.garis),
+                ),
               ),
             ),
-          ),
-          const SizedBox(height: SpasiFunda.m),
-          const TeksFunda.label('Pilih Ikon'),
-          const SizedBox(height: SpasiFunda.xs),
-          Wrap(
-            spacing: SpasiFunda.s,
-            children: _pilihanIkon.map((i) {
-              return ChoiceChip(
-                avatar: Icon(ambilIkonLucide(i), size: 16),
-                label: Text(i),
-                selected: _ikon == i,
-                onSelected: (_) => setState(() => _ikon = i),
-              );
-            }).toList(),
-          ),
-          const SizedBox(height: SpasiFunda.l),
-          TombolFunda.primer(
-            teks: 'Simpan Kantong',
-            lebarPenuh: true,
-            memuat: _sedangMemuat,
-            padaTekan: _simpan,
-          ),
-          const SizedBox(height: SpasiFunda.m),
-        ],
+            const SizedBox(height: SpasiFunda.m),
+            const TeksFunda.label('Pilih Ikon'),
+            const SizedBox(height: SpasiFunda.xs),
+            Wrap(
+              spacing: SpasiFunda.s,
+              runSpacing: SpasiFunda.xs,
+              children: _pilihanIkon.map((i) {
+                return ChoiceChip(
+                  avatar: Icon(ambilIkonLucide(i), size: 16),
+                  label: Text(i),
+                  selected: _ikon == i,
+                  onSelected: (_) => setState(() => _ikon = i),
+                );
+              }).toList(),
+            ),
+            const SizedBox(height: SpasiFunda.l),
+            TombolFunda.pilGelap(
+              teks: 'Simpan Kantong',
+              lebarPenuh: true,
+              memuat: _sedangMemuat,
+              padaTekan: _simpan,
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -519,84 +673,90 @@ class _LembarAlokasiKantongState extends ConsumerState<_LembarAlokasiKantong> {
         ? 'Isi Kantong: ${widget.kantong.nama}'
         : 'Ambil dari: ${widget.kantong.nama}';
 
-    return Padding(
-      padding: EdgeInsets.only(
-        left: SpasiFunda.m,
-        right: SpasiFunda.m,
-        top: SpasiFunda.m,
-        bottom: MediaQuery.of(context).viewInsets.bottom + SpasiFunda.m,
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(child: TeksFunda.judulBagian(judul)),
-              IconButton(
-                icon: const Icon(LucideIcons.x),
-                onPressed: () => Navigator.pop(context),
+    return SafeArea(
+      top: false,
+      child: SingleChildScrollView(
+        padding: EdgeInsets.only(
+          left: SpasiFunda.l,
+          right: SpasiFunda.l,
+          top: SpasiFunda.l,
+          bottom: MediaQuery.of(context).viewInsets.bottom + SpasiFunda.l,
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(child: TeksFunda.judulBagian(judul)),
+                IconButton(
+                  icon: const Icon(LucideIcons.x),
+                  constraints: const BoxConstraints(
+                    minWidth: 48,
+                    minHeight: 48,
+                  ),
+                  onPressed: () => Navigator.pop(context),
+                ),
+              ],
+            ),
+            const SizedBox(height: SpasiFunda.s),
+            if (_pesanGalat != null) ...[
+              Container(
+                padding: const EdgeInsets.all(SpasiFunda.s),
+                decoration: BoxDecoration(
+                  color: WarnaFunda.tintMawar,
+                  borderRadius: BorderRadius.circular(SudutFunda.kartu),
+                  border: Border.all(color: WarnaFunda.pengeluaran),
+                ),
+                child: Text(
+                  _pesanGalat!,
+                  style: const TextStyle(color: WarnaFunda.pengeluaran),
+                ),
               ),
+              const SizedBox(height: SpasiFunda.m),
             ],
-          ),
-          const SizedBox(height: SpasiFunda.s),
-          if (_pesanGalat != null) ...[
-            Container(
-              padding: const EdgeInsets.all(SpasiFunda.s),
-              decoration: BoxDecoration(
-                color: WarnaFunda.pengeluaran.withAlpha(25),
-                borderRadius: BorderRadius.circular(SudutFunda.kecil),
-                border: Border.all(color: WarnaFunda.pengeluaran),
+            const TeksFunda.label('Nominal (Rupiah)'),
+            const SizedBox(height: SpasiFunda.xs),
+            TextField(
+              controller: _pengontrolNominal,
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(
+                hintText: 'Rp 0',
+                prefixIcon: const Icon(LucideIcons.coins),
+                filled: true,
+                fillColor: WarnaFunda.latar,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(SudutFunda.kartu),
+                  borderSide: const BorderSide(color: WarnaFunda.garis),
+                ),
               ),
-              child: Text(
-                _pesanGalat!,
-                style: const TextStyle(color: WarnaFunda.pengeluaran),
-              ),
+              onChanged: _padaUbahNominal,
             ),
             const SizedBox(height: SpasiFunda.m),
+            const TeksFunda.label('Catatan (Opsional)'),
+            const SizedBox(height: SpasiFunda.xs),
+            TextField(
+              controller: _pengontrolCatatan,
+              decoration: InputDecoration(
+                hintText: 'Keterangan alokasi',
+                filled: true,
+                fillColor: WarnaFunda.latar,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(SudutFunda.kartu),
+                  borderSide: const BorderSide(color: WarnaFunda.garis),
+                ),
+              ),
+            ),
+            const SizedBox(height: SpasiFunda.l),
+            TombolFunda.pilGelap(
+              teks: widget.isIsi ? 'Isi Kantong' : 'Ambil Dana',
+              lebarPenuh: true,
+              memuat: _sedangMemuat,
+              padaTekan: _jumlahRupiah > 0 ? _kirim : null,
+            ),
           ],
-          const TeksFunda.label('Nominal (Rupiah)'),
-          const SizedBox(height: SpasiFunda.xs),
-          TextField(
-            controller: _pengontrolNominal,
-            keyboardType: TextInputType.number,
-            decoration: InputDecoration(
-              hintText: 'Rp 0',
-              prefixIcon: const Icon(LucideIcons.coins),
-              filled: true,
-              fillColor: WarnaFunda.latar,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(SudutFunda.kecil),
-                borderSide: const BorderSide(color: WarnaFunda.garis),
-              ),
-            ),
-            onChanged: _padaUbahNominal,
-          ),
-          const SizedBox(height: SpasiFunda.m),
-          const TeksFunda.label('Catatan (Opsional)'),
-          const SizedBox(height: SpasiFunda.xs),
-          TextField(
-            controller: _pengontrolCatatan,
-            decoration: InputDecoration(
-              hintText: 'Keterangan alokasi',
-              filled: true,
-              fillColor: WarnaFunda.latar,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(SudutFunda.kecil),
-                borderSide: const BorderSide(color: WarnaFunda.garis),
-              ),
-            ),
-          ),
-          const SizedBox(height: SpasiFunda.l),
-          TombolFunda.primer(
-            teks: widget.isIsi ? 'Isi Kantong' : 'Ambil Dana',
-            lebarPenuh: true,
-            memuat: _sedangMemuat,
-            padaTekan: _jumlahRupiah > 0 ? _kirim : null,
-          ),
-          const SizedBox(height: SpasiFunda.m),
-        ],
+        ),
       ),
     );
   }

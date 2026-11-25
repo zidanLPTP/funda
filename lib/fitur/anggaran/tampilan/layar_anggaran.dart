@@ -801,6 +801,7 @@ class _LembarAturAnggaranState extends ConsumerState<_LembarAturAnggaran> {
               const SizedBox(height: SpasiFunda.xs),
               DropdownButtonFormField<String>(
                 initialValue: _kategoriTerpilihId,
+                isExpanded: true,
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: WarnaFunda.latar,
@@ -816,7 +817,9 @@ class _LembarAturAnggaranState extends ConsumerState<_LembarAturAnggaran> {
                       children: [
                         Icon(ambilIkonLucide(k.ikon), size: 18),
                         const SizedBox(width: SpasiFunda.s),
-                        Text(k.nama),
+                        Expanded(
+                          child: Text(k.nama, overflow: TextOverflow.ellipsis),
+                        ),
                       ],
                     ),
                   );
