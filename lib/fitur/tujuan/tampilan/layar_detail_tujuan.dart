@@ -199,10 +199,10 @@ class LayarDetailTujuan extends ConsumerWidget {
                           children: [
                             Row(
                               children: [
-                                Icon(
-                                  ambilIkonLucide(tujuan.ikon),
-                                  size: 22,
-                                  color: warnaAksen,
+                                IkonKategoriFunda(
+                                  kunciIkon: tujuan.ikon,
+                                  ukuran: 24,
+                                  warnaFallback: warnaAksen,
                                 ),
                                 const SizedBox(width: SpasiFunda.m),
                                 Expanded(
@@ -518,10 +518,11 @@ class LayarDetailTujuan extends ConsumerWidget {
                                       ),
                                       child: Row(
                                         children: [
-                                          Icon(
-                                            ambilIkonLucide(dompet.ikon),
-                                            size: 20,
-                                            color: warnaAksen,
+                                          IkonDompetFunda(
+                                            kodeJenis: dompet.jenis,
+                                            kunciIkonFallback: dompet.ikon,
+                                            ukuran: 20,
+                                            warnaFallback: warnaAksen,
                                           ),
                                           const SizedBox(width: SpasiFunda.m),
                                           Expanded(
@@ -886,7 +887,11 @@ class _LembarFormAlokasiState extends ConsumerState<_LembarFormAlokasi> {
                   value: d.id,
                   child: Row(
                     children: [
-                      Icon(ambilIkonLucide(d.ikon), size: 18),
+                      IkonDompetFunda(
+                        kodeJenis: d.jenis,
+                        kunciIkonFallback: d.ikon,
+                        ukuran: 18,
+                      ),
                       const SizedBox(width: SpasiFunda.s),
                       Expanded(
                         child: Text(d.nama, overflow: TextOverflow.ellipsis),

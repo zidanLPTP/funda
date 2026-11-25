@@ -468,7 +468,10 @@ class _KartuKosongBerandaEditorial extends StatelessWidget {
         Center(
           child: TextButton.icon(
             onPressed: padaPelajariDasar,
-            icon: const Icon(LucideIcons.compass, size: 16),
+            icon: const IkonSvgFunda(
+              pathAset: AsetIkonFunda.menuPanduan,
+              ukuran: 18,
+            ),
             label: const Text('Pelajari Nilai Dasar Funda'),
           ),
         ),
@@ -618,6 +621,7 @@ class _HeroBerandaEditorial extends StatelessWidget {
                   label: 'Total Saldo ($jumlahDompet dompet)',
                   nilai: totalSaldo,
                   ikon: LucideIcons.wallet,
+                  pathSvg: AsetIkonFunda.menuDompet,
                   warnaIkon: WarnaFunda.utamaGelap,
                   padaKetuk: padaKetukSaldo,
                 ),
@@ -627,6 +631,7 @@ class _HeroBerandaEditorial extends StatelessWidget {
                   label: 'Kekayaan Bersih',
                   nilai: kekayaanBersih,
                   ikon: LucideIcons.scale,
+                  pathSvg: AsetIkonFunda.menuKekayaan,
                   warnaIkon: WarnaFunda.sifatKebutuhan,
                   padaKetuk: padaKetukKekayaan,
                 ),
@@ -641,6 +646,7 @@ class _HeroBerandaEditorial extends StatelessWidget {
                     label: 'Total Saldo',
                     nilai: totalSaldo,
                     ikon: LucideIcons.wallet,
+                    pathSvg: AsetIkonFunda.menuDompet,
                     warnaIkon: WarnaFunda.utamaGelap,
                     padaKetuk: padaKetukSaldo,
                   ),
@@ -657,6 +663,7 @@ class _HeroBerandaEditorial extends StatelessWidget {
                     label: 'Kekayaan Bersih',
                     nilai: kekayaanBersih,
                     ikon: LucideIcons.scale,
+                    pathSvg: AsetIkonFunda.menuKekayaan,
                     warnaIkon: WarnaFunda.sifatKebutuhan,
                     padaKetuk: padaKetukKekayaan,
                   ),
@@ -685,6 +692,7 @@ class _ItemRingkasHero extends StatelessWidget {
   final String label;
   final int nilai;
   final IconData ikon;
+  final String? pathSvg;
   final Color warnaIkon;
   final VoidCallback padaKetuk;
 
@@ -693,6 +701,7 @@ class _ItemRingkasHero extends StatelessWidget {
     required this.label,
     required this.nilai,
     required this.ikon,
+    this.pathSvg,
     required this.warnaIkon,
     required this.padaKetuk,
   });
@@ -712,7 +721,10 @@ class _ItemRingkasHero extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  Icon(ikon, size: 14, color: warnaIkon),
+                  if (pathSvg != null)
+                    IkonSvgFunda(pathAset: pathSvg!, ukuran: 16)
+                  else
+                    Icon(ikon, size: 14, color: warnaIkon),
                   const SizedBox(width: SpasiFunda.xs),
                   Expanded(
                     child: Text(
@@ -972,10 +984,9 @@ class _KartuTagihanBeranda extends StatelessWidget {
                 ),
                 child: Row(
                   children: [
-                    Icon(
-                      LucideIcons.calendarCheck,
-                      color: WarnaFunda.aksenIkonMint,
-                      size: 24,
+                    IkonSvgFunda(
+                      pathAset: AsetIkonFunda.menuTagihan,
+                      ukuran: 24,
                     ),
                     SizedBox(width: SpasiFunda.m),
                     Expanded(

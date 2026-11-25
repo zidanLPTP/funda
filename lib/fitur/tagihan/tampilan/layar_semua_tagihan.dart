@@ -112,14 +112,9 @@ class _LayarSemuaTagihanState extends ConsumerState<LayarSemuaTagihan> {
                             ? WarnaFunda.utama
                             : WarnaFunda.teksRedup,
                       )
-                    : Icon(
-                        jenis == JenisTagihan.langganan
-                            ? LucideIcons.repeat
-                            : LucideIcons.receipt,
-                        color: tagihan.aktif
-                            ? WarnaFunda.utama
-                            : WarnaFunda.teksRedup,
-                        size: 20,
+                    : const IkonSvgFunda(
+                        pathAset: AsetIkonFunda.menuTagihan,
+                        ukuran: 22,
                       ),
               ),
               const SizedBox(width: SpasiFunda.m),

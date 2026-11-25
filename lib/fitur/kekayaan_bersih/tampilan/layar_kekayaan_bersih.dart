@@ -249,10 +249,11 @@ class LayarKekayaanBersih extends ConsumerWidget {
                                       ),
                                       child: Row(
                                         children: [
-                                          Icon(
-                                            ambilIkonLucide(dompet.ikon),
-                                            color: warnaAksen,
-                                            size: 22,
+                                          IkonDompetFunda(
+                                            kodeJenis: dompet.jenis,
+                                            kunciIkonFallback: dompet.ikon,
+                                            ukuran: 24,
+                                            warnaFallback: warnaAksen,
                                           ),
                                           const SizedBox(width: SpasiFunda.m),
                                           Expanded(
@@ -383,10 +384,9 @@ class LayarKekayaanBersih extends ConsumerWidget {
                                       ),
                                       child: Row(
                                         children: [
-                                          const Icon(
-                                            LucideIcons.fileText,
-                                            color: WarnaFunda.peringatan,
-                                            size: 22,
+                                          const IkonSvgFunda(
+                                            pathAset: AsetIkonFunda.menuUtang,
+                                            ukuran: 22,
                                           ),
                                           const SizedBox(width: SpasiFunda.m),
                                           Expanded(

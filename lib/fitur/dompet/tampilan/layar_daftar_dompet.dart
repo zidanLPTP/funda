@@ -236,7 +236,6 @@ class _KartuDaftarDompetPutih extends StatelessWidget {
               final saldo = petaSaldo[dompet.id] ?? dompet.saldoAwalRupiah;
               final jenis = JenisDompet.dariKode(dompet.jenis);
               final warnaAksen = ambilWarnaAksenTint(dompet.warna);
-              final svgJenis = pathSvgUntukJenisDompet(dompet.jenis);
 
               final infoNominal = Column(
                 crossAxisAlignment: isTeksBesar
@@ -280,14 +279,12 @@ class _KartuDaftarDompetPutih extends StatelessWidget {
                       ),
                       child: Row(
                         children: [
-                          if (svgJenis != null)
-                            IkonSvgFunda(pathAset: svgJenis, ukuran: 26)
-                          else
-                            Icon(
-                              ambilIkonLucide(dompet.ikon),
-                              size: 22,
-                              color: warnaAksen,
-                            ),
+                          IkonDompetFunda(
+                            kodeJenis: dompet.jenis,
+                            kunciIkonFallback: dompet.ikon,
+                            ukuran: 26,
+                            warnaFallback: warnaAksen,
+                          ),
                           const SizedBox(width: SpasiFunda.m),
                           Expanded(
                             child: Column(

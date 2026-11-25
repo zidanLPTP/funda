@@ -254,10 +254,10 @@ class _BarisTujuanEditorial extends ConsumerWidget {
             children: [
               Row(
                 children: [
-                  Icon(
-                    ambilIkonLucide(tujuan.ikon),
-                    size: 22,
-                    color: warnaAksen,
+                  IkonKategoriFunda(
+                    kunciIkon: tujuan.ikon,
+                    ukuran: 22,
+                    warnaFallback: warnaAksen,
                   ),
                   const SizedBox(width: SpasiFunda.m),
                   Expanded(

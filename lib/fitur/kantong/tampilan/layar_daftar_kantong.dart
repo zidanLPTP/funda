@@ -192,10 +192,11 @@ class _LayarDaftarKantongState extends ConsumerState<LayarDaftarKantong> {
                         return Padding(
                           padding: const EdgeInsets.only(right: SpasiFunda.s),
                           child: ChoiceChip(
-                            avatar: Icon(
-                              ambilIkonLucide(d.ikon),
-                              size: 16,
-                              color: terpilih
+                            avatar: IkonDompetFunda(
+                              kodeJenis: d.jenis,
+                              kunciIkonFallback: d.ikon,
+                              ukuran: 18,
+                              warnaFallback: terpilih
                                   ? WarnaFunda.utamaGelap
                                   : WarnaFunda.teksRedup,
                             ),
@@ -225,10 +226,11 @@ class _LayarDaftarKantongState extends ConsumerState<LayarDaftarKantong> {
                       children: [
                         Row(
                           children: [
-                            Icon(
-                              ambilIkonLucide(dompetTerpilih.ikon),
-                              size: 20,
-                              color: warnaAksen,
+                            IkonDompetFunda(
+                              kodeJenis: dompetTerpilih.jenis,
+                              kunciIkonFallback: dompetTerpilih.ikon,
+                              ukuran: 22,
+                              warnaFallback: warnaAksen,
                             ),
                             const SizedBox(width: SpasiFunda.s),
                             Expanded(
@@ -379,10 +381,10 @@ class _LayarDaftarKantongState extends ConsumerState<LayarDaftarKantong> {
                                     children: [
                                       Row(
                                         children: [
-                                          Icon(
-                                            ambilIkonLucide(k.ikon),
-                                            size: 22,
-                                            color: aksenKantong,
+                                          IkonKategoriFunda(
+                                            kunciIkon: k.ikon,
+                                            ukuran: 22,
+                                            warnaFallback: aksenKantong,
                                           ),
                                           const SizedBox(width: SpasiFunda.m),
                                           Expanded(
@@ -600,7 +602,7 @@ class _LembarTambahKantongBebasState
               runSpacing: SpasiFunda.xs,
               children: _pilihanIkon.map((i) {
                 return ChoiceChip(
-                  avatar: Icon(ambilIkonLucide(i), size: 16),
+                  avatar: IkonKategoriFunda(kunciIkon: i, ukuran: 18),
                   label: Text(i),
                   selected: _ikon == i,
                   onSelected: (_) => setState(() => _ikon = i),

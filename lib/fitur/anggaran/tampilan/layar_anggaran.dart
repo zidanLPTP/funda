@@ -642,10 +642,10 @@ class _BarisItemAnggaran extends StatelessWidget {
                 children: [
                   Padding(
                     padding: const EdgeInsets.only(top: 2),
-                    child: Icon(
-                      ambilIkonLucide(item.kategoriIkon),
-                      size: 22,
-                      color: warnaStatus,
+                    child: IkonKategoriFunda(
+                      kunciIkon: item.kategoriIkon,
+                      ukuran: 22,
+                      warnaFallback: warnaStatus,
                     ),
                   ),
                   const SizedBox(width: SpasiFunda.m),
@@ -823,7 +823,7 @@ class _LembarAturAnggaranState extends ConsumerState<_LembarAturAnggaran> {
                     value: k.id,
                     child: Row(
                       children: [
-                        Icon(ambilIkonLucide(k.ikon), size: 18),
+                        IkonKategoriFunda(kunciIkon: k.ikon, ukuran: 20),
                         const SizedBox(width: SpasiFunda.s),
                         Expanded(
                           child: Text(k.nama, overflow: TextOverflow.ellipsis),
@@ -844,7 +844,13 @@ class _LembarAturAnggaranState extends ConsumerState<_LembarAturAnggaran> {
               keyboardType: TextInputType.number,
               decoration: InputDecoration(
                 hintText: 'Rp 0',
-                prefixIcon: const Icon(LucideIcons.walletCards),
+                prefixIcon: const Padding(
+                  padding: EdgeInsets.all(12),
+                  child: IkonSvgFunda(
+                    pathAset: AsetIkonFunda.metrikAnggaran,
+                    ukuran: 20,
+                  ),
+                ),
                 filled: true,
                 fillColor: WarnaFunda.latar,
                 border: OutlineInputBorder(

@@ -195,10 +195,10 @@ class _LayarFormTujuanState extends ConsumerState<LayarFormTujuan> {
                     const SizedBox(height: SpasiFunda.m),
                     Row(
                       children: [
-                        Icon(
-                          ambilIkonLucide(_ikon),
-                          size: 28,
-                          color: warnaAksen,
+                        IkonKategoriFunda(
+                          kunciIkon: _ikon,
+                          ukuran: 28,
+                          warnaFallback: warnaAksen,
                         ),
                         const SizedBox(width: SpasiFunda.m),
                         Expanded(
@@ -424,9 +424,9 @@ class _LayarFormTujuanState extends ConsumerState<LayarFormTujuan> {
                             children: _pilihanIkon.map((kunciIkon) {
                               final terpilih = _ikon == kunciIkon;
                               return ChoiceChip(
-                                avatar: Icon(
-                                  ambilIkonLucide(kunciIkon),
-                                  size: 18,
+                                avatar: IkonKategoriFunda(
+                                  kunciIkon: kunciIkon,
+                                  ukuran: 18,
                                 ),
                                 label: Text(kunciIkon),
                                 selected: terpilih,

@@ -592,7 +592,11 @@ class _LayarFormTagihanState extends ConsumerState<LayarFormTagihan> {
                                   value: d.id,
                                   child: Row(
                                     children: [
-                                      Icon(ambilIkonLucide(d.ikon), size: 18),
+                                      IkonDompetFunda(
+                                        kodeJenis: d.jenis,
+                                        kunciIkonFallback: d.ikon,
+                                        ukuran: 18,
+                                      ),
                                       const SizedBox(width: SpasiFunda.s),
                                       Expanded(
                                         child: Text(

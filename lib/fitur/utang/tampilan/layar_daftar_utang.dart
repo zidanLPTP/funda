@@ -366,13 +366,17 @@ class _BarisItemUtang extends ConsumerWidget {
             children: [
               Row(
                 children: [
-                  Icon(
-                    isLunas ? LucideIcons.circleCheck : LucideIcons.creditCard,
-                    size: 22,
-                    color: isLunas
-                        ? WarnaFunda.pemasukan
-                        : WarnaFunda.sifatUtang,
-                  ),
+                  if (isLunas)
+                    const Icon(
+                      LucideIcons.circleCheck,
+                      size: 22,
+                      color: WarnaFunda.pemasukan,
+                    )
+                  else
+                    const IkonSvgFunda(
+                      pathAset: AsetIkonFunda.menuUtang,
+                      ukuran: 22,
+                    ),
                   const SizedBox(width: SpasiFunda.m),
                   Expanded(
                     child: Column(

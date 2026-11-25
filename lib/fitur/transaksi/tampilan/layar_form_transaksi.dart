@@ -235,10 +235,11 @@ class _LayarFormTransaksiState extends ConsumerState<LayarFormTransaksi> {
                           horizontal: SpasiFunda.s,
                           vertical: 4,
                         ),
-                        leading: Icon(
-                          ambilIkonLucide(d.ikon),
-                          size: 20,
-                          color: terpilih
+                        leading: IkonDompetFunda(
+                          kodeJenis: d.jenis,
+                          kunciIkonFallback: d.ikon,
+                          ukuran: 22,
+                          warnaFallback: terpilih
                               ? WarnaFunda.utama
                               : WarnaFunda.teksRedup,
                         ),
@@ -1264,19 +1265,17 @@ class _BarisPilihDompetTransfer extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 4),
         child: Row(
           children: [
-            if (dompet != null &&
-                pathSvgUntukJenisDompet(dompet!.jenis) != null)
-              IkonSvgFunda(
-                pathAset: pathSvgUntukJenisDompet(dompet!.jenis)!,
+            if (dompet != null)
+              IkonDompetFunda(
+                kodeJenis: dompet!.jenis,
+                kunciIkonFallback: dompet!.ikon,
                 ukuran: 22,
+                warnaFallback: WarnaFunda.utama,
               )
             else
-              Icon(
-                dompet != null
-                    ? ambilIkonLucide(dompet!.ikon)
-                    : LucideIcons.wallet,
-                size: 20,
-                color: dompet != null ? WarnaFunda.utama : WarnaFunda.teksRedup,
+              const IkonSvgFunda(
+                pathAset: AsetIkonFunda.menuDompet,
+                ukuran: 22,
               ),
             const SizedBox(width: SpasiFunda.m),
             Expanded(

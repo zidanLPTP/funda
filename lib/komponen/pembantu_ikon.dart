@@ -17,8 +17,12 @@ IconData ambilIkonLucide(String kunci) {
     'utensils' => LucideIcons.utensils,
     'home' => LucideIcons.home,
     'bus' => LucideIcons.bus,
+    'car' => LucideIcons.car,
+    'plane' => LucideIcons.plane,
+    'laptop' => LucideIcons.laptop,
     'wifi' => LucideIcons.wifi,
     'zap' => LucideIcons.zap,
+    'heart' => LucideIcons.heart,
     'heartPulse' => LucideIcons.heartPulse,
     'heartHandshake' => LucideIcons.heartHandshake,
     'graduationCap' => LucideIcons.graduationCap,
@@ -31,24 +35,27 @@ IconData ambilIkonLucide(String kunci) {
     'tv' => LucideIcons.tv,
     'receipt' => LucideIcons.receipt,
     'piggyBank' => LucideIcons.piggyBank,
+    'shield' => LucideIcons.shield,
     'shieldAlert' => LucideIcons.shieldAlert,
     'calendarClock' => LucideIcons.calendarClock,
     'receiptText' => LucideIcons.receiptText,
+    'layers' => LucideIcons.layers,
+    'target' => LucideIcons.target,
     'archive' => LucideIcons.archive,
     'arrowLeftRight' => LucideIcons.arrowLeftRight,
     _ => LucideIcons.circleDot,
   };
 }
 
-/// Memetakan kunci ikon kategori ke aset SVG custom bila tersedia.
+/// Memetakan kunci ikon kategori / entitas ke aset SVG custom bila tersedia.
 String? pathSvgUntukIkonKategori(String kunci) {
   return switch (kunci) {
     'utensils' || 'makan' => AsetIkonFunda.katMakan,
     'home' || 'rumah' => AsetIkonFunda.katRumah,
-    'bus' || 'transportasi' => AsetIkonFunda.katTransportasi,
+    'bus' || 'car' || 'transportasi' => AsetIkonFunda.katTransportasi,
     'wifi' || 'internet' => AsetIkonFunda.katInternet,
     'zap' || 'listrik' => AsetIkonFunda.katListrik,
-    'heartPulse' || 'kesehatan' => AsetIkonFunda.katKesehatan,
+    'heartPulse' || 'heart' || 'kesehatan' => AsetIkonFunda.katKesehatan,
     'graduationCap' || 'pendidikan' => AsetIkonFunda.katPendidikan,
     'shoppingCart' || 'shoppingBag' || 'belanja' => AsetIkonFunda.katBelanja,
     'clapperboard' ||
@@ -57,11 +64,19 @@ String? pathSvgUntukIkonKategori(String kunci) {
     'tv' ||
     'hiburan' => AsetIkonFunda.katHiburan,
     'coffee' || 'kopi' => AsetIkonFunda.katKopi,
-    'briefcase' || 'wallet' || 'gaji' => AsetIkonFunda.katGaji,
-    'handCoins' || 'trendingUp' || 'gift' || 'bonus' => AsetIkonFunda.katBonus,
+    'briefcase' || 'gaji' => AsetIkonFunda.katGaji,
+    'wallet' || 'walletCards' => AsetIkonFunda.menuDompet,
+    'building2' || 'bank' => AsetIkonFunda.dompetBank,
+    'layers' => AsetIkonFunda.menuKantong,
+    'target' => AsetIkonFunda.metrikTujuan,
+    'handCoins' ||
+    'trendingUp' ||
+    'gift' ||
+    'coins' ||
+    'bonus' => AsetIkonFunda.katBonus,
     'heartHandshake' || 'donasi' => AsetIkonFunda.katDonasi,
     'piggyBank' => AsetIkonFunda.sifatTabungan,
-    'shieldAlert' => AsetIkonFunda.metrikDanaDarurat,
+    'shield' || 'shieldAlert' => AsetIkonFunda.metrikDanaDarurat,
     'calendarClock' ||
     'receiptText' ||
     'creditCard' => AsetIkonFunda.sifatUtang,
@@ -70,7 +85,7 @@ String? pathSvgUntukIkonKategori(String kunci) {
   };
 }
 
-/// Widget ikon kategori: menampilkan SVG custom Funda jika tersedia, fallback Lucide.
+/// Widget ikon kategori / entitas: menampilkan SVG custom Funda jika tersedia, fallback Lucide.
 class IkonKategoriFunda extends StatelessWidget {
   final String kunciIkon;
   final double ukuran;
@@ -90,6 +105,39 @@ class IkonKategoriFunda extends StatelessWidget {
       return IkonSvgFunda(pathAset: pathSvg, ukuran: ukuran);
     }
     return Icon(ambilIkonLucide(kunciIkon), size: ukuran, color: warnaFallback);
+  }
+}
+
+/// Widget ikon dompet: memprioritaskan jenis dompet (`rekening_bank`, `e_wallet`, `tunai`)
+/// dan menggunakan `ic_menu_dompet` / kategori SVG bila berjenis `lainnya`.
+class IkonDompetFunda extends StatelessWidget {
+  final String? kodeJenis;
+  final String? kunciIkonFallback;
+  final double ukuran;
+  final Color? warnaFallback;
+
+  const IkonDompetFunda({
+    super.key,
+    this.kodeJenis,
+    this.kunciIkonFallback,
+    this.ukuran = 22,
+    this.warnaFallback,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    if (kodeJenis != null) {
+      final pathJenis = pathSvgUntukJenisDompet(kodeJenis!);
+      if (pathJenis != null) {
+        return IkonSvgFunda(pathAset: pathJenis, ukuran: ukuran);
+      }
+    }
+    final kunci = kunciIkonFallback ?? 'wallet';
+    return IkonKategoriFunda(
+      kunciIkon: kunci,
+      ukuran: ukuran,
+      warnaFallback: warnaFallback,
+    );
   }
 }
 

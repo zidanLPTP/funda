@@ -188,10 +188,10 @@ class _LayarFormDompetState extends ConsumerState<LayarFormDompet> {
                   const SizedBox(height: SpasiFunda.m),
                   Row(
                     children: [
-                      Icon(
-                        ambilIkonLucide(_ikonTerpilih),
-                        size: 28,
-                        color: warnaAksen,
+                      IkonKategoriFunda(
+                        kunciIkon: _ikonTerpilih,
+                        ukuran: 28,
+                        warnaFallback: warnaAksen,
                       ),
                       const SizedBox(width: SpasiFunda.m),
                       Expanded(
