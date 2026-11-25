@@ -143,6 +143,7 @@ class _LayarKuisModulState extends ConsumerState<LayarKuisModul> {
             padding: const EdgeInsets.all(SpasiFunda.m),
             child: KeadaanKosong(
               ikon: LucideIcons.circleAlert,
+              pathSvg: AsetIlustrasiFunda.galatPemuatan,
               judul: 'Kuis Belum Siap',
               pesan: _galat ?? 'Bank soal kuis modul ini belum tersedia.',
               teksTombol: 'Kembali',

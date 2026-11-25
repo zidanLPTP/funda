@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
+import 'ilustrasi_funda.dart';
 
 /// Memetakan kunci string ikon ke IconData dari pustaka Lucide.
 IconData ambilIkonLucide(String kunci) {
@@ -19,6 +20,7 @@ IconData ambilIkonLucide(String kunci) {
     'wifi' => LucideIcons.wifi,
     'zap' => LucideIcons.zap,
     'heartPulse' => LucideIcons.heartPulse,
+    'heartHandshake' => LucideIcons.heartHandshake,
     'graduationCap' => LucideIcons.graduationCap,
     'shoppingBag' => LucideIcons.shoppingBag,
     'clapperboard' => LucideIcons.clapperboard,
@@ -36,6 +38,59 @@ IconData ambilIkonLucide(String kunci) {
     'arrowLeftRight' => LucideIcons.arrowLeftRight,
     _ => LucideIcons.circleDot,
   };
+}
+
+/// Memetakan kunci ikon kategori ke aset SVG custom bila tersedia.
+String? pathSvgUntukIkonKategori(String kunci) {
+  return switch (kunci) {
+    'utensils' || 'makan' => AsetIkonFunda.katMakan,
+    'home' || 'rumah' => AsetIkonFunda.katRumah,
+    'bus' || 'transportasi' => AsetIkonFunda.katTransportasi,
+    'wifi' || 'internet' => AsetIkonFunda.katInternet,
+    'zap' || 'listrik' => AsetIkonFunda.katListrik,
+    'heartPulse' || 'kesehatan' => AsetIkonFunda.katKesehatan,
+    'graduationCap' || 'pendidikan' => AsetIkonFunda.katPendidikan,
+    'shoppingCart' || 'shoppingBag' || 'belanja' => AsetIkonFunda.katBelanja,
+    'clapperboard' ||
+    'palmtree' ||
+    'gamepad2' ||
+    'tv' ||
+    'hiburan' => AsetIkonFunda.katHiburan,
+    'coffee' || 'kopi' => AsetIkonFunda.katKopi,
+    'briefcase' || 'wallet' || 'gaji' => AsetIkonFunda.katGaji,
+    'handCoins' || 'trendingUp' || 'gift' || 'bonus' => AsetIkonFunda.katBonus,
+    'heartHandshake' || 'donasi' => AsetIkonFunda.katDonasi,
+    'piggyBank' => AsetIkonFunda.sifatTabungan,
+    'shieldAlert' => AsetIkonFunda.metrikDanaDarurat,
+    'calendarClock' ||
+    'receiptText' ||
+    'creditCard' => AsetIkonFunda.sifatUtang,
+    'receipt' || 'tag' || 'lainnya' => AsetIkonFunda.katLainnya,
+    _ => null,
+  };
+}
+
+/// Widget ikon kategori: menampilkan SVG custom Funda jika tersedia, fallback Lucide.
+class IkonKategoriFunda extends StatelessWidget {
+  final String kunciIkon;
+  final double ukuran;
+  final Color? warnaFallback;
+
+  const IkonKategoriFunda({
+    super.key,
+    required this.kunciIkon,
+    this.ukuran = 20,
+    this.warnaFallback,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final pathSvg = pathSvgUntukIkonKategori(kunciIkon);
+    if (pathSvg != null) {
+      return IkonSvgFunda(pathAset: pathSvg, ukuran: ukuran);
+    }
+    return Icon(ambilIkonLucide(kunciIkon), size: ukuran, color: warnaFallback);
+  }
 }
 
 /// Daftar pilihan ikon yang dapat dipilih pengguna saat membuat dompet atau kategori kustom.
@@ -58,6 +113,11 @@ const List<Map<String, dynamic>> daftarPilihanIkon = [
   {'kunci': 'bus', 'label': 'Transportasi', 'ikon': LucideIcons.bus},
   {'kunci': 'home', 'label': 'Rumah', 'ikon': LucideIcons.home},
   {'kunci': 'gift', 'label': 'Hadiah', 'ikon': LucideIcons.gift},
+  {
+    'kunci': 'heartHandshake',
+    'label': 'Donasi / Berbagi',
+    'ikon': LucideIcons.heartHandshake,
+  },
   {
     'kunci': 'briefcase',
     'label': 'Kerja / Bisnis',

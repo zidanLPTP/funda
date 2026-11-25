@@ -464,10 +464,10 @@ class _BarisKategori extends ConsumerWidget {
         horizontal: SpasiFunda.m,
         vertical: SpasiFunda.xs,
       ),
-      leading: Icon(
-        ambilIkonLucide(kategori.ikon),
-        size: 20,
-        color: warnaSifat,
+      leading: IkonKategoriFunda(
+        kunciIkon: kategori.ikon,
+        ukuran: 22,
+        warnaFallback: warnaSifat,
       ),
       title: Wrap(
         spacing: SpasiFunda.s,

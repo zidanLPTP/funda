@@ -350,6 +350,7 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
             padding: const EdgeInsets.all(SpasiFunda.m),
             child: KeadaanKosong(
               ikon: LucideIcons.circleAlert,
+              pathSvg: AsetIlustrasiFunda.galatPemuatan,
               judul: 'Gagal Membuka Pelajaran',
               pesan: _galat ?? 'Materi pelajaran tidak ditemukan.',
               teksTombol: 'Kembali',

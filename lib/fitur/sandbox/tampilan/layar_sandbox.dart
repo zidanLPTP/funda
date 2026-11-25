@@ -82,10 +82,9 @@ class _LayarSandboxState extends ConsumerState<LayarSandbox> {
                         ),
                         child: const Row(
                           children: [
-                            Icon(
-                              LucideIcons.flaskConical,
-                              color: WarnaFunda.peringatan,
-                              size: 22,
+                            IkonSvgFunda(
+                              pathAset: AsetIkonFunda.modeSandbox,
+                              ukuran: 24,
                             ),
                             SizedBox(width: SpasiFunda.s),
                             Expanded(

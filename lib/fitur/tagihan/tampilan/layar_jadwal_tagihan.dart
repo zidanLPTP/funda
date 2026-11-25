@@ -202,15 +202,19 @@ class _LayarJadwalTagihanState extends ConsumerState<LayarJadwalTagihan> {
             children: [
               Padding(
                 padding: const EdgeInsets.only(top: 2),
-                child: Icon(
-                  item.isCicilanUtang
-                      ? LucideIcons.creditCard
-                      : (kategori != null
-                            ? ambilIkonLucide(kategori.ikon)
-                            : LucideIcons.receipt),
-                  color: warnaStatus,
-                  size: 20,
-                ),
+                child: !item.isCicilanUtang && kategori != null
+                    ? IkonKategoriFunda(
+                        kunciIkon: kategori.ikon,
+                        ukuran: 22,
+                        warnaFallback: warnaStatus,
+                      )
+                    : Icon(
+                        item.isCicilanUtang
+                            ? LucideIcons.creditCard
+                            : LucideIcons.receipt,
+                        color: warnaStatus,
+                        size: 20,
+                      ),
               ),
               const SizedBox(width: SpasiFunda.m),
               Expanded(

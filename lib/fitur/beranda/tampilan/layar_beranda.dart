@@ -203,6 +203,7 @@ class LayarBeranda extends ConsumerWidget {
               kiri: _KartuMetrikPutih(
                 key: const Key('kartu_metrik_anggaran'),
                 ikon: LucideIcons.pieChart,
+                pathSvg: AsetIkonFunda.metrikAnggaran,
                 warnaIkon: WarnaFunda.aksenIkonKuning,
                 judul: 'Sisa Anggaran',
                 labelAkses: 'Sisa anggaran bulan ini',
@@ -225,6 +226,7 @@ class LayarBeranda extends ConsumerWidget {
                   ? _KartuMetrikPutih(
                       key: const Key('kartu_metrik_dana_darurat'),
                       ikon: LucideIcons.shieldAlert,
+                      pathSvg: AsetIkonFunda.metrikDanaDarurat,
                       warnaIkon: WarnaFunda.aksenIkonMint,
                       judul: 'Dana Darurat',
                       labelAkses: 'Dana darurat',
@@ -246,6 +248,7 @@ class LayarBeranda extends ConsumerWidget {
                         return _KartuMetrikPutih(
                           key: const Key('kartu_metrik_dana_darurat'),
                           ikon: LucideIcons.shieldCheck,
+                          pathSvg: AsetIkonFunda.metrikDanaDarurat,
                           warnaIkon: WarnaFunda.aksenIkonMint,
                           judul: 'Dana Darurat',
                           labelAkses: 'Dana darurat $progres persen',
@@ -267,6 +270,7 @@ class LayarBeranda extends ConsumerWidget {
               kiri: _KartuMetrikPutih(
                 key: const Key('kartu_metrik_rasio_cicilan'),
                 ikon: LucideIcons.creditCard,
+                pathSvg: AsetIkonFunda.metrikRasioCicilan,
                 warnaIkon: WarnaFunda.aksenIkonKoral,
                 judul: 'Rasio Cicilan',
                 labelAkses: 'Rasio cicilan bulanan',
@@ -281,6 +285,7 @@ class LayarBeranda extends ConsumerWidget {
                   ? _KartuMetrikPutih(
                       key: const Key('kartu_metrik_tujuan'),
                       ikon: LucideIcons.target,
+                      pathSvg: AsetIkonFunda.metrikTujuan,
                       warnaIkon: WarnaFunda.aksenIkonBiru,
                       judul: 'Tujuan Impian',
                       labelAkses: 'Tujuan terdekat',
@@ -304,6 +309,7 @@ class LayarBeranda extends ConsumerWidget {
                         return _KartuMetrikPutih(
                           key: const Key('kartu_metrik_tujuan'),
                           ikon: LucideIcons.target,
+                          pathSvg: AsetIkonFunda.metrikTujuan,
                           warnaIkon: WarnaFunda.aksenIkonBiru,
                           judul: tujuanTerdekatLain.nama,
                           labelAkses:
@@ -743,6 +749,7 @@ class _ItemRingkasHero extends StatelessWidget {
 
 class _KartuMetrikPutih extends StatelessWidget {
   final IconData ikon;
+  final String? pathSvg;
   final Color warnaIkon;
   final String judul;
   final Widget isiNilai;
@@ -753,6 +760,7 @@ class _KartuMetrikPutih extends StatelessWidget {
   const _KartuMetrikPutih({
     super.key,
     required this.ikon,
+    this.pathSvg,
     required this.warnaIkon,
     required this.judul,
     required this.isiNilai,
@@ -785,7 +793,10 @@ class _KartuMetrikPutih extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Icon(ikon, size: 22, color: warnaIkon),
+                      if (pathSvg != null)
+                        IkonSvgFunda(pathAset: pathSvg!, ukuran: 24)
+                      else
+                        Icon(ikon, size: 22, color: warnaIkon),
                       const Icon(
                         LucideIcons.chevronRight,
                         size: 16,
@@ -1281,12 +1292,11 @@ class _KartuTransaksiTerakhir extends StatelessWidget {
                                 ukuran: 20,
                               )
                             else
-                              Icon(
-                                ambilIkonLucide(
-                                  (kategori?.ikon as String?) ?? 'receipt',
-                                ),
-                                size: 18,
-                                color: warnaNominal,
+                              IkonKategoriFunda(
+                                kunciIkon:
+                                    (kategori?.ikon as String?) ?? 'receipt',
+                                ukuran: 20,
+                                warnaFallback: warnaNominal,
                               ),
                             const SizedBox(width: SpasiFunda.m),
                             Expanded(

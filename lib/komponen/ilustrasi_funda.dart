@@ -28,6 +28,7 @@ abstract final class AsetIlustrasiFunda {
   static const kuisLulus = 'aset/gambar/ilustrasi/kuis_lulus.svg';
   static const kuisUlangi = 'aset/gambar/ilustrasi/kuis_ulangi.svg';
   static const ruangTenang = 'aset/gambar/ilustrasi/ruang_tenang.svg';
+  static const galatPemuatan = 'aset/gambar/ilustrasi/galat_pemuatan.svg';
 
   static const mulaiTesAwal = 'aset/gambar/ilustrasi/mulai-tes-awal.svg';
   static const anggaranArusKas =
@@ -87,6 +88,41 @@ abstract final class AsetIkonFunda {
   static const transaksiPengeluaran =
       'aset/gambar/ikon/ic_transaksi_pengeluaran.svg';
   static const transaksiTransfer = 'aset/gambar/ikon/ic_transaksi_transfer.svg';
+
+  static const modeSandbox = 'aset/gambar/ikon/ic_mode_sandbox.svg';
+
+  static const metrikAnggaran = 'aset/gambar/ikon/ic_metrik_anggaran.svg';
+  static const metrikDanaDarurat =
+      'aset/gambar/ikon/ic_metrik_dana_darurat.svg';
+  static const metrikRasioCicilan =
+      'aset/gambar/ikon/ic_metrik_rasio_cicilan.svg';
+  static const metrikTujuan = 'aset/gambar/ikon/ic_metrik_tujuan.svg';
+
+  static const menuCadangan = 'aset/gambar/ikon/ic_menu_cadangan.svg';
+  static const menuDompet = 'aset/gambar/ikon/ic_menu_dompet.svg';
+  static const menuKantong = 'aset/gambar/ikon/ic_menu_kantong.svg';
+  static const menuKategori = 'aset/gambar/ikon/ic_menu_kategori.svg';
+  static const menuKekayaan = 'aset/gambar/ikon/ic_menu_kekayaan.svg';
+  static const menuPanduan = 'aset/gambar/ikon/ic_menu_panduan.svg';
+  static const menuPrivasi = 'aset/gambar/ikon/ic_menu_privasi.svg';
+  static const menuTagihan = 'aset/gambar/ikon/ic_menu_tagihan.svg';
+  static const menuTentang = 'aset/gambar/ikon/ic_menu_tentang.svg';
+  static const menuUtang = 'aset/gambar/ikon/ic_menu_utang.svg';
+
+  static const katBelanja = 'aset/gambar/ikon/ic_kat_belanja.svg';
+  static const katBonus = 'aset/gambar/ikon/ic_kat_bonus.svg';
+  static const katDonasi = 'aset/gambar/ikon/ic_kat_donasi.svg';
+  static const katGaji = 'aset/gambar/ikon/ic_kat_gaji.svg';
+  static const katHiburan = 'aset/gambar/ikon/ic_kat_hiburan.svg';
+  static const katInternet = 'aset/gambar/ikon/ic_kat_internet.svg';
+  static const katKesehatan = 'aset/gambar/ikon/ic_kat_kesehatan.svg';
+  static const katKopi = 'aset/gambar/ikon/ic_kat_kopi.svg';
+  static const katLainnya = 'aset/gambar/ikon/ic_kat_lainnya.svg';
+  static const katListrik = 'aset/gambar/ikon/ic_kat_listrik.svg';
+  static const katMakan = 'aset/gambar/ikon/ic_kat_makan.svg';
+  static const katPendidikan = 'aset/gambar/ikon/ic_kat_pendidikan.svg';
+  static const katRumah = 'aset/gambar/ikon/ic_kat_rumah.svg';
+  static const katTransportasi = 'aset/gambar/ikon/ic_kat_transportasi.svg';
 }
 
 /// Widget perender ikon SVG custom berukuran tetap (default 24x24).

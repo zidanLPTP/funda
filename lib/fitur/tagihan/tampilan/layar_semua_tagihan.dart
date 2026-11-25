@@ -104,17 +104,23 @@ class _LayarSemuaTagihanState extends ConsumerState<LayarSemuaTagihan> {
             children: [
               Padding(
                 padding: const EdgeInsets.only(top: 2),
-                child: Icon(
-                  kategori != null
-                      ? ambilIkonLucide(kategori.ikon)
-                      : (jenis == JenisTagihan.langganan
+                child: kategori != null
+                    ? IkonKategoriFunda(
+                        kunciIkon: kategori.ikon,
+                        ukuran: 22,
+                        warnaFallback: tagihan.aktif
+                            ? WarnaFunda.utama
+                            : WarnaFunda.teksRedup,
+                      )
+                    : Icon(
+                        jenis == JenisTagihan.langganan
                             ? LucideIcons.repeat
-                            : LucideIcons.receipt),
-                  color: tagihan.aktif
-                      ? WarnaFunda.utama
-                      : WarnaFunda.teksRedup,
-                  size: 20,
-                ),
+                            : LucideIcons.receipt,
+                        color: tagihan.aktif
+                            ? WarnaFunda.utama
+                            : WarnaFunda.teksRedup,
+                        size: 20,
+                      ),
               ),
               const SizedBox(width: SpasiFunda.m),
               Expanded(

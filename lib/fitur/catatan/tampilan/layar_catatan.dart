@@ -957,6 +957,12 @@ class _ItemBarisTransaksi extends StatelessWidget {
                   pathAset: AsetIkonFunda.transaksiTransfer,
                   ukuran: 22,
                 )
+              else if (kategori != null)
+                IkonKategoriFunda(
+                  kunciIkon: kategori.ikon,
+                  ukuran: 20,
+                  warnaFallback: warnaIkon,
+                )
               else
                 Icon(ikonBaris, size: 20, color: warnaIkon),
               const SizedBox(width: SpasiFunda.m),

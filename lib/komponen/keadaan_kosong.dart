@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import '../tema/token.dart';
+import 'ilustrasi_funda.dart';
 import 'teks_funda.dart';
 import 'tombol_funda.dart';
 
 /// Komponen Keadaan Kosong (Empty State) Funda.
-/// Terdiri dari kotak ikon membulat berwarna tint, satu kalimat pesan yang ramah,
+/// Terdiri dari ilustrasi SVG atau wadah ikon ber-tint, pesan ramah,
 /// dan satu tombol aksi utama.
 class KeadaanKosong extends StatelessWidget {
   const KeadaanKosong({
@@ -16,6 +17,7 @@ class KeadaanKosong extends StatelessWidget {
     this.padaAksi,
     this.warnaTint = WarnaFunda.tintHijau,
     this.warnaIkon = WarnaFunda.utama,
+    this.pathSvg,
   });
 
   final IconData ikon;
@@ -25,6 +27,7 @@ class KeadaanKosong extends StatelessWidget {
   final VoidCallback? padaAksi;
   final Color warnaTint;
   final Color warnaIkon;
+  final String? pathSvg;
 
   @override
   Widget build(BuildContext context) {
@@ -35,17 +38,30 @@ class KeadaanKosong extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // Wadah Ikon Ber-tint
-            Container(
-              width: 72,
-              height: 72,
-              decoration: BoxDecoration(
-                color: warnaTint,
-                borderRadius: BorderRadius.circular(SudutFunda.petak),
-                border: Border.all(color: WarnaFunda.garis),
+            if (pathSvg != null)
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: SpasiFunda.l,
+                  vertical: SpasiFunda.m,
+                ),
+                decoration: BoxDecoration(
+                  color: warnaTint,
+                  borderRadius: BorderRadius.circular(SudutFunda.petak),
+                  border: Border.all(color: WarnaFunda.garis),
+                ),
+                child: IlustrasiSvgFunda(pathAset: pathSvg!, tinggi: 92),
+              )
+            else
+              Container(
+                width: 72,
+                height: 72,
+                decoration: BoxDecoration(
+                  color: warnaTint,
+                  borderRadius: BorderRadius.circular(SudutFunda.petak),
+                  border: Border.all(color: WarnaFunda.garis),
+                ),
+                child: Icon(ikon, size: 32, color: warnaIkon),
               ),
-              child: Icon(ikon, size: 32, color: warnaIkon),
-            ),
             const SizedBox(height: SpasiFunda.l),
 
             // Judul jika ada

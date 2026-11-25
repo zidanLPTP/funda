@@ -38,6 +38,7 @@ class LayarDetailModul extends ConsumerWidget {
             padding: const EdgeInsets.all(SpasiFunda.l),
             child: KeadaanKosong(
               ikon: LucideIcons.circleAlert,
+              pathSvg: AsetIlustrasiFunda.galatPemuatan,
               judul: 'Gagal Memuat Modul',
               pesan: 'Terjadi kendala saat membuka detail modul: $err',
               teksTombol: 'Kembali',

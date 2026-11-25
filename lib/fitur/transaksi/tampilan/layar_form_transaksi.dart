@@ -1016,10 +1016,10 @@ class _LayarFormTransaksiState extends ConsumerState<LayarFormTransaksi> {
                                       child: FilterChip(
                                         selected: terpilih,
                                         showCheckmark: false,
-                                        avatar: Icon(
-                                          ambilIkonLucide(kategori.ikon),
-                                          size: 16,
-                                          color: terpilih
+                                        avatar: IkonKategoriFunda(
+                                          kunciIkon: kategori.ikon,
+                                          ukuran: 18,
+                                          warnaFallback: terpilih
                                               ? WarnaFunda.teksPutih
                                               : warnaSifat,
                                         ),

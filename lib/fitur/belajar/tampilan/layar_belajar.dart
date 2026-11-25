@@ -54,6 +54,7 @@ class LayarBelajar extends ConsumerWidget {
               padding: const EdgeInsets.all(SpasiFunda.m),
               child: KeadaanKosong(
                 ikon: LucideIcons.circleAlert,
+                pathSvg: AsetIlustrasiFunda.galatPemuatan,
                 judul: 'Gagal Memuat Materi',
                 pesan: 'Terjadi kendala saat membaca materi belajar: $err',
                 teksTombol: 'Coba Lagi',

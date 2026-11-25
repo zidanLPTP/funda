@@ -152,6 +152,7 @@ class LayarLainnya extends ConsumerWidget {
                 anak: [
                   _BarisMenuEditorial(
                     ikon: LucideIcons.pieChart,
+                    pathSvg: AsetIkonFunda.metrikAnggaran,
                     warnaIkon: WarnaFunda.sifatKebutuhan,
                     judul: 'Anggaran Bulanan',
                     keterangan:
@@ -165,6 +166,7 @@ class LayarLainnya extends ConsumerWidget {
                   ),
                   _BarisMenuEditorial(
                     ikon: LucideIcons.target,
+                    pathSvg: AsetIkonFunda.metrikTujuan,
                     warnaIkon: WarnaFunda.utama,
                     judul: 'Tujuan Keuangan',
                     keterangan: 'Pantau impian, pos tabungan, dan dana darurat',
@@ -177,6 +179,7 @@ class LayarLainnya extends ConsumerWidget {
                   ),
                   _BarisMenuEditorial(
                     ikon: LucideIcons.calendarClock,
+                    pathSvg: AsetIkonFunda.menuTagihan,
                     warnaIkon: WarnaFunda.pengeluaran,
                     judul: 'Tagihan & Langganan',
                     keterangan:
@@ -200,6 +203,7 @@ class LayarLainnya extends ConsumerWidget {
                 anak: [
                   _BarisMenuEditorial(
                     ikon: LucideIcons.wallet,
+                    pathSvg: AsetIkonFunda.menuDompet,
                     warnaIkon: WarnaFunda.utama,
                     judul: 'Kelola Dompet',
                     keterangan:
@@ -213,6 +217,7 @@ class LayarLainnya extends ConsumerWidget {
                   ),
                   _BarisMenuEditorial(
                     ikon: LucideIcons.layers,
+                    pathSvg: AsetIkonFunda.menuKantong,
                     warnaIkon: WarnaFunda.sifatKeinginan,
                     judul: 'Kantong Dompet',
                     keterangan:
@@ -226,6 +231,7 @@ class LayarLainnya extends ConsumerWidget {
                   ),
                   _BarisMenuEditorial(
                     ikon: LucideIcons.creditCard,
+                    pathSvg: AsetIkonFunda.menuUtang,
                     warnaIkon: WarnaFunda.sifatUtang,
                     judul: 'Utang & Cicilan',
                     keterangan:
@@ -239,6 +245,7 @@ class LayarLainnya extends ConsumerWidget {
                   ),
                   _BarisMenuEditorial(
                     ikon: LucideIcons.trendingUp,
+                    pathSvg: AsetIkonFunda.menuKekayaan,
                     warnaIkon: WarnaFunda.pemasukan,
                     judul: 'Kekayaan Bersih',
                     keterangan:
@@ -252,6 +259,7 @@ class LayarLainnya extends ConsumerWidget {
                   ),
                   _BarisMenuEditorial(
                     ikon: LucideIcons.tags,
+                    pathSvg: AsetIkonFunda.menuKategori,
                     warnaIkon: WarnaFunda.aksenIkonUngu,
                     judul: 'Kelola Kategori',
                     keterangan:
@@ -275,6 +283,7 @@ class LayarLainnya extends ConsumerWidget {
                 anak: [
                   _BarisMenuEditorial(
                     ikon: LucideIcons.database,
+                    pathSvg: AsetIkonFunda.menuCadangan,
                     warnaIkon: WarnaFunda.info,
                     judul: 'Cadangan & Pemulihan Data',
                     keterangan:
@@ -288,6 +297,7 @@ class LayarLainnya extends ConsumerWidget {
                   ),
                   _BarisMenuEditorial(
                     ikon: LucideIcons.shieldCheck,
+                    pathSvg: AsetIkonFunda.menuPrivasi,
                     warnaIkon: WarnaFunda.pemasukan,
                     judul: 'Privasi & Keamanan',
                     keterangan:
@@ -296,6 +306,7 @@ class LayarLainnya extends ConsumerWidget {
                   ),
                   _BarisMenuEditorial(
                     ikon: LucideIcons.compass,
+                    pathSvg: AsetIkonFunda.menuPanduan,
                     warnaIkon: WarnaFunda.sifatKeinginan,
                     judul: 'Panduan Nilai Funda',
                     keterangan:
@@ -309,6 +320,7 @@ class LayarLainnya extends ConsumerWidget {
                   ),
                   _BarisMenuEditorial(
                     ikon: LucideIcons.info,
+                    pathSvg: AsetIkonFunda.menuTentang,
                     warnaIkon: WarnaFunda.info,
                     judul: 'Tentang Funda',
                     keterangan:
@@ -796,6 +808,7 @@ class _KartuGrupMenu extends StatelessWidget {
 class _BarisMenuEditorial extends StatelessWidget {
   const _BarisMenuEditorial({
     required this.ikon,
+    this.pathSvg,
     required this.warnaIkon,
     required this.judul,
     required this.keterangan,
@@ -803,6 +816,7 @@ class _BarisMenuEditorial extends StatelessWidget {
   });
 
   final IconData ikon;
+  final String? pathSvg;
   final Color warnaIkon;
   final String judul;
   final String keterangan;
@@ -821,7 +835,10 @@ class _BarisMenuEditorial extends StatelessWidget {
           ),
           child: Row(
             children: [
-              Icon(ikon, color: warnaIkon, size: 22),
+              if (pathSvg != null)
+                IkonSvgFunda(pathAset: pathSvg!, ukuran: 24)
+              else
+                Icon(ikon, color: warnaIkon, size: 22),
               const SizedBox(width: SpasiFunda.m),
               Expanded(
                 child: Column(
