@@ -123,6 +123,31 @@ abstract final class AsetIkonFunda {
   static const katPendidikan = 'aset/gambar/ikon/ic_kat_pendidikan.svg';
   static const katRumah = 'aset/gambar/ikon/ic_kat_rumah.svg';
   static const katTransportasi = 'aset/gambar/ikon/ic_kat_transportasi.svg';
+
+  static const arusKas = 'aset/gambar/ikon/ic_arus_kas.svg';
+  static const trenNaik = 'aset/gambar/ikon/ic_tren_naik.svg';
+  static const trenTurun = 'aset/gambar/ikon/ic_tren_turun.svg';
+  static const modePrivat = 'aset/gambar/ikon/ic_mode_privat.svg';
+  static const eksporPng = 'aset/gambar/ikon/ic_ekspor_png.svg';
+  static const eksporPdf = 'aset/gambar/ikon/ic_ekspor_pdf.svg';
+
+  static const belajarDurasi = 'aset/gambar/ikon/ic_belajar_durasi.svg';
+  static const belajarMulai = 'aset/gambar/ikon/ic_belajar_mulai.svg';
+  static const belajarTerkunci = 'aset/gambar/ikon/ic_belajar_terkunci.svg';
+  static const tesAwal = 'aset/gambar/ikon/ic_tes_awal.svg';
+
+  static const pengaturanNotifikasi =
+      'aset/gambar/ikon/ic_pengaturan_notifikasi.svg';
+  static const pengaturanNotifikasiNonaktif =
+      'aset/gambar/ikon/ic_pengaturan_notifikasi_nonaktif.svg';
+  static const pengaturanHaptik = 'aset/gambar/ikon/ic_pengaturan_haptik.svg';
+  static const pengaturanTutorial =
+      'aset/gambar/ikon/ic_pengaturan_tutorial.svg';
+  static const pengaturanProfil = 'aset/gambar/ikon/ic_pengaturan_profil.svg';
+
+  static const tujuanKendaraan = 'aset/gambar/ikon/ic_tujuan_kendaraan.svg';
+  static const tujuanLaptop = 'aset/gambar/ikon/ic_tujuan_laptop.svg';
+  static const tujuanLiburan = 'aset/gambar/ikon/ic_tujuan_liburan.svg';
 }
 
 /// Widget perender ikon SVG custom berukuran tetap (default 24x24).

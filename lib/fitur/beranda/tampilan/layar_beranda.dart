@@ -539,10 +539,9 @@ class _HeroBerandaEditorial extends StatelessWidget {
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Icon(
-                              LucideIcons.activity,
-                              size: 18,
-                              color: WarnaFunda.utamaGelap,
+                            IkonSvgFunda(
+                              pathAset: AsetIkonFunda.arusKas,
+                              ukuran: 20,
                             ),
                             SizedBox(width: SpasiFunda.s),
                             Flexible(
@@ -567,14 +566,11 @@ class _HeroBerandaEditorial extends StatelessWidget {
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Icon(
-                              selisih >= 0
-                                  ? LucideIcons.trendingUp
-                                  : LucideIcons.trendingDown,
-                              size: 14,
-                              color: selisih >= 0
-                                  ? WarnaFunda.pemasukan
-                                  : WarnaFunda.pengeluaran,
+                            IkonSvgFunda(
+                              pathAset: selisih >= 0
+                                  ? AsetIkonFunda.trenNaik
+                                  : AsetIkonFunda.trenTurun,
+                              ukuran: 16,
                             ),
                             const SizedBox(width: SpasiFunda.xs),
                             TeksFunda.catatan(

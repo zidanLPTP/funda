@@ -105,13 +105,17 @@ class _LayarPengaturanState extends ConsumerState<LayarPengaturan> {
   }
 
   Widget _bangunJudulBagian({
-    required IconData ikon,
-    required Color warnaIkon,
+    String? pathSvg,
+    IconData? ikon,
+    Color? warnaIkon,
     required String judul,
   }) {
     return Row(
       children: [
-        Icon(ikon, color: warnaIkon, size: 18),
+        if (pathSvg != null)
+          IkonSvgFunda(pathAset: pathSvg, ukuran: 20)
+        else if (ikon != null)
+          Icon(ikon, color: warnaIkon, size: 18),
         const SizedBox(width: SpasiFunda.s),
         Expanded(child: TeksFunda.label(judul)),
       ],
@@ -166,8 +170,7 @@ class _LayarPengaturanState extends ConsumerState<LayarPengaturan> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         _bangunJudulBagian(
-                          ikon: LucideIcons.bell,
-                          warnaIkon: WarnaFunda.utama,
+                          pathSvg: AsetIkonFunda.pengaturanNotifikasi,
                           judul: 'Pengingat Jadwal Tagihan',
                         ),
                         const SizedBox(height: SpasiFunda.s),
@@ -236,8 +239,7 @@ class _LayarPengaturanState extends ConsumerState<LayarPengaturan> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         _bangunJudulBagian(
-                          ikon: LucideIcons.smartphone,
-                          warnaIkon: WarnaFunda.sifatUtang,
+                          pathSvg: AsetIkonFunda.pengaturanHaptik,
                           judul: 'Interaksi & Getaran Taktil',
                         ),
                         const SizedBox(height: SpasiFunda.s),
@@ -267,18 +269,16 @@ class _LayarPengaturanState extends ConsumerState<LayarPengaturan> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         _bangunJudulBagian(
-                          ikon: LucideIcons.compass,
-                          warnaIkon: WarnaFunda.sifatKebutuhan,
+                          pathSvg: AsetIkonFunda.menuPanduan,
                           judul: 'Panduan & Profil Keuangan',
                         ),
                         const SizedBox(height: SpasiFunda.s),
                         ListTile(
                           key: const Key('menu_ulangi_tutorial'),
                           contentPadding: EdgeInsets.zero,
-                          leading: const Icon(
-                            LucideIcons.playCircle,
-                            color: WarnaFunda.utama,
-                            size: 20,
+                          leading: const IkonSvgFunda(
+                            pathAset: AsetIkonFunda.pengaturanTutorial,
+                            ukuran: 22,
                           ),
                           title: const TeksFunda.isi(
                             'Ulangi Tutorial Aplikasi',
@@ -313,10 +313,9 @@ class _LayarPengaturanState extends ConsumerState<LayarPengaturan> {
                         ListTile(
                           key: const Key('menu_perbarui_profil'),
                           contentPadding: EdgeInsets.zero,
-                          leading: const Icon(
-                            LucideIcons.userCheck,
-                            color: WarnaFunda.sifatKeinginan,
-                            size: 20,
+                          leading: const IkonSvgFunda(
+                            pathAset: AsetIkonFunda.pengaturanProfil,
+                            ukuran: 22,
                           ),
                           title: const TeksFunda.isi(
                             'Perbarui Profil Keuangan',
@@ -347,8 +346,7 @@ class _LayarPengaturanState extends ConsumerState<LayarPengaturan> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         _bangunJudulBagian(
-                          ikon: LucideIcons.shieldCheck,
-                          warnaIkon: WarnaFunda.pemasukan,
+                          pathSvg: AsetIkonFunda.menuPrivasi,
                           judul: 'Privasi & Baterai Ramah',
                         ),
                         const SizedBox(height: SpasiFunda.s),

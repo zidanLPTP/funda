@@ -317,10 +317,9 @@ class _LayarLaporanBulananState extends ConsumerState<LayarLaporanBulanan> {
                               const Expanded(
                                 child: Row(
                                   children: [
-                                    Icon(
-                                      LucideIcons.eyeOff,
-                                      size: 18,
-                                      color: WarnaFunda.sifatKeinginan,
+                                    IkonSvgFunda(
+                                      pathAset: AsetIkonFunda.modePrivat,
+                                      ukuran: 20,
                                     ),
                                     SizedBox(width: SpasiFunda.s),
                                     Expanded(
@@ -353,7 +352,10 @@ class _LayarLaporanBulananState extends ConsumerState<LayarLaporanBulanan> {
                   if (isTeksBesar) ...[
                     TombolFunda.sekunder(
                       teks: 'Bagikan Gambar',
-                      ikon: const Icon(LucideIcons.image, size: 18),
+                      ikon: const IkonSvgFunda(
+                        pathAset: AsetIkonFunda.eksporPng,
+                        ukuran: 18,
+                      ),
                       memuat: _sedangMengekspor,
                       padaTekan: () => _bagikanGambar(laporan, sensorAktif),
                       lebarPenuh: true,
@@ -361,7 +363,10 @@ class _LayarLaporanBulananState extends ConsumerState<LayarLaporanBulanan> {
                     const SizedBox(height: SpasiFunda.s),
                     TombolFunda.pilGelap(
                       teks: 'Bagikan PDF',
-                      ikon: const Icon(LucideIcons.fileText, size: 18),
+                      ikon: const IkonSvgFunda(
+                        pathAset: AsetIkonFunda.eksporPdf,
+                        ukuran: 18,
+                      ),
                       memuat: _sedangMengekspor,
                       padaTekan: () => _bagikanPdf(laporan, sensorAktif),
                       lebarPenuh: true,
@@ -372,7 +377,10 @@ class _LayarLaporanBulananState extends ConsumerState<LayarLaporanBulanan> {
                         Expanded(
                           child: TombolFunda.sekunder(
                             teks: 'Bagikan Gambar',
-                            ikon: const Icon(LucideIcons.image, size: 18),
+                            ikon: const IkonSvgFunda(
+                              pathAset: AsetIkonFunda.eksporPng,
+                              ukuran: 18,
+                            ),
                             memuat: _sedangMengekspor,
                             padaTekan: () =>
                                 _bagikanGambar(laporan, sensorAktif),
@@ -382,7 +390,10 @@ class _LayarLaporanBulananState extends ConsumerState<LayarLaporanBulanan> {
                         Expanded(
                           child: TombolFunda.pilGelap(
                             teks: 'Bagikan PDF',
-                            ikon: const Icon(LucideIcons.fileText, size: 18),
+                            ikon: const IkonSvgFunda(
+                              pathAset: AsetIkonFunda.eksporPdf,
+                              ukuran: 18,
+                            ),
                             memuat: _sedangMengekspor,
                             padaTekan: () => _bagikanPdf(laporan, sensorAktif),
                             lebarPenuh: false,

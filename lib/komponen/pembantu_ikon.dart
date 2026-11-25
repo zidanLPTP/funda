@@ -52,7 +52,10 @@ String? pathSvgUntukIkonKategori(String kunci) {
   return switch (kunci) {
     'utensils' || 'makan' => AsetIkonFunda.katMakan,
     'home' || 'rumah' => AsetIkonFunda.katRumah,
-    'bus' || 'car' || 'transportasi' => AsetIkonFunda.katTransportasi,
+    'bus' || 'transportasi' => AsetIkonFunda.katTransportasi,
+    'car' => AsetIkonFunda.tujuanKendaraan,
+    'plane' => AsetIkonFunda.tujuanLiburan,
+    'laptop' => AsetIkonFunda.tujuanLaptop,
     'wifi' || 'internet' => AsetIkonFunda.katInternet,
     'zap' || 'listrik' => AsetIkonFunda.katListrik,
     'heartPulse' || 'heart' || 'kesehatan' => AsetIkonFunda.katKesehatan,

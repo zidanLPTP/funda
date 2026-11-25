@@ -141,15 +141,17 @@ class LayarKekayaanBersih extends ConsumerWidget {
                             ),
                             child: Row(
                               children: [
-                                Icon(
-                                  isNegatif
-                                      ? LucideIcons.info
-                                      : LucideIcons.trendingUp,
-                                  color: isNegatif
-                                      ? WarnaFunda.peringatan
-                                      : WarnaFunda.utama,
-                                  size: 18,
-                                ),
+                                if (isNegatif)
+                                  const Icon(
+                                    LucideIcons.info,
+                                    color: WarnaFunda.peringatan,
+                                    size: 18,
+                                  )
+                                else
+                                  const IkonSvgFunda(
+                                    pathAset: AsetIkonFunda.trenNaik,
+                                    ukuran: 20,
+                                  ),
                                 const SizedBox(width: SpasiFunda.s),
                                 Expanded(
                                   child: TeksFunda.catatan(

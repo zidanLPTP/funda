@@ -823,10 +823,9 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
           const SizedBox(height: SpasiFunda.m),
           Row(
             children: [
-              const Icon(
-                LucideIcons.timer,
-                size: 16,
-                color: WarnaFunda.teksRedup,
+              const IkonSvgFunda(
+                pathAset: AsetIkonFunda.belajarDurasi,
+                ukuran: 18,
               ),
               const SizedBox(width: SpasiFunda.xs),
               Expanded(
@@ -998,10 +997,9 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
           const SizedBox(height: SpasiFunda.m),
           Row(
             children: [
-              const Icon(
-                LucideIcons.timer,
-                size: 16,
-                color: WarnaFunda.teksRedup,
+              const IkonSvgFunda(
+                pathAset: AsetIkonFunda.belajarDurasi,
+                ukuran: 18,
               ),
               const SizedBox(width: SpasiFunda.xs),
               Expanded(
@@ -1301,10 +1299,9 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
           const SizedBox(height: SpasiFunda.m),
           Row(
             children: [
-              const Icon(
-                LucideIcons.timer,
-                size: 16,
-                color: WarnaFunda.teksRedup,
+              const IkonSvgFunda(
+                pathAset: AsetIkonFunda.belajarDurasi,
+                ukuran: 18,
               ),
               const SizedBox(width: SpasiFunda.xs),
               Expanded(
@@ -1523,10 +1520,9 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
           const SizedBox(height: SpasiFunda.m),
           Row(
             children: [
-              const Icon(
-                LucideIcons.timer,
-                size: 16,
-                color: WarnaFunda.teksRedup,
+              const IkonSvgFunda(
+                pathAset: AsetIkonFunda.belajarDurasi,
+                ukuran: 18,
               ),
               const SizedBox(width: SpasiFunda.xs),
               Expanded(
@@ -1550,7 +1546,7 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
             child: const Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Icon(LucideIcons.lock, size: 18, color: WarnaFunda.utama),
+                IkonSvgFunda(pathAset: AsetIkonFunda.menuPrivasi, ukuran: 20),
                 SizedBox(width: SpasiFunda.s),
                 Expanded(
                   child: TeksFunda.catatan(
@@ -1701,10 +1697,9 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
           const SizedBox(height: SpasiFunda.m),
           Row(
             children: [
-              const Icon(
-                LucideIcons.timer,
-                size: 16,
-                color: WarnaFunda.teksRedup,
+              const IkonSvgFunda(
+                pathAset: AsetIkonFunda.belajarDurasi,
+                ukuran: 18,
               ),
               const SizedBox(width: SpasiFunda.xs),
               Expanded(

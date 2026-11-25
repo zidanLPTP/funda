@@ -280,10 +280,9 @@ class LayarDetailModul extends ConsumerWidget {
                                 ),
                                 child: const Row(
                                   children: [
-                                    Icon(
-                                      LucideIcons.clock,
-                                      size: 18,
-                                      color: WarnaFunda.utama,
+                                    IkonSvgFunda(
+                                      pathAset: AsetIkonFunda.belajarDurasi,
+                                      ukuran: 20,
                                     ),
                                     SizedBox(width: SpasiFunda.s),
                                     Expanded(
@@ -513,10 +512,9 @@ class KotakSyaratBelajar extends ConsumerWidget {
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Icon(
-                LucideIcons.info,
-                size: 16,
-                color: WarnaFunda.peringatan,
+              const IkonSvgFunda(
+                pathAset: AsetIkonFunda.belajarTerkunci,
+                ukuran: 18,
               ),
               const SizedBox(width: SpasiFunda.s),
               Expanded(
@@ -814,12 +812,16 @@ class _BarisTimelinePelajaran extends StatelessWidget {
       StatusBelajar.sedang => Container(
         width: 32,
         height: 32,
+        alignment: Alignment.center,
         decoration: BoxDecoration(
           color: warnaKanvas,
           shape: BoxShape.circle,
           border: Border.all(color: warnaAksen, width: 1.5),
         ),
-        child: Icon(LucideIcons.play, size: 15, color: warnaAksen),
+        child: const IkonSvgFunda(
+          pathAset: AsetIkonFunda.belajarMulai,
+          ukuran: 18,
+        ),
       ),
       StatusBelajar.terbuka => Container(
         width: 32,
@@ -841,7 +843,10 @@ class _BarisTimelinePelajaran extends StatelessWidget {
           shape: BoxShape.circle,
           border: Border.all(color: WarnaFunda.garis),
         ),
-        child: TeksFunda.catatan(nomorLabel, warna: WarnaFunda.teksRedup),
+        child: const IkonSvgFunda(
+          pathAset: AsetIkonFunda.belajarTerkunci,
+          ukuran: 18,
+        ),
       ),
     };
   }

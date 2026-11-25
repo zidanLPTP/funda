@@ -293,10 +293,10 @@ class _LayarFormTagihanState extends ConsumerState<LayarFormTagihan> {
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Icon(
-                              LucideIcons.bellOff,
-                              color: WarnaFunda.peringatan,
-                              size: 20,
+                            const IkonSvgFunda(
+                              pathAset:
+                                  AsetIkonFunda.pengaturanNotifikasiNonaktif,
+                              ukuran: 22,
                             ),
                             const SizedBox(width: SpasiFunda.m),
                             Expanded(

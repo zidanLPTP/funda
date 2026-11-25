@@ -238,10 +238,9 @@ class _LayarTesAwalState extends ConsumerState<LayarTesAwal> {
                         ),
                         child: const Row(
                           children: [
-                            Icon(
-                              LucideIcons.compass,
-                              color: WarnaFunda.utama,
-                              size: 28,
+                            IkonSvgFunda(
+                              pathAset: AsetIkonFunda.tesAwal,
+                              ukuran: 28,
                             ),
                             SizedBox(width: SpasiFunda.m),
                             Expanded(
@@ -514,10 +513,9 @@ class _LayarTesAwalState extends ConsumerState<LayarTesAwal> {
                                   color: WarnaFunda.batasHijau,
                                 ),
                               ),
-                              child: const Icon(
-                                LucideIcons.userCheck,
-                                size: 36,
-                                color: WarnaFunda.utama,
+                              child: const IkonSvgFunda(
+                                pathAset: AsetIkonFunda.pengaturanProfil,
+                                ukuran: 38,
                               ),
                             ),
                             const SizedBox(height: SpasiFunda.l),
@@ -851,10 +849,9 @@ class _LayarTesAwalState extends ConsumerState<LayarTesAwal> {
                                                     SudutFunda.kecil,
                                                   ),
                                             ),
-                                            child: const Icon(
-                                              LucideIcons.compass,
-                                              size: 16,
-                                              color: WarnaFunda.utama,
+                                            child: const IkonSvgFunda(
+                                              pathAset: AsetIkonFunda.tesAwal,
+                                              ukuran: 20,
                                             ),
                                           ),
                                           const SizedBox(width: SpasiFunda.s),
