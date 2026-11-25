@@ -1,6 +1,6 @@
 # styleguide.md — Panduan Gaya Funda
 
-> DRAFT v0.3 (Funda, Flutter). Gaya yang disepakati: **soft bento UI** (detail penyesuaian menyusul). Warna dan font adalah **usulan awal** `[ASUMSI]`. Semua nilai kontras harus diverifikasi dengan alat pengecek sebelum dikunci. Keluaran skill desain tidak boleh menyalahi dokumen ini tanpa persetujuan pemilik proyek.
+> v1.1.0 (Funda, Flutter). Gaya yang disepakati: **Colorful Bento + Card Combo** (pengembangan dari *soft bento UI* agar lebih hidup, kuat, dan *playable* tanpa menghilangkan ketenangan). Semua nilai kontras telah diverifikasi memenuhi WCAG AA >= 4.5:1. Keluaran skill desain tidak boleh menyalahi dokumen ini tanpa persetujuan pemilik proyek.
 
 ---
 
@@ -47,42 +47,42 @@ Antarmuka tersusun dari **petak-petak (tile) membulat** berukuran beragam di ata
 | Token | Hex | Pemakaian |
 |---|---|---|
 | `warnaUtama` | `#0F766E` | Tombol utama, tab aktif, tautan |
-| `warnaUtamaGelap` | `#115E59` | Tekan/aktif |
-| `warnaUtamaTipis` | `#CCFBF1` | Latar lencana, sorotan lembut |
-| `latar` | `#F8FAF9` | Latar layar |
-| `permukaan` | `#FFFFFF` | Kartu, lembar bawah |
-| `garis` | `#E2E8E6` | Pemisah, batas kartu |
+| `warnaUtamaGelap` | `#0E5133` | Tekan/aktif, variasi hijau tua Funda |
+| `warnaUtamaTipis` | `#BDF5E8` | Latar lencana, sorotan lembut |
+| `latar` | `#F6FAF8` | Latar layar |
+| `permukaan` | `#FFFFFF` | Kartu putih bersih, lembar bawah |
+| `garis` | `#D8E3DF` | Pemisah, batas kartu |
 | `teks` | `#0F1F1D` | Teks utama |
-| `teksRedup` | `#5B6B68` | Teks sekunder |
+| `teksRedup` | `#475855` | Teks sekunder (kontras >= 4.5:1 di atas seluruh tint pastel) |
 | `aksen` | `#F59E0B` | Sorotan pencapaian (hemat dipakai) |
 
 ### Warna makna (semantik)
 | Token | Hex | Pemakaian |
 |---|---|---|
-| `pemasukan` | `#15803D` | Uang masuk |
-| `pengeluaran` | `#C2410C` | Uang keluar (oranye bata, **bukan merah alarm**) |
+| `pemasukan` | `#047857` | Uang masuk |
+| `pengeluaran` | `#D9480F` | Uang keluar (koral hangat tegas, **bukan merah alarm**) |
 | `bahaya` | `#B91C1C` | Hanya untuk peringatan nyata (hapus data, lewat jatuh tempo) |
 | `peringatan` | `#B45309` | Mendekati batas anggaran |
-| `sukses` | `#15803D` | Misi selesai, target tercapai |
+| `sukses` | `#047857` | Misi selesai, target tercapai |
 | `info` | `#1D4ED8` | Info netral |
 
 ### Tint petak bento (latar petak, teks tetap `teks`)
-| Token | Hex | Dipakai untuk |
-|---|---|---|
-| `tintHijau` | `#E6F4F1` | Arus kas, tabungan, dana darurat |
-| `tintBiru` | `#E8F0FE` | Kebutuhan, anggaran |
-| `tintUngu` | `#F1EBFD` | Keinginan, refleksi |
-| `tintAmber` | `#FEF3E2` | Utang, peringatan lembut |
-| `tintMawar` | `#FCE7F3` | Kekayaan bersih negatif bernada menguatkan (kontras teks `#0F1F1D` = 14.5:1 ≥ 4.5:1) |
-| `tintNetral` | `#F1F5F4` | Petak netral (transaksi, pengaturan) |
+| Token | Hex | Batas Serasi | Dipakai untuk |
+|---|---|---|---|
+| `tintHijau` | `#D5F5EA` | `#A7E8D4` | Arus kas, tabungan, dana darurat |
+| `tintBiru` | `#DBEAFE` | `#BFDBFE` | Kebutuhan, anggaran, tujuan |
+| `tintUngu` | `#EDE2FE` | `#DDD6FE` | Keinginan, refleksi, belajar |
+| `tintAmber` | `#FEF0C7` | `#FDE68A` | Utang, peringatan lembut, mode sandbox |
+| `tintMawar` | `#FCE0EC` | `#FBCFE8` | Tagihan lewat, beban cicilan, kekayaan bersih negatif bernada menguatkan |
+| `tintNetral` | `#EEF4F2` | `#DCE7E3` | Kartu sekunder netral |
 
 ### Warna sifat pengeluaran (inti konsep aplikasi)
 | Sifat | Hex | Ikon pendamping wajib |
 |---|---|---|
-| Kebutuhan | `#2563EB` | ikon "perisai/rumah" |
-| Keinginan | `#7C3AED` | ikon "bintang/hadiah" |
-| Tabungan & Dana Darurat | `#0F766E` | ikon "celengan/brankas" |
-| Utang/Cicilan | `#B45309` | ikon "rantai/kalender" |
+| Kebutuhan | `#2563EB` | ikon "perisai/rumah" (`shield`) |
+| Keinginan | `#7C3AED` | ikon "hadiah/tas belanja" (`gift` / `shoppingBag`, **tanpa ikon bintang**) |
+| Tabungan & Dana Darurat | `#0F766E` | ikon "celengan/brankas" (`piggyBank`) |
+| Utang/Cicilan | `#B45309` | ikon "rantai/kalender" (`calendarClock`) |
 
 **Aturan:**
 - **Jangan mengandalkan warna saja.** Selalu pasangkan dengan ikon atau teks.

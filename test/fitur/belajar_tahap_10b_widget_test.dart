@@ -160,17 +160,21 @@ void main() {
           await tester.pump();
         }
 
-        // Jawab 3 soal Cek Paham 12.1
+        // Jawab 3 soal Cek Paham 12.1 (1 soal per halaman)
         final opsi1 = find.textContaining('Agar lebih mudah diukur');
         await tester.ensureVisible(opsi1);
         await tester.pump();
         await tester.tap(opsi1);
+        await tester.pump();
+        await tester.tap(find.byKey(const Key('tombol_lanjut')));
         await tester.pump();
 
         final opsi2 = find.textContaining('Rp1.500.000');
         await tester.ensureVisible(opsi2);
         await tester.pump();
         await tester.tap(opsi2);
+        await tester.pump();
+        await tester.tap(find.byKey(const Key('tombol_lanjut')));
         await tester.pump();
 
         final opsi3 = find.textContaining('Memperpanjang tenggat');
@@ -278,17 +282,21 @@ void main() {
         await tester.pump();
       }
 
-      // Jawab 3 soal Cek Paham 12.2
+      // Jawab 3 soal Cek Paham 12.2 (1 soal per halaman)
       final opsi1 = find.textContaining('biaya barang dan jasa cenderung naik');
       await tester.ensureVisible(opsi1);
       await tester.pump();
       await tester.tap(opsi1);
+      await tester.pump();
+      await tester.tap(find.byKey(const Key('tombol_lanjut')));
       await tester.pump();
 
       final opsi2 = find.textContaining('Meninjau ulang target dan setoran');
       await tester.ensureVisible(opsi2);
       await tester.pump();
       await tester.tap(opsi2);
+      await tester.pump();
+      await tester.tap(find.byKey(const Key('tombol_lanjut')));
       await tester.pump();
 
       final opsi3 = find.textContaining(
@@ -313,8 +321,8 @@ void main() {
       await tester.pump();
 
       // Umpan balik nyata muncul
-      await pompaHinggaAda(tester, find.text('Umpan Balik Nyata'));
-      expect(find.text('Umpan Balik Nyata'), findsOneWidget);
+      await pompaHinggaAda(tester, find.text('Hasil dari Datamu'));
+      expect(find.text('Hasil dari Datamu'), findsOneWidget);
 
       // Verifikasi teks ringkasan_tujuan_besar
       expect(
@@ -373,7 +381,7 @@ void main() {
         await tester.pump();
       }
 
-      // Jawab 3 soal Cek Paham 12.3
+      // Jawab 3 soal Cek Paham 12.3 (1 soal per halaman)
       final opsi1 = find.textContaining(
         'Agar tiap tujuan lebih cepat tercapai',
       );
@@ -381,11 +389,15 @@ void main() {
       await tester.pump();
       await tester.tap(opsi1);
       await tester.pump();
+      await tester.tap(find.byKey(const Key('tombol_lanjut')));
+      await tester.pump();
 
       final opsi2 = find.textContaining('Pilihan lain yang dilepaskan');
       await tester.ensureVisible(opsi2);
       await tester.pump();
       await tester.tap(opsi2);
+      await tester.pump();
+      await tester.tap(find.byKey(const Key('tombol_lanjut')));
       await tester.pump();
 
       final opsi3 = find.textContaining(

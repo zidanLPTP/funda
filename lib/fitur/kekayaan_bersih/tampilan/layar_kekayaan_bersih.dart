@@ -91,7 +91,9 @@ class LayarKekayaanBersih extends ConsumerWidget {
                       child: Row(
                         children: [
                           Icon(
-                            isNegatif ? LucideIcons.info : LucideIcons.sparkles,
+                            isNegatif
+                                ? LucideIcons.info
+                                : LucideIcons.trendingUp,
                             color: isNegatif
                                 ? WarnaFunda.peringatan
                                 : WarnaFunda.utama,

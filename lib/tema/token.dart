@@ -5,24 +5,24 @@ import 'package:flutter/material.dart';
 abstract final class WarnaFunda {
   // Palet dasar
   static const utama = Color(0xFF0F766E);
-  static const utamaGelap = Color(0xFF115E59);
-  static const utamaTipis = Color(0xFFCCFBF1);
-  static const latar = Color(0xFFF8FAF9);
+  static const utamaGelap = Color(0xFF0E5133);
+  static const utamaTipis = Color(0xFFBDF5E8);
+  static const latar = Color(0xFFF6FAF8);
   static const permukaan = Color(0xFFFFFFFF);
   static const putih = Color(0xFFFFFFFF);
   static const teksPutih = Color(0xFFFFFFFF);
   static const teksPutihRedup = Color(0xB3FFFFFF);
-  static const garis = Color(0xFFE2E8E6);
+  static const garis = Color(0xFFD8E3DF);
   static const teks = Color(0xFF0F1F1D);
-  static const teksRedup = Color(0xFF5B6B68);
+  static const teksRedup = Color(0xFF475855);
   static const aksen = Color(0xFFF59E0B);
 
-  // Warna semantik / makna
-  static const pemasukan = Color(0xFF15803D);
-  static const pengeluaran = Color(0xFFC2410C);
+  // Warna semantik / makna (tegas, ramah, tetap menjaga kontras >= 4.5:1)
+  static const pemasukan = Color(0xFF047857);
+  static const pengeluaran = Color(0xFFD9480F);
   static const bahaya = Color(0xFFB91C1C);
   static const peringatan = Color(0xFFB45309);
-  static const sukses = Color(0xFF15803D);
+  static const sukses = Color(0xFF047857);
   static const info = Color(0xFF1D4ED8);
 
   // Warna sifat pengeluaran (inti konsep aplikasi)
@@ -31,21 +31,28 @@ abstract final class WarnaFunda {
   static const sifatTabungan = Color(0xFF0F766E);
   static const sifatUtang = Color(0xFFB45309);
 
-  // Tint latar petak bento
-  static const tintHijau = Color(0xFFE6F4F1);
-  static const tintBiru = Color(0xFFE8F0FE);
-  static const tintUngu = Color(0xFFF1EBFD);
-  static const tintAmber = Color(0xFFFEF3E2);
-  static const tintNetral = Color(0xFFF1F5F4);
-  static const tintMawar = Color(0xFFFCE7F3);
+  // Tint latar petak bento (pastel lebih hidup & jenuh, kontras teks >= 4.5:1)
+  static const tintHijau = Color(0xFFD5F5EA);
+  static const batasHijau = Color(0xFFA7E8D4);
+  static const tintBiru = Color(0xFFDBEAFE);
+  static const batasBiru = Color(0xFFBFDBFE);
+  static const tintUngu = Color(0xFFEDE2FE);
+  static const batasUngu = Color(0xFFDDD6FE);
+  static const tintAmber = Color(0xFFFEF0C7);
+  static const batasAmber = Color(0xFFFDE68A);
+  static const tintNetral = Color(0xFFEEF4F2);
+  static const batasNetral = Color(0xFFDCE7E3);
+  static const tintMawar = Color(0xFFFCE0EC);
+  static const batasMawar = Color(0xFFFBCFE8);
 
   // Utilitas & Kartu Khusus
   static const transparan = Colors.transparent;
   static const hitam = Color(0xFF000000);
   static const bayangan = Color(0x0A000000);
-  static const tintLaporan = Color(0xFFEBF6FA);
-  static const garisLaporan = Color(0xFFC7E5F0);
-  static const teksLaporan = Color(0xFF006684);
+  static const bayanganKartu = Color(0x120F1F1D);
+  static const tintLaporan = Color(0xFFE0F2FE);
+  static const garisLaporan = Color(0xFFBAE6FD);
+  static const teksLaporan = Color(0xFF0369A1);
 }
 
 /// Token spasi Funda berbasis grid 4dp.

@@ -580,7 +580,7 @@ void main() {
           await tester.pump();
           expect(find.textContaining('Selesaikan Modul 3 dulu.'), findsWidgets);
           expect(
-            find.textContaining('Catat utang atau cicilanmu di menu Utang'),
+            find.textContaining('catat utang atau cicilanmu di menu Utang'),
             findsWidgets,
           );
           expect(find.text('Aku tidak punya ini'), findsNothing);

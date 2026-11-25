@@ -136,6 +136,7 @@ Setiap pelajaran/modul punya **syarat data**. Pelajaran terbuka hanya bila syara
 **Tes awal (modul 0):**
 - ±10–15 soal ringan + pertanyaan kondisi (punya penghasilan? punya utang? sudah menabung? pernah investasi?).
 - Hasil: **profil keuangan**, **saran modul pertama**, dan modul dengan skor tinggi ditawari **Mode Ringkas** `[ASUMSI]` (baca ringkasan + langsung misi).
+- **Cukup sekali isi di Tab Belajar:** setelah pengguna menyelesaikan Modul 0 (profil tersimpan dan tes awal selesai), kartu Modul 0 di Tab Belajar menampilkan status tenang *"Profil keuanganmu sudah tersimpan"* dan tidak tampil terbuka untuk diisi ulang di peta belajar. Bila kondisi pengguna berubah di masa depan, pembaruan diakses lewat **Lainnya → Pengaturan → Perbarui Profil Keuangan**.
 - **Tes awal tidak membuka kunci.** Gerbang data tetap berlaku untuk semua orang.
 
 **Personalisasi berjalan terus** dari data pengguna (rasio cicilan tinggi → sarankan modul 4; dana darurat nol → modul 3; pengeluaran keinginan dominan → modul 6) dengan nada menguatkan, tidak menghakimi.

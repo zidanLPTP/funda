@@ -67,158 +67,158 @@
     {
       "id": "ta_arus_kas_1",
       "modulId": "anggaran_arus_kas",
-      "tanya": "Apa yang dimaksud dengan kondisi arus kas positif?",
+      "tanya": "Gaji bulanan habis untuk belanja, namun saldo rekening awal masih tersisa banyak. Apa kondisi arus kasmu bulan itu?",
       "pilihan": [
-        "Uang yang keluar lebih banyak daripada uang yang masuk",
-        "Uang yang masuk lebih banyak daripada uang yang keluar",
-        "Seluruh saldo uang habis terpakai tanpa sisa",
+        "Arus kas positif karena saldo rekening masih tersisa banyak",
+        "Arus kas seimbang karena gaji habis terpakai selama sebulan penuh",
+        "Arus kas negatif karena pengeluaran melampaui gaji bulanan",
         "Belum tahu, nggak apa-apa"
       ],
       "benar": 1,
-      "penjelasan": "Arus kas positif terjadi saat uang masuk melebihi uang keluar."
+      "penjelasan": "Arus kas hanya membandingkan uang masuk dan keluar selama periode tersebut, bukan saldo tabungan lama."
     },
     {
       "id": "ta_arus_kas_2",
       "modulId": "anggaran_arus_kas",
-      "tanya": "Kapan waktu terbaik menyusun alokasi anggaran bulanan?",
+      "tanya": "Bila pengeluaran bulan ini lebih besar dari perkiraan awal, apa langkah penyesuaian anggaran yang paling tepat?",
       "pilihan": [
-        "Di awal bulan sebelum uang mulai dibelanjakan",
-        "Di akhir bulan setelah semua uang terpakai",
-        "Hanya saat saldo rekening sudah menipis",
+        "Mengubah batas pos kategori lain yang masih longgar agar total tetap seimbang",
+        "Menghapus catatan pengeluaran berlebih agar laporan bulan ini tetap rapi",
+        "Membuat anggaran bulan depan tanpa melihat rincian pengeluaran bulan ini",
         "Belum tahu, nggak apa-apa"
       ],
       "benar": 0,
-      "penjelasan": "Anggaran disusun di awal bulan sebagai panduan batas pengeluaran."
+      "penjelasan": "Anggaran bersifat fleksibel untuk disesuaikan antar pos agar pengeluaran total tetap terkendali."
     },
     {
       "id": "ta_tabungan_1",
       "modulId": "tabungan",
-      "tanya": "Bagaimana cara menabung yang paling efektif dan konsisten?",
+      "tanya": "Dua orang menyisihkan nominal yang sama, satu di awal gajian dan satu dari sisa akhir bulan. Apa keunggulan menyisihkan di awal?",
       "pilihan": [
-        "Menunggu sisa uang belanja di akhir bulan",
-        "Menyisihkan uang di awal begitu menerima pemasukan",
-        "Menghabiskan uang dulu lalu berutang bila kurang",
+        "Bunga simpanan bank otomatis menjadi lebih tinggi sejak hari pertama",
+        "Target simpanan terlindungi sebelum tergoda pengeluaran harian yang tak terencana",
+        "Uang simpanan menjadi boleh dipakai kapan saja bila belanja kurang",
         "Belum tahu, nggak apa-apa"
       ],
       "benar": 1,
-      "penjelasan": "Menyisihkan uang di awal memastikan tabungan selalu terisi konsisten."
+      "penjelasan": "Menyisihkan di awal bulan memastikan simpanan terisi sebelum terpakai kebutuhan lain."
     },
     {
       "id": "ta_tabungan_2",
       "modulId": "tabungan",
-      "tanya": "Apa fungsi memisahkan rekening tabungan dari rekening harian?",
+      "tanya": "Mengapa penting menamai pos tabungan secara spesifik daripada menggabungkan semuanya menjadi satu?",
       "pilihan": [
-        "Agar uang tabungan tidak sengaja terpakai belanja harian",
-        "Agar biaya administrasi bank bertambah banyak",
-        "Supaya bisa menarik uang tunai lebih sering",
+        "Agar bank memberikan bebas biaya administrasi di setiap pos berbeda",
+        "Supaya bunga tabungan masing-masing pos bisa cair lebih cepat",
+        "Supaya batas dan progres setiap tujuan terlihat jelas tanpa saling terpakai",
         "Belum tahu, nggak apa-apa"
       ],
-      "benar": 0,
-      "penjelasan": "Pemisahan pos simpanan melindungi uang dari belanja impulsif."
+      "benar": 2,
+      "penjelasan": "Pos tabungan yang jelas tujuannya membantumu menjaga komitmen dan mengukur progres masing-masing target."
     },
     {
       "id": "ta_dana_darurat_1",
       "modulId": "dana_darurat",
-      "tanya": "Untuk keperluan apa dana darurat boleh digunakan?",
+      "tanya": "Mana situasi yang paling tepat ditangani menggunakan dana darurat?",
       "pilihan": [
-        "Membeli tiket konser yang sedang diskon",
-        "Biaya perbaikan mendadak atau berobat saat sakit",
-        "Modal spekulasi belanja barang koleksi",
+        "Kendaraan kerja tiba-tiba mogok berat atau ada biaya pengobatan mendadak",
+        "Promo besar toko daring akhir tahun untuk barang yang sudah lama diincar",
+        "Kebutuhan rutin bulanan seperti tagihan listrik dan belanja makan harian",
         "Belum tahu, nggak apa-apa"
       ],
-      "benar": 1,
-      "penjelasan": "Dana darurat khusus untuk peristiwa genting yang tak terduga."
+      "benar": 0,
+      "penjelasan": "Dana darurat khusus untuk kejadian tak terduga dan mendesak, bukan kebutuhan rutin atau promo belanja."
     },
     {
       "id": "ta_dana_darurat_2",
       "modulId": "dana_darurat",
-      "tanya": "Di mana tempat penyimpanan dana darurat yang paling tepat?",
+      "tanya": "Faktor apa yang paling diutamakan saat memilih tempat menyimpan dana darurat?",
       "pilihan": [
-        "Instrumen berisiko tinggi dengan fluktuasi tajam",
-        "Tempat yang aman, stabil, dan mudah dicairkan sewaktu-waktu",
-        "Barang atau tanah yang butuh waktu lama untuk dijual",
+        "Potensi keuntungan paling tinggi meski nilainya bisa turun sementara",
+        "Nilai stabil, aman, dan bisa ditarik cepat saat dibutuhkan mendadak",
+        "Berbentuk barang berharga yang nilai jualnya naik dalam jangka panjang",
         "Belum tahu, nggak apa-apa"
       ],
       "benar": 1,
-      "penjelasan": "Dana darurat harus likuid agar siap dipakai seketika dibutuhkan."
+      "penjelasan": "Dana darurat harus aman dan mudah dicairkan seketika tanpa menunggu harga jual naik."
     },
     {
       "id": "ta_utang_1",
       "modulId": "utang_cicilan",
-      "tanya": "Apa pertimbangan utama sebelum memutuskan mengambil pinjaman atau cicilan?",
+      "tanya": "Dua pinjaman berpokok sama menawarkan cicilan bulanan lebih kecil jika tenornya lebih panjang. Apa dampaknya bagi peminjam?",
       "pilihan": [
-        "Kemampuan membayar cicilan bulanan hingga lunas tanpa mengganggu kebutuhan pokok",
-        "Apakah batas pinjaman yang ditawarkan bernilai sebesar mungkin",
-        "Keinginan membeli barang mewah agar terlihat mapan seketika",
+        "Total biaya bunga yang dibayar hingga lunas menjadi lebih besar",
+        "Total bunga berkurang karena cicilan per bulannya lebih ringan",
+        "Total bunga tetap sama selama pokok pinjaman awalnya tidak berubah",
         "Belum tahu, nggak apa-apa"
       ],
       "benar": 0,
-      "penjelasan": "Kesiapan membayar cicilan secara tertib adalah kunci agar arus kas tetap lega."
+      "penjelasan": "Tenor lebih panjang memang meringankan cicilan bulanan, tetapi total akumulasi bunganya biasanya lebih besar."
     },
     {
       "id": "ta_utang_2",
       "modulId": "utang_cicilan",
-      "tanya": "Apa langkah pertama yang bijak saat memiliki beberapa cicilan utang?",
+      "tanya": "Bila kamu punya dua cicilan dan dana pelunasan ekstra terbatas, apa perbedaan strategi melunasi saldo terkecil vs bunga tertinggi?",
       "pilihan": [
-        "Membuat utang baru untuk menutup utang lama",
-        "Mencatat seluruh daftar utang, bunga, dan jadwal jatuh tempo",
-        "Mengabaikan tagihan sampai penagih datang ke rumah",
+        "Keduanya menghasilkan total penghematan bunga yang persis sama",
+        "Saldo terkecil cepat mengurangi jumlah tagihan, bunga tertinggi paling hemat biaya",
+        "Bunga tertinggi selalu selesai lebih cepat meski saldonya jauh lebih besar",
         "Belum tahu, nggak apa-apa"
       ],
       "benar": 1,
-      "penjelasan": "Memetakan total kewajiban adalah kunci menyusun strategi pelunasan."
+      "penjelasan": "Melunasi saldo kecil dulu menjaga semangat karena daftar tagihan berkurang, sementara bunga tinggi lebih hemat biaya."
     },
     {
       "id": "ta_penipuan_1",
       "modulId": "waspada_penipuan",
-      "tanya": "Apa tanda mencurigakan dari tawaran investasi bodong?",
+      "tanya": "Seseorang mengirim pesan tautan mengatasnamakan kurir atau bank meminta verifikasi data aplikasi. Apa langkah verifikasi yang aman?",
       "pilihan": [
-        "Keuntungan pasti sangat tinggi tanpa ada risiko rugi",
-        "Terdaftar resmi dan diawasi oleh otoritas keuangan",
-        "Risiko investasi dijelaskan secara transparan",
+        "Membuka tautan dari pesan terlebih dahulu untuk memeriksa tampilan halamannya",
+        "Membalas pesan untuk memastikan nama lengkap pengirim dan nomor pegawai",
+        "Mengabaikan tautan tersebut lalu mengecek langsung lewat aplikasi resmi bank atau ekspedisi",
         "Belum tahu, nggak apa-apa"
       ],
-      "benar": 0,
-      "penjelasan": "Janji keuntungan pasti tanpa risiko adalah ciri khas utama penipuan."
+      "benar": 2,
+      "penjelasan": "Jangan mengeklik tautan mencurigakan. Selalu cek langsung melalui aplikasi atau kontak resmi penyedia layanan."
     },
     {
       "id": "ta_penipuan_2",
       "modulId": "waspada_penipuan",
-      "tanya": "Apa yang harus kamu lakukan bila ada orang meminta kode OTP perbankanmu?",
+      "tanya": "Mengapa tawaran keuangan yang menjanjikan imbal hasil tinggi dan pasti tanpa risiko patut diwaspadai?",
       "pilihan": [
-        "Segera memberikannya karena mengaku petugas bank",
-        "Jangan pernah membagikan kode OTP kepada siapa pun",
-        "Menuliskan kode OTP di media sosial publik",
+        "Karena keuntungan besar hanya diberikan untuk modal jangka sangat pendek",
+        "Karena setiap peluang hasil tinggi wajarnya selalu sebanding dengan risikonya",
+        "Karena produk keuangan resmi biasanya baru membayar keuntungan setelah setahun",
         "Belum tahu, nggak apa-apa"
       ],
       "benar": 1,
-      "penjelasan": "Kode OTP bersifat rahasia pribadi dan pihak bank tidak pernah memintanya."
+      "penjelasan": "Tidak ada hasil tinggi yang bebas risiko. Janji pasti untung besar merupakan ciri khas penawaran bermasalah."
     },
     {
       "id": "ta_psikologi_1",
       "modulId": "psikologi_uang",
-      "tanya": "Apa strategi sederhana meredam dorongan belanja impulsif?",
+      "tanya": "Penghitung waktu promo kilat sering membuat orang langsung membayar barang tanpa rencana. Mengapa aturan jeda membantu?",
       "pilihan": [
-        "Langsung bayar barang saat pertama kali melihatnya",
-        "Beri jeda waktu berpikir sebelum memutuskan membeli barang non-esensial",
-        "Pinjam uang teman agar bisa segera checkout belanjaan",
+        "Memberi waktu agar emosi reda dan menimbang apakah barang benar dibutuhkan",
+        "Menunggu harga promo turun lebih rendah lagi keesokan harinya",
+        "Supaya batas transaksi kartu harian tidak langsung habis terpakai",
         "Belum tahu, nggak apa-apa"
       ],
-      "benar": 1,
-      "penjelasan": "Jeda waktu berpikir memberi ruang menimbang antara butuh dan ingin."
+      "benar": 0,
+      "penjelasan": "Memberi jeda memisahkan dorongan sesaat dari pertimbangan jernih sesuai anggaran."
     },
     {
       "id": "ta_psikologi_2",
       "modulId": "psikologi_uang",
-      "tanya": "Bagaimana membedakan kebutuhan pokok dari keinginan pribadi?",
+      "tanya": "Membeli ponsel untuk bekerja agar komunikasi lancar dibandingkan membeli ponsel seri terbaru demi gengsi. Apa pembedanya?",
       "pilihan": [
-        "Kebutuhan menunjang keberlangsungan hidup, keinginan meningkatkan kenyamanan",
-        "Kebutuhan dan keinginan memiliki sifat yang sama persis",
-        "Semua barang mahal otomatis tergolong sebagai kebutuhan primer",
+        "Harga jual kembali ponsel saat ingin diganti tahun berikutnya",
+        "Fungsi utama yang menopang produktivitas vs dorongan kenyamanan atau gengsi",
+        "Cara pembayaran apakah dibeli secara tunai atau memakai cicilan",
         "Belum tahu, nggak apa-apa"
       ],
-      "benar": 0,
-      "penjelasan": "Kebutuhan esensial untuk hidup, sedangkan keinginan bersifat pelengkap."
+      "benar": 1,
+      "penjelasan": "Barang yang sama bisa tergolong kebutuhan atau keinginan tergantung fungsi utama serta niat di baliknya."
     }
   ]
 }

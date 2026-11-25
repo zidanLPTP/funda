@@ -94,13 +94,15 @@ void main() {
           await tester.pump();
         }
 
-        // Jawab 3 soal Cek Paham 7.1
+        // Jawab 3 soal Cek Paham 7.1 (1 soal per halaman)
         final opsi1 = find.textContaining(
           'Utang yang mengikat pemasukan bulan depan',
         );
         await tester.ensureVisible(opsi1);
         await tester.pump();
         await tester.tap(opsi1);
+        await tester.pump();
+        await tester.tap(find.byKey(const Key('tombol_lanjut')));
         await tester.pump();
 
         final opsi2 = find.textContaining(
@@ -109,6 +111,8 @@ void main() {
         await tester.ensureVisible(opsi2);
         await tester.pump();
         await tester.tap(opsi2);
+        await tester.pump();
+        await tester.tap(find.byKey(const Key('tombol_lanjut')));
         await tester.pump();
 
         final opsi3 = find.textContaining(
@@ -237,13 +241,15 @@ void main() {
           await tester.pump();
         }
 
-        // Jawab 3 soal Cek Paham 7.3
+        // Jawab 3 soal Cek Paham 7.3 (1 soal per halaman)
         final opsi1 = find.textContaining(
           'Menghindari bunga berjalan dan menjaga riwayat kredit tetap bersih',
         );
         await tester.ensureVisible(opsi1);
         await tester.pump();
         await tester.tap(opsi1);
+        await tester.pump();
+        await tester.tap(find.byKey(const Key('tombol_lanjut')));
         await tester.pump();
 
         final opsi2 = find.textContaining(
@@ -252,6 +258,8 @@ void main() {
         await tester.ensureVisible(opsi2);
         await tester.pump();
         await tester.tap(opsi2);
+        await tester.pump();
+        await tester.tap(find.byKey(const Key('tombol_lanjut')));
         await tester.pump();
 
         final opsi3 = find.textContaining(
@@ -435,13 +443,15 @@ void main() {
           await tester.pump();
         }
 
-        // Jawab 3 soal Cek Paham 10.3
+        // Jawab 3 soal Cek Paham 10.3 (1 soal per halaman)
         final opsi1 = find.textContaining(
           'Berisiko berhenti membayar di tengah jalan sehingga perlindungan tidak aktif',
         );
         await tester.ensureVisible(opsi1);
         await tester.pump();
         await tester.tap(opsi1);
+        await tester.pump();
+        await tester.tap(find.byKey(const Key('tombol_lanjut')));
         await tester.pump();
 
         final opsi2 = find.textContaining(
@@ -450,6 +460,8 @@ void main() {
         await tester.ensureVisible(opsi2);
         await tester.pump();
         await tester.tap(opsi2);
+        await tester.pump();
+        await tester.tap(find.byKey(const Key('tombol_lanjut')));
         await tester.pump();
 
         final opsi3 = find.textContaining(
@@ -481,8 +493,8 @@ void main() {
         await tester.pump();
 
         // Umpan balik nyata muncul
-        await pompaHinggaAda(tester, find.text('Umpan Balik Nyata'));
-        expect(find.text('Umpan Balik Nyata'), findsOneWidget);
+        await pompaHinggaAda(tester, find.text('Hasil dari Datamu'));
+        expect(find.text('Hasil dari Datamu'), findsOneWidget);
         expect(
           find.textContaining(
             'Pengeluaran wajibmu sekitar Rp1.500.000 per bulan (bulan ini).',

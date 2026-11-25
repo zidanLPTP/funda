@@ -422,7 +422,7 @@ void main() {
         await tester.pump();
 
         // Langkah 1: Pemantik
-        expect(find.text('Pemantik'), findsOneWidget);
+        expect(find.text('Memetakan Arus Kas'), findsOneWidget);
         expect(
           find.textContaining('Temanmu bertanya, "Uangmu bulan ini cukup?"'),
           findsOneWidget,
@@ -464,14 +464,18 @@ void main() {
           findsOneWidget,
         );
 
-        // Jawab ketiga soal cek paham
+        // Jawab ketiga soal cek paham (1 soal per halaman PageView)
         await tester.tap(find.text('Minus Rp200.000, uang keluar lebih besar'));
+        await tester.pump();
+        await tester.tap(find.text('Lanjut'));
         await tester.pump();
 
         final soal2 = find.text('Biaya kos bulanan');
         await tester.ensureVisible(soal2);
         await tester.pump();
         await tester.tap(soal2);
+        await tester.pump();
+        await tester.tap(find.text('Lanjut'));
         await tester.pump();
 
         final soal3 = find.text(
@@ -482,7 +486,7 @@ void main() {
         await tester.tap(soal3);
         await tester.pump();
 
-        // Sekarang tombol Lanjut aktif -> Langkah 7: Misi Praktik
+        // Sekarang tombol Lanjut aktif -> Langkah Misi Praktik
         await tester.tap(find.text('Lanjut'));
         await tester.pump();
         expect(find.text('Petakan uang masuk dan keluar'), findsOneWidget);

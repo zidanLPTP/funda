@@ -243,13 +243,10 @@ void main() {
           );
           await tester.pump();
 
-          // Berpindah dari Pemantik (langkah 0) -> Cek Paham (langkah 1) -> Misi (langkah 2)
-          await tester.tap(find.text('Lanjut'));
-          await tester.pump();
+          // Berpindah dari Pemantik (langkah 0) -> Misi (langkah 1, karena Cek Paham kosong)
           await tester.tap(find.text('Lanjut'));
           await tester.pump();
 
-          expect(find.text('Misi Praktik Nyata'), findsOneWidget);
           expect(find.text('Buat 3 Anggaran'), findsOneWidget);
 
           await bongkarWidget(tester);
@@ -440,16 +437,10 @@ void main() {
           expect(tester.takeException(), isNull);
           expect(find.text('Arus Kas Bulanan Detail'), findsOneWidget);
 
-          // Pindah ke Cek Paham (kosong, lanjut)
+          // Pindah langsung ke Misi (karena Cek Paham kosong)
           await tester.tap(find.text('Lanjut'));
           await tester.pump();
           expect(tester.takeException(), isNull);
-
-          // Pindah ke Misi Praktik Nyata
-          await tester.tap(find.text('Lanjut'));
-          await tester.pump();
-          expect(tester.takeException(), isNull);
-          expect(find.text('Misi Praktik Nyata'), findsOneWidget);
           expect(find.text('Misi Uji Skala'), findsOneWidget);
 
           await bongkarWidget(tester);

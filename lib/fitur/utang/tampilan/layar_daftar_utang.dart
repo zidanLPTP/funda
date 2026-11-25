@@ -210,6 +210,13 @@ class _KartuItemUtang extends ConsumerWidget {
         color: WarnaFunda.permukaan,
         borderRadius: BorderRadius.circular(SudutFunda.kartu),
         border: Border.all(color: WarnaFunda.garis),
+        boxShadow: const [
+          BoxShadow(
+            color: WarnaFunda.bayanganKartu,
+            blurRadius: 10,
+            offset: Offset(0, 3),
+          ),
+        ],
       ),
       child: Material(
         color: WarnaFunda.transparan,
@@ -224,6 +231,25 @@ class _KartuItemUtang extends ConsumerWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
+                    Container(
+                      padding: const EdgeInsets.all(SpasiFunda.s),
+                      decoration: BoxDecoration(
+                        color: isLunas
+                            ? WarnaFunda.tintHijau
+                            : WarnaFunda.tintAmber,
+                        borderRadius: BorderRadius.circular(SudutFunda.kecil),
+                      ),
+                      child: Icon(
+                        isLunas
+                            ? LucideIcons.checkCircle2
+                            : LucideIcons.creditCard,
+                        size: 20,
+                        color: isLunas
+                            ? WarnaFunda.sukses
+                            : WarnaFunda.sifatUtang,
+                      ),
+                    ),
+                    const SizedBox(width: SpasiFunda.m),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,

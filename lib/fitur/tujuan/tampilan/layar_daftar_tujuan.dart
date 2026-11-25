@@ -115,8 +115,11 @@ class _KartuBentoTujuan extends ConsumerWidget {
     final jenis = JenisTujuan.dariKode(tujuan.jenis);
     final sisa = tujuan.targetRupiah - danaTerkumpul;
 
+    final warnaAksen = ambilWarnaAksenTint(tujuan.warna);
+
     return PetakBento.ukuran2x1(
       warnaKustom: ambilWarnaTint(tujuan.warna),
+      warnaBatasKustom: ambilWarnaBatasTint(tujuan.warna),
       padaKetuk: padaKetuk,
       anak: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -132,7 +135,7 @@ class _KartuBentoTujuan extends ConsumerWidget {
                 child: Icon(
                   ambilIkonLucide(tujuan.ikon),
                   size: 20,
-                  color: WarnaFunda.utama,
+                  color: warnaAksen,
                 ),
               ),
               const SizedBox(width: SpasiFunda.m),

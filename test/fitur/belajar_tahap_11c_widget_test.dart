@@ -334,12 +334,14 @@ void main() {
             await tester.pump();
           }
 
-          // Jawab 3 soal Cek Paham 17.1
+          // Jawab 3 soal Cek Paham 17.1 (1 soal per halaman)
           final opsi1 = find.textContaining(
             'Sulit mengetahui untung rugi sebenarnya',
           );
           await tester.ensureVisible(opsi1);
           await tester.tap(opsi1);
+          await tester.pump();
+          await tester.tap(find.byKey(const Key('tombol_lanjut')));
           await tester.pump();
 
           final opsi2 = find.textContaining(
@@ -347,6 +349,8 @@ void main() {
           );
           await tester.ensureVisible(opsi2);
           await tester.tap(opsi2);
+          await tester.pump();
+          await tester.tap(find.byKey(const Key('tombol_lanjut')));
           await tester.pump();
 
           final opsi3 = find.text('Rp2.200.000');
@@ -508,12 +512,14 @@ void main() {
             await tester.pump();
           }
 
-          // Jawab 3 soal Cek Paham 17.2
+          // Jawab 3 soal Cek Paham 17.2 (1 soal per halaman)
           final opsi1 = find.textContaining(
             'Omzet adalah total penjualan kotor',
           );
           await tester.ensureVisible(opsi1);
           await tester.tap(opsi1);
+          await tester.pump();
+          await tester.tap(find.byKey(const Key('tombol_lanjut')));
           await tester.pump();
 
           final opsi2 = find.textContaining(
@@ -521,6 +527,8 @@ void main() {
           );
           await tester.ensureVisible(opsi2);
           await tester.tap(opsi2);
+          await tester.pump();
+          await tester.tap(find.byKey(const Key('tombol_lanjut')));
           await tester.pump();
 
           final opsi3 = find.textContaining(
@@ -617,17 +625,21 @@ void main() {
             await tester.pump();
           }
 
-          // Jawab 3 soal Cek Paham 17.3
+          // Jawab 3 soal Cek Paham 17.3 (1 soal per halaman)
           final opsi1 = find.textContaining(
             'Membiayai perputaran operasional harian',
           );
           await tester.ensureVisible(opsi1);
           await tester.tap(opsi1);
           await tester.pump();
+          await tester.tap(find.byKey(const Key('tombol_lanjut')));
+          await tester.pump();
 
           final opsi2 = find.textContaining('Menghadapi masa penjualan sepi');
           await tester.ensureVisible(opsi2);
           await tester.tap(opsi2);
+          await tester.pump();
+          await tester.tap(find.byKey(const Key('tombol_lanjut')));
           await tester.pump();
 
           final opsi3 = find.textContaining(
@@ -718,12 +730,14 @@ void main() {
             await tester.pump();
           }
 
-          // Jawab 3 soal Cek Paham 18.1
+          // Jawab 3 soal Cek Paham 18.1 (1 soal per halaman)
           final opsi1 = find.textContaining(
             'Agar keluarga tidak kebingungan mengakses hak',
           );
           await tester.ensureVisible(opsi1);
           await tester.tap(opsi1);
+          await tester.pump();
+          await tester.tap(find.byKey(const Key('tombol_lanjut')));
           await tester.pump();
 
           final opsi2 = find.textContaining(
@@ -731,6 +745,8 @@ void main() {
           );
           await tester.ensureVisible(opsi2);
           await tester.tap(opsi2);
+          await tester.pump();
+          await tester.tap(find.byKey(const Key('tombol_lanjut')));
           await tester.pump();
 
           final opsi3 = find.textContaining(
@@ -818,10 +834,12 @@ void main() {
             await tester.pump();
           }
 
-          // Jawab 3 soal Cek Paham 18.2
+          // Jawab 3 soal Cek Paham 18.2 (1 soal per halaman)
           final opsi1 = find.textContaining('Dalam satu map tahan air');
           await tester.ensureVisible(opsi1);
           await tester.tap(opsi1);
+          await tester.pump();
+          await tester.tap(find.byKey(const Key('tombol_lanjut')));
           await tester.pump();
 
           final opsi2 = find.textContaining(
@@ -829,6 +847,8 @@ void main() {
           );
           await tester.ensureVisible(opsi2);
           await tester.tap(opsi2);
+          await tester.pump();
+          await tester.tap(find.byKey(const Key('tombol_lanjut')));
           await tester.pump();
 
           final opsi3 = find.textContaining(
@@ -927,12 +947,14 @@ void main() {
             await tester.pump();
           }
 
-          // Jawab 3 soal Cek Paham 18.3
+          // Jawab 3 soal Cek Paham 18.3 (1 soal per halaman)
           final opsi1 = find.textContaining(
             'Mencegah kebingungan dan sengketa keluarga',
           );
           await tester.ensureVisible(opsi1);
           await tester.tap(opsi1);
+          await tester.pump();
+          await tester.tap(find.byKey(const Key('tombol_lanjut')));
           await tester.pump();
 
           final opsi2 = find.textContaining(
@@ -940,6 +962,8 @@ void main() {
           );
           await tester.ensureVisible(opsi2);
           await tester.tap(opsi2);
+          await tester.pump();
+          await tester.tap(find.byKey(const Key('tombol_lanjut')));
           await tester.pump();
 
           final opsi3 = find.textContaining(

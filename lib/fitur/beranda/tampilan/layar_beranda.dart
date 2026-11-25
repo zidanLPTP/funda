@@ -19,6 +19,7 @@ import '../../../perhitungan/perhitungan_tagihan.dart';
 import '../../tujuan/kontroler/penyedia_tujuan.dart';
 import '../../utang/kontroler/penyedia_utang.dart';
 import '../../cadangan/kontroler/penyedia_cadangan.dart';
+import '../../tutorial/kontroler/penyedia_tutorial.dart';
 
 /// Layar Beranda utama aplikasi Funda.
 /// Dashboard penuh dengan ~8 petak bento (data nyata) dan modul pendukung.
@@ -59,6 +60,7 @@ class LayarBeranda extends ConsumerWidget {
     final semuaTujuan = ref.watch(penyediaDaftarTujuanAktif).value ?? [];
     final limaTransaksiAsync = ref.watch(penyediaLimaTransaksiTerakhir);
     final daftarKategori = ref.watch(penyediaDaftarKategori).value ?? [];
+    final kunciTutorial = ref.watch(penyediaKunciTutorialBeranda);
 
     final textScale = MediaQuery.textScalerOf(context).scale(1.0);
     final isTeksBesar = textScale > 1.3;
@@ -115,24 +117,27 @@ class LayarBeranda extends ConsumerWidget {
 
           if (daftarDompetAktif.isEmpty) ...[
             const SizedBox(height: SpasiFunda.xl),
-            KeadaanKosong(
-              ikon: LucideIcons.wallet,
-              judul: 'Selamat Datang di Funda',
-              pesan:
-                  'Mulai kelola uangmu dengan rapi. Buat dompet pertamamu untuk mencatat pemasukan dan pengeluaran.',
-              teksTombol: 'Buat Dompet Pertamamu',
-              padaAksi: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => const LayarFormDompet()),
-                );
-              },
+            KeyedSubtree(
+              key: kunciTutorial.ringkasanKeuangan,
+              child: KeadaanKosong(
+                ikon: LucideIcons.wallet,
+                judul: 'Selamat Datang di Funda',
+                pesan:
+                    'Mulai kelola uangmu dengan rapi. Buat dompet pertamamu untuk mencatat pemasukan dan pengeluaran.',
+                teksTombol: 'Buat Dompet Pertamamu',
+                padaAksi: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => const LayarFormDompet()),
+                  );
+                },
+              ),
             ),
             const SizedBox(height: SpasiFunda.m),
             Center(
               child: TextButton.icon(
                 onPressed: () => context.push('/onboarding'),
-                icon: const Icon(LucideIcons.sparkles, size: 16),
+                icon: const Icon(LucideIcons.compass, size: 16),
                 label: const Text('Pelajari Nilai Dasar Funda'),
               ),
             ),
@@ -221,6 +226,7 @@ class LayarBeranda extends ConsumerWidget {
 
             // 1. Bento 2x1: Hero Arus Kas Bulan Ini (DATA NYATA) -> /catatan
             PetakBento.ukuran2x1(
+              key: kunciTutorial.ringkasanKeuangan,
               tint: TintPetakBento.hijau,
               padaKetuk: () => context.go('/catatan'),
               labelAkses:
@@ -231,20 +237,39 @@ class LayarBeranda extends ConsumerWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Expanded(
-                        child: TeksFunda.isiKecil('Arus Kas Bulan Ini'),
+                      Expanded(
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.all(6),
+                              decoration: BoxDecoration(
+                                color: WarnaFunda.permukaan,
+                                borderRadius: BorderRadius.circular(
+                                  SudutFunda.kecil,
+                                ),
+                              ),
+                              child: const Icon(
+                                LucideIcons.activity,
+                                size: 16,
+                                color: WarnaFunda.utama,
+                              ),
+                            ),
+                            const SizedBox(width: SpasiFunda.s),
+                            const Flexible(
+                              child: TeksFunda.isiKecil('Arus Kas Bulan Ini'),
+                            ),
+                          ],
+                        ),
                       ),
+                      const SizedBox(width: SpasiFunda.s),
                       Container(
                         padding: const EdgeInsets.symmetric(
                           horizontal: SpasiFunda.s,
                           vertical: SpasiFunda.xs,
                         ),
                         decoration: BoxDecoration(
-                          color:
-                              (arusKas.selisih >= 0
-                                      ? WarnaFunda.pemasukan
-                                      : WarnaFunda.pengeluaran)
-                                  .withAlpha(25),
+                          color: WarnaFunda.permukaan,
                           borderRadius: BorderRadius.circular(SudutFunda.pil),
                         ),
                         child: Row(
@@ -312,7 +337,7 @@ class LayarBeranda extends ConsumerWidget {
                       child: const Icon(
                         LucideIcons.wallet,
                         size: 18,
-                        color: WarnaFunda.utama,
+                        color: WarnaFunda.sifatKebutuhan,
                       ),
                     ),
                     const SizedBox(height: SpasiFunda.m),
@@ -402,7 +427,7 @@ class LayarBeranda extends ConsumerWidget {
                           child: const Icon(
                             LucideIcons.pieChart,
                             size: 18,
-                            color: WarnaFunda.sifatKebutuhan,
+                            color: WarnaFunda.sifatUtang,
                           ),
                         ),
                         const SizedBox(height: SpasiFunda.m),
@@ -444,7 +469,7 @@ class LayarBeranda extends ConsumerWidget {
                             child: const Icon(
                               LucideIcons.shieldAlert,
                               size: 18,
-                              color: WarnaFunda.teksRedup,
+                              color: WarnaFunda.utama,
                             ),
                           ),
                           const SizedBox(height: SpasiFunda.m),
@@ -506,7 +531,7 @@ class LayarBeranda extends ConsumerWidget {
                 ukuran: isTeksBesar
                     ? UkuranPetakBento.petak2x1
                     : UkuranPetakBento.petak1x1,
-                tint: TintPetakBento.amber,
+                tint: TintPetakBento.mawar,
                 padaKetuk: () => context.push('/utang'),
                 labelAkses: 'Rasio cicilan bulanan',
                 anak: Column(
@@ -521,7 +546,7 @@ class LayarBeranda extends ConsumerWidget {
                       child: const Icon(
                         LucideIcons.creditCard,
                         size: 18,
-                        color: WarnaFunda.sifatUtang,
+                        color: WarnaFunda.pengeluaran,
                       ),
                     ),
                     const SizedBox(height: SpasiFunda.m),
@@ -540,7 +565,7 @@ class LayarBeranda extends ConsumerWidget {
                 ukuran: isTeksBesar
                     ? UkuranPetakBento.petak2x1
                     : UkuranPetakBento.petak1x1,
-                tint: TintPetakBento.netral,
+                tint: TintPetakBento.biru,
                 padaKetuk: () => context.push('/tujuan'),
                 labelAkses: 'Tujuan terdekat',
                 anak: tujuanTerdekatLain == null
@@ -558,7 +583,7 @@ class LayarBeranda extends ConsumerWidget {
                             child: const Icon(
                               LucideIcons.target,
                               size: 18,
-                              color: WarnaFunda.teksRedup,
+                              color: WarnaFunda.sifatKebutuhan,
                             ),
                           ),
                           const SizedBox(height: SpasiFunda.m),
@@ -596,7 +621,7 @@ class LayarBeranda extends ConsumerWidget {
                                 child: const Icon(
                                   LucideIcons.target,
                                   size: 18,
-                                  color: WarnaFunda.utama,
+                                  color: WarnaFunda.sifatKebutuhan,
                                 ),
                               ),
                               const SizedBox(height: SpasiFunda.m),
@@ -694,7 +719,7 @@ class LayarBeranda extends ConsumerWidget {
                   data: (tagihan) {
                     if (tagihan == null) {
                       return PetakBento.ukuran2x1(
-                        tint: TintPetakBento.netral,
+                        tint: TintPetakBento.putih,
                         padaKetuk: () => context.push('/tagihan'),
                         labelAkses:
                             'Tagihan terdekat: Tidak ada tagihan dalam 7 hari ke depan',
@@ -703,7 +728,7 @@ class LayarBeranda extends ConsumerWidget {
                             Container(
                               padding: const EdgeInsets.all(SpasiFunda.m),
                               decoration: BoxDecoration(
-                                color: WarnaFunda.permukaan,
+                                color: WarnaFunda.tintHijau,
                                 borderRadius: BorderRadius.circular(
                                   SudutFunda.kartu,
                                 ),
@@ -729,7 +754,7 @@ class LayarBeranda extends ConsumerWidget {
                             ),
                             const Icon(
                               LucideIcons.chevronRight,
-                              color: WarnaFunda.teksRedup,
+                              color: WarnaFunda.utama,
                             ),
                           ],
                         ),
@@ -834,9 +859,13 @@ class LayarBeranda extends ConsumerWidget {
                             ),
                           ),
                           const SizedBox(width: SpasiFunda.s),
-                          const Icon(
+                          Icon(
                             LucideIcons.chevronRight,
-                            color: WarnaFunda.teksRedup,
+                            color: isLewat
+                                ? WarnaFunda.pengeluaran
+                                : (isHariIni
+                                      ? WarnaFunda.peringatan
+                                      : WarnaFunda.utama),
                           ),
                         ],
                       ),
@@ -847,9 +876,9 @@ class LayarBeranda extends ConsumerWidget {
             ),
             const SizedBox(height: SpasiFunda.jarakPetak),
 
-            // 10. Bento 2x1: 5 Transaksi Terakhir (Data Nyata)
+            // 10. Kartu Putih 2x1: 5 Transaksi Terakhir (Kombinasi Bento + Card)
             PetakBento.ukuran2x1(
-              tint: TintPetakBento.netral,
+              tint: TintPetakBento.putih,
               padaKetuk: () => context.go('/catatan'),
               labelAkses: 'Lihat 5 transaksi terakhir',
               anak: Column(
@@ -925,9 +954,9 @@ class LayarBeranda extends ConsumerWidget {
                             child: Row(
                               children: [
                                 Container(
-                                  padding: const EdgeInsets.all(SpasiFunda.xs),
+                                  padding: const EdgeInsets.all(6),
                                   decoration: BoxDecoration(
-                                    color: WarnaFunda.permukaan,
+                                    color: warnaNominal.withAlpha(24),
                                     borderRadius: BorderRadius.circular(
                                       SudutFunda.kecil,
                                     ),

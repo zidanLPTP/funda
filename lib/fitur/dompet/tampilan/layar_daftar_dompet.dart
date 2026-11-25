@@ -162,6 +162,7 @@ class _ItemDompetBento extends StatelessWidget {
 
     return PetakBento.ukuran2x1(
       warnaKustom: ambilWarnaTint(dompet.warna),
+      warnaBatasKustom: ambilWarnaBatasTint(dompet.warna),
       padaKetuk: padaKetuk,
       labelAkses: 'Dompet ${dompet.nama}, saldo ${formatRupiah(saldo)}',
       anak: Row(
@@ -175,7 +176,7 @@ class _ItemDompetBento extends StatelessWidget {
             child: Icon(
               ambilIkonLucide(dompet.ikon),
               size: 24,
-              color: WarnaFunda.utama,
+              color: ambilWarnaAksenTint(dompet.warna),
             ),
           ),
           const SizedBox(width: SpasiFunda.l),

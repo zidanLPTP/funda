@@ -8,8 +8,33 @@ Color ambilWarnaTint(String kunci) {
     'tintBiru' => WarnaFunda.tintBiru,
     'tintUngu' => WarnaFunda.tintUngu,
     'tintAmber' => WarnaFunda.tintAmber,
+    'tintMawar' => WarnaFunda.tintMawar,
     'tintNetral' => WarnaFunda.tintNetral,
     _ => WarnaFunda.tintNetral,
+  };
+}
+
+/// Memetakan kunci nama token tint ke warna aksen ikon yang kontras dan serasi.
+Color ambilWarnaAksenTint(String kunci) {
+  return switch (kunci) {
+    'tintHijau' => WarnaFunda.utama,
+    'tintBiru' => WarnaFunda.sifatKebutuhan,
+    'tintUngu' => WarnaFunda.sifatKeinginan,
+    'tintAmber' => WarnaFunda.sifatUtang,
+    'tintMawar' => WarnaFunda.pengeluaran,
+    _ => WarnaFunda.utama,
+  };
+}
+
+/// Memetakan kunci nama token tint ke warna batas kartu yang serasi.
+Color ambilWarnaBatasTint(String kunci) {
+  return switch (kunci) {
+    'tintHijau' => WarnaFunda.batasHijau,
+    'tintBiru' => WarnaFunda.batasBiru,
+    'tintUngu' => WarnaFunda.batasUngu,
+    'tintAmber' => WarnaFunda.batasAmber,
+    'tintMawar' => WarnaFunda.batasMawar,
+    _ => WarnaFunda.batasNetral,
   };
 }
 

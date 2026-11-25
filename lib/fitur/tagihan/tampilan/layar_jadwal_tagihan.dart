@@ -484,16 +484,25 @@ class _LayarJadwalTagihanState extends ConsumerState<LayarJadwalTagihan> {
                         vertical: SpasiFunda.xl,
                       ),
                       child: Column(
-                        children: const [
-                          Icon(
-                            LucideIcons.calendarCheck,
-                            size: 48,
-                            color: WarnaFunda.teksRedup,
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.all(SpasiFunda.l),
+                            decoration: const BoxDecoration(
+                              color: WarnaFunda.tintHijau,
+                              shape: BoxShape.circle,
+                            ),
+                            child: const Icon(
+                              LucideIcons.calendarCheck,
+                              size: 40,
+                              color: WarnaFunda.utama,
+                            ),
                           ),
-                          SizedBox(height: SpasiFunda.m),
-                          TeksFunda.judulBagian('Tidak Ada Tagihan Bulan Ini'),
-                          SizedBox(height: SpasiFunda.xs),
-                          TeksFunda.catatan(
+                          const SizedBox(height: SpasiFunda.m),
+                          const TeksFunda.judulBagian(
+                            'Tidak Ada Tagihan Bulan Ini',
+                          ),
+                          const SizedBox(height: SpasiFunda.xs),
+                          const TeksFunda.catatan(
                             'Semua jadwal tagihan pada bulan ini tenang.',
                           ),
                         ],
@@ -564,13 +573,13 @@ class _LayarJadwalTagihanState extends ConsumerState<LayarJadwalTagihan> {
                         children: [
                           const Icon(
                             LucideIcons.circleCheck,
-                            color: WarnaFunda.teksRedup,
+                            color: WarnaFunda.pemasukan,
                             size: 20,
                           ),
                           const SizedBox(width: SpasiFunda.xs),
                           TeksFunda.label(
                             'Sudah Ditandai (${sudahDitandai.length})',
-                            warna: WarnaFunda.teksRedup,
+                            warna: WarnaFunda.pemasukan,
                           ),
                         ],
                       ),

@@ -65,6 +65,8 @@ class LayarLainnya extends StatelessWidget {
           const SizedBox(height: SpasiFunda.m),
           _ItemMenu(
             ikon: LucideIcons.fileText,
+            warnaAksen: WarnaFunda.info,
+            warnaLatarIkon: WarnaFunda.tintBiru,
             judul: 'Laporan Bulanan',
             keterangan: 'Arus kas, komposisi, anggaran, dan saran per bulan',
             padaKetuk: () => context.push('/laporan'),
@@ -72,6 +74,8 @@ class LayarLainnya extends StatelessWidget {
           const SizedBox(height: SpasiFunda.s),
           _ItemMenu(
             ikon: LucideIcons.pieChart,
+            warnaAksen: WarnaFunda.sifatKebutuhan,
+            warnaLatarIkon: WarnaFunda.tintBiru,
             judul: 'Anggaran Bulanan',
             keterangan: 'Rencanakan batas pengeluaran per kategori per bulan',
             padaKetuk: () => context.push('/anggaran'),
@@ -79,6 +83,8 @@ class LayarLainnya extends StatelessWidget {
           const SizedBox(height: SpasiFunda.s),
           _ItemMenu(
             ikon: LucideIcons.target,
+            warnaAksen: WarnaFunda.utama,
+            warnaLatarIkon: WarnaFunda.tintHijau,
             judul: 'Tujuan Keuangan',
             keterangan: 'Pantau impian, pos tabungan, dan dana darurat',
             padaKetuk: () => context.push('/tujuan'),
@@ -86,6 +92,8 @@ class LayarLainnya extends StatelessWidget {
           const SizedBox(height: SpasiFunda.s),
           _ItemMenu(
             ikon: LucideIcons.layers,
+            warnaAksen: WarnaFunda.sifatKeinginan,
+            warnaLatarIkon: WarnaFunda.tintUngu,
             judul: 'Kantong Dompet',
             keterangan: 'Pisahkan pos uang dalam dompet tanpa pindah rekening',
             padaKetuk: () => context.push('/kantong'),
@@ -93,6 +101,8 @@ class LayarLainnya extends StatelessWidget {
           const SizedBox(height: SpasiFunda.s),
           _ItemMenu(
             ikon: LucideIcons.creditCard,
+            warnaAksen: WarnaFunda.sifatUtang,
+            warnaLatarIkon: WarnaFunda.tintAmber,
             judul: 'Utang & Cicilan',
             keterangan:
                 'Pantau sisa pinjaman, cicilan per bulan, dan rasio cicilan',
@@ -101,6 +111,8 @@ class LayarLainnya extends StatelessWidget {
           const SizedBox(height: SpasiFunda.s),
           _ItemMenu(
             ikon: LucideIcons.calendarClock,
+            warnaAksen: WarnaFunda.pengeluaran,
+            warnaLatarIkon: WarnaFunda.tintMawar,
             judul: 'Tagihan & Langganan',
             keterangan:
                 'Jadwal jatuh tempo rutin dan pengingat lokal ramah baterai',
@@ -109,6 +121,8 @@ class LayarLainnya extends StatelessWidget {
           const SizedBox(height: SpasiFunda.s),
           _ItemMenu(
             ikon: LucideIcons.trendingUp,
+            warnaAksen: WarnaFunda.pemasukan,
+            warnaLatarIkon: WarnaFunda.tintHijau,
             judul: 'Kekayaan Bersih',
             keterangan: 'Selisih total saldo aset dan sisa seluruh pinjaman',
             padaKetuk: () => context.push('/kekayaan-bersih'),
@@ -116,6 +130,8 @@ class LayarLainnya extends StatelessWidget {
           const SizedBox(height: SpasiFunda.s),
           _ItemMenu(
             ikon: LucideIcons.wallet,
+            warnaAksen: WarnaFunda.utama,
+            warnaLatarIkon: WarnaFunda.tintHijau,
             judul: 'Kelola Dompet',
             keterangan: 'Tambah akun, ubah, arsipkan, atau sesuaikan saldo',
             padaKetuk: () => context.push('/dompet'),
@@ -123,6 +139,8 @@ class LayarLainnya extends StatelessWidget {
           const SizedBox(height: SpasiFunda.s),
           _ItemMenu(
             ikon: LucideIcons.tags,
+            warnaAksen: WarnaFunda.sifatKeinginan,
+            warnaLatarIkon: WarnaFunda.tintUngu,
             judul: 'Kelola Kategori',
             keterangan: 'Kelompok kebutuhan, keinginan, tabungan, dan utang',
             padaKetuk: () {
@@ -135,6 +153,8 @@ class LayarLainnya extends StatelessWidget {
           const SizedBox(height: SpasiFunda.s),
           _ItemMenu(
             ikon: LucideIcons.flaskConical,
+            warnaAksen: WarnaFunda.peringatan,
+            warnaLatarIkon: WarnaFunda.tintAmber,
             judul: 'Mode Sandbox',
             keterangan:
                 'Simulasi portofolio investasi fiktif terisolasi dari data riil',
@@ -147,6 +167,8 @@ class LayarLainnya extends StatelessWidget {
           const SizedBox(height: SpasiFunda.m),
           _ItemMenu(
             ikon: LucideIcons.database,
+            warnaAksen: WarnaFunda.info,
+            warnaLatarIkon: WarnaFunda.tintBiru,
             judul: 'Cadangan & Pemulihan Data',
             keterangan:
                 'Ekspor dan pulihkan seluruh data keuangan secara lokal',
@@ -155,6 +177,8 @@ class LayarLainnya extends StatelessWidget {
           const SizedBox(height: SpasiFunda.s),
           _ItemMenu(
             ikon: LucideIcons.shieldCheck,
+            warnaAksen: WarnaFunda.pemasukan,
+            warnaLatarIkon: WarnaFunda.tintHijau,
             judul: 'Privasi & Keamanan',
             keterangan:
                 'Funda tidak mengirimkan data keuanganmu ke server luar (v1)',
@@ -163,14 +187,18 @@ class LayarLainnya extends StatelessWidget {
           const SizedBox(height: SpasiFunda.s),
           _ItemMenu(
             ikon: LucideIcons.settings,
+            warnaAksen: WarnaFunda.utama,
+            warnaLatarIkon: WarnaFunda.tintHijau,
             judul: 'Pengaturan',
             keterangan:
-                'Kelola pengingat lokal, jam notifikasi, dan privasi nominal',
+                'Pengingat lokal, tutorial aplikasi, dan pembaruan profil',
             padaKetuk: () => context.push('/pengaturan'),
           ),
           const SizedBox(height: SpasiFunda.s),
           _ItemMenu(
-            ikon: LucideIcons.sparkles,
+            ikon: LucideIcons.compass,
+            warnaAksen: WarnaFunda.sifatKeinginan,
+            warnaLatarIkon: WarnaFunda.tintUngu,
             judul: 'Panduan Nilai Funda',
             keterangan:
                 'Tiga pilar cara Funda memandang uang: Tenang, Kendali, dan Bertumbuh',
@@ -179,8 +207,10 @@ class LayarLainnya extends StatelessWidget {
           const SizedBox(height: SpasiFunda.s),
           _ItemMenu(
             ikon: LucideIcons.info,
+            warnaAksen: WarnaFunda.info,
+            warnaLatarIkon: WarnaFunda.tintBiru,
             judul: 'Tentang Funda',
-            keterangan: 'Versi 1.0.0 (Teman Mengelola Uang yang Nyaman & Aman)',
+            keterangan: 'Versi 1.1.0 (Teman Mengelola Uang yang Nyaman & Aman)',
             padaKetuk: () => _tampilkanTentangFunda(context),
           ),
           const SizedBox(height: SpasiFunda.xl),
@@ -193,7 +223,7 @@ class LayarLainnya extends StatelessWidget {
     showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
-      backgroundColor: Colors.transparent,
+      backgroundColor: WarnaFunda.transparan,
       builder: (ctx) {
         return Container(
           decoration: const BoxDecoration(
@@ -247,7 +277,7 @@ class LayarLainnya extends StatelessWidget {
 
                   const TeksFunda.judulLayar('Funda'),
                   const SizedBox(height: SpasiFunda.xs),
-                  const TeksFunda.label('Versi 1.0.0', warna: WarnaFunda.utama),
+                  const TeksFunda.label('Versi 1.1.0', warna: WarnaFunda.utama),
                   const SizedBox(height: SpasiFunda.xs),
                   const TeksFunda.catatan(
                     'Teman Mengelola Uang yang Nyaman, Sadar, dan Aman',
@@ -348,12 +378,16 @@ class LayarLainnya extends StatelessWidget {
 class _ItemMenu extends StatelessWidget {
   const _ItemMenu({
     required this.ikon,
+    required this.warnaAksen,
+    required this.warnaLatarIkon,
     required this.judul,
     required this.keterangan,
     required this.padaKetuk,
   });
 
   final IconData ikon;
+  final Color warnaAksen;
+  final Color warnaLatarIkon;
   final String judul;
   final String keterangan;
   final VoidCallback padaKetuk;
@@ -365,6 +399,13 @@ class _ItemMenu extends StatelessWidget {
         color: WarnaFunda.permukaan,
         borderRadius: BorderRadius.circular(SudutFunda.kartu),
         border: Border.all(color: WarnaFunda.garis),
+        boxShadow: const [
+          BoxShadow(
+            color: WarnaFunda.bayanganKartu,
+            blurRadius: 8,
+            offset: Offset(0, 2),
+          ),
+        ],
       ),
       child: ListTile(
         onTap: padaKetuk,
@@ -372,14 +413,17 @@ class _ItemMenu extends StatelessWidget {
           horizontal: SpasiFunda.l,
           vertical: SpasiFunda.xs,
         ),
-        leading: Icon(ikon, color: WarnaFunda.utama, size: 22),
+        leading: Container(
+          padding: const EdgeInsets.all(SpasiFunda.s),
+          decoration: BoxDecoration(
+            color: warnaLatarIkon,
+            borderRadius: BorderRadius.circular(SudutFunda.kartu),
+          ),
+          child: Icon(ikon, color: warnaAksen, size: 22),
+        ),
         title: TeksFunda.label(judul),
         subtitle: TeksFunda.catatan(keterangan),
-        trailing: const Icon(
-          LucideIcons.chevronRight,
-          size: 18,
-          color: WarnaFunda.teksRedup,
-        ),
+        trailing: Icon(LucideIcons.chevronRight, size: 18, color: warnaAksen),
       ),
     );
   }

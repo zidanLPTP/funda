@@ -1,11 +1,13 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '../../../komponen/komponen_funda.dart';
 import '../../../layanan/pengingat/penyedia_layanan_pengingat.dart';
 import '../../../perhitungan/perhitungan_tagihan.dart';
 import '../../../tema/token.dart';
+import '../../tutorial/kontroler/penyedia_tutorial.dart';
 import '../kontroler/penyedia_pengaturan.dart';
 
 /// Layar Pengaturan Aplikasi (Pengingat Lokal, Jam Notifikasi, Privasi Nominal).
@@ -121,6 +123,7 @@ class _LayarPengaturanState extends ConsumerState<LayarPengaturan> {
           children: [
             // Grup 1: Pengingat Tagihan & Notifikasi Lokal
             PetakBento(
+              tint: TintPetakBento.putih,
               anak: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -129,7 +132,7 @@ class _LayarPengaturanState extends ConsumerState<LayarPengaturan> {
                       Container(
                         padding: const EdgeInsets.all(SpasiFunda.xs),
                         decoration: BoxDecoration(
-                          color: WarnaFunda.permukaan,
+                          color: WarnaFunda.tintHijau,
                           borderRadius: BorderRadius.circular(SudutFunda.kecil),
                         ),
                         child: const Icon(
@@ -187,6 +190,7 @@ class _LayarPengaturanState extends ConsumerState<LayarPengaturan> {
 
             // Grup 2: Interaksi & Umpan Balik Haptik
             PetakBento(
+              tint: TintPetakBento.putih,
               anak: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -195,12 +199,12 @@ class _LayarPengaturanState extends ConsumerState<LayarPengaturan> {
                       Container(
                         padding: const EdgeInsets.all(SpasiFunda.xs),
                         decoration: BoxDecoration(
-                          color: WarnaFunda.permukaan,
+                          color: WarnaFunda.tintAmber,
                           borderRadius: BorderRadius.circular(SudutFunda.kecil),
                         ),
                         child: const Icon(
                           LucideIcons.smartphone,
-                          color: WarnaFunda.utama,
+                          color: WarnaFunda.sifatUtang,
                           size: 20,
                         ),
                       ),
@@ -229,8 +233,9 @@ class _LayarPengaturanState extends ConsumerState<LayarPengaturan> {
             ),
             const SizedBox(height: SpasiFunda.m),
 
-            // Grup 2: Transparansi Baterai & Privasi
+            // Grup 2b: Panduan & Profil Keuangan
             PetakBento(
+              tint: TintPetakBento.putih,
               anak: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -239,12 +244,104 @@ class _LayarPengaturanState extends ConsumerState<LayarPengaturan> {
                       Container(
                         padding: const EdgeInsets.all(SpasiFunda.xs),
                         decoration: BoxDecoration(
-                          color: WarnaFunda.permukaan,
+                          color: WarnaFunda.tintBiru,
+                          borderRadius: BorderRadius.circular(SudutFunda.kecil),
+                        ),
+                        child: const Icon(
+                          LucideIcons.compass,
+                          color: WarnaFunda.sifatKebutuhan,
+                          size: 20,
+                        ),
+                      ),
+                      const SizedBox(width: SpasiFunda.s),
+                      const Expanded(
+                        child: TeksFunda.label('Panduan & Profil Keuangan'),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: SpasiFunda.s),
+                  ListTile(
+                    key: const Key('menu_ulangi_tutorial'),
+                    contentPadding: EdgeInsets.zero,
+                    leading: Container(
+                      padding: const EdgeInsets.all(SpasiFunda.xs),
+                      decoration: BoxDecoration(
+                        color: WarnaFunda.tintHijau,
+                        borderRadius: BorderRadius.circular(SudutFunda.kecil),
+                      ),
+                      child: const Icon(
+                        LucideIcons.playCircle,
+                        color: WarnaFunda.utama,
+                        size: 18,
+                      ),
+                    ),
+                    title: const TeksFunda.isi('Ulangi Tutorial Aplikasi'),
+                    subtitle: const TeksFunda.catatan(
+                      'Tampilkan kembali tur sorotan pengenalan tab utama di Beranda',
+                    ),
+                    trailing: const Icon(
+                      LucideIcons.chevronRight,
+                      size: 20,
+                      color: WarnaFunda.utama,
+                    ),
+                    onTap: () async {
+                      await ref
+                          .read(penyediaTutorialBeranda.notifier)
+                          .ulangiTutorial();
+                      if (context.mounted) {
+                        context.go('/');
+                      }
+                    },
+                  ),
+                  const Divider(),
+                  ListTile(
+                    key: const Key('menu_perbarui_profil'),
+                    contentPadding: EdgeInsets.zero,
+                    leading: Container(
+                      padding: const EdgeInsets.all(SpasiFunda.xs),
+                      decoration: BoxDecoration(
+                        color: WarnaFunda.tintUngu,
+                        borderRadius: BorderRadius.circular(SudutFunda.kecil),
+                      ),
+                      child: const Icon(
+                        LucideIcons.userCheck,
+                        color: WarnaFunda.sifatKeinginan,
+                        size: 18,
+                      ),
+                    ),
+                    title: const TeksFunda.isi('Perbarui Profil Keuangan'),
+                    subtitle: const TeksFunda.catatan(
+                      'Ubah jawaban kondisi keuanganmu bila situasimu berubah',
+                    ),
+                    trailing: const Icon(
+                      LucideIcons.chevronRight,
+                      size: 20,
+                      color: WarnaFunda.sifatKeinginan,
+                    ),
+                    onTap: () => context.push('/belajar/tes-awal'),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: SpasiFunda.m),
+
+            // Grup 3: Transparansi Baterai & Privasi
+            PetakBento(
+              tint: TintPetakBento.putih,
+              anak: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(SpasiFunda.xs),
+                        decoration: BoxDecoration(
+                          color: WarnaFunda.tintHijau,
                           borderRadius: BorderRadius.circular(SudutFunda.kecil),
                         ),
                         child: const Icon(
                           LucideIcons.shieldCheck,
-                          color: WarnaFunda.utama,
+                          color: WarnaFunda.pemasukan,
                           size: 20,
                         ),
                       ),

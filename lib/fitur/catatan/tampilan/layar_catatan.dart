@@ -169,11 +169,25 @@ class _LayarCatatanState extends ConsumerState<LayarCatatan> {
     switch (_filter.rentang) {
       case RentangWaktuFilter.hariIni:
         mulai = hariIni;
-        selesai = DateTime(hariIni.year, hariIni.month, hariIni.day, 23, 59, 59);
+        selesai = DateTime(
+          hariIni.year,
+          hariIni.month,
+          hariIni.day,
+          23,
+          59,
+          59,
+        );
         break;
       case RentangWaktuFilter.tujuhHari:
         mulai = hariIni.subtract(const Duration(days: 7));
-        selesai = DateTime(hariIni.year, hariIni.month, hariIni.day, 23, 59, 59);
+        selesai = DateTime(
+          hariIni.year,
+          hariIni.month,
+          hariIni.day,
+          23,
+          59,
+          59,
+        );
         break;
       case RentangWaktuFilter.bulanIni:
         mulai = DateTime(hariIni.year, hariIni.month, 1);
@@ -685,7 +699,7 @@ class _ItemBarisTransaksi extends StatelessWidget {
     } else {
       judulBaris = jenis.label;
       ikonBaris = LucideIcons.slidersHorizontal;
-      warnaIkon = WarnaFunda.teksRedup;
+      warnaIkon = WarnaFunda.utama;
     }
 
     return Container(
@@ -694,6 +708,13 @@ class _ItemBarisTransaksi extends StatelessWidget {
         color: WarnaFunda.permukaan,
         borderRadius: BorderRadius.circular(SudutFunda.kartu),
         border: Border.all(color: WarnaFunda.garis),
+        boxShadow: const [
+          BoxShadow(
+            color: WarnaFunda.bayanganKartu,
+            blurRadius: 8,
+            offset: Offset(0, 2),
+          ),
+        ],
       ),
       child: ListTile(
         onTap: padaKetuk,

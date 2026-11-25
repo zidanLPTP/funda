@@ -3,16 +3,18 @@ import '../tema/token.dart';
 
 /// Pilihan warna tint latar untuk Petak Bento.
 enum TintPetakBento {
-  hijau(WarnaFunda.tintHijau),
-  biru(WarnaFunda.tintBiru),
-  ungu(WarnaFunda.tintUngu),
-  amber(WarnaFunda.tintAmber),
-  netral(WarnaFunda.tintNetral),
-  mawar(WarnaFunda.tintMawar),
-  putih(WarnaFunda.permukaan);
+  hijau(WarnaFunda.tintHijau, WarnaFunda.batasHijau, WarnaFunda.utama),
+  biru(WarnaFunda.tintBiru, WarnaFunda.batasBiru, WarnaFunda.sifatKebutuhan),
+  ungu(WarnaFunda.tintUngu, WarnaFunda.batasUngu, WarnaFunda.sifatKeinginan),
+  amber(WarnaFunda.tintAmber, WarnaFunda.batasAmber, WarnaFunda.sifatUtang),
+  netral(WarnaFunda.tintNetral, WarnaFunda.batasNetral, WarnaFunda.utama),
+  mawar(WarnaFunda.tintMawar, WarnaFunda.batasMawar, WarnaFunda.pengeluaran),
+  putih(WarnaFunda.permukaan, WarnaFunda.garis, WarnaFunda.utama);
 
-  const TintPetakBento(this.warna);
+  const TintPetakBento(this.warna, this.warnaBatas, this.warnaAksen);
   final Color warna;
+  final Color warnaBatas;
+  final Color warnaAksen;
 }
 
 /// Ukuran kisi petak bento.
@@ -33,6 +35,7 @@ class PetakBento extends StatefulWidget {
     this.ukuran = UkuranPetakBento.petak2x1,
     this.tint = TintPetakBento.netral,
     this.warnaKustom,
+    this.warnaBatasKustom,
     this.padaKetuk,
     this.labelAkses,
     this.padding,
@@ -45,6 +48,7 @@ class PetakBento extends StatefulWidget {
     required this.anak,
     this.tint = TintPetakBento.netral,
     this.warnaKustom,
+    this.warnaBatasKustom,
     this.padaKetuk,
     this.labelAkses,
     this.padding,
@@ -57,6 +61,7 @@ class PetakBento extends StatefulWidget {
     required this.anak,
     this.tint = TintPetakBento.netral,
     this.warnaKustom,
+    this.warnaBatasKustom,
     this.padaKetuk,
     this.labelAkses,
     this.padding,
@@ -67,6 +72,7 @@ class PetakBento extends StatefulWidget {
   final UkuranPetakBento ukuran;
   final TintPetakBento tint;
   final Color? warnaKustom;
+  final Color? warnaBatasKustom;
   final VoidCallback? padaKetuk;
   final String? labelAkses;
   final EdgeInsetsGeometry? padding;
@@ -87,12 +93,24 @@ class _PetakBentoState extends State<PetakBento> {
   @override
   Widget build(BuildContext context) {
     final warnaLatar = widget.warnaKustom ?? widget.tint.warna;
+    final warnaBatas =
+        widget.warnaBatasKustom ??
+        (widget.warnaKustom != null
+            ? WarnaFunda.garis
+            : widget.tint.warnaBatas);
     final paddingDalam = widget.padding ?? const EdgeInsets.all(SpasiFunda.l);
 
     final dekorasi = BoxDecoration(
       color: warnaLatar,
       borderRadius: BorderRadius.circular(SudutFunda.petak),
-      border: Border.all(color: WarnaFunda.garis, width: 1),
+      border: Border.all(color: warnaBatas, width: 1.2),
+      boxShadow: const [
+        BoxShadow(
+          color: WarnaFunda.bayanganKartu,
+          blurRadius: 12,
+          offset: Offset(0, 4),
+        ),
+      ],
     );
 
     Widget konten = AnimatedScale(

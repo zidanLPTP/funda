@@ -10,8 +10,14 @@ import '../kontroler/penyedia_belajar.dart';
 class TeksDenganIstilah extends ConsumerWidget {
   final String teks;
   final TextStyle? gaya;
+  final TextAlign rataTeks;
 
-  const TeksDenganIstilah({super.key, required this.teks, this.gaya});
+  const TeksDenganIstilah({
+    super.key,
+    required this.teks,
+    this.gaya,
+    this.rataTeks = TextAlign.justify,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -71,6 +77,7 @@ class TeksDenganIstilah extends ConsumerWidget {
 
     return Text.rich(
       TextSpan(children: spans),
+      textAlign: rataTeks,
       style:
           gaya ??
           const TextStyle(fontSize: 16, height: 1.5, color: WarnaFunda.teks),
@@ -138,7 +145,7 @@ class TeksDenganIstilah extends ConsumerWidget {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              TeksFunda.isi(arti),
+              TeksFunda.isi(arti, rataTeks: TextAlign.justify),
               if (contohRupiah.isNotEmpty) ...[
                 const SizedBox(height: SpasiFunda.m),
                 Container(
@@ -155,7 +162,10 @@ class TeksDenganIstilah extends ConsumerWidget {
                         warna: WarnaFunda.teksRedup,
                       ),
                       const SizedBox(height: SpasiFunda.xs),
-                      TeksFunda.isiKecil(contohRupiah),
+                      TeksFunda.isiKecil(
+                        contohRupiah,
+                        rataTeks: TextAlign.justify,
+                      ),
                     ],
                   ),
                 ),

@@ -253,7 +253,7 @@ class _DaftarKategoriKeluar extends ConsumerWidget {
             child: Row(
               children: [
                 const Icon(
-                  LucideIcons.sparkles,
+                  LucideIcons.tags,
                   color: WarnaFunda.peringatan,
                   size: 20,
                 ),
@@ -283,7 +283,7 @@ class _DaftarKategoriKeluar extends ConsumerWidget {
 
           final ikonSifat = switch (sifat) {
             SifatKategori.kebutuhan => LucideIcons.shield,
-            SifatKategori.keinginan => LucideIcons.sparkles,
+            SifatKategori.keinginan => LucideIcons.gift,
             SifatKategori.tabungan => LucideIcons.piggyBank,
             SifatKategori.utang => LucideIcons.calendarClock,
             _ => LucideIcons.helpCircle,

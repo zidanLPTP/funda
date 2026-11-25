@@ -5,6 +5,26 @@ Format penulisan mengacu pada standar Keep a Changelog dan penamaan commit Funda
 
 ---
 
+## [1.1.0] - 2026-11-25 — Tahap 13B: Pembaruan Visual Colorful Bento+Card, UX Belajar, Tutorial & Optimasi Ukuran APK
+
+Tahap 13B menghadirkan penyegaran visual, perbaikan alur belajar dan tes awal dari hasil uji langsung di perangkat Android fisik, serta optimasi ukuran APK rilis:
+- **Penyegaran Visual Colorful Bento + Card & Bebas Ikon Bintang:**
+  - Memperkuat saturasi tint pastel (`tintHijau`, `tintBiru`, `tintUngu`, `tintAmber`, `tintNetral`, `tintMawar`) lengkap dengan pasangan warna batas dan bayangan lembut terukur (`bayanganKartu`), sambil mempertahankan kontras teks >= 4.5:1 di `lib/tema/token.dart`.
+  - Menyelaraskan warna seluruh ikon pada layar utama (Beranda, Catatan, Belajar, Lainnya, Dompet, Anggaran, Tujuan, Utang, Tagihan, Sandbox, Pengaturan) di dalam wadah membulat ber-tint serasi tanpa ikon abu-abu polos maupun warna hard-coded di luar `lib/tema/`.
+  - Menghapus seluruh penggunaan ikon bintang (`star` / `sparkles`) di `lib/`.
+- **Tutorial Awal Interaktif Beranda:**
+  - Menambahkan lapisan sorotan tutorial interaktif 4 langkah (`LapisanTutorialBeranda`) yang muncul otomatis saat pertama kali memasuki Beranda, menghormati `disableAnimations`, dan menyimpan status pada `tabel_pengaturan` (`tutorial_beranda_selesai`).
+  - Menambahkan pintasan **"Ulangi Tutorial Aplikasi"** pada `LayarPengaturan`.
+- **Perombakan UX Tab Belajar, Modul 0, & Pemutar Pelajaran:**
+  - Membersihkan tumpukan badge `"Saran untuk kamu"` menjadi maksimal 1 kartu sorotan rekomendasi di bagian atas Tab Belajar dan menghilangkan banjir ikon gembok di baris pelajaran terkunci.
+  - Menyederhanakan Modul 0 menjadi kartu ringkas `"Profil keuanganmu sudah tersimpan"` setelah profil diisi, disertai pintasan **"Perbarui Profil Keuangan"** di Pengaturan.
+  - Menghapus chip badge penanda tahapan di `LayarPemutarPelajaran`, meratakan teks materi dan popup kamus ke `TextAlign.justify`, serta memecah **Cek Paham** menjadi 1 soal per halaman `PageView`.
+- **Alur & Soal Tes Awal (12 Soal Baru):**
+  - Menambahkan layar transisi animasi dari kuesioner profil ke soal Tes Awal dan layar animasi perayaan selesai sebelum ringkasan hasil & rekomendasi.
+  - Merombak 12 soal Tes Awal di `aset/konten/pemula/mulai_tes_awal/tes_awal.json` dengan pengecoh realistis agar benar-benar mengukur pemahaman pengguna.
+- **Optimasi Ukuran APK Rilis:**
+  - Mengaktifkan R8 (`isMinifyEnabled = true`, `isShrinkResources = true`, dan `android/app/proguard-rules.pro`) serta memindahkan/menghapus aset gambar besar tak terpakai di `aset/gambar/`.
+
 ## [1.0.2] - 2026-11-24 — Tahap 13A: Hotfix Kritis Navigasi, Layar Catatan & ANR
 
 Tahap 13A merupakan pembaruan hotfix kritis setelah pengujian langsung pada perangkat Android fisik untuk memperbaiki 3 kendala utama:

@@ -418,6 +418,13 @@ class _KartuItemAnggaran extends StatelessWidget {
           color: WarnaFunda.permukaan,
           borderRadius: BorderRadius.circular(SudutFunda.kartu),
           border: Border.all(color: WarnaFunda.garis),
+          boxShadow: const [
+            BoxShadow(
+              color: WarnaFunda.bayanganKartu,
+              blurRadius: 8,
+              offset: Offset(0, 2),
+            ),
+          ],
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -427,13 +434,13 @@ class _KartuItemAnggaran extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.all(SpasiFunda.s),
                   decoration: BoxDecoration(
-                    color: WarnaFunda.latar,
+                    color: warnaStatus.withAlpha(26),
                     borderRadius: BorderRadius.circular(SudutFunda.kecil),
                   ),
                   child: Icon(
                     ambilIkonLucide(item.kategoriIkon),
                     size: 20,
-                    color: WarnaFunda.utama,
+                    color: warnaStatus,
                   ),
                 ),
                 const SizedBox(width: SpasiFunda.m),
