@@ -6,13 +6,16 @@ abstract final class WarnaFunda {
   // Palet dasar
   static const utama = Color(0xFF0F766E);
   static const utamaGelap = Color(0xFF0E5133);
+  static const tombolGelap = Color(0xFF0B2E22);
   static const utamaTipis = Color(0xFFBDF5E8);
+  static const mintCerah = Color(0xFF6FE0BA);
   static const latar = Color(0xFFF6FAF8);
   static const permukaan = Color(0xFFFFFFFF);
   static const putih = Color(0xFFFFFFFF);
   static const teksPutih = Color(0xFFFFFFFF);
   static const teksPutihRedup = Color(0xB3FFFFFF);
   static const garis = Color(0xFFD8E3DF);
+  static const segmenNonAktif = Color(0xFFE2EAE6);
   static const teks = Color(0xFF0F1F1D);
   static const teksRedup = Color(0xFF475855);
   static const aksen = Color(0xFFF59E0B);
@@ -44,6 +47,18 @@ abstract final class WarnaFunda {
   static const batasNetral = Color(0xFFDCE7E3);
   static const tintMawar = Color(0xFFFCE0EC);
   static const batasMawar = Color(0xFFFBCFE8);
+
+  // Kanvas ilustrasi solid cerah & aksen ikon vektor modul (gaya editorial)
+  static const kanvasMint = Color(0xFFC8F7E5);
+  static const kanvasBiru = Color(0xFFD6E8FF);
+  static const kanvasUngu = Color(0xFFE7DAFF);
+  static const kanvasKuning = Color(0xFFFFF0BF);
+  static const kanvasKoral = Color(0xFFFFDCE6);
+  static const aksenIkonKuning = Color(0xFFEAB308);
+  static const aksenIkonKoral = Color(0xFFF43F5E);
+  static const aksenIkonMint = Color(0xFF10B981);
+  static const aksenIkonBiru = Color(0xFF3B82F6);
+  static const aksenIkonUngu = Color(0xFF8B5CF6);
 
   // Utilitas & Kartu Khusus
   static const transparan = Colors.transparent;

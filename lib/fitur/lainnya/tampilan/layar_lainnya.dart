@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
+import '../../../aplikasi/konfigurasi_debug.dart';
 import '../../../komponen/komponen_funda.dart';
 import '../../../tema/token.dart';
 import '../../kategori/tampilan/layar_daftar_kategori.dart';
@@ -18,8 +19,8 @@ class LayarLainnya extends StatelessWidget {
       anak: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Kartu Info Pengembang (hanya di mode debug)
-          if (kDebugMode) ...[
+          // Kartu Info Pengembang (hanya bila flag debug UI aktif)
+          if (kDebugMode && aktifkanFiturDebugUi) ...[
             PetakBento.ukuran2x1(
               tint: TintPetakBento.biru,
               padaKetuk: () => context.push('/galeri'),

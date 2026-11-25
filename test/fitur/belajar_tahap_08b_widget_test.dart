@@ -15,6 +15,7 @@ import 'package:funda/fitur/belajar/model/pembaca_konten.dart';
 import 'package:funda/fitur/belajar/tampilan/layar_belajar.dart';
 import 'package:funda/fitur/belajar/tampilan/layar_kuis_modul.dart';
 import 'package:funda/fitur/belajar/tampilan/layar_pemutar_pelajaran.dart';
+import 'package:funda/komponen/indikator_memuat.dart';
 import 'package:funda/perhitungan/perhitungan_belajar.dart';
 import 'package:funda/tema/tema.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -88,6 +89,7 @@ void main() {
             ProviderScope(
               overrides: [
                 penyediaBasisData.overrideWithValue(db),
+                penyediaTanpaAnimasi.overrideWithValue(true),
                 penyediaFotoData.overrideWith(
                   (ref) => Future.value(FotoDataPengguna.kosong()),
                 ),
@@ -196,6 +198,7 @@ void main() {
             ProviderScope(
               overrides: [
                 penyediaBasisData.overrideWithValue(db),
+                penyediaTanpaAnimasi.overrideWithValue(true),
                 penyediaFotoData.overrideWith(
                   (ref) => Future.value(
                     FotoDataPengguna.kosong().copyWith(jumlahUtangAktif: 1),
@@ -303,6 +306,7 @@ void main() {
             ProviderScope(
               overrides: [
                 penyediaBasisData.overrideWithValue(db),
+                penyediaTanpaAnimasi.overrideWithValue(true),
                 penyediaFotoData.overrideWith(
                   (ref) => Future.value(fotoDataTerkunci),
                 ),
@@ -326,9 +330,11 @@ void main() {
           final teksModul = find.text('Utang & Cicilan');
           expect(teksModul, findsOneWidget);
 
-          // Scroll ke modul Utang & Cicilan
+          // Ketuk kartu modul Utang & Cicilan untuk membuka lembar detail modul
           await tester.ensureVisible(teksModul);
           await tester.pump();
+          await tester.tap(teksModul);
+          await pompaHinggaAda(tester, find.text('Aku tidak punya ini'));
 
           // Verifikasi tombol "Aku tidak punya ini" muncul
           final tombolPernyataan = find.text('Aku tidak punya ini');
@@ -336,7 +342,9 @@ void main() {
 
           // Ketuk tombol pernyataan
           await tester.ensureVisible(tombolPernyataan);
+          await tester.pump();
           await tester.tap(tombolPernyataan);
+          await tester.pump();
           await tester.pump();
 
           // Verifikasi pernyataan tersimpan di database
@@ -434,6 +442,7 @@ void main() {
             ProviderScope(
               overrides: [
                 penyediaBasisData.overrideWithValue(db),
+                penyediaTanpaAnimasi.overrideWithValue(true),
                 penyediaFotoData.overrideWith(
                   (ref) => Future.value(FotoDataPengguna.kosong()),
                 ),
@@ -561,6 +570,7 @@ void main() {
             ProviderScope(
               overrides: [
                 penyediaBasisData.overrideWithValue(db),
+                penyediaTanpaAnimasi.overrideWithValue(true),
                 penyediaFotoData.overrideWith(
                   (ref) => Future.value(fotoDataKeduanyaBelum),
                 ),
@@ -578,6 +588,11 @@ void main() {
             ),
           );
           await tester.pump();
+          await tester.tap(find.text('Utang & Cicilan'));
+          await pompaHinggaAda(
+            tester,
+            find.textContaining('Selesaikan Modul 3 dulu.'),
+          );
           expect(find.textContaining('Selesaikan Modul 3 dulu.'), findsWidgets);
           expect(
             find.textContaining('catat utang atau cicilanmu di menu Utang'),
@@ -602,6 +617,7 @@ void main() {
             ProviderScope(
               overrides: [
                 penyediaBasisData.overrideWithValue(db),
+                penyediaTanpaAnimasi.overrideWithValue(true),
                 penyediaFotoData.overrideWith(
                   (ref) => Future.value(fotoDataHanyaModul3Belum),
                 ),
@@ -619,6 +635,11 @@ void main() {
             ),
           );
           await tester.pump();
+          await tester.tap(find.text('Utang & Cicilan'));
+          await pompaHinggaAda(
+            tester,
+            find.textContaining('Selesaikan Modul 3 dulu.'),
+          );
           expect(find.textContaining('Selesaikan Modul 3 dulu.'), findsWidgets);
           expect(find.textContaining('Lalu catat utang'), findsNothing);
           expect(find.textContaining('Catat utang'), findsNothing);
@@ -653,6 +674,7 @@ void main() {
             ProviderScope(
               overrides: [
                 penyediaBasisData.overrideWithValue(db),
+                penyediaTanpaAnimasi.overrideWithValue(true),
                 penyediaFotoData.overrideWith(
                   (ref) => Future.value(fotoDataHanyaUtangBelum),
                 ),
@@ -670,6 +692,8 @@ void main() {
             ),
           );
           await tester.pump();
+          await tester.tap(find.text('Utang & Cicilan'));
+          await pompaHinggaAda(tester, find.text(pesanTanpaLalu));
           expect(find.text(pesanTanpaLalu), findsWidgets);
           expect(find.text('Aku tidak punya ini'), findsWidgets);
           await bongkarWidget(tester);
@@ -695,6 +719,7 @@ void main() {
             ProviderScope(
               overrides: [
                 penyediaBasisData.overrideWithValue(db),
+                penyediaTanpaAnimasi.overrideWithValue(true),
                 penyediaFotoData.overrideWith(
                   (ref) => Future.value(FotoDataPengguna.kosong()),
                 ),

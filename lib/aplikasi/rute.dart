@@ -11,6 +11,7 @@ import '../fitur/cadangan/tampilan/layar_cadangan.dart';
 import '../fitur/catatan/tampilan/layar_catatan.dart';
 import '../fitur/dompet/tampilan/layar_daftar_dompet.dart';
 import '../fitur/galeri/tampilan/layar_galeri.dart';
+import 'konfigurasi_debug.dart';
 import '../fitur/kategori/tampilan/layar_daftar_kategori.dart';
 import '../fitur/kantong/tampilan/layar_daftar_kantong.dart';
 import '../fitur/kekayaan_bersih/tampilan/layar_kekayaan_bersih.dart';
@@ -226,8 +227,8 @@ final ruteFunda = GoRouter(
       builder: (context, state) => const LayarSandbox(),
     ),
 
-    // Rute Galeri Komponen (hanya tersedia di mode debug)
-    if (kDebugMode)
+    // Rute Galeri Komponen (hanya tersedia bila flag debug UI dan kDebugMode aktif)
+    if (kDebugMode && aktifkanFiturDebugUi)
       GoRoute(
         parentNavigatorKey: _kunciNavigatorAkar,
         path: '/galeri',

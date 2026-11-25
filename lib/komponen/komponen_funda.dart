@@ -7,3 +7,5 @@ export 'tombol_funda.dart';
 export 'disclaimer_langkah_dunia_nyata.dart';
 export 'animasi_funda.dart';
 export 'efek_perayaan.dart';
+export 'ilustrasi_funda.dart';
+export 'teks_animasi_kata.dart';

@@ -4,155 +4,114 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../komponen/komponen_funda.dart';
 import '../../../tema/token.dart';
 import '../kontroler/penyedia_belajar.dart';
+import '../model/pembaca_konten.dart';
 
-/// Widget teks kaya yang otomatis mendeteksi istilah {{nama_istilah}}
-/// dan menjadikannya teks bergaris bawah putus-putus yang membuka dialog penjelasan kamus.
-class TeksDenganIstilah extends ConsumerWidget {
+/// Bagian teks hasil penguraian sintaks `{{istilah}}` dan `**tebal**`.
+class SegmenTeksIstilah {
   final String teks;
-  final TextStyle? gaya;
-  final TextAlign rataTeks;
+  final bool tebal;
+  final String? kunciIstilah;
 
-  const TeksDenganIstilah({
-    super.key,
+  const SegmenTeksIstilah({
     required this.teks,
-    this.gaya,
-    this.rataTeks = TextAlign.justify,
+    this.tebal = false,
+    this.kunciIstilah,
   });
+}
 
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final kamusAsync = ref.watch(penyediaKamus);
-    final mapKamus = kamusAsync.value ?? {};
+/// Mengurai string materi yang mengandung penanda `{{istilah}}` dan `**tebal**`.
+List<SegmenTeksIstilah> uraiSegmenTeksIstilah(String sumber) {
+  final hasil = <SegmenTeksIstilah>[];
+  final regexIstilah = RegExp(r'\{\{([^}]+)\}\}');
+  var posisiTerakhir = 0;
 
-    final spans = <InlineSpan>[];
-    final regex = RegExp(r'\{\{([^}]+)\}\}');
-    var posisiTerakhir = 0;
-
-    for (final match in regex.allMatches(teks)) {
-      if (match.start > posisiTerakhir) {
-        final teksBiasa = teks.substring(posisiTerakhir, match.start);
-        spans.addAll(_uraiFormatTebal(teksBiasa, gaya));
-      }
-
-      final istilahKunci = match.group(1)!;
-      final istilahObj = mapKamus[istilahKunci.toLowerCase().trim()];
-
-      spans.add(
-        TextSpan(
-          text: istilahKunci,
-          style: (gaya ?? const TextStyle()).copyWith(
-            fontWeight: FontWeight.w600,
-            color: WarnaFunda.utama,
-            decoration: TextDecoration.underline,
-            decorationStyle: TextDecorationStyle.dashed,
-          ),
-          recognizer: TapGestureRecognizer()
-            ..onTap = () {
-              if (istilahObj != null) {
-                _tampilkanDialogKamus(
-                  context,
-                  istilahObj.istilah,
-                  istilahObj.arti,
-                  istilahObj.contohRupiah,
-                );
-              } else {
-                _tampilkanDialogKamus(
-                  context,
-                  istilahKunci,
-                  'Istilah keuangan.',
-                  '',
-                );
-              }
-            },
-        ),
-      );
-
-      posisiTerakhir = match.end;
-    }
-
-    if (posisiTerakhir < teks.length) {
-      final sisa = teks.substring(posisiTerakhir);
-      spans.addAll(_uraiFormatTebal(sisa, gaya));
-    }
-
-    return Text.rich(
-      TextSpan(children: spans),
-      textAlign: rataTeks,
-      style:
-          gaya ??
-          const TextStyle(fontSize: 16, height: 1.5, color: WarnaFunda.teks),
-    );
-  }
-
-  List<InlineSpan> _uraiFormatTebal(String teks, TextStyle? dasar) {
-    final spans = <InlineSpan>[];
+  void tambahTeksBiasa(String bagian) {
     final regTebal = RegExp(r'\*\*([^*]+)\*\*');
     var idx = 0;
-
-    for (final m in regTebal.allMatches(teks)) {
+    for (final m in regTebal.allMatches(bagian)) {
       if (m.start > idx) {
-        spans.add(TextSpan(text: teks.substring(idx, m.start), style: dasar));
+        hasil.add(SegmenTeksIstilah(teks: bagian.substring(idx, m.start)));
       }
-      spans.add(
-        TextSpan(
-          text: m.group(1),
-          style: (dasar ?? const TextStyle()).copyWith(
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      );
+      hasil.add(SegmenTeksIstilah(teks: m.group(1)!, tebal: true));
       idx = m.end;
     }
-    if (idx < teks.length) {
-      spans.add(TextSpan(text: teks.substring(idx), style: dasar));
+    if (idx < bagian.length) {
+      hasil.add(SegmenTeksIstilah(teks: bagian.substring(idx)));
     }
-    return spans;
   }
 
-  void _tampilkanDialogKamus(
-    BuildContext context,
-    String istilah,
-    String arti,
-    String contohRupiah,
-  ) {
-    showDialog(
-      context: context,
-      builder: (ctx) {
-        return AlertDialog(
-          backgroundColor: WarnaFunda.permukaan,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(SudutFunda.kartu),
-          ),
-          title: Row(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(SpasiFunda.s),
-                decoration: BoxDecoration(
-                  color: WarnaFunda.utamaTipis,
-                  borderRadius: BorderRadius.circular(SudutFunda.kecil),
-                ),
-                child: const Icon(
-                  Icons.menu_book,
-                  color: WarnaFunda.utama,
-                  size: 20,
-                ),
+  for (final match in regexIstilah.allMatches(sumber)) {
+    if (match.start > posisiTerakhir) {
+      tambahTeksBiasa(sumber.substring(posisiTerakhir, match.start));
+    }
+    final kunci = match.group(1)!;
+    hasil.add(SegmenTeksIstilah(teks: kunci, kunciIstilah: kunci));
+    posisiTerakhir = match.end;
+  }
+
+  if (posisiTerakhir < sumber.length) {
+    tambahTeksBiasa(sumber.substring(posisiTerakhir));
+  }
+
+  return hasil;
+}
+
+/// Mengembalikan teks polos tanpa markah `{{...}}` atau `**...**` untuk pembaca layar.
+String bersihkanMarkahIstilah(String sumber) {
+  return uraiSegmenTeksIstilah(sumber).map((s) => s.teks).join();
+}
+
+/// Membuka dialog penjelasan kamus untuk istilah tertentu.
+void tampilkanDialogKamusIstilah(
+  BuildContext context,
+  String kunciIstilah,
+  Map<String, IstilahKamus> mapKamus,
+) {
+  final istilahObj = mapKamus[kunciIstilah.toLowerCase().trim()];
+  final judul = istilahObj?.istilah ?? kunciIstilah;
+  final arti = istilahObj?.arti ?? 'Istilah keuangan.';
+  final contohRupiah = istilahObj?.contohRupiah ?? '';
+
+  showDialog<void>(
+    context: context,
+    builder: (ctx) {
+      return AlertDialog(
+        backgroundColor: WarnaFunda.permukaan,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(SudutFunda.petak),
+        ),
+        title: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(SpasiFunda.s),
+              decoration: BoxDecoration(
+                color: WarnaFunda.utamaTipis,
+                borderRadius: BorderRadius.circular(SudutFunda.kecil),
               ),
-              const SizedBox(width: SpasiFunda.s),
-              Expanded(child: TeksFunda.judulBagian(istilah)),
-            ],
-          ),
-          content: Column(
+              child: const Icon(
+                Icons.menu_book,
+                color: WarnaFunda.utama,
+                size: 20,
+              ),
+            ),
+            const SizedBox(width: SpasiFunda.s),
+            Expanded(child: TeksFunda.judulBagian(judul)),
+          ],
+        ),
+        content: SingleChildScrollView(
+          child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              TeksFunda.isi(arti, rataTeks: TextAlign.justify),
+              TeksFunda.isi(arti, rataTeks: TextAlign.start),
               if (contohRupiah.isNotEmpty) ...[
                 const SizedBox(height: SpasiFunda.m),
                 Container(
+                  width: double.infinity,
                   padding: const EdgeInsets.all(SpasiFunda.m),
                   decoration: BoxDecoration(
                     color: WarnaFunda.tintNetral,
-                    borderRadius: BorderRadius.circular(SudutFunda.kecil),
+                    borderRadius: BorderRadius.circular(SudutFunda.kartu),
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -164,7 +123,7 @@ class TeksDenganIstilah extends ConsumerWidget {
                       const SizedBox(height: SpasiFunda.xs),
                       TeksFunda.isiKecil(
                         contohRupiah,
-                        rataTeks: TextAlign.justify,
+                        rataTeks: TextAlign.start,
                       ),
                     ],
                   ),
@@ -172,14 +131,74 @@ class TeksDenganIstilah extends ConsumerWidget {
               ],
             ],
           ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(ctx),
-              child: const TeksFunda.label('Mengerti', warna: WarnaFunda.utama),
-            ),
-          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: const TeksFunda.label('Mengerti', warna: WarnaFunda.utama),
+          ),
+        ],
+      );
+    },
+  );
+}
+
+/// Widget teks kaya yang otomatis mendeteksi istilah `{{nama_istilah}}`
+/// dan menjadikannya teks bergaris bawah putus-putus yang membuka dialog penjelasan kamus.
+class TeksDenganIstilah extends ConsumerWidget {
+  final String teks;
+  final TextStyle? gaya;
+  final TextAlign rataTeks;
+
+  const TeksDenganIstilah({
+    super.key,
+    required this.teks,
+    this.gaya,
+    this.rataTeks = TextAlign.start,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final kamusAsync = ref.watch(penyediaKamus);
+    final mapKamus = kamusAsync.value ?? const <String, IstilahKamus>{};
+    final gayaDasar =
+        gaya ??
+        TipografiFunda.isi.copyWith(
+          fontSize: 16,
+          height: 1.6,
+          color: WarnaFunda.teks,
         );
-      },
+
+    final segmen = uraiSegmenTeksIstilah(teks);
+    final spans = segmen.map((bagian) {
+      if (bagian.kunciIstilah != null) {
+        final kunci = bagian.kunciIstilah!;
+        return TextSpan(
+          text: bagian.teks,
+          style: gayaDasar.copyWith(
+            fontWeight: FontWeight.w600,
+            color: WarnaFunda.utama,
+            decoration: TextDecoration.underline,
+            decorationStyle: TextDecorationStyle.dashed,
+          ),
+          recognizer: TapGestureRecognizer()
+            ..onTap = () =>
+                tampilkanDialogKamusIstilah(context, kunci, mapKamus),
+        );
+      }
+      if (bagian.tebal) {
+        return TextSpan(
+          text: bagian.teks,
+          style: gayaDasar.copyWith(fontWeight: FontWeight.w700),
+        );
+      }
+      return TextSpan(text: bagian.teks, style: gayaDasar);
+    }).toList();
+
+    return Text.rich(
+      TextSpan(children: spans),
+      textAlign: rataTeks,
+      style: gayaDasar,
     );
   }
 }

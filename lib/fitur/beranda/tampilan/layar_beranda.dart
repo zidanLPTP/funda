@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
+import '../../../aplikasi/konfigurasi_debug.dart';
 import '../../../data/penyedia_data.dart';
 import '../../../komponen/komponen_funda.dart';
 import '../../../komponen/pembantu_ikon.dart';
@@ -75,8 +76,8 @@ class LayarBeranda extends ConsumerWidget {
       anak: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Banner Pengembang (Akses ke Galeri Komponen, hanya muncul di mode debug)
-          if (kDebugMode) ...[
+          // Banner Pengembang (hanya muncul bila flag debug UI aktif)
+          if (kDebugMode && aktifkanFiturDebugUi) ...[
             GestureDetector(
               onTap: () => context.push('/galeri'),
               child: Container(

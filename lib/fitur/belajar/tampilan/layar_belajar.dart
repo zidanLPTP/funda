@@ -6,8 +6,10 @@ import '../../../komponen/komponen_funda.dart';
 import '../../../perhitungan/perhitungan_belajar.dart';
 import '../../../tema/token.dart';
 import '../kontroler/penyedia_belajar.dart';
+import 'lembar_detail_modul.dart';
 
-/// Layar utama Tab Belajar (Peta Tingkat -> Modul -> Pelajaran).
+/// Layar utama Tab Belajar bergaya editorial micro-learning:
+/// kartu sorotan terbelah dua di atas, aksi utama pil gelap, dan kartu modul ramping.
 class LayarBelajar extends ConsumerWidget {
   const LayarBelajar({super.key});
 
@@ -51,56 +53,47 @@ class LayarBelajar extends ConsumerWidget {
                 children: [
                   const TeksFunda.judulLayar('Belajar Finansial'),
                   const SizedBox(height: SpasiFunda.xs),
-                  const TeksFunda.isi(
+                  const TeksFunda.isiKecil(
                     'Kuasai fondasi uangmu langkah demi langkah melalui praktik nyata.',
                     warna: WarnaFunda.teksRedup,
                   ),
                   const SizedBox(height: SpasiFunda.l),
 
-                  // Kartu Saran Personalisasi / Tes Awal
-                  _bangunKartuSaranPersonalisasi(context, ref),
+                  // Kartu Sorotan Atas Terbelah Dua (Split Card) + Tombol Pil Gelap
+                  _KartuSorotanAtas(daftarItemModul: daftarItemModul),
 
-                  // Tingkat Pemula
-                  _bangunBagianTingkat(
-                    context,
-                    ref,
-                    judul: 'Tingkat Pemula',
-                    keterangan:
-                        'Fondasi penting arus kas, tabungan, dan dana darurat.',
-                    warnaAksen: WarnaFunda.utama,
-                    warnaTint: WarnaFunda.tintHijau,
-                    daftarModul: modulPemula,
-                  ),
+                  if (modulPemula.isNotEmpty) ...[
+                    _BagianTingkatBelajar(
+                      judul: 'Tingkat Pemula',
+                      keterangan:
+                          'Fondasi penting arus kas, tabungan, dan dana darurat.',
+                      warnaAksen: WarnaFunda.utama,
+                      daftarModul: modulPemula,
+                    ),
+                    const SizedBox(height: SpasiFunda.xl),
+                  ],
 
-                  const SizedBox(height: SpasiFunda.xl),
+                  if (modulMenengah.isNotEmpty) ...[
+                    _BagianTingkatBelajar(
+                      judul: 'Tingkat Menengah',
+                      keterangan:
+                          'Perlindungan aset, manajemen kredit, dan investasi dasar.',
+                      warnaAksen: WarnaFunda.sifatKebutuhan,
+                      daftarModul: modulMenengah,
+                    ),
+                    const SizedBox(height: SpasiFunda.xl),
+                  ],
 
-                  // Tingkat Menengah
-                  _bangunBagianTingkat(
-                    context,
-                    ref,
-                    judul: 'Tingkat Menengah',
-                    keterangan:
-                        'Perlindungan aset, manajemen kredit, dan investasi dasar.',
-                    warnaAksen: WarnaFunda.sifatKebutuhan,
-                    warnaTint: WarnaFunda.tintBiru,
-                    daftarModul: modulMenengah,
-                  ),
-
-                  const SizedBox(height: SpasiFunda.xl),
-
-                  // Tingkat Lanjutan
-                  _bangunBagianTingkat(
-                    context,
-                    ref,
-                    judul: 'Tingkat Lanjutan',
-                    keterangan:
-                        'Perencanaan jangka panjang, KPR, dan kebebasan finansial.',
-                    warnaAksen: WarnaFunda.sifatKeinginan,
-                    warnaTint: WarnaFunda.tintUngu,
-                    daftarModul: modulLanjutan,
-                  ),
-
-                  const SizedBox(height: SpasiFunda.xxl),
+                  if (modulLanjutan.isNotEmpty) ...[
+                    _BagianTingkatBelajar(
+                      judul: 'Tingkat Lanjutan',
+                      keterangan:
+                          'Perencanaan jangka panjang, KPR, dan kebebasan finansial.',
+                      warnaAksen: WarnaFunda.sifatKeinginan,
+                      daftarModul: modulLanjutan,
+                    ),
+                    const SizedBox(height: SpasiFunda.xxl),
+                  ],
                 ],
               ),
             );
@@ -109,16 +102,225 @@ class LayarBelajar extends ConsumerWidget {
       ),
     );
   }
+}
 
-  Widget _bangunBagianTingkat(
-    BuildContext context,
-    WidgetRef ref, {
+class _KartuSorotanAtas extends ConsumerWidget {
+  final List<ItemPetaModul> daftarItemModul;
+
+  const _KartuSorotanAtas({required this.daftarItemModul});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final profilAsync = ref.watch(penyediaStreamProfilKeuangan);
+    final rekomendasiAsync = ref.watch(penyediaDaftarRekomendasiModul);
+    final pernyataanAsync = ref.watch(penyediaStreamPernyataan);
+
+    final dilewati = pernyataanAsync.asData?.value['profil_dilewati'] == 'true';
+
+    return profilAsync.when(
+      data: (profil) {
+        if (profil == null && !dilewati) {
+          return _bangunSplitCard(
+            context,
+            kunciKartu: const Key('kartu_sorotan_tes_awal'),
+            jenisIlustrasi: JenisIlustrasiFunda.kompas,
+            warnaAksenIlustrasi: WarnaFunda.tombolGelap,
+            labelKecil: 'Mulai Dari Sini',
+            judul: 'Tes Awal 3 Menit',
+            deskripsi:
+                'Kenali kondisi keuanganmu agar modul pertama yang paling relevan langsung terbuka.',
+            teksTombol: 'Mulai Tes Awal',
+            padaTekan: () => context.push('/belajar/tes-awal'),
+          );
+        }
+
+        return rekomendasiAsync.when(
+          data: (daftar) {
+            if (daftar.isNotEmpty) {
+              final rek = daftar.first;
+              final itemPeta = daftarItemModul
+                  .where((m) => m.modul.id == rek.modul.id)
+                  .firstOrNull;
+              final pelBerikutnya = itemPeta?.daftarPelajaran
+                  .where((p) => p.$2.status != StatusBelajar.terkunci)
+                  .map((p) => p.$1)
+                  .firstOrNull;
+              final tema = temaVisualUntukModul(rek.modul.id);
+              final isTersedia = rek.modul.tersedia;
+
+              return _bangunSplitCard(
+                context,
+                kunciKartu: const Key('kartu_sorotan_rekomendasi'),
+                jenisIlustrasi: tema.ilustrasi,
+                warnaAksenIlustrasi: tema.aksen,
+                labelKecil: rek.judulAlasan,
+                judul: rek.modul.judul,
+                deskripsi: rek.deskripsiAlasan,
+                teksTombol: isTersedia
+                    ? (pelBerikutnya != null
+                          ? 'Lanjut Belajar'
+                          : 'Buka Modul Ini')
+                    : 'Segera Hadir',
+                padaTekan: isTersedia
+                    ? () {
+                        if (pelBerikutnya != null) {
+                          context.push(
+                            '/belajar/pelajaran/${rek.modul.id}/${pelBerikutnya.id}',
+                          );
+                        } else if (rek.statusModul.ruteAksi != null) {
+                          context.push(rek.statusModul.ruteAksi!);
+                        } else {
+                          tampilkanLembarDetailModul(
+                            context,
+                            modulId: rek.modul.id,
+                          );
+                        }
+                      }
+                    : null,
+              );
+            }
+
+            // Fallback bila daftar rekomendasi kosong tetapi ada pelajaran aktif
+            final itemAktif = _cariPelajaranAktifPertama();
+            if (itemAktif == null) return const SizedBox.shrink();
+            final (modulAktif, pelAktif) = itemAktif;
+            final tema = temaVisualUntukModul(modulAktif.id);
+
+            return _bangunSplitCard(
+              context,
+              kunciKartu: const Key('kartu_sorotan_lanjut'),
+              jenisIlustrasi: tema.ilustrasi,
+              warnaAksenIlustrasi: tema.aksen,
+              labelKecil: modulAktif.judul,
+              judul: pelAktif.judul,
+              deskripsi:
+                  'Lanjutkan langkah belajar hari ini (${pelAktif.durasiMenit} menit).',
+              teksTombol: 'Lanjut Belajar',
+              padaTekan: () => context.push(
+                '/belajar/pelajaran/${modulAktif.id}/${pelAktif.id}',
+              ),
+            );
+          },
+          loading: () => const SizedBox.shrink(),
+          error: (_, _) => const SizedBox.shrink(),
+        );
+      },
+      loading: () => const SizedBox.shrink(),
+      error: (_, _) => const SizedBox.shrink(),
+    );
+  }
+
+  (dynamic, dynamic)? _cariPelajaranAktifPertama() {
+    for (final item in daftarItemModul) {
+      if (!item.modul.tersedia || item.modul.id == 'mulai_tes_awal') continue;
+      for (final (pel, st) in item.daftarPelajaran) {
+        if (st.status == StatusBelajar.sedang ||
+            st.status == StatusBelajar.terbuka) {
+          return (item.modul, pel);
+        }
+      }
+    }
+    return null;
+  }
+
+  Widget _bangunSplitCard(
+    BuildContext context, {
+    required Key kunciKartu,
+    required JenisIlustrasiFunda jenisIlustrasi,
+    required Color warnaAksenIlustrasi,
+    required String labelKecil,
     required String judul,
-    required String keterangan,
-    required Color warnaAksen,
-    required Color warnaTint,
-    required List<ItemPetaModul> daftarModul,
+    required String deskripsi,
+    required String teksTombol,
+    required VoidCallback? padaTekan,
   }) {
+    final teksBesar = MediaQuery.textScalerOf(context).scale(1) >= 1.5;
+
+    return Container(
+      key: kunciKartu,
+      margin: const EdgeInsets.only(bottom: SpasiFunda.xl),
+      decoration: BoxDecoration(
+        color: WarnaFunda.permukaan,
+        borderRadius: BorderRadius.circular(SudutFunda.petak),
+        border: Border.all(color: WarnaFunda.garis, width: 1.0),
+      ),
+      clipBehavior: Clip.antiAlias,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          IntrinsicHeight(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                if (!teksBesar)
+                  Expanded(
+                    flex: 38,
+                    child: Container(
+                      color: WarnaFunda.mintCerah,
+                      padding: const EdgeInsets.all(SpasiFunda.m),
+                      child: Center(
+                        child: IlustrasiGeometrisFunda(
+                          jenis: jenisIlustrasi,
+                          warnaAksen: warnaAksenIlustrasi,
+                          ukuran: 88,
+                        ),
+                      ),
+                    ),
+                  ),
+                Expanded(
+                  flex: 62,
+                  child: Padding(
+                    padding: const EdgeInsets.all(SpasiFunda.l),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        TeksFunda.catatan(labelKecil, warna: WarnaFunda.utama),
+                        const SizedBox(height: SpasiFunda.xs),
+                        TeksFunda.judulBagian(judul),
+                        const SizedBox(height: SpasiFunda.xs),
+                        TeksFunda.isiKecil(
+                          deskripsi,
+                          warna: WarnaFunda.teksRedup,
+                          rataTeks: TextAlign.start,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(
+              SpasiFunda.l,
+              0,
+              SpasiFunda.l,
+              SpasiFunda.l,
+            ),
+            child: TombolFunda.pilGelap(teks: teksTombol, padaTekan: padaTekan),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _BagianTingkatBelajar extends StatelessWidget {
+  final String judul;
+  final String keterangan;
+  final Color warnaAksen;
+  final List<ItemPetaModul> daftarModul;
+
+  const _BagianTingkatBelajar({
+    required this.judul,
+    required this.keterangan,
+    required this.warnaAksen,
+    required this.daftarModul,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -133,916 +335,136 @@ class LayarBelajar extends ConsumerWidget {
               ),
             ),
             const SizedBox(width: SpasiFunda.s),
-            TeksFunda.judulBagian(judul),
+            Expanded(child: TeksFunda.judulBagian(judul)),
           ],
         ),
         const SizedBox(height: SpasiFunda.xs),
         TeksFunda.catatan(keterangan, warna: WarnaFunda.teksRedup),
         const SizedBox(height: SpasiFunda.m),
-        ...daftarModul.map(
-          (item) => _bangunKartuModul(
-            context,
-            ref,
-            item,
-            warnaAksenTingkat: warnaAksen,
-            warnaTintTingkat: warnaTint,
-          ),
-        ),
+        ...daftarModul.map((item) => _KartuModulRamping(item: item)),
       ],
     );
   }
+}
 
-  Widget _bangunKartuModul(
-    BuildContext context,
-    WidgetRef ref,
-    ItemPetaModul item, {
-    required Color warnaAksenTingkat,
-    required Color warnaTintTingkat,
-  }) {
+class _KartuModulRamping extends ConsumerWidget {
+  final ItemPetaModul item;
+
+  const _KartuModulRamping({required this.item});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
     final modul = item.modul;
     final profilSudahAda =
         ref.watch(penyediaStreamProfilKeuangan).asData?.value != null;
+    final tema = temaVisualUntukModul(modul.id);
+    final isTersedia = modul.tersedia;
     final statusModul = (modul.id == 'mulai_tes_awal' && profilSudahAda)
         ? const HasilStatusBelajar(
             status: StatusBelajar.selesai,
             apaYangKurang: [],
           )
         : item.statusModul;
-    final isTersedia = modul.tersedia;
     final modulTerkunci = statusModul.status == StatusBelajar.terkunci;
 
+    final jumlahSelesai = item.daftarPelajaran
+        .where((p) => p.$2.status == StatusBelajar.selesai)
+        .length;
+    final totalPelajaran = item.daftarPelajaran.length;
+
+    final String teksProgres;
+    if (modul.id == 'mulai_tes_awal') {
+      teksProgres = profilSudahAda ? 'Profil tersimpan' : '0/1';
+    } else if (!isTersedia) {
+      teksProgres = 'Segera Hadir';
+    } else {
+      teksProgres = '$jumlahSelesai/$totalPelajaran';
+    }
+
+    final judulKartu = (modul.id == 'mulai_tes_awal' && profilSudahAda)
+        ? 'Profil keuanganmu sudah tersimpan'
+        : modul.judul;
+
     return Container(
+      key: (modul.id == 'mulai_tes_awal' && profilSudahAda)
+          ? const Key('kartu_modul_0_tersimpan')
+          : Key('kartu_modul_${modul.id}'),
       margin: const EdgeInsets.only(bottom: SpasiFunda.m),
       decoration: BoxDecoration(
-        color: modulTerkunci ? WarnaFunda.tintNetral : WarnaFunda.permukaan,
+        color: WarnaFunda.permukaan,
         borderRadius: BorderRadius.circular(SudutFunda.petak),
-        border: Border.all(color: WarnaFunda.garis),
-        boxShadow: const [
-          BoxShadow(
-            color: WarnaFunda.bayanganKartu,
-            blurRadius: 10,
-            offset: Offset(0, 3),
-          ),
-        ],
+        border: Border.all(color: WarnaFunda.garis, width: 1.0),
       ),
-      padding: const EdgeInsets.all(SpasiFunda.m),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                padding: const EdgeInsets.all(SpasiFunda.s),
-                decoration: BoxDecoration(
-                  color: warnaTintTingkat,
-                  borderRadius: BorderRadius.circular(SudutFunda.kartu),
-                ),
-                child: Icon(
-                  modul.id == 'mulai_tes_awal'
-                      ? LucideIcons.compass
-                      : (statusModul.status == StatusBelajar.selesai
-                            ? LucideIcons.checkCircle2
-                            : LucideIcons.bookOpen),
-                  size: 20,
-                  color: warnaAksenTingkat,
-                ),
+      clipBehavior: Clip.antiAlias,
+      child: Material(
+        color: WarnaFunda.transparan,
+        child: InkWell(
+          onTap: () => tampilkanLembarDetailModul(context, modulId: modul.id),
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(minHeight: 80),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: SpasiFunda.l,
+                vertical: SpasiFunda.m,
               ),
-              const SizedBox(width: SpasiFunda.m),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        TeksFunda.catatan(
-                          'Modul ${modul.urutan}',
-                          warna: warnaAksenTingkat,
-                        ),
-                        const SizedBox(width: SpasiFunda.s),
-                        if (!isTersedia ||
-                            statusModul.status == StatusBelajar.selesai)
-                          _bangunBadgeStatusModul(
-                            isTersedia,
-                            statusModul.status,
+                        Text(
+                          judulKartu,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: TipografiFunda.label.copyWith(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            color: WarnaFunda.teks,
                           ),
+                        ),
+                        const SizedBox(height: SpasiFunda.s),
+                        Wrap(
+                          spacing: SpasiFunda.s,
+                          runSpacing: SpasiFunda.xs,
+                          crossAxisAlignment: WrapCrossAlignment.center,
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: SpasiFunda.s,
+                                vertical: 3,
+                              ),
+                              decoration: BoxDecoration(
+                                color: WarnaFunda.tintNetral,
+                                borderRadius: BorderRadius.circular(
+                                  SudutFunda.pil,
+                                ),
+                              ),
+                              child: TeksFunda.catatan(
+                                teksProgres,
+                                warna: WarnaFunda.teksRedup,
+                              ),
+                            ),
+                            if (modulTerkunci && isTersedia)
+                              const TeksFunda.catatan(
+                                'Perlu data',
+                                warna: WarnaFunda.peringatan,
+                              ),
+                          ],
+                        ),
                       ],
                     ),
-                    const SizedBox(height: SpasiFunda.xs),
-                    TeksFunda.judulBagian(modul.judul),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: SpasiFunda.s),
-          TeksFunda.isiKecil(
-            modul.deskripsiSingkat,
-            warna: WarnaFunda.teksRedup,
-          ),
-
-          if (modul.id == 'utang_cicilan') ...[
-            ref
-                .watch(penyediaStreamPernyataan)
-                .when(
-                  data: (pernyataan) {
-                    if (pernyataan['tidak_punya_utang'] == 'true') {
-                      return Container(
-                        margin: const EdgeInsets.only(top: SpasiFunda.s),
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: SpasiFunda.m,
-                          vertical: SpasiFunda.s,
-                        ),
-                        decoration: BoxDecoration(
-                          color: WarnaFunda.tintBiru,
-                          borderRadius: BorderRadius.circular(SudutFunda.kecil),
-                        ),
-                        child: Row(
-                          children: [
-                            const Icon(
-                              LucideIcons.info,
-                              size: 16,
-                              color: WarnaFunda.utama,
-                            ),
-                            const SizedBox(width: SpasiFunda.s),
-                            const Expanded(
-                              child: TeksFunda.catatan(
-                                'Kamu menyatakan tidak punya utang.',
-                                warna: WarnaFunda.teks,
-                              ),
-                            ),
-                            TextButton(
-                              style: TextButton.styleFrom(
-                                minimumSize: const Size(48, 36),
-                              ),
-                              onPressed: () async {
-                                final repo = ref.read(
-                                  penyediaPernyataanRepositori,
-                                );
-                                await repo.hapusPernyataan('tidak_punya_utang');
-                                ref.invalidate(penyediaFotoData);
-                              },
-                              child: const TeksFunda.catatan(
-                                'Cabut pernyataan',
-                                warna: WarnaFunda.utama,
-                              ),
-                            ),
-                          ],
-                        ),
-                      );
-                    }
-                    return const SizedBox.shrink();
-                  },
-                  loading: () => const SizedBox.shrink(),
-                  error: (err, stack) => const SizedBox.shrink(),
-                ),
-          ],
-
-          if (modul.id == 'penghasilan_tambahan') ...[
-            ref
-                .watch(penyediaStreamPernyataan)
-                .when(
-                  data: (pernyataan) {
-                    if (pernyataan['baru_satu_sumber'] == 'true') {
-                      return Container(
-                        margin: const EdgeInsets.only(top: SpasiFunda.s),
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: SpasiFunda.m,
-                          vertical: SpasiFunda.s,
-                        ),
-                        decoration: BoxDecoration(
-                          color: WarnaFunda.tintBiru,
-                          borderRadius: BorderRadius.circular(SudutFunda.kecil),
-                        ),
-                        child: Row(
-                          children: [
-                            const Icon(
-                              LucideIcons.info,
-                              size: 16,
-                              color: WarnaFunda.utama,
-                            ),
-                            const SizedBox(width: SpasiFunda.s),
-                            const Expanded(
-                              child: TeksFunda.catatan(
-                                'Kamu menyatakan baru punya satu sumber penghasilan.',
-                                warna: WarnaFunda.teks,
-                              ),
-                            ),
-                            TextButton(
-                              style: TextButton.styleFrom(
-                                minimumSize: const Size(48, 36),
-                              ),
-                              onPressed: () async {
-                                final repo = ref.read(
-                                  penyediaPernyataanRepositori,
-                                );
-                                await repo.hapusPernyataan('baru_satu_sumber');
-                                ref.invalidate(penyediaFotoData);
-                              },
-                              child: const TeksFunda.catatan(
-                                'Cabut pernyataan',
-                                warna: WarnaFunda.utama,
-                              ),
-                            ),
-                          ],
-                        ),
-                      );
-                    }
-                    return const SizedBox.shrink();
-                  },
-                  loading: () => const SizedBox.shrink(),
-                  error: (err, stack) => const SizedBox.shrink(),
-                ),
-          ],
-
-          if (modul.id == 'keuangan_usaha_kecil') ...[
-            ref
-                .watch(penyediaStreamPernyataan)
-                .when(
-                  data: (pernyataan) {
-                    if (pernyataan['belum_punya_usaha'] == 'true') {
-                      return Container(
-                        margin: const EdgeInsets.only(top: SpasiFunda.s),
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: SpasiFunda.m,
-                          vertical: SpasiFunda.s,
-                        ),
-                        decoration: BoxDecoration(
-                          color: WarnaFunda.tintBiru,
-                          borderRadius: BorderRadius.circular(SudutFunda.kecil),
-                        ),
-                        child: Row(
-                          children: [
-                            const Icon(
-                              LucideIcons.info,
-                              size: 16,
-                              color: WarnaFunda.utama,
-                            ),
-                            const SizedBox(width: SpasiFunda.s),
-                            const Expanded(
-                              child: TeksFunda.catatan(
-                                'Kamu menyatakan belum punya usaha saat ini.',
-                                warna: WarnaFunda.teks,
-                              ),
-                            ),
-                            TextButton(
-                              style: TextButton.styleFrom(
-                                minimumSize: const Size(48, 36),
-                              ),
-                              onPressed: () async {
-                                final repo = ref.read(
-                                  penyediaPernyataanRepositori,
-                                );
-                                await repo.hapusPernyataan('belum_punya_usaha');
-                                ref.invalidate(penyediaFotoData);
-                              },
-                              child: const TeksFunda.catatan(
-                                'Cabut pernyataan',
-                                warna: WarnaFunda.utama,
-                              ),
-                            ),
-                          ],
-                        ),
-                      );
-                    }
-                    return const SizedBox.shrink();
-                  },
-                  loading: () => const SizedBox.shrink(),
-                  error: (err, stack) => const SizedBox.shrink(),
-                ),
-          ],
-
-          if (modul.id == 'mulai_tes_awal') ...[
-            const SizedBox(height: SpasiFunda.m),
-            if (profilSudahAda)
-              Container(
-                key: const Key('kartu_modul_0_tersimpan'),
-                padding: const EdgeInsets.all(SpasiFunda.m),
-                decoration: BoxDecoration(
-                  color: WarnaFunda.tintHijau,
-                  borderRadius: BorderRadius.circular(SudutFunda.kartu),
-                  border: Border.all(color: WarnaFunda.batasHijau),
-                ),
-                child: const Row(
-                  children: [
-                    Icon(
-                      LucideIcons.checkCircle2,
-                      size: 20,
-                      color: WarnaFunda.pemasukan,
-                    ),
-                    SizedBox(width: SpasiFunda.s),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          TeksFunda.label(
-                            'Profil keuanganmu sudah tersimpan',
-                            warna: WarnaFunda.pemasukan,
-                          ),
-                          SizedBox(height: 2),
-                          TeksFunda.catatan(
-                            'Kamu bisa memperbaruinya di Lainnya -> Pengaturan.',
-                            warna: WarnaFunda.teksRedup,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              )
-            else
-              TombolFunda(
-                key: const Key('tombol_buka_tes_awal'),
-                teks: 'Buka Tes Awal',
-                lebarPenuh: true,
-                padaTekan: () => context.push('/belajar/tes-awal'),
-              ),
-          ] else if (!isTersedia) ...[
-            const SizedBox(height: SpasiFunda.m),
-            Container(
-              padding: const EdgeInsets.symmetric(
-                horizontal: SpasiFunda.m,
-                vertical: SpasiFunda.s,
-              ),
-              decoration: BoxDecoration(
-                color: WarnaFunda.tintNetral,
-                borderRadius: BorderRadius.circular(SudutFunda.kecil),
-              ),
-              child: const Row(
-                children: [
-                  Icon(LucideIcons.clock, size: 16, color: WarnaFunda.utama),
-                  SizedBox(width: SpasiFunda.s),
-                  Expanded(
-                    child: TeksFunda.catatan(
-                      'Segera hadir di kurikulum mendatang.',
-                      warna: WarnaFunda.teksRedup,
-                    ),
                   ),
+                  const SizedBox(width: SpasiFunda.l),
+                  // Satu ikon vektor garis berwarna cerah tanpa kotak latar belakang
+                  Icon(tema.ikonGaris, size: 30, color: tema.warnaIkon),
                 ],
               ),
             ),
-          ] else ...[
-            // Pesan singkat penjelas syarat di level modul bila seluruh modul terkunci
-            if (modulTerkunci && statusModul.apaYangKurang.isNotEmpty) ...[
-              const SizedBox(height: SpasiFunda.m),
-              _bangunKotakSyarat(
-                context,
-                ref,
-                daftarPesan: statusModul.apaYangKurang,
-                ruteAksi: statusModul.ruteAksi,
-                daftarAtauPernyataan: statusModul.daftarAtauPernyataan,
-              ),
-            ],
-            // Daftar Pelajaran di dalam modul aktif
-            const SizedBox(height: SpasiFunda.m),
-            const Divider(color: WarnaFunda.garis),
-            const SizedBox(height: SpasiFunda.s),
-            ...item.daftarPelajaran.asMap().entries.map((entry) {
-              final idx = entry.key;
-              final (pel, statusPel) = entry.value;
-              return _bangunBarisPelajaran(
-                context,
-                ref,
-                pel,
-                statusPel,
-                idx + 1,
-                modulTerkunci: modulTerkunci,
-                warnaAksenTingkat: warnaAksenTingkat,
-              );
-            }),
-
-            // Tombol Kuis Akhir Modul
-            const SizedBox(height: SpasiFunda.m),
-            _bangunTombolKuisModul(context, item),
-          ],
-        ],
-      ),
-    );
-  }
-
-  Widget _bangunBadgeStatusModul(bool tersedia, StatusBelajar status) {
-    if (!tersedia) {
-      return Container(
-        padding: const EdgeInsets.symmetric(
-          horizontal: SpasiFunda.s,
-          vertical: 2,
-        ),
-        decoration: BoxDecoration(
-          color: WarnaFunda.tintNetral,
-          borderRadius: BorderRadius.circular(SudutFunda.pil),
-        ),
-        child: const TeksFunda.catatan(
-          'Segera Hadir',
-          warna: WarnaFunda.teksRedup,
-        ),
-      );
-    }
-
-    Color warnaLatar;
-    Color warnaTeks;
-    String label;
-
-    switch (status) {
-      case StatusBelajar.selesai:
-        warnaLatar = WarnaFunda.tintHijau;
-        warnaTeks = WarnaFunda.pemasukan;
-        label = 'Selesai';
-        break;
-      case StatusBelajar.sedang:
-        warnaLatar = WarnaFunda.tintBiru;
-        warnaTeks = WarnaFunda.utama;
-        label = 'Sedang Berjalan';
-        break;
-      case StatusBelajar.terbuka:
-        warnaLatar = WarnaFunda.tintBiru;
-        warnaTeks = WarnaFunda.utama;
-        label = 'Terbuka';
-        break;
-      case StatusBelajar.terkunci:
-        warnaLatar = WarnaFunda.tintAmber;
-        warnaTeks = WarnaFunda.peringatan;
-        label = 'Terkunci';
-        break;
-    }
-
-    return Container(
-      padding: const EdgeInsets.symmetric(
-        horizontal: SpasiFunda.s,
-        vertical: 2,
-      ),
-      decoration: BoxDecoration(
-        color: warnaLatar,
-        borderRadius: BorderRadius.circular(SudutFunda.pil),
-      ),
-      child: TeksFunda.catatan(label, warna: warnaTeks),
-    );
-  }
-
-  Widget _bangunKotakSyarat(
-    BuildContext context,
-    WidgetRef ref, {
-    required List<String> daftarPesan,
-    String? ruteAksi,
-    List<String> daftarAtauPernyataan = const [],
-  }) {
-    return Container(
-      padding: const EdgeInsets.all(SpasiFunda.m),
-      decoration: BoxDecoration(
-        color: WarnaFunda.tintAmber,
-        borderRadius: BorderRadius.circular(SudutFunda.kartu),
-        border: Border.all(color: WarnaFunda.batasAmber),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Icon(
-                LucideIcons.info,
-                size: 16,
-                color: WarnaFunda.peringatan,
-              ),
-              const SizedBox(width: SpasiFunda.s),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: daftarPesan
-                      .map(
-                        (pesan) => Padding(
-                          padding: const EdgeInsets.only(bottom: 2),
-                          child: TeksFunda.catatan(
-                            pesan,
-                            warna: WarnaFunda.teks,
-                          ),
-                        ),
-                      )
-                      .toList(),
-                ),
-              ),
-            ],
-          ),
-          if (ruteAksi != null) ...[
-            const SizedBox(height: SpasiFunda.s),
-            SizedBox(
-              width: double.infinity,
-              child: OutlinedButton.icon(
-                style: OutlinedButton.styleFrom(
-                  minimumSize: const Size(48, 48),
-                  side: const BorderSide(color: WarnaFunda.utama),
-                  backgroundColor: WarnaFunda.permukaan,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(SudutFunda.pil),
-                  ),
-                ),
-                onPressed: () => context.push(ruteAksi),
-                icon: const Icon(
-                  LucideIcons.arrowRight,
-                  size: 16,
-                  color: WarnaFunda.utama,
-                ),
-                label: const TeksFunda.label(
-                  'Lengkapi Data Sekarang',
-                  warna: WarnaFunda.utama,
-                ),
-              ),
-            ),
-          ],
-          if (daftarAtauPernyataan.isNotEmpty) ...[
-            const SizedBox(height: SpasiFunda.xs),
-            SizedBox(
-              width: double.infinity,
-              child: TextButton(
-                style: TextButton.styleFrom(minimumSize: const Size(48, 48)),
-                onPressed: () async {
-                  final kunci = daftarAtauPernyataan.first;
-                  final repo = ref.read(penyediaPernyataanRepositori);
-                  final map = await repo.ambilSemuaPernyataan();
-                  final nilaiLama = map[kunci];
-                  if (nilaiLama == 'true') {
-                    await repo.hapusPernyataan(kunci);
-                  } else {
-                    await repo.simpanPernyataan(kunci, 'true');
-                  }
-                  ref.invalidate(penyediaFotoData);
-                },
-                child: const TeksFunda.catatan(
-                  'Aku tidak punya ini',
-                  warna: WarnaFunda.teksRedup,
-                ),
-              ),
-            ),
-          ],
-        ],
-      ),
-    );
-  }
-
-  Widget _bangunBarisPelajaran(
-    BuildContext context,
-    WidgetRef ref,
-    PelajaranKonten pel,
-    HasilStatusBelajar statusPel,
-    int nomorUrut, {
-    required bool modulTerkunci,
-    required Color warnaAksenTingkat,
-  }) {
-    final status = statusPel.status;
-    final isTerkunci = status == StatusBelajar.terkunci;
-    final tampilkanSyaratBaris =
-        isTerkunci && !modulTerkunci && statusPel.apaYangKurang.isNotEmpty;
-
-    return Opacity(
-      opacity: isTerkunci ? 0.72 : 1.0,
-      child: Container(
-        margin: const EdgeInsets.only(bottom: SpasiFunda.s),
-        padding: const EdgeInsets.all(SpasiFunda.m),
-        decoration: BoxDecoration(
-          color: isTerkunci ? WarnaFunda.tintNetral : WarnaFunda.permukaan,
-          borderRadius: BorderRadius.circular(SudutFunda.kartu),
-          border: Border.all(
-            color: status == StatusBelajar.sedang
-                ? warnaAksenTingkat
-                : WarnaFunda.garis,
-            width: status == StatusBelajar.sedang ? 1.5 : 1.0,
           ),
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                _bangunIkonStatusPelajaran(
-                  status,
-                  nomorUrut,
-                  warnaAksenTingkat: warnaAksenTingkat,
-                ),
-                const SizedBox(width: SpasiFunda.s),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      TeksFunda.label(pel.judul),
-                      const SizedBox(height: 2),
-                      TeksFunda.catatan(
-                        '${pel.durasiMenit} menit',
-                        warna: WarnaFunda.teksRedup,
-                      ),
-                    ],
-                  ),
-                ),
-                if (!isTerkunci)
-                  TombolFunda(
-                    teks: status == StatusBelajar.selesai
-                        ? 'Baca Ulang'
-                        : (status == StatusBelajar.sedang ? 'Lanjut' : 'Mulai'),
-                    padaTekan: () {
-                      context.push(
-                        '/belajar/pelajaran/${pel.modulId}/${pel.id}',
-                      );
-                    },
-                  ),
-              ],
-            ),
-
-            // Tampilan pesan penjelas syarat hanya bila modul sudah terbuka
-            if (tampilkanSyaratBaris) ...[
-              const SizedBox(height: SpasiFunda.s),
-              _bangunKotakSyarat(
-                context,
-                ref,
-                daftarPesan: statusPel.apaYangKurang,
-                ruteAksi: statusPel.ruteAksi,
-                daftarAtauPernyataan: statusPel.daftarAtauPernyataan,
-              ),
-            ],
-          ],
-        ),
       ),
-    );
-  }
-
-  Widget _bangunIkonStatusPelajaran(
-    StatusBelajar status,
-    int nomorUrut, {
-    required Color warnaAksenTingkat,
-  }) {
-    switch (status) {
-      case StatusBelajar.selesai:
-        return Container(
-          padding: const EdgeInsets.all(6),
-          decoration: const BoxDecoration(
-            color: WarnaFunda.tintHijau,
-            shape: BoxShape.circle,
-          ),
-          child: const Icon(
-            LucideIcons.check,
-            size: 16,
-            color: WarnaFunda.pemasukan,
-          ),
-        );
-      case StatusBelajar.sedang:
-        return Container(
-          padding: const EdgeInsets.all(6),
-          decoration: BoxDecoration(
-            color: WarnaFunda.tintBiru,
-            shape: BoxShape.circle,
-          ),
-          child: Icon(LucideIcons.play, size: 16, color: warnaAksenTingkat),
-        );
-      case StatusBelajar.terbuka:
-        return Container(
-          padding: const EdgeInsets.all(6),
-          decoration: const BoxDecoration(
-            color: WarnaFunda.tintBiru,
-            shape: BoxShape.circle,
-          ),
-          child: Icon(LucideIcons.bookOpen, size: 16, color: warnaAksenTingkat),
-        );
-      case StatusBelajar.terkunci:
-        return Container(
-          width: 28,
-          height: 28,
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-            color: WarnaFunda.permukaan,
-            shape: BoxShape.circle,
-            border: Border.all(color: WarnaFunda.garis),
-          ),
-          child: TeksFunda.catatan('$nomorUrut', warna: WarnaFunda.teksRedup),
-        );
-    }
-  }
-
-  Widget _bangunTombolKuisModul(BuildContext context, ItemPetaModul item) {
-    final modul = item.modul;
-    final semuaPelajaranSelesai = item.daftarPelajaran.every(
-      (p) => p.$2.status == StatusBelajar.selesai,
-    );
-    final kuis = modul.kuis;
-    if (kuis.jumlahSoal <= 0) return const SizedBox.shrink();
-
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(SpasiFunda.m),
-      decoration: BoxDecoration(
-        color: semuaPelajaranSelesai
-            ? WarnaFunda.utamaTipis
-            : WarnaFunda.tintNetral,
-        borderRadius: BorderRadius.circular(SudutFunda.kartu),
-        border: Border.all(
-          color: semuaPelajaranSelesai ? WarnaFunda.utama : WarnaFunda.garis,
-        ),
-      ),
-      child: Row(
-        children: [
-          Icon(
-            LucideIcons.helpCircle,
-            color: semuaPelajaranSelesai
-                ? WarnaFunda.utama
-                : WarnaFunda.teksRedup,
-          ),
-          const SizedBox(width: SpasiFunda.m),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                TeksFunda.label(
-                  'Kuis Akhir Modul (${kuis.jumlahSoal} Soal)',
-                  warna: semuaPelajaranSelesai
-                      ? WarnaFunda.utama
-                      : WarnaFunda.teksRedup,
-                ),
-                const SizedBox(height: 2),
-                TeksFunda.catatan(
-                  semuaPelajaranSelesai
-                      ? 'Uji pemahamanmu untuk menuntaskan modul ini (minimal 70%).'
-                      : 'Terbuka setelah seluruh pelajaran modul ini selesai.',
-                  warna: WarnaFunda.teksRedup,
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(width: SpasiFunda.s),
-          TombolFunda(
-            teks: 'Mulai Kuis',
-            padaTekan: semuaPelajaranSelesai
-                ? () {
-                    context.push('/belajar/kuis/${modul.id}');
-                  }
-                : null,
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _bangunKartuSaranPersonalisasi(BuildContext context, WidgetRef ref) {
-    final profilAsync = ref.watch(penyediaStreamProfilKeuangan);
-    final rekomendasiAsync = ref.watch(penyediaDaftarRekomendasiModul);
-    final pernyataanAsync = ref.watch(penyediaStreamPernyataan);
-    final petaAsync = ref.watch(penyediaPetaBelajar);
-
-    final dilewati = pernyataanAsync.asData?.value['profil_dilewati'] == 'true';
-
-    return profilAsync.when(
-      data: (profil) {
-        if (profil == null && !dilewati) {
-          // Banner ajakan ramah jika belum ada profil dan belum pernah melewati
-          return Container(
-            margin: const EdgeInsets.only(bottom: SpasiFunda.l),
-            padding: const EdgeInsets.all(SpasiFunda.l),
-            decoration: BoxDecoration(
-              color: WarnaFunda.tintHijau,
-              borderRadius: BorderRadius.circular(SudutFunda.petak),
-              border: Border.all(color: WarnaFunda.batasHijau, width: 1.2),
-              boxShadow: const [
-                BoxShadow(
-                  color: WarnaFunda.bayanganKartu,
-                  blurRadius: 10,
-                  offset: Offset(0, 3),
-                ),
-              ],
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(SpasiFunda.s),
-                      decoration: BoxDecoration(
-                        color: WarnaFunda.permukaan,
-                        borderRadius: BorderRadius.circular(SudutFunda.kartu),
-                      ),
-                      child: const Icon(
-                        LucideIcons.compass,
-                        color: WarnaFunda.utama,
-                        size: 20,
-                      ),
-                    ),
-                    const SizedBox(width: SpasiFunda.s),
-                    const Expanded(
-                      child: TeksFunda.label(
-                        'Saran Belajar Sesuai Kondisimu',
-                        warna: WarnaFunda.utama,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: SpasiFunda.s),
-                const TeksFunda.isiKecil(
-                  'Ikuti tes awal 3 menit untuk mengetahui topik mana yang paling pas buat kamu mulai duluan.',
-                ),
-                const SizedBox(height: SpasiFunda.m),
-                TombolFunda(
-                  teks: 'Mulai Tes Awal (Modul 0)',
-                  lebarPenuh: true,
-                  padaTekan: () => context.push('/belajar/tes-awal'),
-                ),
-              ],
-            ),
-          );
-        }
-
-        // Tampilkan maksimal 1 kartu sorotan rekomendasi ringkas di atas (tanpa badge bertumpuk)
-        return rekomendasiAsync.when(
-          data: (daftar) {
-            if (daftar.isEmpty) return const SizedBox();
-
-            final rek = daftar.first;
-            final isTersedia = rek.modul.tersedia;
-            final itemPeta = petaAsync.asData?.value
-                .where((m) => m.modul.id == rek.modul.id)
-                .firstOrNull;
-            final pelBerikutnya = itemPeta?.daftarPelajaran
-                .where((p) => p.$2.status != StatusBelajar.terkunci)
-                .map((p) => p.$1)
-                .firstOrNull;
-
-            return Container(
-              key: const Key('kartu_sorotan_rekomendasi'),
-              margin: const EdgeInsets.only(bottom: SpasiFunda.l),
-              padding: const EdgeInsets.all(SpasiFunda.l),
-              decoration: BoxDecoration(
-                color: WarnaFunda.tintBiru,
-                borderRadius: BorderRadius.circular(SudutFunda.petak),
-                border: Border.all(color: WarnaFunda.batasBiru, width: 1.2),
-                boxShadow: const [
-                  BoxShadow(
-                    color: WarnaFunda.bayanganKartu,
-                    blurRadius: 10,
-                    offset: Offset(0, 3),
-                  ),
-                ],
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.all(SpasiFunda.s),
-                        decoration: BoxDecoration(
-                          color: WarnaFunda.permukaan,
-                          borderRadius: BorderRadius.circular(SudutFunda.kartu),
-                        ),
-                        child: const Icon(
-                          LucideIcons.compass,
-                          size: 20,
-                          color: WarnaFunda.sifatKebutuhan,
-                        ),
-                      ),
-                      const SizedBox(width: SpasiFunda.s),
-                      Expanded(
-                        child: TeksFunda.catatan(
-                          'Rekomendasi Utama • ${rek.judulAlasan}',
-                          warna: WarnaFunda.sifatKebutuhan,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: SpasiFunda.s),
-                  TeksFunda.judulBagian(rek.modul.judul),
-                  const SizedBox(height: SpasiFunda.xs),
-                  TeksFunda.isiKecil(
-                    rek.deskripsiAlasan,
-                    warna: WarnaFunda.teksRedup,
-                  ),
-                  const SizedBox(height: SpasiFunda.m),
-                  TombolFunda(
-                    teks: isTersedia ? 'Buka Modul Ini' : 'Segera Hadir',
-                    lebarPenuh: true,
-                    padaTekan: isTersedia
-                        ? () {
-                            if (pelBerikutnya != null) {
-                              context.push(
-                                '/belajar/pelajaran/${rek.modul.id}/${pelBerikutnya.id}',
-                              );
-                            } else if (rek.statusModul.ruteAksi != null) {
-                              context.push(rek.statusModul.ruteAksi!);
-                            } else {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(
-                                    'Lengkapi syarat di modul ${rek.modul.judul} pada daftar di bawah.',
-                                  ),
-                                ),
-                              );
-                            }
-                          }
-                        : null,
-                  ),
-                ],
-              ),
-            );
-          },
-          loading: () => const SizedBox(),
-          error: (err, stack) => const SizedBox(),
-        );
-      },
-      loading: () => const SizedBox(),
-      error: (err, stack) => const SizedBox(),
     );
   }
 }

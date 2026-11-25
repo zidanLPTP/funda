@@ -48,7 +48,9 @@ Antarmuka tersusun dari **petak-petak (tile) membulat** berukuran beragam di ata
 |---|---|---|
 | `warnaUtama` | `#0F766E` | Tombol utama, tab aktif, tautan |
 | `warnaUtamaGelap` | `#0E5133` | Tekan/aktif, variasi hijau tua Funda |
+| `tombolGelap` | `#0B2E22` | Tombol aksi utama pil gelap kontras tinggi (Tab Belajar & Pemutar Pelajaran) |
 | `warnaUtamaTipis` | `#BDF5E8` | Latar lencana, sorotan lembut |
+| `mintCerah` | `#6FE0BA` | Blok warna cerah kartu sorotan atas Tab Belajar |
 | `latar` | `#F6FAF8` | Latar layar |
 | `permukaan` | `#FFFFFF` | Kartu putih bersih, lembar bawah |
 | `garis` | `#D8E3DF` | Pemisah, batas kartu |
@@ -107,7 +109,8 @@ Antarmuka tersusun dari **petak-petak (tile) membulat** berukuran beragam di ata
 | Label/tombol | 15 | SemiBold | 20 |
 | Catatan kaki | 12 | Regular | 16 |
 
-- **Isi materi pelajaran** memakai 16–17 dengan tinggi baris longgar (±1,6) untuk kenyamanan membaca.
+- **Isi materi pelajaran** memakai 16–17 dengan tinggi baris longgar (±1,6) serta perataan **rata kiri (`TextAlign.start`)** agar nyaman dibaca di layar ponsel tanpa celah antar-kata yang melebar.
+- Materi pemantik, konsep, kesimpulan contoh angka, dan tindak lanjut memanfaatkan animasi teks muncul kata per kata (`TeksAnimasiKata`) yang dapat diselesaikan instan dengan ketukan dan menghormati pengaturan `disableAnimations`.
 - **Angka uang** memakai angka rata-lebar (tabular) bila font mendukung agar kolom rapi.
 - Mendukung pembesaran teks sistem sampai 200% tanpa terpotong.
 
@@ -141,9 +144,10 @@ Antarmuka tersusun dari **petak-petak (tile) membulat** berukuran beragam di ata
 - Pelajaran terkunci memberi petunjuk cara membukanya, bukan hanya ikon gembok.
 
 ### Layar Pelajaran
-- Kartu geser dengan penanda kemajuan di atas. **Satu ide per kartu.**
-- Tombol "Lanjut" besar di bawah; tombol kembali selalu ada.
-- Istilah teknis ber-**garis bawah putus-putus** → ketuk untuk penjelasan singkat + contoh Rupiah.
+- Bilah atas ringkas: tombol tutup bulat (`×`) dengan border halus dan *progress bar* bersegmen tanpa badge tahapan atau label debug.
+- Kanvas ilustrasi vektor geometris (`IlustrasiGeometrisFunda`) berlatar warna solid pastel cerah di bagian atas kartu materi.
+- Area bacaan rata kiri (`TextAlign.start`) dengan ruang napas luas dan tombol pil gelap kontras tinggi (`TombolFunda.pilGelap`) di bagian bawah.
+- Istilah teknis ber-**garis bawah putus-putus** → ketuk untuk penjelasan singkat rata kiri + contoh Rupiah.
 
 ### Kartu Misi
 - Tampil menonjol di akhir pelajaran: judul tugas, apa yang akan dilakukan, perkiraan waktu.

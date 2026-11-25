@@ -15,7 +15,6 @@ import '../kontroler/penyedia_belajar.dart';
 import '../model/pembaca_konten.dart';
 import '../model/registri_misi.dart';
 import '../../transaksi/tampilan/layar_form_transaksi.dart';
-import 'komponen_teks_istilah.dart';
 
 /// Layar pemutar pelajaran kartu geser berurutan (Micro-learning Funda).
 class LayarPemutarPelajaran extends ConsumerStatefulWidget {
@@ -365,64 +364,71 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
     final totalLangkah = _hitungTotalLangkah();
     final fotoData =
         ref.watch(penyediaFotoData).value ?? FotoDataPengguna.kosong();
+    final temaVisual = temaVisualUntukModul(pel.modulId);
 
     return Scaffold(
-      backgroundColor: WarnaFunda.latar,
+      backgroundColor: WarnaFunda.permukaan,
       body: SafeArea(
         child: Column(
           children: [
-            // Header: Tombol Kembali + Penanda Kemajuan + Lencana Draf
+            // Bilah Atas Editorial: Tombol Tutup Bulat (X) + Progress Bar Bersegmen
             Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: SpasiFunda.m,
-                vertical: SpasiFunda.s,
+              padding: const EdgeInsets.fromLTRB(
+                SpasiFunda.l,
+                SpasiFunda.m,
+                SpasiFunda.l,
+                SpasiFunda.s,
               ),
               child: Row(
                 children: [
-                  IconButton(
-                    icon: const Icon(
-                      LucideIcons.arrowLeft,
-                      color: WarnaFunda.teks,
-                    ),
-                    onPressed: () => Navigator.pop(context),
-                    tooltip: 'Kembali',
-                  ),
-                  const SizedBox(width: SpasiFunda.xs),
-                  Expanded(
-                    child: ClipRRect(
+                  Semantics(
+                    button: true,
+                    label: 'Tutup pelajaran',
+                    child: InkWell(
+                      key: const Key('tombol_tutup_pelajaran'),
+                      onTap: () => Navigator.pop(context),
                       borderRadius: BorderRadius.circular(SudutFunda.pil),
-                      child: IndikatorMemuat.garis(
-                        nilai: (totalLangkah > 0)
-                            ? (_indeksLangkah + 1) / totalLangkah
-                            : 0.0,
-                        warnaLatar: WarnaFunda.garis,
-                        warna: WarnaFunda.utama,
-                        tinggi: 8,
+                      child: Container(
+                        width: 48,
+                        height: 48,
+                        decoration: BoxDecoration(
+                          color: WarnaFunda.permukaan,
+                          shape: BoxShape.circle,
+                          border: Border.all(color: WarnaFunda.garis),
+                        ),
+                        child: const Icon(
+                          LucideIcons.x,
+                          size: 20,
+                          color: WarnaFunda.teks,
+                        ),
                       ),
                     ),
                   ),
                   const SizedBox(width: SpasiFunda.m),
-                  TeksFunda.catatan(
-                    '${_indeksLangkah + 1}/$totalLangkah',
-                    warna: WarnaFunda.teksRedup,
-                  ),
-                  if (kDebugMode && pel.status == 'draf') ...[
-                    const SizedBox(width: SpasiFunda.s),
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 6,
-                        vertical: 2,
-                      ),
-                      decoration: BoxDecoration(
-                        color: WarnaFunda.tintAmber,
-                        borderRadius: BorderRadius.circular(SudutFunda.pil),
-                      ),
-                      child: const TeksFunda.catatan(
-                        'Draf',
-                        warna: WarnaFunda.peringatan,
-                      ),
+                  Expanded(
+                    child: Row(
+                      key: const Key('progress_bersegmen_pelajaran'),
+                      children: List.generate(totalLangkah, (idx) {
+                        final aktif = idx <= _indeksLangkah;
+                        return Expanded(
+                          child: Container(
+                            height: 6,
+                            margin: EdgeInsets.only(
+                              right: idx == totalLangkah - 1 ? 0 : 4,
+                            ),
+                            decoration: BoxDecoration(
+                              color: aktif
+                                  ? temaVisual.aksen
+                                  : WarnaFunda.segmenNonAktif,
+                              borderRadius: BorderRadius.circular(
+                                SudutFunda.pil,
+                              ),
+                            ),
+                          ),
+                        );
+                      }),
                     ),
-                  ],
+                  ),
                 ],
               ),
             ),
@@ -437,21 +443,22 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
               ),
             ),
 
-            // Tombol Aksi Lanjut di Bagian Bawah
+            // Tombol Pil Gelap Aksi Bawah Kontras Tinggi
             Padding(
-              padding: const EdgeInsets.all(SpasiFunda.m),
-              child: SizedBox(
-                width: double.infinity,
-                child: TombolFunda(
-                  key: const Key('tombol_lanjut'),
-                  teks: _indeksLangkah == totalLangkah - 1
-                      ? 'Selesai Belajar'
-                      : 'Lanjut',
-                  lebarPenuh: true,
-                  padaTekan: _cekApakahBisaLanjut(pel, fotoData)
-                      ? _lanjutkanKeLangkahBerikutnya
-                      : null,
-                ),
+              padding: const EdgeInsets.fromLTRB(
+                SpasiFunda.xl,
+                SpasiFunda.s,
+                SpasiFunda.xl,
+                SpasiFunda.l,
+              ),
+              child: TombolFunda.pilGelap(
+                key: const Key('tombol_lanjut'),
+                teks: _indeksLangkah == totalLangkah - 1
+                    ? 'Selesai Belajar'
+                    : 'Lanjut',
+                padaTekan: _cekApakahBisaLanjut(pel, fotoData)
+                    ? _lanjutkanKeLangkahBerikutnya
+                    : null,
               ),
             ),
           ],
@@ -499,45 +506,26 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
     kartuWidgets.add(
       _pembungkusKartu(
         judul: pel.judul,
+        headerVisual: KanvasIlustrasiPelajaran(modulId: pel.modulId),
+        pakaiKartuMembungkus: false,
         isi: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              padding: const EdgeInsets.all(SpasiFunda.l),
-              decoration: BoxDecoration(
-                color: WarnaFunda.tintHijau,
-                borderRadius: BorderRadius.circular(SudutFunda.kartu),
-                border: Border.all(color: WarnaFunda.batasHijau),
-              ),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(SpasiFunda.s),
-                    decoration: BoxDecoration(
-                      color: WarnaFunda.permukaan,
-                      borderRadius: BorderRadius.circular(SudutFunda.kecil),
-                    ),
-                    child: const Icon(
-                      LucideIcons.lightbulb,
-                      color: WarnaFunda.utama,
-                      size: 20,
-                    ),
-                  ),
-                  const SizedBox(width: SpasiFunda.m),
-                  Expanded(
-                    child: TeksFunda.isi(
-                      pel.pemantik,
-                      rataTeks: TextAlign.justify,
-                    ),
-                  ),
-                ],
+            TeksAnimasiKata(
+              teks: pel.pemantik,
+              dukungIstilah: false,
+              rataTeks: TextAlign.start,
+              gaya: TipografiFunda.isi.copyWith(
+                fontSize: 16,
+                height: 1.6,
+                color: WarnaFunda.teks,
               ),
             ),
             const SizedBox(height: SpasiFunda.l),
             const TeksFunda.isiKecil(
               'Mari kita bedah pelan-pelan melalui kartu konsep berikut ini.',
               warna: WarnaFunda.teksRedup,
+              rataTeks: TextAlign.start,
             ),
           ],
         ),
@@ -550,11 +538,17 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
       kartuWidgets.add(
         _pembungkusKartu(
           judul: k.judul,
-          isi: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              TeksDenganIstilah(teks: k.isi, rataTeks: TextAlign.justify),
-            ],
+          headerVisual: KanvasIlustrasiPelajaran(modulId: pel.modulId),
+          pakaiKartuMembungkus: false,
+          isi: TeksAnimasiKata(
+            teks: k.isi,
+            dukungIstilah: true,
+            rataTeks: TextAlign.start,
+            gaya: TipografiFunda.isi.copyWith(
+              fontSize: 16,
+              height: 1.6,
+              color: WarnaFunda.teks,
+            ),
           ),
         ),
       );
@@ -570,9 +564,9 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                padding: const EdgeInsets.all(SpasiFunda.m),
+                padding: const EdgeInsets.all(SpasiFunda.l),
                 decoration: BoxDecoration(
-                  color: WarnaFunda.permukaan,
+                  color: WarnaFunda.latar,
                   borderRadius: BorderRadius.circular(SudutFunda.kartu),
                   border: Border.all(color: WarnaFunda.garis),
                 ),
@@ -601,16 +595,17 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
                               : null,
                           children: [
                             Padding(
-                              padding: const EdgeInsets.symmetric(
-                                vertical: SpasiFunda.xs,
+                              padding: const EdgeInsets.only(
+                                top: SpasiFunda.xs,
+                                bottom: SpasiFunda.xs,
+                                right: SpasiFunda.s,
                               ),
                               child: Text(
                                 b.label,
-                                style: TextStyle(
+                                style: TipografiFunda.isiKecil.copyWith(
                                   fontWeight: isTebal
-                                      ? FontWeight.bold
-                                      : FontWeight.normal,
-                                  fontSize: 13,
+                                      ? FontWeight.w700
+                                      : FontWeight.w400,
                                   color: isTebal
                                       ? WarnaFunda.teks
                                       : WarnaFunda.teksRedup,
@@ -624,12 +619,14 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
                               child: Text(
                                 formatJumlah,
                                 textAlign: TextAlign.right,
-                                style: TextStyle(
+                                style: TipografiFunda.isiKecil.copyWith(
                                   fontWeight: isTebal
-                                      ? FontWeight.bold
-                                      : FontWeight.w500,
-                                  fontSize: 13,
+                                      ? FontWeight.w700
+                                      : FontWeight.w600,
                                   color: WarnaFunda.teks,
+                                  fontFeatures: const [
+                                    FontFeature.tabularFigures(),
+                                  ],
                                 ),
                               ),
                             ),
@@ -640,11 +637,15 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
                     if (contoh.kesimpulan.isNotEmpty) ...[
                       const SizedBox(height: SpasiFunda.m),
                       const Divider(color: WarnaFunda.garis),
-                      const SizedBox(height: SpasiFunda.xs),
-                      TeksFunda.isiKecil(
-                        contoh.kesimpulan,
-                        warna: WarnaFunda.teksRedup,
-                        rataTeks: TextAlign.justify,
+                      const SizedBox(height: SpasiFunda.s),
+                      TeksAnimasiKata(
+                        teks: contoh.kesimpulan,
+                        dukungIstilah: false,
+                        rataTeks: TextAlign.start,
+                        gaya: TipografiFunda.isiKecil.copyWith(
+                          height: 1.6,
+                          color: WarnaFunda.teksRedup,
+                        ),
                       ),
                     ],
                   ],
@@ -755,7 +756,7 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
                   child: TeksFunda.isiKecil(
                     soal.penjelasan,
                     warna: WarnaFunda.teks,
-                    rataTeks: TextAlign.justify,
+                    rataTeks: TextAlign.start,
                   ),
                 ),
               ],
@@ -776,42 +777,17 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
       kartuWidgets.add(
         _pembungkusKartu(
           judul: 'Langkah Kecil Berikutnya',
-          isi: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                padding: const EdgeInsets.all(SpasiFunda.l),
-                decoration: BoxDecoration(
-                  color: WarnaFunda.tintHijau,
-                  borderRadius: BorderRadius.circular(SudutFunda.kartu),
-                  border: Border.all(color: WarnaFunda.batasHijau),
-                ),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(SpasiFunda.s),
-                      decoration: BoxDecoration(
-                        color: WarnaFunda.permukaan,
-                        borderRadius: BorderRadius.circular(SudutFunda.kecil),
-                      ),
-                      child: const Icon(
-                        LucideIcons.lightbulb,
-                        color: WarnaFunda.utama,
-                        size: 20,
-                      ),
-                    ),
-                    const SizedBox(width: SpasiFunda.m),
-                    Expanded(
-                      child: TeksFunda.isi(
-                        pel.tindakLanjut!,
-                        rataTeks: TextAlign.justify,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
+          headerVisual: KanvasIlustrasiPelajaran(modulId: pel.modulId),
+          pakaiKartuMembungkus: false,
+          isi: TeksAnimasiKata(
+            teks: pel.tindakLanjut!,
+            dukungIstilah: false,
+            rataTeks: TextAlign.start,
+            gaya: TipografiFunda.isi.copyWith(
+              fontSize: 16,
+              height: 1.6,
+              color: WarnaFunda.teks,
+            ),
           ),
         ),
       );
@@ -1951,7 +1927,38 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
     );
   }
 
-  Widget _pembungkusKartu({required String judul, required Widget isi}) {
+  Widget _pembungkusKartu({
+    required String judul,
+    required Widget isi,
+    Widget? headerVisual,
+    bool pakaiKartuMembungkus = true,
+  }) {
+    final konten = Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        if (headerVisual != null) ...[
+          headerVisual,
+          const SizedBox(height: SpasiFunda.xl),
+        ],
+        TeksFunda.judulLayar(judul),
+        const SizedBox(height: SpasiFunda.m),
+        isi,
+        const SizedBox(height: SpasiFunda.m),
+      ],
+    );
+
+    if (!pakaiKartuMembungkus) {
+      return SingleChildScrollView(
+        padding: const EdgeInsets.fromLTRB(
+          SpasiFunda.xl,
+          SpasiFunda.s,
+          SpasiFunda.xl,
+          SpasiFunda.m,
+        ),
+        child: konten,
+      );
+    }
+
     return SingleChildScrollView(
       padding: const EdgeInsets.symmetric(horizontal: SpasiFunda.marginLayar),
       child: Container(
@@ -1961,23 +1968,8 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
           color: WarnaFunda.permukaan,
           borderRadius: BorderRadius.circular(SudutFunda.petak),
           border: Border.all(color: WarnaFunda.garis),
-          boxShadow: const [
-            BoxShadow(
-              color: WarnaFunda.bayanganKartu,
-              blurRadius: 12,
-              offset: Offset(0, 4),
-            ),
-          ],
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            TeksFunda.judulLayar(judul),
-            const SizedBox(height: SpasiFunda.m),
-            isi,
-            const SizedBox(height: SpasiFunda.m),
-          ],
-        ),
+        child: konten,
       ),
     );
   }

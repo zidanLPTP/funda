@@ -8,6 +8,7 @@ import 'package:drift/native.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:funda/komponen/indikator_memuat.dart';
 import 'package:funda/komponen/tombol_funda.dart';
 import 'package:funda/data/basis_data.dart';
 import 'package:funda/data/penyedia_data.dart';
@@ -89,6 +90,7 @@ void main() {
           ProviderScope(
             overrides: [
               penyediaBasisData.overrideWithValue(db),
+              penyediaTanpaAnimasi.overrideWithValue(true),
               penyediaFotoData.overrideWith(
                 (ref) => Future.value(fotoDataTerkunci),
               ),
@@ -111,15 +113,20 @@ void main() {
           find.text('Penghasilan Tambahan & Freelance'),
         );
 
-        // Modul 8 harus terlihat
+        // Modul 8 harus terlihat lalu ketuk untuk membuka lembar detail modul
         expect(find.text('Penghasilan Tambahan & Freelance'), findsOneWidget);
+        await tester.tap(find.text('Penghasilan Tambahan & Freelance'));
+        await pompaHinggaAda(tester, find.text('Aku tidak punya ini'));
 
         // Cari tombol "Aku tidak punya ini"
         final tombolPernyataan = find.text('Aku tidak punya ini');
         expect(tombolPernyataan, findsOneWidget);
 
         // Tap tombol pernyataan
+        await tester.ensureVisible(tombolPernyataan);
+        await tester.pump();
         await tester.tap(tombolPernyataan);
+        await tester.pump();
         await tester.pump();
 
         // Verifikasi pernyataan tersimpan di database
@@ -461,6 +468,7 @@ void main() {
           ProviderScope(
             overrides: [
               penyediaBasisData.overrideWithValue(db),
+              penyediaTanpaAnimasi.overrideWithValue(true),
               penyediaFotoData.overrideWith(
                 (ref) => Future.value(FotoDataPengguna.kosong()),
               ),
@@ -641,6 +649,7 @@ void main() {
           ProviderScope(
             overrides: [
               penyediaBasisData.overrideWithValue(db),
+              penyediaTanpaAnimasi.overrideWithValue(true),
               penyediaFotoData.overrideWith(
                 (ref) => Future.value(FotoDataPengguna.kosong()),
               ),

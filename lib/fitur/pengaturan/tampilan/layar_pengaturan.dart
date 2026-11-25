@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
+import '../../../aplikasi/konfigurasi_debug.dart';
 import '../../../komponen/komponen_funda.dart';
 import '../../../layanan/pengingat/penyedia_layanan_pengingat.dart';
 import '../../../perhitungan/perhitungan_tagihan.dart';
@@ -367,7 +368,7 @@ class _LayarPengaturanState extends ConsumerState<LayarPengaturan> {
               ),
             ),
 
-            if (kDebugMode) ...[
+            if (kDebugMode && aktifkanFiturDebugUi) ...[
               const SizedBox(height: SpasiFunda.m),
               PetakBento(
                 anak: Column(

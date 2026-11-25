@@ -12,6 +12,7 @@ import 'package:funda/fitur/belajar/kontroler/penyedia_belajar.dart';
 import 'package:funda/fitur/belajar/model/pembaca_konten.dart';
 import 'package:funda/fitur/belajar/tampilan/layar_kuis_modul.dart';
 import 'package:funda/fitur/belajar/tampilan/layar_pemutar_pelajaran.dart';
+import 'package:funda/komponen/indikator_memuat.dart';
 import 'package:funda/perhitungan/perhitungan_belajar.dart';
 import 'package:funda/perhitungan/perhitungan_umpan_balik_belajar.dart';
 import 'package:funda/tema/tema.dart';
@@ -85,6 +86,7 @@ void main() {
             ProviderScope(
               overrides: [
                 penyediaBasisData.overrideWithValue(db),
+                penyediaTanpaAnimasi.overrideWithValue(true),
                 penyediaFotoData.overrideWith(
                   (ref) => Future.value(FotoDataPengguna.kosong()),
                 ),
@@ -221,6 +223,7 @@ void main() {
             ProviderScope(
               overrides: [
                 penyediaBasisData.overrideWithValue(db),
+                penyediaTanpaAnimasi.overrideWithValue(true),
                 penyediaFotoData.overrideWith(
                   (ref) => Future.value(FotoDataPengguna.kosong()),
                 ),
@@ -305,6 +308,7 @@ void main() {
             ProviderScope(
               overrides: [
                 penyediaBasisData.overrideWithValue(db),
+                penyediaTanpaAnimasi.overrideWithValue(true),
                 penyediaFotoData.overrideWith(
                   (ref) => Future.value(FotoDataPengguna.kosong()),
                 ),
@@ -386,6 +390,7 @@ void main() {
             ProviderScope(
               overrides: [
                 penyediaBasisData.overrideWithValue(db),
+                penyediaTanpaAnimasi.overrideWithValue(true),
                 penyediaFotoData.overrideWith(
                   (ref) => Future.value(FotoDataPengguna.kosong()),
                 ),

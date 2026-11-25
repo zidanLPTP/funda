@@ -15,6 +15,7 @@ import 'package:funda/fitur/belajar/model/pembaca_konten.dart';
 import 'package:funda/fitur/belajar/tampilan/layar_belajar.dart';
 import 'package:funda/fitur/belajar/tampilan/layar_kuis_modul.dart';
 import 'package:funda/fitur/belajar/tampilan/layar_pemutar_pelajaran.dart';
+import 'package:funda/komponen/indikator_memuat.dart';
 import 'package:funda/perhitungan/perhitungan_belajar.dart';
 import 'package:funda/tema/tema_funda.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -91,6 +92,7 @@ void main() {
             ProviderScope(
               overrides: [
                 penyediaBasisData.overrideWithValue(db),
+                penyediaTanpaAnimasi.overrideWithValue(true),
                 penyediaFotoData.overrideWith(
                   (ref) => Future.value(fotoDataTerkunci),
                 ),
@@ -112,12 +114,19 @@ void main() {
           await pompaHinggaAda(tester, find.text('Keuangan Usaha Kecil'));
           expect(find.text('Keuangan Usaha Kecil'), findsOneWidget);
 
+          // Ketuk kartu modul untuk membuka lembar detail modul
+          await tester.tap(find.text('Keuangan Usaha Kecil'));
+          await pompaHinggaAda(tester, find.text('Aku tidak punya ini'));
+
           // Cari tombol "Aku tidak punya ini"
           final tombolPernyataan = find.text('Aku tidak punya ini');
           expect(tombolPernyataan, findsOneWidget);
 
           // Tap tombol pernyataan
+          await tester.ensureVisible(tombolPernyataan);
+          await tester.pump();
           await tester.tap(tombolPernyataan);
+          await tester.pump();
           await tester.pump();
 
           // Verifikasi pernyataan tersimpan di database
@@ -192,6 +201,7 @@ void main() {
             ProviderScope(
               overrides: [
                 penyediaBasisData.overrideWithValue(db),
+                penyediaTanpaAnimasi.overrideWithValue(true),
                 penyediaFotoData.overrideWith(
                   (ref) => Future.value(fotoDataTerkunci),
                 ),
@@ -217,6 +227,13 @@ void main() {
           expect(
             find.text('Proteksi Keluarga & Warisan Dasar'),
             findsOneWidget,
+          );
+
+          // Ketuk kartu modul untuk memeriksa pesan gerbang pada lembar detail modul
+          await tester.tap(find.text('Proteksi Keluarga & Warisan Dasar'));
+          await pompaHinggaAda(
+            tester,
+            find.textContaining('Selesaikan Modul 10 (Proteksi Dasar) dulu'),
           );
 
           // Verifikasi pesan gerbang muncul
@@ -257,6 +274,7 @@ void main() {
             ProviderScope(
               overrides: [
                 penyediaBasisData.overrideWithValue(db),
+                penyediaTanpaAnimasi.overrideWithValue(true),
                 penyediaFotoData.overrideWith(
                   (ref) => Future.value(fotoDataTerbuka),
                 ),
@@ -308,6 +326,7 @@ void main() {
             ProviderScope(
               overrides: [
                 penyediaBasisData.overrideWithValue(db),
+                penyediaTanpaAnimasi.overrideWithValue(true),
                 penyediaFotoData.overrideWith(
                   (ref) => Future.value(FotoDataPengguna.kosong()),
                 ),
@@ -599,6 +618,7 @@ void main() {
             ProviderScope(
               overrides: [
                 penyediaBasisData.overrideWithValue(db),
+                penyediaTanpaAnimasi.overrideWithValue(true),
                 penyediaFotoData.overrideWith(
                   (ref) => Future.value(FotoDataPengguna.kosong()),
                 ),
@@ -704,6 +724,7 @@ void main() {
             ProviderScope(
               overrides: [
                 penyediaBasisData.overrideWithValue(db),
+                penyediaTanpaAnimasi.overrideWithValue(true),
                 penyediaFotoData.overrideWith(
                   (ref) => Future.value(FotoDataPengguna.kosong()),
                 ),
@@ -808,6 +829,7 @@ void main() {
             ProviderScope(
               overrides: [
                 penyediaBasisData.overrideWithValue(db),
+                penyediaTanpaAnimasi.overrideWithValue(true),
                 penyediaFotoData.overrideWith(
                   (ref) => Future.value(FotoDataPengguna.kosong()),
                 ),
@@ -921,6 +943,7 @@ void main() {
             ProviderScope(
               overrides: [
                 penyediaBasisData.overrideWithValue(db),
+                penyediaTanpaAnimasi.overrideWithValue(true),
                 penyediaFotoData.overrideWith(
                   (ref) => Future.value(FotoDataPengguna.kosong()),
                 ),
@@ -1074,6 +1097,7 @@ void main() {
             ProviderScope(
               overrides: [
                 penyediaBasisData.overrideWithValue(db),
+                penyediaTanpaAnimasi.overrideWithValue(true),
                 penyediaFotoData.overrideWith(
                   (ref) => Future.value(FotoDataPengguna.kosong()),
                 ),

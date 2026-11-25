@@ -206,15 +206,15 @@ void main() {
         );
         await tester.pump();
 
-        // Langkah 0 (Pemantik): bebas badge tahap 'Pemantik' dan rata kanan-kiri
+        // Langkah 0 (Pemantik): bebas badge tahap 'Pemantik' dan rata kiri
         expect(find.text('Pemantik'), findsNothing);
         expect(find.text('Pelajaran Uji Justify'), findsOneWidget);
         final widgetPemantik = tester.widget<Text>(
           find.text('Ini teks pemantik yang harus rata kanan-kiri.'),
         );
-        expect(widgetPemantik.textAlign, equals(TextAlign.justify));
+        expect(widgetPemantik.textAlign, equals(TextAlign.start));
 
-        // Langkah 1 (Kartu Inti): teks istilah rata kanan-kiri + popup kamus rata kanan-kiri
+        // Langkah 1 (Kartu Inti): teks istilah rata kiri + popup kamus rata kiri
         await tester.tap(find.byKey(const Key('tombol_lanjut')));
         await pompaHinggaAda(tester, find.byType(TeksDenganIstilah));
         // Tunggu rebuild provider FutureProvider penyediaKamus agar istilahObj terisi
@@ -229,9 +229,9 @@ void main() {
               )
               .first,
         );
-        expect(richText.textAlign, equals(TextAlign.justify));
+        expect(richText.textAlign, equals(TextAlign.start));
 
-        // Ketuk istilah di kartu untuk cek popup kamus justify
+        // Ketuk istilah di kartu untuk cek popup kamus
         TapGestureRecognizer? pengenalKetuk;
         (richText.text as TextSpan).visitChildren((child) {
           if (child is TextSpan &&
@@ -247,7 +247,7 @@ void main() {
         final artiKamus = tester.widget<Text>(
           find.text('Aliran uang masuk dan keluar.'),
         );
-        expect(artiKamus.textAlign, equals(TextAlign.justify));
+        expect(artiKamus.textAlign, equals(TextAlign.start));
         await tester.tap(find.text('Mengerti'));
         await tester.pump();
 
@@ -458,6 +458,12 @@ void main() {
         );
         expect(find.text('Saran untuk kamu'), findsNothing);
         expect(find.text('Tidak boleh tampil bertumpuk.'), findsNothing);
+
+        // Ketuk modul Dana Darurat untuk memeriksa detail modul di lembar bawah
+        await tester.ensureVisible(find.text('Dana Darurat').last);
+        await tester.pump();
+        await tester.tap(find.text('Dana Darurat').last);
+        await pompaHinggaAda(tester, find.text('Selesaikan syarat Modul 3.'));
 
         // Bebas ikon gembok di baris pelajaran
         expect(find.byIcon(LucideIcons.lock), findsNothing);

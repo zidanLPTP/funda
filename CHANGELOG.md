@@ -5,25 +5,21 @@ Format penulisan mengacu pada standar Keep a Changelog dan penamaan commit Funda
 
 ---
 
-## [1.1.0] - 2026-11-25 — Tahap 13B: Pembaruan Visual Colorful Bento+Card, UX Belajar, Tutorial & Optimasi Ukuran APK
+## [1.1.0] - 2026-11-25 — Tahap 13B & 13C: Redesain Editorial Anti-Slop, Animasi Kata, UX Belajar, Tutorial, Bersih Debug UI & Optimasi APK
 
-Tahap 13B menghadirkan penyegaran visual, perbaikan alur belajar dan tes awal dari hasil uji langsung di perangkat Android fisik, serta optimasi ukuran APK rilis:
-- **Penyegaran Visual Colorful Bento + Card & Bebas Ikon Bintang:**
-  - Memperkuat saturasi tint pastel (`tintHijau`, `tintBiru`, `tintUngu`, `tintAmber`, `tintNetral`, `tintMawar`) lengkap dengan pasangan warna batas dan bayangan lembut terukur (`bayanganKartu`), sambil mempertahankan kontras teks >= 4.5:1 di `lib/tema/token.dart`.
-  - Menyelaraskan warna seluruh ikon pada layar utama (Beranda, Catatan, Belajar, Lainnya, Dompet, Anggaran, Tujuan, Utang, Tagihan, Sandbox, Pengaturan) di dalam wadah membulat ber-tint serasi tanpa ikon abu-abu polos maupun warna hard-coded di luar `lib/tema/`.
-  - Menghapus seluruh penggunaan ikon bintang (`star` / `sparkles`) di `lib/`.
-- **Tutorial Awal Interaktif Beranda:**
-  - Menambahkan lapisan sorotan tutorial interaktif 4 langkah (`LapisanTutorialBeranda`) yang muncul otomatis saat pertama kali memasuki Beranda, menghormati `disableAnimations`, dan menyimpan status pada `tabel_pengaturan` (`tutorial_beranda_selesai`).
-  - Menambahkan pintasan **"Ulangi Tutorial Aplikasi"** pada `LayarPengaturan`.
-- **Perombakan UX Tab Belajar, Modul 0, & Pemutar Pelajaran:**
-  - Membersihkan tumpukan badge `"Saran untuk kamu"` menjadi maksimal 1 kartu sorotan rekomendasi di bagian atas Tab Belajar dan menghilangkan banjir ikon gembok di baris pelajaran terkunci.
-  - Menyederhanakan Modul 0 menjadi kartu ringkas `"Profil keuanganmu sudah tersimpan"` setelah profil diisi, disertai pintasan **"Perbarui Profil Keuangan"** di Pengaturan.
-  - Menghapus chip badge penanda tahapan di `LayarPemutarPelajaran`, meratakan teks materi dan popup kamus ke `TextAlign.justify`, serta memecah **Cek Paham** menjadi 1 soal per halaman `PageView`.
-- **Alur & Soal Tes Awal (12 Soal Baru):**
-  - Menambahkan layar transisi animasi dari kuesioner profil ke soal Tes Awal dan layar animasi perayaan selesai sebelum ringkasan hasil & rekomendasi.
-  - Merombak 12 soal Tes Awal di `aset/konten/pemula/mulai_tes_awal/tes_awal.json` dengan pengecoh realistis agar benar-benar mengukur pemahaman pengguna.
-- **Optimasi Ukuran APK Rilis:**
-  - Mengaktifkan R8 (`isMinifyEnabled = true`, `isShrinkResources = true`, dan `android/app/proguard-rules.pro`) serta memindahkan/menghapus aset gambar besar tak terpakai di `aset/gambar/`.
+Tahap 13B dan 13C menghadirkan penyegaran visual *Colorful Bento + Card* serta redesain editorial modern untuk pengalaman belajar:
+- **Pembersihan Fitur & Label Debug UI (`aktifkanFiturDebugUi = false`):**
+  - Menambahkan konstanta pusat `aktifkanFiturDebugUi = false` pada `lib/aplikasi/konfigurasi_debug.dart` sehingga seluruh elemen debug antarmuka (lencana `"Draf"` di pemutar pelajaran, banner Galeri Komponen di Beranda, kartu menu Galeri di Lainnya, tombol Jadwalkan Pengingat Uji di Pengaturan, serta rute `/galeri`) nonaktif secara default layaknya versi produksi termasuk saat dijalankan dalam mode debug.
+- **Redesain Editorial Anti-Slop Tab Belajar (`LayarBelajar` & `LembarDetailModul`):**
+  - Menghadirkan kartu sorotan atas terbelah dua horizontal (*Split Card*) dengan blok `WarnaFunda.mintCerah` dan ilustrasi vektor geometris buatan sendiri, disertai tombol aksi utama pil gelap (`TombolFunda.pilGelap`, `WarnaFunda.tombolGelap`).
+  - Menyajikan setiap modul sebagai kartu horizontal ringkas berisi judul tegas, pil progres `selesai/total` (atau `Profil tersimpan` untuk Modul 0), serta ikon vektor garis berwarna cerah tanpa kotak latar; mengetuk modul membuka lembar bawah detail modul berisi daftar pelajaran, kotak syarat gerbang, pernyataan kosong, dan kuis akhir modul.
+- **Redesain Pemutar Pelajaran, Koleksi Ilustrasi Vektor, & `TeksAnimasiKata`:**
+  - Menambahkan koleksi ilustrasi vektor geometris murni pada `lib/komponen/ilustrasi_funda.dart` (`IlustrasiGeometrisFunda` dan `KanvasIlustrasiPelajaran`).
+  - Memperbarui bilah atas `LayarPemutarPelajaran` menjadi tombol tutup bulat (`x`) dan *progress bar* bersegmen, kanvas ilustrasi pastel cerah, area bacaan lapang rata kiri (`TextAlign.start`, `height: 1.6`, bebas `TextAlign.justify`), serta tombol pil gelap bawah.
+  - Membuat komponen `TeksAnimasiKata` (`lib/komponen/teks_animasi_kata.dart`) dengan animasi kata muncul berurutan dari bawah ke atas, jeda adaptif (maksimal ~1.200 ms), ketuk-untuk-selesai instan, dukungan penuh `{{istilah}}` kamus dan `**tebal**`, serta kepatuhan penuh pada `disableAnimations` dan `penyediaTanpaAnimasi`.
+- **Penyegaran Visual Bento + Card, Tutorial Beranda, Tes Awal & Optimasi APK (Tahap 13B):**
+  - Memperkuat saturasi tint pastel, batas warna serasi, dan bayangan kartu terukur (`WarnaFunda.bayanganKartu`), menyelaraskan warna ikon seluruh layar utama, serta menghapus seluruh ikon bintang (`star` / `sparkles`).
+  - Menambahkan tutorial interaktif Beranda 4 langkah (`LapisanTutorialBeranda`), menu **Ulangi Tutorial Aplikasi** & **Perbarui Profil Keuangan** di Pengaturan, 12 soal baru Tes Awal (`tes_awal.json`), dan aktivasi R8 (`isMinifyEnabled = true`, `isShrinkResources = true`).
 
 ## [1.0.2] - 2026-11-24 — Tahap 13A: Hotfix Kritis Navigasi, Layar Catatan & ANR
 
