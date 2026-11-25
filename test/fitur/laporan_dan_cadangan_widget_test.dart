@@ -356,10 +356,16 @@ void main() {
         );
         await selesaikanAsync(tester);
 
+        await tester.ensureVisible(
+          find.text('Yuk, amankan catatan keuanganmu'),
+        );
+        await tester.pump();
         expect(find.text('Yuk, amankan catatan keuanganmu'), findsOneWidget);
         expect(find.text('Cadangkan sekarang'), findsOneWidget);
         expect(find.text('Nanti'), findsOneWidget);
 
+        await tester.ensureVisible(find.text('Nanti'));
+        await tester.pump();
         await tester.tap(find.text('Nanti'));
         await tester.pump();
         await tester.pump();
