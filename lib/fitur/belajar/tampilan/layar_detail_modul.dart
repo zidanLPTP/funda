@@ -174,10 +174,9 @@ class LayarDetailModul extends ConsumerWidget {
                                   ],
                                 ),
                                 const SizedBox(height: SpasiFunda.s),
-                                IlustrasiGeometrisFunda(
-                                  jenis: tema.ilustrasi,
-                                  warnaAksen: tema.aksen,
-                                  ukuran: teksBesar ? 88 : 116,
+                                IlustrasiSvgFunda(
+                                  pathAset: tema.pathSvg,
+                                  tinggi: teksBesar ? 92 : 124,
                                 ),
                               ],
                             ),

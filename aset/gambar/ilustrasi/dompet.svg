@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 160" width="240" height="160">
+  
+  
+
+  
+  <ellipse cx="119" cy="144" rx="64" ry="6.5" fill="#0B2E22" fill-opacity="0.12" />
+
+  
+  <g stroke="#0F766E" stroke-width="4" stroke-linecap="round" stroke-opacity="0.45">
+    <path d="M 98 14 L 98 23" />
+    <path d="M 116 8 L 116 18" />
+    <path d="M 134 14 L 134 23" />
+  </g>
+
+  
+  <path d="M 58 68 L 58 56 C 58 48 64 43 72 42 L 156 35 C 165 34 172 41 172 50 L 172 68 Z" fill="#0B4A3E" stroke="#0B2E22" stroke-width="4.5" stroke-linejoin="round" />
+
+  
+  <g>
+    <circle cx="116" cy="54" r="24" fill="#FACC15" stroke="#0B2E22" stroke-width="4.5" />
+    <circle cx="116" cy="54" r="16.5" fill="#FDE047" stroke="#D97706" stroke-width="2.5" />
+    
+    <path d="M 103 46 A 14 14 0 0 1 114 40" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-opacity="0.9" />
+    
+    <path d="M 116 45 L 116 59" fill="none" stroke="#B45309" stroke-width="4" stroke-linecap="round" />
+  </g>
+
+  
+  <rect x="54" y="64" width="126" height="72" rx="16" fill="#0F766E" stroke="#0B2E22" stroke-width="4.5" />
+
+  
+  <rect x="63" y="73" width="108" height="54" rx="10" fill="none" stroke="#99F6E4" stroke-opacity="0.35" stroke-width="2" stroke-dasharray="6 6" />
+
+  
+  <path d="M 154 90 L 178 90 L 178 120 L 154 120 C 145 120 139 113 139 105 C 139 97 145 90 154 90 Z" fill="#0B2E22" fill-opacity="0.22" />
+
+  
+  <path d="M 154 85 L 180 85 C 184 85 186 88 186 92 L 186 108 C 186 112 184 115 180 115 L 154 115 C 146 115 140 108 140 100 C 140 92 146 85 154 85 Z" fill="#FFFFFF" stroke="#0B2E22" stroke-width="4.5" stroke-linejoin="round" />
+
+  
+  <circle cx="155" cy="100" r="6" fill="#FACC15" stroke="#0B2E22" stroke-width="3.5" />
+</svg>

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../komponen/ilustrasi_funda.dart';
 import '../../../komponen/indikator_memuat.dart';
-import '../../../komponen/tombol_funda.dart';
 import '../../../komponen/teks_funda.dart';
+import '../../../komponen/tombol_funda.dart';
 import '../../../tema/token.dart';
 import '../../../util/haptic.dart';
 
@@ -14,6 +15,7 @@ class ItemSorotanTutorial {
     required this.ikon,
     required this.warnaAksen,
     required this.warnaLatarIkon,
+    this.pathSvg,
     this.kunciTarget,
   });
 
@@ -22,10 +24,11 @@ class ItemSorotanTutorial {
   final IconData ikon;
   final Color warnaAksen;
   final Color warnaLatarIkon;
+  final String? pathSvg;
   final GlobalKey? kunciTarget;
 }
 
-/// Lapisan coachmark / spotlight interaktif 4 langkah ala aplikasi perbankan modern.
+/// Lapisan coachmark / spotlight interaktif 4 langkah bergaya editorial bersih.
 class LapisanTutorialBeranda extends ConsumerStatefulWidget {
   const LapisanTutorialBeranda({
     super.key,
@@ -148,7 +151,7 @@ class _LapisanTutorialBerandaState
                 ),
               ),
 
-              // Kartu Penjelasan Tutorial
+              // Kartu Penjelasan Tutorial Bergaya Editorial
               SafeArea(
                 child: Align(
                   alignment: targetDiBawah
@@ -182,20 +185,19 @@ class _LapisanTutorialBerandaState
                       child: ConstrainedBox(
                         key: ValueKey(_indeks),
                         constraints: BoxConstraints(
-                          maxWidth: 440,
+                          maxWidth: 420,
                           maxHeight:
-                              ukuranLayar.height * (teksBesar ? 0.65 : 0.55),
+                              ukuranLayar.height * (teksBesar ? 0.68 : 0.62),
                         ),
                         child: Container(
-                          padding: const EdgeInsets.all(SpasiFunda.l),
                           decoration: BoxDecoration(
                             color: WarnaFunda.permukaan,
                             borderRadius: BorderRadius.circular(
                               SudutFunda.petak,
                             ),
                             border: Border.all(
-                              color: langkah.warnaAksen.withAlpha(80),
-                              width: 1.5,
+                              color: WarnaFunda.garis,
+                              width: 1.0,
                             ),
                             boxShadow: const [
                               BoxShadow(
@@ -205,126 +207,177 @@ class _LapisanTutorialBerandaState
                               ),
                             ],
                           ),
+                          clipBehavior: Clip.antiAlias,
                           child: SingleChildScrollView(
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
-                                // Baris atas: ikon langkah, indikator (1/4), dan tombol Lewati
-                                SizedBox(
-                                  width: double.infinity,
-                                  child: Wrap(
-                                    alignment: WrapAlignment.spaceBetween,
-                                    crossAxisAlignment:
-                                        WrapCrossAlignment.center,
-                                    spacing: SpasiFunda.s,
-                                    runSpacing: SpasiFunda.xs,
+                                // Kanvas Atas Editorial (indikator langkah, Lewati, & ilustrasi)
+                                Container(
+                                  color: langkah.warnaLatarIkon,
+                                  padding: const EdgeInsets.fromLTRB(
+                                    SpasiFunda.l,
+                                    SpasiFunda.m,
+                                    SpasiFunda.l,
+                                    SpasiFunda.l,
+                                  ),
+                                  child: Column(
                                     children: [
-                                      Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          Container(
-                                            padding: const EdgeInsets.all(
-                                              SpasiFunda.s,
-                                            ),
-                                            decoration: BoxDecoration(
-                                              color: langkah.warnaLatarIkon,
-                                              borderRadius:
-                                                  BorderRadius.circular(
-                                                    SudutFunda.kartu,
+                                      SizedBox(
+                                        width: double.infinity,
+                                        child: Wrap(
+                                          alignment: WrapAlignment.spaceBetween,
+                                          crossAxisAlignment:
+                                              WrapCrossAlignment.center,
+                                          spacing: SpasiFunda.s,
+                                          runSpacing: SpasiFunda.xs,
+                                          children: [
+                                            Container(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                    horizontal: SpasiFunda.m,
+                                                    vertical: SpasiFunda.xs,
                                                   ),
+                                              decoration: BoxDecoration(
+                                                color: WarnaFunda.permukaan,
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                      SudutFunda.pil,
+                                                    ),
+                                                border: Border.all(
+                                                  color: WarnaFunda.garis,
+                                                  width: 1.0,
+                                                ),
+                                              ),
+                                              child: TeksFunda.catatan(
+                                                '${_indeks + 1}/$total',
+                                                warna: WarnaFunda.teks,
+                                              ),
                                             ),
-                                            child: Icon(
+                                            TextButton(
+                                              key: const Key(
+                                                'tombol_lewati_tutorial',
+                                              ),
+                                              style: TextButton.styleFrom(
+                                                backgroundColor:
+                                                    WarnaFunda.permukaan,
+                                                minimumSize: const Size(48, 48),
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                      horizontal: SpasiFunda.m,
+                                                      vertical: SpasiFunda.s,
+                                                    ),
+                                                shape: StadiumBorder(
+                                                  side: BorderSide(
+                                                    color: WarnaFunda.garis,
+                                                    width: 1.0,
+                                                  ),
+                                                ),
+                                              ),
+                                              onPressed: () {
+                                                UtilHaptic.pilih();
+                                                widget.padaLewati();
+                                              },
+                                              child: const TeksFunda.label(
+                                                'Lewati',
+                                                warna: WarnaFunda.teks,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      if (!teksBesar) ...[
+                                        const SizedBox(height: SpasiFunda.s),
+                                        if (langkah.pathSvg != null)
+                                          IlustrasiSvgFunda(
+                                            pathAset: langkah.pathSvg!,
+                                            tinggi: 84,
+                                          )
+                                        else
+                                          Icon(
+                                            langkah.ikon,
+                                            color: langkah.warnaAksen,
+                                            size: 40,
+                                          ),
+                                      ],
+                                    ],
+                                  ),
+                                ),
+
+                                // Isi Penjelasan & Tombol Pil Gelap
+                                Padding(
+                                  padding: const EdgeInsets.all(SpasiFunda.l),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      if (teksBesar) ...[
+                                        Row(
+                                          children: [
+                                            Icon(
                                               langkah.ikon,
                                               color: langkah.warnaAksen,
                                               size: 22,
                                             ),
-                                          ),
-                                          const SizedBox(width: SpasiFunda.s),
-                                          Container(
-                                            padding: const EdgeInsets.symmetric(
-                                              horizontal: SpasiFunda.s,
-                                              vertical: SpasiFunda.xs,
+                                            const SizedBox(width: SpasiFunda.s),
+                                            Expanded(
+                                              child: TeksFunda.judulBagian(
+                                                langkah.judul,
+                                              ),
                                             ),
+                                          ],
+                                        ),
+                                      ] else
+                                        TeksFunda.judulBagian(langkah.judul),
+                                      const SizedBox(height: SpasiFunda.s),
+                                      TeksFunda.isiKecil(
+                                        langkah.deskripsi,
+                                        warna: WarnaFunda.teksRedup,
+                                        rataTeks: TextAlign.start,
+                                      ),
+                                      const SizedBox(height: SpasiFunda.l),
+
+                                      // Indikator titik langkah
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: List.generate(total, (i) {
+                                          final aktif = i == _indeks;
+                                          return AnimatedContainer(
+                                            duration: durasi,
+                                            margin: const EdgeInsets.symmetric(
+                                              horizontal: 4,
+                                            ),
+                                            width: aktif ? 22 : 8,
+                                            height: 8,
                                             decoration: BoxDecoration(
-                                              color: langkah.warnaLatarIkon,
+                                              color: aktif
+                                                  ? WarnaFunda.tombolGelap
+                                                  : WarnaFunda.garis,
                                               borderRadius:
                                                   BorderRadius.circular(
                                                     SudutFunda.pil,
                                                   ),
                                             ),
-                                            child: TeksFunda.catatan(
-                                              '${_indeks + 1}/$total',
-                                              warna: langkah.warnaAksen,
-                                            ),
-                                          ),
-                                        ],
+                                          );
+                                        }),
                                       ),
-                                      TextButton(
+                                      const SizedBox(height: SpasiFunda.m),
+
+                                      // Tombol Lanjut / Mulai Pakai (Pil Gelap Editorial)
+                                      TombolFunda.pilGelap(
                                         key: const Key(
-                                          'tombol_lewati_tutorial',
+                                          'tombol_lanjut_tutorial',
                                         ),
-                                        style: TextButton.styleFrom(
-                                          minimumSize: const Size(48, 48),
-                                          padding: const EdgeInsets.symmetric(
-                                            horizontal: SpasiFunda.xs,
-                                          ),
-                                        ),
-                                        onPressed: () {
-                                          UtilHaptic.pilih();
-                                          widget.padaLewati();
-                                        },
-                                        child: const TeksFunda.label(
-                                          'Lewati',
-                                          warna: WarnaFunda.teksRedup,
-                                        ),
+                                        lebarPenuh: true,
+                                        teks: _indeks == total - 1
+                                            ? 'Mulai Pakai'
+                                            : 'Lanjut',
+                                        padaTekan: _langkahBerikutnya,
                                       ),
                                     ],
                                   ),
-                                ),
-                                const SizedBox(height: SpasiFunda.m),
-
-                                TeksFunda.judulBagian(langkah.judul),
-                                const SizedBox(height: SpasiFunda.s),
-                                TeksFunda.isi(
-                                  langkah.deskripsi,
-                                  warna: WarnaFunda.teksRedup,
-                                ),
-                                const SizedBox(height: SpasiFunda.l),
-
-                                // Indikator titik langkah
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: List.generate(total, (i) {
-                                    final aktif = i == _indeks;
-                                    return AnimatedContainer(
-                                      duration: durasi,
-                                      margin: const EdgeInsets.symmetric(
-                                        horizontal: 4,
-                                      ),
-                                      width: aktif ? 22 : 8,
-                                      height: 8,
-                                      decoration: BoxDecoration(
-                                        color: aktif
-                                            ? langkah.warnaAksen
-                                            : WarnaFunda.garis,
-                                        borderRadius: BorderRadius.circular(
-                                          SudutFunda.pil,
-                                        ),
-                                      ),
-                                    );
-                                  }),
-                                ),
-                                const SizedBox(height: SpasiFunda.m),
-
-                                // Tombol Lanjut / Mulai Pakai
-                                TombolFunda.primer(
-                                  key: const Key('tombol_lanjut_tutorial'),
-                                  lebarPenuh: true,
-                                  teks: _indeks == total - 1
-                                      ? 'Mulai Pakai'
-                                      : 'Lanjut',
-                                  padaTekan: _langkahBerikutnya,
                                 ),
                               ],
                             ),

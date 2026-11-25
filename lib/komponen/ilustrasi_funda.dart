@@ -1,8 +1,76 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '../tema/token.dart';
+
+/// Kumpulan path aset SVG ilustrasi resmi Funda di `aset/gambar/ilustrasi/`.
+abstract final class AsetIlustrasiFunda {
+  static const dompet = 'aset/gambar/ilustrasi/dompet.svg';
+  static const belumAdaDompet = 'aset/gambar/ilustrasi/belum-ada-dompet.svg';
+  static const laporanBulanan = 'aset/gambar/ilustrasi/laporan_bulanan.svg';
+  static const modeSandbox = 'aset/gambar/ilustrasi/mode_sandbox.svg';
+  static const iconFunda = 'aset/gambar/ilustrasi/icon-funda.svg';
+
+  static const mulaiTesAwal = 'aset/gambar/ilustrasi/mulai-tes-awal.svg';
+  static const anggaranArusKas =
+      'aset/gambar/ilustrasi/anggaran-dan-arus-kas.svg';
+  static const tabungan = 'aset/gambar/ilustrasi/tabungan.svg';
+  static const danaDarurat = 'aset/gambar/ilustrasi/dana-darurat.svg';
+  static const utangCicilan = 'aset/gambar/ilustrasi/utang_cicilan.svg';
+  static const waspadaPenipuan = 'aset/gambar/ilustrasi/waspada_penipuan.svg';
+  static const psikologiUang = 'aset/gambar/ilustrasi/psikologi_uang.svg';
+
+  static const investasiDasar = 'aset/gambar/ilustrasi/investasi_dasar.svg';
+  static const pajakDasar = 'aset/gambar/ilustrasi/pajak_dasar.svg';
+  static const paylaterKredit = 'aset/gambar/ilustrasi/paylater_kredit.svg';
+  static const penghasilanTambahan =
+      'aset/gambar/ilustrasi/penghasilan_tambahan.svg';
+  static const tujuanBesar = 'aset/gambar/ilustrasi/tujuan_besar.svg';
+  static const proteksiDasar = 'aset/gambar/ilustrasi/proteksi_dasar.svg';
+
+  static const investasiLanjutan =
+      'aset/gambar/ilustrasi/investasi_lanjutan.svg';
+  static const kprKreditBesar = 'aset/gambar/ilustrasi/kpr_kredit_besar.svg';
+  static const pajakLanjutan = 'aset/gambar/ilustrasi/pajak_lanjutan.svg';
+  static const pensiunKebebasanFinansial =
+      'aset/gambar/ilustrasi/pensiun_kebebasan_finansial.svg';
+  static const keuanganUsahaKecil =
+      'aset/gambar/ilustrasi/keuangan_usaha_kecil.svg';
+  static const proteksiKeluargaWarisan =
+      'aset/gambar/ilustrasi/proteksi_keluarga_warisan.svg';
+}
+
+/// Widget perender ilustrasi SVG lokal dari aset Funda.
+class IlustrasiSvgFunda extends StatelessWidget {
+  final String pathAset;
+  final double? lebar;
+  final double tinggi;
+  final BoxFit fit;
+  final String? labelAkses;
+
+  const IlustrasiSvgFunda({
+    super.key,
+    required this.pathAset,
+    this.lebar,
+    this.tinggi = 96,
+    this.fit = BoxFit.contain,
+    this.labelAkses,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SvgPicture.asset(
+      pathAset,
+      width: lebar,
+      height: tinggi,
+      fit: fit,
+      excludeFromSemantics: labelAkses == null,
+      semanticsLabel: labelAkses,
+    );
+  }
+}
 
 /// Jenis ilustrasi vektor geometris buatan sendiri untuk modul & layar belajar Funda.
 enum JenisIlustrasiFunda {
@@ -17,13 +85,14 @@ enum JenisIlustrasiFunda {
   sasaran,
 }
 
-/// Pasangan warna kanvas solid cerah & aksen kontras untuk modul.
+/// Pasangan warna kanvas solid cerah, aset SVG, & aksen kontras untuk modul.
 class TemaVisualModul {
   final Color kanvas;
   final Color aksen;
   final Color warnaIkon;
   final IconData ikonGaris;
   final JenisIlustrasiFunda ilustrasi;
+  final String pathSvg;
 
   const TemaVisualModul({
     required this.kanvas,
@@ -31,10 +100,11 @@ class TemaVisualModul {
     required this.warnaIkon,
     required this.ikonGaris,
     required this.ilustrasi,
+    required this.pathSvg,
   });
 }
 
-/// Mengembalikan pasangan warna kanvas, aksen ilustrasi, dan ikon vektor berwarna per modul.
+/// Mengembalikan pasangan warna kanvas, aset SVG, aksen ilustrasi, dan ikon per modul.
 TemaVisualModul temaVisualUntukModul(String modulId) {
   return switch (modulId) {
     'mulai_tes_awal' => const TemaVisualModul(
@@ -43,6 +113,7 @@ TemaVisualModul temaVisualUntukModul(String modulId) {
       warnaIkon: WarnaFunda.aksenIkonMint,
       ikonGaris: LucideIcons.compass,
       ilustrasi: JenisIlustrasiFunda.kompas,
+      pathSvg: AsetIlustrasiFunda.mulaiTesAwal,
     ),
     'anggaran_arus_kas' => const TemaVisualModul(
       kanvas: WarnaFunda.kanvasBiru,
@@ -50,6 +121,7 @@ TemaVisualModul temaVisualUntukModul(String modulId) {
       warnaIkon: WarnaFunda.aksenIkonBiru,
       ikonGaris: LucideIcons.scale,
       ilustrasi: JenisIlustrasiFunda.neraca,
+      pathSvg: AsetIlustrasiFunda.anggaranArusKas,
     ),
     'tabungan' => const TemaVisualModul(
       kanvas: WarnaFunda.kanvasMint,
@@ -57,6 +129,7 @@ TemaVisualModul temaVisualUntukModul(String modulId) {
       warnaIkon: WarnaFunda.aksenIkonMint,
       ikonGaris: LucideIcons.piggyBank,
       ilustrasi: JenisIlustrasiFunda.celengan,
+      pathSvg: AsetIlustrasiFunda.tabungan,
     ),
     'dana_darurat' => const TemaVisualModul(
       kanvas: WarnaFunda.kanvasKuning,
@@ -64,6 +137,7 @@ TemaVisualModul temaVisualUntukModul(String modulId) {
       warnaIkon: WarnaFunda.aksenIkonKuning,
       ikonGaris: LucideIcons.umbrella,
       ilustrasi: JenisIlustrasiFunda.perisai,
+      pathSvg: AsetIlustrasiFunda.danaDarurat,
     ),
     'utang_cicilan' => const TemaVisualModul(
       kanvas: WarnaFunda.kanvasKoral,
@@ -71,6 +145,7 @@ TemaVisualModul temaVisualUntukModul(String modulId) {
       warnaIkon: WarnaFunda.aksenIkonKoral,
       ikonGaris: LucideIcons.calendarClock,
       ilustrasi: JenisIlustrasiFunda.rantaiKalender,
+      pathSvg: AsetIlustrasiFunda.utangCicilan,
     ),
     'waspada_penipuan' => const TemaVisualModul(
       kanvas: WarnaFunda.kanvasKoral,
@@ -78,6 +153,7 @@ TemaVisualModul temaVisualUntukModul(String modulId) {
       warnaIkon: WarnaFunda.aksenIkonKoral,
       ikonGaris: LucideIcons.shieldAlert,
       ilustrasi: JenisIlustrasiFunda.perisai,
+      pathSvg: AsetIlustrasiFunda.waspadaPenipuan,
     ),
     'psikologi_uang' => const TemaVisualModul(
       kanvas: WarnaFunda.kanvasUngu,
@@ -85,6 +161,7 @@ TemaVisualModul temaVisualUntukModul(String modulId) {
       warnaIkon: WarnaFunda.aksenIkonUngu,
       ikonGaris: LucideIcons.brain,
       ilustrasi: JenisIlustrasiFunda.pikiran,
+      pathSvg: AsetIlustrasiFunda.psikologiUang,
     ),
     'paylater_kredit' => const TemaVisualModul(
       kanvas: WarnaFunda.kanvasKuning,
@@ -92,6 +169,7 @@ TemaVisualModul temaVisualUntukModul(String modulId) {
       warnaIkon: WarnaFunda.aksenIkonKuning,
       ikonGaris: LucideIcons.creditCard,
       ilustrasi: JenisIlustrasiFunda.rantaiKalender,
+      pathSvg: AsetIlustrasiFunda.paylaterKredit,
     ),
     'penghasilan_tambahan' => const TemaVisualModul(
       kanvas: WarnaFunda.kanvasMint,
@@ -99,34 +177,71 @@ TemaVisualModul temaVisualUntukModul(String modulId) {
       warnaIkon: WarnaFunda.aksenIkonMint,
       ikonGaris: LucideIcons.briefcase,
       ilustrasi: JenisIlustrasiFunda.neraca,
+      pathSvg: AsetIlustrasiFunda.penghasilanTambahan,
     ),
-    'pajak_dasar' || 'pajak_lanjutan' => const TemaVisualModul(
+    'pajak_dasar' => const TemaVisualModul(
       kanvas: WarnaFunda.kanvasBiru,
       aksen: WarnaFunda.info,
       warnaIkon: WarnaFunda.aksenIkonBiru,
       ikonGaris: LucideIcons.fileSpreadsheet,
       ilustrasi: JenisIlustrasiFunda.pajak,
+      pathSvg: AsetIlustrasiFunda.pajakDasar,
     ),
-    'proteksi_dasar' || 'proteksi_keluarga_warisan' => const TemaVisualModul(
+    'pajak_lanjutan' => const TemaVisualModul(
+      kanvas: WarnaFunda.kanvasBiru,
+      aksen: WarnaFunda.info,
+      warnaIkon: WarnaFunda.aksenIkonBiru,
+      ikonGaris: LucideIcons.fileSpreadsheet,
+      ilustrasi: JenisIlustrasiFunda.pajak,
+      pathSvg: AsetIlustrasiFunda.pajakLanjutan,
+    ),
+    'proteksi_dasar' => const TemaVisualModul(
       kanvas: WarnaFunda.kanvasBiru,
       aksen: WarnaFunda.sifatKebutuhan,
       warnaIkon: WarnaFunda.aksenIkonBiru,
       ikonGaris: LucideIcons.shieldCheck,
       ilustrasi: JenisIlustrasiFunda.perisai,
+      pathSvg: AsetIlustrasiFunda.proteksiDasar,
     ),
-    'investasi_dasar' || 'investasi_lanjutan' => const TemaVisualModul(
+    'proteksi_keluarga_warisan' => const TemaVisualModul(
+      kanvas: WarnaFunda.kanvasBiru,
+      aksen: WarnaFunda.sifatKebutuhan,
+      warnaIkon: WarnaFunda.aksenIkonBiru,
+      ikonGaris: LucideIcons.shieldCheck,
+      ilustrasi: JenisIlustrasiFunda.perisai,
+      pathSvg: AsetIlustrasiFunda.proteksiKeluargaWarisan,
+    ),
+    'investasi_dasar' => const TemaVisualModul(
       kanvas: WarnaFunda.kanvasMint,
       aksen: WarnaFunda.utamaGelap,
       warnaIkon: WarnaFunda.aksenIkonMint,
       ikonGaris: LucideIcons.sprout,
       ilustrasi: JenisIlustrasiFunda.tunas,
+      pathSvg: AsetIlustrasiFunda.investasiDasar,
     ),
-    'tujuan_besar' || 'kpr_kredit_besar' => const TemaVisualModul(
+    'investasi_lanjutan' => const TemaVisualModul(
+      kanvas: WarnaFunda.kanvasMint,
+      aksen: WarnaFunda.utamaGelap,
+      warnaIkon: WarnaFunda.aksenIkonMint,
+      ikonGaris: LucideIcons.sprout,
+      ilustrasi: JenisIlustrasiFunda.tunas,
+      pathSvg: AsetIlustrasiFunda.investasiLanjutan,
+    ),
+    'tujuan_besar' => const TemaVisualModul(
       kanvas: WarnaFunda.kanvasUngu,
       aksen: WarnaFunda.sifatKeinginan,
       warnaIkon: WarnaFunda.aksenIkonUngu,
       ikonGaris: LucideIcons.target,
       ilustrasi: JenisIlustrasiFunda.sasaran,
+      pathSvg: AsetIlustrasiFunda.tujuanBesar,
+    ),
+    'kpr_kredit_besar' => const TemaVisualModul(
+      kanvas: WarnaFunda.kanvasUngu,
+      aksen: WarnaFunda.sifatKeinginan,
+      warnaIkon: WarnaFunda.aksenIkonUngu,
+      ikonGaris: LucideIcons.target,
+      ilustrasi: JenisIlustrasiFunda.sasaran,
+      pathSvg: AsetIlustrasiFunda.kprKreditBesar,
     ),
     'pensiun_kebebasan_finansial' => const TemaVisualModul(
       kanvas: WarnaFunda.kanvasKuning,
@@ -134,6 +249,7 @@ TemaVisualModul temaVisualUntukModul(String modulId) {
       warnaIkon: WarnaFunda.aksenIkonKuning,
       ikonGaris: LucideIcons.sun,
       ilustrasi: JenisIlustrasiFunda.tunas,
+      pathSvg: AsetIlustrasiFunda.pensiunKebebasanFinansial,
     ),
     'keuangan_usaha_kecil' => const TemaVisualModul(
       kanvas: WarnaFunda.kanvasKoral,
@@ -141,6 +257,7 @@ TemaVisualModul temaVisualUntukModul(String modulId) {
       warnaIkon: WarnaFunda.aksenIkonKoral,
       ikonGaris: LucideIcons.store,
       ilustrasi: JenisIlustrasiFunda.neraca,
+      pathSvg: AsetIlustrasiFunda.keuanganUsahaKecil,
     ),
     _ => const TemaVisualModul(
       kanvas: WarnaFunda.kanvasMint,
@@ -148,6 +265,7 @@ TemaVisualModul temaVisualUntukModul(String modulId) {
       warnaIkon: WarnaFunda.aksenIkonMint,
       ikonGaris: LucideIcons.bookOpen,
       ilustrasi: JenisIlustrasiFunda.sasaran,
+      pathSvg: AsetIlustrasiFunda.mulaiTesAwal,
     ),
   };
 }
@@ -175,11 +293,7 @@ class KanvasIlustrasiPelajaran extends StatelessWidget {
         borderRadius: BorderRadius.circular(SudutFunda.petak),
       ),
       child: Center(
-        child: IlustrasiGeometrisFunda(
-          jenis: tema.ilustrasi,
-          warnaAksen: tema.aksen,
-          ukuran: tinggi * 0.72,
-        ),
+        child: IlustrasiSvgFunda(pathAset: tema.pathSvg, tinggi: tinggi * 0.78),
       ),
     );
   }

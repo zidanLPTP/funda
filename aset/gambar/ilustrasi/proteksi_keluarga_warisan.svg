@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 160" width="240" height="160">
+  
+  <ellipse cx="120" cy="146" rx="68" ry="6.5" fill="#0B2E22" fill-opacity="0.12" />
+
+  
+  <rect x="64" y="66" width="112" height="72" rx="12" fill="#FFFFFF" stroke="#0B2E22" stroke-width="4.5" />
+
+  
+  <g stroke="#0B2E22" stroke-width="4" stroke-linejoin="round">
+    <circle cx="91" cy="91" r="9.5" fill="#0F766E" />
+    <path d="M 75 138 L 75 123 C 75 110, 107 110, 107 123 L 107 138 Z" fill="#0F766E" />
+  </g>
+
+  
+  <g stroke="#0B2E22" stroke-width="4" stroke-linejoin="round">
+    <circle cx="149" cy="91" r="9.5" fill="#14B8A6" />
+    <path d="M 133 138 L 133 123 C 133 110, 165 110, 165 123 L 165 138 Z" fill="#14B8A6" />
+  </g>
+
+  
+  <g stroke="#0B2E22" stroke-width="4" stroke-linejoin="round">
+    <circle cx="120" cy="103" r="8" fill="#FACC15" />
+    <path d="M 105 138 L 105 127 C 105 117, 135 117, 135 127 L 135 138 Z" fill="#FACC15" />
+  </g>
+
+  
+  <path d="M 44 74 L 120 20 L 196 74 Z" fill="#0F766E" stroke="#0B2E22" stroke-width="4.5" stroke-linejoin="round" />
+
+  
+  <path d="M 120 63 C 110 56, 106 50, 106 45.5 C 106 41.5, 109.5 38.5, 113.5 38.5 C 116.5 38.5, 118.8 40.3, 120 42.5 C 121.2 40.3, 123.5 38.5, 126.5 38.5 C 130.5 38.5, 134 41.5, 134 45.5 C 134 50, 130 56, 120 63 Z" fill="#FB7185" stroke="#0B2E22" stroke-width="3.8" stroke-linejoin="round" />
+</svg>

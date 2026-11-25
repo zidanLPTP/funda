@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 160" width="240" height="160">
+  
+  <ellipse cx="118" cy="146" rx="68" ry="6.5" fill="#0B2E22" fill-opacity="0.12" />
+
+  
+  <rect x="60" y="28" width="96" height="110" rx="14" fill="#0B4A3E" stroke="#0B2E22" stroke-width="4.5" />
+
+  
+  <rect x="50" y="22" width="96" height="110" rx="14" fill="#FFFFFF" stroke="#0B2E22" stroke-width="4.5" />
+
+  
+  <path d="M 50 36 C 50 28, 56 22, 64 22 L 132 22 C 140 22, 146 28, 146 36 L 146 46 L 50 46 Z" fill="#0F766E" stroke="#0B2E22" stroke-width="4.5" stroke-linejoin="round" />
+  <path d="M 66 34 L 106 34" fill="none" stroke="#99F6E4" stroke-width="3.5" stroke-linecap="round" />
+
+  
+  <circle cx="71" cy="65" r="8.5" fill="#0F766E" stroke="#0B2E22" stroke-width="3" />
+  <path d="M 67.5 65 L 70.2 67.8 L 75 62.5" fill="none" stroke="#FFFFFF" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" />
+  <rect x="88" y="61" width="44" height="8" rx="4" fill="#99F6E4" />
+
+  
+  <circle cx="71" cy="89" r="8.5" fill="#0F766E" stroke="#0B2E22" stroke-width="3" />
+  <path d="M 67.5 89 L 70.2 91.8 L 75 86.5" fill="none" stroke="#FFFFFF" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" />
+  <rect x="88" y="85" width="44" height="8" rx="4" fill="#99F6E4" />
+
+  
+  <circle cx="71" cy="113" r="8.5" fill="#FACC15" stroke="#0B2E22" stroke-width="3" />
+  <rect x="88" y="109" width="32" height="8" rx="4" fill="#E2E8F0" />
+
+  
+  <g transform="translate(171, 99) rotate(-28)">
+    
+    <path d="M -6 -11 L -22 -11 C -31 -11, -31 11, -22 11 L -6 11" fill="none" stroke="#0B2E22" stroke-width="13" stroke-linecap="round" />
+    <path d="M -6 -11 L -22 -11 C -31 -11, -31 11, -22 11 L -6 11" fill="none" stroke="#0F766E" stroke-width="5" stroke-linecap="round" />
+
+    
+    <path d="M 6 -11 L 22 -11 C 31 -11, 31 11, 22 11 L 6 11" fill="none" stroke="#0B2E22" stroke-width="13" stroke-linecap="round" />
+    <path d="M 6 -11 L 22 -11 C 31 -11, 31 11, 22 11 L 6 11" fill="none" stroke="#FACC15" stroke-width="5" stroke-linecap="round" />
+
+    
+    <g stroke="#0B2E22" stroke-width="3.2" stroke-linecap="round">
+      <path d="M 0 -22 L 0 -16" />
+      <path d="M 0 16 L 0 22" />
+    </g>
+  </g>
+</svg>

@@ -390,7 +390,7 @@ void main() {
           ),
           findsOneWidget,
         );
-        expect(find.byType(IlustrasiGeometrisFunda), findsWidgets);
+        expect(find.byType(IlustrasiSvgFunda), findsWidgets);
         // Kartu modul ramping menampilkan pil progres x/y, daftar pelajaran belum dibentangkan
         expect(find.text('1/2'), findsOneWidget);
         expect(find.text('Memecah Tujuan Besar'), findsNothing);

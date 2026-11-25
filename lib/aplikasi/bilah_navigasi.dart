@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '../fitur/tutorial/kontroler/penyedia_tutorial.dart';
 import '../fitur/tutorial/tampilan/lapisan_tutorial_beranda.dart';
+import '../komponen/ilustrasi_funda.dart';
 import '../tema/token.dart';
 import '../util/haptic.dart';
 
@@ -89,8 +90,9 @@ class PembungkusBilahNavigasi extends ConsumerWidget {
               ItemSorotanTutorial(
                 kunciTarget: kunciTutorial.ringkasanKeuangan,
                 ikon: LucideIcons.wallet,
+                pathSvg: AsetIlustrasiFunda.dompet,
                 warnaAksen: WarnaFunda.utama,
-                warnaLatarIkon: WarnaFunda.tintHijau,
+                warnaLatarIkon: WarnaFunda.kanvasMint,
                 judul: 'Ringkasan Keuangan',
                 deskripsi:
                     'Pantau arus kas masuk & keluar serta total saldo seluruh dompetmu langsung di Beranda.',
@@ -98,8 +100,9 @@ class PembungkusBilahNavigasi extends ConsumerWidget {
               ItemSorotanTutorial(
                 kunciTarget: kunciTutorial.tabCatatan,
                 ikon: LucideIcons.receipt,
+                pathSvg: AsetIlustrasiFunda.anggaranArusKas,
                 warnaAksen: WarnaFunda.sifatKebutuhan,
-                warnaLatarIkon: WarnaFunda.tintBiru,
+                warnaLatarIkon: WarnaFunda.kanvasBiru,
                 judul: 'Tab Catatan',
                 deskripsi:
                     'Tempat mencatat uang masuk, pengeluaran harian, dan transfer antar dompet dengan rapi.',
@@ -107,8 +110,9 @@ class PembungkusBilahNavigasi extends ConsumerWidget {
               ItemSorotanTutorial(
                 kunciTarget: kunciTutorial.tabBelajar,
                 ikon: LucideIcons.bookOpen,
+                pathSvg: AsetIlustrasiFunda.mulaiTesAwal,
                 warnaAksen: WarnaFunda.sifatKeinginan,
-                warnaLatarIkon: WarnaFunda.tintUngu,
+                warnaLatarIkon: WarnaFunda.kanvasUngu,
                 judul: 'Tab Belajar',
                 deskripsi:
                     '18 modul keuangan dari pemula hingga lanjutan yang langsung dipraktikkan memakai datamu sendiri.',
@@ -116,8 +120,9 @@ class PembungkusBilahNavigasi extends ConsumerWidget {
               ItemSorotanTutorial(
                 kunciTarget: kunciTutorial.tabLainnya,
                 ikon: LucideIcons.layoutGrid,
+                pathSvg: AsetIlustrasiFunda.laporanBulanan,
                 warnaAksen: WarnaFunda.sifatUtang,
-                warnaLatarIkon: WarnaFunda.tintAmber,
+                warnaLatarIkon: WarnaFunda.kanvasKuning,
                 judul: 'Tab Lainnya',
                 deskripsi:
                     'Kelola dompet, anggaran bulanan, tujuan, utang, laporan keuangan, dan cadangan data di sini.',

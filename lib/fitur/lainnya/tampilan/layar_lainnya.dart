@@ -62,8 +62,7 @@ class LayarLainnya extends ConsumerWidget {
       judul: 'Laporan Bulanan',
       keterangan: 'Arus kas & saran per bulan',
       kanvas: WarnaFunda.kanvasBiru,
-      warnaAksen: WarnaFunda.sifatKebutuhan,
-      jenisIlustrasi: JenisIlustrasiFunda.neraca,
+      pathSvg: AsetIlustrasiFunda.laporanBulanan,
       padaKetuk: () => _bukaRuteAtauHalaman(
         context,
         ref,
@@ -77,8 +76,7 @@ class LayarLainnya extends ConsumerWidget {
       judul: 'Mode Sandbox',
       keterangan: 'Simulasi portofolio investasi',
       kanvas: WarnaFunda.kanvasUngu,
-      warnaAksen: WarnaFunda.sifatKeinginan,
-      jenisIlustrasi: JenisIlustrasiFunda.tunas,
+      pathSvg: AsetIlustrasiFunda.modeSandbox,
       padaKetuk: () => _bukaRuteAtauHalaman(
         context,
         ref,
@@ -698,16 +696,14 @@ class _KartuKanvasSorotan extends StatelessWidget {
     required this.judul,
     required this.keterangan,
     required this.kanvas,
-    required this.warnaAksen,
-    required this.jenisIlustrasi,
+    required this.pathSvg,
     required this.padaKetuk,
   });
 
   final String judul;
   final String keterangan;
   final Color kanvas;
-  final Color warnaAksen;
-  final JenisIlustrasiFunda jenisIlustrasi;
+  final String pathSvg;
   final VoidCallback padaKetuk;
 
   @override
@@ -736,11 +732,7 @@ class _KartuKanvasSorotan extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      IlustrasiGeometrisFunda(
-                        jenis: jenisIlustrasi,
-                        warnaAksen: warnaAksen,
-                        ukuran: 48,
-                      ),
+                      IlustrasiSvgFunda(pathAset: pathSvg, tinggi: 58),
                       const Icon(
                         LucideIcons.arrowUpRight,
                         size: 18,

@@ -87,11 +87,10 @@ class LayarDaftarDompet extends ConsumerWidget {
                                   SudutFunda.kartu,
                                 ),
                               ),
-                              child: const Center(
-                                child: IlustrasiGeometrisFunda(
-                                  jenis: JenisIlustrasiFunda.celengan,
-                                  warnaAksen: WarnaFunda.utama,
-                                  ukuran: 64,
+                              child: Center(
+                                child: IlustrasiSvgFunda(
+                                  pathAset: AsetIlustrasiFunda.belumAdaDompet,
+                                  tinggi: isTeksBesar ? 80 : 104,
                                 ),
                               ),
                             ),

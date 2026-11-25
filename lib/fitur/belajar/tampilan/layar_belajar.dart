@@ -149,8 +149,8 @@ class _KartuSorotanAtas extends ConsumerWidget {
           return _bangunSplitCard(
             context,
             kunciKartu: const Key('kartu_sorotan_tes_awal'),
-            jenisIlustrasi: JenisIlustrasiFunda.kompas,
-            warnaAksenIlustrasi: WarnaFunda.tombolGelap,
+            pathSvg: AsetIlustrasiFunda.mulaiTesAwal,
+            kanvasIlustrasi: WarnaFunda.mintCerah,
             labelKecil: 'Mulai Dari Sini',
             judul: 'Tes Awal 3 Menit',
             deskripsi:
@@ -177,8 +177,8 @@ class _KartuSorotanAtas extends ConsumerWidget {
               return _bangunSplitCard(
                 context,
                 kunciKartu: const Key('kartu_sorotan_rekomendasi'),
-                jenisIlustrasi: tema.ilustrasi,
-                warnaAksenIlustrasi: tema.aksen,
+                pathSvg: tema.pathSvg,
+                kanvasIlustrasi: WarnaFunda.mintCerah,
                 labelKecil: rek.judulAlasan,
                 judul: rek.modul.judul,
                 deskripsi: rek.deskripsiAlasan,
@@ -212,8 +212,8 @@ class _KartuSorotanAtas extends ConsumerWidget {
             return _bangunSplitCard(
               context,
               kunciKartu: const Key('kartu_sorotan_lanjut'),
-              jenisIlustrasi: tema.ilustrasi,
-              warnaAksenIlustrasi: tema.aksen,
+              pathSvg: tema.pathSvg,
+              kanvasIlustrasi: WarnaFunda.mintCerah,
               labelKecil: modulAktif.judul,
               judul: pelAktif.judul,
               deskripsi:
@@ -249,8 +249,8 @@ class _KartuSorotanAtas extends ConsumerWidget {
   Widget _bangunSplitCard(
     BuildContext context, {
     required Key kunciKartu,
-    required JenisIlustrasiFunda jenisIlustrasi,
-    required Color warnaAksenIlustrasi,
+    required String pathSvg,
+    required Color kanvasIlustrasi,
     required String labelKecil,
     required String judul,
     required String deskripsi,
@@ -279,14 +279,10 @@ class _KartuSorotanAtas extends ConsumerWidget {
                   Expanded(
                     flex: 38,
                     child: Container(
-                      color: WarnaFunda.mintCerah,
+                      color: kanvasIlustrasi,
                       padding: const EdgeInsets.all(SpasiFunda.m),
                       child: Center(
-                        child: IlustrasiGeometrisFunda(
-                          jenis: jenisIlustrasi,
-                          warnaAksen: warnaAksenIlustrasi,
-                          ukuran: 88,
-                        ),
+                        child: IlustrasiSvgFunda(pathAset: pathSvg, tinggi: 92),
                       ),
                     ),
                   ),
@@ -314,13 +310,9 @@ class _KartuSorotanAtas extends ConsumerWidget {
               ],
             ),
           ),
+          const Divider(height: 1, thickness: 1, color: WarnaFunda.garis),
           Padding(
-            padding: const EdgeInsets.fromLTRB(
-              SpasiFunda.l,
-              0,
-              SpasiFunda.l,
-              SpasiFunda.l,
-            ),
+            padding: const EdgeInsets.all(SpasiFunda.l),
             child: TombolFunda.pilGelap(teks: teksTombol, padaTekan: padaTekan),
           ),
         ],
@@ -479,9 +471,21 @@ class _KartuModulRamping extends ConsumerWidget {
                       ],
                     ),
                   ),
-                  const SizedBox(width: SpasiFunda.l),
-                  // Satu ikon vektor garis berwarna cerah tanpa kotak latar belakang
-                  Icon(tema.ikonGaris, size: 30, color: tema.warnaIkon),
+                  const SizedBox(width: SpasiFunda.m),
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: SpasiFunda.s,
+                      vertical: SpasiFunda.xs,
+                    ),
+                    decoration: BoxDecoration(
+                      color: tema.kanvas,
+                      borderRadius: BorderRadius.circular(SudutFunda.kartu),
+                    ),
+                    child: IlustrasiSvgFunda(
+                      pathAset: tema.pathSvg,
+                      tinggi: 48,
+                    ),
+                  ),
                 ],
               ),
             ),

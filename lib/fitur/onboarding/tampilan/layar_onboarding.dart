@@ -1,32 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '../../../data/penyedia_basis_data.dart';
 import '../../../komponen/komponen_funda.dart';
 import '../../../tema/token.dart';
 import '../../../util/haptic.dart';
 
-/// Model kartu edukatif pengantar selamat datang Funda.
+/// Model kartu edukatif pengantar nilai dasar dan sambutan Funda.
 class ItemSlideOnboarding {
-  final IconData ikon;
   final String tag;
   final String judul;
   final String deskripsi;
-  final Color warnaTint;
-  final Color warnaIkon;
+  final Color kanvas;
+  final Color warnaTag;
+  final String pathSvg;
 
   const ItemSlideOnboarding({
-    required this.ikon,
     required this.tag,
     required this.judul,
     required this.deskripsi,
-    required this.warnaTint,
-    required this.warnaIkon,
+    required this.kanvas,
+    required this.warnaTag,
+    required this.pathSvg,
   });
 }
 
-/// Layar Sambutan Pengguna Baru (Onboarding Soft Bento 3 Slide).
+/// Layar Nilai Dasar & Sambutan Pengguna Baru bergaya editorial bersih.
 class LayarOnboarding extends ConsumerStatefulWidget {
   const LayarOnboarding({super.key});
 
@@ -40,31 +39,31 @@ class _LayarOnboardingState extends ConsumerState<LayarOnboarding> {
 
   static const _daftarSlide = [
     ItemSlideOnboarding(
-      ikon: LucideIcons.shieldCheck,
       tag: 'Privasi Penuh (Offline-First)',
       judul: 'Datamu 100% Milikmu, Tersimpan di HP-mu',
       deskripsi:
           'Funda tidak punya server backend dan tidak mengirimkan datamu ke mana pun. Seluruh catatan keuangan dan refleksi tersimpan privat di perangkatmu.',
-      warnaTint: WarnaFunda.tintHijau,
-      warnaIkon: WarnaFunda.pemasukan,
+      kanvas: WarnaFunda.kanvasMint,
+      warnaTag: WarnaFunda.pemasukan,
+      pathSvg: AsetIlustrasiFunda.proteksiDasar,
     ),
     ItemSlideOnboarding(
-      ikon: LucideIcons.graduationCap,
       tag: 'Belajar Sambil Praktik',
       judul: '18 Modul Finansial Berbasis Uang Nyatamu',
       deskripsi:
           'Kuasai fondasi uang dari dasar sampai mahir. Pelajaran micro-learning berujung pada misi praktik yang langsung melatih datamu sendiri.',
-      warnaTint: WarnaFunda.tintBiru,
-      warnaIkon: WarnaFunda.info,
+      kanvas: WarnaFunda.kanvasBiru,
+      warnaTag: WarnaFunda.info,
+      pathSvg: AsetIlustrasiFunda.mulaiTesAwal,
     ),
     ItemSlideOnboarding(
-      ikon: LucideIcons.heartHandshake,
       tag: 'Tanpa Penghakiman',
       judul: 'Ruang Tenang Menata dan Memahami Arus Kas',
       deskripsi:
           'Tidak ada label pelit atau boros. Funda membantumu melihat ke mana uang mengalir dengan jernih, tenang, dan memberdayakan.',
-      warnaTint: WarnaFunda.tintUngu,
-      warnaIkon: WarnaFunda.sifatKeinginan,
+      kanvas: WarnaFunda.kanvasUngu,
+      warnaTag: WarnaFunda.sifatKeinginan,
+      pathSvg: AsetIlustrasiFunda.psikologiUang,
     ),
   ];
 
@@ -73,7 +72,14 @@ class _LayarOnboardingState extends ConsumerState<LayarOnboarding> {
     final db = ref.read(penyediaBasisData);
     await db.simpanPengaturan('onboarding_selesai', 'true');
     if (!mounted) return;
-    context.go('/');
+    if (Navigator.canPop(context)) {
+      Navigator.pop(context);
+      return;
+    }
+    final router = GoRouter.maybeOf(context);
+    if (router != null) {
+      context.go('/');
+    }
   }
 
   void _halamanBerikutnya() {
@@ -96,6 +102,9 @@ class _LayarOnboardingState extends ConsumerState<LayarOnboarding> {
 
   @override
   Widget build(BuildContext context) {
+    final isTeksBesar = MediaQuery.textScalerOf(context).scale(1.0) > 1.3;
+    final bisaKembali = Navigator.canPop(context);
+
     return Scaffold(
       backgroundColor: WarnaFunda.latar,
       body: SafeArea(
@@ -105,45 +114,50 @@ class _LayarOnboardingState extends ConsumerState<LayarOnboarding> {
           ),
           child: Column(
             children: [
-              // Baris Header: Logo & Tombol Lewati
+              // Baris Header Editorial: Kembali (bila dibuka dari dalam app), Logo Funda, & Pil Lewati
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: SpasiFunda.m),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Row(
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.all(SpasiFunda.xs),
-                          decoration: BoxDecoration(
-                            color: WarnaFunda.utama,
+                    Flexible(
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          if (bisaKembali) ...[
+                            TombolKembaliEditorial(
+                              padaTekan: () => Navigator.maybePop(context),
+                            ),
+                            const SizedBox(width: SpasiFunda.s),
+                          ],
+                          ClipRRect(
                             borderRadius: BorderRadius.circular(
                               SudutFunda.kecil,
                             ),
+                            child: Image.asset(
+                              'aset/gambar/app_icon_512.png',
+                              width: 30,
+                              height: 30,
+                              fit: BoxFit.cover,
+                            ),
                           ),
-                          child: const Icon(
-                            LucideIcons.wallet,
-                            color: WarnaFunda.putih,
-                            size: 18,
-                          ),
-                        ),
-                        const SizedBox(width: SpasiFunda.s),
-                        const TeksFunda.judulBagian('Funda'),
-                      ],
-                    ),
-                    if (_indeksHalaman < _daftarSlide.length - 1)
-                      TextButton(
-                        onPressed: _selesaikanOnboarding,
-                        child: const TeksFunda.label(
-                          'Lewati',
-                          warna: WarnaFunda.teksRedup,
-                        ),
+                          const SizedBox(width: SpasiFunda.s),
+                          const Flexible(child: TeksFunda.judulBagian('Funda')),
+                        ],
                       ),
+                    ),
+                    if (_indeksHalaman < _daftarSlide.length - 1) ...[
+                      const SizedBox(width: SpasiFunda.s),
+                      TombolPilHeaderEditorial(
+                        teks: 'Lewati',
+                        padaTekan: _selesaikanOnboarding,
+                      ),
+                    ],
                   ],
                 ),
               ),
 
-              // PageView Kartu Bento
+              // PageView Kartu Editorial
               Expanded(
                 child: PageView.builder(
                   controller: _pengontrolHalaman,
@@ -155,71 +169,80 @@ class _LayarOnboardingState extends ConsumerState<LayarOnboarding> {
                     final slide = _daftarSlide[indeks];
                     return Center(
                       child: SingleChildScrollView(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: SpasiFunda.xs,
+                        ),
                         child: Container(
-                          padding: const EdgeInsets.all(SpasiFunda.xl),
                           decoration: BoxDecoration(
                             color: WarnaFunda.permukaan,
                             borderRadius: BorderRadius.circular(
                               SudutFunda.petak,
                             ),
-                            border: Border.all(color: WarnaFunda.garis),
-                            boxShadow: const [
-                              BoxShadow(
-                                color: WarnaFunda.bayangan,
-                                blurRadius: 16,
-                                offset: Offset(0, 8),
-                              ),
-                            ],
+                            border: Border.all(
+                              color: WarnaFunda.garis,
+                              width: 1.0,
+                            ),
                           ),
+                          clipBehavior: Clip.antiAlias,
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
-                              // Kotak Ikon Bertint
+                              // Kanvas Atas Berwarna Cerah + Tag Pill + Ilustrasi SVG
                               Container(
-                                width: 64,
-                                height: 64,
-                                decoration: BoxDecoration(
-                                  color: slide.warnaTint,
-                                  borderRadius: BorderRadius.circular(
-                                    SudutFunda.kartu,
-                                  ),
-                                ),
-                                child: Icon(
-                                  slide.ikon,
-                                  size: 32,
-                                  color: slide.warnaIkon,
+                                color: slide.kanvas,
+                                padding: const EdgeInsets.all(SpasiFunda.l),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: SpasiFunda.m,
+                                        vertical: SpasiFunda.xs,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color: WarnaFunda.permukaan,
+                                        borderRadius: BorderRadius.circular(
+                                          SudutFunda.pil,
+                                        ),
+                                        border: Border.all(
+                                          color: WarnaFunda.garis,
+                                          width: 1.0,
+                                        ),
+                                      ),
+                                      child: TeksFunda.catatan(
+                                        slide.tag,
+                                        warna: slide.warnaTag,
+                                      ),
+                                    ),
+                                    if (!isTeksBesar) ...[
+                                      const SizedBox(height: SpasiFunda.m),
+                                      Center(
+                                        child: IlustrasiSvgFunda(
+                                          pathAset: slide.pathSvg,
+                                          tinggi: 132,
+                                        ),
+                                      ),
+                                    ],
+                                  ],
                                 ),
                               ),
-                              const SizedBox(height: SpasiFunda.l),
 
-                              // Tag Kecil
-                              Container(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: SpasiFunda.s,
-                                  vertical: SpasiFunda.xs,
+                              // Area Baca Putih Bersih
+                              Padding(
+                                padding: const EdgeInsets.all(SpasiFunda.xl),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    TeksFunda.judulLayar(slide.judul),
+                                    const SizedBox(height: SpasiFunda.m),
+                                    TeksFunda.isi(
+                                      slide.deskripsi,
+                                      warna: WarnaFunda.teksRedup,
+                                      rataTeks: TextAlign.start,
+                                    ),
+                                  ],
                                 ),
-                                decoration: BoxDecoration(
-                                  color: slide.warnaTint,
-                                  borderRadius: BorderRadius.circular(
-                                    SudutFunda.pil,
-                                  ),
-                                ),
-                                child: TeksFunda.catatan(
-                                  slide.tag,
-                                  warna: slide.warnaIkon,
-                                ),
-                              ),
-                              const SizedBox(height: SpasiFunda.m),
-
-                              // Judul Slide
-                              TeksFunda.judulLayar(slide.judul),
-                              const SizedBox(height: SpasiFunda.m),
-
-                              // Deskripsi
-                              TeksFunda.isi(
-                                slide.deskripsi,
-                                warna: WarnaFunda.teksRedup,
                               ),
                             ],
                           ),
@@ -230,12 +253,11 @@ class _LayarOnboardingState extends ConsumerState<LayarOnboarding> {
                 ),
               ),
 
-              // Baris Bawah: Indikator Titik & Tombol Lanjut
+              // Baris Bawah: Indikator Titik & Tombol Pil Gelap
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: SpasiFunda.l),
                 child: Column(
                   children: [
-                    // Indikator Titik
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: List.generate(_daftarSlide.length, (i) {
@@ -246,16 +268,16 @@ class _LayarOnboardingState extends ConsumerState<LayarOnboarding> {
                           width: aktif ? 24 : 8,
                           height: 8,
                           decoration: BoxDecoration(
-                            color: aktif ? WarnaFunda.utama : WarnaFunda.garis,
+                            color: aktif
+                                ? WarnaFunda.tombolGelap
+                                : WarnaFunda.garis,
                             borderRadius: BorderRadius.circular(SudutFunda.pil),
                           ),
                         );
                       }),
                     ),
-                    const SizedBox(height: SpasiFunda.xl),
-
-                    // Tombol Aksi Bawah
-                    TombolFunda.primer(
+                    const SizedBox(height: SpasiFunda.l),
+                    TombolFunda.pilGelap(
                       key: const Key('tombol_aksi_onboarding'),
                       lebarPenuh: true,
                       teks: _indeksHalaman == _daftarSlide.length - 1

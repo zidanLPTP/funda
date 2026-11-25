@@ -430,10 +430,9 @@ class _KartuKosongBerandaEditorial extends StatelessWidget {
                   horizontal: SpasiFunda.l,
                 ),
                 child: Center(
-                  child: IlustrasiGeometrisFunda(
-                    jenis: JenisIlustrasiFunda.celengan,
-                    warnaAksen: WarnaFunda.utama,
-                    ukuran: isTeksBesar ? 80 : 108,
+                  child: IlustrasiSvgFunda(
+                    pathAset: AsetIlustrasiFunda.dompet,
+                    tinggi: isTeksBesar ? 88 : 124,
                   ),
                 ),
               ),
@@ -835,8 +834,21 @@ class _SplitCardLanjutBelajar extends StatelessWidget {
     required this.padaKetuk,
   });
 
+  String _ambilPathSvgLanjutBelajar(String rute) {
+    final segmen = Uri.tryParse(rute)?.pathSegments ?? const [];
+    if (segmen.contains('tes-awal')) {
+      return AsetIlustrasiFunda.mulaiTesAwal;
+    }
+    if (segmen.length >= 3 &&
+        (segmen[1] == 'pelajaran' || segmen[1] == 'modul')) {
+      return temaVisualUntukModul(segmen[2]).pathSvg;
+    }
+    return AsetIlustrasiFunda.mulaiTesAwal;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final pathSvg = _ambilPathSvgLanjutBelajar(info.rute);
     return Semantics(
       button: true,
       label: 'Pelajaran keuangan: ${info.labelAksi} ${info.judul}',
@@ -862,11 +874,10 @@ class _SplitCardLanjutBelajar extends StatelessWidget {
                       child: Container(
                         color: WarnaFunda.kanvasUngu,
                         padding: const EdgeInsets.all(SpasiFunda.m),
-                        child: const Center(
-                          child: IlustrasiGeometrisFunda(
-                            jenis: JenisIlustrasiFunda.tunas,
-                            warnaAksen: WarnaFunda.sifatKeinginan,
-                            ukuran: 74,
+                        child: Center(
+                          child: IlustrasiSvgFunda(
+                            pathAset: pathSvg,
+                            tinggi: 76,
                           ),
                         ),
                       ),
