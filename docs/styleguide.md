@@ -139,9 +139,10 @@ Antarmuka tersusun dari **petak-petak (tile) membulat** berukuran beragam di ata
 - Tinggi min. **48dp**, lebar penuh untuk aksi utama di layar pelajaran/misi.
 - Status: normal, ditekan, nonaktif, memuat. Tombol nonaktif tetap menjelaskan *kenapa* nonaktif.
 
-### Kartu Pelajaran (peta belajar)
-- Judul, durasi (mis. "4 menit"), status (belum / sedang / selesai), ikon modul.
-- Pelajaran terkunci memberi petunjuk cara membukanya, bukan hanya ikon gembok.
+### Kartu Pelajaran (peta belajar & detail modul)
+- Kartu modul di Tab Belajar berbentuk baris ramping horizontal dengan judul, pil progres ringkas (`x/y`), dan ikon vektor berwarna cerah tanpa kotak latar.
+- Mengetuk modul membuka halaman detail modul editorial penuh ber-kanvas pastel di atas, daftar materi *timeline* bernomor bersih (tanpa tombol per baris), dan satu tombol pil gelap utama di bagian bawah.
+- Pelajaran terkunci memberi petunjuk cara membukanya, tanpa banjir ikon gembok.
 
 ### Layar Pelajaran
 - Bilah atas ringkas: tombol tutup bulat (`×`) dengan border halus dan *progress bar* bersegmen tanpa badge tahapan atau label debug.

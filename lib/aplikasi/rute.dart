@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../fitur/anggaran/tampilan/layar_anggaran.dart';
 import '../fitur/belajar/tampilan/layar_belajar.dart';
+import '../fitur/belajar/tampilan/layar_detail_modul.dart';
 import '../fitur/belajar/tampilan/layar_kuis_modul.dart';
 import '../fitur/belajar/tampilan/layar_pemutar_pelajaran.dart';
 import '../fitur/belajar/tampilan/layar_tes_awal.dart';
@@ -179,7 +180,15 @@ final ruteFunda = GoRouter(
       builder: (context, state) => const LayarDaftarKategori(),
     ),
 
-    // Rute Fitur Tahap 4: Pemutar Pelajaran & Kuis Akhir Modul
+    // Rute Fitur Tahap 4: Detail Modul, Pemutar Pelajaran & Kuis Akhir Modul
+    GoRoute(
+      parentNavigatorKey: _kunciNavigatorAkar,
+      path: '/belajar/modul/:modulId',
+      builder: (context, state) => LayarDetailModul(
+        key: ValueKey(state.pathParameters['modulId']!),
+        modulId: state.pathParameters['modulId']!,
+      ),
+    ),
     GoRoute(
       parentNavigatorKey: _kunciNavigatorAkar,
       path: '/belajar/pelajaran/:modulId/:pelajaranId',

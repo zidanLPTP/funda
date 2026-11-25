@@ -6,7 +6,33 @@ import '../../../komponen/komponen_funda.dart';
 import '../../../perhitungan/perhitungan_belajar.dart';
 import '../../../tema/token.dart';
 import '../kontroler/penyedia_belajar.dart';
-import 'lembar_detail_modul.dart';
+import 'layar_detail_modul.dart';
+
+void _bukaHalamanDetailModul(
+  BuildContext context,
+  WidgetRef ref,
+  String modulId,
+) {
+  final router = GoRouter.maybeOf(context);
+  if (router != null) {
+    router.push('/belajar/modul/$modulId');
+    return;
+  }
+
+  final tanpaAnimasi =
+      MediaQuery.disableAnimationsOf(context) || ref.read(penyediaTanpaAnimasi);
+  Navigator.of(context).push(
+    PageRouteBuilder<void>(
+      transitionDuration: tanpaAnimasi
+          ? Duration.zero
+          : const Duration(milliseconds: 250),
+      reverseTransitionDuration: tanpaAnimasi
+          ? Duration.zero
+          : const Duration(milliseconds: 200),
+      pageBuilder: (_, _, _) => LayarDetailModul(modulId: modulId),
+    ),
+  );
+}
 
 /// Layar utama Tab Belajar bergaya editorial micro-learning:
 /// kartu sorotan terbelah dua di atas, aksi utama pil gelap, dan kartu modul ramping.
@@ -170,10 +196,7 @@ class _KartuSorotanAtas extends ConsumerWidget {
                         } else if (rek.statusModul.ruteAksi != null) {
                           context.push(rek.statusModul.ruteAksi!);
                         } else {
-                          tampilkanLembarDetailModul(
-                            context,
-                            modulId: rek.modul.id,
-                          );
+                          _bukaHalamanDetailModul(context, ref, rek.modul.id);
                         }
                       }
                     : null,
@@ -399,7 +422,7 @@ class _KartuModulRamping extends ConsumerWidget {
       child: Material(
         color: WarnaFunda.transparan,
         child: InkWell(
-          onTap: () => tampilkanLembarDetailModul(context, modulId: modul.id),
+          onTap: () => _bukaHalamanDetailModul(context, ref, modul.id),
           child: ConstrainedBox(
             constraints: const BoxConstraints(minHeight: 80),
             child: Padding(

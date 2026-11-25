@@ -14,6 +14,7 @@ import 'package:funda/fitur/belajar/kontroler/penyedia_belajar.dart';
 import 'package:funda/fitur/belajar/model/pembaca_konten.dart';
 import 'package:funda/fitur/belajar/tampilan/komponen_teks_istilah.dart';
 import 'package:funda/fitur/belajar/tampilan/layar_belajar.dart';
+import 'package:funda/fitur/belajar/tampilan/layar_detail_modul.dart';
 import 'package:funda/fitur/belajar/tampilan/layar_pemutar_pelajaran.dart';
 import 'package:funda/fitur/beranda/tampilan/layar_beranda.dart';
 import 'package:funda/fitur/lainnya/tampilan/layar_lainnya.dart';
@@ -394,11 +395,113 @@ void main() {
         expect(find.text('1/2'), findsOneWidget);
         expect(find.text('Memecah Tujuan Besar'), findsNothing);
 
-        // Ketuk kartu modul -> membuka lembar detail modul
+        // Ketuk kartu modul -> membuka halaman penuh LayarDetailModul editorial
         await tester.tap(find.byKey(const Key('kartu_modul_tujuan_besar')));
-        await pompaHinggaAda(tester, find.text('Memecah Tujuan Besar'));
+        await pompaHinggaAda(tester, find.byType(LayarDetailModul));
+        expect(
+          find.byKey(const Key('header_kanvas_detail_modul')),
+          findsOneWidget,
+        );
+        expect(
+          find.byKey(const Key('tombol_kembali_detail_modul')),
+          findsOneWidget,
+        );
         expect(find.text('Memecah Tujuan Besar'), findsOneWidget);
         expect(find.text('Menghitung Dampak Harga'), findsOneWidget);
+        // Bersih tanpa tombol "Baca Ulang" / "Mulai" per baris, diganti 1 sticky CTA pil gelap
+        expect(find.text('Baca Ulang'), findsNothing);
+        expect(find.text('Mulai'), findsNothing);
+        expect(
+          find.byKey(const Key('tombol_aksi_detail_modul')),
+          findsOneWidget,
+        );
+
+        await bongkarWidget(tester);
+      },
+    );
+
+    testWidgets(
+      '5. LayarDetailModul bebas overflow pada layar 360x640 skala teks 2.0',
+      (tester) async {
+        tester.view.physicalSize = const Size(360, 640);
+        tester.view.devicePixelRatio = 1.0;
+        addTearDown(() => tester.view.resetPhysicalSize());
+
+        const modul = ModulKonten(
+          id: 'dana_darurat',
+          judul: 'Dana Darurat Untuk Situasi Tak Terduga',
+          tingkat: 'pemula',
+          urutan: 3,
+          deskripsiSingkat: 'Bangun bantalan aman perlahan.',
+          tersedia: true,
+          gerbang: [],
+          daftarPelajaran: ['dana_darurat_3_1'],
+          kuis: KuisKonten(jumlahSoal: 5, bankSoal: []),
+        );
+        const pel = PelajaranKonten(
+          id: 'dana_darurat_3_1',
+          modulId: 'dana_darurat',
+          judul: 'Berapa Bulan Dana Darurat yang Ideal',
+          durasiMenit: 4,
+          status: 'draf',
+          gerbang: [],
+          pemantik: 'Situasi darurat bisa datang kapan saja.',
+          kartu: [KartuPelajaranKonten(judul: 'K1', isi: 'Mulai 1 bulan.')],
+          contohAngka: ContohAngkaKonten.kosong,
+          cekPaham: [],
+          misi: MisiKonten(
+            tipe: 'ada_data',
+            objek: 'tujuan',
+            min: 1,
+            judul: 'Misi',
+            deskripsi: 'Buat target.',
+            perkiraanMenit: 2,
+          ),
+        );
+
+        await tester.pumpWidget(
+          ProviderScope(
+            overrides: [
+              penyediaBasisData.overrideWithValue(db),
+              penyediaTanpaAnimasi.overrideWithValue(true),
+              penyediaPetaBelajar.overrideWith(
+                (ref) => Future.value([
+                  const ItemPetaModul(
+                    modul: modul,
+                    statusModul: HasilStatusBelajar(
+                      status: StatusBelajar.sedang,
+                      apaYangKurang: [],
+                    ),
+                    daftarPelajaran: [
+                      (
+                        pel,
+                        HasilStatusBelajar(
+                          status: StatusBelajar.sedang,
+                          apaYangKurang: [],
+                        ),
+                      ),
+                    ],
+                  ),
+                ]),
+              ),
+            ],
+            child: MediaQuery(
+              data: const MediaQueryData(
+                size: Size(360, 640),
+                textScaler: TextScaler.linear(2.0),
+              ),
+              child: MaterialApp(
+                theme: TemaFunda.temaTerang,
+                home: const LayarDetailModul(modulId: 'dana_darurat'),
+              ),
+            ),
+          ),
+        );
+        await pompaHinggaAda(
+          tester,
+          find.byKey(const Key('header_kanvas_detail_modul')),
+        );
+        expect(tester.takeException(), isNull);
 
         await bongkarWidget(tester);
       },
