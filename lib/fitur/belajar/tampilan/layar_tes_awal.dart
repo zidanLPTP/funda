@@ -531,7 +531,7 @@ class _LayarTesAwalState extends ConsumerState<LayarTesAwal> {
                             ),
                             const SizedBox(height: SpasiFunda.m),
                             const TeksFunda.isi(
-                              'Sekarang lanjut ke 12 pertanyaan singkat untuk memetakan pemahamanmu. Jawab santai saja — nggak perlu takut salah, ada opsi "Belum tahu" bila masih asing.',
+                              'Sekarang lanjut ke 12 pertanyaan singkat untuk memetakan pemahamanmu. Jawab santai saja nggak perlu takut salah, ada opsi "Belum tahu" bila masih ragu.',
                               warna: WarnaFunda.teksRedup,
                               rataTeks: TextAlign.center,
                             ),

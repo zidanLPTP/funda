@@ -50,8 +50,7 @@ class _LayarOnboardingState extends ConsumerState<LayarOnboarding> {
     ),
     ItemSlideOnboarding(
       judul: 'Ruang Tenang Menata Uang',
-      deskripsi:
-          'Pahami arah arus kasmu dengan jernih—tanpa label boros, pelit, atau rasa bersalah.',
+      deskripsi: 'Pahami arah arus kasmu dengan jelas.',
       kanvas: WarnaFunda.kanvasUngu,
       pathSvg: AsetIlustrasiFunda.ruangTenang,
     ),

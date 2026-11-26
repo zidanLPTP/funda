@@ -1987,7 +1987,7 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
           ),
           const SizedBox(height: SpasiFunda.m),
           const TeksFunda.catatan(
-            'Ini adalah gambaran nyata dari keuanganmu saat ini tanpa kata-kata menghakimi.',
+            'Ini adalah gambaran nyata dari keuanganmu saat ini.',
             warna: WarnaFunda.teksRedup,
           ),
         ],

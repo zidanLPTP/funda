@@ -89,7 +89,7 @@ class _LayarSandboxState extends ConsumerState<LayarSandbox> {
                             SizedBox(width: SpasiFunda.s),
                             Expanded(
                               child: Text(
-                                'Mode Sandbox — Uang Fiktif (Simulasi, bukan prediksi)',
+                                'Mode Sandbox (Simulasi)',
                                 style: TextStyle(
                                   fontFamily: TipografiFunda.namaKeluargaFont,
                                   fontSize: 13,

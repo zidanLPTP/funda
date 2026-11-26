@@ -562,9 +562,9 @@ class LayarLainnya extends ConsumerWidget {
                           ikon: LucideIcons.heartHandshake,
                           pathSvg: AsetIkonFunda.katDonasi,
                           warnaIkon: WarnaFunda.sifatKeinginan,
-                          judul: 'Ruang Tenang Tanpa Penghakiman',
+                          judul: 'Ruang Tenang',
                           keterangan:
-                              'Membantumu memahami arah arus kas dengan jernih tanpa rasa bersalah atau label negatif.',
+                              'Membantumu memahami arah arus kas dengan jelas.',
                         ),
                         Divider(
                           height: SpasiFunda.l * 2,

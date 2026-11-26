@@ -61,10 +61,7 @@ void main() {
       );
 
       // Verifikasi teks banner persis
-      expect(
-        find.text('Mode Sandbox — Uang Fiktif (Simulasi, bukan prediksi)'),
-        findsOneWidget,
-      );
+      expect(find.text('Mode Sandbox (Simulasi)'), findsOneWidget);
 
       // Verifikasi disclaimer tampil dan tombol Mengerti dapat dilipat
       expect(find.byType(LayarSandbox), findsOneWidget);
