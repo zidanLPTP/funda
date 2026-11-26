@@ -39,6 +39,26 @@ void main() {
         );
         expect(peringatanUtang.pathSvg, AsetIlustrasiFunda.waspadaPenipuan);
         expect(peringatanUtang.kanvas, WarnaFunda.kanvasKoral);
+
+        final bantalan = selesaikanIlustrasiPelajaran(
+          modulId: 'dana_darurat',
+          pelajaranId: 'dana_darurat_3_1',
+          tahap: TahapPelajaranVisual.pemantik,
+        );
+        expect(bantalan.pathSvg, AsetIlustrasiFunda.pelajaranBantalanDarurat);
+        expect(bantalan.kanvas, WarnaFunda.kanvasKuning);
+
+        final paylaterBunga = selesaikanIlustrasiPelajaran(
+          modulId: 'paylater_kredit',
+          pelajaranId: 'paylater_kredit_7_1',
+          tahap: TahapPelajaranVisual.kartu,
+          indeksKartu: 1,
+        );
+        expect(
+          paylaterBunga.pathSvg,
+          AsetIlustrasiFunda.pelajaranBungaPinjaman,
+        );
+        expect(paylaterBunga.kanvas, WarnaFunda.kanvasKoral);
       },
     );
 
@@ -92,13 +112,13 @@ void main() {
 
     test('Prioritas 3: fallback ke ilustrasi modulId bila belum dipetakan', () {
       final info = selesaikanIlustrasiPelajaran(
-        modulId: 'dana_darurat',
-        pelajaranId: 'dana_darurat_3_1',
+        modulId: 'investasi_dasar',
+        pelajaranId: 'investasi_dasar_belum_dipetakan',
         tahap: TahapPelajaranVisual.kartu,
         indeksKartu: 0,
       );
 
-      expect(info.pathSvg, AsetIlustrasiFunda.danaDarurat);
+      expect(info.pathSvg, AsetIlustrasiFunda.investasiDasar);
       expect(info.kanvas, WarnaFunda.kanvasMint);
     });
 

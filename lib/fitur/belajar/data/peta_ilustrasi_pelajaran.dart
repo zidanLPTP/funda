@@ -114,6 +114,10 @@ const Map<(String, String), InfoIlustrasiPelajaran> petaSpesifikIlustrasiKartu =
         pathSvg: AsetIlustrasiFunda.dompet,
         kanvas: WarnaFunda.kanvasKuning,
       ),
+      ('tabungan_2_1', 'kartu_0'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.pelajaranTujuanTarget,
+        kanvas: WarnaFunda.kanvasMint,
+      ),
       ('tabungan_2_1', 'kartu_1'): InfoIlustrasiPelajaran(
         pathSvg: AsetIlustrasiFunda.tujuanKosong,
         kanvas: WarnaFunda.kanvasMint,
@@ -134,12 +138,36 @@ const Map<(String, String), InfoIlustrasiPelajaran> petaSpesifikIlustrasiKartu =
         pathSvg: AsetIlustrasiFunda.kantongKosong,
         kanvas: WarnaFunda.kanvasMint,
       ),
+      ('tabungan_2_3', 'pemantik'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.pelajaranTujuanTarget,
+        kanvas: WarnaFunda.kanvasKuning,
+      ),
+      ('tabungan_2_3', 'kartu_0'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.pelajaranKecepatanMenabung,
+        kanvas: WarnaFunda.kanvasMint,
+      ),
+      ('tabungan_2_3', 'kartu_1'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.pelajaranKecepatanMenabung,
+        kanvas: WarnaFunda.kanvasMint,
+      ),
       ('tabungan_2_3', 'kartu_2'): InfoIlustrasiPelajaran(
         pathSvg: AsetIlustrasiFunda.pelajaranEvaluasiKompas,
         kanvas: WarnaFunda.kanvasMint,
       ),
 
       // Modul 3: Dana Darurat
+      ('dana_darurat_3_1', 'pemantik'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.pelajaranBantalanDarurat,
+        kanvas: WarnaFunda.kanvasKuning,
+      ),
+      ('dana_darurat_3_1', 'kartu_0'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.pelajaranBantalanDarurat,
+        kanvas: WarnaFunda.kanvasMint,
+      ),
+      ('dana_darurat_3_1', 'kartu_1'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.pelajaranBantalanDarurat,
+        kanvas: WarnaFunda.kanvasMint,
+      ),
       ('dana_darurat_3_1', 'kartu_2'): InfoIlustrasiPelajaran(
         pathSvg: AsetIlustrasiFunda.kantongKosong,
         kanvas: WarnaFunda.kanvasMint,
@@ -150,6 +178,10 @@ const Map<(String, String), InfoIlustrasiPelajaran> petaSpesifikIlustrasiKartu =
       ),
       ('dana_darurat_3_2', 'kartu_0'): InfoIlustrasiPelajaran(
         pathSvg: AsetIlustrasiFunda.tagihanTenang,
+        kanvas: WarnaFunda.kanvasMint,
+      ),
+      ('dana_darurat_3_2', 'kartu_1'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.pelajaranMeteranBulanDarurat,
         kanvas: WarnaFunda.kanvasMint,
       ),
       ('dana_darurat_3_2', 'kartu_2'): InfoIlustrasiPelajaran(
@@ -168,6 +200,10 @@ const Map<(String, String), InfoIlustrasiPelajaran> petaSpesifikIlustrasiKartu =
         pathSvg: AsetIlustrasiFunda.catatTransaksi,
         kanvas: WarnaFunda.kanvasMint,
       ),
+      ('dana_darurat_3_3', 'kartu_2'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.pelajaranMeteranBulanDarurat,
+        kanvas: WarnaFunda.kanvasMint,
+      ),
 
       // Modul 4: Utang & Cicilan
       ('utang_cicilan_4_1', 'pemantik'): InfoIlustrasiPelajaran(
@@ -177,6 +213,18 @@ const Map<(String, String), InfoIlustrasiPelajaran> petaSpesifikIlustrasiKartu =
       ('utang_cicilan_4_1', 'kartu_2'): InfoIlustrasiPelajaran(
         pathSvg: AsetIlustrasiFunda.waspadaPenipuan,
         kanvas: WarnaFunda.kanvasKoral,
+      ),
+      ('utang_cicilan_4_2', 'pemantik'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.pelajaranBungaPinjaman,
+        kanvas: WarnaFunda.kanvasKuning,
+      ),
+      ('utang_cicilan_4_2', 'kartu_0'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.pelajaranBungaPinjaman,
+        kanvas: WarnaFunda.kanvasMint,
+      ),
+      ('utang_cicilan_4_2', 'kartu_1'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.pelajaranBungaPinjaman,
+        kanvas: WarnaFunda.kanvasMint,
       ),
       ('utang_cicilan_4_2', 'kartu_2'): InfoIlustrasiPelajaran(
         pathSvg: AsetIlustrasiFunda.paylaterKredit,
@@ -190,8 +238,114 @@ const Map<(String, String), InfoIlustrasiPelajaran> petaSpesifikIlustrasiKartu =
         pathSvg: AsetIlustrasiFunda.pelajaranEvaluasiKompas,
         kanvas: WarnaFunda.kanvasMint,
       ),
+      ('utang_cicilan_4_4', 'pemantik'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.pelajaranBolaSaljuLongsor,
+        kanvas: WarnaFunda.kanvasKuning,
+      ),
+      ('utang_cicilan_4_4', 'kartu_0'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.pelajaranBolaSaljuLongsor,
+        kanvas: WarnaFunda.kanvasMint,
+      ),
+      ('utang_cicilan_4_4', 'kartu_1'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.pelajaranBolaSaljuLongsor,
+        kanvas: WarnaFunda.kanvasMint,
+      ),
       ('utang_cicilan_4_4', 'kartu_2'): InfoIlustrasiPelajaran(
         pathSvg: AsetIlustrasiFunda.utangLunasKosong,
+        kanvas: WarnaFunda.kanvasMint,
+      ),
+
+      // Modul 5: Waspada Penipuan
+      ('waspada_penipuan_5_1', 'pemantik'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.waspadaPenipuan,
+        kanvas: WarnaFunda.kanvasKoral,
+      ),
+      ('waspada_penipuan_5_1', 'kartu_0'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.psikologiUang,
+        kanvas: WarnaFunda.kanvasMint,
+      ),
+      ('waspada_penipuan_5_1', 'kartu_1'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.waspadaPenipuan,
+        kanvas: WarnaFunda.kanvasKoral,
+      ),
+      ('waspada_penipuan_5_2', 'kartu_1'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.waspadaPenipuan,
+        kanvas: WarnaFunda.kanvasKoral,
+      ),
+      ('waspada_penipuan_5_2', 'kartu_2'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.pelajaranEvaluasiKompas,
+        kanvas: WarnaFunda.kanvasMint,
+      ),
+      ('waspada_penipuan_5_3', 'pemantik'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.ruangTenang,
+        kanvas: WarnaFunda.kanvasKuning,
+      ),
+      ('waspada_penipuan_5_3', 'kartu_0'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.ruangTenang,
+        kanvas: WarnaFunda.kanvasMint,
+      ),
+      ('waspada_penipuan_5_3', 'kartu_1'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.privasiLokal,
+        kanvas: WarnaFunda.kanvasMint,
+      ),
+
+      // Modul 6: Psikologi Uang
+      ('psikologi_uang_6_1', 'kartu_0'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.psikologiUang,
+        kanvas: WarnaFunda.kanvasMint,
+      ),
+      ('psikologi_uang_6_1', 'kartu_1'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.pelajaranEvaluasiKompas,
+        kanvas: WarnaFunda.kanvasMint,
+      ),
+      ('psikologi_uang_6_2', 'pemantik'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.pelajaranPengeluaranKecil,
+        kanvas: WarnaFunda.kanvasKuning,
+      ),
+      ('psikologi_uang_6_2', 'kartu_0'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.pelajaranPengeluaranKecil,
+        kanvas: WarnaFunda.kanvasMint,
+      ),
+      ('psikologi_uang_6_2', 'kartu_1'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.pelajaranEvaluasiKompas,
+        kanvas: WarnaFunda.kanvasMint,
+      ),
+      ('psikologi_uang_6_2', 'kartu_2'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.tagihanTenang,
+        kanvas: WarnaFunda.kanvasMint,
+      ),
+      ('psikologi_uang_6_3', 'kartu_1'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.pelajaranKebutuhanVsKeinginan,
+        kanvas: WarnaFunda.kanvasMint,
+      ),
+
+      // Modul 7: Paylater & Kredit
+      ('paylater_kredit_7_1', 'pemantik'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.paylaterKredit,
+        kanvas: WarnaFunda.kanvasKuning,
+      ),
+      ('paylater_kredit_7_1', 'kartu_0'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.utangCicilan,
+        kanvas: WarnaFunda.kanvasMint,
+      ),
+      ('paylater_kredit_7_1', 'kartu_1'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.pelajaranBungaPinjaman,
+        kanvas: WarnaFunda.kanvasKoral,
+      ),
+      ('paylater_kredit_7_1', 'kartu_2'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.pelajaranPengeluaranKecil,
+        kanvas: WarnaFunda.kanvasKoral,
+      ),
+      ('paylater_kredit_7_2', 'pemantik'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.kprKreditBesar,
+        kanvas: WarnaFunda.kanvasKuning,
+      ),
+      ('paylater_kredit_7_3', 'kartu_0'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.tagihanTenang,
+        kanvas: WarnaFunda.kanvasMint,
+      ),
+      ('paylater_kredit_7_3', 'kartu_1'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.pelajaranRencana503020,
         kanvas: WarnaFunda.kanvasMint,
       ),
     };

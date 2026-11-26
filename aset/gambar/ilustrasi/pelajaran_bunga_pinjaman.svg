@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 160" width="240" height="160">
+  
+  <ellipse cx="116" cy="146" rx="78" ry="6.5" fill="#0B2E22" fill-opacity="0.12" />
+
+  
+  <g stroke="#0B2E22" stroke-width="4.2" stroke-linejoin="round">
+    <rect x="52" y="124" width="76" height="14" rx="7" fill="#0F766E" />
+    <rect x="52" y="110" width="76" height="14" rx="7" fill="#14B8A6" />
+    <rect x="52" y="96" width="76" height="14" rx="7" fill="#0F766E" />
+    <rect x="52" y="82" width="76" height="14" rx="7" fill="#14B8A6" />
+  </g>
+  
+  <g stroke="#99F6E4" stroke-opacity="0.7" stroke-width="3" stroke-linecap="round">
+    <path d="M 63 89 H 75" />
+    <path d="M 63 103 H 75" />
+    <path d="M 63 117 H 75" />
+    <path d="M 63 131 H 75" />
+  </g>
+
+  
+  <g stroke="#0B2E22" stroke-width="4.2" stroke-linejoin="round">
+    <rect x="56" y="68" width="76" height="14" rx="7" fill="#FB923C" />
+    <rect x="50" y="54" width="76" height="14" rx="7" fill="#FB7185" />
+    <rect x="54" y="40" width="76" height="14" rx="7" fill="#FB923C" />
+  </g>
+  
+  <g stroke="#FFFFFF" stroke-opacity="0.65" stroke-width="3" stroke-linecap="round">
+    <path d="M 65 47 H 77" />
+    <path d="M 61 61 H 73" />
+    <path d="M 67 75 H 79" />
+  </g>
+
+  
+  <g>
+    <circle cx="158" cy="64" r="24" fill="#FACC15" stroke="#0B2E22" stroke-width="4.5" />
+    <circle cx="158" cy="64" r="17" fill="#FDE047" stroke="#D97706" stroke-width="2" />
+    
+    <circle cx="149.5" cy="56" r="4.2" fill="#FFFFFF" stroke="#0B2E22" stroke-width="3.2" />
+    <circle cx="166.5" cy="72" r="4.2" fill="#FFFFFF" stroke="#0B2E22" stroke-width="3.2" />
+    <path d="M 149 73 L 167 55" fill="none" stroke="#0B2E22" stroke-width="4.2" stroke-linecap="round" />
+  </g>
+
+  
+  <g>
+    <path d="M 193 84 V 44" fill="none" stroke="#0B2E22" stroke-width="10.5" stroke-linecap="round" />
+    <path d="M 193 84 V 44" fill="none" stroke="#FB7185" stroke-width="4.5" stroke-linecap="round" />
+    <path d="M 183 50 L 193 34 L 203 50 Z" fill="#FB7185" stroke="#0B2E22" stroke-width="4" stroke-linejoin="round" />
+  </g>
+</svg>
