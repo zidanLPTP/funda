@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 160" width="240" height="160">
+  
+  <ellipse cx="120" cy="144" rx="84" ry="6.5" fill="#0B2E22" fill-opacity="0.12" />
+
+  
+  <g>
+    <path d="M 34 58 V 48 C 34 44, 37.5 41, 41.5 41 H 100 C 104 41, 107 44, 107 48 V 58 Z" fill="#0B4A3E" stroke="#0B2E22" stroke-width="4.5" stroke-linejoin="round" />
+    <rect x="30" y="54" width="80" height="66" rx="14" fill="#0F766E" stroke="#0B2E22" stroke-width="4.5" />
+    <rect x="38" y="62" width="64" height="50" rx="8" fill="none" stroke="#99F6E4" stroke-opacity="0.35" stroke-width="2" stroke-dasharray="5 5" />
+    
+    <path d="M 94 76 H 112 C 114.5 76, 116 77.8, 116 80.5 V 93.5 C 116 96.2, 114.5 98, 112 98 H 94 C 88 98, 83.5 93, 83.5 87 C 83.5 81, 88 76, 94 76 Z" fill="#FFFFFF" stroke="#0B2E22" stroke-width="4.2" stroke-linejoin="round" />
+    <circle cx="95" cy="87" r="4.2" fill="#FACC15" stroke="#0B2E22" stroke-width="2.8" />
+  </g>
+
+  
+  <g>
+    <path d="M 172 45 H 142 V 37 L 123 52 L 142 67 V 59 H 172 C 174.5 59, 176.5 57, 176.5 54.5 V 49.5 C 176.5 47, 174.5 45, 172 45 Z" fill="#14B8A6" stroke="#0B2E22" stroke-width="4.2" stroke-linejoin="round" />
+    
+    <circle cx="197" cy="52" r="15" fill="#FACC15" stroke="#0B2E22" stroke-width="4.2" />
+    <circle cx="197" cy="52" r="9.5" fill="#FDE047" stroke="#D97706" stroke-width="1.8" />
+    <path d="M 197 47 L 197 57" fill="none" stroke="#B45309" stroke-width="3.2" stroke-linecap="round" />
+  </g>
+
+  
+  <g>
+    <path d="M 127.5 101 H 157 V 93 L 176 108 L 157 123 V 115 H 127.5 C 125 115, 123 113, 123 110.5 V 105.5 C 123 103, 125 101, 127.5 101 Z" fill="#FB923C" stroke="#0B2E22" stroke-width="4.2" stroke-linejoin="round" />
+    
+    <rect x="182" y="90" width="30" height="36" rx="7" fill="#FFFFFF" stroke="#0B2E22" stroke-width="4.2" />
+    <path d="M 182 97 C 182 93, 185 90, 189 90 H 205 C 209 90, 212 93, 212 97 V 101 H 182 Z" fill="#FDBA74" stroke="#0B2E22" stroke-width="3.8" stroke-linejoin="round" />
+    <path d="M 189 109 H 205 M 189 117 H 200" fill="none" stroke="#94A3B8" stroke-width="3.5" stroke-linecap="round" />
+  </g>
+</svg>

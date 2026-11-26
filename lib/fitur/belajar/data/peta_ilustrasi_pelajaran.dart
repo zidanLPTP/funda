@@ -25,50 +25,176 @@ String kunciTahapVisual(TahapPelajaranVisual tahap, {int? indeksKartu}) {
 }
 
 /// Peta spesifik per `(pelajaranId, kunciTahap)` (Prioritas 1).
-const Map<(String, String), InfoIlustrasiPelajaran>
-petaSpesifikIlustrasiKartu = {
-  // Modul 1: Anggaran & Arus Kas (pemakaian ulang aset SVG yang sudah cocok)
-  ('anggaran_arus_kas_1_1', 'pemantik'): InfoIlustrasiPelajaran(
-    pathSvg: AsetIlustrasiFunda.dompet,
-    kanvas: WarnaFunda.kanvasKuning,
-  ),
-  ('anggaran_arus_kas_1_1', 'kartu_1'): InfoIlustrasiPelajaran(
-    pathSvg: AsetIlustrasiFunda.catatTransaksi,
-    kanvas: WarnaFunda.kanvasMint,
-  ),
-  ('anggaran_arus_kas_1_1', 'kartu_2'): InfoIlustrasiPelajaran(
-    pathSvg: AsetIlustrasiFunda.laporanBulanan,
-    kanvas: WarnaFunda.kanvasMint,
-  ),
-  ('anggaran_arus_kas_1_2', 'kartu_2'): InfoIlustrasiPelajaran(
-    pathSvg: AsetIlustrasiFunda.ruangTenang,
-    kanvas: WarnaFunda.kanvasMint,
-  ),
-  ('anggaran_arus_kas_1_3', 'kartu_0'): InfoIlustrasiPelajaran(
-    pathSvg: AsetIlustrasiFunda.psikologiUang,
-    kanvas: WarnaFunda.kanvasMint,
-  ),
-  ('anggaran_arus_kas_1_3', 'kartu_2'): InfoIlustrasiPelajaran(
-    pathSvg: AsetIlustrasiFunda.kantongKosong,
-    kanvas: WarnaFunda.kanvasMint,
-  ),
-  ('anggaran_arus_kas_1_4', 'kartu_1'): InfoIlustrasiPelajaran(
-    pathSvg: AsetIlustrasiFunda.tabungan,
-    kanvas: WarnaFunda.kanvasMint,
-  ),
-  ('anggaran_arus_kas_1_5', 'pemantik'): InfoIlustrasiPelajaran(
-    pathSvg: AsetIlustrasiFunda.ruangTenang,
-    kanvas: WarnaFunda.kanvasKuning,
-  ),
-  ('anggaran_arus_kas_1_5', 'kartu_0'): InfoIlustrasiPelajaran(
-    pathSvg: AsetIlustrasiFunda.laporanBulanan,
-    kanvas: WarnaFunda.kanvasMint,
-  ),
-  ('anggaran_arus_kas_1_5', 'kartu_2'): InfoIlustrasiPelajaran(
-    pathSvg: AsetIlustrasiFunda.anggaranKosong,
-    kanvas: WarnaFunda.kanvasMint,
-  ),
-};
+const Map<(String, String), InfoIlustrasiPelajaran> petaSpesifikIlustrasiKartu =
+    {
+      // Modul 1: Anggaran & Arus Kas
+      ('anggaran_arus_kas_1_1', 'pemantik'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.dompet,
+        kanvas: WarnaFunda.kanvasKuning,
+      ),
+      ('anggaran_arus_kas_1_1', 'kartu_0'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.pelajaranPengeluaranKecil,
+        kanvas: WarnaFunda.kanvasMint,
+      ),
+      ('anggaran_arus_kas_1_1', 'kartu_1'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.catatTransaksi,
+        kanvas: WarnaFunda.kanvasMint,
+      ),
+      ('anggaran_arus_kas_1_1', 'kartu_2'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.laporanBulanan,
+        kanvas: WarnaFunda.kanvasMint,
+      ),
+      ('anggaran_arus_kas_1_2', 'pemantik'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.pelajaranPetaArusKas,
+        kanvas: WarnaFunda.kanvasKuning,
+      ),
+      ('anggaran_arus_kas_1_2', 'kartu_0'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.pelajaranPetaArusKas,
+        kanvas: WarnaFunda.kanvasMint,
+      ),
+      ('anggaran_arus_kas_1_2', 'kartu_1'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.pelajaranPetaArusKas,
+        kanvas: WarnaFunda.kanvasMint,
+      ),
+      ('anggaran_arus_kas_1_2', 'kartu_2'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.ruangTenang,
+        kanvas: WarnaFunda.kanvasMint,
+      ),
+      ('anggaran_arus_kas_1_3', 'pemantik'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.pelajaranKebutuhanVsKeinginan,
+        kanvas: WarnaFunda.kanvasKuning,
+      ),
+      ('anggaran_arus_kas_1_3', 'kartu_0'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.psikologiUang,
+        kanvas: WarnaFunda.kanvasMint,
+      ),
+      ('anggaran_arus_kas_1_3', 'kartu_1'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.pelajaranKebutuhanVsKeinginan,
+        kanvas: WarnaFunda.kanvasMint,
+      ),
+      ('anggaran_arus_kas_1_3', 'kartu_2'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.kantongKosong,
+        kanvas: WarnaFunda.kanvasMint,
+      ),
+      ('anggaran_arus_kas_1_4', 'pemantik'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.pelajaranRencana503020,
+        kanvas: WarnaFunda.kanvasKuning,
+      ),
+      ('anggaran_arus_kas_1_4', 'kartu_0'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.pelajaranRencana503020,
+        kanvas: WarnaFunda.kanvasMint,
+      ),
+      ('anggaran_arus_kas_1_4', 'kartu_1'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.tabungan,
+        kanvas: WarnaFunda.kanvasMint,
+      ),
+      ('anggaran_arus_kas_1_4', 'kartu_2'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.pelajaranRencana503020,
+        kanvas: WarnaFunda.kanvasMint,
+      ),
+      ('anggaran_arus_kas_1_5', 'pemantik'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.ruangTenang,
+        kanvas: WarnaFunda.kanvasKuning,
+      ),
+      ('anggaran_arus_kas_1_5', 'kartu_0'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.laporanBulanan,
+        kanvas: WarnaFunda.kanvasMint,
+      ),
+      ('anggaran_arus_kas_1_5', 'kartu_1'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.pelajaranEvaluasiKompas,
+        kanvas: WarnaFunda.kanvasMint,
+      ),
+      ('anggaran_arus_kas_1_5', 'kartu_2'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.anggaranKosong,
+        kanvas: WarnaFunda.kanvasMint,
+      ),
+
+      // Modul 2: Tabungan
+      ('tabungan_2_1', 'pemantik'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.dompet,
+        kanvas: WarnaFunda.kanvasKuning,
+      ),
+      ('tabungan_2_1', 'kartu_1'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.tujuanKosong,
+        kanvas: WarnaFunda.kanvasMint,
+      ),
+      ('tabungan_2_1', 'kartu_2'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.tujuanBesar,
+        kanvas: WarnaFunda.kanvasMint,
+      ),
+      ('tabungan_2_2', 'pemantik'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.pelajaranPengeluaranKecil,
+        kanvas: WarnaFunda.kanvasKuning,
+      ),
+      ('tabungan_2_2', 'kartu_1'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.tabungan,
+        kanvas: WarnaFunda.kanvasMint,
+      ),
+      ('tabungan_2_2', 'kartu_2'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.kantongKosong,
+        kanvas: WarnaFunda.kanvasMint,
+      ),
+      ('tabungan_2_3', 'kartu_2'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.pelajaranEvaluasiKompas,
+        kanvas: WarnaFunda.kanvasMint,
+      ),
+
+      // Modul 3: Dana Darurat
+      ('dana_darurat_3_1', 'kartu_2'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.kantongKosong,
+        kanvas: WarnaFunda.kanvasMint,
+      ),
+      ('dana_darurat_3_2', 'pemantik'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.pelajaranEvaluasiKompas,
+        kanvas: WarnaFunda.kanvasKuning,
+      ),
+      ('dana_darurat_3_2', 'kartu_0'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.tagihanTenang,
+        kanvas: WarnaFunda.kanvasMint,
+      ),
+      ('dana_darurat_3_2', 'kartu_2'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.tujuanBesar,
+        kanvas: WarnaFunda.kanvasMint,
+      ),
+      ('dana_darurat_3_3', 'pemantik'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.tujuanKosong,
+        kanvas: WarnaFunda.kanvasKuning,
+      ),
+      ('dana_darurat_3_3', 'kartu_0'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.tabungan,
+        kanvas: WarnaFunda.kanvasMint,
+      ),
+      ('dana_darurat_3_3', 'kartu_1'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.catatTransaksi,
+        kanvas: WarnaFunda.kanvasMint,
+      ),
+
+      // Modul 4: Utang & Cicilan
+      ('utang_cicilan_4_1', 'pemantik'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.paylaterKredit,
+        kanvas: WarnaFunda.kanvasKuning,
+      ),
+      ('utang_cicilan_4_1', 'kartu_2'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.waspadaPenipuan,
+        kanvas: WarnaFunda.kanvasKoral,
+      ),
+      ('utang_cicilan_4_2', 'kartu_2'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.paylaterKredit,
+        kanvas: WarnaFunda.kanvasKoral,
+      ),
+      ('utang_cicilan_4_3', 'kartu_0'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.laporanBulanan,
+        kanvas: WarnaFunda.kanvasMint,
+      ),
+      ('utang_cicilan_4_3', 'kartu_2'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.pelajaranEvaluasiKompas,
+        kanvas: WarnaFunda.kanvasMint,
+      ),
+      ('utang_cicilan_4_4', 'kartu_2'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.utangLunasKosong,
+        kanvas: WarnaFunda.kanvasMint,
+      ),
+    };
 
 /// Mengembalikan warna kanvas default sesuai ritme peran tahap pelajaran.
 Color kanvasDefaultUntukTahap(TahapPelajaranVisual tahap) {

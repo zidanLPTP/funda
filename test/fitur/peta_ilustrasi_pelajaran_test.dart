@@ -18,6 +18,27 @@ void main() {
 
         expect(info.pathSvg, AsetIlustrasiFunda.dompet);
         expect(info.kanvas, WarnaFunda.kanvasKuning);
+
+        final kartuKecil = selesaikanIlustrasiPelajaran(
+          modulId: 'anggaran_arus_kas',
+          pelajaranId: 'anggaran_arus_kas_1_1',
+          tahap: TahapPelajaranVisual.kartu,
+          indeksKartu: 0,
+        );
+        expect(
+          kartuKecil.pathSvg,
+          AsetIlustrasiFunda.pelajaranPengeluaranKecil,
+        );
+        expect(kartuKecil.kanvas, WarnaFunda.kanvasMint);
+
+        final peringatanUtang = selesaikanIlustrasiPelajaran(
+          modulId: 'utang_cicilan',
+          pelajaranId: 'utang_cicilan_4_1',
+          tahap: TahapPelajaranVisual.kartu,
+          indeksKartu: 2,
+        );
+        expect(peringatanUtang.pathSvg, AsetIlustrasiFunda.waspadaPenipuan);
+        expect(peringatanUtang.kanvas, WarnaFunda.kanvasKoral);
       },
     );
 
