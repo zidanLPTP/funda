@@ -59,6 +59,15 @@ void main() {
           AsetIlustrasiFunda.pelajaranBungaPinjaman,
         );
         expect(paylaterBunga.kanvas, WarnaFunda.kanvasKoral);
+
+        final skorKredit = selesaikanIlustrasiPelajaran(
+          modulId: 'paylater_kredit',
+          pelajaranId: 'paylater_kredit_7_2',
+          tahap: TahapPelajaranVisual.kartu,
+          indeksKartu: 1,
+        );
+        expect(skorKredit.pathSvg, AsetIlustrasiFunda.pelajaranSkorKredit);
+        expect(skorKredit.kanvas, WarnaFunda.kanvasMint);
       },
     );
 

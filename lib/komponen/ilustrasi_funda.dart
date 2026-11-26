@@ -82,6 +82,15 @@ abstract final class AsetIlustrasiFunda {
       'aset/gambar/ilustrasi/pelajaran_meteran_bulan_darurat.svg';
   static const pelajaranTujuanTarget =
       'aset/gambar/ilustrasi/pelajaran_tujuan_target.svg';
+
+  static const pelajaranCekLegalitas =
+      'aset/gambar/ilustrasi/pelajaran_cek_legalitas.svg';
+  static const pelajaranPemicuImpulsif =
+      'aset/gambar/ilustrasi/pelajaran_pemicu_impulsif.svg';
+  static const pelajaranRemKeputusan =
+      'aset/gambar/ilustrasi/pelajaran_rem_keputusan.svg';
+  static const pelajaranSkorKredit =
+      'aset/gambar/ilustrasi/pelajaran_skor_kredit.svg';
 }
 
 /// Kumpulan path aset ikon SVG custom Funda di `aset/gambar/ikon/`.
