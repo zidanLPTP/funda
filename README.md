@@ -1,171 +1,193 @@
-# Funda
+<div align="center">
+  <img src="app-icon.svg" alt="Ikon Aplikasi Funda" width="120" height="120" />
+  <h1>Funda</h1>
+  <p><strong>Kuasai fondasi uangmu, dari dasar sampai mahir.</strong></p>
+  <p>
+    Aplikasi keuangan pribadi <em>offline-first</em> berbasis Flutter yang menggabungkan pencatatan kas harian,
+    kurikulum belajar 18 modul berbasis data riil, dan mode simulasi sandbox — tanpa server, tanpa akun, dan tanpa pelacak.
+  </p>
 
-> Kuasai fondasi uangmu, dari dasar sampai mahir.
+  <p>
+    <a href="https://github.com/zidanLPTP/funda/releases/tag/v1.2.0">
+      <img src="https://img.shields.io/badge/Rilis-v1.2.0-0F766E?style=for-the-badge" alt="Rilis v1.2.0" />
+    </a>
+    <img src="https://img.shields.io/badge/Flutter-%3E%3D3.38.0-02569B?style=for-the-badge&logo=flutter&logoColor=white" alt="Flutter >= 3.38.0" />
+    <img src="https://img.shields.io/badge/Platform-Android%20%7C%20iOS-3DDC84?style=for-the-badge&logo=android&logoColor=white" alt="Platform Android dan iOS" />
+    <img src="https://img.shields.io/badge/Privasi-100%25%20Offline--First-111827?style=for-the-badge" alt="100% Offline-First" />
+  </p>
 
-**Funda** (dari kata *fundamental* dan *fund*) adalah aplikasi mobile keuangan pribadi (Android dan iOS) berbasis **Flutter** dengan konsep "belajar sambil praktik" dan fitur dompet digital pencatatan. Aplikasi ini beroperasi sepenuhnya secara offline-first, tanpa server backend eksternal, tanpa pelacak, dan tanpa iklan.
-
----
-
-## Rilis Versi 1.2.0 & Unduh APK
-
-Rilis terbaru **Funda v1.2.0** menghadirkan **122 ikon SVG custom** di seluruh antarmuka, **62 ilustrasi tematik** yang dipetakan dinamis untuk seluruh 18 modul belajar, penyederhanaan tampilan *Onboarding*, *Lainnya*, *Pengaturan*, *Cadangan*, serta perbaikan rute **Bayar Cicilan** dan alokasi kantong/tujuan.
-
-- **Halaman Rilis GitHub v1.2.0:** [Rilis Resmi Funda v1.2.0](https://github.com/zidanLPTP/funda/releases/tag/v1.2.0)
-- **Berkas APK per Arsitektur (`--split-per-abi`):**
-  - `app-arm64-v8a-release.apk` — direkomendasikan untuk mayoritas ponsel Android modern (64-bit ARM).
-  - `app-armeabi-v7a-release.apk` — untuk perangkat Android 32-bit lama.
-  - `app-x86_64-release.apk` — untuk emulator atau perangkat berbasis x86_64.
-
-### Cara Pemasangan di Ponsel Android
-1. Unduh berkas APK yang sesuai dengan arsitektur perangkat (umumnya `arm64-v8a`) dari halaman rilis GitHub v1.2.0.
-2. Buka berkas APK yang telah selesai diunduh.
-3. Berikan izin pemasangan aplikasi dari sumber ini jika diminta oleh sistem Android.
-4. Tekan tombol **Pasang (Install)** dan buka aplikasi Funda.
-
----
-
-## Gambaran Tiga Sisi Funda
-
-1. **Dompet Digital Pencatatan:** Pencatatan arus kas, banyak dompet, alokasi kantong, jadwal tagihan rutin, pelacakan utang dan cicilan, serta kalkulasi kekayaan bersih (aplikasi tidak menyimpan atau memindahkan uang asli).
-2. **Belajar Sambil Praktik:** Kurikulum micro-learning 18 modul berjenjang (Tingkat Pemula, Menengah, dan Lanjutan) yang menghubungkan teori keuangan langsung dengan data riil pengguna melalui mekanisme Gerbang Data.
-3. **Mode Sandbox:** Ruang simulasi mandiri dengan saldo fiktif yang terisolasi dari pencatatan riil untuk melatih keputusan investasi dan pengalokasian dana tanpa risiko.
+  <p>
+    <a href="#unduh--pasang-apk">Unduh APK</a> •
+    <a href="#pembaruan-v120">Pembaruan v1.2.0</a> •
+    <a href="#fitur-utama">Fitur Utama</a> •
+    <a href="#kurikulum-18-modul">Kurikulum</a> •
+    <a href="#memulai-pengembangan">Pengembangan</a> •
+    <a href="#dokumentasi-terkait">Dokumentasi</a>
+  </p>
+</div>
 
 ---
 
-## Fitur Utama Aplikasi
+## Unduh & Pasang APK
 
-### 1. Pengelolaan Keuangan Mandiri
-- **Multi-Dompet & Kantong:** Kelola beragam rekening bank, dompet digital, atau uang tunai serta alokasikan dana darurat dan pos tabungan khusus melalui Kantong Dompet tanpa perlu rekening baru.
-- **Pencatatan Transaksi Cepat:** Catat pengeluaran (kanvas koral), pemasukan (kanvas mint), dan transfer antar dompet (kanvas biru) dengan pemilih dompet 1-ketukan dan tombol simpan *sticky* di bagian bawah layar.
-- **Anggaran Bulanan:** Rencanakan dan pantau batas pengeluaran per kategori setiap bulan kalender, lengkap dengan opsi salin anggaran dari bulan sebelumnya.
-- **Tujuan Keuangan:** Pantau kemajuan dana impian dan dana darurat dengan proyeksi waktu tercapai.
-- **Utang & Cicilan:** Pantau sisa pokok pinjaman, rasio cicilan terhadap arus kas, pelacakan riwayat pembayaran, serta strategi pelunasan.
-- **Tagihan Berulang & Pengingat Lokal:** Penjadwalan jatuh tempo rutin dengan notifikasi lokal ramah baterai dan opsi sensor nominal di layar kunci.
-- **Kekayaan Bersih:** Visualisasi selisih total saldo aset dan seluruh sisa kewajiban dengan bahasa yang objektif dan menenangkan.
+Berkas APK resmi tersedia di halaman [**GitHub Releases Funda v1.2.0**](https://github.com/zidanLPTP/funda/releases/tag/v1.2.0). Pilih varian sesuai arsitektur perangkat Android Anda:
 
-### 2. Kurikulum Edukasi Finansial (18 Modul Lengkap)
-- **Tingkat Pemula (Modul 1 - 6):** Arus kas, tabungan, dana darurat, utang dasar, waspada penipuan dan pinjaman ilegal, serta psikologi uang.
-- **Tingkat Menengah (Modul 7 - 12):** Paylater dan skor kredit, penghasilan tambahan dan kerja lepas, pajak dasar, proteksi asuransi dasar, investasi dasar, serta perencanaan tujuan besar.
-- **Tingkat Lanjutan (Modul 13 - 18):** Investasi lanjutan, KPR dan kredit besar, pajak lanjutan, persiapan pensiun dan kebebasan finansial, keuangan usaha kecil, serta proteksi keluarga dan warisan dasar.
-- **Fitur Belajar Interaktif:** Pemetaan profil awal adaptif, peta jalur belajar editorial, pemantik reflektif, kartu konsep dengan glosarium kamus istilah terintegrasi, cek paham interaktif, misi praktik berbasis data riil, dan kuis kelulusan modul berstandar 70%.
+| Varian APK | Arsitektur | Rekomendasi Penggunaan | Tautan Unduh Langsung |
+| :--- | :--- | :--- | :--- |
+| `app-arm64-v8a-release.apk` | 64-bit ARM | **Direkomendasikan** untuk mayoritas ponsel Android modern | [Unduh arm64-v8a](https://github.com/zidanLPTP/funda/releases/download/v1.2.0/app-arm64-v8a-release.apk) |
+| `app-armeabi-v7a-release.apk` | 32-bit ARM | Perangkat Android generasi lama | [Unduh armeabi-v7a](https://github.com/zidanLPTP/funda/releases/download/v1.2.0/app-armeabi-v7a-release.apk) |
+| `app-x86_64-release.apk` | 64-bit x86 | Emulator Android atau perangkat berbasis x86_64 | [Unduh x86_64](https://github.com/zidanLPTP/funda/releases/download/v1.2.0/app-x86_64-release.apk) |
 
-### 3. Pengalaman Pengguna, Aksesibilitas, dan Privasi
-- **Bahasa Visual Editorial Bersih:** Kartu hero kanvas berwarna cerah, kartu daftar putih border `1px` dengan garis pemisah tipis, ikon vektor bersih tanpa kotak berlebihan, dan tombol pil gelap kontras tinggi (`>= 4.5:1`).
-- **Aksesibilitas Terverifikasi:** Area sentuh minimal `48x48dp` pada navigasi sub-layar (`HeaderSubLayarEditorial`) dan dukungan penuh skala teks sistem hingga `2.0x` pada layar `360x640`.
-- **Alur Sambutan & Sapaan Kontekstual:** Pengenalan nilai Funda (privasi penuh, belajar sambil praktik, ruang tenang tanpa penghakiman) serta ucapan beranda yang menyesuaikan waktu dan periode bulan.
-- **Laporan Bulanan & Ekspor:** Ringkasan komposisi pengeluaran, rasio kesehatan finansial, ekspor dokumen PDF dan kartu gambar PNG, dilengkapi sakelar sembunyikan nominal.
-- **Cadangan & Pemulihan Data:** Ekspor seluruh basis data ke berkas JSON terstruktur dengan validasi integritas checksum SHA-256 dan pengaman pemulihan data terakhir.
-- **100% Offline-First:** Seluruh data tersimpan lokal pada basis data SQLite (Drift) di memori penyimpanan perangkat pengguna.
+> [!TIP]
+> Tidak yakin arsitektur HP Anda? Mulai dengan **`app-arm64-v8a-release.apk`** — cocok untuk hampir semua ponsel Android keluaran 2017 ke atas.
+
+### Cara Pemasangan di Android
+1. Unduh berkas APK dari tabel di atas atau buka [**Halaman Rilis v1.2.0**](https://github.com/zidanLPTP/funda/releases/tag/v1.2.0).
+2. Buka berkas `.apk` yang telah selesai diunduh melalui pengelola berkas.
+3. Izinkan pemasangan aplikasi dari sumber tersebut bila diminta oleh sistem Android.
+4. Ketuk **Pasang (Install)** lalu buka **Funda**.
 
 ---
 
-## Kebutuhan Sistem
+## Pembaruan v1.2.0
 
-- **Flutter SDK:** >= 3.38.0
-- **Dart SDK:** >= 3.10.0
+- **Ikon Aplikasi Baru:** Maskot resmi Funda ([app-icon.svg](app-icon.svg)) diterapkan menyeluruh pada ikon launcher Android, Adaptive Icon, iOS `AppIcon`, dan aset in-app.
+- **122 Ikon SVG Custom:** Seluruh ikon navigasi, menu, kategori, dompet, sifat transaksi, dan kontrol UI kini menggunakan aset vektor custom yang seragam.
+- **62 Ilustrasi Tematik Pelajaran:** Pemetaan ilustrasi dinamis berdasarkan tahap dan konteks di seluruh **18 modul** dengan transisi kanvas halus.
+- **Polesan Antarmuka & Perbaikan Bug:** Penyederhanaan layar *Onboarding*, *Lainnya*, *Pengaturan*, dan *Cadangan*, perbaikan alokasi dana kantong/tujuan, serta perbaikan rute **Bayar Cicilan** dari jadwal tagihan.
+
+---
+
+## Tiga Pilar Funda
+
+1. **Dompet Pencatatan Lokal** — Catat arus kas, kelola multi-dompet, alokasi kantong, tagihan berulang, utang/cicilan, dan kekayaan bersih *(Funda tidak terhubung ke rekening bank dan tidak memindahkan uang asli)*.
+2. **Belajar Sambil Praktik** — 18 modul micro-learning berjenjang yang terhubung langsung dengan data keuanganmu melalui mekanisme *Gerbang Data*.
+3. **Mode Sandbox (Simulasi)** — Ruang latihan mandiri dengan saldo fiktif yang terisolasi dari catatan riil untuk menguji keputusan alokasi dana dan investasi tanpa risiko.
+
+---
+
+## Fitur Utama
+
+### Pengelolaan Keuangan Mandiri
+- **Multi-Dompet & Kantong:** Pisahkan rekening bank, e-wallet, dan uang tunai, serta alokasikan dana darurat atau pos khusus lewat Kantong Dompet.
+- **Pencatatan Transaksi Cepat:** Catat pengeluaran, pemasukan, dan transfer antar dompet dengan pemilih dompet cepat dan tombol simpan *sticky*.
+- **Anggaran Bulanan:** Tetapkan batas pengeluaran per kategori setiap bulan, lengkap dengan fitur salin anggaran bulan lalu.
+- **Tujuan Keuangan & Dana Darurat:** Pantau progres target tabungan beserta estimasi waktu tercapai.
+- **Utang, Cicilan, & Tagihan Berulang:** Lacak sisa pokok pinjaman, rasio cicilan terhadap arus kas, riwayat pembayaran, serta pengingat jatuh tempo lokal ramah baterai.
+- **Laporan Bulanan & Kekayaan Bersih:** Ringkasan komposisi pengeluaran, tren arus kas, sakelar sembunyikan nominal, dan ekspor laporan PDF/PNG.
+
+### Privasi, Keamanan, & Aksesibilitas
+- **100% Offline-First:** Seluruh data disimpan secara lokal di perangkat menggunakan SQLite (Drift).
+- **Cadangan Terverifikasi:** Ekspor dan pulihkan data dalam format JSON dengan validasi checksum SHA-256 serta pengaman pemulihan terakhir.
+- **Aksesibilitas Teruji:** Target sentuh minimal `48x48dp` pada navigasi sub-layar dan dukungan skala teks sistem hingga `2.0x` pada layar `360x640`.
+
+---
+
+## Kurikulum 18 Modul
+
+<details>
+<summary>Lihat rincian lengkap kurikulum (Pemula, Menengah, Lanjutan)</summary>
+
+| Tingkat | Modul | Topik Utama |
+| :--- | :---: | :--- |
+| **Pemula** | 1 – 6 | Anggaran & Arus Kas, Tabungan, Dana Darurat, Utang & Cicilan, Waspada Penipuan, Psikologi Uang |
+| **Menengah** | 7 – 12 | Paylater & Skor Kredit, Penghasilan Tambahan, Pajak Dasar, Proteksi Dasar, Investasi Dasar, Tujuan Besar |
+| **Lanjutan** | 13 – 18 | Investasi Lanjutan, KPR & Kredit Besar, Pajak Lanjutan, Pensiun & Kebebasan Finansial, Keuangan Usaha Kecil, Proteksi Keluarga & Warisan |
+
+Setiap modul dilengkapi pemantik reflektif, kartu konsep dengan kamus istilah interaktif, contoh angka Rupiah, misi praktik berbasis data riil, dan kuis kelulusan (standar 70%).
+
+</details>
+
+---
+
+## Memulai Pengembangan
+
+### Kebutuhan Sistem
+- **Flutter SDK:** `>= 3.38.0`
+- **Dart SDK:** `>= 3.10.0`
 - **Android SDK:** Platform API 34+ (Android 14+)
-- **Perangkat Target:** Android (API 21+) dan iOS (12.0+)
+- **Target Perangkat:** Android (API 21+) dan iOS (12.0+)
 
----
+### Menjalankan Secara Lokal
 
-## Cara Menjalankan Aplikasi
-
-1. Pasang dependensi proyek:
-   ```bash
-   flutter pub get
-   ```
-
-2. Jalankan generator kode basis data Drift:
-   ```bash
-   dart run build_runner build --delete-conflicting-outputs
-   ```
-
-3. Jalankan aplikasi pada perangkat atau emulator:
-   ```bash
-   flutter run
-   ```
-
----
-
-## Membangun Berkas Rilis (Production Build)
-
-Untuk menghasilkan berkas APK rilis ringkas per arsitektur (`--split-per-abi`):
 ```bash
-flutter build apk --release --split-per-abi
+# 1. Pasang dependensi
+flutter pub get
+
+# 2. Generate kode basis data Drift
+dart run build_runner build --delete-conflicting-outputs
+
+# 3. Jalankan aplikasi
+flutter run
 ```
-Berkas keluaran tersedia pada lokasi:
+
+### Build Rilis (Production)
+
+```bash
+# APK ringkas per arsitektur
+flutter build apk --release --split-per-abi
+
+# Android App Bundle (AAB) untuk Google Play Store
+flutter build appbundle --release
+```
+
+Hasil build tersedia di:
 - `build/app/outputs/flutter-apk/app-arm64-v8a-release.apk`
 - `build/app/outputs/flutter-apk/app-armeabi-v7a-release.apk`
 - `build/app/outputs/flutter-apk/app-x86_64-release.apk`
+- `build/app/outputs/bundle/release/app-release.aab`
 
-Untuk menghasilkan satu berkas Android App Bundle (AAB) bagi Google Play Store:
+### Pengujian & Kualitas Kode
+
 ```bash
-flutter build appbundle --release
-```
-Berkas keluaran tersedia pada lokasi:
-`build/app/outputs/bundle/release/app-release.aab`
-
----
-
-## Pengujian dan Kualitas Kode
-
-Menjalankan seluruh rangkaian pengujian unit dan widget:
-```bash
+dart format lib/ test/
+flutter analyze
 flutter test
 ```
 
-Menjalankan analisis statis kode:
-```bash
-flutter analyze
-```
-
-Format kode:
-```bash
-dart format .
-```
+> Untuk meregenerasi ikon aplikasi dari `app-icon.svg`, jalankan `python tool/generate_app_icons.py`.
 
 ---
 
-## Struktur Direktori Proyek
+## Struktur Proyek
 
 ```text
 funda/
 ├─ lib/
-│  ├─ main.dart                 # Titik masuk utama aplikasi (ProviderScope)
-│  ├─ aplikasi/                 # MaterialApp, GoRouter, bilah navigasi, rute
-│  ├─ tema/                     # Token warna, spasi, sudut, tipografi, ThemeData
-│  ├─ komponen/                 # Komponen bersama: PetakBento, TombolFunda, TeksFunda, HeaderSubLayarEditorial, Animasi, Perayaan
-│  ├─ fitur/                    # Modul fitur (Beranda, Catatan, Belajar, Onboarding, Dompet, Transaksi, Anggaran, Tujuan, Kantong, Utang, Tagihan, Sandbox, Cadangan, Laporan, Kategori, Pengaturan)
-│  ├─ layanan/                  # Layanan sistem perangkat (Pengingat Notifikasi Lokal)
-│  ├─ data/                     # Basis data Drift (SQLite), tabel, entitas, repositori, migrasi skema
-│  ├─ perhitungan/              # Fungsi murni kalkulasi finansial
-│  └─ util/                     # Utilitas murni (formatRupiah, haptic, tanggal)
+│  ├─ main.dart           # Titik masuk aplikasi (ProviderScope)
+│  ├─ aplikasi/           # MaterialApp, GoRouter, navigasi, rute
+│  ├─ tema/               # Token warna, spasi, sudut, tipografi, ThemeData
+│  ├─ komponen/           # Komponen UI bersama, ikon SVG, animasi
+│  ├─ fitur/              # Modul fitur (Beranda, Catatan, Belajar, Dompet, dll.)
+│  ├─ layanan/            # Notifikasi lokal dan layanan perangkat
+│  ├─ data/               # Basis data Drift (SQLite), repositori, migrasi
+│  ├─ perhitungan/        # Fungsi murni kalkulasi finansial
+│  └─ util/               # Utilitas murni (formatRupiah, haptic, tanggal)
 ├─ aset/
-│  ├─ font/                     # Font lokal Plus Jakarta Sans (Regular, SemiBold, Bold)
-│  ├─ gambar/                   # Aset gambar resmi (master app icon, vektor logo)
-│  └─ konten/                   # Berkas kurikulum edukasi JSON (Pemula, Menengah, Lanjutan)
-├─ docs/                        # Dokumentasi teknis, spesifikasi, dan panduan proyek
-├─ test/                        # Pengujian unit, widget, aksesibilitas, dan penjaga aturan
-├─ android/                     # Konfigurasi platform Android, manifest, mipmap, adaptive icon
-├─ ios/                         # Konfigurasi platform iOS
-├─ README.md
-└─ CHANGELOG.md
+│  ├─ font/               # Plus Jakarta Sans (Regular, SemiBold, Bold)
+│  ├─ gambar/             # Ikon SVG, ilustrasi tematik, dan app_icon_512.png
+│  └─ konten/             # Kurikulum edukasi JSON (Modul 1–18, kamus, rekomendasi)
+├─ tool/                  # Utilitas pembangun aset (generate_app_icons.py)
+├─ docs/                  # Spesifikasi, pedoman desain, dan panduan rilis
+├─ test/                  # Unit test, widget test, dan uji aksesibilitas
+├─ app-icon.svg           # Sumber vektor utama ikon aplikasi Funda
+└─ README.md
 ```
 
 ---
 
-## Dokumentasi Spesifikasi Terkait
+## Dokumentasi Terkait
 
-- [docs/agent.md](docs/agent.md) — Aturan kerja pengujian, larangan, dan format laporan.
-- [docs/spec.md](docs/spec.md) — Rincian spesifikasi lengkap aplikasi Funda.
+- [docs/spec.md](docs/spec.md) — Spesifikasi lengkap fitur dan arsitektur aplikasi.
 - [docs/styleguide.md](docs/styleguide.md) — Token desain editorial, warna, dan pedoman bahasa.
-- [docs/format_konten.md](docs/format_konten.md) — Spesifikasi skema JSON kurikulum edukasi dan kamus istilah.
-- [docs/format_cadangan.md](docs/format_cadangan.md) — Spesifikasi format JSON v1 berkas cadangan dan checksum SHA-256.
-- [docs/panduan_rilis.md](docs/panduan_rilis.md) — Panduan penandatanganan rilis APK/AAB dan checklist uji perangkat fisik.
-- [docs/utang_teknis.md](docs/utang_teknis.md) — Catatan arsitektur, dependensi native SQLite, dan rencana refaktor.
+- [docs/format_konten.md](docs/format_konten.md) — Skema JSON kurikulum edukasi dan kamus istilah.
+- [docs/format_cadangan.md](docs/format_cadangan.md) — Spesifikasi format cadangan JSON dan checksum SHA-256.
+- [docs/panduan_rilis.md](docs/panduan_rilis.md) — Panduan penandatanganan APK/AAB dan checklist uji perangkat.
+- [docs/utang_teknis.md](docs/utang_teknis.md) — Catatan teknis, dependensi native SQLite, dan rencana refaktor.
+- [CHANGELOG.md](CHANGELOG.md) — Catatan riwayat perubahan antar versi.
 
 ---
 
 ## Lisensi Font
 
-Font **Plus Jakarta Sans** dirancang oleh Tokotype (Gumpita Rahayu) dan dilisensikan di bawah lisensi terbuka [SIL Open Font License (OFL)](aset/font/OFL.txt). Berkas teks lisensi resmi disertakan pada `aset/font/OFL.txt`.
+Font **Plus Jakarta Sans** dirancang oleh Tokotype (Gumpita Rahayu) dan dilisensikan di bawah [SIL Open Font License (OFL)](aset/font/OFL.txt).
