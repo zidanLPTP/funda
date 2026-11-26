@@ -134,7 +134,11 @@ class _LayarKuisModulState extends ConsumerState<LayarKuisModul> {
           backgroundColor: WarnaFunda.transparan,
           elevation: 0,
           leading: IconButton(
-            icon: const Icon(LucideIcons.arrowLeft, color: WarnaFunda.teks),
+            icon: const IkonUiFunda(
+              pathAset: AsetIkonUiFunda.arrowLeft,
+              warna: WarnaFunda.teks,
+              ukuran: 24,
+            ),
             onPressed: () => Navigator.pop(context),
           ),
         ),
@@ -177,9 +181,10 @@ class _LayarKuisModulState extends ConsumerState<LayarKuisModul> {
               child: Row(
                 children: [
                   IconButton(
-                    icon: const Icon(
-                      LucideIcons.arrowLeft,
-                      color: WarnaFunda.teks,
+                    icon: const IkonUiFunda(
+                      pathAset: AsetIkonUiFunda.arrowLeft,
+                      warna: WarnaFunda.teks,
+                      ukuran: 24,
                     ),
                     onPressed: () => Navigator.pop(context),
                   ),
@@ -275,12 +280,12 @@ class _LayarKuisModulState extends ConsumerState<LayarKuisModul> {
                           ),
                           child: Row(
                             children: [
-                              Icon(
-                                isSelected
-                                    ? LucideIcons.checkCircle2
-                                    : LucideIcons.circle,
-                                size: 20,
-                                color: isSelected
+                              IkonUiFunda(
+                                pathAset: isSelected
+                                    ? AsetIkonUiFunda.circleCheck
+                                    : AsetIkonUiFunda.circle,
+                                ukuran: 20,
+                                warna: isSelected
                                     ? WarnaFunda.utama
                                     : WarnaFunda.teksRedup,
                               ),
@@ -306,14 +311,14 @@ class _LayarKuisModulState extends ConsumerState<LayarKuisModul> {
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Icon(
-                              pilihanTerpilih == soal.benar
-                                  ? LucideIcons.check
-                                  : LucideIcons.info,
-                              color: pilihanTerpilih == soal.benar
+                            IkonUiFunda(
+                              pathAset: pilihanTerpilih == soal.benar
+                                  ? AsetIkonUiFunda.check
+                                  : AsetIkonUiFunda.info,
+                              warna: pilihanTerpilih == soal.benar
                                   ? WarnaFunda.pemasukan
                                   : WarnaFunda.peringatan,
-                              size: 20,
+                              ukuran: 20,
                             ),
                             const SizedBox(width: SpasiFunda.s),
                             Expanded(

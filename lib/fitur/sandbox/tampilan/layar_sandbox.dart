@@ -375,7 +375,10 @@ class _LayarSandboxState extends ConsumerState<LayarSandbox> {
                           mainAxisSize: MainAxisSize.min,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Icon(LucideIcons.fastForward, size: 20),
+                            IkonUiFunda(
+                              pathAset: AsetIkonUiFunda.fastForward,
+                              ukuran: 20,
+                            ),
                             SizedBox(width: SpasiFunda.s),
                             Flexible(
                               child: Text(

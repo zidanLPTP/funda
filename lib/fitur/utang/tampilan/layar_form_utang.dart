@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
-import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '../../../data/basis_data.dart';
 import '../../../data/model/jenis_bunga.dart';
 import '../../../data/model/jenis_utang.dart';
@@ -528,10 +527,10 @@ class _LayarFormUtangState extends ConsumerState<LayarFormUtang> {
                                     ),
                                   ),
                                   const SizedBox(width: SpasiFunda.s),
-                                  const Icon(
-                                    LucideIcons.calendar,
-                                    size: 18,
-                                    color: WarnaFunda.teksRedup,
+                                  const IkonUiFunda(
+                                    pathAset: AsetIkonUiFunda.calendar,
+                                    ukuran: 18,
+                                    warna: WarnaFunda.teksRedup,
                                   ),
                                 ],
                               ),

@@ -304,9 +304,10 @@ class LayarDetailTujuan extends ConsumerWidget {
                           ),
                           child: const Row(
                             children: [
-                              Icon(
-                                LucideIcons.checkCheck,
-                                color: WarnaFunda.pemasukan,
+                              IkonUiFunda(
+                                pathAset: AsetIkonUiFunda.checkCheck,
+                                warna: WarnaFunda.pemasukan,
+                                ukuran: 24,
                               ),
                               SizedBox(width: SpasiFunda.m),
                               Expanded(
@@ -340,10 +341,10 @@ class LayarDetailTujuan extends ConsumerWidget {
                             children: [
                               Row(
                                 children: [
-                                  const Icon(
-                                    LucideIcons.calendar,
-                                    size: 18,
-                                    color: WarnaFunda.utama,
+                                  const IkonUiFunda(
+                                    pathAset: AsetIkonUiFunda.calendar,
+                                    ukuran: 18,
+                                    warna: WarnaFunda.utama,
                                   ),
                                   const SizedBox(width: SpasiFunda.s),
                                   Expanded(
@@ -372,7 +373,10 @@ class LayarDetailTujuan extends ConsumerWidget {
                         TombolFunda.pilGelap(
                           teks: 'Isi Tujuan',
                           lebarPenuh: true,
-                          ikon: const Icon(LucideIcons.circlePlus, size: 18),
+                          ikon: const IkonUiFunda(
+                            pathAset: AsetIkonUiFunda.circlePlus,
+                            ukuran: 18,
+                          ),
                           padaTekan: () => _bukaModalAlokasi(
                             context,
                             ref,
@@ -385,7 +389,10 @@ class LayarDetailTujuan extends ConsumerWidget {
                         TombolFunda.sekunder(
                           teks: 'Ambil Dana',
                           lebarPenuh: true,
-                          ikon: const Icon(LucideIcons.circleMinus, size: 18),
+                          ikon: const IkonUiFunda(
+                            pathAset: AsetIkonUiFunda.circleMinus,
+                            ukuran: 18,
+                          ),
                           padaTekan: danaTerkumpul > 0
                               ? () => _bukaModalAlokasi(
                                   context,
@@ -403,9 +410,9 @@ class LayarDetailTujuan extends ConsumerWidget {
                               child: TombolFunda.pilGelap(
                                 teks: 'Isi Tujuan',
                                 lebarPenuh: false,
-                                ikon: const Icon(
-                                  LucideIcons.circlePlus,
-                                  size: 18,
+                                ikon: const IkonUiFunda(
+                                  pathAset: AsetIkonUiFunda.circlePlus,
+                                  ukuran: 18,
                                 ),
                                 padaTekan: () => _bukaModalAlokasi(
                                   context,
@@ -420,9 +427,9 @@ class LayarDetailTujuan extends ConsumerWidget {
                             Expanded(
                               child: TombolFunda.sekunder(
                                 teks: 'Ambil Dana',
-                                ikon: const Icon(
-                                  LucideIcons.circleMinus,
-                                  size: 18,
+                                ikon: const IkonUiFunda(
+                                  pathAset: AsetIkonUiFunda.circleMinus,
+                                  ukuran: 18,
                                 ),
                                 padaTekan: danaTerkumpul > 0
                                     ? () => _bukaModalAlokasi(
@@ -615,12 +622,12 @@ class LayarDetailTujuan extends ConsumerWidget {
                                       ),
                                       child: Row(
                                         children: [
-                                          Icon(
-                                            isIsi
-                                                ? LucideIcons.arrowDownLeft
-                                                : LucideIcons.arrowUpRight,
-                                            size: 20,
-                                            color: warnaNominal,
+                                          IkonUiFunda(
+                                            pathAset: isIsi
+                                                ? AsetIkonUiFunda.arrowDownLeft
+                                                : AsetIkonUiFunda.arrowUpRight,
+                                            ukuran: 20,
+                                            warna: warnaNominal,
                                           ),
                                           const SizedBox(width: SpasiFunda.m),
                                           Expanded(
@@ -839,7 +846,10 @@ class _LembarFormAlokasiState extends ConsumerState<_LembarFormAlokasi> {
               children: [
                 Expanded(child: TeksFunda.judulBagian(judul)),
                 IconButton(
-                  icon: const Icon(LucideIcons.x),
+                  icon: const IkonUiFunda(
+                    pathAset: AsetIkonUiFunda.x,
+                    ukuran: 24,
+                  ),
                   constraints: const BoxConstraints(
                     minWidth: 48,
                     minHeight: 48,

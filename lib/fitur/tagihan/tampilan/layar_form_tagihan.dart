@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
-import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '../../../data/basis_data.dart';
 import '../../../data/model/frekuensi_tagihan.dart';
 import '../../../data/model/jenis_tagihan.dart';
@@ -449,9 +448,10 @@ class _LayarFormTagihanState extends ConsumerState<LayarFormTagihan> {
                           const SizedBox(height: SpasiFunda.m),
                           ListTile(
                             contentPadding: EdgeInsets.zero,
-                            leading: const Icon(
-                              LucideIcons.calendar,
-                              color: WarnaFunda.utama,
+                            leading: const IkonUiFunda(
+                              pathAset: AsetIkonUiFunda.calendar,
+                              warna: WarnaFunda.utama,
+                              ukuran: 24,
                             ),
                             title: const TeksFunda.isi('Jatuh Tempo Pertama'),
                             subtitle: TeksFunda.catatan(
@@ -460,9 +460,9 @@ class _LayarFormTagihanState extends ConsumerState<LayarFormTagihan> {
                                 'id_ID',
                               ).format(_tanggalJatuhTempoPertama),
                             ),
-                            trailing: const Icon(
-                              LucideIcons.chevronRight,
-                              size: 20,
+                            trailing: const IkonUiFunda(
+                              pathAset: AsetIkonUiFunda.chevronRight,
+                              ukuran: 20,
                             ),
                             onTap: _pilihTanggalJatuhTempo,
                           ),
@@ -497,9 +497,10 @@ class _LayarFormTagihanState extends ConsumerState<LayarFormTagihan> {
                             ),
                             ListTile(
                               contentPadding: EdgeInsets.zero,
-                              leading: const Icon(
-                                LucideIcons.calendarOff,
-                                color: WarnaFunda.pengeluaran,
+                              leading: const IkonUiFunda(
+                                pathAset: AsetIkonUiFunda.calendarOff,
+                                warna: WarnaFunda.pengeluaran,
+                                ukuran: 24,
                               ),
                               title: const TeksFunda.isi('Berakhir Pada'),
                               subtitle: TeksFunda.catatan(
@@ -510,9 +511,9 @@ class _LayarFormTagihanState extends ConsumerState<LayarFormTagihan> {
                                       ).format(_berakhirPada!)
                                     : 'Pilih tanggal',
                               ),
-                              trailing: const Icon(
-                                LucideIcons.chevronRight,
-                                size: 20,
+                              trailing: const IkonUiFunda(
+                                pathAset: AsetIkonUiFunda.chevronRight,
+                                ukuran: 20,
                               ),
                               onTap: _pilihTanggalBerakhir,
                             ),

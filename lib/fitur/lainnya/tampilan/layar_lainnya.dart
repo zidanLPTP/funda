@@ -111,6 +111,7 @@ class LayarLainnya extends ConsumerWidget {
                   anak: [
                     _BarisMenuEditorial(
                       ikon: LucideIcons.palette,
+                      pathSvg: AsetIkonFunda.katHiburan,
                       warnaIkon: WarnaFunda.utama,
                       judul: 'Galeri Komponen UI',
                       keterangan:
@@ -580,6 +581,7 @@ class LayarLainnya extends ConsumerWidget {
                         ),
                         _PoinInfoSheet(
                           ikon: LucideIcons.heartHandshake,
+                          pathSvg: AsetIkonFunda.katDonasi,
                           warnaIkon: WarnaFunda.sifatKeinginan,
                           judul: 'Ruang Tenang Tanpa Penghakiman',
                           keterangan:
@@ -591,6 +593,7 @@ class LayarLainnya extends ConsumerWidget {
                         ),
                         _PoinInfoSheet(
                           ikon: LucideIcons.graduationCap,
+                          pathSvg: AsetIkonFunda.katPendidikan,
                           warnaIkon: WarnaFunda.info,
                           judul: '18 Modul Belajar Nyata',
                           keterangan:
@@ -664,7 +667,11 @@ class _HeaderLainnyaEditorial extends StatelessWidget {
           child: const Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(LucideIcons.settings, size: 16, color: WarnaFunda.teks),
+              IkonUiFunda(
+                pathAset: AsetIkonUiFunda.settings,
+                ukuran: 16,
+                warna: WarnaFunda.teks,
+              ),
               SizedBox(width: SpasiFunda.xs),
               Flexible(
                 child: Text(
@@ -748,10 +755,10 @@ class _KartuKanvasSorotan extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       IlustrasiSvgFunda(pathAset: pathSvg, tinggi: 58),
-                      const Icon(
-                        LucideIcons.arrowUpRight,
-                        size: 18,
-                        color: WarnaFunda.teks,
+                      const IkonUiFunda(
+                        pathAset: AsetIkonUiFunda.arrowUpRight,
+                        ukuran: 18,
+                        warna: WarnaFunda.teks,
                       ),
                     ],
                   ),
@@ -842,7 +849,7 @@ class _BarisMenuEditorial extends StatelessWidget {
               if (pathSvg != null)
                 IkonSvgFunda(pathAset: pathSvg!, ukuran: 24)
               else
-                Icon(ikon, color: warnaIkon, size: 22),
+                ikonUiDariLucide(ikon, ukuran: 22, warna: warnaIkon),
               const SizedBox(width: SpasiFunda.m),
               Expanded(
                 child: Column(
@@ -855,10 +862,10 @@ class _BarisMenuEditorial extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: SpasiFunda.s),
-              const Icon(
-                LucideIcons.chevronRight,
-                size: 18,
-                color: WarnaFunda.teksRedup,
+              const IkonUiFunda(
+                pathAset: AsetIkonUiFunda.chevronRight,
+                ukuran: 18,
+                warna: WarnaFunda.teksRedup,
               ),
             ],
           ),
@@ -893,7 +900,7 @@ class _PoinInfoSheet extends StatelessWidget {
             if (pathSvg != null)
               IkonSvgFunda(pathAset: pathSvg!, ukuran: 20)
             else
-              Icon(ikon, size: 18, color: warnaIkon),
+              ikonUiDariLucide(ikon, ukuran: 18, warna: warnaIkon),
             const SizedBox(width: SpasiFunda.s),
             Expanded(child: TeksFunda.label(judul)),
           ],

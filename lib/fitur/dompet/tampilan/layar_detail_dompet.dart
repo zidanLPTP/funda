@@ -242,9 +242,9 @@ class _LayarDetailDompetState extends ConsumerState<LayarDetailDompet> {
                           TombolFunda.pilGelap(
                             teks: 'Sesuaikan Saldo',
                             lebarPenuh: true,
-                            ikon: const Icon(
-                              LucideIcons.slidersHorizontal,
-                              size: 16,
+                            ikon: const IkonUiFunda(
+                              pathAset: AsetIkonUiFunda.slidersHorizontal,
+                              ukuran: 16,
                             ),
                             padaTekan: () => _tampilkanDialogSesuaikanSaldo(
                               context,
@@ -257,11 +257,11 @@ class _LayarDetailDompetState extends ConsumerState<LayarDetailDompet> {
                           TombolFunda.sekunder(
                             teks: dompet.diarsipkan ? 'Pulihkan' : 'Arsipkan',
                             lebarPenuh: true,
-                            ikon: Icon(
-                              dompet.diarsipkan
-                                  ? LucideIcons.archiveRestore
-                                  : LucideIcons.archive,
-                              size: 16,
+                            ikon: IkonUiFunda(
+                              pathAset: dompet.diarsipkan
+                                  ? AsetIkonUiFunda.archiveRestore
+                                  : AsetIkonUiFunda.archive,
+                              ukuran: 16,
                             ),
                             padaTekan: () => _arsipDompet(repoDompet, dompet),
                           ),
@@ -272,9 +272,9 @@ class _LayarDetailDompetState extends ConsumerState<LayarDetailDompet> {
                                 child: TombolFunda.pilGelap(
                                   teks: 'Sesuaikan Saldo',
                                   lebarPenuh: false,
-                                  ikon: const Icon(
-                                    LucideIcons.slidersHorizontal,
-                                    size: 16,
+                                  ikon: const IkonUiFunda(
+                                    pathAset: AsetIkonUiFunda.slidersHorizontal,
+                                    ukuran: 16,
                                   ),
                                   padaTekan: () =>
                                       _tampilkanDialogSesuaikanSaldo(
@@ -291,11 +291,11 @@ class _LayarDetailDompetState extends ConsumerState<LayarDetailDompet> {
                                   teks: dompet.diarsipkan
                                       ? 'Pulihkan'
                                       : 'Arsipkan',
-                                  ikon: Icon(
-                                    dompet.diarsipkan
-                                        ? LucideIcons.archiveRestore
-                                        : LucideIcons.archive,
-                                    size: 16,
+                                  ikon: IkonUiFunda(
+                                    pathAset: dompet.diarsipkan
+                                        ? AsetIkonUiFunda.archiveRestore
+                                        : AsetIkonUiFunda.archive,
+                                    ukuran: 16,
                                   ),
                                   padaTekan: () =>
                                       _arsipDompet(repoDompet, dompet),
@@ -373,9 +373,9 @@ class _LayarDetailDompetState extends ConsumerState<LayarDetailDompet> {
                                   ),
                                 );
                               },
-                              icon: const Icon(
-                                LucideIcons.arrowRight,
-                                size: 16,
+                              icon: const IkonUiFunda(
+                                pathAset: AsetIkonUiFunda.arrowRight,
+                                ukuran: 16,
                               ),
                               label: const Text('Kelola Kantong'),
                             ),

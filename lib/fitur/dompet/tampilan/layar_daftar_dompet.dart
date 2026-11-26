@@ -308,10 +308,10 @@ class _KartuDaftarDompetPutih extends StatelessWidget {
                             infoNominal,
                           ],
                           const SizedBox(width: SpasiFunda.xs),
-                          const Icon(
-                            LucideIcons.chevronRight,
-                            size: 18,
-                            color: WarnaFunda.teksRedup,
+                          const IkonUiFunda(
+                            pathAset: AsetIkonUiFunda.chevronRight,
+                            ukuran: 18,
+                            warna: WarnaFunda.teksRedup,
                           ),
                         ],
                       ),

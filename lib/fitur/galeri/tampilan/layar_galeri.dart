@@ -229,10 +229,10 @@ class _LayarGaleriState extends State<LayarGaleri> {
                   children: [
                     TombolFunda.primer(
                       teks: 'Dengan Ikon',
-                      ikon: const Icon(
-                        LucideIcons.plus,
-                        size: 18,
-                        color: WarnaFunda.putih,
+                      ikon: const IkonUiFunda(
+                        pathAset: AsetIkonUiFunda.plus,
+                        ukuran: 18,
+                        warna: WarnaFunda.putih,
                       ),
                       padaTekan: () {},
                     ),

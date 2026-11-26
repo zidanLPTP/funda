@@ -100,7 +100,10 @@ class LayarAnggaran extends ConsumerWidget {
                     child: Row(
                       children: [
                         IconButton(
-                          icon: const Icon(LucideIcons.chevronLeft),
+                          icon: const IkonUiFunda(
+                            pathAset: AsetIkonUiFunda.chevronLeft,
+                            ukuran: 24,
+                          ),
                           tooltip: 'Bulan Sebelumnya',
                           constraints: const BoxConstraints(
                             minWidth: 48,
@@ -119,7 +122,10 @@ class LayarAnggaran extends ConsumerWidget {
                           ),
                         ),
                         IconButton(
-                          icon: const Icon(LucideIcons.chevronRight),
+                          icon: const IkonUiFunda(
+                            pathAset: AsetIkonUiFunda.chevronRight,
+                            ukuran: 24,
+                          ),
                           tooltip: 'Bulan Berikutnya',
                           constraints: const BoxConstraints(
                             minWidth: 48,
@@ -150,10 +156,10 @@ class LayarAnggaran extends ConsumerWidget {
                         ),
                         child: Row(
                           children: [
-                            Icon(
-                              LucideIcons.copyPlus,
-                              size: 18,
-                              color: WarnaFunda.utama,
+                            IkonUiFunda(
+                              pathAset: AsetIkonUiFunda.copyPlus,
+                              ukuran: 18,
+                              warna: WarnaFunda.utama,
                             ),
                             SizedBox(width: SpasiFunda.s),
                             Expanded(
@@ -162,10 +168,10 @@ class LayarAnggaran extends ConsumerWidget {
                                 warna: WarnaFunda.utama,
                               ),
                             ),
-                            Icon(
-                              LucideIcons.chevronRight,
-                              size: 16,
-                              color: WarnaFunda.utama,
+                            IkonUiFunda(
+                              pathAset: AsetIkonUiFunda.chevronRight,
+                              ukuran: 16,
+                              warna: WarnaFunda.utama,
                             ),
                           ],
                         ),
@@ -608,7 +614,7 @@ class _BarisItemAnggaran extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(ikonStatus, size: 12, color: warnaStatus),
+          ikonUiDariLucide(ikonStatus, ukuran: 12, warna: warnaStatus),
           const SizedBox(width: SpasiFunda.xs),
           Flexible(child: TeksFunda.catatan(labelStatus, warna: warnaStatus)),
         ],
@@ -794,7 +800,10 @@ class _LembarAturAnggaranState extends ConsumerState<_LembarAturAnggaran> {
                   ),
                 ),
                 IconButton(
-                  icon: const Icon(LucideIcons.x),
+                  icon: const IkonUiFunda(
+                    pathAset: AsetIkonUiFunda.x,
+                    ukuran: 24,
+                  ),
                   constraints: const BoxConstraints(
                     minWidth: 48,
                     minHeight: 48,

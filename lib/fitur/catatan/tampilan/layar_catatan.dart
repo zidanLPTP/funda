@@ -179,10 +179,10 @@ class _LayarCatatanState extends ConsumerState<LayarCatatan> {
                     shape: BoxShape.circle,
                     border: Border.all(color: WarnaFunda.garis),
                   ),
-                  child: const Icon(
-                    LucideIcons.arrowLeft,
-                    size: 18,
-                    color: WarnaFunda.teks,
+                  child: const IkonUiFunda(
+                    pathAset: AsetIkonUiFunda.arrowLeft,
+                    ukuran: 18,
+                    warna: WarnaFunda.teks,
                   ),
                 ),
               ),
@@ -212,10 +212,10 @@ class _LayarCatatanState extends ConsumerState<LayarCatatan> {
                   child: const Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(
-                        LucideIcons.plus,
-                        size: 16,
-                        color: WarnaFunda.teksPutih,
+                      IkonUiFunda(
+                        pathAset: AsetIkonUiFunda.plus,
+                        ukuran: 16,
+                        warna: WarnaFunda.teksPutih,
                       ),
                       SizedBox(width: SpasiFunda.xs),
                       Text(
@@ -375,10 +375,16 @@ class _LayarCatatanState extends ConsumerState<LayarCatatan> {
                       controller: _pengontrolCari,
                       decoration: InputDecoration(
                         hintText: 'Cari catatan atau kategori...',
-                        prefixIcon: const Icon(LucideIcons.search, size: 20),
+                        prefixIcon: const IkonUiFunda(
+                          pathAset: AsetIkonUiFunda.search,
+                          ukuran: 20,
+                        ),
                         suffixIcon: _kataKunci.isNotEmpty
                             ? IconButton(
-                                icon: const Icon(Icons.clear, size: 18),
+                                icon: const IkonUiFunda(
+                                  pathAset: AsetIkonUiFunda.x,
+                                  ukuran: 18,
+                                ),
                                 onPressed: () {
                                   _pengontrolCari.clear();
                                   setState(() => _kataKunci = '');
@@ -415,9 +421,9 @@ class _LayarCatatanState extends ConsumerState<LayarCatatan> {
                           daftarSemuaDompet,
                           daftarKategori,
                         ),
-                        icon: const Icon(
-                          LucideIcons.slidersHorizontal,
-                          size: 20,
+                        icon: const IkonUiFunda(
+                          pathAset: AsetIkonUiFunda.slidersHorizontal,
+                          ukuran: 20,
                         ),
                         style: IconButton.styleFrom(
                           minimumSize: const Size(48, 48),
@@ -684,9 +690,10 @@ class _LayarCatatanState extends ConsumerState<LayarCatatan> {
               ),
               const SizedBox(height: SpasiFunda.xl),
               ListTile(
-                leading: const Icon(
-                  LucideIcons.pencil,
-                  color: WarnaFunda.utama,
+                leading: const IkonUiFunda(
+                  pathAset: AsetIkonUiFunda.pencil,
+                  warna: WarnaFunda.utama,
+                  ukuran: 24,
                 ),
                 title: const Text(
                   'Ubah Catatan Ini',
@@ -703,9 +710,10 @@ class _LayarCatatanState extends ConsumerState<LayarCatatan> {
                 },
               ),
               ListTile(
-                leading: const Icon(
-                  LucideIcons.trash2,
-                  color: WarnaFunda.bahaya,
+                leading: const IkonUiFunda(
+                  pathAset: AsetIkonUiFunda.trash,
+                  warna: WarnaFunda.bahaya,
+                  ukuran: 24,
                 ),
                 title: const Text(
                   'Hapus Catatan Ini',
@@ -964,7 +972,7 @@ class _ItemBarisTransaksi extends StatelessWidget {
                   warnaFallback: warnaIkon,
                 )
               else
-                Icon(ikonBaris, size: 20, color: warnaIkon),
+                ikonUiDariLucide(ikonBaris, ukuran: 20, warna: warnaIkon),
               const SizedBox(width: SpasiFunda.m),
               Expanded(
                 child: Column(

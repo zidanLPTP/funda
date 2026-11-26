@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '../../../komponen/komponen_funda.dart';
 import '../../../komponen/pembantu_ikon.dart';
 import '../../../komponen/pembantu_tint.dart';
@@ -142,10 +141,10 @@ class LayarKekayaanBersih extends ConsumerWidget {
                             child: Row(
                               children: [
                                 if (isNegatif)
-                                  const Icon(
-                                    LucideIcons.info,
-                                    color: WarnaFunda.peringatan,
-                                    size: 18,
+                                  const IkonUiFunda(
+                                    pathAset: AsetIkonUiFunda.info,
+                                    warna: WarnaFunda.peringatan,
+                                    ukuran: 18,
                                   )
                                 else
                                   const IkonSvgFunda(
@@ -282,10 +281,11 @@ class LayarKekayaanBersih extends ConsumerWidget {
                                             ),
                                           ],
                                           const SizedBox(width: SpasiFunda.xs),
-                                          const Icon(
-                                            LucideIcons.chevronRight,
-                                            size: 18,
-                                            color: WarnaFunda.teksRedup,
+                                          const IkonUiFunda(
+                                            pathAset:
+                                                AsetIkonUiFunda.chevronRight,
+                                            ukuran: 18,
+                                            warna: WarnaFunda.teksRedup,
                                           ),
                                         ],
                                       ),
@@ -418,10 +418,11 @@ class LayarKekayaanBersih extends ConsumerWidget {
                                             ),
                                           ],
                                           const SizedBox(width: SpasiFunda.xs),
-                                          const Icon(
-                                            LucideIcons.chevronRight,
-                                            size: 18,
-                                            color: WarnaFunda.teksRedup,
+                                          const IkonUiFunda(
+                                            pathAset:
+                                                AsetIkonUiFunda.chevronRight,
+                                            ukuran: 18,
+                                            warna: WarnaFunda.teksRedup,
                                           ),
                                         ],
                                       ),

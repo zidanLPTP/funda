@@ -124,7 +124,11 @@ class LayarBeranda extends ConsumerWidget {
                 ),
                 child: const Row(
                   children: [
-                    Icon(LucideIcons.code, size: 20, color: WarnaFunda.utama),
+                    IkonUiFunda(
+                      pathAset: AsetIkonUiFunda.code,
+                      ukuran: 20,
+                      warna: WarnaFunda.utama,
+                    ),
                     SizedBox(width: SpasiFunda.s),
                     Expanded(
                       child: TeksFunda.label(
@@ -132,10 +136,10 @@ class LayarBeranda extends ConsumerWidget {
                         warna: WarnaFunda.utama,
                       ),
                     ),
-                    Icon(
-                      LucideIcons.chevronRight,
-                      size: 16,
-                      color: WarnaFunda.utama,
+                    IkonUiFunda(
+                      pathAset: AsetIkonUiFunda.chevronRight,
+                      ukuran: 16,
+                      warna: WarnaFunda.utama,
                     ),
                   ],
                 ),
@@ -671,10 +675,10 @@ class _HeroBerandaEditorial extends StatelessWidget {
           TombolFunda.pilGelap(
             key: const Key('tombol_catat_transaksi_beranda'),
             teks: 'Catat Transaksi',
-            ikon: const Icon(
-              LucideIcons.plus,
-              size: 18,
-              color: WarnaFunda.teksPutih,
+            ikon: const IkonUiFunda(
+              pathAset: AsetIkonUiFunda.plus,
+              ukuran: 18,
+              warna: WarnaFunda.teksPutih,
             ),
             padaTekan: padaCatatTransaksi,
           ),
@@ -732,10 +736,10 @@ class _ItemRingkasHero extends StatelessWidget {
                       ),
                     ),
                   ),
-                  const Icon(
-                    LucideIcons.chevronRight,
-                    size: 14,
-                    color: WarnaFunda.teksRedup,
+                  const IkonUiFunda(
+                    pathAset: AsetIkonUiFunda.chevronRight,
+                    ukuran: 14,
+                    warna: WarnaFunda.teksRedup,
                   ),
                 ],
               ),
@@ -805,10 +809,10 @@ class _KartuMetrikPutih extends StatelessWidget {
                         IkonSvgFunda(pathAset: pathSvg!, ukuran: 24)
                       else
                         Icon(ikon, size: 22, color: warnaIkon),
-                      const Icon(
-                        LucideIcons.chevronRight,
-                        size: 16,
-                        color: WarnaFunda.teksRedup,
+                      const IkonUiFunda(
+                        pathAset: AsetIkonUiFunda.chevronRight,
+                        ukuran: 16,
+                        warna: WarnaFunda.teksRedup,
                       ),
                     ],
                   ),
@@ -929,10 +933,10 @@ class _SplitCardLanjutBelajar extends StatelessWidget {
                                 warna: WarnaFunda.utama,
                               ),
                               SizedBox(width: SpasiFunda.xs),
-                              Icon(
-                                LucideIcons.arrowRight,
-                                size: 16,
-                                color: WarnaFunda.utama,
+                              IkonUiFunda(
+                                pathAset: AsetIkonUiFunda.arrowRight,
+                                ukuran: 16,
+                                warna: WarnaFunda.utama,
                               ),
                             ],
                           ),
@@ -998,10 +1002,10 @@ class _KartuTagihanBeranda extends StatelessWidget {
                         ],
                       ),
                     ),
-                    Icon(
-                      LucideIcons.chevronRight,
-                      size: 18,
-                      color: WarnaFunda.teksRedup,
+                    IkonUiFunda(
+                      pathAset: AsetIkonUiFunda.chevronRight,
+                      ukuran: 18,
+                      warna: WarnaFunda.teksRedup,
                     ),
                   ],
                 ),
@@ -1061,14 +1065,14 @@ class _KartuTagihanBeranda extends StatelessWidget {
               ),
               child: Row(
                 children: [
-                  Icon(
-                    isLewat
-                        ? LucideIcons.circleAlert
+                  IkonUiFunda(
+                    pathAset: isLewat
+                        ? AsetIkonUiFunda.circleAlert
                         : (isHariIni
-                              ? LucideIcons.clock
-                              : LucideIcons.calendarClock),
-                    color: warnaIkon,
-                    size: 24,
+                              ? AsetIkonUiFunda.clock
+                              : AsetIkonUiFunda.calendarClock),
+                    warna: warnaIkon,
+                    ukuran: 24,
                   ),
                   const SizedBox(width: SpasiFunda.m),
                   Expanded(
@@ -1113,10 +1117,10 @@ class _KartuTagihanBeranda extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(width: SpasiFunda.s),
-                  const Icon(
-                    LucideIcons.chevronRight,
-                    size: 18,
-                    color: WarnaFunda.teksRedup,
+                  const IkonUiFunda(
+                    pathAset: AsetIkonUiFunda.chevronRight,
+                    ukuran: 18,
+                    warna: WarnaFunda.teksRedup,
                   ),
                 ],
               ),
@@ -1237,10 +1241,10 @@ class _KartuTransaksiTerakhir extends StatelessWidget {
                           warna: WarnaFunda.utama,
                         ),
                         SizedBox(width: SpasiFunda.xs),
-                        Icon(
-                          LucideIcons.chevronRight,
-                          size: 14,
-                          color: WarnaFunda.utama,
+                        IkonUiFunda(
+                          pathAset: AsetIkonUiFunda.chevronRight,
+                          ukuran: 14,
+                          warna: WarnaFunda.utama,
                         ),
                       ],
                     ),

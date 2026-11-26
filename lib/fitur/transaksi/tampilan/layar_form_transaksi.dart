@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
-import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '../../../data/basis_data.dart';
 import '../../../data/model/jenis_transaksi.dart';
 import '../../../data/model/sifat_kategori.dart';
@@ -249,10 +248,10 @@ class _LayarFormTransaksiState extends ConsumerState<LayarFormTransaksi> {
                           warna: WarnaFunda.teksRedup,
                         ),
                         trailing: terpilih
-                            ? const Icon(
-                                LucideIcons.check,
-                                size: 18,
-                                color: WarnaFunda.utama,
+                            ? const IkonUiFunda(
+                                pathAset: AsetIkonUiFunda.check,
+                                ukuran: 18,
+                                warna: WarnaFunda.utama,
                               )
                             : null,
                         onTap: () {
@@ -510,10 +509,10 @@ class _LayarFormTransaksiState extends ConsumerState<LayarFormTransaksi> {
                                           color: WarnaFunda.garis,
                                         ),
                                       ),
-                                      child: const Icon(
-                                        LucideIcons.arrowLeft,
-                                        size: 18,
-                                        color: WarnaFunda.teks,
+                                      child: const IkonUiFunda(
+                                        pathAset: AsetIkonUiFunda.arrowLeft,
+                                        ukuran: 18,
+                                        warna: WarnaFunda.teks,
                                       ),
                                     ),
                                   ),
@@ -683,10 +682,10 @@ class _LayarFormTransaksiState extends ConsumerState<LayarFormTransaksi> {
                             ),
                             child: Row(
                               children: [
-                                const Icon(
-                                  LucideIcons.alertCircle,
-                                  color: WarnaFunda.peringatan,
-                                  size: 20,
+                                const IkonUiFunda(
+                                  pathAset: AsetIkonUiFunda.circleAlert,
+                                  warna: WarnaFunda.peringatan,
+                                  ukuran: 20,
                                 ),
                                 const SizedBox(width: SpasiFunda.m),
                                 Expanded(
@@ -870,10 +869,11 @@ class _LayarFormTransaksiState extends ConsumerState<LayarFormTransaksi> {
                                           child: const Row(
                                             mainAxisSize: MainAxisSize.min,
                                             children: [
-                                              Icon(
-                                                LucideIcons.arrowUpDown,
-                                                size: 14,
-                                                color: WarnaFunda.utama,
+                                              IkonUiFunda(
+                                                pathAset:
+                                                    AsetIkonUiFunda.arrowUpDown,
+                                                ukuran: 14,
+                                                warna: WarnaFunda.utama,
                                               ),
                                               SizedBox(width: 4),
                                               TeksFunda.catatan(
@@ -1125,10 +1125,10 @@ class _LayarFormTransaksiState extends ConsumerState<LayarFormTransaksi> {
                                   ),
                                   child: Row(
                                     children: [
-                                      const Icon(
-                                        LucideIcons.calendar,
-                                        size: 18,
-                                        color: WarnaFunda.utama,
+                                      const IkonUiFunda(
+                                        pathAset: AsetIkonUiFunda.calendar,
+                                        ukuran: 18,
+                                        warna: WarnaFunda.utama,
                                       ),
                                       const SizedBox(width: SpasiFunda.m),
                                       Expanded(
@@ -1151,10 +1151,10 @@ class _LayarFormTransaksiState extends ConsumerState<LayarFormTransaksi> {
                                           ],
                                         ),
                                       ),
-                                      const Icon(
-                                        LucideIcons.chevronRight,
-                                        size: 16,
-                                        color: WarnaFunda.teksRedup,
+                                      const IkonUiFunda(
+                                        pathAset: AsetIkonUiFunda.chevronRight,
+                                        ukuran: 16,
+                                        warna: WarnaFunda.teksRedup,
                                       ),
                                     ],
                                   ),
@@ -1300,10 +1300,10 @@ class _BarisPilihDompetTransfer extends StatelessWidget {
               ),
             ),
             const SizedBox(width: SpasiFunda.s),
-            const Icon(
-              LucideIcons.chevronRight,
-              size: 16,
-              color: WarnaFunda.teksRedup,
+            const IkonUiFunda(
+              pathAset: AsetIkonUiFunda.chevronRight,
+              ukuran: 16,
+              warna: WarnaFunda.teksRedup,
             ),
           ],
         ),

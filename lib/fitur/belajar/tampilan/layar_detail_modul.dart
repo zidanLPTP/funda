@@ -148,10 +148,10 @@ class LayarDetailModul extends ConsumerWidget {
                                               color: WarnaFunda.garis,
                                             ),
                                           ),
-                                          child: const Icon(
-                                            LucideIcons.arrowLeft,
-                                            size: 20,
-                                            color: WarnaFunda.teks,
+                                          child: const IkonUiFunda(
+                                            pathAset: AsetIkonUiFunda.arrowLeft,
+                                            ukuran: 20,
+                                            warna: WarnaFunda.teks,
                                           ),
                                         ),
                                       ),
@@ -242,10 +242,10 @@ class LayarDetailModul extends ConsumerWidget {
                                   ),
                                   child: const Row(
                                     children: [
-                                      Icon(
-                                        LucideIcons.checkCircle2,
-                                        size: 20,
-                                        color: WarnaFunda.pemasukan,
+                                      IkonUiFunda(
+                                        pathAset: AsetIkonUiFunda.circleCheck,
+                                        ukuran: 20,
+                                        warna: WarnaFunda.pemasukan,
                                       ),
                                       SizedBox(width: SpasiFunda.s),
                                       Expanded(
@@ -554,10 +554,10 @@ class KotakSyaratBelajar extends ConsumerWidget {
                     router.push(ruteAksi!);
                   }
                 },
-                icon: const Icon(
-                  LucideIcons.arrowRight,
-                  size: 16,
-                  color: WarnaFunda.utama,
+                icon: const IkonUiFunda(
+                  pathAset: AsetIkonUiFunda.arrowRight,
+                  ukuran: 16,
+                  warna: WarnaFunda.utama,
                 ),
                 label: const TeksFunda.label(
                   'Lengkapi Data Sekarang',
@@ -639,7 +639,11 @@ class _BangunBannerPernyataanModul extends ConsumerWidget {
           ),
           child: Row(
             children: [
-              const Icon(LucideIcons.info, size: 16, color: WarnaFunda.utama),
+              const IkonUiFunda(
+                pathAset: AsetIkonUiFunda.info,
+                ukuran: 16,
+                warna: WarnaFunda.utama,
+              ),
               const SizedBox(width: SpasiFunda.s),
               Expanded(
                 child: TeksFunda.catatan(config.$2, warna: WarnaFunda.teks),
@@ -768,10 +772,10 @@ class _BarisTimelinePelajaran extends StatelessWidget {
                       padding: EdgeInsets.only(left: SpasiFunda.s, top: 6),
                       child: Align(
                         alignment: Alignment.topCenter,
-                        child: Icon(
-                          LucideIcons.chevronRight,
-                          size: 18,
-                          color: WarnaFunda.teksRedup,
+                        child: IkonUiFunda(
+                          pathAset: AsetIkonUiFunda.chevronRight,
+                          ukuran: 18,
+                          warna: WarnaFunda.teksRedup,
                         ),
                       ),
                     ),
@@ -803,10 +807,10 @@ class _BarisTimelinePelajaran extends StatelessWidget {
           color: WarnaFunda.tintHijau,
           shape: BoxShape.circle,
         ),
-        child: const Icon(
-          LucideIcons.check,
-          size: 16,
-          color: WarnaFunda.pemasukan,
+        child: const IkonUiFunda(
+          pathAset: AsetIkonUiFunda.check,
+          ukuran: 16,
+          warna: WarnaFunda.pemasukan,
         ),
       ),
       StatusBelajar.sedang => Container(
@@ -890,10 +894,10 @@ class _BarisTimelineKuis extends StatelessWidget {
                   color: semuaSelesai ? WarnaFunda.utama : WarnaFunda.garis,
                 ),
               ),
-              child: Icon(
-                LucideIcons.helpCircle,
-                size: 16,
-                color: semuaSelesai ? WarnaFunda.utama : WarnaFunda.teksRedup,
+              child: IkonUiFunda(
+                pathAset: AsetIkonUiFunda.circleHelp,
+                ukuran: 16,
+                warna: semuaSelesai ? WarnaFunda.utama : WarnaFunda.teksRedup,
               ),
             ),
             const SizedBox(width: 16),
@@ -925,10 +929,10 @@ class _BarisTimelineKuis extends StatelessWidget {
             if (semuaSelesai)
               const Padding(
                 padding: EdgeInsets.only(left: SpasiFunda.s, top: 6),
-                child: Icon(
-                  LucideIcons.chevronRight,
-                  size: 18,
-                  color: WarnaFunda.utama,
+                child: IkonUiFunda(
+                  pathAset: AsetIkonUiFunda.chevronRight,
+                  ukuran: 18,
+                  warna: WarnaFunda.utama,
                 ),
               ),
           ],

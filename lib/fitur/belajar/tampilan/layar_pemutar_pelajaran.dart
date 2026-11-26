@@ -341,7 +341,11 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
           backgroundColor: WarnaFunda.transparan,
           elevation: 0,
           leading: IconButton(
-            icon: const Icon(LucideIcons.arrowLeft, color: WarnaFunda.teks),
+            icon: const IkonUiFunda(
+              pathAset: AsetIkonUiFunda.arrowLeft,
+              warna: WarnaFunda.teks,
+              ukuran: 24,
+            ),
             onPressed: () => Navigator.pop(context),
           ),
         ),
@@ -397,10 +401,10 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
                           shape: BoxShape.circle,
                           border: Border.all(color: WarnaFunda.garis),
                         ),
-                        child: const Icon(
-                          LucideIcons.x,
-                          size: 20,
-                          color: WarnaFunda.teks,
+                        child: const IkonUiFunda(
+                          pathAset: AsetIkonUiFunda.x,
+                          ukuran: 20,
+                          warna: WarnaFunda.teks,
                         ),
                       ),
                     ),
@@ -722,12 +726,12 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
                     ),
                     child: Row(
                       children: [
-                        Icon(
-                          isSelected
-                              ? LucideIcons.checkCircle2
-                              : LucideIcons.circle,
-                          size: 18,
-                          color: isSelected
+                        IkonUiFunda(
+                          pathAset: isSelected
+                              ? AsetIkonUiFunda.circleCheck
+                              : AsetIkonUiFunda.circle,
+                          ukuran: 18,
+                          warna: isSelected
                               ? WarnaFunda.utama
                               : WarnaFunda.teksRedup,
                         ),
@@ -851,17 +855,18 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
             ),
             child: Row(
               children: [
-                Icon(
-                  sudahSelesai
-                      ? LucideIcons.checkCircle
+                IkonUiFunda(
+                  pathAset: sudahSelesai
+                      ? AsetIkonUiFunda.circleCheck
                       : (_misiDilewati
-                            ? LucideIcons.forward
-                            : LucideIcons.alertCircle),
-                  color: sudahSelesai
+                            ? AsetIkonUiFunda.forward
+                            : AsetIkonUiFunda.circleAlert),
+                  warna: sudahSelesai
                       ? WarnaFunda.pemasukan
                       : (_misiDilewati
                             ? WarnaFunda.teksRedup
                             : WarnaFunda.peringatan),
+                  ukuran: 24,
                 ),
                 const SizedBox(width: SpasiFunda.s),
                 Expanded(
@@ -964,7 +969,11 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
               ),
               child: const Row(
                 children: [
-                  Icon(LucideIcons.check, color: WarnaFunda.pemasukan),
+                  IkonUiFunda(
+                    pathAset: AsetIkonUiFunda.check,
+                    warna: WarnaFunda.pemasukan,
+                    ukuran: 24,
+                  ),
                   SizedBox(width: SpasiFunda.s),
                   Expanded(
                     child: TeksFunda.label(
@@ -1026,10 +1035,10 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
               children: [
                 const Row(
                   children: [
-                    Icon(
-                      LucideIcons.helpCircle,
-                      size: 18,
-                      color: WarnaFunda.utama,
+                    IkonUiFunda(
+                      pathAset: AsetIkonUiFunda.circleHelp,
+                      ukuran: 18,
+                      warna: WarnaFunda.utama,
                     ),
                     SizedBox(width: SpasiFunda.xs),
                     TeksFunda.label('Skenario', warna: WarnaFunda.utama),
@@ -1052,7 +1061,11 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
               ),
               child: const Row(
                 children: [
-                  Icon(LucideIcons.forward, color: WarnaFunda.teksRedup),
+                  IkonUiFunda(
+                    pathAset: AsetIkonUiFunda.forward,
+                    warna: WarnaFunda.teksRedup,
+                    ukuran: 24,
+                  ),
                   SizedBox(width: SpasiFunda.s),
                   Expanded(
                     child: TeksFunda.label(
@@ -1076,9 +1089,10 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
                 children: [
                   const Row(
                     children: [
-                      Icon(
-                        LucideIcons.checkCircle,
-                        color: WarnaFunda.pemasukan,
+                      IkonUiFunda(
+                        pathAset: AsetIkonUiFunda.circleCheck,
+                        warna: WarnaFunda.pemasukan,
+                        ukuran: 24,
                       ),
                       SizedBox(width: SpasiFunda.s),
                       Expanded(
@@ -1135,9 +1149,10 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
                     children: [
                       const Row(
                         children: [
-                          Icon(
-                            LucideIcons.alertCircle,
-                            color: WarnaFunda.peringatan,
+                          IkonUiFunda(
+                            pathAset: AsetIkonUiFunda.circleAlert,
+                            warna: WarnaFunda.peringatan,
+                            ukuran: 24,
                           ),
                           SizedBox(width: SpasiFunda.s),
                           Expanded(
@@ -1355,14 +1370,14 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Icon(
-                          _langkahDicentang.contains(langkah.id)
-                              ? LucideIcons.checkSquare
-                              : LucideIcons.square,
-                          color: _langkahDicentang.contains(langkah.id)
+                        IkonUiFunda(
+                          pathAset: _langkahDicentang.contains(langkah.id)
+                              ? AsetIkonUiFunda.checkSquare
+                              : AsetIkonUiFunda.square,
+                          warna: _langkahDicentang.contains(langkah.id)
                               ? WarnaFunda.utama
                               : WarnaFunda.teksRedup,
-                          size: 22,
+                          ukuran: 22,
                         ),
                         const SizedBox(width: SpasiFunda.s),
                         Expanded(child: TeksFunda.isi(langkah.teks)),
@@ -1390,10 +1405,12 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
             ),
             child: Row(
               children: [
-                Icon(
-                  memenuhiSyarat ? LucideIcons.check : LucideIcons.listTodo,
-                  size: 18,
-                  color: memenuhiSyarat
+                IkonUiFunda(
+                  pathAset: memenuhiSyarat
+                      ? AsetIkonUiFunda.check
+                      : AsetIkonUiFunda.listTodo,
+                  ukuran: 18,
+                  warna: memenuhiSyarat
                       ? WarnaFunda.pemasukan
                       : WarnaFunda.teksRedup,
                 ),
@@ -1421,7 +1438,11 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
               ),
               child: const Row(
                 children: [
-                  Icon(LucideIcons.forward, color: WarnaFunda.teksRedup),
+                  IkonUiFunda(
+                    pathAset: AsetIkonUiFunda.forward,
+                    warna: WarnaFunda.teksRedup,
+                    ukuran: 24,
+                  ),
                   SizedBox(width: SpasiFunda.s),
                   Expanded(
                     child: TeksFunda.label(
@@ -1441,7 +1462,11 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
               ),
               child: const Row(
                 children: [
-                  Icon(LucideIcons.check, color: WarnaFunda.pemasukan),
+                  IkonUiFunda(
+                    pathAset: AsetIkonUiFunda.check,
+                    warna: WarnaFunda.pemasukan,
+                    ukuran: 24,
+                  ),
                   SizedBox(width: SpasiFunda.s),
                   Expanded(
                     child: TeksFunda.label(
@@ -1605,7 +1630,10 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
           TombolFunda(
             key: const Key('tombol_simpan_refleksi'),
             teks: _misiTerverifikasi ? 'Perbarui Refleksi' : 'Simpan Refleksi',
-            ikon: const Icon(LucideIcons.check, size: 18),
+            ikon: const IkonUiFunda(
+              pathAset: AsetIkonUiFunda.check,
+              ukuran: 18,
+            ),
             lebarPenuh: true,
             padaTekan: cukupKarakter
                 ? () async {
@@ -1637,10 +1665,10 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
               ),
               child: const Row(
                 children: [
-                  Icon(
-                    LucideIcons.checkCircle2,
-                    size: 20,
-                    color: WarnaFunda.sukses,
+                  IkonUiFunda(
+                    pathAset: AsetIkonUiFunda.circleCheck,
+                    ukuran: 20,
+                    warna: WarnaFunda.sukses,
                   ),
                   SizedBox(width: SpasiFunda.s),
                   Expanded(
@@ -1738,12 +1766,17 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
             child: Row(
               children: [
                 if (sudahSelesai)
-                  const Icon(
-                    LucideIcons.checkCircle,
-                    color: WarnaFunda.pemasukan,
+                  const IkonUiFunda(
+                    pathAset: AsetIkonUiFunda.circleCheck,
+                    warna: WarnaFunda.pemasukan,
+                    ukuran: 24,
                   )
                 else if (_misiDilewati)
-                  const Icon(LucideIcons.forward, color: WarnaFunda.teksRedup)
+                  const IkonUiFunda(
+                    pathAset: AsetIkonUiFunda.forward,
+                    warna: WarnaFunda.teksRedup,
+                    ukuran: 24,
+                  )
                 else
                   const IkonSvgFunda(
                     pathAset: AsetIkonFunda.modeSandbox,
@@ -1776,7 +1809,10 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
               width: double.infinity,
               child: OutlinedButton.icon(
                 key: const Key('tombol_buka_sandbox'),
-                icon: const Icon(LucideIcons.externalLink, size: 18),
+                icon: const IkonUiFunda(
+                  pathAset: AsetIkonUiFunda.externalLink,
+                  ukuran: 18,
+                ),
                 label: const Text('Buka Mode Sandbox'),
                 onPressed: () => context.push('/sandbox'),
                 style: OutlinedButton.styleFrom(
@@ -1791,7 +1827,10 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
               width: double.infinity,
               child: ElevatedButton.icon(
                 key: const Key('tombol_periksa_misi_sandbox'),
-                icon: const Icon(LucideIcons.check, size: 18),
+                icon: const IkonUiFunda(
+                  pathAset: AsetIkonUiFunda.check,
+                  ukuran: 18,
+                ),
                 label: const Text('Periksa Misi'),
                 style: ElevatedButton.styleFrom(
                   minimumSize: const Size(double.infinity, 48),

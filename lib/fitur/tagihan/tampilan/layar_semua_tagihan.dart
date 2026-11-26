@@ -170,7 +170,10 @@ class _LayarSemuaTagihanState extends ConsumerState<LayarSemuaTagihan> {
                 ),
               ),
               PopupMenuButton<String>(
-                icon: const Icon(LucideIcons.ellipsisVertical, size: 20),
+                icon: const IkonUiFunda(
+                  pathAset: AsetIkonUiFunda.ellipsisVertical,
+                  ukuran: 20,
+                ),
                 onSelected: (aksi) async {
                   final repo = ref.read(penyediaTagihanRepositori);
                   if (aksi == 'ubah') {
@@ -208,7 +211,10 @@ class _LayarSemuaTagihanState extends ConsumerState<LayarSemuaTagihan> {
                     value: 'ubah',
                     child: Row(
                       children: [
-                        Icon(LucideIcons.pencil, size: 18),
+                        IkonUiFunda(
+                          pathAset: AsetIkonUiFunda.pencil,
+                          ukuran: 18,
+                        ),
                         SizedBox(width: 8),
                         Expanded(child: Text('Ubah Tagihan')),
                       ],
@@ -218,9 +224,11 @@ class _LayarSemuaTagihanState extends ConsumerState<LayarSemuaTagihan> {
                     value: 'jeda',
                     child: Row(
                       children: [
-                        Icon(
-                          tagihan.aktif ? LucideIcons.pause : LucideIcons.play,
-                          size: 18,
+                        IkonUiFunda(
+                          pathAset: tagihan.aktif
+                              ? AsetIkonUiFunda.pause
+                              : AsetIkonUiFunda.play,
+                          ukuran: 18,
                         ),
                         const SizedBox(width: 8),
                         Expanded(
@@ -237,11 +245,11 @@ class _LayarSemuaTagihanState extends ConsumerState<LayarSemuaTagihan> {
                     value: 'arsip',
                     child: Row(
                       children: [
-                        Icon(
-                          tagihan.diarsipkan
-                              ? LucideIcons.archiveRestore
-                              : LucideIcons.archive,
-                          size: 18,
+                        IkonUiFunda(
+                          pathAset: tagihan.diarsipkan
+                              ? AsetIkonUiFunda.archiveRestore
+                              : AsetIkonUiFunda.archive,
+                          ukuran: 18,
                         ),
                         const SizedBox(width: 8),
                         Expanded(
@@ -258,10 +266,10 @@ class _LayarSemuaTagihanState extends ConsumerState<LayarSemuaTagihan> {
                     value: 'hapus',
                     child: Row(
                       children: [
-                        Icon(
-                          LucideIcons.trash2,
-                          size: 18,
-                          color: WarnaFunda.pengeluaran,
+                        IkonUiFunda(
+                          pathAset: AsetIkonUiFunda.trash,
+                          ukuran: 18,
+                          warna: WarnaFunda.pengeluaran,
                         ),
                         SizedBox(width: 8),
                         Expanded(
@@ -342,12 +350,12 @@ class _LayarSemuaTagihanState extends ConsumerState<LayarSemuaTagihan> {
                       minWidth: 48,
                       minHeight: 48,
                     ),
-                    icon: Icon(
-                      _tampilkanArsip
-                          ? LucideIcons.archiveRestore
-                          : LucideIcons.archive,
-                      color: WarnaFunda.teks,
-                      size: 20,
+                    icon: IkonUiFunda(
+                      pathAset: _tampilkanArsip
+                          ? AsetIkonUiFunda.archiveRestore
+                          : AsetIkonUiFunda.archive,
+                      warna: WarnaFunda.teks,
+                      ukuran: 20,
                     ),
                     tooltip: _tampilkanArsip
                         ? 'Sembunyikan Arsip'

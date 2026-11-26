@@ -2,7 +2,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '../../../aplikasi/konfigurasi_debug.dart';
 import '../../../komponen/komponen_funda.dart';
 import '../../../layanan/pengingat/penyedia_layanan_pengingat.dart';
@@ -199,9 +198,9 @@ class _LayarPengaturanState extends ConsumerState<LayarPengaturan> {
                             subtitle: TeksFunda.catatan(
                               'Setiap pukul $jamPengingat',
                             ),
-                            trailing: const Icon(
-                              LucideIcons.chevronRight,
-                              size: 20,
+                            trailing: const IkonUiFunda(
+                              pathAset: AsetIkonUiFunda.chevronRight,
+                              ukuran: 20,
                             ),
                             onTap: () => _pilihJamPengingat(jamPengingat),
                           ),
@@ -286,10 +285,10 @@ class _LayarPengaturanState extends ConsumerState<LayarPengaturan> {
                           subtitle: const TeksFunda.catatan(
                             'Tampilkan kembali tur sorotan pengenalan tab utama di Beranda',
                           ),
-                          trailing: const Icon(
-                            LucideIcons.chevronRight,
-                            size: 20,
-                            color: WarnaFunda.utama,
+                          trailing: const IkonUiFunda(
+                            pathAset: AsetIkonUiFunda.chevronRight,
+                            ukuran: 20,
+                            warna: WarnaFunda.utama,
                           ),
                           onTap: () async {
                             await ref
@@ -323,10 +322,10 @@ class _LayarPengaturanState extends ConsumerState<LayarPengaturan> {
                           subtitle: const TeksFunda.catatan(
                             'Ubah jawaban kondisi keuanganmu bila situasimu berubah',
                           ),
-                          trailing: const Icon(
-                            LucideIcons.chevronRight,
-                            size: 20,
-                            color: WarnaFunda.sifatKeinginan,
+                          trailing: const IkonUiFunda(
+                            pathAset: AsetIkonUiFunda.chevronRight,
+                            ukuran: 20,
+                            warna: WarnaFunda.sifatKeinginan,
                           ),
                           onTap: () {
                             final router = GoRouter.maybeOf(context);
@@ -372,8 +371,7 @@ class _LayarPengaturanState extends ConsumerState<LayarPengaturan> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           _bangunJudulBagian(
-                            ikon: LucideIcons.flaskConical,
-                            warnaIkon: WarnaFunda.peringatan,
+                            pathSvg: AsetIkonFunda.modeSandbox,
                             judul: 'Alat Pengujian Notifikasi (Debug)',
                           ),
                           const SizedBox(height: SpasiFunda.s),

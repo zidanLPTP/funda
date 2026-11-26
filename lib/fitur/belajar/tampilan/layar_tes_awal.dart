@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '../../../data/penyedia_data.dart';
 import '../../../komponen/komponen_funda.dart';
 import '../../../perhitungan/perhitungan_tes_awal_personalisasi.dart';
@@ -168,10 +167,10 @@ class _LayarTesAwalState extends ConsumerState<LayarTesAwal> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Icon(
-                  LucideIcons.alertTriangle,
-                  size: 48,
-                  color: WarnaFunda.peringatan,
+                const IkonUiFunda(
+                  pathAset: AsetIkonUiFunda.triangleAlert,
+                  ukuran: 48,
+                  warna: WarnaFunda.peringatan,
                 ),
                 const SizedBox(height: SpasiFunda.m),
                 TeksFunda.judulBagian('Gagal Memuat Tes Awal'),
@@ -358,7 +357,10 @@ class _LayarTesAwalState extends ConsumerState<LayarTesAwal> {
           'Profil (${_indeksPertanyaanProfil + 1}/${daftarPertanyaan.length})',
         ),
         leading: IconButton(
-          icon: const Icon(LucideIcons.arrowLeft),
+          icon: const IkonUiFunda(
+            pathAset: AsetIkonUiFunda.arrowLeft,
+            ukuran: 24,
+          ),
           onPressed: () {
             if (_indeksPertanyaanProfil > 0) {
               setState(() => _indeksPertanyaanProfil--);
@@ -413,13 +415,14 @@ class _LayarTesAwalState extends ConsumerState<LayarTesAwal> {
                         ),
                         child: Row(
                           children: [
-                            Icon(
-                              terpilih
-                                  ? LucideIcons.checkCircle2
-                                  : LucideIcons.circle,
-                              color: terpilih
+                            IkonUiFunda(
+                              pathAset: terpilih
+                                  ? AsetIkonUiFunda.circleCheck
+                                  : AsetIkonUiFunda.circle,
+                              warna: terpilih
                                   ? WarnaFunda.utama
                                   : WarnaFunda.teksRedup,
+                              ukuran: 24,
                             ),
                             const SizedBox(width: SpasiFunda.m),
                             Expanded(child: TeksFunda.isi(pil.teks)),
@@ -469,7 +472,10 @@ class _LayarTesAwalState extends ConsumerState<LayarTesAwal> {
       appBar: AppBar(
         title: const Text('Profil Keuangan'),
         leading: IconButton(
-          icon: const Icon(LucideIcons.arrowLeft),
+          icon: const IkonUiFunda(
+            pathAset: AsetIkonUiFunda.arrowLeft,
+            ukuran: 24,
+          ),
           onPressed: () {
             setState(() {
               _indeksPertanyaanProfil = _konten!.pertanyaanProfil.length - 1;
@@ -596,10 +602,10 @@ class _LayarTesAwalState extends ConsumerState<LayarTesAwal> {
                                 color: WarnaFunda.permukaan,
                                 shape: BoxShape.circle,
                               ),
-                              child: const Icon(
-                                LucideIcons.checkCircle2,
-                                size: 44,
-                                color: WarnaFunda.pemasukan,
+                              child: const IkonUiFunda(
+                                pathAset: AsetIkonUiFunda.circleCheck,
+                                ukuran: 44,
+                                warna: WarnaFunda.pemasukan,
                               ),
                             ),
                             const SizedBox(height: SpasiFunda.l),
@@ -648,7 +654,10 @@ class _LayarTesAwalState extends ConsumerState<LayarTesAwal> {
       appBar: AppBar(
         title: Text('Tes Awal (${_indeksSoal + 1}/${daftarSoal.length})'),
         leading: IconButton(
-          icon: const Icon(LucideIcons.arrowLeft),
+          icon: const IkonUiFunda(
+            pathAset: AsetIkonUiFunda.arrowLeft,
+            ukuran: 24,
+          ),
           onPressed: () {
             if (_indeksSoal > 0) {
               setState(() => _indeksSoal--);
@@ -712,15 +721,16 @@ class _LayarTesAwalState extends ConsumerState<LayarTesAwal> {
                         ),
                         child: Row(
                           children: [
-                            Icon(
-                              terpilih
-                                  ? LucideIcons.checkCircle2
-                                  : LucideIcons.circle,
-                              color: terpilih
+                            IkonUiFunda(
+                              pathAset: terpilih
+                                  ? AsetIkonUiFunda.circleCheck
+                                  : AsetIkonUiFunda.circle,
+                              warna: terpilih
                                   ? (apakahBelumTahu
                                         ? WarnaFunda.teksRedup
                                         : WarnaFunda.utama)
                                   : WarnaFunda.teksRedup,
+                              ukuran: 24,
                             ),
                             const SizedBox(width: SpasiFunda.m),
                             Expanded(
@@ -796,10 +806,10 @@ class _LayarTesAwalState extends ConsumerState<LayarTesAwal> {
                         ),
                         child: Column(
                           children: [
-                            const Icon(
-                              LucideIcons.checkCircle2,
-                              color: WarnaFunda.utama,
-                              size: 40,
+                            const IkonUiFunda(
+                              pathAset: AsetIkonUiFunda.circleCheck,
+                              warna: WarnaFunda.utama,
+                              ukuran: 40,
                             ),
                             const SizedBox(height: SpasiFunda.s),
                             TeksFunda.judulBagian('Profil Berhasil Dibentuk'),

@@ -166,10 +166,10 @@ class _LayarDaftarKantongState extends ConsumerState<LayarDaftarKantong> {
                     ),
                     child: const Row(
                       children: [
-                        Icon(
-                          LucideIcons.info,
-                          color: WarnaFunda.utama,
-                          size: 20,
+                        IkonUiFunda(
+                          pathAset: AsetIkonUiFunda.info,
+                          warna: WarnaFunda.utama,
+                          ukuran: 20,
                         ),
                         SizedBox(width: SpasiFunda.m),
                         Expanded(
@@ -275,7 +275,10 @@ class _LayarDaftarKantongState extends ConsumerState<LayarDaftarKantong> {
                           context,
                           dompetTerpilih.id,
                         ),
-                        icon: const Icon(LucideIcons.plus, size: 16),
+                        icon: const IkonUiFunda(
+                          pathAset: AsetIkonUiFunda.plus,
+                          ukuran: 16,
+                        ),
                         label: const Text('Kantong Bebas'),
                       ),
                     ],
@@ -451,9 +454,9 @@ class _LayarDaftarKantongState extends ConsumerState<LayarDaftarKantong> {
                                                         isIsi: false,
                                                       )
                                                 : null,
-                                            icon: const Icon(
-                                              LucideIcons.minus,
-                                              size: 14,
+                                            icon: const IkonUiFunda(
+                                              pathAset: AsetIkonUiFunda.minus,
+                                              ukuran: 14,
                                             ),
                                             label: const Text('Ambil'),
                                           ),
@@ -464,9 +467,9 @@ class _LayarDaftarKantongState extends ConsumerState<LayarDaftarKantong> {
                                                   kantong: k,
                                                   isIsi: true,
                                                 ),
-                                            icon: const Icon(
-                                              LucideIcons.plus,
-                                              size: 14,
+                                            icon: const IkonUiFunda(
+                                              pathAset: AsetIkonUiFunda.plus,
+                                              ukuran: 14,
                                             ),
                                             label: const Text('Isi'),
                                           ),
@@ -570,7 +573,10 @@ class _LembarTambahKantongBebasState
                   child: TeksFunda.judulBagian('Buat Kantong Bebas'),
                 ),
                 IconButton(
-                  icon: const Icon(LucideIcons.x),
+                  icon: const IkonUiFunda(
+                    pathAset: AsetIkonUiFunda.x,
+                    ukuran: 24,
+                  ),
                   constraints: const BoxConstraints(
                     minWidth: 48,
                     minHeight: 48,
@@ -706,7 +712,10 @@ class _LembarAlokasiKantongState extends ConsumerState<_LembarAlokasiKantong> {
               children: [
                 Expanded(child: TeksFunda.judulBagian(judul)),
                 IconButton(
-                  icon: const Icon(LucideIcons.x),
+                  icon: const IkonUiFunda(
+                    pathAset: AsetIkonUiFunda.x,
+                    ukuran: 24,
+                  ),
                   constraints: const BoxConstraints(
                     minWidth: 48,
                     minHeight: 48,

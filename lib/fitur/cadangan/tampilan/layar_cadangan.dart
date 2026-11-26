@@ -3,7 +3,6 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '../../../data/cadangan/format_cadangan.dart';
 import '../../../komponen/komponen_funda.dart';
 import '../../../perhitungan/perhitungan_laporan_bulanan.dart';
@@ -389,7 +388,10 @@ class _LayarCadanganState extends ConsumerState<LayarCadangan> {
                       children: [
                         TombolFunda.pilGelap(
                           teks: 'Buat Cadangan dan Bagikan',
-                          ikon: const Icon(LucideIcons.upload, size: 18),
+                          ikon: const IkonUiFunda(
+                            pathAset: AsetIkonUiFunda.upload,
+                            ukuran: 18,
+                          ),
                           memuat: _sedangMemproses,
                           padaTekan: _sedangMemproses ? null : _buatCadangan,
                           lebarPenuh: true,
@@ -397,7 +399,10 @@ class _LayarCadanganState extends ConsumerState<LayarCadangan> {
                         const SizedBox(height: SpasiFunda.s),
                         TombolFunda.sekunder(
                           teks: 'Pulihkan dari Berkas',
-                          ikon: const Icon(LucideIcons.download, size: 18),
+                          ikon: const IkonUiFunda(
+                            pathAset: AsetIkonUiFunda.download,
+                            ukuran: 18,
+                          ),
                           memuat: _sedangMemproses,
                           padaTekan: _sedangMemproses
                               ? null
@@ -410,7 +415,10 @@ class _LayarCadanganState extends ConsumerState<LayarCadangan> {
                           const SizedBox(height: SpasiFunda.s),
                           TombolFunda.teks(
                             teks: 'Kembalikan Data Sebelum Pemulihan Terakhir',
-                            ikon: const Icon(LucideIcons.undo2, size: 18),
+                            ikon: const IkonUiFunda(
+                              pathAset: AsetIkonUiFunda.undo,
+                              ukuran: 18,
+                            ),
                             memuat: _sedangMemproses,
                             padaTekan: _sedangMemproses
                                 ? null
@@ -437,10 +445,10 @@ class _LayarCadanganState extends ConsumerState<LayarCadangan> {
                     child: const Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Icon(
-                          LucideIcons.shieldAlert,
-                          size: 20,
-                          color: WarnaFunda.peringatan,
+                        IkonUiFunda(
+                          pathAset: AsetIkonUiFunda.shieldAlert,
+                          ukuran: 20,
+                          warna: WarnaFunda.peringatan,
                         ),
                         SizedBox(width: SpasiFunda.m),
                         Expanded(

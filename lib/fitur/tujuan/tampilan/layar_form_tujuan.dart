@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '../../../data/basis_data.dart';
 import '../../../data/model/jenis_tujuan.dart';
 import '../../../data/penyedia_basis_data.dart';
@@ -238,9 +237,10 @@ class _LayarFormTujuanState extends ConsumerState<LayarFormTujuan> {
                         ),
                         child: Row(
                           children: [
-                            const Icon(
-                              LucideIcons.circleAlert,
-                              color: WarnaFunda.pengeluaran,
+                            const IkonUiFunda(
+                              pathAset: AsetIkonUiFunda.circleAlert,
+                              warna: WarnaFunda.pengeluaran,
+                              ukuran: 24,
                             ),
                             const SizedBox(width: SpasiFunda.s),
                             Expanded(
@@ -304,7 +304,13 @@ class _LayarFormTujuanState extends ConsumerState<LayarFormTujuan> {
                               hintText: 'Rp 0',
                               filled: true,
                               fillColor: WarnaFunda.latar,
-                              prefixIcon: const Icon(LucideIcons.target),
+                              prefixIcon: const Padding(
+                                padding: EdgeInsets.all(12),
+                                child: IkonSvgFunda(
+                                  pathAset: AsetIkonFunda.metrikTujuan,
+                                  ukuran: 20,
+                                ),
+                              ),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(
                                   SudutFunda.kartu,
@@ -378,10 +384,10 @@ class _LayarFormTujuanState extends ConsumerState<LayarFormTujuan> {
                               ),
                               child: Row(
                                 children: [
-                                  const Icon(
-                                    LucideIcons.calendar,
-                                    size: 20,
-                                    color: WarnaFunda.utama,
+                                  const IkonUiFunda(
+                                    pathAset: AsetIkonUiFunda.calendar,
+                                    ukuran: 20,
+                                    warna: WarnaFunda.utama,
                                   ),
                                   const SizedBox(width: SpasiFunda.s),
                                   Expanded(
@@ -396,7 +402,10 @@ class _LayarFormTujuanState extends ConsumerState<LayarFormTujuan> {
                                   ),
                                   if (_tenggat != null)
                                     IconButton(
-                                      icon: const Icon(LucideIcons.x, size: 16),
+                                      icon: const IkonUiFunda(
+                                        pathAset: AsetIkonUiFunda.x,
+                                        ukuran: 16,
+                                      ),
                                       constraints: const BoxConstraints(
                                         minWidth: 48,
                                         minHeight: 48,
@@ -405,9 +414,9 @@ class _LayarFormTujuanState extends ConsumerState<LayarFormTujuan> {
                                           setState(() => _tenggat = null),
                                     )
                                   else
-                                    const Icon(
-                                      LucideIcons.chevronRight,
-                                      size: 18,
+                                    const IkonUiFunda(
+                                      pathAset: AsetIkonUiFunda.chevronRight,
+                                      ukuran: 18,
                                     ),
                                 ],
                               ),

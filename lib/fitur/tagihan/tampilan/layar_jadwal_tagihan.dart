@@ -309,10 +309,10 @@ class _LayarJadwalTagihanState extends ConsumerState<LayarJadwalTagihan> {
                           minWidth: 48,
                           minHeight: 48,
                         ),
-                        icon: const Icon(
-                          LucideIcons.skipForward,
-                          size: 20,
-                          color: WarnaFunda.teksRedup,
+                        icon: const IkonUiFunda(
+                          pathAset: AsetIkonUiFunda.skipForward,
+                          ukuran: 20,
+                          warna: WarnaFunda.teksRedup,
                         ),
                         tooltip: 'Lewati periode ini',
                         onPressed: () => _lewatiPeriode(item),
@@ -328,7 +328,10 @@ class _LayarJadwalTagihanState extends ConsumerState<LayarJadwalTagihan> {
                           vertical: SpasiFunda.s,
                         ),
                       ),
-                      icon: const Icon(LucideIcons.check, size: 16),
+                      icon: const IkonUiFunda(
+                        pathAset: AsetIkonUiFunda.check,
+                        ukuran: 16,
+                      ),
                       label: Text(
                         item.isCicilanUtang ? 'Bayar Cicilan' : 'Bayar',
                       ),
@@ -338,10 +341,10 @@ class _LayarJadwalTagihanState extends ConsumerState<LayarJadwalTagihan> {
                 ),
               ] else ...[
                 TextButton.icon(
-                  icon: const Icon(
-                    LucideIcons.rotateCcw,
-                    size: 16,
-                    color: WarnaFunda.teksRedup,
+                  icon: const IkonUiFunda(
+                    pathAset: AsetIkonUiFunda.rotateCcw,
+                    ukuran: 16,
+                    warna: WarnaFunda.teksRedup,
                   ),
                   label: const Text(
                     'Batalkan',
@@ -371,7 +374,7 @@ class _LayarJadwalTagihanState extends ConsumerState<LayarJadwalTagihan> {
       children: [
         Row(
           children: [
-            Icon(ikon, color: warnaJudul, size: 18),
+            ikonUiDariLucide(ikon, ukuran: 18, warna: warnaJudul),
             const SizedBox(width: SpasiFunda.xs),
             Expanded(
               child: TeksFunda.label(
@@ -440,10 +443,10 @@ class _LayarJadwalTagihanState extends ConsumerState<LayarJadwalTagihan> {
                       minWidth: 48,
                       minHeight: 48,
                     ),
-                    icon: const Icon(
-                      LucideIcons.listFilter,
-                      color: WarnaFunda.teks,
-                      size: 20,
+                    icon: const IkonUiFunda(
+                      pathAset: AsetIkonUiFunda.listFilter,
+                      warna: WarnaFunda.teks,
+                      ukuran: 20,
                     ),
                     tooltip: 'Master Tagihan',
                     onPressed: () => _bukaRute(
@@ -456,10 +459,10 @@ class _LayarJadwalTagihanState extends ConsumerState<LayarJadwalTagihan> {
                       minWidth: 48,
                       minHeight: 48,
                     ),
-                    icon: const Icon(
-                      LucideIcons.settings,
-                      color: WarnaFunda.teks,
-                      size: 20,
+                    icon: const IkonUiFunda(
+                      pathAset: AsetIkonUiFunda.settings,
+                      warna: WarnaFunda.teks,
+                      ukuran: 20,
                     ),
                     tooltip: 'Pengaturan Pengingat',
                     onPressed: () => _bukaRute(
@@ -509,7 +512,10 @@ class _LayarJadwalTagihanState extends ConsumerState<LayarJadwalTagihan> {
                             minWidth: 48,
                             minHeight: 48,
                           ),
-                          icon: const Icon(LucideIcons.chevronLeft),
+                          icon: const IkonUiFunda(
+                            pathAset: AsetIkonUiFunda.chevronLeft,
+                            ukuran: 24,
+                          ),
                           tooltip: 'Bulan Sebelumnya',
                           onPressed: () => ref
                               .read(penyediaBulanJadwalTerpilih.notifier)
@@ -528,7 +534,10 @@ class _LayarJadwalTagihanState extends ConsumerState<LayarJadwalTagihan> {
                             minWidth: 48,
                             minHeight: 48,
                           ),
-                          icon: const Icon(LucideIcons.chevronRight),
+                          icon: const IkonUiFunda(
+                            pathAset: AsetIkonUiFunda.chevronRight,
+                            ukuran: 24,
+                          ),
                           tooltip: 'Bulan Berikutnya',
                           onPressed: () => ref
                               .read(penyediaBulanJadwalTerpilih.notifier)

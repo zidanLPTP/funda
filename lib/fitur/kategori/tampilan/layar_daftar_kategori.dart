@@ -306,7 +306,7 @@ class _DaftarKategoriKeluar extends ConsumerWidget {
             child: const Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Icon(LucideIcons.tags, color: WarnaFunda.peringatan, size: 20),
+                IkonSvgFunda(pathAset: AsetIkonFunda.menuKategori, ukuran: 22),
                 SizedBox(width: SpasiFunda.m),
                 Expanded(
                   child: TeksFunda.catatan(
@@ -348,7 +348,7 @@ class _DaftarKategoriKeluar extends ConsumerWidget {
                   if (svgSifat != null)
                     IkonSvgFunda(pathAset: svgSifat, ukuran: 20)
                   else
-                    Icon(ikonSifat, size: 18, color: warnaSifat),
+                    ikonUiDariLucide(ikonSifat, ukuran: 18, warna: warnaSifat),
                   const SizedBox(width: SpasiFunda.s),
                   Expanded(
                     child: TeksFunda.label(
@@ -408,10 +408,10 @@ class _DaftarKategoriMasuk extends ConsumerWidget {
       children: [
         Row(
           children: [
-            const Icon(
-              LucideIcons.arrowDownLeft,
-              size: 18,
-              color: WarnaFunda.pemasukan,
+            const IkonUiFunda(
+              pathAset: AsetIkonUiFunda.arrowDownLeft,
+              ukuran: 18,
+              warna: WarnaFunda.pemasukan,
             ),
             const SizedBox(width: SpasiFunda.s),
             Expanded(
@@ -490,7 +490,10 @@ class _BarisKategori extends ConsumerWidget {
         ],
       ),
       trailing: PopupMenuButton<String>(
-        icon: const Icon(LucideIcons.ellipsisVertical, size: 18),
+        icon: const IkonUiFunda(
+          pathAset: AsetIkonUiFunda.ellipsisVertical,
+          ukuran: 18,
+        ),
         onSelected: (aksi) => _tanganiAksi(context, ref, aksi),
         itemBuilder: (context) => [
           if (kategori.arus == 'keluar')
@@ -571,12 +574,14 @@ class _BarisKategori extends ConsumerWidget {
                       final terpilih = sifatTerpilih == s;
                       return ListTile(
                         title: Text(s.label),
-                        leading: Icon(
-                          terpilih ? LucideIcons.circleDot : LucideIcons.circle,
-                          color: terpilih
+                        leading: IkonUiFunda(
+                          pathAset: terpilih
+                              ? AsetIkonUiFunda.circleDot
+                              : AsetIkonUiFunda.circle,
+                          warna: terpilih
                               ? WarnaFunda.utama
                               : WarnaFunda.teksRedup,
-                          size: 20,
+                          ukuran: 20,
                         ),
                         onTap: () {
                           setDialogState(() => sifatTerpilih = s);

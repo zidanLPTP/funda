@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '../../../komponen/komponen_funda.dart';
 import '../../../layanan/laporan/layanan_bagikan.dart';
 import '../../../layanan/laporan/pembuat_gambar_laporan.dart';
@@ -155,10 +154,10 @@ class _LayarLaporanBulananState extends ConsumerState<LayarLaporanBulanan> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Icon(
-                          LucideIcons.triangleAlert,
-                          color: WarnaFunda.bahaya,
-                          size: 40,
+                        const IkonUiFunda(
+                          pathAset: AsetIkonUiFunda.triangleAlert,
+                          warna: WarnaFunda.bahaya,
+                          ukuran: 40,
                         ),
                         const SizedBox(height: SpasiFunda.m),
                         TeksFunda.isiKecil(
@@ -262,10 +261,10 @@ class _LayarLaporanBulananState extends ConsumerState<LayarLaporanBulanan> {
                             children: [
                               const Row(
                                 children: [
-                                  Icon(
-                                    LucideIcons.calendar,
-                                    size: 18,
-                                    color: WarnaFunda.utama,
+                                  IkonUiFunda(
+                                    pathAset: AsetIkonUiFunda.calendar,
+                                    ukuran: 18,
+                                    warna: WarnaFunda.utama,
                                   ),
                                   SizedBox(width: SpasiFunda.s),
                                   Expanded(
@@ -288,10 +287,10 @@ class _LayarLaporanBulananState extends ConsumerState<LayarLaporanBulanan> {
                             children: [
                               const Row(
                                 children: [
-                                  Icon(
-                                    LucideIcons.calendar,
-                                    size: 18,
-                                    color: WarnaFunda.utama,
+                                  IkonUiFunda(
+                                    pathAset: AsetIkonUiFunda.calendar,
+                                    ukuran: 18,
+                                    warna: WarnaFunda.utama,
                                   ),
                                   SizedBox(width: SpasiFunda.s),
                                   TeksFunda.label('Pilih Bulan'),
@@ -445,7 +444,10 @@ class _LayarLaporanBulananState extends ConsumerState<LayarLaporanBulanan> {
         value: bulanDipilih,
         isExpanded: lebarPenuh,
         underline: const SizedBox(),
-        icon: const Icon(LucideIcons.chevronDown, size: 16),
+        icon: const IkonUiFunda(
+          pathAset: AsetIkonUiFunda.chevronDown,
+          ukuran: 16,
+        ),
         items: daftarBulan.map((b) {
           return DropdownMenuItem<DateTime>(
             value: b,

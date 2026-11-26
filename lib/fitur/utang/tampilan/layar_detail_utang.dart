@@ -203,9 +203,10 @@ class _LayarDetailUtangState extends ConsumerState<LayarDetailUtang> {
                           ),
                           child: const Row(
                             children: [
-                              Icon(
-                                LucideIcons.checkCheck,
-                                color: WarnaFunda.pemasukan,
+                              IkonUiFunda(
+                                pathAset: AsetIkonUiFunda.checkCheck,
+                                warna: WarnaFunda.pemasukan,
+                                ukuran: 24,
                               ),
                               SizedBox(width: SpasiFunda.m),
                               Expanded(
@@ -320,9 +321,9 @@ class _LayarDetailUtangState extends ConsumerState<LayarDetailUtang> {
                         TombolFunda.sekunder(
                           teks: 'Sesuaikan Sisa Utang',
                           lebarPenuh: true,
-                          ikon: const Icon(
-                            LucideIcons.slidersHorizontal,
-                            size: 18,
+                          ikon: const IkonUiFunda(
+                            pathAset: AsetIkonUiFunda.slidersHorizontal,
+                            ukuran: 18,
                           ),
                           padaTekan: () => _bukaDialogSesuaikan(utang),
                         ),
@@ -346,9 +347,9 @@ class _LayarDetailUtangState extends ConsumerState<LayarDetailUtang> {
                             Expanded(
                               child: TombolFunda.sekunder(
                                 teks: 'Sesuaikan',
-                                ikon: const Icon(
-                                  LucideIcons.slidersHorizontal,
-                                  size: 18,
+                                ikon: const IkonUiFunda(
+                                  pathAset: AsetIkonUiFunda.slidersHorizontal,
+                                  ukuran: 18,
                                 ),
                                 padaTekan: () => _bukaDialogSesuaikan(utang),
                               ),
@@ -537,10 +538,10 @@ class _LayarDetailUtangState extends ConsumerState<LayarDetailUtang> {
       ),
       child: Row(
         children: [
-          const Icon(
-            LucideIcons.arrowDownRight,
-            color: WarnaFunda.pemasukan,
-            size: 20,
+          const IkonUiFunda(
+            pathAset: AsetIkonUiFunda.arrowDownRight,
+            warna: WarnaFunda.pemasukan,
+            ukuran: 20,
           ),
           const SizedBox(width: SpasiFunda.m),
           Expanded(
@@ -593,10 +594,10 @@ class _LayarDetailUtangState extends ConsumerState<LayarDetailUtang> {
       ),
       child: Row(
         children: [
-          Icon(
-            isTambah ? LucideIcons.plus : LucideIcons.minus,
-            color: warna,
-            size: 20,
+          IkonUiFunda(
+            pathAset: isTambah ? AsetIkonUiFunda.plus : AsetIkonUiFunda.minus,
+            warna: warna,
+            ukuran: 20,
           ),
           const SizedBox(width: SpasiFunda.m),
           Expanded(
@@ -778,7 +779,10 @@ class _LembarCatatPembayaranUtangState
                   child: TeksFunda.judulBagian('Bayar ${widget.utang.nama}'),
                 ),
                 IconButton(
-                  icon: const Icon(LucideIcons.x),
+                  icon: const IkonUiFunda(
+                    pathAset: AsetIkonUiFunda.x,
+                    ukuran: 24,
+                  ),
                   constraints: const BoxConstraints(
                     minWidth: 48,
                     minHeight: 48,
@@ -936,7 +940,10 @@ class _LembarSesuaikanSisaUtangState
                   child: TeksFunda.judulBagian('Sesuaikan Sisa Utang'),
                 ),
                 IconButton(
-                  icon: const Icon(LucideIcons.x),
+                  icon: const IkonUiFunda(
+                    pathAset: AsetIkonUiFunda.x,
+                    ukuran: 24,
+                  ),
                   constraints: const BoxConstraints(
                     minWidth: 48,
                     minHeight: 48,

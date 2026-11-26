@@ -367,10 +367,10 @@ class _BarisItemUtang extends ConsumerWidget {
               Row(
                 children: [
                   if (isLunas)
-                    const Icon(
-                      LucideIcons.circleCheck,
-                      size: 22,
-                      color: WarnaFunda.pemasukan,
+                    const IkonUiFunda(
+                      pathAset: AsetIkonUiFunda.circleCheck,
+                      ukuran: 22,
+                      warna: WarnaFunda.pemasukan,
                     )
                   else
                     const IkonSvgFunda(
