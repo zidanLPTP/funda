@@ -6,18 +6,18 @@
 
 ---
 
-## Rilis Versi 1.1.0 & Unduh APK
+## Rilis Versi 1.2.0 & Unduh APK
 
-Rilis terbaru **Funda v1.1.0** menghadirkan pembaruan menyeluruh antarmuka editorial (*Clean Editorial Finance UI*), alur pencatatan cepat dengan kanvas dinamis, kartu putih border `1px` berpemisah tipis, tombol aksi utama berbentuk pil gelap (`TombolFunda.pilGelap`), serta kepatuhan penuh skala teks hingga `2.0x`.
+Rilis terbaru **Funda v1.2.0** menghadirkan **122 ikon SVG custom** di seluruh antarmuka, **62 ilustrasi tematik** yang dipetakan dinamis untuk seluruh 18 modul belajar, penyederhanaan tampilan *Onboarding*, *Lainnya*, *Pengaturan*, *Cadangan*, serta perbaikan rute **Bayar Cicilan** dan alokasi kantong/tujuan.
 
-- **Halaman Rilis GitHub v1.1.0:** [Rilis Resmi Funda v1.1.0](https://github.com/zidanLPTP/funda/releases/tag/v1.1.0)
+- **Halaman Rilis GitHub v1.2.0:** [Rilis Resmi Funda v1.2.0](https://github.com/zidanLPTP/funda/releases/tag/v1.2.0)
 - **Berkas APK per Arsitektur (`--split-per-abi`):**
   - `app-arm64-v8a-release.apk` — direkomendasikan untuk mayoritas ponsel Android modern (64-bit ARM).
   - `app-armeabi-v7a-release.apk` — untuk perangkat Android 32-bit lama.
   - `app-x86_64-release.apk` — untuk emulator atau perangkat berbasis x86_64.
 
 ### Cara Pemasangan di Ponsel Android
-1. Unduh berkas APK yang sesuai dengan arsitektur perangkat (umumnya `arm64-v8a`) dari halaman rilis GitHub v1.1.0.
+1. Unduh berkas APK yang sesuai dengan arsitektur perangkat (umumnya `arm64-v8a`) dari halaman rilis GitHub v1.2.0.
 2. Buka berkas APK yang telah selesai diunduh.
 3. Berikan izin pemasangan aplikasi dari sumber ini jika diminta oleh sistem Android.
 4. Tekan tombol **Pasang (Install)** dan buka aplikasi Funda.

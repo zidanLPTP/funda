@@ -112,34 +112,20 @@ void main() {
         // Buka bottom sheet Privasi & Keamanan
         await tester.ensureVisible(find.text('Privasi & Keamanan'));
         await tester.tap(find.text('Privasi & Keamanan'));
-        await pompaHinggaAda(tester, find.text('100% Tersimpan Lokal di HP'));
+        await pompaHinggaAda(tester, find.text('Tersimpan Lokal di HP'));
 
         expect(find.text('Tanpa Akun, Server, & Pelacak'), findsOneWidget);
         expect(find.text('Kendali Penuh Lewat Cadangan'), findsOneWidget);
-        final tombolCadangan = tester.widget<TombolFunda>(
-          find.byKey(const Key('tombol_privasi_ke_cadangan')),
-        );
-        expect(tombolCadangan.varian, equals(VarianTombolFunda.pilGelap));
 
-        await tester.ensureVisible(find.text('Mengerti'));
-        await tester.tap(find.text('Mengerti'));
-        await pompaHinggaHilang(
-          tester,
-          find.text('100% Tersimpan Lokal di HP'),
-        );
+        Navigator.of(tester.element(find.text('Tersimpan Lokal di HP'))).pop();
+        await pompaHinggaHilang(tester, find.text('Tersimpan Lokal di HP'));
 
         // Buka bottom sheet Tentang Funda
         await tester.ensureVisible(find.text('Tentang Funda'));
         await tester.tap(find.text('Tentang Funda'));
         await pompaHinggaAda(tester, find.text('100% Offline & Privat'));
 
-        final tombolPanduan = tester.widget<TombolFunda>(
-          find.byKey(const Key('tombol_tentang_ke_panduan')),
-        );
-        expect(tombolPanduan.varian, equals(VarianTombolFunda.pilGelap));
-
-        await tester.ensureVisible(find.text('Tutup'));
-        await tester.tap(find.text('Tutup'));
+        Navigator.of(tester.element(find.text('100% Offline & Privat'))).pop();
         await pompaHinggaHilang(tester, find.text('100% Offline & Privat'));
 
         await bongkarWidget(tester);

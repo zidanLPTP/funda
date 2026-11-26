@@ -22,7 +22,6 @@ import 'package:funda/komponen/komponen_funda.dart';
 import 'package:funda/perhitungan/perhitungan_anggaran_tujuan.dart';
 import 'package:funda/tema/tema.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../pembantu/pompa_uji.dart';
 
@@ -182,8 +181,20 @@ void main() {
         expect(find.text('Salin dari bulan lalu'), findsOneWidget);
         expect(find.text('Mendekati batas'), findsOneWidget);
         expect(find.text('Melebihi batas'), findsOneWidget);
-        expect(find.byIcon(LucideIcons.triangleAlert), findsOneWidget);
-        expect(find.byIcon(LucideIcons.circleAlert), findsOneWidget);
+        expect(
+          find.byWidgetPredicate(
+            (w) =>
+                w is IkonUiFunda && w.pathAset == AsetIkonUiFunda.triangleAlert,
+          ),
+          findsOneWidget,
+        );
+        expect(
+          find.byWidgetPredicate(
+            (w) =>
+                w is IkonUiFunda && w.pathAset == AsetIkonUiFunda.circleAlert,
+          ),
+          findsOneWidget,
+        );
 
         await bongkarWidget(tester);
       },
@@ -218,12 +229,7 @@ void main() {
           find.text('Kembalikan Data Sebelum Pemulihan Terakhir'),
           findsOneWidget,
         );
-        expect(
-          find.textContaining(
-            'tidak dienkripsi. Simpan hanya di tempat yang aman.',
-          ),
-          findsOneWidget,
-        );
+        expect(find.text('Buat Cadangan dan Bagikan'), findsOneWidget);
         expect(find.byType(TombolFunda), findsWidgets);
 
         await bongkarWidget(tester);

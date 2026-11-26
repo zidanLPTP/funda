@@ -262,7 +262,7 @@ void main() {
         await tester.pump();
 
         expect(find.text('Nyalakan Pengingat Lokal'), findsOneWidget);
-        expect(find.text('Privasi & Baterai Ramah'), findsOneWidget);
+        expect(find.text('Panduan & Profil Keuangan'), findsOneWidget);
       },
     );
   });

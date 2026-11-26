@@ -94,12 +94,9 @@ void main() {
           ),
         );
 
-        // Slide 1: Datamu 100% Milikmu, Tersimpan di HP-mu
-        expect(
-          find.text('Datamu 100% Milikmu, Tersimpan di HP-mu'),
-          findsOneWidget,
-        );
-        expect(find.text('Lewati'), findsOneWidget);
+        // Slide 1: Data 100% Milikmu
+        expect(find.text('Data 100% Milikmu'), findsOneWidget);
+        expect(find.text('Lewati'), findsNothing);
         expect(find.text('Lanjut'), findsOneWidget);
 
         // Pindah ke Slide 2
@@ -108,18 +105,12 @@ void main() {
             .controller!;
         controller.jumpToPage(1);
         await tester.pump();
-        expect(
-          find.text('18 Modul Finansial Berbasis Uang Nyatamu'),
-          findsOneWidget,
-        );
+        expect(find.text('Belajar dari Uang Nyatamu'), findsOneWidget);
 
         // Pindah ke Slide 3
         controller.jumpToPage(2);
         await tester.pump();
-        expect(
-          find.text('Ruang Tenang Menata dan Memahami Arus Kas'),
-          findsOneWidget,
-        );
+        expect(find.text('Ruang Tenang Menata Uang'), findsOneWidget);
         expect(find.text('Mulai Jelajahi Funda'), findsOneWidget);
       },
     );
