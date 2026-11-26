@@ -68,6 +68,23 @@ void main() {
         );
         expect(skorKredit.pathSvg, AsetIlustrasiFunda.pelajaranSkorKredit);
         expect(skorKredit.kanvas, WarnaFunda.kanvasMint);
+
+        final slipPajak = selesaikanIlustrasiPelajaran(
+          modulId: 'pajak_dasar',
+          pelajaranId: 'pajak_dasar_9_1',
+          tahap: TahapPelajaranVisual.pemantik,
+        );
+        expect(slipPajak.pathSvg, AsetIlustrasiFunda.pelajaranSlipGajiPajak);
+        expect(slipPajak.kanvas, WarnaFunda.kanvasKuning);
+
+        final investasiSandbox = selesaikanIlustrasiPelajaran(
+          modulId: 'investasi_lanjutan',
+          pelajaranId: 'investasi_lanjutan_13_1',
+          tahap: TahapPelajaranVisual.kartu,
+          indeksKartu: 2,
+        );
+        expect(investasiSandbox.pathSvg, AsetIlustrasiFunda.modeSandbox);
+        expect(investasiSandbox.kanvas, WarnaFunda.kanvasMint);
       },
     );
 
