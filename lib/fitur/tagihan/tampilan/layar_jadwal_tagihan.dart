@@ -11,7 +11,6 @@ import '../../../komponen/pembantu_ikon.dart';
 import '../../../perhitungan/perhitungan_tagihan.dart';
 import '../../../tema/token.dart';
 import '../../../util/format_rupiah.dart';
-import '../../pengaturan/tampilan/layar_pengaturan.dart';
 import '../../transaksi/tampilan/layar_form_transaksi.dart';
 import '../kontroler/penyedia_tagihan.dart';
 import 'layar_form_tagihan.dart';
@@ -121,7 +120,7 @@ class _LayarJadwalTagihanState extends ConsumerState<LayarJadwalTagihan> {
     if (item.isCicilanUtang && item.idUtang != null) {
       final router = GoRouter.maybeOf(context);
       if (router != null) {
-        context.push('/utang/detail/${item.idUtang}').then((_) {
+        context.push('/utang/${item.idUtang}').then((_) {
           ref.invalidate(penyediaJadwalBulanTerpilih);
         });
       }
@@ -452,22 +451,6 @@ class _LayarJadwalTagihanState extends ConsumerState<LayarJadwalTagihan> {
                     onPressed: () => _bukaRute(
                       '/tagihan/semua',
                       (_) => const LayarSemuaTagihan(),
-                    ),
-                  ),
-                  IconButton(
-                    constraints: const BoxConstraints(
-                      minWidth: 48,
-                      minHeight: 48,
-                    ),
-                    icon: const IkonUiFunda(
-                      pathAset: AsetIkonUiFunda.settings,
-                      warna: WarnaFunda.teks,
-                      ukuran: 20,
-                    ),
-                    tooltip: 'Pengaturan Pengingat',
-                    onPressed: () => _bukaRute(
-                      '/pengaturan',
-                      (_) => const LayarPengaturan(),
                     ),
                   ),
                   TombolPilHeaderEditorial(
