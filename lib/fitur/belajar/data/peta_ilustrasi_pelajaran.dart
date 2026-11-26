@@ -544,6 +544,14 @@ const Map<(String, String), InfoIlustrasiPelajaran> petaSpesifikIlustrasiKartu =
       ),
 
       // Modul 11: Investasi Dasar
+      ('investasi_dasar_11_1', 'pemantik'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.pelajaranInflasiDayaBeli,
+        kanvas: WarnaFunda.kanvasKuning,
+      ),
+      ('investasi_dasar_11_1', 'kartu_0'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.pelajaranInflasiDayaBeli,
+        kanvas: WarnaFunda.kanvasMint,
+      ),
       ('investasi_dasar_11_1', 'kartu_1'): InfoIlustrasiPelajaran(
         pathSvg: AsetIlustrasiFunda.tabungan,
         kanvas: WarnaFunda.kanvasMint,
@@ -555,6 +563,14 @@ const Map<(String, String), InfoIlustrasiPelajaran> petaSpesifikIlustrasiKartu =
       ('investasi_dasar_11_2', 'pemantik'): InfoIlustrasiPelajaran(
         pathSvg: AsetIlustrasiFunda.pelajaranPenghasilanFluktuatif,
         kanvas: WarnaFunda.kanvasKuning,
+      ),
+      ('investasi_dasar_11_2', 'kartu_0'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.pelajaranInstrumenInvestasi,
+        kanvas: WarnaFunda.kanvasMint,
+      ),
+      ('investasi_dasar_11_2', 'kartu_1'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.pelajaranInstrumenInvestasi,
+        kanvas: WarnaFunda.kanvasMint,
       ),
       ('investasi_dasar_11_2', 'kartu_2'): InfoIlustrasiPelajaran(
         pathSvg: AsetIlustrasiFunda.pelajaranRencana503020,
@@ -588,6 +604,18 @@ const Map<(String, String), InfoIlustrasiPelajaran> petaSpesifikIlustrasiKartu =
       ),
       ('tujuan_besar_12_1', 'kartu_1'): InfoIlustrasiPelajaran(
         pathSvg: AsetIlustrasiFunda.pelajaranKecepatanMenabung,
+        kanvas: WarnaFunda.kanvasMint,
+      ),
+      ('tujuan_besar_12_1', 'kartu_2'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.pelajaranLangkahTujuanBesar,
+        kanvas: WarnaFunda.kanvasMint,
+      ),
+      ('tujuan_besar_12_2', 'pemantik'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.pelajaranInflasiDayaBeli,
+        kanvas: WarnaFunda.kanvasKuning,
+      ),
+      ('tujuan_besar_12_2', 'kartu_0'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.pelajaranInflasiDayaBeli,
         kanvas: WarnaFunda.kanvasMint,
       ),
       ('tujuan_besar_12_2', 'kartu_1'): InfoIlustrasiPelajaran(
@@ -632,6 +660,10 @@ const Map<(String, String), InfoIlustrasiPelajaran> petaSpesifikIlustrasiKartu =
         pathSvg: AsetIlustrasiFunda.modeSandbox,
         kanvas: WarnaFunda.kanvasMint,
       ),
+      ('investasi_lanjutan_13_2', 'pemantik'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.pelajaranBiayaInvestasi,
+        kanvas: WarnaFunda.kanvasKuning,
+      ),
       ('investasi_lanjutan_13_2', 'kartu_0'): InfoIlustrasiPelajaran(
         pathSvg: AsetIlustrasiFunda.pelajaranPengeluaranKecil,
         kanvas: WarnaFunda.kanvasKoral,
@@ -658,6 +690,256 @@ const Map<(String, String), InfoIlustrasiPelajaran> petaSpesifikIlustrasiKartu =
       ),
       ('investasi_lanjutan_13_3', 'kartu_2'): InfoIlustrasiPelajaran(
         pathSvg: AsetIlustrasiFunda.ruangTenang,
+        kanvas: WarnaFunda.kanvasMint,
+      ),
+
+      // Modul 14: KPR & Kredit Besar
+      ('kpr_kredit_besar_14_1', 'pemantik'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.kprKreditBesar,
+        kanvas: WarnaFunda.kanvasKuning,
+      ),
+      ('kpr_kredit_besar_14_1', 'kartu_0'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.pelajaranArsipDokumen,
+        kanvas: WarnaFunda.kanvasMint,
+      ),
+      ('kpr_kredit_besar_14_1', 'kartu_1'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.pelajaranBungaPinjaman,
+        kanvas: WarnaFunda.kanvasMint,
+      ),
+      ('kpr_kredit_besar_14_1', 'kartu_2'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.pelajaranBantalanDarurat,
+        kanvas: WarnaFunda.kanvasKoral,
+      ),
+      ('kpr_kredit_besar_14_2', 'pemantik'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.pelajaranPenghasilanFluktuatif,
+        kanvas: WarnaFunda.kanvasKuning,
+      ),
+      ('kpr_kredit_besar_14_2', 'kartu_0'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.pelajaranBungaPinjaman,
+        kanvas: WarnaFunda.kanvasKoral,
+      ),
+      ('kpr_kredit_besar_14_2', 'kartu_1'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.pelajaranLangkahTujuanBesar,
+        kanvas: WarnaFunda.kanvasMint,
+      ),
+      ('kpr_kredit_besar_14_2', 'kartu_2'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.pelajaranPengeluaranKecil,
+        kanvas: WarnaFunda.kanvasMint,
+      ),
+      ('kpr_kredit_besar_14_3', 'pemantik'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.pelajaranEvaluasiKompas,
+        kanvas: WarnaFunda.kanvasKuning,
+      ),
+      ('kpr_kredit_besar_14_3', 'kartu_0'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.laporanBulanan,
+        kanvas: WarnaFunda.kanvasMint,
+      ),
+      ('kpr_kredit_besar_14_3', 'kartu_1'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.pelajaranRencana503020,
+        kanvas: WarnaFunda.kanvasMint,
+      ),
+      ('kpr_kredit_besar_14_3', 'kartu_2'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.kantongKosong,
+        kanvas: WarnaFunda.kanvasMint,
+      ),
+
+      // Modul 15: Pajak Lanjutan
+      ('pajak_lanjutan_15_1', 'pemantik'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.pelajaranPetaArusKas,
+        kanvas: WarnaFunda.kanvasKuning,
+      ),
+      ('pajak_lanjutan_15_1', 'kartu_0'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.pelajaranSlipGajiPajak,
+        kanvas: WarnaFunda.kanvasMint,
+      ),
+      ('pajak_lanjutan_15_1', 'kartu_1'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.pelajaranKebutuhanVsKeinginan,
+        kanvas: WarnaFunda.kanvasMint,
+      ),
+      ('pajak_lanjutan_15_1', 'kartu_2'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.pelajaranArsipDokumen,
+        kanvas: WarnaFunda.kanvasMint,
+      ),
+      ('pajak_lanjutan_15_2', 'pemantik'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.pajakLanjutan,
+        kanvas: WarnaFunda.kanvasKuning,
+      ),
+      ('pajak_lanjutan_15_2', 'kartu_0'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.pelajaranCekLegalitas,
+        kanvas: WarnaFunda.kanvasMint,
+      ),
+      ('pajak_lanjutan_15_2', 'kartu_1'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.waspadaPenipuan,
+        kanvas: WarnaFunda.kanvasKoral,
+      ),
+      ('pajak_lanjutan_15_2', 'kartu_2'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.pelajaranEvaluasiKompas,
+        kanvas: WarnaFunda.kanvasMint,
+      ),
+      ('pajak_lanjutan_15_3', 'pemantik'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.ruangTenang,
+        kanvas: WarnaFunda.kanvasKuning,
+      ),
+      ('pajak_lanjutan_15_3', 'kartu_0'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.catatTransaksi,
+        kanvas: WarnaFunda.kanvasMint,
+      ),
+      ('pajak_lanjutan_15_3', 'kartu_1'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.kekayaanBersih,
+        kanvas: WarnaFunda.kanvasMint,
+      ),
+      ('pajak_lanjutan_15_3', 'kartu_2'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.pelajaranArsipDokumen,
+        kanvas: WarnaFunda.kanvasMint,
+      ),
+
+      // Modul 16: Pensiun & Kebebasan Finansial
+      ('pensiun_kebebasan_finansial_16_1', 'pemantik'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.pensiunKebebasanFinansial,
+        kanvas: WarnaFunda.kanvasKuning,
+      ),
+      ('pensiun_kebebasan_finansial_16_1', 'kartu_0'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.pelajaranLangkahTujuanBesar,
+        kanvas: WarnaFunda.kanvasMint,
+      ),
+      ('pensiun_kebebasan_finansial_16_1', 'kartu_1'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.ruangTenang,
+        kanvas: WarnaFunda.kanvasMint,
+      ),
+      ('pensiun_kebebasan_finansial_16_1', 'kartu_2'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.pelajaranKecepatanMenabung,
+        kanvas: WarnaFunda.kanvasMint,
+      ),
+      ('pensiun_kebebasan_finansial_16_2', 'pemantik'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.pelajaranTujuanTarget,
+        kanvas: WarnaFunda.kanvasKuning,
+      ),
+      ('pensiun_kebebasan_finansial_16_2', 'kartu_0'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.pelajaranPetaArusKas,
+        kanvas: WarnaFunda.kanvasMint,
+      ),
+      ('pensiun_kebebasan_finansial_16_2', 'kartu_1'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.pelajaranMeteranBulanDarurat,
+        kanvas: WarnaFunda.kanvasMint,
+      ),
+      ('pensiun_kebebasan_finansial_16_2', 'kartu_2'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.pelajaranEvaluasiKompas,
+        kanvas: WarnaFunda.kanvasMint,
+      ),
+      ('pensiun_kebebasan_finansial_16_3', 'pemantik'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.pelajaranInflasiDayaBeli,
+        kanvas: WarnaFunda.kanvasKuning,
+      ),
+      ('pensiun_kebebasan_finansial_16_3', 'kartu_0'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.pelajaranInflasiDayaBeli,
+        kanvas: WarnaFunda.kanvasKoral,
+      ),
+      ('pensiun_kebebasan_finansial_16_3', 'kartu_1'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.pelajaranKecepatanMenabung,
+        kanvas: WarnaFunda.kanvasMint,
+      ),
+      ('pensiun_kebebasan_finansial_16_3', 'kartu_2'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.pelajaranKeluargaProteksi,
+        kanvas: WarnaFunda.kanvasMint,
+      ),
+
+      // Modul 17: Keuangan Usaha Kecil
+      ('keuangan_usaha_kecil_17_1', 'pemantik'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.keuanganUsahaKecil,
+        kanvas: WarnaFunda.kanvasKuning,
+      ),
+      ('keuangan_usaha_kecil_17_1', 'kartu_0'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.dompet,
+        kanvas: WarnaFunda.kanvasMint,
+      ),
+      ('keuangan_usaha_kecil_17_1', 'kartu_1'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.pelajaranPetaArusKas,
+        kanvas: WarnaFunda.kanvasMint,
+      ),
+      ('keuangan_usaha_kecil_17_1', 'kartu_2'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.kantongKosong,
+        kanvas: WarnaFunda.kanvasMint,
+      ),
+      ('keuangan_usaha_kecil_17_2', 'pemantik'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.laporanBulanan,
+        kanvas: WarnaFunda.kanvasKuning,
+      ),
+      ('keuangan_usaha_kecil_17_2', 'kartu_0'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.pelajaranPenghasilanFluktuatif,
+        kanvas: WarnaFunda.kanvasMint,
+      ),
+      ('keuangan_usaha_kecil_17_2', 'kartu_1'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.pelajaranPetaArusKas,
+        kanvas: WarnaFunda.kanvasMint,
+      ),
+      ('keuangan_usaha_kecil_17_2', 'kartu_2'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.pelajaranPengeluaranKecil,
+        kanvas: WarnaFunda.kanvasKoral,
+      ),
+      ('keuangan_usaha_kecil_17_3', 'pemantik'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.dompet,
+        kanvas: WarnaFunda.kanvasKuning,
+      ),
+      ('keuangan_usaha_kecil_17_3', 'kartu_0'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.tabungan,
+        kanvas: WarnaFunda.kanvasMint,
+      ),
+      ('keuangan_usaha_kecil_17_3', 'kartu_1'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.pelajaranBantalanDarurat,
+        kanvas: WarnaFunda.kanvasMint,
+      ),
+      ('keuangan_usaha_kecil_17_3', 'kartu_2'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.pelajaranKecepatanMenabung,
+        kanvas: WarnaFunda.kanvasMint,
+      ),
+
+      // Modul 18: Proteksi Keluarga & Warisan
+      ('proteksi_keluarga_warisan_18_1', 'pemantik'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.proteksiKeluargaWarisan,
+        kanvas: WarnaFunda.kanvasKuning,
+      ),
+      ('proteksi_keluarga_warisan_18_1', 'kartu_0'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.pelajaranKeluargaProteksi,
+        kanvas: WarnaFunda.kanvasMint,
+      ),
+      ('proteksi_keluarga_warisan_18_1', 'kartu_1'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.pelajaranKeluargaProteksi,
+        kanvas: WarnaFunda.kanvasMint,
+      ),
+      ('proteksi_keluarga_warisan_18_1', 'kartu_2'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.ruangTenang,
+        kanvas: WarnaFunda.kanvasMint,
+      ),
+      ('proteksi_keluarga_warisan_18_2', 'pemantik'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.pelajaranArsipDokumen,
+        kanvas: WarnaFunda.kanvasKuning,
+      ),
+      ('proteksi_keluarga_warisan_18_2', 'kartu_0'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.pelajaranArsipDokumen,
+        kanvas: WarnaFunda.kanvasMint,
+      ),
+      ('proteksi_keluarga_warisan_18_2', 'kartu_1'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.privasiLokal,
+        kanvas: WarnaFunda.kanvasMint,
+      ),
+      ('proteksi_keluarga_warisan_18_2', 'kartu_2'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.pelajaranEvaluasiKompas,
+        kanvas: WarnaFunda.kanvasMint,
+      ),
+      ('proteksi_keluarga_warisan_18_3', 'pemantik'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.ruangTenang,
+        kanvas: WarnaFunda.kanvasKuning,
+      ),
+      ('proteksi_keluarga_warisan_18_3', 'kartu_0'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.proteksiKeluargaWarisan,
+        kanvas: WarnaFunda.kanvasMint,
+      ),
+      ('proteksi_keluarga_warisan_18_3', 'kartu_1'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.kekayaanBersih,
+        kanvas: WarnaFunda.kanvasMint,
+      ),
+      ('proteksi_keluarga_warisan_18_3', 'kartu_2'): InfoIlustrasiPelajaran(
+        pathSvg: AsetIlustrasiFunda.pelajaranCekLegalitas,
         kanvas: WarnaFunda.kanvasMint,
       ),
     };

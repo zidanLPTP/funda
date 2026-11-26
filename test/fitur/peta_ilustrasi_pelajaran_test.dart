@@ -85,6 +85,23 @@ void main() {
         );
         expect(investasiSandbox.pathSvg, AsetIlustrasiFunda.modeSandbox);
         expect(investasiSandbox.kanvas, WarnaFunda.kanvasMint);
+
+        final inflasi = selesaikanIlustrasiPelajaran(
+          modulId: 'investasi_dasar',
+          pelajaranId: 'investasi_dasar_11_1',
+          tahap: TahapPelajaranVisual.pemantik,
+        );
+        expect(inflasi.pathSvg, AsetIlustrasiFunda.pelajaranInflasiDayaBeli);
+        expect(inflasi.kanvas, WarnaFunda.kanvasKuning);
+
+        final warisan = selesaikanIlustrasiPelajaran(
+          modulId: 'proteksi_keluarga_warisan',
+          pelajaranId: 'proteksi_keluarga_warisan_18_2',
+          tahap: TahapPelajaranVisual.kartu,
+          indeksKartu: 0,
+        );
+        expect(warisan.pathSvg, AsetIlustrasiFunda.pelajaranArsipDokumen);
+        expect(warisan.kanvas, WarnaFunda.kanvasMint);
       },
     );
 

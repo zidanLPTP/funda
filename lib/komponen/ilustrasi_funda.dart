@@ -100,6 +100,15 @@ abstract final class AsetIlustrasiFunda {
       'aset/gambar/ilustrasi/pelajaran_penghasilan_fluktuatif.svg';
   static const pelajaranSlipGajiPajak =
       'aset/gambar/ilustrasi/pelajaran_slip_gaji_pajak.svg';
+
+  static const pelajaranBiayaInvestasi =
+      'aset/gambar/ilustrasi/pelajaran_biaya_investasi.svg';
+  static const pelajaranInflasiDayaBeli =
+      'aset/gambar/ilustrasi/pelajaran_inflasi_daya_beli.svg';
+  static const pelajaranInstrumenInvestasi =
+      'aset/gambar/ilustrasi/pelajaran_instrumen_investasi.svg';
+  static const pelajaranLangkahTujuanBesar =
+      'aset/gambar/ilustrasi/pelajaran_langkah_tujuan_besar.svg';
 }
 
 /// Kumpulan path aset ikon SVG custom Funda di `aset/gambar/ikon/`.

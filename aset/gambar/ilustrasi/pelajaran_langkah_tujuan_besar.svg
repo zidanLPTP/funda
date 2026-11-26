@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 160" width="240" height="160">
+  
+  <ellipse cx="120" cy="147" rx="86" ry="6" fill="#0B2E22" fill-opacity="0.12" />
+
+  
+  <g fill="none" stroke="#0F766E" stroke-opacity="0.35" stroke-width="2.8" stroke-linecap="round" stroke-dasharray="4 5">
+    <path d="M 128 114 V 134" />
+    <path d="M 184 70 V 134" />
+  </g>
+
+  
+  <g>
+    <path d="M 38 134 H 201" fill="none" stroke="#0B2E22" stroke-width="4" stroke-linecap="round" />
+    <path d="M 195 128 L 202 134 L 195 140" fill="none" stroke="#0B2E22" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+    <circle cx="48" cy="134" r="4.5" fill="#FFFFFF" stroke="#0B2E22" stroke-width="3" />
+    <circle cx="128" cy="134" r="4.5" fill="#14B8A6" stroke="#0B2E22" stroke-width="3" />
+    <circle cx="184" cy="134" r="4.5" fill="#FACC15" stroke="#0B2E22" stroke-width="3" />
+  </g>
+
+  
+  <g>
+    <path d="M 48 100 C 90 96, 120 58, 174 48" fill="none" stroke="#0B2E22" stroke-width="19" stroke-linecap="round" />
+    <path d="M 48 100 C 90 96, 120 58, 174 48" fill="none" stroke="#0F766E" stroke-width="11" stroke-linecap="round" />
+    <path d="M 56 99 C 94 94, 122 59, 168 49" fill="none" stroke="#99F6E4" stroke-opacity="0.6" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="5 6" />
+  </g>
+
+  
+  <g>
+    <path d="M 48 100 H 126" fill="none" stroke="#0B2E22" stroke-width="19" stroke-linecap="round" />
+    <path d="M 48 100 H 126" fill="none" stroke="#CCFBF1" stroke-width="11" stroke-linecap="round" />
+    <path d="M 60 100 H 114" fill="none" stroke="#0F766E" stroke-opacity="0.55" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="5 6" />
+  </g>
+
+  
+  <circle cx="48" cy="100" r="11" fill="#FFFFFF" stroke="#0B2E22" stroke-width="4.2" />
+  <circle cx="48" cy="100" r="4.5" fill="#0F766E" />
+
+  
+  <g>
+    <circle cx="128" cy="100" r="14" fill="#14B8A6" stroke="#0B2E22" stroke-width="4.2" />
+    <path d="M 122 100 L 126 104 L 134 96" fill="none" stroke="#FFFFFF" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round" />
+  </g>
+
+  
+  <circle cx="115" cy="70" r="5" fill="#FFFFFF" stroke="#0B2E22" stroke-width="3.2" />
+
+  
+  <g>
+    <circle cx="184" cy="48" r="22" fill="#0F766E" stroke="#0B2E22" stroke-width="4.5" />
+    <circle cx="184" cy="48" r="14" fill="#FFFFFF" stroke="#0B2E22" stroke-width="3.6" />
+    <circle cx="184" cy="48" r="7" fill="#FACC15" stroke="#0B2E22" stroke-width="3.2" />
+  </g>
+</svg>
