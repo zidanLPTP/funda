@@ -429,37 +429,6 @@ class _LayarCadanganState extends ConsumerState<LayarCadangan> {
                       ],
                     ),
                   ),
-                  const SizedBox(height: SpasiFunda.m),
-
-                  // 4. Peringatan Privasi
-                  Container(
-                    padding: const EdgeInsets.all(SpasiFunda.l),
-                    decoration: BoxDecoration(
-                      color: WarnaFunda.permukaan,
-                      borderRadius: BorderRadius.circular(SudutFunda.petak),
-                      border: Border.all(
-                        color: WarnaFunda.batasAmber,
-                        width: 1.0,
-                      ),
-                    ),
-                    child: const Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        IkonUiFunda(
-                          pathAset: AsetIkonUiFunda.shieldAlert,
-                          ukuran: 20,
-                          warna: WarnaFunda.peringatan,
-                        ),
-                        SizedBox(width: SpasiFunda.m),
-                        Expanded(
-                          child: TeksFunda.catatan(
-                            'Berkas cadangan berisi seluruh data keuanganmu dan tidak dienkripsi. Simpan hanya di tempat yang aman.',
-                            warna: WarnaFunda.teksRedup,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
                   const SizedBox(height: SpasiFunda.xl),
                 ],
               ),

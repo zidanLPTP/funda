@@ -114,8 +114,6 @@ class LayarLainnya extends ConsumerWidget {
                       pathSvg: AsetIkonFunda.katHiburan,
                       warnaIkon: WarnaFunda.utama,
                       judul: 'Galeri Komponen UI',
-                      keterangan:
-                          'Lihat semua varian tombol, kartu, warna, dan tipografi',
                       padaKetuk: () => context.push('/galeri'),
                     ),
                   ],
@@ -156,8 +154,6 @@ class LayarLainnya extends ConsumerWidget {
                     pathSvg: AsetIkonFunda.metrikAnggaran,
                     warnaIkon: WarnaFunda.sifatKebutuhan,
                     judul: 'Anggaran Bulanan',
-                    keterangan:
-                        'Rencanakan batas pengeluaran per kategori per bulan',
                     padaKetuk: () => _bukaRuteAtauHalaman(
                       context,
                       ref,
@@ -170,7 +166,6 @@ class LayarLainnya extends ConsumerWidget {
                     pathSvg: AsetIkonFunda.metrikTujuan,
                     warnaIkon: WarnaFunda.utama,
                     judul: 'Tujuan Keuangan',
-                    keterangan: 'Pantau impian, pos tabungan, dan dana darurat',
                     padaKetuk: () => _bukaRuteAtauHalaman(
                       context,
                       ref,
@@ -183,8 +178,6 @@ class LayarLainnya extends ConsumerWidget {
                     pathSvg: AsetIkonFunda.menuTagihan,
                     warnaIkon: WarnaFunda.pengeluaran,
                     judul: 'Tagihan & Langganan',
-                    keterangan:
-                        'Jadwal jatuh tempo rutin dan pengingat lokal ramah baterai',
                     padaKetuk: () => _bukaRuteAtauHalaman(
                       context,
                       ref,
@@ -207,8 +200,6 @@ class LayarLainnya extends ConsumerWidget {
                     pathSvg: AsetIkonFunda.menuDompet,
                     warnaIkon: WarnaFunda.utama,
                     judul: 'Kelola Dompet',
-                    keterangan:
-                        'Tambah akun, ubah, arsipkan, atau sesuaikan saldo',
                     padaKetuk: () => _bukaRuteAtauHalaman(
                       context,
                       ref,
@@ -221,8 +212,6 @@ class LayarLainnya extends ConsumerWidget {
                     pathSvg: AsetIkonFunda.menuKantong,
                     warnaIkon: WarnaFunda.sifatKeinginan,
                     judul: 'Kantong Dompet',
-                    keterangan:
-                        'Pisahkan pos uang dalam dompet tanpa pindah rekening',
                     padaKetuk: () => _bukaRuteAtauHalaman(
                       context,
                       ref,
@@ -235,8 +224,6 @@ class LayarLainnya extends ConsumerWidget {
                     pathSvg: AsetIkonFunda.menuUtang,
                     warnaIkon: WarnaFunda.sifatUtang,
                     judul: 'Utang & Cicilan',
-                    keterangan:
-                        'Pantau sisa pinjaman, cicilan per bulan, dan rasio cicilan',
                     padaKetuk: () => _bukaRuteAtauHalaman(
                       context,
                       ref,
@@ -249,8 +236,6 @@ class LayarLainnya extends ConsumerWidget {
                     pathSvg: AsetIkonFunda.menuKekayaan,
                     warnaIkon: WarnaFunda.pemasukan,
                     judul: 'Kekayaan Bersih',
-                    keterangan:
-                        'Selisih total saldo dompet dan sisa seluruh pinjaman',
                     padaKetuk: () => _bukaRuteAtauHalaman(
                       context,
                       ref,
@@ -263,8 +248,6 @@ class LayarLainnya extends ConsumerWidget {
                     pathSvg: AsetIkonFunda.menuKategori,
                     warnaIkon: WarnaFunda.aksenIkonUngu,
                     judul: 'Kelola Kategori',
-                    keterangan:
-                        'Kelompok kebutuhan, keinginan, tabungan, dan utang',
                     padaKetuk: () => _bukaRuteAtauHalaman(
                       context,
                       ref,
@@ -287,8 +270,6 @@ class LayarLainnya extends ConsumerWidget {
                     pathSvg: AsetIkonFunda.menuCadangan,
                     warnaIkon: WarnaFunda.info,
                     judul: 'Cadangan & Pemulihan Data',
-                    keterangan:
-                        'Ekspor dan pulihkan seluruh data keuangan secara lokal',
                     padaKetuk: () => _bukaRuteAtauHalaman(
                       context,
                       ref,
@@ -301,8 +282,6 @@ class LayarLainnya extends ConsumerWidget {
                     pathSvg: AsetIkonFunda.menuPrivasi,
                     warnaIkon: WarnaFunda.pemasukan,
                     judul: 'Privasi & Keamanan',
-                    keterangan:
-                        'Funda tidak mengirimkan data keuanganmu ke server luar',
                     padaKetuk: () => _tampilkanPrivasiKeamanan(context, ref),
                   ),
                   _BarisMenuEditorial(
@@ -310,8 +289,6 @@ class LayarLainnya extends ConsumerWidget {
                     pathSvg: AsetIkonFunda.menuPanduan,
                     warnaIkon: WarnaFunda.sifatKeinginan,
                     judul: 'Panduan Nilai Funda',
-                    keterangan:
-                        'Tiga pilar cara Funda memandang uang: Tenang, Kendali, dan Bertumbuh',
                     padaKetuk: () => _bukaRuteAtauHalaman(
                       context,
                       ref,
@@ -324,8 +301,6 @@ class LayarLainnya extends ConsumerWidget {
                     pathSvg: AsetIkonFunda.menuTentang,
                     warnaIkon: WarnaFunda.info,
                     judul: 'Tentang Funda',
-                    keterangan:
-                        'Versi 1.1.0 (Teman Mengelola Uang yang Nyaman & Aman)',
                     padaKetuk: () => _tampilkanTentangFunda(context, ref),
                   ),
                 ],
@@ -376,36 +351,37 @@ class LayarLainnya extends ConsumerWidget {
                     ),
                   ),
 
-                  Row(
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.all(SpasiFunda.s),
-                        decoration: BoxDecoration(
-                          color: WarnaFunda.kanvasMint,
-                          borderRadius: BorderRadius.circular(SudutFunda.kartu),
-                        ),
-                        child: const IlustrasiSvgFunda(
+                  // Kartu Header Kanvas Privasi
+                  Container(
+                    padding: const EdgeInsets.all(SpasiFunda.l),
+                    decoration: BoxDecoration(
+                      color: WarnaFunda.kanvasMint,
+                      borderRadius: BorderRadius.circular(SudutFunda.petak),
+                    ),
+                    child: const Row(
+                      children: [
+                        IlustrasiSvgFunda(
                           pathAset: AsetIlustrasiFunda.privasiLokal,
-                          tinggi: 52,
+                          tinggi: 60,
                         ),
-                      ),
-                      const SizedBox(width: SpasiFunda.m),
-                      const Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            TeksFunda.judulBagian('Privasi & Keamanan'),
-                            SizedBox(height: 2),
-                            TeksFunda.catatan(
-                              'Data keuanganmu sepenuhnya milikmu sendiri.',
-                              warna: WarnaFunda.teksRedup,
-                            ),
-                          ],
+                        SizedBox(width: SpasiFunda.m),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              TeksFunda.judulBagian('Privasi & Keamanan'),
+                              SizedBox(height: SpasiFunda.xs),
+                              TeksFunda.catatan(
+                                'Data keuanganmu 100% milikmu dan tetap di perangkat ini.',
+                                warna: WarnaFunda.teksRedup,
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                  const SizedBox(height: SpasiFunda.l),
+                  const SizedBox(height: SpasiFunda.m),
 
                   // 3 Poin Privasi Funda dalam Kartu Putih Border 1px
                   Container(
@@ -422,9 +398,9 @@ class LayarLainnya extends ConsumerWidget {
                           ikon: LucideIcons.smartphone,
                           pathSvg: AsetIkonFunda.penyimpananLokal,
                           warnaIkon: WarnaFunda.utama,
-                          judul: '100% Tersimpan Lokal di HP',
+                          judul: 'Tersimpan Lokal di HP',
                           keterangan:
-                              'Seluruh transaksi, dompet, anggaran, dan catatan pribadimu tersimpan langsung di penyimpanan perangkat ini.',
+                              'Seluruh transaksi, dompet, anggaran, dan catatan pribadimu disimpan langsung di penyimpanan perangkat.',
                         ),
                         Divider(
                           height: SpasiFunda.l * 2,
@@ -436,7 +412,7 @@ class LayarLainnya extends ConsumerWidget {
                           warnaIkon: WarnaFunda.pemasukan,
                           judul: 'Tanpa Akun, Server, & Pelacak',
                           keterangan:
-                              'Funda berjalan sepenuhnya secara luring (offline). Tidak ada login paksa, server luar, iklan, atau pelacak aktivitas.',
+                              'Funda berjalan luring sepenuhnya tanpa login paksa, server luar, iklan, atau pelacak aktivitas.',
                         ),
                         Divider(
                           height: SpasiFunda.l * 2,
@@ -448,32 +424,10 @@ class LayarLainnya extends ConsumerWidget {
                           warnaIkon: WarnaFunda.info,
                           judul: 'Kendali Penuh Lewat Cadangan',
                           keterangan:
-                              'Karena tidak disinkronkan ke awan, biasakan menyimpan berkas cadangan secara berkala agar datamu aman jika ganti HP.',
+                              'Karena tidak disinkronkan ke awan, simpan berkas cadangan secara berkala agar data tetap aman saat ganti HP.',
                         ),
                       ],
                     ),
-                  ),
-                  const SizedBox(height: SpasiFunda.l),
-
-                  TombolFunda.pilGelap(
-                    key: const Key('tombol_privasi_ke_cadangan'),
-                    lebarPenuh: true,
-                    teks: 'Cadangan & Pemulihan Data',
-                    padaTekan: () {
-                      Navigator.pop(ctx);
-                      _bukaRuteAtauHalaman(
-                        context,
-                        ref,
-                        '/cadangan',
-                        (_) => const LayarCadangan(),
-                      );
-                    },
-                  ),
-                  const SizedBox(height: SpasiFunda.s),
-                  TombolFunda.sekunder(
-                    lebarPenuh: true,
-                    teks: 'Mengerti',
-                    padaTekan: () => Navigator.pop(ctx),
                   ),
                 ],
               ),
@@ -507,54 +461,79 @@ class LayarLainnya extends ConsumerWidget {
             child: SingleChildScrollView(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   // Gagang Modal
-                  Container(
-                    width: 40,
-                    height: 4,
-                    margin: const EdgeInsets.only(bottom: SpasiFunda.m),
-                    decoration: BoxDecoration(
-                      color: WarnaFunda.garis,
-                      borderRadius: BorderRadius.circular(SudutFunda.pil),
-                    ),
-                  ),
-
-                  // Lambang Ikon Resmi Funda
-                  Container(
-                    width: 72,
-                    height: 72,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(SudutFunda.kartu),
-                      border: Border.all(color: WarnaFunda.garis, width: 1.0),
-                      boxShadow: const [
-                        BoxShadow(
-                          color: WarnaFunda.bayanganKartu,
-                          blurRadius: 12,
-                          offset: Offset(0, 4),
-                        ),
-                      ],
-                    ),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(SudutFunda.kartu),
-                      child: Image.asset(
-                        'aset/gambar/app_icon_512.png',
-                        fit: BoxFit.cover,
+                  Center(
+                    child: Container(
+                      width: 40,
+                      height: 4,
+                      margin: const EdgeInsets.only(bottom: SpasiFunda.m),
+                      decoration: BoxDecoration(
+                        color: WarnaFunda.garis,
+                        borderRadius: BorderRadius.circular(SudutFunda.pil),
                       ),
                     ),
                   ),
-                  const SizedBox(height: SpasiFunda.m),
 
-                  const TeksFunda.judulLayar('Funda'),
-                  const SizedBox(height: SpasiFunda.xs),
-                  const TeksFunda.label('Versi 1.1.0', warna: WarnaFunda.utama),
-                  const SizedBox(height: SpasiFunda.xs),
-                  const TeksFunda.catatan(
-                    'Teman Mengelola Uang yang Nyaman, Sadar, dan Aman',
-                    rataTeks: TextAlign.center,
-                    warna: WarnaFunda.teksRedup,
+                  // Hero Kanvas Identitas Funda
+                  Container(
+                    padding: const EdgeInsets.all(SpasiFunda.l),
+                    decoration: BoxDecoration(
+                      color: WarnaFunda.kanvasMint,
+                      borderRadius: BorderRadius.circular(SudutFunda.petak),
+                    ),
+                    child: Row(
+                      children: [
+                        Container(
+                          width: 64,
+                          height: 64,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(
+                              SudutFunda.kartu,
+                            ),
+                            border: Border.all(
+                              color: WarnaFunda.garis,
+                              width: 1.0,
+                            ),
+                          ),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(
+                              SudutFunda.kartu,
+                            ),
+                            child: Image.asset(
+                              'aset/gambar/app_icon_512.png',
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: SpasiFunda.m),
+                        const Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  TeksFunda.judulLayar('Funda'),
+                                  SizedBox(width: SpasiFunda.s),
+                                  TeksFunda.catatan(
+                                    'v1.1.0',
+                                    warna: WarnaFunda.utama,
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: SpasiFunda.xs),
+                              TeksFunda.catatan(
+                                'Teman mengelola uang yang nyaman, sadar, dan aman.',
+                                warna: WarnaFunda.teksRedup,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                  const SizedBox(height: SpasiFunda.l),
+                  const SizedBox(height: SpasiFunda.m),
 
                   // 3 Pilar Funda dalam Kartu Putih Border 1px
                   Container(
@@ -573,7 +552,7 @@ class LayarLainnya extends ConsumerWidget {
                           warnaIkon: WarnaFunda.utama,
                           judul: '100% Offline & Privat',
                           keterangan:
-                              'Data keuanganmu tersimpan aman di perangkatmu sendiri. Tidak ada pelacakan, tidak ada server backend luar, dan bebas iklan selamanya.',
+                              'Data tersimpan aman di perangkatmu tanpa pelacakan, server luar, maupun iklan.',
                         ),
                         Divider(
                           height: SpasiFunda.l * 2,
@@ -585,7 +564,7 @@ class LayarLainnya extends ConsumerWidget {
                           warnaIkon: WarnaFunda.sifatKeinginan,
                           judul: 'Ruang Tenang Tanpa Penghakiman',
                           keterangan:
-                              'Membantumu memahami ke mana uangmu mengalir dengan jernih, tanpa rasa bersalah atau label negatif.',
+                              'Membantumu memahami arah arus kas dengan jernih tanpa rasa bersalah atau label negatif.',
                         ),
                         Divider(
                           height: SpasiFunda.l * 2,
@@ -597,33 +576,10 @@ class LayarLainnya extends ConsumerWidget {
                           warnaIkon: WarnaFunda.info,
                           judul: '18 Modul Belajar Nyata',
                           keterangan:
-                              'Pelajaran micro-learning yang melatih data pribadimu sendiri: dari arus kas dasar hingga pensiun dan proteksi.',
+                              'Pelajaran singkat yang langsung dipraktikkan memakai data pribadimu dari arus kas hingga proteksi.',
                         ),
                       ],
                     ),
-                  ),
-                  const SizedBox(height: SpasiFunda.l),
-
-                  // Tombol Aksi
-                  TombolFunda.pilGelap(
-                    key: const Key('tombol_tentang_ke_panduan'),
-                    lebarPenuh: true,
-                    teks: 'Buka Panduan Nilai Funda',
-                    padaTekan: () {
-                      Navigator.pop(ctx);
-                      _bukaRuteAtauHalaman(
-                        context,
-                        ref,
-                        '/onboarding',
-                        (_) => const LayarOnboarding(),
-                      );
-                    },
-                  ),
-                  const SizedBox(height: SpasiFunda.s),
-                  TombolFunda.sekunder(
-                    lebarPenuh: true,
-                    teks: 'Tutup',
-                    padaTekan: () => Navigator.pop(ctx),
                   ),
                 ],
               ),
@@ -822,7 +778,6 @@ class _BarisMenuEditorial extends StatelessWidget {
     this.pathSvg,
     required this.warnaIkon,
     required this.judul,
-    required this.keterangan,
     required this.padaKetuk,
   });
 
@@ -830,7 +785,6 @@ class _BarisMenuEditorial extends StatelessWidget {
   final String? pathSvg;
   final Color warnaIkon;
   final String judul;
-  final String keterangan;
   final VoidCallback padaKetuk;
 
   @override
@@ -842,7 +796,7 @@ class _BarisMenuEditorial extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.symmetric(
             horizontal: SpasiFunda.l,
-            vertical: SpasiFunda.m,
+            vertical: SpasiFunda.l,
           ),
           child: Row(
             children: [
@@ -851,16 +805,7 @@ class _BarisMenuEditorial extends StatelessWidget {
               else
                 ikonUiDariLucide(ikon, ukuran: 22, warna: warnaIkon),
               const SizedBox(width: SpasiFunda.m),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    TeksFunda.label(judul),
-                    const SizedBox(height: 2),
-                    TeksFunda.catatan(keterangan, warna: WarnaFunda.teksRedup),
-                  ],
-                ),
-              ),
+              Expanded(child: TeksFunda.label(judul)),
               const SizedBox(width: SpasiFunda.s),
               const IkonUiFunda(
                 pathAset: AsetIkonUiFunda.chevronRight,

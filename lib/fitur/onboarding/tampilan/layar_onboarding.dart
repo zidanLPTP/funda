@@ -8,19 +8,15 @@ import '../../../util/haptic.dart';
 
 /// Model kartu edukatif pengantar nilai dasar dan sambutan Funda.
 class ItemSlideOnboarding {
-  final String tag;
   final String judul;
   final String deskripsi;
   final Color kanvas;
-  final Color warnaTag;
   final String pathSvg;
 
   const ItemSlideOnboarding({
-    required this.tag,
     required this.judul,
     required this.deskripsi,
     required this.kanvas,
-    required this.warnaTag,
     required this.pathSvg,
   });
 }
@@ -39,30 +35,24 @@ class _LayarOnboardingState extends ConsumerState<LayarOnboarding> {
 
   static const _daftarSlide = [
     ItemSlideOnboarding(
-      tag: 'Privasi Penuh (Offline-First)',
-      judul: 'Datamu 100% Milikmu, Tersimpan di HP-mu',
+      judul: 'Data 100% Milikmu',
       deskripsi:
-          'Funda tidak punya server backend dan tidak mengirimkan datamu ke mana pun. Seluruh catatan keuangan dan refleksi tersimpan privat di perangkatmu.',
+          'Semua catatan dan refleksimu tersimpan privat di HP ini, tanpa server atau pengiriman data keluar.',
       kanvas: WarnaFunda.kanvasMint,
-      warnaTag: WarnaFunda.pemasukan,
       pathSvg: AsetIlustrasiFunda.privasiLokal,
     ),
     ItemSlideOnboarding(
-      tag: 'Belajar Sambil Praktik',
-      judul: '18 Modul Finansial Berbasis Uang Nyatamu',
+      judul: 'Belajar dari Uang Nyatamu',
       deskripsi:
-          'Kuasai fondasi uang dari dasar sampai mahir. Pelajaran micro-learning berujung pada misi praktik yang langsung melatih datamu sendiri.',
+          '18 modul singkat yang langsung dipraktikkan memakai catatan keuanganmu sendiri.',
       kanvas: WarnaFunda.kanvasBiru,
-      warnaTag: WarnaFunda.info,
       pathSvg: AsetIlustrasiFunda.mulaiTesAwal,
     ),
     ItemSlideOnboarding(
-      tag: 'Tanpa Penghakiman',
-      judul: 'Ruang Tenang Menata dan Memahami Arus Kas',
+      judul: 'Ruang Tenang Menata Uang',
       deskripsi:
-          'Tidak ada label pelit atau boros. Funda membantumu melihat ke mana uang mengalir dengan jernih, tenang, dan memberdayakan.',
+          'Pahami arah arus kasmu dengan jernih—tanpa label boros, pelit, atau rasa bersalah.',
       kanvas: WarnaFunda.kanvasUngu,
-      warnaTag: WarnaFunda.sifatKeinginan,
       pathSvg: AsetIlustrasiFunda.ruangTenang,
     ),
   ];
@@ -114,48 +104,16 @@ class _LayarOnboardingState extends ConsumerState<LayarOnboarding> {
           ),
           child: Column(
             children: [
-              // Baris Header Editorial: Kembali (bila dibuka dari dalam app), Logo Funda, & Pil Lewati
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: SpasiFunda.m),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Flexible(
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          if (bisaKembali) ...[
-                            TombolKembaliEditorial(
-                              padaTekan: () => Navigator.maybePop(context),
-                            ),
-                            const SizedBox(width: SpasiFunda.s),
-                          ],
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(
-                              SudutFunda.kecil,
-                            ),
-                            child: Image.asset(
-                              'aset/gambar/app_icon_512.png',
-                              width: 30,
-                              height: 30,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                          const SizedBox(width: SpasiFunda.s),
-                          const Flexible(child: TeksFunda.judulBagian('Funda')),
-                        ],
-                      ),
-                    ),
-                    if (_indeksHalaman < _daftarSlide.length - 1) ...[
-                      const SizedBox(width: SpasiFunda.s),
-                      TombolPilHeaderEditorial(
-                        teks: 'Lewati',
-                        padaTekan: _selesaikanOnboarding,
-                      ),
-                    ],
-                  ],
-                ),
-              ),
+              if (bisaKembali)
+                Padding(
+                  padding: const EdgeInsets.only(top: SpasiFunda.m),
+                  child: HeaderSubLayarEditorial(
+                    judul: 'Panduan Nilai Funda',
+                    padaKembali: () => Navigator.maybePop(context),
+                  ),
+                )
+              else
+                const SizedBox(height: SpasiFunda.l),
 
               // PageView Kartu Editorial
               Expanded(
@@ -188,45 +146,20 @@ class _LayarOnboardingState extends ConsumerState<LayarOnboarding> {
                             mainAxisSize: MainAxisSize.min,
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
-                              // Kanvas Atas Berwarna Cerah + Tag Pill + Ilustrasi SVG
-                              Container(
-                                color: slide.kanvas,
-                                padding: const EdgeInsets.all(SpasiFunda.l),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Container(
-                                      padding: const EdgeInsets.symmetric(
-                                        horizontal: SpasiFunda.m,
-                                        vertical: SpasiFunda.xs,
-                                      ),
-                                      decoration: BoxDecoration(
-                                        color: WarnaFunda.permukaan,
-                                        borderRadius: BorderRadius.circular(
-                                          SudutFunda.pil,
-                                        ),
-                                        border: Border.all(
-                                          color: WarnaFunda.garis,
-                                          width: 1.0,
-                                        ),
-                                      ),
-                                      child: TeksFunda.catatan(
-                                        slide.tag,
-                                        warna: slide.warnaTag,
-                                      ),
+                              if (!isTeksBesar)
+                                Container(
+                                  color: slide.kanvas,
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: SpasiFunda.l,
+                                    vertical: SpasiFunda.xl,
+                                  ),
+                                  child: Center(
+                                    child: IlustrasiSvgFunda(
+                                      pathAset: slide.pathSvg,
+                                      tinggi: 140,
                                     ),
-                                    if (!isTeksBesar) ...[
-                                      const SizedBox(height: SpasiFunda.m),
-                                      Center(
-                                        child: IlustrasiSvgFunda(
-                                          pathAset: slide.pathSvg,
-                                          tinggi: 132,
-                                        ),
-                                      ),
-                                    ],
-                                  ],
+                                  ),
                                 ),
-                              ),
 
                               // Area Baca Putih Bersih
                               Padding(
