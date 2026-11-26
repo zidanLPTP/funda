@@ -779,6 +779,11 @@ class _LembarFormAlokasiState extends ConsumerState<_LembarFormAlokasi> {
   void _padaUbahNominal(String teks) {
     final digit = teks.replaceAll(RegExp(r'[^0-9]'), '');
     final nilai = int.tryParse(digit) ?? 0;
+    final teksFormat = nilai > 0 ? formatRupiah(nilai) : '';
+    _pengontrolNominal.value = TextEditingValue(
+      text: teksFormat,
+      selection: TextSelection.collapsed(offset: teksFormat.length),
+    );
     setState(() {
       _jumlahRupiah = nilai;
     });

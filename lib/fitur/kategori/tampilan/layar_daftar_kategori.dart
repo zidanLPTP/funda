@@ -172,7 +172,14 @@ class _LayarDaftarKategoriState extends ConsumerState<LayarDaftarKategori>
                         selected: arus == 'keluar',
                         selectedColor: WarnaFunda.utamaTipis,
                         onSelected: (val) {
-                          if (val) setDialogState(() => arus = 'keluar');
+                          if (val) {
+                            setDialogState(() {
+                              arus = 'keluar';
+                              if (sifat == SifatKategori.tidakBerlaku) {
+                                sifat = SifatKategori.keinginan;
+                              }
+                            });
+                          }
                         },
                       ),
                       ChoiceChip(

@@ -126,6 +126,7 @@ class KantongRepositori {
         jenis: Value(jenis),
         jumlahRupiah: Value(jumlahRupiah),
         catatan: Value(catatan),
+        waktu: Value(sekarang),
         dibuatPada: Value(sekarang),
       ),
     );
