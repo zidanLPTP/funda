@@ -72,11 +72,8 @@ String? pathSvgUntukIkonKategori(String kunci) {
     'building2' || 'bank' => AsetIkonFunda.dompetBank,
     'layers' => AsetIkonFunda.menuKantong,
     'target' => AsetIkonFunda.metrikTujuan,
-    'handCoins' ||
-    'trendingUp' ||
-    'gift' ||
-    'coins' ||
-    'bonus' => AsetIkonFunda.katBonus,
+    'coins' => AsetIkonFunda.kasKoin,
+    'handCoins' || 'trendingUp' || 'gift' || 'bonus' => AsetIkonFunda.katBonus,
     'heartHandshake' || 'donasi' => AsetIkonFunda.katDonasi,
     'piggyBank' => AsetIkonFunda.sifatTabungan,
     'shield' || 'shieldAlert' => AsetIkonFunda.metrikDanaDarurat,
@@ -107,7 +104,11 @@ class IkonKategoriFunda extends StatelessWidget {
     if (pathSvg != null) {
       return IkonSvgFunda(pathAset: pathSvg, ukuran: ukuran);
     }
-    return Icon(ambilIkonLucide(kunciIkon), size: ukuran, color: warnaFallback);
+    return ikonUiDariLucide(
+      ambilIkonLucide(kunciIkon),
+      ukuran: ukuran,
+      warna: warnaFallback,
+    );
   }
 }
 

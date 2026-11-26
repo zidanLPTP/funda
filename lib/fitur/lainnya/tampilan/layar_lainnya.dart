@@ -419,6 +419,7 @@ class LayarLainnya extends ConsumerWidget {
                       children: [
                         _PoinInfoSheet(
                           ikon: LucideIcons.smartphone,
+                          pathSvg: AsetIkonFunda.penyimpananLokal,
                           warnaIkon: WarnaFunda.utama,
                           judul: '100% Tersimpan Lokal di HP',
                           keterangan:
@@ -430,6 +431,7 @@ class LayarLainnya extends ConsumerWidget {
                         ),
                         _PoinInfoSheet(
                           ikon: LucideIcons.shieldCheck,
+                          pathSvg: AsetIkonFunda.menuPrivasi,
                           warnaIkon: WarnaFunda.pemasukan,
                           judul: 'Tanpa Akun, Server, & Pelacak',
                           keterangan:
@@ -441,6 +443,7 @@ class LayarLainnya extends ConsumerWidget {
                         ),
                         _PoinInfoSheet(
                           ikon: LucideIcons.database,
+                          pathSvg: AsetIkonFunda.menuCadangan,
                           warnaIkon: WarnaFunda.info,
                           judul: 'Kendali Penuh Lewat Cadangan',
                           keterangan:
@@ -565,6 +568,7 @@ class LayarLainnya extends ConsumerWidget {
                       children: [
                         _PoinInfoSheet(
                           ikon: LucideIcons.shieldCheck,
+                          pathSvg: AsetIkonFunda.menuPrivasi,
                           warnaIkon: WarnaFunda.utama,
                           judul: '100% Offline & Privat',
                           keterangan:
@@ -867,12 +871,14 @@ class _BarisMenuEditorial extends StatelessWidget {
 class _PoinInfoSheet extends StatelessWidget {
   const _PoinInfoSheet({
     required this.ikon,
+    this.pathSvg,
     required this.warnaIkon,
     required this.judul,
     required this.keterangan,
   });
 
   final IconData ikon;
+  final String? pathSvg;
   final Color warnaIkon;
   final String judul;
   final String keterangan;
@@ -884,7 +890,10 @@ class _PoinInfoSheet extends StatelessWidget {
       children: [
         Row(
           children: [
-            Icon(ikon, size: 18, color: warnaIkon),
+            if (pathSvg != null)
+              IkonSvgFunda(pathAset: pathSvg!, ukuran: 20)
+            else
+              Icon(ikon, size: 18, color: warnaIkon),
             const SizedBox(width: SpasiFunda.s),
             Expanded(child: TeksFunda.label(judul)),
           ],

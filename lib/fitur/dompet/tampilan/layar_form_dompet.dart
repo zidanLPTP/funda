@@ -389,7 +389,6 @@ class _LayarFormDompetState extends ConsumerState<LayarFormDompet> {
                         runSpacing: SpasiFunda.s,
                         children: daftarPilihanIkon.map((item) {
                           final kunci = item['kunci'] as String;
-                          final ikon = item['ikon'] as IconData;
                           final terpilih = _ikonTerpilih == kunci;
                           return InkWell(
                             onTap: () => setState(() => _ikonTerpilih = kunci),
@@ -416,12 +415,12 @@ class _LayarFormDompetState extends ConsumerState<LayarFormDompet> {
                                   width: terpilih ? 2 : 1,
                                 ),
                               ),
-                              child: Icon(
-                                ikon,
-                                color: terpilih
+                              child: IkonKategoriFunda(
+                                kunciIkon: kunci,
+                                ukuran: 22,
+                                warnaFallback: terpilih
                                     ? WarnaFunda.utama
                                     : WarnaFunda.teksRedup,
-                                size: 22,
                               ),
                             ),
                           );

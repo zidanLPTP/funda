@@ -1737,18 +1737,18 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
             ),
             child: Row(
               children: [
-                Icon(
-                  sudahSelesai
-                      ? LucideIcons.checkCircle
-                      : (_misiDilewati
-                            ? LucideIcons.forward
-                            : LucideIcons.flaskConical),
-                  color: sudahSelesai
-                      ? WarnaFunda.pemasukan
-                      : (_misiDilewati
-                            ? WarnaFunda.teksRedup
-                            : WarnaFunda.peringatan),
-                ),
+                if (sudahSelesai)
+                  const Icon(
+                    LucideIcons.checkCircle,
+                    color: WarnaFunda.pemasukan,
+                  )
+                else if (_misiDilewati)
+                  const Icon(LucideIcons.forward, color: WarnaFunda.teksRedup)
+                else
+                  const IkonSvgFunda(
+                    pathAset: AsetIkonFunda.modeSandbox,
+                    ukuran: 22,
+                  ),
                 const SizedBox(width: SpasiFunda.s),
                 Expanded(
                   child: TeksFunda.label(
@@ -1896,10 +1896,9 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
                         color: WarnaFunda.utamaTipis,
                         shape: BoxShape.circle,
                       ),
-                      child: const Icon(
-                        LucideIcons.barChart2,
-                        color: WarnaFunda.utama,
-                        size: 20,
+                      child: const IkonSvgFunda(
+                        pathAset: AsetIkonFunda.analisisData,
+                        ukuran: 22,
                       ),
                     ),
                     const SizedBox(width: SpasiFunda.s),

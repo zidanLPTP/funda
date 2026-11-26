@@ -60,7 +60,9 @@ class KeadaanKosong extends StatelessWidget {
                   borderRadius: BorderRadius.circular(SudutFunda.petak),
                   border: Border.all(color: WarnaFunda.garis),
                 ),
-                child: Icon(ikon, size: 32, color: warnaIkon),
+                child: Center(
+                  child: ikonUiDariLucide(ikon, ukuran: 32, warna: warnaIkon),
+                ),
               ),
             const SizedBox(height: SpasiFunda.l),
 

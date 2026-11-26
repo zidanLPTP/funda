@@ -148,6 +148,192 @@ abstract final class AsetIkonFunda {
   static const tujuanKendaraan = 'aset/gambar/ikon/ic_tujuan_kendaraan.svg';
   static const tujuanLaptop = 'aset/gambar/ikon/ic_tujuan_laptop.svg';
   static const tujuanLiburan = 'aset/gambar/ikon/ic_tujuan_liburan.svg';
+
+  static const analisisData = 'aset/gambar/ikon/ic_analisis_data.svg';
+  static const kasKoin = 'aset/gambar/ikon/ic_kas_koin.svg';
+  static const pembayaranUtang = 'aset/gambar/ikon/ic_pembayaran_utang.svg';
+  static const penyimpananLokal = 'aset/gambar/ikon/ic_penyimpanan_lokal.svg';
+}
+
+/// Kumpulan path aset SVG ikon UI monokrom Funda di `aset/gambar/ikon/`.
+abstract final class AsetIkonUiFunda {
+  static const archive = 'aset/gambar/ikon/ic_ui_archive.svg';
+  static const archiveRestore = 'aset/gambar/ikon/ic_ui_archive_restore.svg';
+  static const arrowDownLeft = 'aset/gambar/ikon/ic_ui_arrow_down_left.svg';
+  static const arrowDownRight = 'aset/gambar/ikon/ic_ui_arrow_down_right.svg';
+  static const arrowLeft = 'aset/gambar/ikon/ic_ui_arrow_left.svg';
+  static const arrowLeftRight = 'aset/gambar/ikon/ic_ui_arrow_left_right.svg';
+  static const arrowRight = 'aset/gambar/ikon/ic_ui_arrow_right.svg';
+  static const arrowUpDown = 'aset/gambar/ikon/ic_ui_arrow_up_down.svg';
+  static const arrowUpRight = 'aset/gambar/ikon/ic_ui_arrow_up_right.svg';
+  static const calendar = 'aset/gambar/ikon/ic_ui_calendar.svg';
+  static const calendarClock = 'aset/gambar/ikon/ic_ui_calendar_clock.svg';
+  static const calendarOff = 'aset/gambar/ikon/ic_ui_calendar_off.svg';
+  static const check = 'aset/gambar/ikon/ic_ui_check.svg';
+  static const checkCheck = 'aset/gambar/ikon/ic_ui_check_check.svg';
+  static const checkSquare = 'aset/gambar/ikon/ic_ui_check_square.svg';
+  static const chevronDown = 'aset/gambar/ikon/ic_ui_chevron_down.svg';
+  static const chevronLeft = 'aset/gambar/ikon/ic_ui_chevron_left.svg';
+  static const chevronRight = 'aset/gambar/ikon/ic_ui_chevron_right.svg';
+  static const circle = 'aset/gambar/ikon/ic_ui_circle.svg';
+  static const circleAlert = 'aset/gambar/ikon/ic_ui_circle_alert.svg';
+  static const circleCheck = 'aset/gambar/ikon/ic_ui_circle_check.svg';
+  static const circleDot = 'aset/gambar/ikon/ic_ui_circle_dot.svg';
+  static const circleHelp = 'aset/gambar/ikon/ic_ui_circle_help.svg';
+  static const circleMinus = 'aset/gambar/ikon/ic_ui_circle_minus.svg';
+  static const circlePlus = 'aset/gambar/ikon/ic_ui_circle_plus.svg';
+  static const clock = 'aset/gambar/ikon/ic_ui_clock.svg';
+  static const code = 'aset/gambar/ikon/ic_ui_code.svg';
+  static const copyPlus = 'aset/gambar/ikon/ic_ui_copy_plus.svg';
+  static const download = 'aset/gambar/ikon/ic_ui_download.svg';
+  static const ellipsisVertical =
+      'aset/gambar/ikon/ic_ui_ellipsis_vertical.svg';
+  static const externalLink = 'aset/gambar/ikon/ic_ui_external_link.svg';
+  static const fastForward = 'aset/gambar/ikon/ic_ui_fast_forward.svg';
+  static const forward = 'aset/gambar/ikon/ic_ui_forward.svg';
+  static const info = 'aset/gambar/ikon/ic_ui_info.svg';
+  static const listFilter = 'aset/gambar/ikon/ic_ui_list_filter.svg';
+  static const listTodo = 'aset/gambar/ikon/ic_ui_list_todo.svg';
+  static const minus = 'aset/gambar/ikon/ic_ui_minus.svg';
+  static const pause = 'aset/gambar/ikon/ic_ui_pause.svg';
+  static const pencil = 'aset/gambar/ikon/ic_ui_pencil.svg';
+  static const play = 'aset/gambar/ikon/ic_ui_play.svg';
+  static const plus = 'aset/gambar/ikon/ic_ui_plus.svg';
+  static const rotateCcw = 'aset/gambar/ikon/ic_ui_rotate_ccw.svg';
+  static const search = 'aset/gambar/ikon/ic_ui_search.svg';
+  static const settings = 'aset/gambar/ikon/ic_ui_settings.svg';
+  static const shieldAlert = 'aset/gambar/ikon/ic_ui_shield_alert.svg';
+  static const skipForward = 'aset/gambar/ikon/ic_ui_skip_forward.svg';
+  static const slidersHorizontal =
+      'aset/gambar/ikon/ic_ui_sliders_horizontal.svg';
+  static const square = 'aset/gambar/ikon/ic_ui_square.svg';
+  static const trash = 'aset/gambar/ikon/ic_ui_trash.svg';
+  static const triangleAlert = 'aset/gambar/ikon/ic_ui_triangle_alert.svg';
+  static const undo = 'aset/gambar/ikon/ic_ui_undo.svg';
+  static const upload = 'aset/gambar/ikon/ic_ui_upload.svg';
+  static const x = 'aset/gambar/ikon/ic_ui_x.svg';
+}
+
+/// Memetakan [IconData] dari `LucideIcons` ke path SVG monokrom custom UI Funda.
+String? pathSvgUiUntukLucide(IconData ikon) {
+  if (ikon == LucideIcons.archive) return AsetIkonUiFunda.archive;
+  if (ikon == LucideIcons.archiveRestore) return AsetIkonUiFunda.archiveRestore;
+  if (ikon == LucideIcons.arrowDownLeft) return AsetIkonUiFunda.arrowDownLeft;
+  if (ikon == LucideIcons.arrowDownRight) return AsetIkonUiFunda.arrowDownRight;
+  if (ikon == LucideIcons.arrowLeft) return AsetIkonUiFunda.arrowLeft;
+  if (ikon == LucideIcons.arrowLeftRight) return AsetIkonUiFunda.arrowLeftRight;
+  if (ikon == LucideIcons.arrowRight) return AsetIkonUiFunda.arrowRight;
+  if (ikon == LucideIcons.arrowUpDown) return AsetIkonUiFunda.arrowUpDown;
+  if (ikon == LucideIcons.arrowUpRight) return AsetIkonUiFunda.arrowUpRight;
+  if (ikon == LucideIcons.calendar) return AsetIkonUiFunda.calendar;
+  if (ikon == LucideIcons.calendarClock) return AsetIkonUiFunda.calendarClock;
+  if (ikon == LucideIcons.calendarOff) return AsetIkonUiFunda.calendarOff;
+  if (ikon == LucideIcons.check) return AsetIkonUiFunda.check;
+  if (ikon == LucideIcons.checkCheck) return AsetIkonUiFunda.checkCheck;
+  if (ikon == LucideIcons.checkSquare) return AsetIkonUiFunda.checkSquare;
+  if (ikon == LucideIcons.chevronDown) return AsetIkonUiFunda.chevronDown;
+  if (ikon == LucideIcons.chevronLeft) return AsetIkonUiFunda.chevronLeft;
+  if (ikon == LucideIcons.chevronRight) return AsetIkonUiFunda.chevronRight;
+  if (ikon == LucideIcons.circle) return AsetIkonUiFunda.circle;
+  if (ikon == LucideIcons.circleAlert || ikon == LucideIcons.alertCircle) {
+    return AsetIkonUiFunda.circleAlert;
+  }
+  if (ikon == LucideIcons.circleCheck ||
+      ikon == LucideIcons.checkCircle ||
+      ikon == LucideIcons.checkCircle2) {
+    return AsetIkonUiFunda.circleCheck;
+  }
+  if (ikon == LucideIcons.circleDot) return AsetIkonUiFunda.circleDot;
+  if (ikon == LucideIcons.helpCircle) return AsetIkonUiFunda.circleHelp;
+  if (ikon == LucideIcons.circleMinus) return AsetIkonUiFunda.circleMinus;
+  if (ikon == LucideIcons.circlePlus) return AsetIkonUiFunda.circlePlus;
+  if (ikon == LucideIcons.clock) return AsetIkonUiFunda.clock;
+  if (ikon == LucideIcons.code) return AsetIkonUiFunda.code;
+  if (ikon == LucideIcons.copyPlus) return AsetIkonUiFunda.copyPlus;
+  if (ikon == LucideIcons.download) return AsetIkonUiFunda.download;
+  if (ikon == LucideIcons.ellipsisVertical) {
+    return AsetIkonUiFunda.ellipsisVertical;
+  }
+  if (ikon == LucideIcons.externalLink) return AsetIkonUiFunda.externalLink;
+  if (ikon == LucideIcons.fastForward) return AsetIkonUiFunda.fastForward;
+  if (ikon == LucideIcons.forward) return AsetIkonUiFunda.forward;
+  if (ikon == LucideIcons.info) return AsetIkonUiFunda.info;
+  if (ikon == LucideIcons.listFilter) return AsetIkonUiFunda.listFilter;
+  if (ikon == LucideIcons.listTodo) return AsetIkonUiFunda.listTodo;
+  if (ikon == LucideIcons.minus) return AsetIkonUiFunda.minus;
+  if (ikon == LucideIcons.pause) return AsetIkonUiFunda.pause;
+  if (ikon == LucideIcons.pencil) return AsetIkonUiFunda.pencil;
+  if (ikon == LucideIcons.play) return AsetIkonUiFunda.play;
+  if (ikon == LucideIcons.plus) return AsetIkonUiFunda.plus;
+  if (ikon == LucideIcons.rotateCcw) return AsetIkonUiFunda.rotateCcw;
+  if (ikon == LucideIcons.search) return AsetIkonUiFunda.search;
+  if (ikon == LucideIcons.settings) return AsetIkonUiFunda.settings;
+  if (ikon == LucideIcons.shieldAlert) return AsetIkonUiFunda.shieldAlert;
+  if (ikon == LucideIcons.skipForward) return AsetIkonUiFunda.skipForward;
+  if (ikon == LucideIcons.slidersHorizontal) {
+    return AsetIkonUiFunda.slidersHorizontal;
+  }
+  if (ikon == LucideIcons.square) return AsetIkonUiFunda.square;
+  if (ikon == LucideIcons.trash2) return AsetIkonUiFunda.trash;
+  if (ikon == LucideIcons.triangleAlert || ikon == LucideIcons.alertTriangle) {
+    return AsetIkonUiFunda.triangleAlert;
+  }
+  if (ikon == LucideIcons.undo2) return AsetIkonUiFunda.undo;
+  if (ikon == LucideIcons.upload) return AsetIkonUiFunda.upload;
+  if (ikon == LucideIcons.x) return AsetIkonUiFunda.x;
+  return null;
+}
+
+/// Widget perender ikon UI monokrom SVG custom yang otomatis mengikuti
+/// warna `IconTheme` (tombol, lencana status) atau [warna] eksplisit.
+class IkonUiFunda extends StatelessWidget {
+  final String pathAset;
+  final double ukuran;
+  final Color? warna;
+  final String? labelAkses;
+
+  const IkonUiFunda({
+    super.key,
+    required this.pathAset,
+    this.ukuran = 20,
+    this.warna,
+    this.labelAkses,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final warnaEfektif =
+        warna ?? IconTheme.of(context).color ?? WarnaFunda.teks;
+    return SvgPicture.asset(
+      pathAset,
+      width: ukuran,
+      height: ukuran,
+      fit: BoxFit.contain,
+      colorFilter: ColorFilter.mode(warnaEfektif, BlendMode.srcIn),
+      excludeFromSemantics: labelAkses == null,
+      semanticsLabel: labelAkses,
+    );
+  }
+}
+
+/// Merender ikon UI SVG custom bila [ikon] tersedia di [pathSvgUiUntukLucide],
+/// atau jatuh kembali ke [Icon] standar bila tidak ada padanannya.
+Widget ikonUiDariLucide(
+  IconData ikon, {
+  double ukuran = 20,
+  Color? warna,
+  String? labelAkses,
+}) {
+  final pathSvg = pathSvgUiUntukLucide(ikon);
+  if (pathSvg != null) {
+    return IkonUiFunda(
+      pathAset: pathSvg,
+      ukuran: ukuran,
+      warna: warna,
+      labelAkses: labelAkses,
+    );
+  }
+  return Icon(ikon, size: ukuran, color: warna, semanticLabel: labelAkses);
 }
 
 /// Widget perender ikon SVG custom berukuran tetap (default 24x24).

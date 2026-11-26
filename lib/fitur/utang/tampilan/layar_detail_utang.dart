@@ -308,9 +308,9 @@ class _LayarDetailUtangState extends ConsumerState<LayarDetailUtang> {
                         TombolFunda.pilGelap(
                           teks: 'Catat Pembayaran',
                           lebarPenuh: true,
-                          ikon: const Icon(
-                            LucideIcons.circleDollarSign,
-                            size: 18,
+                          ikon: const IkonSvgFunda(
+                            pathAset: AsetIkonFunda.pembayaranUtang,
+                            ukuran: 18,
                           ),
                           padaTekan: sudahLunas
                               ? null
@@ -333,9 +333,9 @@ class _LayarDetailUtangState extends ConsumerState<LayarDetailUtang> {
                               child: TombolFunda.pilGelap(
                                 teks: 'Catat Bayar',
                                 lebarPenuh: false,
-                                ikon: const Icon(
-                                  LucideIcons.circleDollarSign,
-                                  size: 18,
+                                ikon: const IkonSvgFunda(
+                                  pathAset: AsetIkonFunda.pembayaranUtang,
+                                  ukuran: 18,
                                 ),
                                 padaTekan: sudahLunas
                                     ? null

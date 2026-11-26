@@ -911,7 +911,13 @@ class _LembarFormAlokasiState extends ConsumerState<_LembarFormAlokasi> {
               keyboardType: TextInputType.number,
               decoration: InputDecoration(
                 hintText: 'Rp 0',
-                prefixIcon: const Icon(LucideIcons.coins),
+                prefixIcon: const Padding(
+                  padding: EdgeInsets.all(12),
+                  child: IkonSvgFunda(
+                    pathAset: AsetIkonFunda.kasKoin,
+                    ukuran: 20,
+                  ),
+                ),
                 filled: true,
                 fillColor: WarnaFunda.latar,
                 border: OutlineInputBorder(

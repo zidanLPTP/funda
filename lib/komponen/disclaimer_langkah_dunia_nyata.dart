@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '../tema/token.dart';
+import 'ilustrasi_funda.dart';
 import 'teks_funda.dart';
 
 /// Komponen resmi untuk menampilkan disclaimer "Langkah Dunia Nyata"
@@ -80,10 +80,10 @@ class _DisclaimerLangkahDuniaNyataState
         ),
         child: Row(
           children: [
-            const Icon(
-              LucideIcons.shieldAlert,
-              size: 18,
-              color: WarnaFunda.peringatan,
+            const IkonUiFunda(
+              pathAset: AsetIkonUiFunda.shieldAlert,
+              ukuran: 18,
+              warna: WarnaFunda.peringatan,
             ),
             const SizedBox(width: SpasiFunda.s),
             const Expanded(
@@ -118,10 +118,10 @@ class _DisclaimerLangkahDuniaNyataState
         children: [
           const Row(
             children: [
-              Icon(
-                LucideIcons.shieldAlert,
-                color: WarnaFunda.peringatan,
-                size: 20,
+              IkonUiFunda(
+                pathAset: AsetIkonUiFunda.shieldAlert,
+                warna: WarnaFunda.peringatan,
+                ukuran: 20,
               ),
               SizedBox(width: SpasiFunda.s),
               Expanded(

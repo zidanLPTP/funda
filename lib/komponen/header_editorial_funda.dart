@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '../tema/token.dart';
+import 'ilustrasi_funda.dart';
 import 'teks_funda.dart';
 
 /// Tombol kembali bulat bergaya editorial dengan target sentuh >= 48x48dp
@@ -33,10 +33,12 @@ class TombolKembaliEditorial extends StatelessWidget {
                   shape: BoxShape.circle,
                   border: Border.all(color: WarnaFunda.garis, width: 1.0),
                 ),
-                child: const Icon(
-                  LucideIcons.arrowLeft,
-                  size: 18,
-                  color: WarnaFunda.teks,
+                child: const Center(
+                  child: IkonUiFunda(
+                    pathAset: AsetIkonUiFunda.arrowLeft,
+                    ukuran: 18,
+                    warna: WarnaFunda.teks,
+                  ),
                 ),
               ),
             ),
@@ -165,7 +167,7 @@ class TombolPilHeaderEditorial extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 if (ikon != null) ...[
-                  Icon(ikon, size: 16, color: warnaTeks),
+                  ikonUiDariLucide(ikon!, ukuran: 16, warna: warnaTeks),
                   const SizedBox(width: SpasiFunda.xs),
                 ],
                 Flexible(
