@@ -31,20 +31,20 @@
 <table>
   <tr>
     <td align="center" width="25%">
-      <img src="docs/tangkapan_layar/tahap_08b_07_beranda_modul_selesai.png" alt="Beranda Funda" width="100%" /><br />
-      <sub><strong>Beranda & Ringkasan Kas</strong></sub>
+      <img src="docs/tangkapan_layar/beranda.jpg" alt="Beranda Funda" width="100%" /><br />
+      <sub><strong>Beranda</strong></sub>
     </td>
     <td align="center" width="25%">
-      <img src="docs/tangkapan_layar/tahap_08c_02_modul_5_terbuka.png" alt="Peta Belajar 18 Modul" width="100%" /><br />
-      <sub><strong>Peta Kurikulum 18 Modul</strong></sub>
+      <img src="docs/tangkapan_layar/catatan.jpg" alt="Catatan Funda" width="100%" /><br />
+      <sub><strong>Catatan</strong></sub>
     </td>
     <td align="center" width="25%">
-      <img src="docs/tangkapan_layar/tahap_08c_03_pelajaran_5_1_opsi_a.png" alt="Misi Praktik Nyata" width="100%" /><br />
-      <sub><strong>Skenario & Misi Praktik</strong></sub>
+      <img src="docs/tangkapan_layar/belajar.jpg" alt="Belajar Funda" width="100%" /><br />
+      <sub><strong>Belajar</strong></sub>
     </td>
     <td align="center" width="25%">
-      <img src="docs/tangkapan_layar/tahap_08b_01_umpan_balik_ringkasan_utang.png" alt="Umpan Balik Berbasis Data" width="100%" /><br />
-      <sub><strong>Umpan Balik Data Riil</strong></sub>
+      <img src="docs/tangkapan_layar/lainnya.jpg" alt="Lainnya Funda" width="100%" /><br />
+      <sub><strong>Lainnya</strong></sub>
     </td>
   </tr>
 </table>
