@@ -282,9 +282,6 @@ class _LayarPengaturanState extends ConsumerState<LayarPengaturan> {
                           title: const TeksFunda.isi(
                             'Ulangi Tutorial Aplikasi',
                           ),
-                          subtitle: const TeksFunda.catatan(
-                            'Tampilkan kembali tur sorotan pengenalan tab utama di Beranda',
-                          ),
                           trailing: const IkonUiFunda(
                             pathAset: AsetIkonUiFunda.chevronRight,
                             ukuran: 20,
@@ -319,9 +316,6 @@ class _LayarPengaturanState extends ConsumerState<LayarPengaturan> {
                           title: const TeksFunda.isi(
                             'Perbarui Profil Keuangan',
                           ),
-                          subtitle: const TeksFunda.catatan(
-                            'Ubah jawaban kondisi keuanganmu bila situasimu berubah',
-                          ),
                           trailing: const IkonUiFunda(
                             pathAset: AsetIkonUiFunda.chevronRight,
                             ukuran: 20,
@@ -333,32 +327,6 @@ class _LayarPengaturanState extends ConsumerState<LayarPengaturan> {
                               context.push('/belajar/tes-awal');
                             }
                           },
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: SpasiFunda.m),
-
-                  // Grup 3: Transparansi Baterai & Privasi
-                  _bangunKartuPutih(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        _bangunJudulBagian(
-                          pathSvg: AsetIkonFunda.menuPrivasi,
-                          judul: 'Privasi & Baterai Ramah',
-                        ),
-                        const SizedBox(height: SpasiFunda.s),
-                        const TeksFunda.catatan(
-                          '1. 100% Berjalan Lokal di Perangkat\nSemua data tagihan dan jadwal pengingat tersimpan di SQLite lokal tanpa ada server pengirim.',
-                        ),
-                        const SizedBox(height: SpasiFunda.xs),
-                        const TeksFunda.catatan(
-                          '2. Hemat Energi (Inexact Alarm)\nNotifikasi menggunakan penjadwalan ramah baterai yang diselaraskan dengan siklus istirahat sistem operasi Android.',
-                        ),
-                        const SizedBox(height: SpasiFunda.xs),
-                        const TeksFunda.catatan(
-                          '3. Jendela Pengingat 45 Hari\nPengingat dijadwalkan sampai 45 hari ke depan, jadi buka Funda sedikitnya sebulan sekali agar jadwal pengingatmu selalu terbarui.',
                         ),
                       ],
                     ),
