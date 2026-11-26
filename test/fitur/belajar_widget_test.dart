@@ -501,7 +501,10 @@ void main() {
         expect(find.text('Belum relevan buat aku'), findsOneWidget);
 
         // Pengguna memilih lewati misi
-        await tester.tap(find.text('Belum relevan buat aku'));
+        final tombolLewatiMisi = find.text('Belum relevan buat aku');
+        await tester.ensureVisible(tombolLewatiMisi);
+        await tester.pump();
+        await tester.tap(tombolLewatiMisi);
         await tester.pump();
         expect(find.text('Misi ini kamu lewati.'), findsOneWidget);
 

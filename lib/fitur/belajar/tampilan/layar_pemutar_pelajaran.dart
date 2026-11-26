@@ -11,6 +11,7 @@ import '../../../data/penyedia_basis_data.dart';
 import '../../../perhitungan/perhitungan_belajar.dart';
 import '../../../perhitungan/perhitungan_umpan_balik_belajar.dart';
 import '../../../tema/token.dart';
+import '../data/peta_ilustrasi_pelajaran.dart';
 import '../kontroler/penyedia_belajar.dart';
 import '../model/pembaca_konten.dart';
 import '../model/registri_misi.dart';
@@ -511,7 +512,11 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
     kartuWidgets.add(
       _pembungkusKartu(
         judul: pel.judul,
-        headerVisual: KanvasIlustrasiPelajaran(modulId: pel.modulId),
+        headerVisual: KanvasIlustrasiPelajaran(
+          modulId: pel.modulId,
+          pelajaranId: pel.id,
+          tahap: TahapPelajaranVisual.pemantik,
+        ),
         pakaiKartuMembungkus: false,
         isi: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -543,7 +548,12 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
       kartuWidgets.add(
         _pembungkusKartu(
           judul: k.judul,
-          headerVisual: KanvasIlustrasiPelajaran(modulId: pel.modulId),
+          headerVisual: KanvasIlustrasiPelajaran(
+            modulId: pel.modulId,
+            pelajaranId: pel.id,
+            tahap: TahapPelajaranVisual.kartu,
+            indeksKartu: i,
+          ),
           pakaiKartuMembungkus: false,
           isi: TeksAnimasiKata(
             teks: k.isi,
@@ -565,6 +575,12 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
       kartuWidgets.add(
         _pembungkusKartu(
           judul: contoh.judul.isNotEmpty ? contoh.judul : 'Gambaran Angka',
+          headerVisual: KanvasIlustrasiPelajaran(
+            modulId: pel.modulId,
+            pelajaranId: pel.id,
+            tahap: TahapPelajaranVisual.contohAngka,
+            tinggi: 136,
+          ),
           isi: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -772,7 +788,7 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
     }
 
     // 5. Kartu Misi Praktik
-    kartuWidgets.add(_bangunKartuMisiPraktik(pel.misi, fotoData));
+    kartuWidgets.add(_bangunKartuMisiPraktik(pel, fotoData));
 
     // 6. Umpan Balik
     kartuWidgets.add(_bangunKartuUmpanBalik(pel.misi));
@@ -782,7 +798,11 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
       kartuWidgets.add(
         _pembungkusKartu(
           judul: 'Langkah Kecil Berikutnya',
-          headerVisual: KanvasIlustrasiPelajaran(modulId: pel.modulId),
+          headerVisual: KanvasIlustrasiPelajaran(
+            modulId: pel.modulId,
+            pelajaranId: pel.id,
+            tahap: TahapPelajaranVisual.tindakLanjut,
+          ),
           pakaiKartuMembungkus: false,
           isi: TeksAnimasiKata(
             teks: pel.tindakLanjut!,
@@ -801,7 +821,11 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
     return kartuWidgets;
   }
 
-  Widget _bangunKartuMisiPraktik(MisiKonten misi, FotoDataPengguna fotoData) {
+  Widget _bangunKartuMisiPraktik(
+    PelajaranKonten pel,
+    FotoDataPengguna fotoData,
+  ) {
+    final misi = pel.misi;
     if (misi.tipe == 'keputusan') {
       return _bangunKartuMisiKeputusan(misi);
     }
@@ -820,6 +844,16 @@ class _LayarPemutarPelajaranState extends ConsumerState<LayarPemutarPelajaran> {
 
     return _pembungkusKartu(
       judul: misi.judul,
+      headerVisual: KanvasIlustrasiPelajaran(
+        modulId: pel.modulId,
+        pelajaranId: pel.id,
+        tahap: TahapPelajaranVisual.misi,
+        misiTipe: misi.tipe,
+        misiObjek: misi.objek,
+        misiAturan: misi.aturan,
+        misiUmpanBalik: misi.umpanBalik,
+        tinggi: 96,
+      ),
       isi: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

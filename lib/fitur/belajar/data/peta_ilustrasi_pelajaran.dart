@@ -1,0 +1,184 @@
+import 'package:flutter/material.dart';
+import '../../../komponen/ilustrasi_funda.dart';
+import '../../../tema/token.dart';
+
+/// Tahap visual di dalam kartu Pemutar Pelajaran.
+enum TahapPelajaranVisual { pemantik, kartu, contohAngka, misi, tindakLanjut }
+
+/// Pasangan path aset SVG dan warna kanvas pastel untuk satu adegan pelajaran.
+class InfoIlustrasiPelajaran {
+  final String pathSvg;
+  final Color kanvas;
+
+  const InfoIlustrasiPelajaran({required this.pathSvg, required this.kanvas});
+}
+
+/// Kunci tahap standar untuk pemetaan spesifik `(pelajaranId, kunciTahap)`.
+String kunciTahapVisual(TahapPelajaranVisual tahap, {int? indeksKartu}) {
+  return switch (tahap) {
+    TahapPelajaranVisual.pemantik => 'pemantik',
+    TahapPelajaranVisual.kartu => 'kartu_${indeksKartu ?? 0}',
+    TahapPelajaranVisual.contohAngka => 'contoh_angka',
+    TahapPelajaranVisual.misi => 'misi',
+    TahapPelajaranVisual.tindakLanjut => 'tindak_lanjut',
+  };
+}
+
+/// Peta spesifik per `(pelajaranId, kunciTahap)` (Prioritas 1).
+const Map<(String, String), InfoIlustrasiPelajaran>
+petaSpesifikIlustrasiKartu = {
+  // Modul 1: Anggaran & Arus Kas (pemakaian ulang aset SVG yang sudah cocok)
+  ('anggaran_arus_kas_1_1', 'pemantik'): InfoIlustrasiPelajaran(
+    pathSvg: AsetIlustrasiFunda.dompet,
+    kanvas: WarnaFunda.kanvasKuning,
+  ),
+  ('anggaran_arus_kas_1_1', 'kartu_1'): InfoIlustrasiPelajaran(
+    pathSvg: AsetIlustrasiFunda.catatTransaksi,
+    kanvas: WarnaFunda.kanvasMint,
+  ),
+  ('anggaran_arus_kas_1_1', 'kartu_2'): InfoIlustrasiPelajaran(
+    pathSvg: AsetIlustrasiFunda.laporanBulanan,
+    kanvas: WarnaFunda.kanvasMint,
+  ),
+  ('anggaran_arus_kas_1_2', 'kartu_2'): InfoIlustrasiPelajaran(
+    pathSvg: AsetIlustrasiFunda.ruangTenang,
+    kanvas: WarnaFunda.kanvasMint,
+  ),
+  ('anggaran_arus_kas_1_3', 'kartu_0'): InfoIlustrasiPelajaran(
+    pathSvg: AsetIlustrasiFunda.psikologiUang,
+    kanvas: WarnaFunda.kanvasMint,
+  ),
+  ('anggaran_arus_kas_1_3', 'kartu_2'): InfoIlustrasiPelajaran(
+    pathSvg: AsetIlustrasiFunda.kantongKosong,
+    kanvas: WarnaFunda.kanvasMint,
+  ),
+  ('anggaran_arus_kas_1_4', 'kartu_1'): InfoIlustrasiPelajaran(
+    pathSvg: AsetIlustrasiFunda.tabungan,
+    kanvas: WarnaFunda.kanvasMint,
+  ),
+  ('anggaran_arus_kas_1_5', 'pemantik'): InfoIlustrasiPelajaran(
+    pathSvg: AsetIlustrasiFunda.ruangTenang,
+    kanvas: WarnaFunda.kanvasKuning,
+  ),
+  ('anggaran_arus_kas_1_5', 'kartu_0'): InfoIlustrasiPelajaran(
+    pathSvg: AsetIlustrasiFunda.laporanBulanan,
+    kanvas: WarnaFunda.kanvasMint,
+  ),
+  ('anggaran_arus_kas_1_5', 'kartu_2'): InfoIlustrasiPelajaran(
+    pathSvg: AsetIlustrasiFunda.anggaranKosong,
+    kanvas: WarnaFunda.kanvasMint,
+  ),
+};
+
+/// Mengembalikan warna kanvas default sesuai ritme peran tahap pelajaran.
+Color kanvasDefaultUntukTahap(TahapPelajaranVisual tahap) {
+  return switch (tahap) {
+    TahapPelajaranVisual.pemantik => WarnaFunda.kanvasKuning,
+    TahapPelajaranVisual.kartu => WarnaFunda.kanvasMint,
+    TahapPelajaranVisual.contohAngka => WarnaFunda.kanvasBiru,
+    TahapPelajaranVisual.misi => WarnaFunda.kanvasUngu,
+    TahapPelajaranVisual.tindakLanjut => WarnaFunda.kanvasMint,
+  };
+}
+
+/// Menentukan path SVG otomatis untuk tahap Misi Praktik berdasarkan jenis/objek misi.
+String _pathSvgUntukMisi({
+  required String modulId,
+  String? misiTipe,
+  String? misiObjek,
+  String? misiAturan,
+  String? misiUmpanBalik,
+}) {
+  if (misiTipe == 'sandbox') return AsetIlustrasiFunda.modeSandbox;
+
+  final objek = (misiObjek ?? '').toLowerCase();
+  final aturan = (misiAturan ?? '').toLowerCase();
+  final umpanBalik = (misiUmpanBalik ?? '').toLowerCase();
+
+  if (objek.contains('dompet')) return AsetIlustrasiFunda.dompet;
+  if (objek.contains('dana_darurat')) return AsetIlustrasiFunda.danaDarurat;
+  if (objek.contains('tujuan') || objek.contains('tabungan')) {
+    return AsetIlustrasiFunda.tujuanKosong;
+  }
+  if (objek.contains('anggaran') || umpanBalik.contains('anggaran')) {
+    return AsetIlustrasiFunda.anggaranKosong;
+  }
+  if (objek.contains('utang') ||
+      objek.contains('cicilan') ||
+      umpanBalik.contains('utang') ||
+      umpanBalik.contains('cicilan') ||
+      umpanBalik.contains('pelunasan')) {
+    return AsetIlustrasiFunda.utangCicilan;
+  }
+  if (objek.contains('pengeluaran') ||
+      objek.contains('pemasukan') ||
+      objek.contains('transaksi') ||
+      objek.contains('arus_kas') ||
+      objek.contains('sumber_pemasukan') ||
+      objek.contains('kategori') ||
+      aturan == 'semua_kategori_berlabel') {
+    return AsetIlustrasiFunda.catatTransaksi;
+  }
+  if (misiTipe == 'lihat_hitungan') return AsetIlustrasiFunda.laporanBulanan;
+  if (misiTipe == 'keputusan' ||
+      misiTipe == 'daftar_periksa' ||
+      misiTipe == 'refleksi') {
+    return temaVisualUntukModul(modulId).pathSvg;
+  }
+
+  return temaVisualUntukModul(modulId).pathSvg;
+}
+
+/// Menyelesaikan path SVG dan warna kanvas untuk kartu di Pemutar Pelajaran.
+///
+/// Urutan prioritas:
+/// 1. Pemetaan spesifik `(pelajaranId, kunciTahap)`.
+/// 2. Pemetaan otomatis tahap `contohAngka` & `misi`.
+/// 3. Fallback ke ilustrasi utama `modulId` dengan ritme warna tahap.
+InfoIlustrasiPelajaran selesaikanIlustrasiPelajaran({
+  required String modulId,
+  String? pelajaranId,
+  TahapPelajaranVisual tahap = TahapPelajaranVisual.kartu,
+  int? indeksKartu,
+  String? misiTipe,
+  String? misiObjek,
+  String? misiAturan,
+  String? misiUmpanBalik,
+}) {
+  // Prioritas 1: Spesifik kartu/pelajaran
+  if (pelajaranId != null) {
+    final kunci = kunciTahapVisual(tahap, indeksKartu: indeksKartu);
+    final spesifik = petaSpesifikIlustrasiKartu[(pelajaranId, kunci)];
+    if (spesifik != null) {
+      return spesifik;
+    }
+  }
+
+  final kanvas = kanvasDefaultUntukTahap(tahap);
+
+  // Prioritas 2: Otomatis untuk tahap Contoh Angka & Misi Praktik
+  if (tahap == TahapPelajaranVisual.contohAngka) {
+    return InfoIlustrasiPelajaran(
+      pathSvg: AsetIlustrasiFunda.laporanBulanan,
+      kanvas: kanvas,
+    );
+  }
+  if (tahap == TahapPelajaranVisual.misi) {
+    return InfoIlustrasiPelajaran(
+      pathSvg: _pathSvgUntukMisi(
+        modulId: modulId,
+        misiTipe: misiTipe,
+        misiObjek: misiObjek,
+        misiAturan: misiAturan,
+        misiUmpanBalik: misiUmpanBalik,
+      ),
+      kanvas: kanvas,
+    );
+  }
+
+  // Prioritas 3: Fallback ke ilustrasi utama modulId
+  return InfoIlustrasiPelajaran(
+    pathSvg: temaVisualUntukModul(modulId).pathSvg,
+    kanvas: kanvas,
+  );
+}

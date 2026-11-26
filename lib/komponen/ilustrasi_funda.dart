@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
+import '../fitur/belajar/data/peta_ilustrasi_pelajaran.dart';
 import '../tema/token.dart';
 
 /// Kumpulan path aset SVG ilustrasi resmi Funda di `aset/gambar/ilustrasi/`.
@@ -621,29 +622,64 @@ TemaVisualModul temaVisualUntukModul(String modulId) {
 }
 
 /// Kanvas ilustrasi persegi panjang membulat besar berlatar pastel solid cerah
-/// untuk kepala kartu di Pemutar Pelajaran.
+/// untuk kepala kartu di Pemutar Pelajaran dengan transisi fade halus.
 class KanvasIlustrasiPelajaran extends StatelessWidget {
   final String modulId;
+  final String? pelajaranId;
+  final TahapPelajaranVisual tahap;
+  final int? indeksKartu;
+  final String? misiTipe;
+  final String? misiObjek;
+  final String? misiAturan;
+  final String? misiUmpanBalik;
   final double tinggi;
 
   const KanvasIlustrasiPelajaran({
     super.key,
     required this.modulId,
+    this.pelajaranId,
+    this.tahap = TahapPelajaranVisual.kartu,
+    this.indeksKartu,
+    this.misiTipe,
+    this.misiObjek,
+    this.misiAturan,
+    this.misiUmpanBalik,
     this.tinggi = 164,
   });
 
   @override
   Widget build(BuildContext context) {
-    final tema = temaVisualUntukModul(modulId);
-    return Container(
+    final info = selesaikanIlustrasiPelajaran(
+      modulId: modulId,
+      pelajaranId: pelajaranId,
+      tahap: tahap,
+      indeksKartu: indeksKartu,
+      misiTipe: misiTipe,
+      misiObjek: misiObjek,
+      misiAturan: misiAturan,
+      misiUmpanBalik: misiUmpanBalik,
+    );
+
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 220),
+      curve: Curves.easeOut,
       width: double.infinity,
       height: tinggi,
       decoration: BoxDecoration(
-        color: tema.kanvas,
+        color: info.kanvas,
         borderRadius: BorderRadius.circular(SudutFunda.petak),
       ),
       child: Center(
-        child: IlustrasiSvgFunda(pathAset: tema.pathSvg, tinggi: tinggi * 0.78),
+        child: AnimatedSwitcher(
+          duration: const Duration(milliseconds: 220),
+          child: IlustrasiSvgFunda(
+            key: ValueKey(
+              '${pelajaranId ?? modulId}_${tahap.name}_${indeksKartu ?? -1}_${info.pathSvg}',
+            ),
+            pathAset: info.pathSvg,
+            tinggi: tinggi * 0.78,
+          ),
+        ),
       ),
     );
   }
