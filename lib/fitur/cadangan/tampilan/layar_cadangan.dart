@@ -4,9 +4,11 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../data/cadangan/format_cadangan.dart';
+import '../../../data/penyedia_data.dart';
 import '../../../komponen/komponen_funda.dart';
 import '../../../perhitungan/perhitungan_laporan_bulanan.dart';
 import '../../../tema/token.dart';
+import '../../belajar/kontroler/penyedia_belajar.dart';
 import '../kontroler/penyedia_cadangan.dart';
 
 /// Typedef fungsi pemilih berkas agar dapat disuntikkan implementasi mock pada pengujian widget/E2E.
@@ -94,6 +96,19 @@ class _LayarCadanganState extends ConsumerState<LayarCadangan> {
         ),
       );
     }
+  }
+
+  void _segarkanPenyediaSetelahPemulihan() {
+    ref.invalidate(penyediaStatusCadangan);
+    ref.invalidate(penyediaDaftarDompetAktif);
+    ref.invalidate(penyediaSinyalTransaksiBerubah);
+    ref.invalidate(penyediaStreamProfilKeuangan);
+    ref.invalidate(penyediaStreamHasilTesAwal);
+    ref.invalidate(penyediaFotoData);
+    ref.invalidate(penyediaPetaBelajar);
+    ref.invalidate(penyediaDaftarRekomendasiModul);
+    ref.invalidate(penyediaLanjutBelajarBeranda);
+    ref.invalidate(penyediaKamusTerbuka);
   }
 
   Future<void> _tampilkanDialogPratinjauPemulihan(
@@ -192,6 +207,7 @@ class _LayarCadanganState extends ConsumerState<LayarCadangan> {
       await repo.pulihkanCadangan(doc, simpanKeselamatanOtomatis: true);
 
       ref.invalidate(penyediaStatusCadangan);
+      _segarkanPenyediaSetelahPemulihan();
 
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
@@ -243,7 +259,8 @@ class _LayarCadanganState extends ConsumerState<LayarCadangan> {
     try {
       final repo = ref.read(penyediaCadanganRepositori);
       await repo.pulihkanDariCadanganKeselamatan();
-      ref.invalidate(penyediaStatusCadangan);
+      _segarkanPenyediaSetelahPemulihan();
+      _segarkanPenyediaSetelahPemulihan();
 
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(

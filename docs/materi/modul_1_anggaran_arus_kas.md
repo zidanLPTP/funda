@@ -74,7 +74,7 @@ kartu 2 | judul: Petakan dari mana dan ke mana
 Peta arus kas punya dua sisi. Sisi masuk berisi gaji, uang saku, kiriman keluarga, atau hasil freelance. Sisi keluar kita bagi dua. {{Pengeluaran tetap}} jumlahnya hampir sama tiap bulan, seperti kos dan paket internet. {{Pengeluaran berubah-ubah}} naik turun, seperti makan, jajan, dan transportasi. Pisahkan keduanya. Yang tetap mudah direncanakan. Yang berubah-ubah adalah ruang untuk menyesuaikan.
 
 kartu 3 | judul: Membaca hasilnya dengan tenang
-Setelah dipetakan, lihat satu angka: selisihnya. Kalau uang masuk lebih besar, kamu punya ruang untuk menabung atau menyiapkan {{dana darurat}}. Kalau uang keluar lebih besar, uangmu terkuras tiap bulan. Tenang, itu informasi, bukan hukuman. Cari dulu bagian mana yang paling besar. Satu perubahan kecil di bagian itu sering lebih terasa daripada mengubah semuanya.
+Setelah dipetakan, lihat satu angka: selisihnya. Kalau uang masuk lebih besar, kamu punya ruang untuk menabung atau menyiapkan {{dana darurat}}. Kalau uang keluar lebih besar, uangmu terkuras tiap bulan. Dari angka itu, cari dulu bagian mana yang paling besar. Satu perubahan kecil di bagian itu sering lebih terasa daripada mengubah semuanya.
 
 contohAngka:
 judul: Contoh arus kas satu bulan
@@ -118,13 +118,13 @@ pemantik:
 Kamu membeli kopi. Itu kebutuhan atau keinginan? Jawabannya bisa dua-duanya, tergantung keadaanmu.
 
 kartu 1 | judul: Dua kelompok, satu tujuan
-{{Kebutuhan}} adalah hal yang perlu ada agar hidup dan kewajibanmu berjalan. Contohnya tempat tinggal, makan harian, transportasi ke kampus atau kerja, listrik, dan kesehatan. {{Keinginan}} adalah hal yang membuat hidup lebih nyaman atau menyenangkan, tetapi bisa ditunda atau dikurangi. Contohnya nongkrong, hiburan, dan langganan tontonan. Keduanya sah. Membedakannya bukan untuk melarang, tetapi supaya kamu memilih dengan sadar.
+{{Kebutuhan}} adalah hal yang perlu ada agar hidup dan kewajibanmu berjalan. Contohnya tempat tinggal, makan harian, transportasi ke kampus atau kerja, listrik, dan kesehatan. {{Keinginan}} adalah hal yang membuat hidup lebih nyaman atau menyenangkan, tetapi bisa ditunda atau dikurangi. Contohnya nongkrong, hiburan, dan langganan tontonan. Keduanya wajar ada, dan membedakannya membantumu memilih pengeluaran dengan sadar.
 
 kartu 2 | judul: Wilayah abu-abu itu wajar
 Banyak pengeluaran berada di tengah. Makan itu kebutuhan. Makan di tempat mahal tiap hari lebih dekat ke keinginan. Paket data itu kebutuhan. Paket data jumbo untuk streaming lebih dekat ke keinginan. Ada pertanyaan bantu: kalau uangku sedang tipis, apakah ini yang pertama kukurangi? Kalau iya, kemungkinan itu keinginan. Kamu yang menentukan label sesuai kondisimu.
 
 kartu 3 | judul: Empat label di Funda
-Di Funda, pengeluaran diberi label: kebutuhan, keinginan, tabungan dan dana darurat, atau utang. Label ini membantumu melihat komposisi pengeluaran. Ini bukan penilaian. Tidak ada komposisi yang cocok untuk semua orang. Yang berguna adalah kamu tahu gambarannya, lalu menyesuaikannya dengan tujuanmu.
+Di Funda, pengeluaran diberi label: kebutuhan, keinginan, tabungan dan dana darurat, atau utang. Tidak ada komposisi yang cocok untuk semua orang. Cukup pahami gambarannya, lalu sesuaikan dengan tujuanmu.
 
 contohAngka:
 judul: Pengeluaran sebulan Rp2.450.000 menurut label
@@ -148,7 +148,7 @@ cekPaham:
    penjelasan: Satu pengeluaran bisa punya arti berbeda untuk orang berbeda. Pilih label yang paling jujur untuk keadaanmu.
 3. tanya: Untuk apa pengeluaran diberi label kebutuhan atau keinginan?
    pilihan: Untuk melihat gambaran pengeluaran dan memilih dengan sadar * | Untuk menilai pantas atau tidaknya kamu jajan | Untuk mencari pengeluaran yang dilarang
-   penjelasan: Label bukan penilaian. Ia membantumu melihat pola, lalu menyesuaikannya dengan tujuanmu.
+   penjelasan: Label membantumu melihat pola pengeluaran, lalu menyesuaikannya dengan tujuanmu.
 
 misi: tipe aturan_data | aturan semua_kategori_berlabel
 judul: Labeli kategori pengeluaranmu
@@ -217,7 +217,7 @@ gerbang pelajaran: ada_data anggaran min 1 DAN ada_data pengeluaran min 1
 pesan gerbang: Buat minimal satu anggaran dan catat pengeluaranmu dulu, supaya ada yang bisa dievaluasi.
 
 pemantik:
-Akhir bulan bukan waktu untuk menghakimi diri sendiri. Ini waktu untuk membaca data dan belajar darinya.
+Akhir bulan adalah waktu untuk membaca data pengeluaran dan belajar darinya.
 
 kartu 1 | judul: Bandingkan rencana dan kenyataan
 Evaluasi akhir bulan membandingkan dua hal: yang kamu rencanakan dan yang benar-benar terjadi. Angka kenyataannya disebut {{realisasi anggaran}}. Kalau realisasi mendekati rencana, bagus. Kalau berbeda jauh, itu informasi. Mungkin rencananya terlalu ketat, atau ada pengeluaran yang belum terpikir. Keduanya bisa diperbaiki.

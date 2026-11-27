@@ -14,10 +14,10 @@ pemantik:
 Awalnya cuma buka aplikasi belanja buat lihat-lihat. Lima menit kemudian, barangnya sudah dibayar, padahal tadi tidak ada niat membeli.
 
 kartu 1 | judul: Keputusan belanja sering datang dari rasa
-{{Belanja impulsif}} adalah membeli sesuatu secara mendadak tanpa rencana sebelumnya. Ini bukan soal lemah niat. Sering kali kita membeli karena sedang lelah, bosan, stres, atau ingin merayakan sesuatu. Saat emosi naik, keputusan belanja jadi lebih cepat daripada pertimbangan kita.
+{{Belanja impulsif}} adalah membeli sesuatu secara mendadak tanpa rencana sebelumnya. Sering kali kita membeli karena sedang lelah, bosan, stres, atau ingin merayakan sesuatu. Saat emosi naik, keputusan belanja jadi lebih cepat daripada pertimbangan kita.
 
 kartu 2 | judul: Kenali pemicu belanjamu
-Setiap orang punya {{pemicu belanja}} yang berbeda. Ada yang terpicu notifikasi diskon, ada yang saat begadang, ada yang saat melihat unggahan teman. Mengenali pemicunya bukan untuk menyalahkan diri sendiri. Justru dari situ kamu tahu kapan perlu lebih pelan sebelum menekan tombol bayar.
+Setiap orang punya {{pemicu belanja}} yang berbeda. Ada yang terpicu notifikasi diskon, ada yang saat begadang, ada yang saat melihat unggahan teman. Dengan mengenali pemicunya, kamu tahu kapan perlu lebih pelan sebelum menekan tombol bayar.
 
 kartu 3 | judul: Ubah lingkungannya, bukan hanya niatnya
 Mengandalkan niat saja sering melelahkan. Cara yang lebih ringan adalah menambah jarak kecil antara dorongan dan pembelian. Misalnya, matikan notifikasi promo, jangan simpan kartu di aplikasi belanja, atau keluar dari aplikasi saat sedang lelah.
@@ -67,7 +67,7 @@ kartu 2 | judul: Audit ringan tiap beberapa bulan
 Sesekali, buka daftar langgananmu dan tanyakan dua hal. Pertama, apakah aku benar-benar memakainya bulan ini? Kedua, kalau harus mendaftar ulang hari ini dengan harga yang sama, apakah aku mau? Kalau jawabannya tidak, mungkin saatnya berhenti sementara.
 
 kartu 3 | judul: Catat supaya tetap terlihat
-Di Funda, kamu bisa mencatat langganan di menu Tagihan dan Langganan. Tujuannya bukan melarangmu menikmati hiburan. Tujuannya supaya setiap rupiah yang keluar secara rutin adalah pilihan sadarmu, bukan karena lupa membatalkan.
+Di Funda, kamu bisa mencatat langganan di menu Tagihan dan Langganan. Dengan begitu, setiap rupiah yang keluar secara rutin tetap menjadi pilihan sadarmu, bukan keluar karena lupa membatalkan.
 
 contohAngka:
 judul: Tiga langganan yang jarang dipakai
@@ -154,7 +154,7 @@ KUIS AKHIR MODUL 6 (jumlahSoal 5, bankSoal 10; ambang lulus 70% global; pelajara
    penjelasan: Emosi yang naik membuat keputusan belanja menjadi lebih cepat daripada pertimbangan kita.
 2. [psikologi_uang_6_1] tanya: Mengapa mengenali pemicu belanja itu berguna?
    pilihan: Supaya tahu kapan perlu lebih pelan sebelum membayar * | Supaya bisa menyalahkan diri sendiri | Supaya tidak pernah belanja lagi
-   penjelasan: Mengenali pemicu membantumu bersiap, bukan menghakimi dirimu.
+   penjelasan: Mengenali pemicu membantumu bersiap.
 3. [psikologi_uang_6_1] tanya: Mana contoh mengubah lingkungan agar lebih tenang saat belanja?
    pilihan: Mematikan notifikasi promo aplikasi belanja * | Membuka aplikasi belanja setiap malam | Menyimpan semua kartu pembayaran otomatis
    penjelasan: Mematikan notifikasi promo mengurangi godaan tanpa menguras tenaga niatmu.

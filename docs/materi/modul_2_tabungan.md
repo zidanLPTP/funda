@@ -85,7 +85,7 @@ baris:
 - Cara 1, dari sisa: tabungan di akhir bulan | 0
 - Cara 2, di depan: disisihkan saat uang masuk | 200000
 - Cara 2: tersisa untuk pengeluaran lain | 2300000 | ringkasan
-kesimpulan: Dalam 6 bulan, cara kedua mengumpulkan Rp1.200.000. Pada contoh ini, cara pertama tidak mengumpulkan apa-apa. Bukan karena niatnya kurang, tetapi karena tidak ada bagian yang disisihkan lebih dulu.
+kesimpulan: Dalam 6 bulan, cara kedua mengumpulkan Rp1.200.000. Pada contoh ini, cara pertama tidak menyisakan tabungan karena tidak ada bagian yang disisihkan di awal.
 
 cekPaham:
 1. tanya: Apa arti "bayar diri sendiri dulu"?

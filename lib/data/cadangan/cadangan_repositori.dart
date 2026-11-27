@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:drift/drift.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 import '../basis_data.dart';
@@ -298,14 +299,21 @@ class CadanganRepositori {
           );
         }
 
-        // Catat tanggal pemulihan di tabel_pengaturan
+        // Catat tanggal pemulihan di tabel_pengaturan menggunakan tipe DateTime Drift
         final waktuCadanganStr = doc.dibuatPada.toIso8601String();
-        await basisData.customStatement(
-          "INSERT OR REPLACE INTO tabel_pengaturan (kunci, nilai, diubah_pada) "
-          "VALUES ('terakhir_cadangan', ?, datetime('now'));",
-          [waktuCadanganStr],
-        );
+        await basisData
+            .into(basisData.tabelPengaturan)
+            .insertOnConflictUpdate(
+              TabelPengaturanCompanion.insert(
+                kunci: 'terakhir_cadangan',
+                nilai: waktuCadanganStr,
+                diubahPada: Value(DateTime.now()),
+              ),
+            );
       });
+
+      // Beri tahu seluruh stream Drift (watch) bahwa isi tabel telah diperbarui.
+      basisData.markTablesUpdated(basisData.allTables);
     } on Exception catch (e) {
       if (e is GalatCadangan) rethrow;
       throw GalatCadangan('Gagal memulihkan basis data: $e');

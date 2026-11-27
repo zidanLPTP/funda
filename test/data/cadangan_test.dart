@@ -614,5 +614,22 @@ void main() {
       await db1.close();
       await db2.close();
     });
+
+    test(
+      '14. Regresi FormatException: pulihkanCadangan menulis diubah_pada valid untuk Drift',
+      () async {
+        final doc = await repositori.eksporCadangan();
+        await repositori.pulihkanCadangan(
+          doc,
+          simpanKeselamatanOtomatis: false,
+        );
+
+        final row = await (db.select(
+          db.tabelPengaturan,
+        )..where((t) => t.kunci.equals('terakhir_cadangan'))).getSingle();
+        expect(DateTime.tryParse(row.nilai) != null, isTrue);
+        expect(row.diubahPada, isA<DateTime>());
+      },
+    );
   });
 }

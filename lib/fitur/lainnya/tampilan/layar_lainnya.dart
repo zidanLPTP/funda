@@ -9,6 +9,7 @@ import '../../../tema/token.dart';
 import '../../anggaran/tampilan/layar_anggaran.dart';
 import '../../cadangan/tampilan/layar_cadangan.dart';
 import '../../dompet/tampilan/layar_daftar_dompet.dart';
+import '../../kamus/tampilan/layar_kamus.dart';
 import '../../kantong/tampilan/layar_daftar_kantong.dart';
 import '../../kategori/tampilan/layar_daftar_kategori.dart';
 import '../../kekayaan_bersih/tampilan/layar_kekayaan_bersih.dart';
@@ -283,6 +284,18 @@ class LayarLainnya extends ConsumerWidget {
                     warnaIkon: WarnaFunda.pemasukan,
                     judul: 'Privasi & Keamanan',
                     padaKetuk: () => _tampilkanPrivasiKeamanan(context, ref),
+                  ),
+                  _BarisMenuEditorial(
+                    ikon: LucideIcons.bookOpen,
+                    pathSvg: AsetIkonFunda.menuKamus,
+                    warnaIkon: WarnaFunda.utama,
+                    judul: 'Kamus Keuangan',
+                    padaKetuk: () => _bukaRuteAtauHalaman(
+                      context,
+                      ref,
+                      '/kamus',
+                      (_) => const LayarKamus(),
+                    ),
                   ),
                   _BarisMenuEditorial(
                     ikon: LucideIcons.compass,

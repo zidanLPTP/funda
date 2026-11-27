@@ -30,6 +30,8 @@ abstract final class AsetIlustrasiFunda {
   static const kuisUlangi = 'aset/gambar/ilustrasi/kuis_ulangi.svg';
   static const ruangTenang = 'aset/gambar/ilustrasi/ruang_tenang.svg';
   static const galatPemuatan = 'aset/gambar/ilustrasi/galat_pemuatan.svg';
+  static const kamusKosong = 'aset/gambar/ilustrasi/kamus_kosong.svg';
+  static const kamusCariKosong = 'aset/gambar/ilustrasi/kamus_cari_kosong.svg';
 
   static const mulaiTesAwal = 'aset/gambar/ilustrasi/mulai-tes-awal.svg';
   static const anggaranArusKas =
@@ -152,6 +154,7 @@ abstract final class AsetIkonFunda {
 
   static const menuCadangan = 'aset/gambar/ikon/ic_menu_cadangan.svg';
   static const menuDompet = 'aset/gambar/ikon/ic_menu_dompet.svg';
+  static const menuKamus = 'aset/gambar/ikon/ic_menu_kamus.svg';
   static const menuKantong = 'aset/gambar/ikon/ic_menu_kantong.svg';
   static const menuKategori = 'aset/gambar/ikon/ic_menu_kategori.svg';
   static const menuKekayaan = 'aset/gambar/ikon/ic_menu_kekayaan.svg';

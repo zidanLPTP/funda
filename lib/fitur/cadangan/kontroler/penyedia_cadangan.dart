@@ -32,33 +32,44 @@ class StatusFiturCadangan {
   });
 }
 
+Future<String?> _bacaNilaiPengaturanAman(
+  BasisDataFunda db,
+  String kunci,
+) async {
+  final row = await db
+      .customSelect(
+        'SELECT nilai FROM tabel_pengaturan WHERE kunci = ? LIMIT 1;',
+        variables: [Variable.withString(kunci)],
+      )
+      .getSingleOrNull();
+  return row?.readNullable<String>('nilai');
+}
+
 /// Provider status pencadangan dan kelayakan banner pengingat.
 final penyediaStatusCadangan = FutureProvider<StatusFiturCadangan>((ref) async {
   final db = ref.watch(penyediaBasisData);
   final repo = ref.watch(penyediaCadanganRepositori);
 
-  // 1. Ambil waktu terakhir cadangan dari tabel_pengaturan
-  final rowCadangan = await (db.select(
-    db.tabelPengaturan,
-  )..where((t) => t.kunci.equals('terakhir_cadangan'))).getSingleOrNull();
+  // 1. Ambil waktu terakhir cadangan dari tabel_pengaturan secara aman
+  final nilaiCadangan = await _bacaNilaiPengaturanAman(db, 'terakhir_cadangan');
 
   DateTime? terakhir;
-  if (rowCadangan != null && rowCadangan.nilai.isNotEmpty) {
+  if (nilaiCadangan != null && nilaiCadangan.isNotEmpty) {
     try {
-      terakhir = DateTime.parse(rowCadangan.nilai);
+      terakhir = DateTime.parse(nilaiCadangan);
     } catch (_) {}
   }
 
   // 2. Ambil penundaan pengingat jika ada
-  final rowTunda =
-      await (db.select(db.tabelPengaturan)
-            ..where((t) => t.kunci.equals('pengingat_cadangan_ditunda_sampai')))
-          .getSingleOrNull();
+  final nilaiTunda = await _bacaNilaiPengaturanAman(
+    db,
+    'pengingat_cadangan_ditunda_sampai',
+  );
 
   DateTime? ditundaSampai;
-  if (rowTunda != null && rowTunda.nilai.isNotEmpty) {
+  if (nilaiTunda != null && nilaiTunda.isNotEmpty) {
     try {
-      ditundaSampai = DateTime.parse(rowTunda.nilai);
+      ditundaSampai = DateTime.parse(nilaiTunda);
     } catch (_) {}
   }
 
