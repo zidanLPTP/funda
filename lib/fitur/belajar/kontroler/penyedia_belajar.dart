@@ -1287,3 +1287,184 @@ final penyediaTeksUmpanBalikMisi = FutureProvider.autoDispose
           return RegistriUmpanBalik.formatArusKasBulanIni(arusKas);
       }
     });
+
+/// Entri istilah kamus yang sudah terbuka beserta informasi modul sumbernya.
+class EntriKamusTerbuka {
+  final IstilahKamus istilah;
+  final String? sumberModul;
+
+  const EntriKamusTerbuka({required this.istilah, this.sumberModul});
+}
+
+/// Ringkasan daftar istilah kamus yang sudah terbuka sesuai progres belajar.
+class RingkasanKamusTerbuka {
+  final List<EntriKamusTerbuka> daftarTerbuka;
+  final int totalIstilah;
+
+  const RingkasanKamusTerbuka({
+    required this.daftarTerbuka,
+    required this.totalIstilah,
+  });
+}
+
+const Set<String> _istilahDasarModulSatu = {
+  'sifat pengeluaran',
+  'dompet',
+  'surplus',
+  'defisit',
+  'cicilan',
+};
+
+final RegExp _polaKurungIstilahKamus = RegExp(r'\{\{([^}]+)\}\}');
+
+Set<String> _ekstrakIstilahPelajaran(PelajaranKonten pel) {
+  final hasil = <String>{};
+  void kumpulkan(String? teks) {
+    if (teks == null || teks.isEmpty) return;
+    for (final m in _polaKurungIstilahKamus.allMatches(teks)) {
+      final kunci = m.group(1)?.trim().toLowerCase();
+      if (kunci != null && kunci.isNotEmpty) {
+        hasil.add(kunci);
+      }
+    }
+  }
+
+  kumpulkan(pel.pemantik);
+  for (final k in pel.kartu) {
+    kumpulkan(k.judul);
+    kumpulkan(k.isi);
+  }
+  if (pel.contohAngka != null) {
+    kumpulkan(pel.contohAngka!.judul);
+    kumpulkan(pel.contohAngka!.kesimpulan);
+    for (final b in pel.contohAngka!.baris) {
+      kumpulkan(b.label);
+    }
+  }
+  for (final c in pel.cekPaham) {
+    kumpulkan(c.tanya);
+    kumpulkan(c.penjelasan);
+    for (final p in c.pilihan) {
+      kumpulkan(p);
+    }
+  }
+  kumpulkan(pel.misi.judul);
+  kumpulkan(pel.misi.deskripsi);
+  kumpulkan(pel.misi.instruksi);
+  kumpulkan(pel.misi.pertanyaan);
+  if (pel.misi.skenario != null) {
+    kumpulkan(pel.misi.skenario!.pemantik);
+    for (final o in pel.misi.skenario!.opsi) {
+      kumpulkan(o.teks);
+      kumpulkan(o.umpanBalik);
+    }
+  }
+  if (pel.misi.langkah != null) {
+    for (final l in pel.misi.langkah!) {
+      kumpulkan(l.teks);
+    }
+  }
+  kumpulkan(pel.tindakLanjut);
+  return hasil;
+}
+
+/// Menghitung daftar istilah kamus yang sudah terbuka berdasarkan progres belajar.
+RingkasanKamusTerbuka hitungKamusTerbuka({
+  required Map<String, IstilahKamus> kamus,
+  required List<ItemPetaModul> peta,
+}) {
+  final sumberPerKunci = <String, String>{};
+  var modulSatuTerbuka = false;
+
+  for (var i = 0; i < peta.length; i++) {
+    final itemModul = peta[i];
+    final modul = itemModul.modul;
+    if (modul.id == 'anggaran_arus_kas' &&
+        itemModul.statusModul.status != StatusBelajar.terkunci) {
+      modulSatuTerbuka = true;
+    }
+
+    final labelModul = modul.urutan > 0
+        ? 'Modul ${modul.urutan} · ${modul.judul}'
+        : modul.judul;
+
+    for (final (pel, statusPel) in itemModul.daftarPelajaran) {
+      final sudahDibuka =
+          statusPel.status == StatusBelajar.sedang ||
+          statusPel.status == StatusBelajar.selesai;
+      if (!sudahDibuka) continue;
+
+      for (final kunci in _ekstrakIstilahPelajaran(pel)) {
+        if (kamus.containsKey(kunci)) {
+          sumberPerKunci.putIfAbsent(kunci, () => labelModul);
+        }
+      }
+    }
+  }
+
+  if (modulSatuTerbuka) {
+    final itemModul1 = peta
+        .where((m) => m.modul.id == 'anggaran_arus_kas')
+        .firstOrNull;
+    final labelModul1 = itemModul1 != null
+        ? 'Modul ${itemModul1.modul.urutan} · ${itemModul1.modul.judul}'
+        : 'Modul 1 · Anggaran & Arus Kas';
+    for (final kunci in _istilahDasarModulSatu) {
+      if (kamus.containsKey(kunci)) {
+        sumberPerKunci.putIfAbsent(kunci, () => labelModul1);
+      }
+    }
+  }
+
+  final daftarTerbuka =
+      sumberPerKunci.entries
+          .map(
+            (e) =>
+                EntriKamusTerbuka(istilah: kamus[e.key]!, sumberModul: e.value),
+          )
+          .toList()
+        ..sort(
+          (a, b) => a.istilah.istilah.toLowerCase().compareTo(
+            b.istilah.istilah.toLowerCase(),
+          ),
+        );
+
+  return RingkasanKamusTerbuka(
+    daftarTerbuka: daftarTerbuka,
+    totalIstilah: kamus.length,
+  );
+}
+
+/// Menyaring daftar istilah kamus terbuka berdasarkan nama istilah, arti, maupun contoh.
+List<EntriKamusTerbuka> filterKamusTerbuka(
+  List<EntriKamusTerbuka> daftar,
+  String kueri,
+) {
+  final q = kueri.trim().toLowerCase();
+  if (q.isEmpty) return daftar;
+
+  final cocok = daftar.where((entri) {
+    final i = entri.istilah;
+    return i.istilah.toLowerCase().contains(q) ||
+        i.arti.toLowerCase().contains(q) ||
+        i.contohRupiah.toLowerCase().contains(q);
+  }).toList();
+
+  // Prioritaskan kecocokan langsung pada nama istilah di urutan atas.
+  cocok.sort((a, b) {
+    final aNama = a.istilah.istilah.toLowerCase().contains(q) ? 0 : 1;
+    final bNama = b.istilah.istilah.toLowerCase().contains(q) ? 0 : 1;
+    if (aNama != bNama) return aNama.compareTo(bNama);
+    return a.istilah.istilah.toLowerCase().compareTo(
+      b.istilah.istilah.toLowerCase(),
+    );
+  });
+  return cocok;
+}
+
+/// Provider reaktif kamus istilah keuangan yang sudah terbuka sesuai progres belajar.
+final penyediaKamusTerbuka = FutureProvider<RingkasanKamusTerbuka>((ref) async {
+  final kamus = await ref.watch(penyediaKamus.future);
+  final peta = await ref.watch(penyediaPetaBelajar.future);
+  return hitungKamusTerbuka(kamus: kamus, peta: peta);
+});

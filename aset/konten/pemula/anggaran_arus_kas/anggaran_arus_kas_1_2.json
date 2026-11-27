@@ -24,7 +24,7 @@
     },
     {
       "judul": "Membaca hasilnya dengan tenang",
-      "isi": "Setelah dipetakan, lihat satu angka: selisihnya. Kalau uang masuk lebih besar, kamu punya ruang untuk menabung atau menyiapkan {{dana darurat}}. Kalau uang keluar lebih besar, uangmu terkuras tiap bulan. Tenang, itu informasi, bukan hukuman. Cari dulu bagian mana yang paling besar. Satu perubahan kecil di bagian itu sering lebih terasa daripada mengubah semuanya."
+      "isi": "Setelah dipetakan, lihat satu angka: selisihnya. Kalau uang masuk lebih besar, kamu punya ruang untuk menabung atau menyiapkan {{dana darurat}}. Kalau uang keluar lebih besar, uangmu terkuras tiap bulan. Dari angka itu, cari dulu bagian mana yang paling besar. Satu perubahan kecil di bagian itu sering lebih terasa daripada mengubah semuanya."
     }
   ],
   "contohAngka": {

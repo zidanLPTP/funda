@@ -14,6 +14,7 @@ import '../fitur/dompet/tampilan/layar_daftar_dompet.dart';
 import '../fitur/galeri/tampilan/layar_galeri.dart';
 import 'konfigurasi_debug.dart';
 import '../fitur/kategori/tampilan/layar_daftar_kategori.dart';
+import '../fitur/kamus/tampilan/layar_kamus.dart';
 import '../fitur/kantong/tampilan/layar_daftar_kantong.dart';
 import '../fitur/kekayaan_bersih/tampilan/layar_kekayaan_bersih.dart';
 import '../fitur/lainnya/tampilan/layar_lainnya.dart';
@@ -227,6 +228,11 @@ final ruteFunda = GoRouter(
       parentNavigatorKey: _kunciNavigatorAkar,
       path: '/onboarding',
       builder: (context, state) => const LayarOnboarding(),
+    ),
+    GoRoute(
+      parentNavigatorKey: _kunciNavigatorAkar,
+      path: '/kamus',
+      builder: (context, state) => const LayarKamus(),
     ),
 
     // Rute Fitur Tahap 9A: Mode Sandbox Edukasi Investasi

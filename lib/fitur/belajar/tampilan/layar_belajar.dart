@@ -168,12 +168,41 @@ class _KartuSorotanAtas extends ConsumerWidget {
               final itemPeta = daftarItemModul
                   .where((m) => m.modul.id == rek.modul.id)
                   .firstOrNull;
-              final pelBerikutnya = itemPeta?.daftarPelajaran
-                  .where((p) => p.$2.status != StatusBelajar.terkunci)
-                  .map((p) => p.$1)
+              final pelBerikutnya =
+                  itemPeta?.daftarPelajaran
+                      .where((p) => p.$2.status == StatusBelajar.sedang)
+                      .map((p) => p.$1)
+                      .firstOrNull ??
+                  itemPeta?.daftarPelajaran
+                      .where((p) => p.$2.status == StatusBelajar.terbuka)
+                      .map((p) => p.$1)
+                      .firstOrNull;
+              final pelTerkunciPertama = itemPeta?.daftarPelajaran
+                  .where((p) => p.$2.status == StatusBelajar.terkunci)
                   .firstOrNull;
+              final kekuranganData =
+                  pelTerkunciPertama?.$2.apaYangKurang.firstOrNull ??
+                  rek.statusModul.apaYangKurang.firstOrNull;
+              final ruteAksiData =
+                  pelTerkunciPertama?.$2.ruteAksi ?? rek.statusModul.ruteAksi;
+              final butuhIsiData =
+                  pelBerikutnya == null &&
+                  (ruteAksiData != null || kekuranganData != null);
+
               final tema = temaVisualUntukModul(rek.modul.id);
               final isTersedia = rek.modul.tersedia;
+              final deskripsiKartu = isTersedia && butuhIsiData
+                  ? (kekuranganData != null
+                        ? 'Isi data dulu untuk lanjut belajar: $kekuranganData'
+                        : 'Lengkapi data keuanganmu terlebih dahulu untuk membuka pelajaran berikutnya.')
+                  : rek.deskripsiAlasan;
+              final teksTombol = !isTersedia
+                  ? 'Segera Hadir'
+                  : pelBerikutnya != null
+                  ? 'Lanjut Belajar'
+                  : butuhIsiData
+                  ? 'Isi Data & Lanjut'
+                  : 'Buka Modul Ini';
 
               return _bangunSplitCard(
                 context,
@@ -182,20 +211,16 @@ class _KartuSorotanAtas extends ConsumerWidget {
                 kanvasIlustrasi: WarnaFunda.mintCerah,
                 labelKecil: rek.judulAlasan,
                 judul: rek.modul.judul,
-                deskripsi: rek.deskripsiAlasan,
-                teksTombol: isTersedia
-                    ? (pelBerikutnya != null
-                          ? 'Lanjut Belajar'
-                          : 'Buka Modul Ini')
-                    : 'Segera Hadir',
+                deskripsi: deskripsiKartu,
+                teksTombol: teksTombol,
                 padaTekan: isTersedia
                     ? () {
                         if (pelBerikutnya != null) {
                           context.push(
                             '/belajar/pelajaran/${rek.modul.id}/${pelBerikutnya.id}',
                           );
-                        } else if (rek.statusModul.ruteAksi != null) {
-                          context.push(rek.statusModul.ruteAksi!);
+                        } else if (ruteAksiData != null) {
+                          context.push(ruteAksiData);
                         } else {
                           _bukaHalamanDetailModul(context, ref, rek.modul.id);
                         }

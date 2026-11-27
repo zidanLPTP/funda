@@ -112,7 +112,7 @@ kartu 1 | judul: Rasio cicilan, satu angka yang jujur
 {{Rasio cicilan}} adalah bagian pemasukan bulanan yang dipakai untuk membayar cicilan. Caranya, bagi total cicilan per bulan dengan pemasukan per bulan, lalu kali 100 persen. Makin besar rasionya, makin kecil ruang untuk kebutuhan lain dan tabungan.
 
 kartu 2 | judul: Pegangan dari aturan praktis
-Sebagai {{aturan praktis}}, banyak panduan menyebut total cicilan sebaiknya tidak melewati sekitar 30 persen dari pemasukan. Ini titik awal untuk bertanya pada dirimu, bukan penilaian atas dirimu. Kalau penghasilanmu tidak tetap atau kamu punya tanggungan, ruangnya bisa lebih sempit.
+Sebagai {{aturan praktis}}, banyak panduan menyebut total cicilan sebaiknya tidak melewati sekitar 30 persen dari pemasukan. Angka ini hanya patokan awal untuk memeriksa kondisimu. Kalau penghasilanmu tidak tetap atau kamu punya tanggungan, ruangnya bisa lebih sempit.
 
 kartu 3 | judul: Kalau rasionya terasa besar
 Kamu punya tiga tuas: menambah pemasukan, menurunkan cicilan, atau menahan utang baru. Untuk menurunkan cicilan, tanyakan opsi yang sah ke pemberi pinjaman dan hitung total biayanya dulu, karena cicilan lebih kecil bisa berarti total lebih besar. Jangan menutup cicilan dengan utang baru.
@@ -130,7 +130,7 @@ cekPaham:
    pilihan: 25 persen * | 20 persen | 40 persen
    penjelasan: Rp600.000 dibagi Rp2.400.000 hasilnya 0,25, atau 25 persen.
 2. tanya: Rasio cicilan sebaiknya diperlakukan sebagai apa?
-   pilihan: Bahan bertanya tentang kondisimu, bukan penilaian atas dirimu * | Hukum yang sama untuk semua orang | Tanda bahwa kamu harus berhenti membayar
+   pilihan: Patokan awal untuk memeriksa kondisimu * | Hukum yang sama untuk semua orang | Tanda bahwa kamu harus berhenti membayar
    penjelasan: Rasio membantumu melihat gambaran. Kondisi tiap orang berbeda, jadi angkanya tidak menilai dirimu.
 3. tanya: Pemasukan turun, cicilan tetap sama. Apa yang terjadi pada rasionya?
    pilihan: Naik * | Turun | Tetap

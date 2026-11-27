@@ -15,7 +15,7 @@
     },
     {
       "judul": "Pegangan dari aturan praktis",
-      "isi": "Sebagai {{aturan praktis}}, banyak panduan menyebut total cicilan sebaiknya tidak melewati sekitar 30 persen dari pemasukan. Ini titik awal untuk bertanya pada dirimu, bukan penilaian atas dirimu. Kalau penghasilanmu tidak tetap atau kamu punya tanggungan, ruangnya bisa lebih sempit."
+      "isi": "Sebagai {{aturan praktis}}, banyak panduan menyebut total cicilan sebaiknya tidak melewati sekitar 30 persen dari pemasukan. Angka ini hanya patokan awal untuk memeriksa kondisimu. Kalau penghasilanmu tidak tetap atau kamu punya tanggungan, ruangnya bisa lebih sempit."
     },
     {
       "judul": "Kalau rasionya terasa besar",
@@ -54,7 +54,7 @@
     {
       "tanya": "Rasio cicilan sebaiknya diperlakukan sebagai apa?",
       "pilihan": [
-        "Bahan bertanya tentang kondisimu, bukan penilaian atas dirimu",
+        "Patokan awal untuk memeriksa kondisimu",
         "Hukum yang sama untuk semua orang",
         "Tanda bahwa kamu harus berhenti membayar"
       ],
