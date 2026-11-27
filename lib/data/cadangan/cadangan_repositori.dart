@@ -311,6 +311,9 @@ class CadanganRepositori {
               ),
             );
       });
+
+      // Beri tahu seluruh stream Drift (watch) bahwa isi tabel telah diperbarui.
+      basisData.markTablesUpdated(basisData.allTables);
     } on Exception catch (e) {
       if (e is GalatCadangan) rethrow;
       throw GalatCadangan('Gagal memulihkan basis data: $e');

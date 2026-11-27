@@ -226,7 +226,6 @@ class _LayarKamusState extends ConsumerState<LayarKamus> {
                             judul: _kapitalisasiJudul(entri.istilah.istilah),
                             arti: entri.istilah.arti,
                             contohRupiah: entri.istilah.contohRupiah,
-                            sumberModul: entri.sumberModul,
                           ),
                           const SizedBox(height: SpasiFunda.m),
                         ],
@@ -246,13 +245,11 @@ class _KartuIstilahKamus extends StatelessWidget {
   final String judul;
   final String arti;
   final String contohRupiah;
-  final String? sumberModul;
 
   const _KartuIstilahKamus({
     required this.judul,
     required this.arti,
     required this.contohRupiah,
-    this.sumberModul,
   });
 
   @override
@@ -268,20 +265,6 @@ class _KartuIstilahKamus extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           TeksFunda.judulBagian(judul),
-          if (sumberModul != null) ...[
-            const SizedBox(height: SpasiFunda.xs),
-            Container(
-              padding: const EdgeInsets.symmetric(
-                horizontal: SpasiFunda.s,
-                vertical: SpasiFunda.xs,
-              ),
-              decoration: BoxDecoration(
-                color: WarnaFunda.kanvasMint,
-                borderRadius: BorderRadius.circular(SudutFunda.pil),
-              ),
-              child: TeksFunda.catatan(sumberModul!, warna: WarnaFunda.utama),
-            ),
-          ],
           const SizedBox(height: SpasiFunda.s),
           TeksFunda.isi(arti),
           if (contohRupiah.isNotEmpty) ...[

@@ -266,6 +266,7 @@ void main() {
         );
         expect(find.text('Arus kas'), findsOneWidget);
         expect(find.text('Keinginan'), findsOneWidget);
+        expect(find.textContaining('Modul 1 ·'), findsNothing);
 
         // Cari lewat contoh ("jajan") -> hanya Keinginan yang tersisa
         await tester.enterText(
