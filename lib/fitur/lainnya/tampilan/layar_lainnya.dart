@@ -530,7 +530,7 @@ class LayarLainnya extends ConsumerWidget {
                                   TeksFunda.judulLayar('Funda'),
                                   SizedBox(width: SpasiFunda.s),
                                   TeksFunda.catatan(
-                                    'v1.2.0',
+                                    'v1.2.1',
                                     warna: WarnaFunda.utama,
                                   ),
                                 ],

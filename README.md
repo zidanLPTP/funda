@@ -8,11 +8,14 @@
   </p>
 
   <p>
-    <a href="https://github.com/zidanLPTP/funda/releases/download/v1.2.0/app-arm64-v8a-release.apk">
-      <img src="https://img.shields.io/badge/Unduh_APK-v1.2.0_(arm64--v8a)-0F766E?style=for-the-badge" alt="Unduh APK v1.2.0" />
+    <a href="https://github.com/zidanLPTP/funda/releases/download/v1.2.1/app-arm64-v8a-release.apk">
+      <img src="https://img.shields.io/badge/Unduh_Android-v1.2.1_(APK)-0F766E?style=for-the-badge&logo=android&logoColor=white" alt="Unduh Android APK v1.2.1" />
     </a>
-    <a href="https://github.com/zidanLPTP/funda/releases/tag/v1.2.0">
-      <img src="https://img.shields.io/badge/GitHub_Releases-v1.2.0-111827?style=for-the-badge" alt="GitHub Releases v1.2.0" />
+    <a href="https://github.com/zidanLPTP/funda/releases/download/v1.2.1/Funda-iOS-unsigned.ipa">
+      <img src="https://img.shields.io/badge/Unduh_iOS-v1.2.1_(IPA)-111827?style=for-the-badge&logo=apple&logoColor=white" alt="Unduh iOS IPA v1.2.1" />
+    </a>
+    <a href="https://github.com/zidanLPTP/funda/releases/tag/v1.2.1">
+      <img src="https://img.shields.io/badge/GitHub_Releases-v1.2.1-374151?style=for-the-badge" alt="GitHub Releases v1.2.1" />
     </a>
   </p>
 
@@ -51,17 +54,20 @@
 
 ---
 
-## Unduh Langsung (Direct APK Download)
+## Unduh Langsung (Android & iOS)
 
-Berkas rilis resmi tersedia di [**GitHub Releases Funda v1.2.0**](https://github.com/zidanLPTP/funda/releases/tag/v1.2.0). Pilih varian sesuai arsitektur perangkat Android Anda:
+Berkas rilis resmi tersedia di [**GitHub Releases Funda v1.2.1**](https://github.com/zidanLPTP/funda/releases/tag/v1.2.1). Pilih paket sesuai perangkat Anda:
 
-| Varian APK | Arsitektur | Panduan Pemilihan | Unduh Langsung |
+| Platform | Berkas Rilis | Panduan Pemilihan | Unduh Langsung |
 | :--- | :--- | :--- | :--- |
-| `app-arm64-v8a-release.apk` | 64-bit ARM | **Direkomendasikan** untuk mayoritas ponsel Android modern (2017+) | [Unduh arm64-v8a](https://github.com/zidanLPTP/funda/releases/download/v1.2.0/app-arm64-v8a-release.apk) |
-| `app-armeabi-v7a-release.apk` | 32-bit ARM | Perangkat Android generasi lama | [Unduh armeabi-v7a](https://github.com/zidanLPTP/funda/releases/download/v1.2.0/app-armeabi-v7a-release.apk) |
-| `app-x86_64-release.apk` | 64-bit x86 | Emulator Android atau perangkat x86_64 | [Unduh x86_64](https://github.com/zidanLPTP/funda/releases/download/v1.2.0/app-x86_64-release.apk) |
+| **Android** | `app-arm64-v8a-release.apk` | **Direkomendasikan** untuk mayoritas ponsel Android modern (2017+) | [Unduh APK (arm64-v8a)](https://github.com/zidanLPTP/funda/releases/download/v1.2.1/app-arm64-v8a-release.apk) |
+| **Android** | `app-armeabi-v7a-release.apk` | Perangkat Android 32-bit generasi lama | [Unduh APK (armeabi-v7a)](https://github.com/zidanLPTP/funda/releases/download/v1.2.1/app-armeabi-v7a-release.apk) |
+| **Android** | `app-x86_64-release.apk` | Emulator Android atau perangkat x86_64 | [Unduh APK (x86_64)](https://github.com/zidanLPTP/funda/releases/download/v1.2.1/app-x86_64-release.apk) |
+| **iOS** | `Funda-iOS-unsigned.ipa` | iPhone / iPad (iOS 12.0+, pasang via AltStore / Sideloadly / TrollStore) | [Unduh IPA (iOS)](https://github.com/zidanLPTP/funda/releases/download/v1.2.1/Funda-iOS-unsigned.ipa) |
 
-> **Catatan Pemasangan:** Unduh APK yang sesuai (umumnya `arm64-v8a`), buka berkasnya di ponsel, izinkan pemasangan dari sumber tersebut jika diminta sistem, lalu ketuk **Pasang**.
+> **Catatan Pemasangan:**
+> - **Android:** Unduh APK yang sesuai (umumnya `arm64-v8a`), buka berkasnya di ponsel, izinkan pemasangan dari sumber tersebut jika diminta sistem, lalu ketuk **Pasang**.
+> - **iOS:** Berkas `.ipa` dirilis dalam format *unsigned* (tanpa sertifikat App Store), sehingga pemasangan di iPhone/iPad dilakukan menggunakan alat sideload seperti **AltStore**, **SideStore**, **Sideloadly**, atau **TrollStore**.
 
 ---
 
