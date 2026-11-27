@@ -75,7 +75,8 @@ Berkas rilis resmi tersedia di [**GitHub Releases Funda v1.2.0**](https://github
 
 ### Pembelajaran
 - **18 Modul Berjenjang:** Kurikulum Pemula, Menengah, dan Lanjutan mulai dari arus kas, dana darurat, utang, pajak, proteksi, hingga investasi dan usaha kecil.
-- **Gerbang Data & Misi Praktik:** Materi terhubung langsung dengan catatan keuangan pengguna untuk menghasilkan umpan balik angka riil, bukan sekadar teori.
+- **Gerbang Data & Misi Praktik:** Materi terhubung langsung dengan catatan keuangan pengguna untuk menghasilkan umpan balik angka riil, dengan panduan pengisian data langsung saat pelajaran berikutnya masih terkunci.
+- **Kamus Keuangan Progresif:** Kumpulan istilah keuangan yang terbuka bertahap mengikuti progres belajar pengguna, lengkap dengan pencarian berdasarkan istilah, arti, maupun contoh Rupiah.
 - **Mode Sandbox (Simulasi):** Ruang latihan dengan saldo fiktif yang terisolasi dari pencatatan asli untuk menguji keputusan keuangan tanpa risiko.
 
 ### Privasi Offline
@@ -92,7 +93,7 @@ Berkas rilis resmi tersedia di [**GitHub Releases Funda v1.2.0**](https://github
 | **Arsitektur** | **Feature-First MVVM** dengan pemisahan lapisan tampilan, kontroler/provider (`flutter_riverpod`), repositori data, dan fungsi perhitungan murni |
 | **Basis Data Lokal** | **Drift (SQLite)** dengan migrasi skema bertingkat, kueri terindeks bebas N+1, dan transaksi atomik |
 | **Navigasi & UI** | `go_router` deklaratif, sistem token desain terpusat (`TemaFunda`), serta font lokal *Plus Jakarta Sans* |
-| **Sistem Aset SVG 100%** | 122 ikon vektor kustom (`IkonUiFunda` & `AsetIkonFunda`), 62 ilustrasi tematik dinamis untuk Modul 1–18, dan sumber ikon aplikasi tunggal ([app-icon.svg](app-icon.svg)) |
+| **Sistem Aset SVG 100%** | 123 ikon vektor kustom (`IkonUiFunda` & `AsetIkonFunda`), 64 ilustrasi tematik dinamis & keadaan kosong, serta sumber ikon aplikasi tunggal ([app-icon.svg](app-icon.svg)) |
 | **Optimasi Ukuran APK** | Pemecahan build per ABI (`--split-per-abi`) dan *icon font tree-shaking* (mengurangi ukuran font ikon hingga >96%, menghasilkan APK rilis ~24–27 MB) |
 
 ---
