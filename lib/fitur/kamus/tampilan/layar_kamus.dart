@@ -81,6 +81,13 @@ class _LayarKamusState extends ConsumerState<LayarKamus> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
+                              const Center(
+                                child: IlustrasiSvgFunda(
+                                  pathAset: AsetIlustrasiFunda.kamusKosong,
+                                  tinggi: 120,
+                                ),
+                              ),
+                              const SizedBox(height: SpasiFunda.m),
                               const TeksFunda.judulBagian(
                                 'Kamusmu Masih Kosong',
                               ),
@@ -198,9 +205,19 @@ class _LayarKamusState extends ConsumerState<LayarKamus> {
                               width: 1.0,
                             ),
                           ),
-                          child: const TeksFunda.isi(
-                            'Istilah belum ditemukan di kosakata yang sudah terbuka. Coba kata kunci lain.',
-                            warna: WarnaFunda.teksRedup,
+                          child: const Column(
+                            children: [
+                              IlustrasiSvgFunda(
+                                pathAset: AsetIlustrasiFunda.kamusCariKosong,
+                                tinggi: 110,
+                              ),
+                              SizedBox(height: SpasiFunda.m),
+                              TeksFunda.isi(
+                                'Istilah belum ditemukan di kosakata yang sudah terbuka. Coba kata kunci lain.',
+                                warna: WarnaFunda.teksRedup,
+                                rataTeks: TextAlign.center,
+                              ),
+                            ],
                           ),
                         )
                       else

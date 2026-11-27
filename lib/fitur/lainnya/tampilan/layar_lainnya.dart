@@ -287,7 +287,7 @@ class LayarLainnya extends ConsumerWidget {
                   ),
                   _BarisMenuEditorial(
                     ikon: LucideIcons.bookOpen,
-                    pathSvg: AsetIkonFunda.belajarMulai,
+                    pathSvg: AsetIkonFunda.menuKamus,
                     warnaIkon: WarnaFunda.utama,
                     judul: 'Kamus Keuangan',
                     padaKetuk: () => _bukaRuteAtauHalaman(
